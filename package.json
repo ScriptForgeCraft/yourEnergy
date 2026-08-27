@@ -1,0 +1,31 @@
+{
+  "name": "yourenergy-homepage",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "content:generate": "node scripts/generate-pages.mjs",
+    "assets:build": "node scripts/build-images.mjs",
+    "dev": "npm run content:generate && vite --host 127.0.0.1",
+    "build": "npm run content:generate && vite build",
+    "preview": "vite preview --host 127.0.0.1",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "test": "node --test",
+    "verify:build": "node scripts/verify-build.mjs",
+    "check": "npm test && npm run lint && npm run format:check && npm run build && npm run verify:build"
+  },
+  "dependencies": {
+    "leaflet": "^1.9.4"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.9.1",
+    "globals": "^17.11.0",
+    "handlebars": "^4.7.9",
+    "prettier": "^3.9.6",
+    "sharp": "^0.35.4",
+    "vite": "^8.2.2"
+  }
+}

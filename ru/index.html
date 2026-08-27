@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Солнечные системы и персональный расчёт в Армении | YOURENERGY</title>
+    <meta name="description" content="Оцените солнечный потенциал дома, сравните три решения и изучите пример Solar Passport. Демо-расчёт солнечной системы в Армении." />
+    <meta name="theme-color" content="#06192b" />
+    <link rel="canonical" href="https://yourenergy.am/ru/" />
+    <link rel="alternate" hreflang="hy" href="https://yourenergy.am/" />
+    <link rel="alternate" hreflang="ru" href="https://yourenergy.am/ru/" />
+    <link rel="alternate" hreflang="x-default" href="https://yourenergy.am/" />
+    <link rel="stylesheet" href="/src/styles/main.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main"></a>
+    <header class="site-header" data-header>
+      <div class="container header-row">
+        <a class="wordmark" href="/ru/" aria-label="YOURENERGY — Русский">
+          <span>YOUR</span><strong>ENERGY</strong>
+        </a>
+        <nav class="desktop-nav" aria-label="Для дома">
+          <a href="#calculator">Для дома</a>
+          <a href="/ru/soon/#business">Для бизнеса</a>
+          <a href="#projects">Проекты</a>
+          <a href="#process">Как это работает</a>
+          <a href="#engineering">О нас</a>
+          <a href="/ru/soon/#blog">Блог</a>
+          <a href="#contacts">Контакты</a>
+        </nav>
+        <div class="header-actions">
+          <span class="demo-phone">+374 10 123 456 <small>демо</small></span>
+          <a class="language-link" href="/" hreflang="hy" aria-label="Открыть армянскую версию">AM</a>
+          <a class="button button--small" href="#calculator"></a>
+        </div>
+        <details class="mobile-menu">
+          <summary aria-label="Menu"><span></span><span></span><span></span></summary>
+          <nav aria-label="Mobile">
+            <a href="#calculator">Для дома</a>
+            <a href="#projects">Проекты</a>
+            <a href="#process">Как это работает</a>
+            <a href="#engineering">О нас</a>
+            <a href="#contacts">Контакты</a>
+            <a href="/">AM</a>
+          </nav>
+        </details>
+      </div>
+    </header>
+    <main id="main">
+      <section class="hero section" id="calculator">
+        <div class="container hero-grid">
+          <div class="hero-copy">
+            <p class="eyebrow">Персональный расчёт солнечной системы</p>
+            <h1>Узнайте потенциал<br />вашего дома<br /><mark>за 60 секунд</mark></h1>
+            <p class="hero-intro">Введите адрес — демо-инструмент YOURENERGY покажет примерный анализ крыши, генерации и экономии.</p>
+            <form class="address-form" data-address-form action="#calculator" novalidate>
+              <label for="address">Адрес вашего дома</label>
+              <div class="address-control">
+                <span aria-hidden="true">⌖</span>
+                <input id="address" autocomplete="street-address" placeholder="Например, Ереван, Арабкир" minlength="5" maxlength="160" />
+                <button class="button button--navy" type="submit">Анализировать</button>
+              </div>
+            </form>
+            <label class="upload-control" for="bill-file">
+              <span class="upload-icon" aria-hidden="true">⇧</span>
+              <span><strong>Загрузите счёт за электричество</strong><small>PDF, JPG или PNG до 10 МБ. Файл не отправляется на сервер.</small></span>
+              <input id="bill-file" type="file" accept=".pdf,.jpg,.jpeg,.png,application/pdf,image/jpeg,image/png" />
+            </label>
+            <ul class="hero-benefits" role="list">
+              <li><span aria-hidden="true">✓</span>Без звонка и обязательств</li><li><span aria-hidden="true">✓</span>Тарифы ENA — будущая интеграция</li><li><span aria-hidden="true">✓</span>PVGIS — будущая интеграция</li><li><span aria-hidden="true">✓</span>Сценарий именно для вашего дома</li>
+            </ul>
+          </div>
+          <div class="roof-product" aria-label="Демонстрационный профиль">
+            <div class="roof-visual">
+              <div class="demo-badge">Демонстрационный профиль</div>
+              <div class="roof-shape" aria-hidden="true">
+                <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+              </div>
+              <aside class="roof-info">
+                <strong>Ереван, Арабкир</strong>
+                <dl>
+                  <div><dt>Площадь крыши</dt><dd>124 м²</dd></div>
+                  <div><dt>Ориентация</dt><dd>Юго-запад (236°)</dd></div>
+                  <div><dt>Наклон</dt><dd>32°</dd></div>
+                  <div class="success"><dt>Solar Score</dt><dd>Отлично</dd></div>
+                </dl>
+              </aside>
+            </div>
+            <div class="result-panel">
+              <p>Предварительный демо-результат</p>
+              <dl>
+                <div><dt></dt><dd></dd></div>
+                <div><dt></dt><dd></dd></div>
+                <div><dt></dt><dd></dd></div>
+                <div><dt></dt><dd></dd></div>
+              </dl>
+              <a href="#passport">Смотреть полный расчёт →</a>
+            </div>
+          </div>
+        </div>
+      </section>
+      <div class="container preview-spacer" aria-hidden="true"></div>
+    </main>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

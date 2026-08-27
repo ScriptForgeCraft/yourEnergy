@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="{{locale}}">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{meta.title}}</title>
+    <meta name="description" content="{{meta.description}}" />
+    <meta name="theme-color" content="#06192b" />
+    <link rel="canonical" href="https://yourenergy.am{{path}}" />
+    <link rel="alternate" hreflang="hy" href="https://yourenergy.am/" />
+    <link rel="alternate" hreflang="ru" href="https://yourenergy.am/ru/" />
+    <link rel="alternate" hreflang="x-default" href="https://yourenergy.am/" />
+    <link rel="stylesheet" href="/src/styles/main.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">{{skip}}</a>
+    <header class="site-header" data-header>
+      <div class="container header-row">
+        <a class="wordmark" href="{{path}}" aria-label="YOURENERGY — {{localeName}}">
+          <span>YOUR</span><strong>ENERGY</strong>
+        </a>
+        <nav class="desktop-nav" aria-label="{{nav.home}}">
+          <a href="#calculator">{{nav.home}}</a>
+          <a href="{{#if (eq locale 'hy')}}/soon/#business{{else}}/ru/soon/#business{{/if}}">{{nav.business}}</a>
+          <a href="#projects">{{nav.projects}}</a>
+          <a href="#process">{{nav.process}}</a>
+          <a href="#engineering">{{nav.about}}</a>
+          <a href="{{#if (eq locale 'hy')}}/soon/#blog{{else}}/ru/soon/#blog{{/if}}">{{nav.blog}}</a>
+          <a href="#contacts">{{nav.contacts}}</a>
+        </nav>
+        <div class="header-actions">
+          <span class="demo-phone">{{contact.phone}} <small>{{contact.demo}}</small></span>
+          <a class="language-link" href="{{switchHref}}" hreflang="{{#if (eq locale 'hy')}}ru{{else}}hy{{/if}}" aria-label="{{switchName}}">{{switchLabel}}</a>
+          <a class="button button--small" href="#calculator">{{cta}}</a>
+        </div>
+        <details class="mobile-menu">
+          <summary aria-label="Menu"><span></span><span></span><span></span></summary>
+          <nav aria-label="Mobile">
+            <a href="#calculator">{{nav.home}}</a>
+            <a href="#projects">{{nav.projects}}</a>
+            <a href="#process">{{nav.process}}</a>
+            <a href="#engineering">{{nav.about}}</a>
+            <a href="#contacts">{{nav.contacts}}</a>
+            <a href="{{switchHref}}">{{switchLabel}}</a>
+          </nav>
+        </details>
+      </div>
+    </header>
+    <main id="main">
+      <section class="hero section" id="calculator">
+        <div class="container hero-grid">
+          <div class="hero-copy">
+            <p class="eyebrow">{{hero.eyebrow}}</p>
+            <h1>{{hero.titleLead}}<br />{{hero.titleMiddle}}<br /><mark>{{hero.titleAccent}}</mark></h1>
+            <p class="hero-intro">{{hero.copy}}</p>
+            <form class="address-form" data-address-form action="#calculator" novalidate>
+              <label for="address">{{hero.addressLabel}}</label>
+              <div class="address-control">
+                <span aria-hidden="true">⌖</span>
+                <input id="address" autocomplete="street-address" placeholder="{{hero.addressPlaceholder}}" minlength="5" maxlength="160" />
+                <button class="button button--navy" type="submit">{{hero.analyze}}</button>
+              </div>
+            </form>
+            <label class="upload-control" for="bill-file">
+              <span class="upload-icon" aria-hidden="true">⇧</span>
+              <span><strong>{{hero.uploadTitle}}</strong><small>{{hero.uploadHelp}}</small></span>
+              <input id="bill-file" type="file" accept=".pdf,.jpg,.jpeg,.png,application/pdf,image/jpeg,image/png" />
+            </label>
+            <ul class="hero-benefits" role="list">
+              {{#each hero.benefits}}<li><span aria-hidden="true">✓</span>{{this}}</li>{{/each}}
+            </ul>
+          </div>
+          <div class="roof-product" aria-label="{{map.demo}}">
+            <div class="roof-visual">
+              <div class="demo-badge">{{map.demo}}</div>
+              <div class="roof-shape" aria-hidden="true">
+                {{#each (range 12)}}<span></span>{{/each}}
+              </div>
+              <aside class="roof-info">
+                <strong>{{map.location}}</strong>
+                <dl>
+                  <div><dt>{{map.roofArea}}</dt><dd>{{map.roofAreaValue}}</dd></div>
+                  <div><dt>{{map.orientation}}</dt><dd>{{map.orientationValue}}</dd></div>
+                  <div><dt>{{map.tilt}}</dt><dd>{{map.tiltValue}}</dd></div>
+                  <div class="success"><dt>{{map.score}}</dt><dd>{{map.scoreValue}}</dd></div>
+                </dl>
+              </aside>
+            </div>
+            <div class="result-panel">
+              <p>{{map.result}}</p>
+              <dl>
+                <div><dt>{{map.generation}}</dt><dd>{{units.generation}}</dd></div>
+                <div><dt>{{map.savings}}</dt><dd>{{units.savings}}</dd></div>
+                <div><dt>{{map.payback}}</dt><dd>{{units.payback}}</dd></div>
+                <div><dt>{{map.coverage}}</dt><dd>{{units.coverage}}</dd></div>
+              </dl>
+              <a href="#passport">{{map.full}} →</a>
+            </div>
+          </div>
+        </div>
+      </section>
+      <div class="container preview-spacer" aria-hidden="true"></div>
+    </main>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

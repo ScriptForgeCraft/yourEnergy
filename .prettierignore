@@ -1,0 +1,8 @@
+dist
+node_modules
+public/images
+index.html
+ru/**/*.html
+privacy/**/*.html
+terms/**/*.html
+soon/**/*.html
