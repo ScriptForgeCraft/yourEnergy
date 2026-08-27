@@ -1,10 +1,12 @@
+@import './sections.css';
+
 :root {
   --color-navy: #071a2d;
   --color-navy-2: #0a243a;
   --color-text: #142234;
   --color-muted: #657180;
   --color-yellow: #f5bd18;
-  --color-yellow-strong: #e7a900;
+  --color-yellow-strong: #8a5a00;
   --color-background: #fbfcfa;
   --color-surface: #ffffff;
   --color-border: #dfe4e8;
@@ -31,7 +33,14 @@ body {
   margin: 0;
   color: var(--color-text);
   background: var(--color-background);
-  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans Armenian", sans-serif;
+  font-family:
+    Inter,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    'Noto Sans Armenian',
+    sans-serif;
   line-height: 1.5;
 }
 
@@ -76,7 +85,9 @@ input {
   border-bottom: 1px solid transparent;
   background: rgb(251 252 250 / 92%);
   backdrop-filter: blur(14px);
-  transition: box-shadow 180ms ease, border-color 180ms ease;
+  transition:
+    box-shadow 180ms ease,
+    border-color 180ms ease;
 }
 
 .site-header.is-scrolled {
@@ -277,11 +288,16 @@ h1 mark {
   cursor: pointer;
 }
 
-.upload-control input {
+.upload-control .upload-control__input {
   position: absolute;
   inset: 0;
   opacity: 0;
   cursor: pointer;
+}
+
+.upload-control:focus-within {
+  outline: 3px solid #1676d2;
+  outline-offset: 3px;
 }
 
 .upload-icon {
@@ -347,7 +363,7 @@ h1 mark {
 }
 
 .roof-visual::before {
-  content: "";
+  content: '';
   position: absolute;
   left: 14%;
   top: 12%;
@@ -533,7 +549,9 @@ h1 mark {
 }
 
 @keyframes result-pulse {
-  50% { background: #123b58; }
+  50% {
+    background: #123b58;
+  }
 }
 
 @media (max-width: 1180px) {
@@ -565,8 +583,13 @@ h1 mark {
     cursor: pointer;
   }
 
-  .mobile-menu summary::-webkit-details-marker { display: none; }
-  .mobile-menu summary span { height: 2px; background: var(--color-navy); }
+  .mobile-menu summary::-webkit-details-marker {
+    display: none;
+  }
+  .mobile-menu summary span {
+    height: 2px;
+    background: var(--color-navy);
+  }
 
   .mobile-menu nav {
     position: absolute;
@@ -600,28 +623,75 @@ h1 mark {
 }
 
 @media (max-width: 680px) {
-  .container { width: min(calc(100% - 32px), var(--container)); }
-  .header-row { min-height: 66px; }
-  .wordmark { font-size: 1.15rem; }
-  .hero { min-height: auto; }
-  .section { padding-block: 46px; }
-  h1 { font-size: clamp(2.45rem, 12.5vw, 4.2rem); }
-  .hero-intro { font-size: 0.94rem; }
-  .address-control { grid-template-columns: 20px 1fr; padding: 8px 10px 8px 14px; }
-  .address-control .button { grid-column: 1 / -1; width: 100%; }
-  .hero-benefits { grid-template-columns: 1fr 1fr; }
-  .roof-visual { min-height: 390px; }
-  .roof-info { top: auto; right: 14px; bottom: 14px; width: calc(100% - 28px); }
-  .roof-shape { left: 20%; top: 16%; width: 56%; height: 39%; }
-  .result-panel { padding: 22px 18px; }
-  .result-panel dl { grid-template-columns: 1fr 1fr; gap: 20px 0; }
-  .result-panel dl > div:nth-child(2) { border-right: 0; }
-  .result-panel dl > div:nth-child(3) { padding-left: 0; }
-  .result-panel dt { min-height: auto; }
+  .container {
+    width: min(calc(100% - 32px), var(--container));
+  }
+  .header-row {
+    min-height: 66px;
+  }
+  .wordmark {
+    font-size: 1.15rem;
+  }
+  .hero {
+    min-height: auto;
+  }
+  .section {
+    padding-block: 46px;
+  }
+  h1 {
+    font-size: clamp(2.45rem, 12.5vw, 4.2rem);
+  }
+  .hero-intro {
+    font-size: 0.94rem;
+  }
+  .address-control {
+    grid-template-columns: 20px 1fr;
+    padding: 8px 10px 8px 14px;
+  }
+  .address-control .button {
+    grid-column: 1 / -1;
+    width: 100%;
+  }
+  .hero-benefits {
+    grid-template-columns: 1fr 1fr;
+  }
+  .roof-visual {
+    min-height: 390px;
+  }
+  .roof-info {
+    top: auto;
+    right: 14px;
+    bottom: 14px;
+    width: calc(100% - 28px);
+  }
+  .roof-shape {
+    left: 20%;
+    top: 16%;
+    width: 56%;
+    height: 39%;
+  }
+  .result-panel {
+    padding: 22px 18px;
+  }
+  .result-panel dl {
+    grid-template-columns: 1fr 1fr;
+    gap: 20px 0;
+  }
+  .result-panel dl > div:nth-child(2) {
+    border-right: 0;
+  }
+  .result-panel dl > div:nth-child(3) {
+    padding-left: 0;
+  }
+  .result-panel dt {
+    min-height: auto;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
+  *,
+  *::before,
+  *::after {
     scroll-behavior: auto !important;
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;

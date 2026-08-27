@@ -25,9 +25,18 @@ for (const [name, widths] of assets) {
     });
 
     await Promise.all([
-      image.clone().avif({ quality: 56, effort: 5 }).toFile(resolve(outputDir, `${name}-${width}.avif`)),
-      image.clone().webp({ quality: 76, effort: 5 }).toFile(resolve(outputDir, `${name}-${width}.webp`)),
-      image.clone().jpeg({ quality: 78, progressive: true, mozjpeg: true }).toFile(resolve(outputDir, `${name}-${width}.jpg`))
+      image
+        .clone()
+        .avif({ quality: 56, effort: 5 })
+        .toFile(resolve(outputDir, `${name}-${width}.avif`)),
+      image
+        .clone()
+        .webp({ quality: 76, effort: 5 })
+        .toFile(resolve(outputDir, `${name}-${width}.webp`)),
+      image
+        .clone()
+        .jpeg({ quality: 78, progressive: true, mozjpeg: true })
+        .toFile(resolve(outputDir, `${name}-${width}.jpg`))
     ]);
   }
 }

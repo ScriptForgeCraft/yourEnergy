@@ -1,0 +1,6 @@
+# The legal-draft and coming-soon pages carry page-level noindex directives.
+# They remain crawlable so compliant crawlers can see those directives.
+User-agent: *
+Allow: /
+
+Sitemap: https://yourenergy.am/sitemap.xml

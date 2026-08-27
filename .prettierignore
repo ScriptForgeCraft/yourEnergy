@@ -6,3 +6,4 @@ ru/**/*.html
 privacy/**/*.html
 terms/**/*.html
 soon/**/*.html
+src/templates/*.hbs

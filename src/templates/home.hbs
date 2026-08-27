@@ -1,106 +1,657 @@
 <!doctype html>
-<html lang="{{locale}}">
+<html lang='{{locale}}'>
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset='UTF-8' />
+    <meta name='viewport' content='width=device-width, initial-scale=1.0' />
+    <meta name='theme-color' content='#071a2d' />
+    <meta name='color-scheme' content='light' />
     <title>{{meta.title}}</title>
-    <meta name="description" content="{{meta.description}}" />
-    <meta name="theme-color" content="#06192b" />
-    <link rel="canonical" href="https://yourenergy.am{{path}}" />
-    <link rel="alternate" hreflang="hy" href="https://yourenergy.am/" />
-    <link rel="alternate" hreflang="ru" href="https://yourenergy.am/ru/" />
-    <link rel="alternate" hreflang="x-default" href="https://yourenergy.am/" />
-    <link rel="stylesheet" href="/src/styles/main.css" />
+    <meta name='description' content='{{meta.description}}' />
+    <meta property='og:type' content='website' />
+    <meta property='og:site_name' content='YOURENERGY' />
+    <meta property='og:locale' content='{{localeCode}}' />
+    <meta property='og:title' content='{{meta.ogTitle}}' />
+    <meta property='og:description' content='{{meta.ogDescription}}' />
+    <meta property='og:url' content='https://yourenergy.am{{path}}' />
+    <meta property='og:image' content='https://yourenergy.am/og.png' />
+    <meta name='twitter:card' content='summary_large_image' />
+    <meta name='twitter:title' content='{{meta.ogTitle}}' />
+    <meta name='twitter:description' content='{{meta.ogDescription}}' />
+    <meta name='twitter:image' content='https://yourenergy.am/og.png' />
+    <link rel='canonical' href='https://yourenergy.am{{path}}' />
+    <link rel='alternate' hreflang='hy' href='https://yourenergy.am/' />
+    <link rel='alternate' hreflang='ru' href='https://yourenergy.am/ru/' />
+    <link rel='alternate' hreflang='x-default' href='https://yourenergy.am/' />
+    <link rel='icon' href='/favicon.svg' type='image/svg+xml' />
+    <link rel='stylesheet' href='/src/styles/main.css' />
+    <script type='application/ld+json'>{{{jsonLd}}}</script>
   </head>
   <body>
-    <a class="skip-link" href="#main">{{skip}}</a>
-    <header class="site-header" data-header>
-      <div class="container header-row">
-        <a class="wordmark" href="{{path}}" aria-label="YOURENERGY — {{localeName}}">
-          <span>YOUR</span><strong>ENERGY</strong>
-        </a>
-        <nav class="desktop-nav" aria-label="{{nav.home}}">
-          <a href="#calculator">{{nav.home}}</a>
-          <a href="{{#if (eq locale 'hy')}}/soon/#business{{else}}/ru/soon/#business{{/if}}">{{nav.business}}</a>
-          <a href="#projects">{{nav.projects}}</a>
-          <a href="#process">{{nav.process}}</a>
-          <a href="#engineering">{{nav.about}}</a>
-          <a href="{{#if (eq locale 'hy')}}/soon/#blog{{else}}/ru/soon/#blog{{/if}}">{{nav.blog}}</a>
-          <a href="#contacts">{{nav.contacts}}</a>
+    <a class='skip-link' href='#main'>{{aria.skip}}</a>
+    <header class='site-header' data-header>
+      <div class='container header-row'>
+        <a class='wordmark' href='{{homeHref}}' aria-label='{{aria.logo}}'><span>YOUR</span><strong
+          >ENERGY</strong></a>
+        <nav class='desktop-nav' aria-label='{{aria.primaryNav}}'>
+          <a href='#calculator'>{{nav.home}}</a>
+          <a href='{{supportBase}}/soon/#business'>{{nav.business}}</a>
+          <a href='#projects'>{{nav.projects}}</a>
+          <a href='#process'>{{nav.process}}</a>
+          <a href='#engineering'>{{nav.about}}</a>
+          <a href='{{supportBase}}/soon/#blog'>{{nav.blog}}</a>
+          <a href='#contacts'>{{nav.contacts}}</a>
         </nav>
-        <div class="header-actions">
-          <span class="demo-phone">{{contact.phone}} <small>{{contact.demo}}</small></span>
-          <a class="language-link" href="{{switchHref}}" hreflang="{{#if (eq locale 'hy')}}ru{{else}}hy{{/if}}" aria-label="{{switchName}}">{{switchLabel}}</a>
-          <a class="button button--small" href="#calculator">{{cta}}</a>
+        <div class='header-actions'>
+          <span class='demo-phone' aria-label='{{contact.note}}'>{{contact.phone}}
+            <small>{{contact.demo}}</small></span>
+          <a
+            class='language-link'
+            href='{{switchHref}}'
+            hreflang='{{switchHreflang}}'
+            aria-label='{{switchLabel}} — {{switchName}}'
+          >{{switchLabel}}</a>
+          <a class='button button--small' href='#calculator'>{{common.cta}}</a>
         </div>
-        <details class="mobile-menu">
-          <summary aria-label="Menu"><span></span><span></span><span></span></summary>
-          <nav aria-label="Mobile">
-            <a href="#calculator">{{nav.home}}</a>
-            <a href="#projects">{{nav.projects}}</a>
-            <a href="#process">{{nav.process}}</a>
-            <a href="#engineering">{{nav.about}}</a>
-            <a href="#contacts">{{nav.contacts}}</a>
-            <a href="{{switchHref}}">{{switchLabel}}</a>
+        <details class='mobile-menu' data-mobile-menu>
+          <summary aria-label='{{aria.menu}}'><span></span><span></span><span></span></summary>
+          <nav aria-label='{{aria.mobileNav}}'>
+            <a href='#calculator'>{{nav.home}}</a>
+            <a href='{{supportBase}}/soon/#business'>{{nav.business}}</a>
+            <a href='#projects'>{{nav.projects}}</a>
+            <a href='#process'>{{nav.process}}</a>
+            <a href='#engineering'>{{nav.about}}</a>
+            <a href='{{supportBase}}/soon/#blog'>{{nav.blog}}</a>
+            <a href='#contacts'>{{nav.contacts}}</a>
+            <a href='{{switchHref}}' hreflang='{{switchHreflang}}' aria-label='{{switchLabel}} — {{switchName}}'>{{switchLabel}}</a>
           </nav>
         </details>
       </div>
     </header>
-    <main id="main">
-      <section class="hero section" id="calculator">
-        <div class="container hero-grid">
-          <div class="hero-copy">
-            <p class="eyebrow">{{hero.eyebrow}}</p>
-            <h1>{{hero.titleLead}}<br />{{hero.titleMiddle}}<br /><mark>{{hero.titleAccent}}</mark></h1>
-            <p class="hero-intro">{{hero.copy}}</p>
-            <form class="address-form" data-address-form action="#calculator" novalidate>
-              <label for="address">{{hero.addressLabel}}</label>
-              <div class="address-control">
-                <span aria-hidden="true">⌖</span>
-                <input id="address" autocomplete="street-address" placeholder="{{hero.addressPlaceholder}}" minlength="5" maxlength="160" />
-                <button class="button button--navy" type="submit">{{hero.analyze}}</button>
+
+    <main id='main'>
+      <section class='hero section' id='calculator' aria-labelledby='hero-title'>
+        <div class='container hero-grid'>
+          <div class='hero-copy'>
+            <p class='eyebrow'>{{hero.eyebrow}}</p>
+            <h1 id='hero-title'>{{hero.titleLead}}<br />{{hero.titleMiddle}}<br /><mark
+              >{{hero.titleAccent}}</mark></h1>
+            <p class='hero-intro'>{{hero.copy}}</p>
+            <form class='address-form' data-address-form action='#calculator' novalidate>
+              <label for='address'>{{hero.addressLabel}}</label>
+              <div class='address-control'>
+                <svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#pin'></use></svg>
+                <input
+                  id='address'
+                  name='address'
+                  autocomplete='street-address'
+                  placeholder='{{hero.addressPlaceholder}}'
+                  minlength='5'
+                  maxlength='160'
+                  aria-describedby='address-help analysis-status'
+                  required
+                />
+                <button class='button button--navy' type='submit'>{{hero.analyze}}</button>
               </div>
+              <small id='address-help' class='field-help'>{{hero.addressHelp}}</small>
             </form>
-            <label class="upload-control" for="bill-file">
-              <span class="upload-icon" aria-hidden="true">⇧</span>
-              <span><strong>{{hero.uploadTitle}}</strong><small>{{hero.uploadHelp}}</small></span>
-              <input id="bill-file" type="file" accept=".pdf,.jpg,.jpeg,.png,application/pdf,image/jpeg,image/png" />
-            </label>
-            <ul class="hero-benefits" role="list">
-              {{#each hero.benefits}}<li><span aria-hidden="true">✓</span>{{this}}</li>{{/each}}
-            </ul>
-          </div>
-          <div class="roof-product" aria-label="{{map.demo}}">
-            <div class="roof-visual">
-              <div class="demo-badge">{{map.demo}}</div>
-              <div class="roof-shape" aria-hidden="true">
-                {{#each (range 12)}}<span></span>{{/each}}
+            <div class='upload-block' data-file-drop>
+              <label class='upload-control' for='bill-file'>
+                <span class='upload-icon' aria-hidden='true'><svg class='inline-icon'><use
+                      href='/icons.svg#file'
+                    ></use></svg></span>
+                <span><strong>{{hero.uploadTitle}}</strong><small>{{hero.uploadPrompt}}
+                    ·
+                    {{hero.uploadHelp}}</small></span>
+                <input
+                  id='bill-file'
+                  class='upload-control__input'
+                  type='file'
+                  accept='.pdf,.jpg,.jpeg,.png,application/pdf,image/jpeg,image/png'
+                  aria-describedby='file-status'
+                />
+              </label>
+              <div class='file-selection' data-file-meta hidden>
+                <span data-file-name></span>
+                <button
+                  class='text-button'
+                  type='button'
+                  data-file-remove
+                >{{hero.removeFile}}</button>
               </div>
-              <aside class="roof-info">
-                <strong>{{map.location}}</strong>
+            </div>
+            <p class='form-status' id='analysis-status' data-analysis-status aria-live='polite'></p>
+            <p class='form-status' id='file-status' data-file-status aria-live='polite'></p>
+            <noscript><p class='noscript-note'>{{hero.disclosure}}</p></noscript>
+            <ul class='hero-benefits' role='list'>
+              {{#each hero.benefits}}<li><svg class='inline-icon' aria-hidden='true'><use
+                      href='/icons.svg#check'
+                    ></use></svg>{{this}}</li>{{/each}}
+            </ul>
+            <p class='hero-disclosure'>{{hero.disclosure}}</p>
+          </div>
+
+          <div class='roof-product' data-analysis-region aria-label='{{map.title}}'>
+            <figure class='roof-visual' data-map-shell>
+              <picture>
+                <source
+                  type='image/avif'
+                  srcset='/images/roof-scan-480.avif 480w, /images/roof-scan-768.avif 768w, /images/roof-scan-1200.avif 1200w, /images/roof-scan-1600.avif 1600w'
+                  sizes='(max-width: 760px) 100vw, 50vw'
+                />
+                <source
+                  type='image/webp'
+                  srcset='/images/roof-scan-480.webp 480w, /images/roof-scan-768.webp 768w, /images/roof-scan-1200.webp 1200w, /images/roof-scan-1600.webp 1600w'
+                  sizes='(max-width: 760px) 100vw, 50vw'
+                />
+                <img
+                  src='/images/roof-scan-1200.jpg'
+                  srcset='/images/roof-scan-480.jpg 480w, /images/roof-scan-768.jpg 768w, /images/roof-scan-1200.jpg 1200w, /images/roof-scan-1600.jpg 1600w'
+                  sizes='(max-width: 760px) 100vw, 50vw'
+                  width='1600'
+                  height='1067'
+                  alt='{{map.imageAlt}}'
+                  fetchpriority='high'
+                  decoding='async'
+                />
+              </picture>
+              <div class='roof-shade' aria-hidden='true'></div>
+              <svg class='roof-overlay' viewBox='0 0 1000 660' aria-hidden='true' focusable='false'>
+                <polygon points='295,125 670,214 616,499 239,410' class='roof-boundary'></polygon>
+                <g class='panel-grid'>
+                  <rect x='330' y='195' width='66' height='49'></rect><rect
+                    x='400'
+                    y='212'
+                    width='66'
+                    height='49'
+                  ></rect><rect x='470' y='229' width='66' height='49'></rect><rect
+                    x='540'
+                    y='246'
+                    width='66'
+                    height='49'
+                  ></rect>
+                  <rect x='314' y='261' width='66' height='49'></rect><rect
+                    x='384'
+                    y='278'
+                    width='66'
+                    height='49'
+                  ></rect><rect x='454' y='295' width='66' height='49'></rect><rect
+                    x='524'
+                    y='312'
+                    width='66'
+                    height='49'
+                  ></rect>
+                  <rect x='298' y='327' width='66' height='49'></rect><rect
+                    x='368'
+                    y='344'
+                    width='66'
+                    height='49'
+                  ></rect><rect x='438' y='361' width='66' height='49'></rect><rect
+                    x='508'
+                    y='378'
+                    width='66'
+                    height='49'
+                  ></rect>
+                  <rect x='282' y='393' width='66' height='49'></rect><rect
+                    x='352'
+                    y='410'
+                    width='66'
+                    height='49'
+                  ></rect><rect x='422' y='427' width='66' height='49'></rect><rect
+                    x='492'
+                    y='444'
+                    width='66'
+                    height='49'
+                  ></rect>
+                </g>
+              </svg>
+              <figcaption class='map-caption'><span class='demo-badge'>{{map.demo}}</span><span
+                >{{map.disclosure}}</span></figcaption>
+              <div
+                class='leaflet-map'
+                data-leaflet-map
+                hidden
+                aria-label='{{map.interactive}}'
+              ></div>
+              <aside class='roof-info'>
+                <strong data-analysis-location>{{map.location}}</strong>
                 <dl>
-                  <div><dt>{{map.roofArea}}</dt><dd>{{map.roofAreaValue}}</dd></div>
-                  <div><dt>{{map.orientation}}</dt><dd>{{map.orientationValue}}</dd></div>
-                  <div><dt>{{map.tilt}}</dt><dd>{{map.tiltValue}}</dd></div>
-                  <div class="success"><dt>{{map.score}}</dt><dd>{{map.scoreValue}}</dd></div>
+                  <div><dt>{{map.roofArea}}</dt><dd
+                      data-analysis-roof='area'
+                    >{{map.roofAreaValue}}</dd></div>
+                  <div><dt>{{map.orientation}}</dt><dd
+                      data-analysis-roof='orientation'
+                    >{{map.orientationValue}}</dd></div>
+                  <div><dt>{{map.tilt}}</dt><dd
+                      data-analysis-roof='tilt'
+                    >{{map.tiltValue}}</dd></div>
+                  <div class='success'><dt>{{map.score}}</dt><dd>{{map.scoreValue}}</dd></div>
                 </dl>
               </aside>
-            </div>
-            <div class="result-panel">
+            </figure>
+            <div class='result-panel' data-result-panel>
               <p>{{map.result}}</p>
               <dl>
-                <div><dt>{{map.generation}}</dt><dd>{{units.generation}}</dd></div>
-                <div><dt>{{map.savings}}</dt><dd>{{units.savings}}</dd></div>
-                <div><dt>{{map.payback}}</dt><dd>{{units.payback}}</dd></div>
-                <div><dt>{{map.coverage}}</dt><dd>{{units.coverage}}</dd></div>
+                {{#each metrics}}
+                  <div><dt>{{label}}</dt><dd data-analysis='{{key}}'>{{value}}
+                      <small>{{unit}}</small></dd></div>
+                {{/each}}
               </dl>
-              <a href="#passport">{{map.full}} →</a>
+              <a href='#passport'>{{map.full}} <span aria-hidden='true'>→</span></a>
             </div>
           </div>
         </div>
       </section>
-      <div class="container preview-spacer" aria-hidden="true"></div>
+
+      <section
+        class='passport section section--soft'
+        id='passport'
+        aria-labelledby='passport-title'
+      >
+        <div class='container passport-grid'>
+          <div class='passport-copy'>
+            <p class='eyebrow'>{{passport.eyebrow}}</p>
+            <h2 id='passport-title'>{{passport.title}}</h2>
+            <p>{{passport.copy}}</p>
+            <ul class='check-list' role='list'>{{#each passport.features}}<li><svg
+                    class='inline-icon'
+                    aria-hidden='true'
+                  ><use href='/icons.svg#check'></use></svg>{{this}}</li>{{/each}}</ul>
+            <a
+              class='button button--outline'
+              href='#calculator'
+              data-open-passport
+            >{{passport.cta}}</a>
+          </div>
+          <article class='passport-card' aria-label='{{passport.dialogTitle}}'>
+            <div class='passport-card__top'><span class='wordmark wordmark--small'><span
+                >YOUR</span><strong>ENERGY</strong></span><span
+                class='pill'
+              >{{passport.badge}}</span></div>
+            <p class='passport-label'>{{passport.reportLabel}}</p>
+            <h3 data-analysis-location>{{passport.reportAddress}}</h3>
+            <p class='passport-date'>{{passport.reportDate}}</p>
+            <div class='passport-card__visual'>
+              <picture>
+                <source
+                  type='image/avif'
+                  srcset='/images/roof-scan-480.avif 480w, /images/roof-scan-768.avif 768w'
+                  sizes='(max-width: 680px) 90vw, 25vw'
+                />
+                <source
+                  type='image/webp'
+                  srcset='/images/roof-scan-480.webp 480w, /images/roof-scan-768.webp 768w'
+                  sizes='(max-width: 680px) 90vw, 25vw'
+                />
+                <img
+                  src='/images/roof-scan-768.jpg'
+                  srcset='/images/roof-scan-480.jpg 480w, /images/roof-scan-768.jpg 768w'
+                  sizes='(max-width: 680px) 90vw, 25vw'
+                  width='768'
+                  height='512'
+                  alt='{{map.imageAlt}}'
+                  loading='lazy'
+                  decoding='async'
+                />
+              </picture>
+              <span class='mini-panels' aria-hidden='true'></span>
+            </div>
+            <dl class='passport-specs'>
+              <div><dt>{{passport.system}}</dt><dd
+                  data-analysis='capacity'
+                >{{passport.capacity}}</dd></div>
+              <div><dt>{{passport.source}}</dt><dd
+                  data-analysis='panels'
+                >{{passport.panels}}</dd></div>
+            </dl>
+          </article>
+          <div class='generation-card' data-chart-card>
+            <h3>{{passport.chartTitle}}</h3>
+            <p id='generation-chart-description'>{{passport.chartDescription}}</p>
+            <div class='bar-chart' aria-describedby='generation-chart-description'>
+              {{#each passport.months}}
+                <button
+                  class='chart-bar'
+                  type='button'
+                  style='--bar-height: {{percent}}%;'
+                  title='{{short}} · {{name}}: {{value}} kWh'
+                  aria-label='{{short}} · {{name}}: {{value}} kWh'
+                  data-chart-bar
+                  data-short='{{short}}'
+                  data-month='{{name}}'
+                  data-value='{{value}}'
+                ><span class='chart-bar__fill'></span><span>{{short}}</span></button>
+              {{/each}}
+            </div>
+            <details class='chart-data'><summary>{{passport.tableTitle}}</summary><table><caption
+                  class='visually-hidden'
+                >{{passport.tableTitle}}</caption><thead><tr><th scope='col'>{{#if
+                        (eq locale 'hy')
+                      }}Ամիս{{else}}Месяц{{/if}}</th><th scope='col'>kWh</th></tr></thead><tbody
+                >{{#each passport.months}}<tr><td>{{name}}</td><td
+                      data-chart-value>{{value}}</td></tr>{{/each}}</tbody></table></details>
+          </div>
+        </div>
+      </section>
+
+      <aside class='trust-strip' aria-label='{{trust.disclosure}}'>
+        <div class='container trust-strip__inner'>
+          {{#each trust.items}}
+            <div class='trust-item'><svg class='inline-icon' aria-hidden='true'><use
+                  href='/icons.svg#{{icon}}'
+                ></use></svg><p><strong>{{title}}</strong><span>{{note}}</span></p></div>
+          {{/each}}
+        </div>
+        <p class='trust-disclosure'>{{trust.disclosure}}</p>
+      </aside>
+
+      <section class='solutions section' id='solutions' aria-labelledby='solutions-title'>
+        <div class='container'>
+          <div class='section-heading'><div><p class='eyebrow'>{{solutions.eyebrow}}</p><h2
+                id='solutions-title'
+              >{{solutions.title}}</h2></div><p>{{solutions.copy}}</p></div>
+          <div class='solution-grid'>
+            {{#each solutions.items}}
+              <article class='solution-card {{cardClass}}'>
+                {{#if badge}}<span class='solution-badge'>{{badge}}</span>{{/if}}
+                <p class='solution-index'>0{{@index}}</p><h3>{{name}}</h3><p>{{subtitle}}</p>
+                <dl><div><dt>kWp</dt><dd>{{capacity}}</dd></div><div><dt>kWh</dt><dd
+                    >{{generation}}</dd></div></dl>
+                <strong class='solution-price'>{{price}}</strong>
+                <details><summary>{{detailsLabel}}</summary><ul>{{#each details}}<li
+                      >{{this}}</li>{{/each}}</ul></details>
+                <a class='button {{buttonClass}}' href='#calculator'>{{ctaLabel}}</a>
+              </article>
+            {{/each}}
+          </div>
+          <p class='section-disclosure'>{{solutions.disclaimer}}</p>
+        </div>
+      </section>
+
+      <section
+        class='projects section section--soft'
+        id='projects'
+        aria-labelledby='projects-title'
+      >
+        <div class='container'>
+          <div class='section-heading section-heading--actions'><div><p
+                class='eyebrow'
+              >{{projects.eyebrow}}</p><h2 id='projects-title'>{{projects.title}}</h2></div><p
+            >{{projects.copy}}</p></div>
+          <div class='projects-toolbar'><span>{{projects.imageNote}}</span><div><button
+                class='round-button'
+                type='button'
+                data-project-direction='-1'
+                aria-label='{{aria.previousProject}}'
+              >←</button><button
+                class='round-button'
+                type='button'
+                data-project-direction='1'
+                aria-label='{{aria.nextProject}}'
+              >→</button></div></div>
+          <div class='projects-track' data-projects-track tabindex='0'>
+            {{#each projects.items}}
+              <article class='project-card {{cardClass}}'>
+                <div class='project-image'><picture><source
+                      type='image/avif'
+                      srcset='{{avifSrcset}}'
+                      sizes='{{imageSizes}}'
+                    /><source
+                      type='image/webp'
+                      srcset='{{webpSrcset}}'
+                      sizes='{{imageSizes}}'
+                    /><img
+                      src='/images/{{image}}-800.jpg'
+                      width='800'
+                      height='533'
+                      alt='{{illustrativeLabel}}: {{city}}'
+                      loading='lazy'
+                      decoding='async'
+                    /></picture><span class='demo-badge'>{{badgeLabel}}</span></div>
+                <div class='project-card__body'><h3>{{city}}</h3>{{#if featured}}<dl
+                      class='project-before-after'
+                    ><div><dt>{{beforeLabel}}</dt><dd>{{before}}</dd></div><div><dt
+                        >{{afterLabel}}</dt><dd>{{after}}</dd></div></dl>{{/if}}<ul role='list'><li
+                    >{{capacity}}</li><li>{{generation}}</li><li>{{payback}}</li></ul></div>
+              </article>
+            {{/each}}
+          </div>
+        </div>
+      </section>
+
+      <section class='process section' id='process' aria-labelledby='process-title'>
+        <div class='container'><div class='section-heading'><div><p
+                class='eyebrow'
+              >{{process.eyebrow}}</p><h2 id='process-title'>{{process.title}}</h2></div><p
+            >{{process.note}}</p></div>
+          <ol class='process-list'>{{#each process.steps}}<li><span>{{number}}</span><svg
+                  class='inline-icon'
+                  aria-hidden='true'
+                ><use href='/icons.svg#{{icon}}'></use></svg><h3>{{title}}</h3><p
+                >{{copy}}</p></li>{{/each}}</ol>
+        </div>
+      </section>
+
+      <section class='finance section' id='investment' aria-labelledby='finance-title'>
+        <div class='container finance-grid'>
+          <div class='finance-copy'><p class='eyebrow eyebrow--dark'>{{finance.eyebrow}}</p><h2
+              id='finance-title'
+            >{{finance.title}}</h2><p>{{finance.copy}}</p><ul
+              class='check-list check-list--dark'
+              role='list'
+            >{{#each finance.benefits}}<li><svg class='inline-icon' aria-hidden='true'><use
+                      href='/icons.svg#check'
+                    ></use></svg>{{this}}</li>{{/each}}</ul></div>
+          <div class='finance-chart'><h3>{{finance.timelineTitle}}</h3><svg
+              class='finance-line'
+              viewBox='0 0 650 250'
+              role='img'
+              aria-label='{{finance.timelineTitle}}'
+              data-finance-chart
+              data-finance-title='{{finance.timelineTitle}}'
+            ><path
+                data-finance-line-path
+                d='M30 192 C145 180, 176 177, 250 143 S390 92, 478 70 S570 35, 623 26'
+                fill='none'
+                stroke='#f5bd18'
+                stroke-width='4'
+                stroke-linecap='round'
+              ></path><path
+                data-finance-baseline
+                d='M30 192 H623'
+                fill='none'
+                stroke='rgba(255,255,255,.22)'
+                stroke-width='1'
+              ></path><circle data-finance-point cx='30' cy='192' r='6' fill='#f5bd18'></circle><circle
+                data-finance-point
+                cx='178'
+                cy='177'
+                r='6'
+                fill='#f5bd18'
+              ></circle><circle data-finance-point cx='250' cy='143' r='6' fill='#f5bd18'></circle><circle
+                data-finance-point
+                cx='410'
+                cy='86'
+                r='6'
+                fill='#f5bd18'
+              ></circle><circle data-finance-point cx='623' cy='26' r='6' fill='#f5bd18'></circle></svg><ol
+              class='finance-timeline'
+              role='list'
+            >{{#each finance.timeline}}<li><span data-analysis-timeline-year>{{year}}</span><strong
+                    data-analysis-timeline='{{@index}}'
+                  >{{value}}</strong></li>{{/each}}</ol></div>
+          <div class='finance-included'><h3>{{finance.includedTitle}}</h3><ul role='list'>{{#each
+                finance.included
+              }}<li><svg class='inline-icon' aria-hidden='true'><use
+                      href='/icons.svg#check'
+                    ></use></svg>{{this}}</li>{{/each}}</ul></div>
+          <p class='finance-disclaimer' data-analysis-finance-disclaimer>{{finance.disclaimer}}</p>
+        </div>
+      </section>
+
+      <section class='engineering section' id='engineering' aria-labelledby='engineering-title'><div
+          class='container engineering-grid'
+        ><div class='engineering-photo'><picture><source
+                type='image/avif'
+                srcset='/images/engineer-onsite-480.avif 480w, /images/engineer-onsite-800.avif 800w, /images/engineer-onsite-1200.avif 1200w'
+                sizes='(max-width: 760px) 100vw, 50vw'
+              /><source
+                type='image/webp'
+                srcset='/images/engineer-onsite-480.webp 480w, /images/engineer-onsite-800.webp 800w, /images/engineer-onsite-1200.webp 1200w'
+                sizes='(max-width: 760px) 100vw, 50vw'
+              /><img
+                src='/images/engineer-onsite-800.jpg'
+                width='800'
+                height='533'
+                alt='{{engineering.imageAlt}}'
+                loading='lazy'
+                decoding='async'
+              /></picture><span class='demo-badge'>{{common.illustrative}}</span><p
+            >{{engineering.imageNote}}</p></div><div><p
+              class='eyebrow'
+            >{{engineering.eyebrow}}</p><h2 id='engineering-title'>{{engineering.title}}</h2><p
+            >{{engineering.copy}}</p><ul class='check-list' role='list'>{{#each
+                engineering.items
+              }}<li><svg class='inline-icon' aria-hidden='true'><use
+                      href='/icons.svg#check'
+                    ></use></svg>{{this}}</li>{{/each}}</ul></div></div></section>
+
+      <section class='equipment' aria-labelledby='equipment-title'><div class='container'><h2
+            id='equipment-title'
+          >{{equipment.title}}</h2><div class='brand-row' role='list'>{{#each
+              equipment.brands
+            }}<span role='listitem'>{{this}}</span>{{/each}}</div><p
+          >{{equipment.note}}</p></div></section>
+
+      <section
+        class='myenergy section section--soft'
+        id='myenergy'
+        aria-labelledby='myenergy-title'
+      ><div class='container myenergy-grid'><div><p class='eyebrow'>{{myEnergy.eyebrow}}</p><h2
+              id='myenergy-title'
+            >{{myEnergy.title}}</h2><p>{{myEnergy.copy}}</p><a
+              class='button'
+              href='{{supportBase}}/soon/#account'
+            >{{myEnergy.cta}}</a><p class='section-disclosure'>{{myEnergy.note}}</p></div><div
+            class='myenergy-dashboard'
+            aria-label='MyEnergy {{common.demo}}'
+          ><div class='dashboard-top'><span class='pulse'></span><span>YOURENERGY · MyEnergy</span><span
+                class='pill'
+              >{{common.soon}}</span></div><div class='dashboard-grid'>{{#each
+                myEnergy.metrics
+              }}<div><span>{{label}}</span><strong>{{value}}</strong></div>{{/each}}</div><div
+              class='dashboard-wave'
+              aria-hidden='true'
+            ><span></span><span></span><span></span><span></span><span></span><span></span><span
+              ></span></div></div></div></section>
+
+      <section
+        class='testimonials section'
+        id='testimonials'
+        aria-labelledby='testimonials-title'
+      ><div class='container'><div class='section-heading section-heading--actions'><div><p
+                class='eyebrow'
+              >{{testimonials.eyebrow}}</p><h2
+                id='testimonials-title'
+              >{{testimonials.title}}</h2></div><p>{{testimonials.disclosure}}</p></div><div
+            class='testimonials-toolbar'
+          ><span class='demo-badge'>{{common.demo}}</span><div><button
+                class='round-button'
+                type='button'
+                data-testimonial-direction='-1'
+                aria-label='{{aria.previousTestimonial}}'
+              >←</button><button
+                class='round-button'
+                type='button'
+                data-testimonial-direction='1'
+                aria-label='{{aria.nextTestimonial}}'
+              >→</button></div></div><div
+            class='testimonials-track'
+            data-testimonials-track
+            tabindex='0'
+          >{{#each testimonials.items}}<blockquote class='testimonial'><svg
+                  class='quote-mark'
+                  aria-hidden='true'
+                ><use href='/icons.svg#quote'></use></svg><p>«{{quote}}»</p><footer><strong
+                  >{{name}}</strong><span
+                  >{{city}}</span></footer></blockquote>{{/each}}</div></div></section>
+
+      <section class='faq section section--soft' id='faq' aria-labelledby='faq-title'><div
+          class='container faq-layout'
+        ><div><p class='eyebrow'>{{faq.eyebrow}}</p><h2 id='faq-title'>{{faq.title}}</h2></div><div
+            class='faq-list'
+          >{{#each faq.items}}<details><summary>{{question}}<span
+                    aria-hidden='true'
+                  >+</span></summary><p>{{answer}}</p></details>{{/each}}</div></div></section>
+
+      <section class='final-cta section' id='final-cta' aria-labelledby='final-title'><div
+          class='container final-cta__inner'
+        ><div><p class='eyebrow eyebrow--dark'>YOURENERGY</p><h2
+              id='final-title'
+            >{{finalCta.title}}</h2><p>{{finalCta.copy}}</p></div><div class='final-cta__actions'><a
+              class='button'
+              href='#calculator'
+            >{{finalCta.primary}}</a><a
+              class='button button--ghost'
+              href='#passport'
+              data-open-passport
+            >{{finalCta.secondary}}</a><small>{{finalCta.note}}</small></div></div></section>
     </main>
-    <script type="module" src="/src/main.js"></script>
+
+    <footer class='site-footer' id='contacts'><div class='container footer-grid'><div><a
+            class='wordmark'
+            href='{{homeHref}}'
+          ><span>YOUR</span><strong>ENERGY</strong></a><p>{{footer.description}}</p><a
+            class='footer-account'
+            href='{{supportBase}}/soon/#account'
+          >{{footer.account}}</a></div>{{#each footer.columns}}<div><h2>{{title}}</h2><ul
+              role='list'
+            >{{#each links}}<li><a
+                    href='{{this.[1]}}'
+                  >{{this.[0]}}</a></li>{{/each}}</ul></div>{{/each}}<div class='footer-contact'><h2
+          >{{nav.contacts}}</h2><p><svg class='inline-icon' aria-hidden='true'><use
+                href='/icons.svg#phone'
+              ></use></svg><span>{{contact.phone}} <b>{{contact.demo}}</b></span></p><p><svg
+              class='inline-icon'
+              aria-hidden='true'
+            ><use href='/icons.svg#mail'></use></svg><span>{{contact.email}}
+              <b>{{contact.demo}}</b></span></p><p><svg class='inline-icon' aria-hidden='true'><use
+                href='/icons.svg#pin'
+              ></use></svg><span>{{contact.city}} <b>{{contact.demo}}</b></span></p><small
+          >{{contact.note}}</small></div></div><div class='container footer-bottom'><span
+        >{{footer.copyright}}</span><span><a
+            href='{{supportBase}}/privacy/'
+          >{{footer.privacy}}</a><a
+            href='{{supportBase}}/terms/'
+          >{{footer.terms}}</a></span></div></footer>
+
+    <dialog class='passport-dialog' data-passport-dialog aria-labelledby='dialog-title'><form
+        method='dialog'
+        class='dialog-close'
+      ><button class='round-button' aria-label='{{passport.close}}'><span
+            aria-hidden='true'
+          >×</span></button></form><div class='dialog-content'><p
+          class='eyebrow'
+        >{{passport.reportLabel}} · {{common.demo}}</p><h2
+          id='dialog-title'
+        >{{passport.dialogTitle}}</h2><div class='dialog-report'><article class='passport-card'><div
+              class='passport-card__top'
+            ><span class='wordmark wordmark--small'><span>YOUR</span><strong
+                >ENERGY</strong></span><span class='pill'>{{passport.badge}}</span></div><p
+              class='passport-label'
+            >{{passport.reportLabel}}</p><h3
+              data-analysis-location
+            >{{passport.reportAddress}}</h3><dl class='passport-specs'><div><dt
+                >{{passport.system}}</dt><dd
+                  data-analysis='capacity'
+                >{{passport.capacity}}</dd></div><div><dt>{{passport.source}}</dt><dd
+                  data-analysis='panels'
+                >{{passport.panels}}</dd></div></dl></article><div class='dialog-numbers'><h3
+            >{{passport.chartTitle}}</h3><dl>{{#each metrics}}<div><dt>{{label}}</dt><dd
+                    data-analysis='{{key}}'
+                  >{{value}} {{unit}}</dd></div>{{/each}}</dl><p
+            >{{finance.disclaimer}}</p></div></div></div></dialog>
+
+    <script id='page-config' type='application/json'>{{{pageConfig}}}</script>
+    <script type='module' src='/src/main.js'></script>
   </body>
 </html>

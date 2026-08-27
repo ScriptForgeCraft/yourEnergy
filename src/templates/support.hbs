@@ -1,20 +1,27 @@
 <!doctype html>
-<html lang="{{locale}}">
+<html lang='{{locale}}'>
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="robots" content="noindex,follow" />
-    <meta name="theme-color" content="#071a2d" />
+    <meta charset='UTF-8' />
+    <meta name='viewport' content='width=device-width, initial-scale=1.0' />
+    <meta name='robots' content='noindex,follow' />
+    <meta name='theme-color' content='#071a2d' />
     <title>{{title}} | YOURENERGY</title>
-    <link rel="stylesheet" href="/src/styles/main.css" />
+    <link rel='canonical' href='https://yourenergy.am{{path}}' />
+    <link rel='icon' href='/favicon.svg' type='image/svg+xml' />
+    <link rel='stylesheet' href='/src/styles/main.css' />
   </head>
-  <body class="support-page">
-    <main class="support-shell">
-      <a class="wordmark" href="{{homeHref}}"><span>YOUR</span><strong>ENERGY</strong></a>
-      <p class="eyebrow">{{label}}</p>
+  <body class='support-page'>
+    <main class='support-shell'>
+      <a class='wordmark' href='{{homeHref}}'><span>YOUR</span><strong>ENERGY</strong></a>
+      <p class='eyebrow'>{{label}}</p>
       <h1>{{title}}</h1>
       <p>{{copy}}</p>
-      <a class="button" href="{{homeHref}}">{{back}}</a>
+      <a class='button' href='{{homeHref}}'>{{back}}</a>
+      {{#if anchors}}
+        <div class='support-anchor-list' aria-label='Upcoming areas'>
+          {{#each anchors}}<span id='{{this}}'></span>{{/each}}
+        </div>
+      {{/if}}
     </main>
   </body>
 </html>
