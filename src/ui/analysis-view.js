@@ -42,13 +42,15 @@ const createFinancePath = (timeline) => {
 
 export const createAnalysisView = ({ locale }) => {
   const isHy = locale.startsWith('hy');
-  const years = isHy ? 'տարի' : 'лет';
-  const area = isHy ? 'մ²' : 'м²';
+  const isEn = locale.startsWith('en');
+  const years = isHy ? 'տարի' : isEn ? 'years' : 'лет';
+  const area = isHy ? 'մ²' : isEn ? 'm²' : 'м²';
   const timelineYear = (year) => {
     const numericYear = Number(year);
     if (!Number.isFinite(numericYear)) return '';
-    if (numericYear === 0) return isHy ? 'Այսօր' : 'Сегодня';
-    return isHy ? `${numericYear} տարի` : `${numericYear} лет`;
+    if (numericYear === 0) return isHy ? 'Այսօր' : isEn ? 'Today' : 'Сегодня';
+    if (isHy) return `${numericYear} տարի`;
+    return isEn ? `${numericYear} years` : `${numericYear} лет`;
   };
   const financeDisclaimer = (analysis) => {
     const capex = formatNumber(analysis.timeline[0]?.net * -1 || 0, locale);
@@ -63,7 +65,9 @@ export const createAnalysisView = ({ locale }) => {
     });
     return isHy
       ? `${capex} ֏ ÷ ${annualSavings} ֏/տարի = ${payback} տարի։ Սակագնի աճը, դեգրադացիան, սպասարկումը, վարկն ու դիսկոնտավորումը չեն հաշվարկվել։ 25 տարվա համախառն խնայողությունը ${grossSavings} մլն ֏ է։`
-      : `${capex} ֏ ÷ ${annualSavings} ֏/год = ${payback} года. Не учтены рост тарифа, деградация, сервис, кредит и дисконтирование. Валовая экономия за 25 лет — ${grossSavings} млн ֏.`;
+      : isEn
+        ? `${capex} ֏ ÷ ${annualSavings} ֏/year = ${payback} years. Tariff growth, degradation, maintenance, financing, and discounting are not included. Gross savings over 25 years are ${grossSavings}M ֏.`
+        : `${capex} ֏ ÷ ${annualSavings} ֏/год = ${payback} года. Не учтены рост тарифа, деградация, сервис, кредит и дисконтирование. Валовая экономия за 25 лет — ${grossSavings} млн ֏.`;
   };
 
   const values = {

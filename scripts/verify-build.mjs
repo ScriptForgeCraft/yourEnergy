@@ -13,7 +13,11 @@ const expectedPages = [
   'soon/index.html',
   'ru/privacy/index.html',
   'ru/terms/index.html',
-  'ru/soon/index.html'
+  'ru/soon/index.html',
+  'en/index.html',
+  'en/privacy/index.html',
+  'en/terms/index.html',
+  'en/soon/index.html'
 ];
 
 const failures = [];
@@ -178,6 +182,16 @@ function validateJsonLd(html, page) {
     fail(`${page}: FAQPage contains an incomplete question/answer`);
   }
 
+  const organization = nodes.find((node) => includesType(node, 'Organization'));
+  if (
+    !organization ||
+    organization.name !== 'Your Energy LLC' ||
+    organization.telephone !== '+374 91 095 950' ||
+    organization.address?.streetAddress !== 'Artashisyan 48 14 Kotayq, Zovuni, 26 33 str, Yerevan'
+  ) {
+    fail(`${page}: Organization JSON-LD must contain the supplied contact details`);
+  }
+
   const serialized = JSON.stringify(documents);
   if (/\+374\s*10\s*123\s*456|info@yourenergy\.am/iu.test(serialized)) {
     fail(`${page}: demo contact data leaked into JSON-LD`);
@@ -230,6 +244,7 @@ async function validateHomeSeo(html, page, canonical) {
   const expected = new Map([
     ['hy', `${origin}/`],
     ['ru', `${origin}/ru/`],
+    ['en', `${origin}/en/`],
     ['x-default', `${origin}/`]
   ]);
   for (const [language, href] of expected) {
@@ -257,6 +272,28 @@ async function validateHomeSeo(html, page, canonical) {
   validateJsonLd(html, page);
 }
 
+function validateLanguageSwitcher(html, page, currentLocale) {
+  const expected = new Map([
+    ['hy', '/'],
+    ['ru', '/ru/'],
+    ['en', '/en/']
+  ]);
+  const languageLinks = tagAttributes(html, 'a').filter((attributes) =>
+    attributes.get('class')?.split(/\s+/u).includes('language-link')
+  );
+
+  for (const [locale, href] of expected) {
+    if (locale === currentLocale) continue;
+    if (
+      !languageLinks.some(
+        (attributes) => attributes.get('hreflang') === locale && attributes.get('href') === href
+      )
+    ) {
+      fail(`${page}: language switcher is missing ${locale} => ${href}`);
+    }
+  }
+}
+
 function validateSupportNoindex(html, page) {
   const robots = findMeta(html, 'name', 'robots')?.get('content')?.toLowerCase() ?? '';
   if (!robots.includes('noindex')) fail(`${page}: support page must be noindex`);
@@ -270,9 +307,35 @@ async function validateSitemap() {
   }
   const sitemap = await readFile(sitemapPath, 'utf8');
   const locations = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/giu)].map((match) => match[1].trim());
-  const expected = [`${origin}/`, `${origin}/ru/`];
+  const expected = [`${origin}/`, `${origin}/ru/`, `${origin}/en/`];
   if (locations.length !== expected.length || expected.some((url) => !locations.includes(url))) {
     fail(`sitemap must include only ${expected.join(', ')}`);
+  }
+
+  const expectedAlternates = new Map([
+    ['hy', `${origin}/`],
+    ['ru', `${origin}/ru/`],
+    ['en', `${origin}/en/`],
+    ['x-default', `${origin}/`]
+  ]);
+  const entries = [...sitemap.matchAll(/<url>([\s\S]*?)<\/url>/giu)];
+  for (const entry of entries) {
+    const location = entry[1].match(/<loc>([^<]+)<\/loc>/iu)?.[1]?.trim() ?? 'unknown URL';
+    const alternates = [...entry[1].matchAll(/<xhtml:link\b[^>]*>/giu)].map((match) =>
+      attrs(match[0])
+    );
+    for (const [language, href] of expectedAlternates) {
+      if (
+        !alternates.some(
+          (attributes) =>
+            attributes.get('rel') === 'alternate' &&
+            attributes.get('hreflang') === language &&
+            attributes.get('href') === href
+        )
+      ) {
+        fail(`sitemap ${location}: missing hreflang ${language} => ${href}`);
+      }
+    }
   }
 }
 
@@ -291,7 +354,7 @@ for (const page of expectedPages) {
 }
 
 for (const [page, html] of pages) {
-  const locale = page.startsWith('ru/') ? 'ru' : 'hy';
+  const locale = page.startsWith('ru/') ? 'ru' : page.startsWith('en/') ? 'en' : 'hy';
   validateBaseDocument(html, page, locale);
   await validateAssets(html, page);
   await validateAnchors(html, page, pages);
@@ -301,8 +364,15 @@ if (pages.has('index.html'))
   await validateHomeSeo(pages.get('index.html'), 'index.html', `${origin}/`);
 if (pages.has('ru/index.html'))
   await validateHomeSeo(pages.get('ru/index.html'), 'ru/index.html', `${origin}/ru/`);
+if (pages.has('en/index.html'))
+  await validateHomeSeo(pages.get('en/index.html'), 'en/index.html', `${origin}/en/`);
+if (pages.has('index.html')) validateLanguageSwitcher(pages.get('index.html'), 'index.html', 'hy');
+if (pages.has('ru/index.html'))
+  validateLanguageSwitcher(pages.get('ru/index.html'), 'ru/index.html', 'ru');
+if (pages.has('en/index.html'))
+  validateLanguageSwitcher(pages.get('en/index.html'), 'en/index.html', 'en');
 for (const page of expectedPages.filter(
-  (page) => page !== 'index.html' && page !== 'ru/index.html'
+  (page) => !['index.html', 'ru/index.html', 'en/index.html'].includes(page)
 )) {
   if (pages.has(page)) validateSupportNoindex(pages.get(page), page);
 }

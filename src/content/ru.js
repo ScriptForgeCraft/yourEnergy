@@ -20,10 +20,6 @@ export default {
   path: '/ru/',
   homeHref: '/ru/',
   supportBase: '/ru',
-  switchLabel: 'AM',
-  switchHref: '/',
-  switchHreflang: 'hy',
-  switchName: 'Открыть армянскую версию',
   meta: {
     title: 'Солнечные системы и персональный расчёт в Армении | YOURENERGY',
     description:
@@ -35,6 +31,7 @@ export default {
     skip: 'Перейти к основному содержанию',
     primaryNav: 'Основная навигация',
     mobileNav: 'Мобильная навигация',
+    languageNav: 'Выбор языка',
     menu: 'Открыть навигационное меню',
     logo: 'YOURENERGY — главная страница',
     previousProject: 'Предыдущий проект',
@@ -53,11 +50,11 @@ export default {
     contacts: 'Контакты'
   },
   contact: {
-    phone: '+374 10 123 456',
-    email: 'info@yourenergy.am',
-    city: 'Ереван, Армения',
-    demo: 'демо',
-    note: 'Эти данные не являются активными каналами связи.'
+    phone: '+374 91 095 950',
+    phoneHref: 'tel:+37491095950',
+    address: 'Artashisyan 48 14 Kotayq, Zovuni, 26 33 str, Yerevan',
+    hours: 'Открыто до 21:00',
+    note: 'Контактные данные предоставлены Your Energy LLC.'
   },
   common: {
     cta: 'Рассчитать мой дом',
@@ -139,6 +136,7 @@ export default {
     chartTitle: 'Помесячная генерация, kWh',
     chartDescription: 'Столбчатый график демонстрационной генерации с января по декабрь.',
     tableTitle: 'Числовые данные помесячной генерации',
+    monthLabel: 'Месяц',
     months
   },
   trust: {
@@ -391,7 +389,8 @@ export default {
     note: 'Бесплатно, без обязательств и без коммерческого обещания.'
   },
   footer: {
-    description: 'Демонстрация будущей цифровой solar-платформы и компании полного цикла.',
+    description:
+      'Солнечные системы для дома и бизнеса: аудит, проектирование, установка, сервис и мониторинг.',
     columns: [
       {
         title: 'Для дома',
@@ -433,7 +432,7 @@ export default {
     account: 'Личный кабинет →',
     privacy: 'Проект политики конфиденциальности',
     terms: 'Проект условий использования',
-    copyright: '© 2026 YOURENERGY. Демонстрационный сайт.'
+    copyright: '© 2026 YOURENERGY. Все права защищены.'
   },
   status: {
     minAddress: 'Введите адрес длиной не менее 5 символов.',

@@ -1309,6 +1309,15 @@ h3 {
   margin: 8px 0;
 }
 
+.footer-contact address {
+  font-style: normal;
+}
+
+.footer-contact a {
+  color: inherit;
+  font-weight: 750;
+}
+
 .footer-contact .inline-icon {
   margin-top: 0.12em;
   color: #f1bf1b;

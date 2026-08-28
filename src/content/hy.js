@@ -20,10 +20,6 @@ export default {
   path: '/',
   homeHref: '/',
   supportBase: '',
-  switchLabel: 'RU',
-  switchHref: '/ru/',
-  switchHreflang: 'ru',
-  switchName: 'Դիտել ռուսերեն տարբերակը',
   meta: {
     title: 'Արևային համակարգեր և անհատական հաշվարկ Հայաստանում | YOURENERGY',
     description:
@@ -35,6 +31,7 @@ export default {
     skip: 'Անցնել հիմնական բովանդակությանը',
     primaryNav: 'Հիմնական նավիգացիա',
     mobileNav: 'Բջջային նավիգացիա',
+    languageNav: 'Լեզվի ընտրություն',
     menu: 'Բացել նավիգացիոն ցանկը',
     logo: 'YOURENERGY — գլխավոր էջ',
     previousProject: 'Նախորդ նախագիծը',
@@ -53,11 +50,11 @@ export default {
     contacts: 'Կապ'
   },
   contact: {
-    phone: '+374 10 123 456',
-    email: 'info@yourenergy.am',
-    city: 'Երևան, Հայաստան',
-    demo: 'դեմո',
-    note: 'Այս տվյալները կապի գործող միջոցներ չեն։'
+    phone: '+374 91 095 950',
+    phoneHref: 'tel:+37491095950',
+    address: 'Artashisyan 48 14 Kotayq, Zovuni, 26 33 str, Yerevan',
+    hours: 'Բաց է մինչև 21:00',
+    note: 'Կոնտակտային տվյալները տրամադրվել են Your Energy LLC-ի կողմից։'
   },
   common: {
     cta: 'Հաշվել իմ տունը',
@@ -139,6 +136,7 @@ export default {
     chartTitle: 'Ամսական արտադրություն, kWh',
     chartDescription: 'Հունվարից դեկտեմբեր ցուցադրական արտադրության սյունակային գրաֆիկ։',
     tableTitle: 'Ամսական արտադրության թվային տվյալներ',
+    monthLabel: 'Ամիս',
     months
   },
   trust: {
@@ -401,7 +399,8 @@ export default {
     note: 'Անվճար, առանց պարտավորության և առևտրային խոստման։'
   },
   footer: {
-    description: 'Ապագա թվային solar-հարթակի և ամբողջական ցիկլով ընկերության ցուցադրություն։',
+    description:
+      'Արևային համակարգեր տան և բիզնեսի համար՝ աուդիտ, նախագծում, տեղադրում, սպասարկում և մոնիտորինգ։',
     columns: [
       {
         title: 'Տան համար',
@@ -443,7 +442,7 @@ export default {
     account: 'Անձնական հաշիվ →',
     privacy: 'Գաղտնիության քաղաքականության նախագիծ',
     terms: 'Օգտագործման պայմանների նախագիծ',
-    copyright: '© 2026 YOURENERGY։ Ցուցադրական կայք։'
+    copyright: '© 2026 YOURENERGY։ Բոլոր իրավունքները պաշտպանված են։'
   },
   status: {
     minAddress: 'Մուտքագրեք առնվազն 5 նիշ պարունակող հասցե։',

@@ -3,16 +3,44 @@ import { dirname, resolve } from 'node:path';
 import Handlebars from 'handlebars';
 import hy from '../src/content/hy.js';
 import ru from '../src/content/ru.js';
+import en from '../src/content/en.js';
+import { GENERATED_CONTENT_LOCALES } from '../src/content/schema.js';
 
 const root = resolve(import.meta.dirname, '..');
 const template = await readFile(resolve(root, 'src/templates/home.hbs'), 'utf8');
 const supportTemplate = await readFile(resolve(root, 'src/templates/support.hbs'), 'utf8');
 
-Handlebars.registerHelper('eq', (left, right) => left === right);
-
 const render = Handlebars.compile(template, { noEscape: false });
 const renderSupport = Handlebars.compile(supportTemplate, { noEscape: false });
 const writeGenerated = (file, markup) => writeFile(file, markup.replace(/[ \t]+\n/g, '\n'), 'utf8');
+
+const runtimeLocales = Object.freeze(
+  Object.fromEntries(GENERATED_CONTENT_LOCALES.map(({ key, locale }) => [key, locale]))
+);
+
+const origin = 'https://yourenergy.am';
+const publishedAlternateLinks = Object.freeze([
+  ...GENERATED_CONTENT_LOCALES.map(({ key, path }) => ({
+    hreflang: key,
+    href: `${origin}${path}`
+  })),
+  { hreflang: 'x-default', href: `${origin}/` }
+]);
+
+const languageLabels = Object.freeze({ hy: 'AM', ru: 'RU', en: 'EN' });
+const localizedLanguageNames = Object.freeze({
+  hy: Object.freeze({ hy: 'Հայերեն', ru: 'Ռուսերեն', en: 'Անգլերեն' }),
+  ru: Object.freeze({ hy: 'Армянский', ru: 'Русский', en: 'Английский' }),
+  en: Object.freeze({ hy: 'Armenian', ru: 'Russian', en: 'English' })
+});
+
+const createLanguageLinks = (currentLocale) =>
+  GENERATED_CONTENT_LOCALES.filter(({ key }) => key !== currentLocale).map(({ key, path }) => ({
+    href: path,
+    hreflang: key,
+    label: languageLabels[key],
+    name: localizedLanguageNames[currentLocale][key]
+  }));
 
 const escapeJsonForHtml = (value) =>
   JSON.stringify(value)
@@ -27,7 +55,9 @@ const createJsonLd = (content) => {
   const serviceName =
     content.locale === 'hy'
       ? 'Արևային համակարգի ցուցադրական հաշվարկ'
-      : 'Демонстрационный расчёт солнечной системы';
+      : content.locale === 'ru'
+        ? 'Демонстрационный расчёт солнечной системы'
+        : 'Solar system estimate';
 
   return {
     '@context': 'https://schema.org',
@@ -41,8 +71,16 @@ const createJsonLd = (content) => {
       {
         '@type': 'Organization',
         '@id': 'https://yourenergy.am/#organization',
-        name: 'YOURENERGY',
-        url: 'https://yourenergy.am/'
+        name: 'Your Energy LLC',
+        alternateName: 'YOURENERGY',
+        url: 'https://yourenergy.am/',
+        telephone: content.contact.phone,
+        address: {
+          '@type': 'PostalAddress',
+          streetAddress: content.contact.address,
+          addressLocality: 'Yerevan',
+          addressCountry: 'AM'
+        }
       },
       {
         '@type': 'Service',
@@ -67,6 +105,8 @@ const createJsonLd = (content) => {
 
 const createHomeContext = (content) => ({
   ...content,
+  alternateLinks: publishedAlternateLinks,
+  languageLinks: createLanguageLinks(content.locale),
   solutions: {
     ...content.solutions,
     items: content.solutions.items.map((item) => ({
@@ -100,16 +140,19 @@ const createHomeContext = (content) => ({
   },
   jsonLd: escapeJsonForHtml(createJsonLd(content)),
   pageConfig: escapeJsonForHtml({
-    locale: content.locale === 'hy' ? 'hy-AM' : 'ru-RU',
+    locale: runtimeLocales[content.locale],
     status: content.status,
     map: { image: '/images/roof-scan-768.webp' }
   })
 });
 
-for (const [file, content] of [
-  ['index.html', hy],
-  ['ru/index.html', ru]
-]) {
+const homeContent = { hy, ru, en };
+
+for (const { file, key } of GENERATED_CONTENT_LOCALES) {
+  const content = homeContent[key];
+  if (!content) {
+    throw new Error(`Published locale ${key} is missing homepage content.`);
+  }
   const output = resolve(root, file);
   await mkdir(dirname(output), { recursive: true });
   await writeGenerated(output, render(createHomeContext(content)));
@@ -199,6 +242,43 @@ const supportPages = [
       title: 'Этот раздел готовится',
       copy: 'Мы готовим полноценные разделы для бизнеса, блога, документов и личного кабинета MyEnergy.',
       back: 'Вернуться на главную',
+      anchors: commonSoonAnchors
+    }
+  ],
+  [
+    'en/privacy/index.html',
+    {
+      locale: 'en',
+      path: '/en/privacy/',
+      homeHref: '/en/',
+      label: 'Draft legal notice',
+      title: 'Privacy policy',
+      copy: 'In this demonstration version, the address and electricity-bill file are not sent to a server. This draft requires legal approval before publication.',
+      back: 'Back to homepage'
+    }
+  ],
+  [
+    'en/terms/index.html',
+    {
+      locale: 'en',
+      path: '/en/terms/',
+      homeHref: '/en/',
+      label: 'Draft legal notice',
+      title: 'Terms of use',
+      copy: 'The estimates and projects shown on this site are demonstration examples and do not constitute a commercial offer.',
+      back: 'Back to homepage'
+    }
+  ],
+  [
+    'en/soon/index.html',
+    {
+      locale: 'en',
+      path: '/en/soon/',
+      homeHref: '/en/',
+      label: 'Coming soon',
+      title: 'This section is being prepared',
+      copy: 'We are preparing detailed pages for business solutions, the blog, documents and the MyEnergy account.',
+      back: 'Back to homepage',
       anchors: commonSoonAnchors
     }
   ]

@@ -1,9 +1,15 @@
 const allowedTypes = new Set(['application/pdf', 'image/jpeg', 'image/png']);
 const allowedExtensions = /\.(pdf|jpe?g|png)$/i;
-const maxBytes = 10 * 1024 * 1024;
+export const MAX_UPLOAD_BYTES = 10 * 1024 * 1024;
 
 const isSupportedFile = (file) =>
   allowedTypes.has(file.type) || (!file.type && allowedExtensions.test(file.name));
+
+export const validateUploadFile = (file) => {
+  if (!file || !isSupportedFile(file)) return 'INVALID_FILE';
+  if (file.size > MAX_UPLOAD_BYTES) return 'FILE_TOO_LARGE';
+  return null;
+};
 
 export const initFileUpload = ({ status }) => {
   const dropZone = document.querySelector('[data-file-drop]');
@@ -34,11 +40,12 @@ export const initFileUpload = ({ status }) => {
     if (!file) {
       return;
     }
-    if (!isSupportedFile(file)) {
+    const validationError = validateUploadFile(file);
+    if (validationError === 'INVALID_FILE') {
       setStatus(status.invalidFile, true);
       return;
     }
-    if (file.size > maxBytes) {
+    if (validationError === 'FILE_TOO_LARGE') {
       setStatus(status.largeFile, true);
       return;
     }

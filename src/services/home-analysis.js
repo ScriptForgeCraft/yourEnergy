@@ -66,8 +66,13 @@ export class HomeAnalysisService {
 
     await waitForNextTask(signal);
     throwIfAborted(signal);
+    const localeKey = String(locale).toLowerCase().startsWith('hy')
+      ? 'hy'
+      : String(locale).toLowerCase().startsWith('en')
+        ? 'en'
+        : 'ru';
     return buildAnalysis(selectDemoProfile(address), {
-      locale: locale.startsWith('hy') ? 'hy' : 'ru'
+      locale: localeKey
     });
   }
 }

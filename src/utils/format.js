@@ -30,9 +30,13 @@ export const formatCompactAmd = (value, locale = 'ru-RU') => {
     ? isMillion
       ? 'մլն'
       : 'հազ.'
-    : isMillion
-      ? 'млн'
-      : 'тыс.';
+    : locale.startsWith('en')
+      ? isMillion
+        ? 'M'
+        : 'K'
+      : isMillion
+        ? 'млн'
+        : 'тыс.';
   return `${formatDecimal(magnitude, locale, { maximumFractionDigits: 1 })} ${suffix} ֏`;
 };
 

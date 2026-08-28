@@ -1,10 +1,10 @@
 # YOURENERGY — engineering handoff
 
-Дата проверки: 27 августа 2026. Проект локальный; деплой в этот этап не входит.
+Дата проверки: 28 августа 2026. Проект локальный; деплой в этот этап не входит.
 
 ## 1. Структура
 
-Vite MPA генерирует полноценные HTML-документы из Handlebars до запуска браузера: армянская homepage — `/`, русская — `/ru/`. Также созданы `/privacy/`, `/terms/`, `/soon/` и локализованные RU-версии. Все вспомогательные страницы `noindex`.
+Vite MPA генерирует полноценные HTML-документы из Handlebars до запуска браузера: армянская homepage — `/`, русская — `/ru/`. Также созданы `/privacy/`, `/terms/`, `/soon/` и локализованные RU-версии. Все вспомогательные страницы `noindex`. В content schema зарезервирован English без маршрута или hreflang.
 
 ## 2. Визуальное соответствие референсу
 
@@ -16,7 +16,7 @@ Runtime-зависимость только `leaflet`; она подгружае
 
 ## 4. Реализованный функционал
 
-Работают sticky/mobile navigation, переключение HY/RU обычными ссылками, калькулятор, отмена предыдущего анализа, динамическое обновление всех результатов, upload/drop/remove файла, native Passport dialog с Escape/focus return, native `<details>` решений и FAQ, scroll-snap проектов/отзывов, финальный CTA, chart focus labels и Leaflet Roof Scan.
+Работают sticky/mobile navigation, переключение HY/RU обычными ссылками, калькулятор, отмена предыдущего анализа, динамическое обновление карты/Passport/bar-chart/доступной таблицы/финансового графика и формулы, upload/drop/remove файла, native Passport dialog с Escape/focus return, native `<details>` решений и FAQ, scroll-snap проектов/отзывов, финальный CTA, chart focus labels и Leaflet Roof Scan.
 
 ## 5. Модель расчёта
 
@@ -44,18 +44,18 @@ Runtime-зависимость только `leaflet`; она подгружае
 
 ## 11. Build, QA и performance
 
-`npm test` — 7/7; `npm run lint`, `npm run format:check`, `npm run build`, `npm run verify:build` — успешно. Post-build verifier прошёл все 8 routes, каноникалы/hreflang/JSON-LD/anchors/assets. Browser smoke проверил menu, language navigation, calculator, upload errors/remove, dialog, solutions, projects, testimonials, FAQ, CTA, Leaflet, JS-off, console и overflow на 320/375/430/768/1024/1280/1440/1728 px.
+`npm test` — 8/8; `npm run lint`, `npm run format:check`, `npm run build`, `npm run verify:build` и `npx knip` — успешно. Post-build verifier прошёл все 8 routes, doctype, каноникалы/hreflang/JSON-LD/anchors/assets. Browser smoke проверил menu, language navigation, calculator и единое обновление данных, upload errors/remove/focus, dialog, solutions, projects, testimonials, FAQ, CTA, Leaflet, JS-off, console и overflow на 320/375/430/768/1024/1280/1440/1728 px.
 
-Локальный production-preview Lighthouse (375 и 1440 px):
+Локальный production-preview Lighthouse (mobile и desktop):
 
-| Route / viewport | Performance | A11y | Best practices | SEO | FCP / LCP / TBT / CLS      |
-| ---------------- | ----------: | ---: | -------------: | --: | -------------------------- |
-| HY 375           |          98 |  100 |            100 | 100 | 0,9 s / 1,3 s / 170 ms / 0 |
-| RU 375           |         100 |  100 |            100 | 100 | 0,9 s / 1,2 s / 0 ms / 0   |
-| HY 1440          |          93 |  100 |            100 | 100 | 0,9 s / 1,7 s / 0 ms / 0   |
-| RU 1440          |          93 |  100 |            100 | 100 | 0,9 s / 1,7 s / 0 ms / 0   |
+| Route / viewport | Performance | A11y | Best practices | SEO | FCP / LCP / TBT / CLS    |
+| ---------------- | ----------: | ---: | -------------: | --: | ------------------------ |
+| HY mobile        |         100 |  100 |            100 | 100 | 0,9 s / 1,4 s / 0 ms / 0 |
+| RU mobile        |         100 |  100 |            100 | 100 | 0,9 s / 1,4 s / 0 ms / 0 |
+| HY desktop       |         100 |  100 |            100 | 100 | 0,3 s / 0,4 s / 0 ms / 0 |
+| RU desktop       |         100 |  100 |            100 | 100 | 0,3 s / 0,4 s / 0 ms / 0 |
 
-Это lab-результаты локального Vite preview, а не гарантия production CWV. Initial app JS: 5,96 KB gzip; CSS: 7,78 KB gzip; Leaflet остаётся отдельным lazy chunk: 43,38 KB gzip. Финальные full-page screenshots сохранены в `reports/screenshots/` как `hy-375-final.jpg`, `hy-1440-final.jpg`, `ru-375-final.jpg`, `ru-1440-final.jpg`.
+Это lab-результаты локального Vite preview, а не гарантия production CWV. Initial app JS: 7,08 KB gzip; CSS: 7,80 KB gzip; Leaflet остаётся отдельным lazy chunk: 43,38 KB gzip. Финальные full-page screenshots сохранены в `reports/screenshots/` как `hy-375-final.jpg`, `hy-1440-final.jpg`, `ru-375-final.jpg`, `ru-1440-final.jpg`.
 
 ## 12. Перед запуском и следующие три шага
 

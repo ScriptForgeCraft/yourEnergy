@@ -1,6 +1,10 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 
+import en from '../src/content/en.js';
+import hy from '../src/content/hy.js';
+import ru from '../src/content/ru.js';
+import { CONTENT_LOCALE_SCHEMA, GENERATED_CONTENT_LOCALES } from '../src/content/schema.js';
 import { BASE_MONTHLY, BASE_PROFILE, buildAnalysis } from '../src/data/demo-profiles.js';
 import {
   AnalysisError,
@@ -10,9 +14,11 @@ import {
 import {
   formatCurrency,
   formatDecimal,
+  formatCompactAmd,
   formatNumber,
   isFiniteDisplayValue
 } from '../src/utils/format.js';
+import { MAX_UPLOAD_BYTES, validateUploadFile } from '../src/ui/file-upload.js';
 
 const ADDRESS = 'Yerevan, Arabkir, Komitas 12';
 const EXPECTED_MONTHLY = [600, 750, 1050, 1350, 1600, 1750, 1850, 1750, 1450, 1100, 750, 600];
@@ -29,6 +35,16 @@ function assertFiniteTree(value, trail = 'analysis', seen = new WeakSet()) {
   for (const [key, nested] of Object.entries(value)) {
     assertFiniteTree(nested, `${trail}.${key}`, seen);
   }
+}
+
+function contentShape(value) {
+  if (Array.isArray(value)) return value.map(contentShape);
+  if (!value || typeof value !== 'object') return typeof value;
+  return Object.fromEntries(
+    Object.keys(value)
+      .sort()
+      .map((key) => [key, contentShape(value[key])])
+  );
 }
 
 test('address validation accepts a meaningful address and rejects incomplete input', () => {
@@ -73,6 +89,44 @@ test('buildAnalysis returns the documented financial model without non-finite va
   });
   assert.equal(analysis.savings.gross25Years, 18_000_000);
   assertFiniteTree(analysis);
+});
+
+test('English has a full published route in the content schema', () => {
+  const english = buildAnalysis(BASE_PROFILE, { locale: 'en-US' });
+  const englishRoute = CONTENT_LOCALE_SCHEMA.find(({ key }) => key === 'en');
+
+  assert.equal(english.location.label, 'Yerevan · standard demo profile');
+  assert.equal(english.roof.orientationLabel, 'South-west (236°)');
+  assert.equal(formatCompactAmd(18_000_000, 'en-US'), '18 M ֏');
+  assert.deepEqual(
+    GENERATED_CONTENT_LOCALES.map(({ key }) => key),
+    ['hy', 'ru', 'en']
+  );
+  assert.deepEqual(englishRoute, {
+    key: 'en',
+    locale: 'en-US',
+    path: '/en/',
+    file: 'en/index.html',
+    published: true
+  });
+});
+
+test('all locale dictionaries have the same template data shape', () => {
+  assert.deepEqual(contentShape(en), contentShape(hy));
+  assert.deepEqual(contentShape(en), contentShape(ru));
+});
+
+test('bill upload validation permits supported files through 10 MiB only', () => {
+  assert.equal(
+    validateUploadFile({ name: 'bill.pdf', type: 'application/pdf', size: MAX_UPLOAD_BYTES }),
+    null
+  );
+  assert.equal(validateUploadFile({ name: 'roof.JPG', type: '', size: 1024 }), null);
+  assert.equal(validateUploadFile({ name: 'bill.txt', type: 'text/plain', size: 1024 }), 'INVALID_FILE');
+  assert.equal(
+    validateUploadFile({ name: 'bill.png', type: 'image/png', size: MAX_UPLOAD_BYTES + 1 }),
+    'FILE_TOO_LARGE'
+  );
 });
 
 test('HomeAnalysisService exposes a demo analysis through the public async contract', async () => {

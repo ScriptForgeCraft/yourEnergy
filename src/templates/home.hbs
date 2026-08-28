@@ -19,9 +19,7 @@
     <meta name='twitter:description' content='{{meta.ogDescription}}' />
     <meta name='twitter:image' content='https://yourenergy.am/og.png' />
     <link rel='canonical' href='https://yourenergy.am{{path}}' />
-    <link rel='alternate' hreflang='hy' href='https://yourenergy.am/' />
-    <link rel='alternate' hreflang='ru' href='https://yourenergy.am/ru/' />
-    <link rel='alternate' hreflang='x-default' href='https://yourenergy.am/' />
+    {{#each alternateLinks}}<link rel='alternate' hreflang='{{hreflang}}' href='{{href}}' />{{/each}}
     <link rel='icon' href='/favicon.svg' type='image/svg+xml' />
     <link rel='stylesheet' href='/src/styles/main.css' />
     <script type='application/ld+json'>{{{jsonLd}}}</script>
@@ -42,14 +40,16 @@
           <a href='#contacts'>{{nav.contacts}}</a>
         </nav>
         <div class='header-actions'>
-          <span class='demo-phone' aria-label='{{contact.note}}'>{{contact.phone}}
-            <small>{{contact.demo}}</small></span>
-          <a
-            class='language-link'
-            href='{{switchHref}}'
-            hreflang='{{switchHreflang}}'
-            aria-label='{{switchLabel}} — {{switchName}}'
-          >{{switchLabel}}</a>
+          <a class='header-phone' href='{{contact.phoneHref}}'><strong>{{contact.phone}}</strong><small
+            >{{contact.hours}}</small></a>
+          <nav class='language-switcher' aria-label='{{aria.languageNav}}'>{{#each
+              languageLinks
+            }}<a
+                class='language-link'
+                href='{{href}}'
+                hreflang='{{hreflang}}'
+                aria-label='{{label}} — {{name}}'
+              >{{label}}</a>{{/each}}</nav>
           <a class='button button--small' href='#calculator'>{{common.cta}}</a>
         </div>
         <details class='mobile-menu' data-mobile-menu>
@@ -62,7 +62,14 @@
             <a href='#engineering'>{{nav.about}}</a>
             <a href='{{supportBase}}/soon/#blog'>{{nav.blog}}</a>
             <a href='#contacts'>{{nav.contacts}}</a>
-            <a href='{{switchHref}}' hreflang='{{switchHreflang}}' aria-label='{{switchLabel}} — {{switchName}}'>{{switchLabel}}</a>
+            <nav class='mobile-language-switcher' aria-label='{{aria.languageNav}}'>{{#each
+                languageLinks
+              }}<a
+                  class='language-link'
+                  href='{{href}}'
+                  hreflang='{{hreflang}}'
+                  aria-label='{{label}} — {{name}}'
+                >{{label}}</a>{{/each}}</nav>
           </nav>
         </details>
       </div>
@@ -324,9 +331,7 @@
             </div>
             <details class='chart-data'><summary>{{passport.tableTitle}}</summary><table><caption
                   class='visually-hidden'
-                >{{passport.tableTitle}}</caption><thead><tr><th scope='col'>{{#if
-                        (eq locale 'hy')
-                      }}Ամիս{{else}}Месяц{{/if}}</th><th scope='col'>kWh</th></tr></thead><tbody
+                >{{passport.tableTitle}}</caption><thead><tr><th scope='col'>{{passport.monthLabel}}</th><th scope='col'>kWh</th></tr></thead><tbody
                 >{{#each passport.months}}<tr><td>{{name}}</td><td
                       data-chart-value>{{value}}</td></tr>{{/each}}</tbody></table></details>
           </div>
@@ -608,15 +613,14 @@
             >{{#each links}}<li><a
                     href='{{this.[1]}}'
                   >{{this.[0]}}</a></li>{{/each}}</ul></div>{{/each}}<div class='footer-contact'><h2
-          >{{nav.contacts}}</h2><p><svg class='inline-icon' aria-hidden='true'><use
+        >{{nav.contacts}}</h2><p><svg class='inline-icon' aria-hidden='true'><use
                 href='/icons.svg#phone'
-              ></use></svg><span>{{contact.phone}} <b>{{contact.demo}}</b></span></p><p><svg
-              class='inline-icon'
-              aria-hidden='true'
-            ><use href='/icons.svg#mail'></use></svg><span>{{contact.email}}
-              <b>{{contact.demo}}</b></span></p><p><svg class='inline-icon' aria-hidden='true'><use
-                href='/icons.svg#pin'
-              ></use></svg><span>{{contact.city}} <b>{{contact.demo}}</b></span></p><small
+              ></use></svg><a href='{{contact.phoneHref}}'>{{contact.phone}}</a></p><p><svg
+                class='inline-icon'
+                aria-hidden='true'
+            ><use href='/icons.svg#pin'></use></svg><address>{{contact.address}}</address></p><p><svg class='inline-icon' aria-hidden='true'><use
+                href='/icons.svg#sun'
+              ></use></svg><span>{{contact.hours}}</span></p><small
           >{{contact.note}}</small></div></div><div class='container footer-bottom'><span
         >{{footer.copyright}}</span><span><a
             href='{{supportBase}}/privacy/'
