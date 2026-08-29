@@ -1,0 +1,15 @@
+# Local Pages Functions development only. Copy to functions/.dev.vars and set
+# non-production test endpoints/credentials; never commit the copy.
+GEOCODING_ENDPOINT=
+GEOCODING_PROVIDER=
+GEOCODING_API_KEY=
+GEOCODING_API_KEY_HEADER=authorization
+GEOCODING_API_KEY_PREFIX=Bearer 
+PVGIS_ENDPOINT=
+CRM_ENDPOINT=
+CRM_API_KEY=
+CRM_API_KEY_HEADER=authorization
+CRM_API_KEY_PREFIX=Bearer 
+TURNSTILE_SECRET_KEY=
+LEAD_REQUIRE_TURNSTILE=false
+API_FETCH_TIMEOUT_MS=8000

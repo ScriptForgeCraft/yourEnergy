@@ -1,12 +1,19 @@
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { dirname, resolve } from 'node:path';
 import Handlebars from 'handlebars';
+import { loadEnv } from 'vite';
 import hy from '../src/content/hy.js';
 import ru from '../src/content/ru.js';
 import en from '../src/content/en.js';
 import { GENERATED_CONTENT_LOCALES } from '../src/content/schema.js';
 
 const root = resolve(import.meta.dirname, '..');
+const mode = process.argv[2] ?? 'production';
+const loadedPublicEnv = loadEnv(mode, root, 'VITE_');
+const publicEnv = {
+  ...loadedPublicEnv,
+  ...Object.fromEntries(Object.entries(process.env).filter(([key]) => key.startsWith('VITE_')))
+};
 const template = await readFile(resolve(root, 'src/templates/home.hbs'), 'utf8');
 const supportTemplate = await readFile(resolve(root, 'src/templates/support.hbs'), 'utf8');
 
@@ -54,10 +61,10 @@ const createJsonLd = (content) => {
   const canonical = `https://yourenergy.am${content.path}`;
   const serviceName =
     content.locale === 'hy'
-      ? 'Արևային համակարգի ցուցադրական հաշվարկ'
+      ? 'Արևային համակարգի նախնական վերլուծություն'
       : content.locale === 'ru'
-        ? 'Демонстрационный расчёт солнечной системы'
-        : 'Solar system estimate';
+        ? 'Предварительный анализ солнечной системы'
+        : 'Preliminary solar-system analysis';
 
   return {
     '@context': 'https://schema.org',
@@ -142,7 +149,12 @@ const createHomeContext = (content) => ({
   pageConfig: escapeJsonForHtml({
     locale: runtimeLocales[content.locale],
     status: content.status,
-    map: { image: '/images/roof-scan-768.webp' }
+    product: content.product,
+    map: {
+      image: '/images/roof-scan-768.webp',
+      tileUrl: publicEnv.VITE_MAP_TILE_URL ?? '',
+      tileAttribution: publicEnv.VITE_MAP_ATTRIBUTION ?? ''
+    }
   })
 });
 

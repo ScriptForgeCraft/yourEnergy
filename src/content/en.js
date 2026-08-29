@@ -23,10 +23,10 @@ export default {
   meta: {
     title: 'Solar systems and a personal estimate in Armenia | YOURENERGY',
     description:
-      'Estimate your home’s solar potential, compare three options and explore a Solar Passport example. A demonstration solar-system estimate for Armenia.',
+      'Start a preliminary solar analysis with confirmed location, consumption input, roof outline and clear source status for Armenia.',
     ogTitle: 'Your home’s solar potential in 60 seconds | YOURENERGY',
     ogDescription:
-      'A preliminary demonstration estimate for a solar system, generation and savings.'
+      'A transparent preliminary solar analysis with source status and manual fallback.'
   },
   aria: {
     skip: 'Skip to main content',
@@ -65,17 +65,188 @@ export default {
     details: 'View details',
     free: 'Free'
   },
+  product: {
+    common: {
+      required: 'Required field',
+      optional: 'Optional',
+      perMonth: 'per month',
+      kwh: 'kWh',
+      amd: '֏',
+      complete: 'Done',
+      cancel: 'Cancel'
+    },
+    consumption: {
+      title: 'Electricity consumption',
+      copy: 'Choose the most convenient way to provide data for a preliminary estimate.',
+      modes: {
+        bill: 'Average bill',
+        usage: 'Average consumption',
+        monthly: 'Monthly profile'
+      },
+      billLabel: 'Average electricity bill',
+      billHelp: 'Enter the average monthly amount in AMD.',
+      usageLabel: 'Average monthly consumption',
+      usageHelp: 'Enter the average monthly consumption in kWh.',
+      monthlyTitle: 'Consumption over 12 months',
+      monthlyHelp: 'Enter kWh for each month when those figures are available.',
+      annualLabel: 'Estimated annual consumption',
+      invalidNumber: 'Enter a number greater than zero.',
+      invalidBill: 'Enter a valid bill amount in AMD.',
+      invalidUsage: 'Enter a valid consumption amount in kWh.',
+      incompleteMonths: 'Complete all 12 months or choose a different method.',
+      noConsumption: 'A consumption or bill value is needed for an estimate.',
+      normalized: 'The data were normalised to an annual profile.'
+    },
+    location: {
+      title: 'Property location',
+      copy: 'Confirm the matched address or select a point manually.',
+      search: 'Find address',
+      searching: 'Finding address…',
+      resultLabel: 'Matched address',
+      confirmPrompt: 'Is this your property?',
+      confirm: 'Confirm property',
+      edit: 'Edit address',
+      noResult: 'The address was not found. Select a point on the map manually.',
+      unavailable: 'Address search is currently unavailable. Select a point on the map manually.',
+      manualTitle: 'Select a point manually',
+      manualCopy: 'Click the map to mark the approximate property location.',
+      chooseOnMap: 'Choose a point on the map',
+      pointSelected: 'Property point selected.',
+      retry: 'Try search again'
+    },
+    roof: {
+      title: 'Roof outline',
+      copy: 'Outline the usable part of the roof for a preliminary area estimate.',
+      fallback: 'The map is unavailable. Continue after setting a location or try again.',
+      start: 'Start outline',
+      addPoint: 'Add point',
+      undo: 'Undo last point',
+      reset: 'Clear outline',
+      finish: 'Finish outline',
+      edit: 'Edit outline',
+      pointsLabel: 'Points in outline: {count}',
+      minimumPoints: 'Add at least 3 points to finish the outline.',
+      areaLabel: 'Preliminary roof area',
+      orientationLabel: 'Roof orientation',
+      tiltLabel: 'Roof tilt',
+      tiltHelp: 'Choose an approximate tilt if it is known.',
+      pointSelectLabel: 'Select point {index}',
+      removePoint: 'Remove point',
+      nudgeNorth: 'Move point north',
+      nudgeSouth: 'Move point south',
+      nudgeEast: 'Move point east',
+      nudgeWest: 'Move point west',
+      orientationOptions: {
+        north: 'North',
+        southEast: 'South-east',
+        southWest: 'South-west',
+        east: 'East',
+        south: 'South',
+        west: 'West',
+        custom: 'Other'
+      },
+      unavailable: 'A roof outline has not been set yet.',
+      tilesUnavailable:
+        'The basemap is unavailable. You can outline the roof after selecting a point.',
+      locationRequired: 'Confirm the property or select a point on the map first.'
+    },
+    result: {
+      title: 'Preliminary analysis',
+      preparing: 'Preparing the preliminary analysis…',
+      ready: 'The preliminary analysis is ready.',
+      unavailable: 'An analysis could not be prepared from the available data.',
+      retry: 'Try calculation again',
+      noTariff: 'A verified tariff is not connected, so savings and payback are not shown.',
+      noSavings: 'There is not enough data to show savings and payback.',
+      chartDescription:
+        'Monthly preliminary generation based on the confirmed inputs and returned solar-resource data.',
+      confidenceTitle: 'Estimate confidence',
+      confidence: {
+        high: 'High',
+        medium: 'Medium',
+        low: 'Low',
+        insufficient: 'Not enough data'
+      },
+      assumptionsTitle: 'Calculation assumptions'
+    },
+    solutions: {
+      liveBadge: 'From your confirmed data',
+      liveCopy:
+        'These three preliminary technical scenarios are calculated from the confirmed property data.',
+      financialUnavailable:
+        'Price and payback appear only after the tariff and system cost are confirmed.'
+    },
+    ledger: {
+      title: 'How this was calculated',
+      copy: 'The sources, versions and assumptions behind this preliminary result.',
+      sources: {
+        consumption: 'Consumption data',
+        location: 'Property location',
+        roof: 'Roof outline and parameters',
+        tariff: 'Electricity tariff',
+        solar: 'Solar resource',
+        investment: 'System price',
+        unavailable: 'Source not connected'
+      },
+      assumptions: {
+        NO_TARIFF_ESCALATION: 'No tariff escalation is modelled.',
+        NO_PANEL_DEGRADATION: 'No panel degradation is modelled.',
+        NO_MAINTENANCE_FINANCING_DISCOUNTING_EXPORT_OR_TAXES:
+          'Maintenance, financing, discounting, export rules and taxes are excluded.',
+        MISSING_EVIDENCE_SUPPRESSES_FINANCIAL_RESULT:
+          'Missing verified evidence suppresses financial values.',
+        PVGIS_SYSTEM_LOSS_14_PERCENT:
+          'PVGIS uses a 14% preliminary system-loss assumption; an engineer must confirm it.'
+      }
+    },
+    passport: {
+      persistenceTitle: 'Solar Passport is stored in this browser',
+      persistenceCopy: 'This preliminary Passport exists only in the current session memory.',
+      memoryOnly: 'The data may be lost when this page is closed.',
+      permanentLink: 'A permanent link and PDF will be available after storage is connected.',
+      sourceLedger: 'Sources and assumptions',
+      shareUnavailable: 'Sharing a link is not available yet.',
+      realTitle: 'Your preliminary Solar Passport',
+      sessionBadge: 'This session'
+    },
+    lead: {
+      title: 'Send this estimate to an engineer',
+      copy: 'Leave your contact details so an engineer can clarify the property data.',
+      nameLabel: 'Your name',
+      phoneLabel: 'Phone',
+      emailLabel: 'Email',
+      messageLabel: 'Property note',
+      consent: 'I agree to the processing of my data to answer this request.',
+      submit: 'Send request',
+      required: 'Complete the required fields and confirm consent.',
+      invalidEmail: 'Enter a valid email address.',
+      sending: 'Sending request…',
+      sent: 'The request was sent. We will contact you after the data are reviewed.',
+      unavailable: 'Sending is temporarily unavailable. Please try later.',
+      retry: 'Try sending again',
+      privacy: 'Data are not sent to analytics.'
+    },
+    status: {
+      geocodeUnavailable: 'The geocoding service is not connected or is temporarily unavailable.',
+      analysisUnavailable:
+        'The solar-analysis service is not connected or is temporarily unavailable.',
+      leadUnavailable: 'The lead service is not connected or is temporarily unavailable.',
+      retry: 'Try again',
+      canceled: 'The previous request was cancelled.'
+    },
+    months: months.map(({ short, name }) => ({ short, name }))
+  },
   hero: {
     eyebrow: 'A personal solar-system estimate for your home',
     titleLead: 'Discover your home’s',
     titleMiddle: 'solar potential',
     titleAccent: 'in 60 seconds',
-    copy: 'Enter an address and the YOURENERGY demo tool will show an example of roof analysis, generation and savings.',
+    copy: 'Enter an address and consumption data to start a preliminary estimate.',
     disclosure:
-      'This is a demonstration estimate. It does not replace a site visit, engineering design or commercial proposal.',
+      'A preliminary result requires property confirmation and does not replace a site visit, engineering design or commercial proposal.',
     addressLabel: 'Your home address',
     addressPlaceholder: 'For example: Yerevan, Arabkir',
-    addressHelp: 'The address is processed only in this browser and is not geocoded.',
+    addressHelp: 'After search, confirm the matched address or select a point manually.',
     analyze: 'Analyse',
     uploadTitle: 'Upload your electricity bill',
     uploadPrompt: 'Choose a file or drag it here',
@@ -83,27 +254,28 @@ export default {
     removeFile: 'Remove file',
     benefits: [
       'No call or obligation',
-      'ENA tariffs — future integration',
-      'PVGIS — future integration',
-      'A scenario for your home'
+      'Confirm the property on a map',
+      'Provide consumption data',
+      'See sources and assumptions'
     ]
   },
   map: {
     title: 'Preliminary roof assessment',
-    demo: 'Demonstration profile',
-    location: 'Yerevan, Arabkir',
-    imageAlt: 'Demonstration aerial roof image with no real geocoding',
-    disclosure: 'The image, address and panel layout are for demonstration only.',
-    interactive: 'Interactive roof diagram',
+    demo: 'Static demonstration fallback',
+    location: 'Illustrative location',
+    imageAlt: 'Illustrative aerial roof image before a property is confirmed',
+    disclosure:
+      'This static image and panel layout are used only as a labelled fallback before a property is confirmed.',
+    interactive: 'Interactive property map',
     roofArea: 'Roof area',
-    roofAreaValue: '124 m²',
+    roofAreaValue: 'Example: 124 m²',
     orientation: 'Orientation',
-    orientationValue: 'South-west (236°)',
+    orientationValue: 'Example: south-west (236°)',
     tilt: 'Tilt',
-    tiltValue: '32°',
+    tiltValue: 'Example: 32°',
     score: 'Solar Score',
-    scoreValue: 'Excellent',
-    result: 'Preliminary demo result',
+    scoreValue: 'Example only',
+    result: 'Preliminary result — confirmation required',
     full: 'View the full estimate'
   },
   metrics: [
@@ -141,10 +313,15 @@ export default {
     months
   },
   trust: {
-    disclosure: 'Data sources are not connected in this version.',
+    disclosure:
+      'Each preliminary result shows its connected, missing and manually supplied sources. Static cards remain demonstrations.',
     items: [
-      { icon: 'satellite', title: 'PVGIS and satellite data', note: 'integration is planned' },
-      { icon: 'calculator', title: 'An accurate home scenario', note: 'after data connections' },
+      {
+        icon: 'satellite',
+        title: 'PVGIS solar resource',
+        note: 'shown only when the provider responds'
+      },
+      { icon: 'calculator', title: 'A transparent home scenario', note: 'from confirmed inputs' },
       { icon: 'shield', title: 'Equipment selection', note: 'based on site parameters' },
       { icon: 'cycle', title: 'End-to-end service', note: 'from estimate to support' },
       {
@@ -252,10 +429,10 @@ export default {
   process: {
     eyebrow: 'Customer journey',
     title: 'How it works',
-    note: 'The first three steps work as a demonstration. The remaining steps describe the intended service process.',
+    note: 'A preliminary result requires confirmed inputs; engineering design and commercial terms follow an inspection.',
     steps: [
       ['Enter your address', 'and a few home details'],
-      ['Receive an estimate', 'for a demo roof profile'],
+      ['Confirm the property', 'or choose its point manually'],
       ['Compare the estimate', 'and three system options'],
       ['Engineer site visit', 'to measure the roof and electrical panel'],
       ['System installation', 'after the design and contract'],
@@ -360,7 +537,7 @@ export default {
       ],
       [
         'How is system capacity calculated?',
-        'A real project considers consumption, available roof area, orientation, shading and grid limitations. This version selects one of several fixed demo profiles.'
+        'The preliminary flow uses entered consumption, a confirmed property point, a manually outlined roof and provider solar-resource data when configured. An engineer still checks shading and grid limits.'
       ],
       [
         'What is the payback period?',
@@ -384,13 +561,13 @@ export default {
       ],
       [
         'What is a Solar Passport?',
-        'It is a demonstration report format with a roof assessment, system, generation and financial model. It is not an engineering design, bank document or offer.'
+        'A preliminary Passport keeps the current session’s inputs, sources and assumptions together. It is not an engineering design, bank document or offer; permanent links and PDFs are not connected in P0.'
       ]
     ].map(([question, answer]) => ({ question, answer }))
   },
   finalCta: {
     title: 'Ready to discover your home’s potential?',
-    copy: 'Get a demonstration estimate and learn which details are needed for an accurate project.',
+    copy: 'Start a preliminary analysis and see exactly which information is confirmed, missing or still needs an engineer.',
     primary: 'Calculate my home',
     secondary: 'View Solar Passport',
     note: 'Free, with no obligation and no commercial promise.'
@@ -443,20 +620,15 @@ export default {
   },
   status: {
     minAddress: 'Enter an address of at least 5 characters.',
-    analyzing: 'Preparing a demonstration estimate…',
-    ready: 'The demonstration result is ready. The address was not geocoded.',
-    unavailable: 'The demo estimate is currently unavailable. Please try again.',
-    profileArabkir: 'The Arabkir demonstration profile was selected. The address was not geocoded.',
-    profileAbovyan: 'The Abovyan demonstration profile was selected. The address was not geocoded.',
-    profileArarat: 'The Ararat demonstration profile was selected. The address was not geocoded.',
-    profileDefault:
-      'The standard Yerevan demonstration profile was selected. The address was not geocoded.',
+    analyzing: 'Preparing a preliminary analysis…',
+    ready: 'The preliminary result is ready. Review the data before making a decision.',
+    unavailable: 'The preliminary analysis is unavailable. Try again or select a point manually.',
     invalidFile: 'This format is not supported. Choose a PDF, JPG, JPEG or PNG.',
     largeFile: 'The file is too large. The maximum size is 10 MB.',
     fileSelected: 'The file was selected and remains only in browser memory.',
     fileRemoved: 'File removed.',
-    mapReady: 'The interactive demonstration map is enabled.',
-    mapFailed: 'The map could not be enabled. The static image remains available.',
+    mapReady: 'The interactive property map is ready.',
+    mapFailed: 'The map is unavailable. The static demonstration fallback remains available.',
     monthTooltip: 'Generation in {month}: {value} kWh'
   }
 };

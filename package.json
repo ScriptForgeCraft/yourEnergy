@@ -6,8 +6,8 @@
   "scripts": {
     "content:generate": "node scripts/generate-pages.mjs",
     "assets:build": "node scripts/build-images.mjs",
-    "dev": "npm run content:generate && vite --host 127.0.0.1",
-    "build": "npm run content:generate && vite build",
+    "dev": "node scripts/generate-pages.mjs development && vite --host 127.0.0.1",
+    "build": "node scripts/generate-pages.mjs production && vite build",
     "preview": "vite preview --host 127.0.0.1",
     "lint": "eslint .",
     "format": "prettier --write .",

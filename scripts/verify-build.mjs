@@ -339,6 +339,39 @@ async function validateSitemap() {
   }
 }
 
+async function validateHeaders() {
+  const headersPath = resolve(distRoot, '_headers');
+  if (!(await exists(headersPath))) {
+    fail('Cloudflare _headers is missing from dist');
+    return;
+  }
+  const headers = await readFile(headersPath, 'utf8');
+  const csp = headers.match(/Content-Security-Policy:\s*([^\r\n]+)/iu)?.[1] ?? '';
+  if (!csp.includes("default-src 'self'")) fail('_headers must set default-src self');
+  if (!csp.includes("connect-src 'self'")) fail('_headers must keep API connections same-origin');
+  if (/\*\s*;|\*$/u.test(csp)) fail('_headers CSP must not use a wildcard source');
+}
+
+function validateP0Markup(html, page) {
+  for (const marker of [
+    'data-consumption-inputs',
+    'data-location-stage',
+    'data-property-map',
+    'data-roof-stage',
+    'data-analysis-ledger',
+    'data-lead-form',
+    'data-analysis-scenario'
+  ]) {
+    if (!html.includes(marker)) fail(`${page}: missing P0 marker ${marker}`);
+  }
+  if (
+    html.includes('data-map-shell') &&
+    (!html.includes('map-caption') || !html.includes('demo-badge'))
+  ) {
+    fail(`${page}: static map fallback lacks an explicit label`);
+  }
+}
+
 if (!(await exists(distRoot))) {
   fail('dist/ is missing. Run npm run build before npm run verify:build.');
 }
@@ -371,12 +404,16 @@ if (pages.has('ru/index.html'))
   validateLanguageSwitcher(pages.get('ru/index.html'), 'ru/index.html', 'ru');
 if (pages.has('en/index.html'))
   validateLanguageSwitcher(pages.get('en/index.html'), 'en/index.html', 'en');
+for (const page of ['index.html', 'ru/index.html', 'en/index.html']) {
+  if (pages.has(page)) validateP0Markup(pages.get(page), page);
+}
 for (const page of expectedPages.filter(
   (page) => !['index.html', 'ru/index.html', 'en/index.html'].includes(page)
 )) {
   if (pages.has(page)) validateSupportNoindex(pages.get(page), page);
 }
 await validateSitemap();
+await validateHeaders();
 
 if (failures.length > 0) {
   console.error('Build validation failed:\n');

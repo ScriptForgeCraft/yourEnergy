@@ -8,6 +8,7 @@ import { CONTENT_LOCALE_SCHEMA, GENERATED_CONTENT_LOCALES } from '../src/content
 import { BASE_MONTHLY, BASE_PROFILE, buildAnalysis } from '../src/data/demo-profiles.js';
 import {
   AnalysisError,
+  DemoHomeAnalysisService,
   HomeAnalysisService,
   validateAddress
 } from '../src/services/home-analysis.js';
@@ -122,18 +123,23 @@ test('bill upload validation permits supported files through 10 MiB only', () =>
     null
   );
   assert.equal(validateUploadFile({ name: 'roof.JPG', type: '', size: 1024 }), null);
-  assert.equal(validateUploadFile({ name: 'bill.txt', type: 'text/plain', size: 1024 }), 'INVALID_FILE');
+  assert.equal(
+    validateUploadFile({ name: 'bill.txt', type: 'text/plain', size: 1024 }),
+    'INVALID_FILE'
+  );
   assert.equal(
     validateUploadFile({ name: 'bill.png', type: 'image/png', size: MAX_UPLOAD_BYTES + 1 }),
     'FILE_TOO_LARGE'
   );
 });
 
-test('HomeAnalysisService exposes a demo analysis through the public async contract', async () => {
-  const service = new HomeAnalysisService();
+test('DemoHomeAnalysisService returns an explicitly labelled non-property demo', async () => {
+  const service = new DemoHomeAnalysisService();
   const analysis = await service.analyze({ address: ADDRESS });
 
   assert.equal(analysis.source, 'demo');
+  assert.equal(analysis.mode, 'demo');
+  assert.match(analysis.disclosure, /not an analysis/u);
   assert.equal(analysis.system.capacityKwp, 9.86);
   assert.equal(
     analysis.monthlyGeneration.reduce((total, value) => total + value, 0),

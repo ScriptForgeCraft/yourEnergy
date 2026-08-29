@@ -1,0 +1,487 @@
+import { normalizeConsumption, isNormalizedConsumption } from './consumption.js';
+import { ANALYSIS_STATUS, CONFIDENCE_LEVEL, SOURCE_KIND, SOURCE_STATUS } from './models.js';
+import {
+  cleanString,
+  MONTHS_PER_YEAR,
+  round,
+  sum,
+  toFiniteNumberOrNull,
+  toPositiveNumberOrNull
+} from './numbers.js';
+import { getConfirmedTariffRate, selectEffectiveTariff } from './tariffs.js';
+
+export const ANALYSIS_SCHEMA_VERSION = '1.0.0';
+
+/**
+ * Planning coverage choices, not production quotes or property-specific
+ * recommendations. They only turn user-confirmed inputs into comparable
+ * scenarios.
+ */
+export const DEFAULT_SCENARIO_TARGETS = Object.freeze([
+  Object.freeze({ id: 'conservative', targetCoverage: 0.7 }),
+  Object.freeze({ id: 'balanced', targetCoverage: 0.9 }),
+  Object.freeze({ id: 'maximum', targetCoverage: 1 })
+]);
+
+export const ANALYSIS_ASSUMPTIONS = Object.freeze([
+  'NO_TARIFF_ESCALATION',
+  'NO_PANEL_DEGRADATION',
+  'NO_MAINTENANCE_FINANCING_DISCOUNTING_EXPORT_OR_TAXES',
+  'MISSING_EVIDENCE_SUPPRESSES_FINANCIAL_RESULT'
+]);
+
+const sourceKinds = new Set(Object.values(SOURCE_KIND));
+const sourceStatuses = new Set(Object.values(SOURCE_STATUS));
+
+const unavailableSource = Object.freeze({
+  kind: SOURCE_KIND.UNAVAILABLE,
+  status: SOURCE_STATUS.UNAVAILABLE,
+  provider: null,
+  reference: null,
+  verifiedAt: null
+});
+
+const normalizeSource = (
+  source,
+  defaultKind = SOURCE_KIND.UNAVAILABLE,
+  defaultStatus = SOURCE_STATUS.UNAVAILABLE
+) => ({
+  kind: sourceKinds.has(source?.kind) ? source.kind : defaultKind,
+  status: sourceStatuses.has(source?.status) ? source.status : defaultStatus,
+  provider: cleanString(source?.provider),
+  reference: cleanString(source?.reference),
+  verifiedAt: cleanString(source?.verifiedAt)
+});
+
+const normalizeCoordinates = (coordinates) => {
+  const lat = toFiniteNumberOrNull(coordinates?.lat);
+  const lng = toFiniteNumberOrNull(coordinates?.lng);
+  if (lat === null || lng === null || lat < -90 || lat > 90 || lng < -180 || lng > 180) {
+    return null;
+  }
+  return { lat, lng };
+};
+
+/** @returns {import('./models.js').Property} */
+export const normalizeProperty = (input = {}) => {
+  const address = cleanString(input.address);
+  const coordinates = normalizeCoordinates(input.coordinates);
+  const confirmed = Boolean(input.confirmed) && Boolean(address || coordinates);
+  return {
+    address,
+    coordinates,
+    confirmed,
+    source: normalizeSource(
+      input.source,
+      address || coordinates ? SOURCE_KIND.MANUAL : SOURCE_KIND.UNAVAILABLE,
+      confirmed
+        ? SOURCE_STATUS.CONFIRMED
+        : address || coordinates
+          ? SOURCE_STATUS.PROVIDED
+          : SOURCE_STATUS.UNAVAILABLE
+    )
+  };
+};
+
+/** @returns {import('./models.js').Roof} */
+export const normalizeRoof = (input = {}) => {
+  const areaSqm = toPositiveNumberOrNull(input.areaSqm);
+  const orientationCandidate = toFiniteNumberOrNull(input.orientationDegrees);
+  const tiltCandidate = toFiniteNumberOrNull(input.tiltDegrees);
+  const usableAreaCandidate = toFiniteNumberOrNull(input.usableAreaRatio);
+  const orientationDegrees =
+    orientationCandidate !== null && orientationCandidate >= 0 && orientationCandidate < 360
+      ? orientationCandidate
+      : null;
+  const tiltDegrees =
+    tiltCandidate !== null && tiltCandidate >= 0 && tiltCandidate <= 90 ? tiltCandidate : null;
+  const usableAreaRatio =
+    usableAreaCandidate !== null && usableAreaCandidate > 0 && usableAreaCandidate <= 1
+      ? usableAreaCandidate
+      : null;
+  const polygonComplete = Boolean(input.polygonComplete);
+  const hasRoofInput = Boolean(
+    areaSqm || polygonComplete || orientationDegrees !== null || tiltDegrees !== null
+  );
+
+  return {
+    areaSqm,
+    orientationDegrees,
+    tiltDegrees,
+    usableAreaRatio,
+    polygonComplete,
+    source: normalizeSource(
+      input.source,
+      hasRoofInput ? SOURCE_KIND.MANUAL : SOURCE_KIND.UNAVAILABLE,
+      polygonComplete
+        ? SOURCE_STATUS.CONFIRMED
+        : hasRoofInput
+          ? SOURCE_STATUS.PROVIDED
+          : SOURCE_STATUS.UNAVAILABLE
+    )
+  };
+};
+
+export const normalizeProduction = (input = {}) => {
+  const annualYieldKwhPerKwp = toPositiveNumberOrNull(input.annualYieldKwhPerKwp);
+  const suppliedFactors = Array.isArray(input.monthlyYieldFactors)
+    ? input.monthlyYieldFactors
+    : null;
+  const monthlyYieldFactors =
+    suppliedFactors?.length === MONTHS_PER_YEAR ? suppliedFactors.map(toFiniteNumberOrNull) : null;
+  const monthlyFactorSum = monthlyYieldFactors?.every((value) => value !== null && value >= 0)
+    ? sum(monthlyYieldFactors)
+    : 0;
+  const normalizedFactors =
+    monthlyFactorSum > 0 ? monthlyYieldFactors.map((value) => value / monthlyFactorSum) : null;
+  const hasProductionInput = annualYieldKwhPerKwp !== null || suppliedFactors !== null;
+
+  return {
+    available: annualYieldKwhPerKwp !== null,
+    annualYieldKwhPerKwp,
+    monthlyYieldFactors: normalizedFactors,
+    issues: [
+      ...(annualYieldKwhPerKwp === null && hasProductionInput ? ['ANNUAL_YIELD_REQUIRED'] : []),
+      ...(suppliedFactors !== null && normalizedFactors === null
+        ? ['MONTHLY_YIELD_PROFILE_INVALID']
+        : [])
+    ],
+    source: normalizeSource(
+      input.source,
+      hasProductionInput ? SOURCE_KIND.MANUAL : SOURCE_KIND.UNAVAILABLE,
+      hasProductionInput ? SOURCE_STATUS.PROVIDED : SOURCE_STATUS.UNAVAILABLE
+    )
+  };
+};
+
+export const normalizeSystem = (input = {}) => ({
+  panelWatts: toPositiveNumberOrNull(input.panelWatts),
+  panelAreaSqm: toPositiveNumberOrNull(input.panelAreaSqm)
+});
+
+export const normalizeInvestment = (input = {}) => ({
+  capexAmd: toPositiveNumberOrNull(input.capexAmd),
+  quotedCapacityKwp: toPositiveNumberOrNull(input.quotedCapacityKwp),
+  capexAmdPerKwp: toPositiveNumberOrNull(input.capexAmdPerKwp),
+  source: normalizeSource(
+    input.source,
+    input.capexAmd !== undefined || input.capexAmdPerKwp !== undefined
+      ? SOURCE_KIND.MANUAL
+      : SOURCE_KIND.UNAVAILABLE,
+    input.capexAmd !== undefined || input.capexAmdPerKwp !== undefined
+      ? SOURCE_STATUS.PROVIDED
+      : SOURCE_STATUS.UNAVAILABLE
+  )
+});
+
+const normalizeScenarioTargets = (targets) => {
+  const values = Array.isArray(targets) && targets.length ? targets : DEFAULT_SCENARIO_TARGETS;
+  const normalized = values
+    .map((target, index) => {
+      const value = toFiniteNumberOrNull(target?.targetCoverage ?? target);
+      if (value === null || value <= 0 || value > 1) return null;
+      return {
+        id: cleanString(target?.id) ?? `scenario-${index + 1}`,
+        targetCoverage: value
+      };
+    })
+    .filter(Boolean);
+  return normalized.length ? normalized : [...DEFAULT_SCENARIO_TARGETS];
+};
+
+const roofPanelLimit = (roof, system) => {
+  if (
+    roof.areaSqm === null ||
+    roof.usableAreaRatio === null ||
+    system.panelAreaSqm === null ||
+    system.panelWatts === null
+  ) {
+    return null;
+  }
+  return Math.floor((roof.areaSqm * roof.usableAreaRatio) / system.panelAreaSqm);
+};
+
+const getScenarioCapex = (investment, capacityKwp) => {
+  if (investment.capexAmdPerKwp !== null) return capacityKwp * investment.capexAmdPerKwp;
+  if (
+    investment.capexAmd !== null &&
+    investment.quotedCapacityKwp !== null &&
+    Math.abs(investment.quotedCapacityKwp - capacityKwp) < 0.01
+  ) {
+    return investment.capexAmd;
+  }
+  return null;
+};
+
+const makeTimeline = (capexAmd, annualSavingsAmd) => {
+  if (capexAmd === null || annualSavingsAmd === null) return [];
+  return [0, 5, 10, 25].map((year) => ({
+    year,
+    netAmd: year === 0 ? -capexAmd : annualSavingsAmd * year - capexAmd
+  }));
+};
+
+/**
+ * Calculates one scenario exclusively from the supplied inputs. It never
+ * fills in a solar yield, tariff, roof area, or price on the caller's behalf.
+ */
+export const calculateSolarScenario = ({
+  id,
+  targetCoverage,
+  consumption: suppliedConsumption,
+  roof: suppliedRoof,
+  production: suppliedProduction,
+  tariff = null,
+  investment: suppliedInvestment,
+  system: suppliedSystem
+} = {}) => {
+  const consumption = isNormalizedConsumption(suppliedConsumption)
+    ? suppliedConsumption
+    : normalizeConsumption(suppliedConsumption, { tariff });
+  const roof = normalizeRoof(suppliedRoof);
+  const production = normalizeProduction(suppliedProduction);
+  const investment = normalizeInvestment(suppliedInvestment);
+  const system = normalizeSystem(suppliedSystem);
+  const target = toFiniteNumberOrNull(targetCoverage);
+  const readyForGeneration =
+    consumption?.available &&
+    consumption.annualKwh !== null &&
+    production?.available &&
+    production.annualYieldKwhPerKwp !== null &&
+    target !== null &&
+    target > 0 &&
+    target <= 1;
+
+  if (!readyForGeneration) {
+    return {
+      id,
+      targetCoverage: target,
+      status: ANALYSIS_STATUS.UNAVAILABLE,
+      limitations: ['CONSUMPTION_AND_CONFIRMED_YIELD_REQUIRED'],
+      system: { capacityKwp: null, panelCount: null, panelWatts: system.panelWatts },
+      generation: { annualKwh: null, monthlyKwh: null },
+      coveragePercent: null,
+      financial: {
+        annualSavingsAmd: null,
+        grossSavings25YearsAmd: null,
+        capexAmd: null,
+        paybackYears: null,
+        timeline: []
+      }
+    };
+  }
+
+  const requestedCapacityKwp = (consumption.annualKwh * target) / production.annualYieldKwhPerKwp;
+  const maxPanelCount = roofPanelLimit(roof, system);
+  const requestedPanelCount = system.panelWatts
+    ? Math.ceil((requestedCapacityKwp * 1000) / system.panelWatts)
+    : null;
+  const panelCount =
+    requestedPanelCount === null
+      ? null
+      : maxPanelCount === null
+        ? requestedPanelCount
+        : Math.min(requestedPanelCount, maxPanelCount);
+  const capacityKwp =
+    panelCount === null ? requestedCapacityKwp : (panelCount * system.panelWatts) / 1000;
+  const annualKwh = capacityKwp * production.annualYieldKwhPerKwp;
+  const monthlyKwh = production.monthlyYieldFactors
+    ? production.monthlyYieldFactors.map((factor) => annualKwh * factor)
+    : null;
+  const rateAmdPerKwh = getConfirmedTariffRate(tariff);
+  const annualSavingsAmd = rateAmdPerKwh === null ? null : annualKwh * rateAmdPerKwh;
+  const capexAmd = getScenarioCapex(investment, capacityKwp);
+  const paybackYears =
+    capexAmd !== null && annualSavingsAmd !== null && annualSavingsAmd > 0
+      ? capexAmd / annualSavingsAmd
+      : null;
+  const roofLimited =
+    maxPanelCount !== null && requestedPanelCount !== null && panelCount < requestedPanelCount;
+
+  const financialReady =
+    capexAmd !== null && capexAmd > 0 && annualSavingsAmd !== null && annualSavingsAmd > 0;
+
+  return {
+    id,
+    targetCoverage: target,
+    status: financialReady ? ANALYSIS_STATUS.FINANCIAL_READY : ANALYSIS_STATUS.TECHNICAL_READY,
+    limitations: [
+      ...(roofLimited ? ['ROOF_CAPACITY_LIMIT'] : []),
+      ...(rateAmdPerKwh === null ? ['CONFIRMED_TARIFF_REQUIRED'] : []),
+      ...(capexAmd === null ? ['CAPEX_REQUIRED'] : [])
+    ],
+    system: {
+      capacityKwp,
+      panelCount,
+      panelWatts: system.panelWatts,
+      requestedCapacityKwp,
+      maximumPanelCount: maxPanelCount
+    },
+    generation: { annualKwh, monthlyKwh },
+    coveragePercent: (annualKwh / consumption.annualKwh) * 100,
+    financial: {
+      annualSavingsAmd,
+      grossSavings25YearsAmd: annualSavingsAmd === null ? null : annualSavingsAmd * 25,
+      capexAmd,
+      paybackYears,
+      timeline: makeTimeline(capexAmd, annualSavingsAmd)
+    }
+  };
+};
+
+const sourceEntry = (key, source, available, reason = null) => ({
+  key,
+  available: Boolean(available),
+  status: source?.status ?? SOURCE_STATUS.UNAVAILABLE,
+  source: source ?? unavailableSource,
+  reason
+});
+
+/**
+ * Builds a transparent completeness score. It measures evidence available to
+ * this calculation, rather than the physical quality of the proposed system.
+ */
+export const calculateConfidence = ({
+  property,
+  consumption,
+  roof,
+  production,
+  tariff,
+  investment
+}) => {
+  const checks = [
+    { key: 'property', complete: property.confirmed },
+    { key: 'consumption', complete: consumption.available },
+    { key: 'roof', complete: roof.polygonComplete || roof.areaSqm !== null },
+    {
+      key: 'production',
+      complete: production.available && production.source.status === SOURCE_STATUS.CONFIRMED
+    },
+    { key: 'tariff', complete: getConfirmedTariffRate(tariff) !== null },
+    {
+      key: 'investment',
+      complete: investment.capexAmdPerKwp !== null || investment.capexAmd !== null
+    }
+  ];
+  const score = checks.filter((check) => check.complete).length;
+  const missing = checks.filter((check) => !check.complete).map((check) => check.key);
+  const essentialMissing = !consumption.available || !production.available;
+  const level = essentialMissing
+    ? CONFIDENCE_LEVEL.UNAVAILABLE
+    : score >= 5
+      ? CONFIDENCE_LEVEL.HIGH
+      : score >= 3
+        ? CONFIDENCE_LEVEL.MEDIUM
+        : CONFIDENCE_LEVEL.LOW;
+
+  return { level, score, maximumScore: checks.length, missing };
+};
+
+/**
+ * Creates a deterministic, provider-agnostic P0 analysis from manual and/or
+ * confirmed provider inputs. The default tariff registry is intentionally
+ * unconfigured, so a default call can produce technical output but never a
+ * fabricated savings or payback figure.
+ *
+ * @param {Object} [input]
+ * @returns {import('./models.js').SolarAnalysis}
+ */
+export const buildSolarAnalysis = (input = {}) => {
+  const property = normalizeProperty(input.property);
+  const roof = normalizeRoof(input.roof);
+  const system = normalizeSystem(input.system);
+  const investment = normalizeInvestment(input.investment);
+  const tariff =
+    input.tariffSelection ?? selectEffectiveTariff(input.tariffDataset, input.effectiveDate);
+  const consumption = isNormalizedConsumption(input.consumption)
+    ? input.consumption
+    : normalizeConsumption(input.consumption, { tariff });
+  const production = normalizeProduction(input.production);
+  const scenarios = normalizeScenarioTargets(input.scenarioTargets).map((scenario) =>
+    calculateSolarScenario({
+      ...scenario,
+      consumption,
+      roof,
+      production,
+      tariff,
+      investment,
+      system
+    })
+  );
+  const selectedScenarioId =
+    cleanString(input.selectedScenarioId) ?? scenarios[1]?.id ?? scenarios[0]?.id;
+  const selectedScenario =
+    scenarios.find((scenario) => scenario.id === selectedScenarioId) ?? scenarios[0] ?? null;
+  const status = selectedScenario?.status ?? ANALYSIS_STATUS.UNAVAILABLE;
+  const sourceLedger = [
+    sourceEntry(
+      'property',
+      property.source,
+      property.confirmed,
+      property.confirmed ? null : 'PROPERTY_CONFIRMATION_REQUIRED'
+    ),
+    sourceEntry(
+      'consumption',
+      consumption.source,
+      consumption.available,
+      consumption.issues?.[0] ?? null
+    ),
+    sourceEntry(
+      'roof',
+      roof.source,
+      roof.polygonComplete || roof.areaSqm !== null,
+      roof.polygonComplete ? null : 'ROOF_CONFIRMATION_RECOMMENDED'
+    ),
+    sourceEntry(
+      'production',
+      production.source,
+      production.available,
+      production.available ? null : (production.issues?.[0] ?? 'PRODUCTION_YIELD_REQUIRED')
+    ),
+    sourceEntry(
+      'tariff',
+      tariff?.source,
+      tariff?.available,
+      tariff?.available ? null : (tariff?.reason ?? 'CONFIRMED_TARIFF_REQUIRED')
+    ),
+    sourceEntry(
+      'investment',
+      investment.source,
+      investment.capexAmdPerKwp !== null || investment.capexAmd !== null,
+      investment.capexAmdPerKwp !== null || investment.capexAmd !== null ? null : 'CAPEX_REQUIRED'
+    )
+  ];
+
+  return {
+    schemaVersion: ANALYSIS_SCHEMA_VERSION,
+    mode: 'real-analysis',
+    status,
+    property,
+    consumption,
+    roof,
+    production,
+    tariff,
+    system,
+    investment,
+    scenarios,
+    selectedScenario,
+    confidence: calculateConfidence({
+      property,
+      consumption,
+      roof,
+      production,
+      tariff,
+      investment
+    }),
+    sourceLedger,
+    assumptions: [
+      ...ANALYSIS_ASSUMPTIONS,
+      ...(Array.isArray(input.assumptions)
+        ? input.assumptions.filter((assumption) => typeof assumption === 'string' && assumption)
+        : [])
+    ]
+  };
+};
+
+/** A small helper for UI layers that want stable display values without NaN. */
+export const roundAnalysisValue = (value, precision = 2) => round(value, precision);

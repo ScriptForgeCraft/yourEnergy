@@ -32,10 +32,12 @@ const waitForNextTask = (signal) =>
   });
 
 /**
- * Browser-only adapter boundary. It deliberately stays local until a public,
- * authenticated backend adapter is configured. No input is geocoded here.
+ * Demo-only legacy adapter. It is intentionally not imported by the production
+ * homepage: the P0 flow uses ProductApiClient plus a confirmed point and roof
+ * outline. The supplied address is used only to choose a labelled illustration
+ * profile and is never returned as a geocoded or property-specific result.
  */
-export class HomeAnalysisService {
+export class DemoHomeAnalysisService {
   constructor({ provider } = {}) {
     this.provider = provider;
   }
@@ -71,8 +73,16 @@ export class HomeAnalysisService {
       : String(locale).toLowerCase().startsWith('en')
         ? 'en'
         : 'ru';
-    return buildAnalysis(selectDemoProfile(address), {
-      locale: localeKey
-    });
+    return {
+      ...buildAnalysis(selectDemoProfile(address), { locale: localeKey }),
+      mode: 'demo',
+      disclosure: 'Illustrative demo profile only; this is not an analysis of the entered address.'
+    };
   }
 }
+
+/**
+ * @deprecated Use DemoHomeAnalysisService only for explicitly labelled static
+ * examples. The homepage uses the real-analysis P0 flow in src/main.js.
+ */
+export const HomeAnalysisService = DemoHomeAnalysisService;

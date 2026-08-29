@@ -100,7 +100,131 @@
                 <button class='button button--navy' type='submit'>{{hero.analyze}}</button>
               </div>
               <small id='address-help' class='field-help'>{{hero.addressHelp}}</small>
+              <fieldset class='consumption-inputs' data-consumption-inputs>
+                <legend>{{product.consumption.title}}</legend>
+                <p>{{product.consumption.copy}}</p>
+                <div class='consumption-modes' role='radiogroup'>
+                  <label><input type='radio' name='consumption-mode' value='bill' checked /><span
+                    >{{product.consumption.modes.bill}}</span></label>
+                  <label><input type='radio' name='consumption-mode' value='usage' /><span
+                    >{{product.consumption.modes.usage}}</span></label>
+                  <label><input type='radio' name='consumption-mode' value='monthly' /><span
+                    >{{product.consumption.modes.monthly}}</span></label>
+                </div>
+                <div class='consumption-panel' data-consumption-panel='bill'>
+                  <label for='consumption-bill'>{{product.consumption.billLabel}}</label>
+                  <div class='input-with-unit'><input
+                      id='consumption-bill'
+                      type='number'
+                      min='1'
+                      step='1'
+                      inputmode='decimal'
+                      data-consumption-bill
+                    /><span>{{product.common.amd}} {{product.common.perMonth}}</span></div>
+                  <small>{{product.consumption.billHelp}}</small>
+                </div>
+                <div class='consumption-panel' data-consumption-panel='usage' hidden>
+                  <label for='consumption-usage'>{{product.consumption.usageLabel}}</label>
+                  <div class='input-with-unit'><input
+                      id='consumption-usage'
+                      type='number'
+                      min='1'
+                      step='1'
+                      inputmode='decimal'
+                      data-consumption-usage
+                    /><span>{{product.common.kwh}} {{product.common.perMonth}}</span></div>
+                  <small>{{product.consumption.usageHelp}}</small>
+                </div>
+                <div class='consumption-panel consumption-panel--months' data-consumption-panel='monthly' hidden>
+                  <p>{{product.consumption.monthlyTitle}}</p>
+                  <div class='monthly-consumption-grid'>{{#each passport.months}}<label
+                      ><span>{{short}}</span><input
+                        type='number'
+                        min='0'
+                        step='1'
+                        inputmode='decimal'
+                        aria-label='{{name}}'
+                        data-consumption-month
+                      /></label>{{/each}}</div>
+                  <small>{{product.consumption.monthlyHelp}}</small>
+                </div>
+                <p class='consumption-total'><span>{{product.consumption.annualLabel}}</span><output
+                    data-consumption-annual
+                  >—</output> {{product.common.kwh}}</p>
+              </fieldset>
             </form>
+            <section class='product-stage' data-location-stage hidden aria-labelledby='location-stage-title'>
+              <p class='eyebrow'>{{product.location.title}}</p>
+              <h2 id='location-stage-title'>{{product.location.confirmPrompt}}</h2>
+              <p data-location-message>{{product.location.copy}}</p>
+              <p class='location-result'><span>{{product.location.resultLabel}}</span><strong
+                  data-location-address
+                ></strong><small data-location-coordinates></small></p>
+              <div class='location-candidates' data-location-candidates hidden></div>
+              <div class='flow-actions'><button
+                  class='button button--navy'
+                  type='button'
+                  data-location-confirm
+                >{{product.location.confirm}}</button><button
+                  class='button button--outline'
+                  type='button'
+                  data-location-manual
+                >{{product.location.chooseOnMap}}</button></div>
+            </section>
+            <section class='product-stage roof-editor' data-roof-stage hidden aria-labelledby='roof-stage-title'>
+              <p class='eyebrow'>{{product.roof.title}}</p>
+              <h2 id='roof-stage-title'>{{product.roof.copy}}</h2>
+              <p data-roof-message>{{product.roof.locationRequired}}</p>
+              <div class='flow-actions'><button
+                  class='button button--navy'
+                  type='button'
+                  data-roof-start
+                >{{product.roof.start}}</button><button
+                  class='button button--outline'
+                  type='button'
+                  data-roof-undo
+                >{{product.roof.undo}}</button><button
+                  class='button button--outline'
+                  type='button'
+                  data-roof-reset
+                >{{product.roof.reset}}</button></div>
+              <div class='roof-editor-controls'><label for='roof-orientation'>{{product.roof.orientationLabel}}<select
+                    id='roof-orientation'
+                    data-roof-orientation
+                  ><option value='180'>{{product.roof.orientationOptions.south}}</option><option
+                      value='225'
+                    >{{product.roof.orientationOptions.southWest}}</option><option value='135'
+                    >{{product.roof.orientationOptions.southEast}}</option><option value='90'
+                    >{{product.roof.orientationOptions.east}}</option><option value='270'
+                    >{{product.roof.orientationOptions.west}}</option><option value='0'
+                    >{{product.roof.orientationOptions.north}}</option><option value=''>{{product.roof.orientationOptions.custom}}</option></select></label><label
+                  for='roof-tilt'
+                >{{product.roof.tiltLabel}}<input
+                    id='roof-tilt'
+                    type='number'
+                    min='0'
+                    max='60'
+                    step='1'
+                    value='25'
+                    data-roof-tilt
+                  /></label></div>
+              <p class='roof-editor__summary'><span data-roof-points>{{product.roof.pointsLabel}}</span><strong
+                  data-roof-area
+                >—</strong></p>
+              <div class='roof-nudge-controls' data-roof-nudge-controls hidden><label
+                  for='roof-point-select'
+                >{{product.roof.pointSelectLabel}}<select id='roof-point-select' data-roof-point-select></select></label><div
+                  ><button type='button' data-roof-nudge='north' aria-label='{{product.roof.nudgeNorth}}'>↑</button><button
+                    type='button'
+                    data-roof-nudge='west'
+                    aria-label='{{product.roof.nudgeWest}}'
+                  >←</button><button type='button' data-roof-nudge='east' aria-label='{{product.roof.nudgeEast}}'>→</button><button
+                    type='button'
+                    data-roof-nudge='south'
+                    aria-label='{{product.roof.nudgeSouth}}'
+                  >↓</button><button type='button' data-roof-remove>{{product.roof.removePoint}}</button></div></div>
+              <button class='button' type='button' data-roof-finish disabled>{{product.roof.finish}}</button>
+            </section>
             <div class='upload-block' data-file-drop>
               <label class='upload-control' for='bill-file'>
                 <span class='upload-icon' aria-hidden='true'><svg class='inline-icon'><use
@@ -219,6 +343,13 @@
                 hidden
                 aria-label='{{map.interactive}}'
               ></div>
+              <div
+                class='property-map'
+                data-property-map
+                hidden
+                aria-label='{{product.location.manualTitle}}'
+              ></div>
+              <p class='property-map-note' data-property-map-note hidden></p>
               <aside class='roof-info'>
                 <strong data-analysis-location>{{map.location}}</strong>
                 <dl>
@@ -231,12 +362,12 @@
                   <div><dt>{{map.tilt}}</dt><dd
                       data-analysis-roof='tilt'
                     >{{map.tiltValue}}</dd></div>
-                  <div class='success'><dt>{{map.score}}</dt><dd>{{map.scoreValue}}</dd></div>
+                  <div class='success' data-analysis-score-row><dt>{{map.score}}</dt><dd>{{map.scoreValue}}</dd></div>
                 </dl>
               </aside>
             </figure>
             <div class='result-panel' data-result-panel>
-              <p>{{map.result}}</p>
+              <p data-analysis-summary>{{map.result}}</p>
               <dl>
                 {{#each metrics}}
                   <div><dt>{{label}}</dt><dd data-analysis='{{key}}'>{{value}}
@@ -268,15 +399,19 @@
               href='#calculator'
               data-open-passport
             >{{passport.cta}}</a>
+            <p class='passport-persistence' data-passport-persistence hidden><strong
+              >{{product.passport.persistenceTitle}}</strong><span>{{product.passport.persistenceCopy}}</span><span
+                >{{product.passport.permanentLink}}</span></p>
           </div>
           <article class='passport-card' aria-label='{{passport.dialogTitle}}'>
             <div class='passport-card__top'><span class='wordmark wordmark--small'><span
-                >YOUR</span><strong>ENERGY</strong></span><span
+              >YOUR</span><strong>ENERGY</strong></span><span
                 class='pill'
+                data-passport-badge
               >{{passport.badge}}</span></div>
             <p class='passport-label'>{{passport.reportLabel}}</p>
             <h3 data-analysis-location>{{passport.reportAddress}}</h3>
-            <p class='passport-date'>{{passport.reportDate}}</p>
+            <p class='passport-date' data-passport-date>{{passport.reportDate}}</p>
             <div class='passport-card__visual'>
               <picture>
                 <source
@@ -300,13 +435,13 @@
                   decoding='async'
                 />
               </picture>
-              <span class='mini-panels' aria-hidden='true'></span>
+              <span class='mini-panels' aria-hidden='true'></span><span class='demo-badge'>{{map.demo}}</span>
             </div>
             <dl class='passport-specs'>
               <div><dt>{{passport.system}}</dt><dd
                   data-analysis='capacity'
                 >{{passport.capacity}}</dd></div>
-              <div><dt>{{passport.source}}</dt><dd
+              <div><dt data-passport-source-label>{{passport.source}}</dt><dd
                   data-analysis='panels'
                 >{{passport.panels}}</dd></div>
             </dl>
@@ -336,6 +471,37 @@
                       data-chart-value>{{value}}</td></tr>{{/each}}</tbody></table></details>
           </div>
         </div>
+        <section class='analysis-ledger' data-analysis-ledger hidden aria-labelledby='analysis-ledger-title'>
+          <div><p class='eyebrow'>{{product.result.title}}</p><h3
+              id='analysis-ledger-title'
+            >{{product.ledger.title}}</h3><p>{{product.ledger.copy}}</p></div><div
+            class='analysis-ledger__confidence'
+          ><span>{{product.result.confidenceTitle}}</span><strong data-analysis-confidence></strong><p
+              data-analysis-confidence-detail
+            ></p></div><dl data-analysis-ledger-list></dl><div><h3
+              >{{product.result.assumptionsTitle}}</h3><ul data-analysis-assumptions></ul></div>
+        </section>
+      </section>
+
+      <section class='lead-section section section--soft' data-lead-section hidden aria-labelledby='lead-title'>
+        <div class='container lead-grid'><div><p class='eyebrow'>YOURENERGY</p><h2
+              id='lead-title'
+            >{{product.lead.title}}</h2><p>{{product.lead.copy}}</p><small>{{product.lead.privacy}}</small></div><form
+            class='lead-form'
+            data-lead-form
+            novalidate
+          ><label>{{product.lead.nameLabel}}<input name='name' autocomplete='name' /></label><label
+              >{{product.lead.phoneLabel}}<input name='phone' autocomplete='tel' inputmode='tel' /></label><label
+              >{{product.lead.emailLabel}}<input name='email' type='email' autocomplete='email' inputmode='email' /></label><label
+              >{{product.lead.messageLabel}} <span>{{product.common.optional}}</span><textarea
+                name='message'
+                rows='3'
+              ></textarea></label><label class='lead-consent'><input name='consent' type='checkbox' /><span
+              >{{product.lead.consent}}</span></label><button class='button' type='submit'>{{product.lead.submit}}</button><p
+              class='form-status'
+              data-lead-status
+              aria-live='polite'
+            ></p></form></div>
       </section>
 
       <aside class='trust-strip' aria-label='{{trust.disclosure}}'>
@@ -356,19 +522,20 @@
               >{{solutions.title}}</h2></div><p>{{solutions.copy}}</p></div>
           <div class='solution-grid'>
             {{#each solutions.items}}
-              <article class='solution-card {{cardClass}}'>
-                {{#if badge}}<span class='solution-badge'>{{badge}}</span>{{/if}}
+              <article class='solution-card {{cardClass}}' data-analysis-scenario='{{@index}}'>
+                {{#if badge}}<span class='solution-badge' data-analysis-solution-badge>{{badge}}</span>{{/if}}
+                <span class='solution-badge' data-analysis-scenario-live hidden>{{../product.solutions.liveBadge}}</span>
                 <p class='solution-index'>0{{@index}}</p><h3>{{name}}</h3><p>{{subtitle}}</p>
-                <dl><div><dt>kWp</dt><dd>{{capacity}}</dd></div><div><dt>kWh</dt><dd
-                    >{{generation}}</dd></div></dl>
-                <strong class='solution-price'>{{price}}</strong>
+                <dl><div><dt>kWp</dt><dd data-analysis-scenario-capacity data-static-value='{{capacity}}'>{{capacity}}</dd></div><div><dt>kWh</dt><dd
+                    data-analysis-scenario-generation data-static-value='{{generation}}'>{{generation}}</dd></div></dl>
+                <strong class='solution-price' data-analysis-scenario-price data-static-value='{{price}}'>{{price}}</strong>
                 <details><summary>{{detailsLabel}}</summary><ul>{{#each details}}<li
                       >{{this}}</li>{{/each}}</ul></details>
                 <a class='button {{buttonClass}}' href='#calculator'>{{ctaLabel}}</a>
               </article>
             {{/each}}
           </div>
-          <p class='section-disclosure'>{{solutions.disclaimer}}</p>
+          <p class='section-disclosure' data-analysis-scenario-disclosure data-static-value='{{solutions.disclaimer}}'>{{solutions.disclaimer}}</p>
         </div>
       </section>
 
@@ -635,19 +802,21 @@
             aria-hidden='true'
           >×</span></button></form><div class='dialog-content'><p
           class='eyebrow'
+        data-passport-dialog-eyebrow
         >{{passport.reportLabel}} · {{common.demo}}</p><h2
           id='dialog-title'
+          data-passport-dialog-title
         >{{passport.dialogTitle}}</h2><div class='dialog-report'><article class='passport-card'><div
               class='passport-card__top'
             ><span class='wordmark wordmark--small'><span>YOUR</span><strong
-                >ENERGY</strong></span><span class='pill'>{{passport.badge}}</span></div><p
+                >ENERGY</strong></span><span class='pill' data-passport-badge>{{passport.badge}}</span></div><p
               class='passport-label'
             >{{passport.reportLabel}}</p><h3
               data-analysis-location
             >{{passport.reportAddress}}</h3><dl class='passport-specs'><div><dt
                 >{{passport.system}}</dt><dd
                   data-analysis='capacity'
-                >{{passport.capacity}}</dd></div><div><dt>{{passport.source}}</dt><dd
+                >{{passport.capacity}}</dd></div><div><dt data-passport-source-label>{{passport.source}}</dt><dd
                   data-analysis='panels'
                 >{{passport.panels}}</dd></div></dl></article><div class='dialog-numbers'><h3
             >{{passport.chartTitle}}</h3><dl>{{#each metrics}}<div><dt>{{label}}</dt><dd

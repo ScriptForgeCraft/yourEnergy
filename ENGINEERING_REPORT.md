@@ -1,66 +1,138 @@
-# YOURENERGY — engineering handoff
+# YOURENERGY — P0 engineering handoff
 
-Дата проверки: 28 августа 2026. Проект локальный; деплой в этот этап не входит.
+Дата проверки: 29 августа 2026. Проект остаётся локальным: деплой и выдача
+production credentials не выполнялись.
 
 ## 1. Структура
 
-Vite MPA генерирует полноценные HTML-документы из Handlebars до запуска браузера: армянская homepage — `/`, русская — `/ru/`. Также созданы `/privacy/`, `/terms/`, `/soon/` и локализованные RU-версии. Все вспомогательные страницы `noindex`. В content schema зарезервирован English без маршрута или hreflang.
+Vite MPA генерирует семантический HTML из Handlebars до запуска браузера.
+Опубликованные homepage-маршруты: Armenian `/`, Russian `/ru/` и English
+`/en/`. Privacy, Terms и Soon существуют для всех трёх локалей и имеют
+`noindex`; post-build validator проверяет 12 маршрутов. В `functions/` лежат
+Cloudflare Pages Functions, а расчётная логика отделена в `src/domain/`.
 
 ## 2. Визуальное соответствие референсу
 
-Сохранены ключевые приёмы: асимметричный hero, Roof Scan c картой/панелями, Solar Passport, тёмная trust-полоса, три решения, редакционная лента проектов, шестишаговый процесс, navy investment section и плотный footer. Намеренное отличие: неподтверждённые проекты, люди, контакты, тарифы и отзывы не выданы за реальные — они имеют видимые demo/illustrative labels.
+Сохранены asymmetric hero, Roof Scan, Solar Passport, тёмная trust-полоса,
+карты решений, editorial projects, шестишаговый процесс, navy investment
+section и плотный footer. Адаптивная проверка на 375 и 1440 px не нашла
+горизонтального overflow. Неподтверждённые статические карточки имеют
+видимые маркировки illustrative/demo; они не выдаются за результат введённого
+адреса.
 
 ## 3. Зависимости
 
-Runtime-зависимость только `leaflet`; она подгружается отдельным chunk после load/по взаимодействию. Dev-зависимости: Vite, Handlebars, Sharp, ESLint, `@eslint/js`, globals и Prettier. Локальный Lucide sprite указан в `THIRD_PARTY_NOTICES.md`.
+Единственная runtime dependency — `leaflet`; она загружается отдельным
+chunk только после начала map workflow. Dev dependencies: Vite, Handlebars,
+Sharp, ESLint, `@eslint/js`, globals и Prettier. `npm ls --depth=0` подтверждён;
+`npx knip --include files` проходит без неиспользуемых файлов. Устаревший
+модуль `CRS.Simple` удалён.
 
-## 4. Реализованный функционал
+## 4. Честный P0 real-analysis flow
 
-Работают sticky/mobile navigation, переключение HY/RU обычными ссылками, калькулятор, отмена предыдущего анализа, динамическое обновление карты/Passport/bar-chart/доступной таблицы/финансового графика и формулы, upload/drop/remove файла, native Passport dialog с Escape/focus return, native `<details>` решений и FAQ, scroll-snap проектов/отзывов, финальный CTA, chart focus labels и Leaflet Roof Scan.
+1. Посетитель вводит адрес и среднее kWh либо 12-месячный профиль.
+2. `/api/geocode` возвращает только кандидатов; выбор точки всегда требует
+   явного подтверждения. При недоступности доступна ручная точка.
+3. На geographic Leaflet map пользователь строит контур крыши, выбирает
+   ориентацию/наклон, может выбрать точку, сдвинуть её, отменить или сбросить
+   контур. «Завершить» недоступно до трёх точек.
+4. `/api/analysis` запрашивает у PVGIS yield для 1 kWp и прозрачным образом
+   масштабирует его от введённого потребления.
+5. Dashboard, карта, Passport, chart, ledger и три варианта системы получают
+   один `SolarAnalysis`; финансовые поля скрываются, если их источники не
+   подтверждены.
+6. Если provider/configuration недоступны, UI показывает ошибку и очищенные
+   значения, а не demo-результат.
 
-## 5. Модель расчёта
+## 5. Consumption, tariffs и расчёт
 
-Базовая demo-модель «Оптимальный»: 17 × 580 W = 9,86 kWp; 14 600 kWh/год; 4 300 000 ֏; 720 000 ֏/год; 5,97 года (`≈ 6,0` в UI); net timeline −4,3 млн / −0,7 млн / +20 тыс. / +2,9 млн / +13,7 млн; gross savings 18,0 млн ֏. Адрес не геокодируется. Arabkir, Abovyan и Ararat выбираются только по demo keywords; всё остальное — стандартный профиль Еревана.
+Pure domain-модули содержат JSDoc-модели Property, Consumption, Roof, Tariff,
+SolarAnalysis, SolarPassport и Confidence. `ARMENIA_TARIFF_DATASET` versioned,
+но намеренно не содержит неподтверждённой ставки. Поэтому счёт в AMD не
+конвертируется без verified tariff, а savings, price и payback не показываются
+без подтверждённых tariff + capex источников. В ledger видны источник,
+полнота и ограничения; PVGIS loss 14% отмечен как допущение.
 
-## 6. Demo-зоны и честные ограничения
+## 6. Real versus demo content
 
-Фото, имена, отзывы, проекты, расчёты, оборудование, номера телефона и email — демонстрационные. Контакты не являются ссылками и исключены из structured data. Модель не учитывает рост тарифа, деградацию, обслуживание, кредит или дисконтирование. ENA/PVGIS обозначены только как будущие интеграции.
+Контакты предоставлены владельцем и показаны как реальные: `+374 91 095 950`,
+Artashisyan 48 14 Kotayq, Zovuni, 26 33 str, Yerevan. Проекты, отзывы, люди,
+изображения, статические варианты систем и фиксированные финансовые цифры
+остаются clearly labelled illustrative/demo. Старый `DemoHomeAnalysisService`
+изолирован от homepage и возвращает явное disclosure; `ProductApiClient`
+никогда не подставляет его вместо provider-ответа.
 
-## 7. Assets
+## 7. API, security и env
 
-Созданы оригинальные illustrative assets: aerial roof, четыре объекта, инженер и social-preview. Исходники находятся в `assets/source/`, responsive AVIF/WebP/JPEG — в `public/images/`; замена описана в `ASSETS.md`. Hero AVIF 1600 px — 119 208 B, то есть меньше установленного лимита 250 KB.
+Есть same-origin JSON endpoints:
 
-## 8. Future API / env
+- `POST /api/geocode` — provider candidates;
+- `POST /api/analysis` — подтверждённый property + контур + PVGIS + ledger;
+- `POST /api/lead` — валидированный lead после результата.
 
-`HomeAnalysisService.analyze(input, { signal })` разделён от UI и возвращает единый `HomeAnalysis`. Ошибки: `INVALID_INPUT`, `ABORTED`, `UNAVAILABLE`; обновление публикует `solar:analysis-updated`. В `.env.example` оставлены только публичные будущие endpoint-переменные: analysis, geocoding, tariffs, optional map tiles и attribution. Секреты/production credentials во frontend не допускаются.
+Все provider, CRM и Turnstile secrets читаются только server-side из
+`functions/.dev.vars`; `.env.example` содержит лишь публичные endpoint/map
+поля. API до вызова PVGIS отвергает неподтверждённый объект или незавершённую
+крышу. CSP/headers ограничивают источники self и явным HTTPS tile origin,
+если он конфигурирован. Functions не логируют адрес, координаты или lead PII.
 
-## 9. SEO
+## 8. Passport, lead и analytics
 
-Есть canonical `https://yourenergy.am/` и `/ru/`, reciprocal `hy`, `ru`, `x-default` hreflang, локализованные title/description/OG/X, sitemap только с двумя homepage и `robots.txt`. JSON-LD содержит только WebSite, Organization, Service и отображаемый FAQ. В support routes установлен `noindex`.
+`SolarPassportRepository` — memory-only реализация P0: permanent URL и PDF
+честно недоступны. Lead form требует имя, телефон и consent; без CRM не
+показывает успех. Turnstile adapter подготовлен, но не заявляется работающим
+без настроенного site key/secret. Browser analytics публикует только
+локальные события без PII.
 
-## 10. Accessibility
+## 9. SEO, i18n и accessibility
 
-Проверены landmarks, skip-link, один H1 на страницу, lang HY/RU, labels/errors/live regions, focus-visible, 44 px controls, Escape, native dialog, native details, reduced motion, chart labels/table и JS-off fallback. В финальном Lighthouse accessibility — 100 для всех четырёх прогонов.
+Основной HTML crawlable без JavaScript. Есть localized title/description/OG,
+canonical и reciprocal `hy`/`ru`/`en`/`x-default` hreflang, FAQ JSON-LD,
+sitemap только с тремя homepage. Маршруты Privacy/Terms/Soon — noindex.
+Проверены один H1, landmarks, skip-link, visible labels/errors, `aria-live`,
+native dialog с Escape/focus return, native details, keyboard map controls,
+reduced motion и текстовые chart/table alternatives.
 
-## 11. Build, QA и performance
+## 10. QA
 
-`npm test` — 8/8; `npm run lint`, `npm run format:check`, `npm run build`, `npm run verify:build` и `npx knip` — успешно. Post-build verifier прошёл все 8 routes, doctype, каноникалы/hreflang/JSON-LD/anchors/assets. Browser smoke проверил menu, language navigation, calculator и единое обновление данных, upload errors/remove/focus, dialog, solutions, projects, testimonials, FAQ, CTA, Leaflet, JS-off, console и overflow на 320/375/430/768/1024/1280/1440/1728 px.
+`npm test` проходит: 26 unit/API tests покрывают consumption/tariffs,
+finite values, Passport memory flow, API envelopes, PVGIS normalization,
+unconfirmed property rejection, aborts и polygon area. `npm run lint`,
+`npm run format:check`, `npm run build`, `npm run verify:build` и `npm run
+check` проходят; verifier подтверждает 12 routes, canonical/hreflang,
+JSON-LD, anchors, template tokens и assets.
 
-Локальный production-preview Lighthouse (mobile и desktop):
+В production preview вручную проверены HY/RU navigation, responsive menu,
+dialog + Escape/focus return, solutions/FAQ, project/testimonial controls,
+manual point, polygon add/undo/reset, unavailable provider flow, desktop/mobile
+overflow и console (чисто при загрузке). Browser upload валидирован unit-тестом;
+автоматический file chooser Chrome extension отказал в доступе к file URLs.
+Для повторения browser upload нужно включить **Allow access to file URLs** в
+Details расширения ChatGPT в `chrome://extensions`.
+
+## 11. Build и performance
+
+Production build: initial main JS 12.51 KB gzip, CSS 9.21 KB gzip, Leaflet
+43.38 KB gzip в lazy chunk. Lighthouse ниже запущен на локальном Vite preview;
+это lab result, а не гарантия production CWV.
 
 | Route / viewport | Performance | A11y | Best practices | SEO | FCP / LCP / TBT / CLS    |
 | ---------------- | ----------: | ---: | -------------: | --: | ------------------------ |
-| HY mobile        |         100 |  100 |            100 | 100 | 0,9 s / 1,4 s / 0 ms / 0 |
-| RU mobile        |         100 |  100 |            100 | 100 | 0,9 s / 1,4 s / 0 ms / 0 |
-| HY desktop       |         100 |  100 |            100 | 100 | 0,3 s / 0,4 s / 0 ms / 0 |
-| RU desktop       |         100 |  100 |            100 | 100 | 0,3 s / 0,4 s / 0 ms / 0 |
+| HY mobile        |         100 |  100 |            100 | 100 | 1.1 s / 1.5 s / 0 ms / 0 |
+| RU mobile        |         100 |  100 |            100 | 100 | 1.1 s / 1.5 s / 0 ms / 0 |
+| HY desktop       |         100 |  100 |            100 | 100 | 0.3 s / 0.4 s / 0 ms / 0 |
+| RU desktop       |         100 |  100 |            100 | 100 | 0.3 s / 0.4 s / 0 ms / 0 |
 
-Это lab-результаты локального Vite preview, а не гарантия production CWV. Initial app JS: 7,08 KB gzip; CSS: 7,80 KB gzip; Leaflet остаётся отдельным lazy chunk: 43,38 KB gzip. Финальные full-page screenshots сохранены в `reports/screenshots/` как `hy-375-final.jpg`, `hy-1440-final.jpg`, `ru-375-final.jpg`, `ru-1440-final.jpg`.
+JSON reports: `reports/lighthouse/*-p0.json`. Visual QA captures:
+`reports/screenshots/hy-375-final.jpg`, `hy-1440-final.jpg`,
+`ru-375-final.jpg`, `ru-1440-final.jpg`.
 
-## 12. Перед запуском и следующие три шага
+## 12. Launch blockers и следующие три шага
 
-Launch blockers: native proofreading армянского текста, юридическое утверждение Privacy/Terms, подтверждённые контакты/проекты/тарифы/согласия на фото.
-
-1. Заменить все demo records и assets на верифицированные данные по чек-листу `ASSETS.md`.
-2. Подключить безопасный backend adapter для геокодирования, solar-analysis и тарифов; сохранить честные source/assumption disclosures.
-3. Провести legal + Armenian native review, настроить CDN/cache headers и повторить Lighthouse на staging/production origin.
+1. Owner must supply and configure an approved geocoder, PVGIS endpoint,
+   map-tile provider, dated verified tariff source/revision, CRM and Turnstile
+   credentials. Until then P0 intentionally shows no property-specific result.
+2. Replace every illustrative project/photo/review/price with approved evidence;
+   complete Armenian native proofreading and legal approval for Privacy/Terms.
+3. Deploy to staging, repeat browser upload/keyboard/mobile smoke and Lighthouse
+   on the real origin, then record actual production results.
