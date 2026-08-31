@@ -322,6 +322,22 @@ async function validateToolSeo(html, page, canonical, type) {
   }
 }
 
+function validateOfferCheckerPriceBookFallback(html, page) {
+  const reference = html.match(
+    /<strong\b[^>]*\bdata-pricebook-reference(?:\s|=|>)[^>]*>([\s\S]*?)<\/strong>/iu
+  );
+  if (!reference) {
+    fail(`${page}: Offer Checker is missing the runtime PriceBook reference`);
+    return;
+  }
+  if (!html.includes('data-pricebook-version')) {
+    fail(`${page}: Offer Checker is missing the runtime PriceBook version label`);
+  }
+  if (/\b(?:232|247|264)\b/u.test(reference[1])) {
+    fail(`${page}: Offer Checker must not show an unchecked static price range`);
+  }
+}
+
 function validateLanguageSwitcher(html, page, currentLocale) {
   const expected = new Map([
     ['hy', '/'],
@@ -495,6 +511,7 @@ for (const { page, locale, type } of toolPages) {
   const canonical = locale === 'hy' ? `${origin}/${type}/` : `${origin}/${locale}/${type}/`;
   await validateToolSeo(pages.get(page), page, canonical, type);
   validateToolLanguageSwitcher(pages.get(page), page, locale, type);
+  if (type === 'offer-checker') validateOfferCheckerPriceBookFallback(pages.get(page), page);
 }
 for (const page of ['index.html', 'ru/index.html', 'en/index.html']) {
   if (pages.has(page)) validateP0Markup(pages.get(page), page);

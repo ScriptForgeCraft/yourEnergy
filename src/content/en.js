@@ -166,6 +166,8 @@ export default {
       retry: 'Try calculation again',
       noTariff:
         'No tariff was entered: capacity, PVGIS generation and a preliminary price remain available, but savings and payback are not shown.',
+      priceUnavailable:
+        'The temporary price book is unavailable or has expired. Request an engineer survey; savings and payback also require a tariff.',
       noSavings: 'There is not enough data to show savings and payback.',
       chartDescription:
         'Monthly preliminary generation based on the confirmed inputs and returned solar-resource data.',
@@ -185,7 +187,9 @@ export default {
       liveCopy:
         'These three preliminary technical scenarios are calculated from the confirmed property data.',
       financialUnavailable:
-        'A preliminary price appears from the active PriceBook; savings and payback require a tariff.'
+        'A preliminary price appears from the active PriceBook; savings and payback require a tariff.',
+      priceUnavailable:
+        'The temporary price book is unavailable or has expired. Request an engineer survey.'
     },
     ledger: {
       title: 'How this was calculated',

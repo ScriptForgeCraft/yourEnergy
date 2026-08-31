@@ -26,8 +26,8 @@ section и плотный footer. Адаптивная проверка на 375
 Единственная runtime dependency — `leaflet`; она загружается отдельным
 chunk только после начала map workflow. Dev dependencies: Vite, Handlebars,
 Sharp, ESLint, `@eslint/js`, globals и Prettier. `npm ls --depth=0` подтверждён;
-`npx knip --include files` проходит без неиспользуемых файлов. Устаревший
-модуль `CRS.Simple` удалён.
+свежий `npx --yes knip --dependencies` не нашёл неиспользуемых declared
+dependencies. Устаревший модуль `CRS.Simple` удалён.
 
 ## 4. Честный P0 real-analysis flow
 
@@ -63,7 +63,8 @@ AMD/kWh из собственного счёта: ledger и Passport прямо 
 инвертор, крепёж, стандартный монтаж и базовое подключение; исключены батарея,
 ремонт крыши, нестандартные электрические работы и финансирование. НДС и
 разрешения требуют подтверждения. После expiry цена скрывается и предлагается
-обследование.
+обследование. Статический Offer Checker не выводит числовой диапазон без
+JavaScript; браузер проверяет срок `validUntil` перед его показом.
 
 ## 6. Real versus demo content
 
@@ -73,6 +74,10 @@ Artashisyan 48 14 Kotayq, Zovuni, 26 33 str, Yerevan. Проекты, отзыв
 остаются clearly labelled illustrative/demo. Старый `DemoHomeAnalysisService`
 изолирован от homepage и возвращает явное disclosure; `ProductApiClient`
 никогда не подставляет его вместо provider-ответа.
+
+Прямая кнопка звонка использует этот подтверждённый номер. Публичный e-mail
+владелец пока не предоставил, поэтому сайт не придумывает адрес и не выводит
+ложную кнопку `mailto:`.
 
 ## 7. API, security и env
 
@@ -111,44 +116,51 @@ reduced motion и текстовые chart/table alternatives.
 
 ## 10. QA
 
-`npm test` проходит: 26 unit/API tests покрывают consumption/tariffs,
-finite values, Passport memory flow, API envelopes, PVGIS normalization,
-unconfirmed property rejection, aborts и polygon area. `npm run lint`,
-`npm run format:check`, `npm run build`, `npm run verify:build` и `npm run
-check` проходят; verifier подтверждает 12 routes, canonical/hreflang,
-JSON-LD, anchors, template tokens и assets.
+Свежий `npm run check` проходит: 35 Node unit/API tests покрывают
+consumption/tariffs, finite values, Passport memory flow, API envelopes,
+PVGIS normalization, unconfirmed property rejection, aborts, polygon area,
+P25/P50/P75 и округление, expiry PriceBook, ручной тариф, скрытие финансов без
+тарифа, server-selected pricebook/client-capex rejection и статусы Offer
+Checker. `npm run lint`, `npm run format:check`, `npm run build` и `npm run
+verify:build` входят в эту команду; verifier подтверждает 18 routes,
+canonical/hreflang, JSON-LD, anchors, template tokens и assets.
 
-В production preview вручную проверены HY/RU navigation, responsive menu,
-dialog + Escape/focus return, solutions/FAQ, project/testimonial controls,
-manual point, polygon add/undo/reset, unavailable provider flow, desktop/mobile
-overflow и console (чисто при загрузке). Browser upload валидирован unit-тестом;
-автоматический file chooser Chrome extension отказал в доступе к file URLs.
-Для повторения browser upload нужно включить **Allow access to file URLs** в
-Details расширения ChatGPT в `chrome://extensions`.
+В production preview вручную проверены HY/RU/EN language routes и один H1,
+responsive menu, no-overflow, быстрый переход Calculator → homepage с данными
+текущей сессии, Offer Checker (P50 «в диапазоне», battery →
+«несопоставимо»), lazy Leaflet/OSM с attribution и console без ошибок.
+Полный PVGIS/geocoder/CRM E2E не выполнялся на Vite preview: Pages Functions
+там не запускаются, поэтому они покрыты изолированными Node API tests с
+provider mocks. MIME/size rules upload покрыты unit-тестом; Chrome extension
+заблокировал автоматический file chooser. Для повторения browser upload нужно
+включить **Allow access to file URLs** в Details расширения ChatGPT в
+`chrome://extensions`.
 
 ## 11. Build и performance
 
-Production build: initial main JS 12.51 KB gzip, CSS 9.21 KB gzip, Leaflet
-43.38 KB gzip в lazy chunk. Lighthouse ниже запущен на локальном Vite preview;
-это lab result, а не гарантия production CWV.
+Fresh production build: main JS 11.28 KB gzip + shared domain chunk 4.39 KB
+gzip, CSS 10.44 KB gzip; Leaflet 43.38 KB gzip remains a lazy chunk and the
+separate tool enhancement is 1.79 KB gzip. Lighthouse ниже запущен 31.08.2026
+на локальном Vite preview; это lab result, а не гарантия production CWV.
 
 | Route / viewport | Performance | A11y | Best practices | SEO | FCP / LCP / TBT / CLS    |
 | ---------------- | ----------: | ---: | -------------: | --: | ------------------------ |
-| HY mobile        |         100 |  100 |            100 | 100 | 1.1 s / 1.5 s / 0 ms / 0 |
-| RU mobile        |         100 |  100 |            100 | 100 | 1.1 s / 1.5 s / 0 ms / 0 |
+| HY mobile        |         100 |  100 |            100 | 100 | 1.2 s / 1.7 s / 0 ms / 0 |
+| RU mobile        |         100 |  100 |            100 | 100 | 1.2 s / 1.7 s / 0 ms / 0 |
 | HY desktop       |         100 |  100 |            100 | 100 | 0.3 s / 0.4 s / 0 ms / 0 |
 | RU desktop       |         100 |  100 |            100 | 100 | 0.3 s / 0.4 s / 0 ms / 0 |
 
-JSON reports: `reports/lighthouse/*-p0.json`. Visual QA captures:
-`reports/screenshots/hy-375-final.jpg`, `hy-1440-final.jpg`,
-`ru-375-final.jpg`, `ru-1440-final.jpg`.
+JSON reports: `reports/lighthouse/*-p1.json`. Visual QA captures:
+`reports/screenshots/hy-375.png`, `hy-1440.png`, `ru-375.png`,
+`ru-1440.png`.
 
 ## 12. Launch blockers и следующие три шага
 
 1. Owner must supply and configure an approved geocoder, dated verified tariff
-   source/revision, CRM and Turnstile credentials. PVGIS/OSM fallbacks are
-   configured, but an approved commercial provider can replace either without
-   changing the browser flow.
+   source/revision, CRM and Turnstile credentials, plus a public e-mail if an
+   e-mail fallback is required. PVGIS/OSM fallbacks are configured, but an
+   approved commercial provider can replace either without changing the browser
+   flow.
 2. Replace every illustrative project/photo/review/price with approved evidence;
    complete Armenian native proofreading and legal approval for Privacy/Terms.
 3. Deploy to staging, repeat browser upload/keyboard/mobile smoke and Lighthouse

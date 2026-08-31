@@ -67,7 +67,9 @@ clearly not an offer. It includes panels, inverter, mounting, standard
 installation and basic grid connection; battery, roof repair, non-standard
 electrical work and financing are excluded. VAT and permits require
 confirmation. Once expired, price output is suppressed and the flow requests an
-engineering survey.
+engineering survey. The static Proposal Checker deliberately renders no numeric
+range before its browser-side validity check, so an expired build cannot expose
+an old provisional price without JavaScript.
 
 To publish financial values, add an approved record in
 `src/data/tariffs/armenia.js` with its effective dates, source reference and

@@ -559,10 +559,15 @@ const analyzeRoof = async () => {
     const passport = passportRepository.create(analysis, { locale });
     publishAnalysis(analysis, passport);
     const financialUnavailable = analysis.selectedScenario?.financial?.annualSavingsAmd === null;
+    const priceUnavailable = ['PRICEBOOK_UNAVAILABLE', 'PRICEBOOK_EXPIRED'].includes(
+      analysis.commercialEstimate?.reason
+    );
     writeStatus(
-      financialUnavailable
-        ? `${product.result?.ready ?? ''} ${product.result?.noTariff ?? ''}`.trim()
-        : (product.result?.ready ?? '')
+      priceUnavailable
+        ? `${product.result?.ready ?? ''} ${product.result?.priceUnavailable ?? ''}`.trim()
+        : financialUnavailable
+          ? `${product.result?.ready ?? ''} ${product.result?.noTariff ?? ''}`.trim()
+          : (product.result?.ready ?? '')
     );
     trackProductEvent('analysis_ready', { status: analysis.status, source: 'provider' });
   } catch (error) {

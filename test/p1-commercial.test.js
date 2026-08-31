@@ -144,6 +144,24 @@ test('a real analysis with no tariff publishes no savings, payback or financial 
   assertFiniteTree(analysis);
 });
 
+test('an expired price book hides the preliminary price and payback even with a user tariff', () => {
+  const analysis = buildSolarAnalysis({
+    ...realAnalysisInputs,
+    effectiveDate: '2026-09-29',
+    tariffSelection: createUserTariffSelection({ rateAmdPerKwh: 52 }, '2026-09-29')
+  });
+  const scenario = analysis.selectedScenario;
+
+  assert.equal(analysis.commercialEstimate.available, false);
+  assert.equal(analysis.commercialEstimate.reason, 'PRICEBOOK_EXPIRED');
+  assert.equal(scenario.commercialEstimate.available, false);
+  assert.equal(scenario.financial.capexAmd, null);
+  assert.equal(scenario.financial.annualSavingsAmd, 588_120);
+  assert.equal(scenario.financial.paybackYears, null);
+  assert.deepEqual(scenario.financial.timeline, []);
+  assertFiniteTree(analysis);
+});
+
 test('Offer Checker only compares a complete standard scope and returns P1 range statuses', () => {
   const shared = {
     capacityKwp: 6,

@@ -100,6 +100,9 @@ const formatCommercialEstimate = (estimate, locale, strings) => {
   );
 };
 
+const hasUnavailablePriceBook = (estimate) =>
+  typeof estimate?.reason === 'string' && estimate.reason.startsWith('PRICEBOOK_');
+
 const resetFinance = (strings) => {
   document.querySelector('[data-finance-line-path]')?.setAttribute('d', '');
   document.querySelectorAll('[data-finance-point]').forEach((point) => {
@@ -148,11 +151,14 @@ const updateScenarioCards = (scenarios, locale, strings) => {
     const generation = finite(scenario.generation?.annualKwh)
       ? `${formatNumber(scenario.generation.annualKwh, locale)} kWh`
       : null;
+    const unavailablePriceMessage = hasUnavailablePriceBook(scenario.commercialEstimate)
+      ? strings.priceUnavailable
+      : strings.financialUnavailable;
     const price = finite(scenario.commercialEstimate?.primaryAmd)
       ? `P50 · ${formatNumber(scenario.commercialEstimate.primaryAmd, locale)} ֏`
       : finite(financial.capexAmd)
         ? `${formatNumber(financial.capexAmd, locale)} ֏`
-        : (strings.financialUnavailable ?? strings.noTariff ?? strings.noSavings ?? '—');
+        : (unavailablePriceMessage ?? strings.noTariff ?? strings.noSavings ?? '—');
 
     setValue(card.querySelector('[data-analysis-scenario-capacity]'), capacity);
     setValue(card.querySelector('[data-analysis-scenario-generation]'), generation);
@@ -241,7 +247,11 @@ export const createAnalysisView = ({ locale, strings = {}, solutionStrings = {} 
     const timeline = Array.isArray(financial.timeline) ? financial.timeline : [];
     const financeLine = createFinancePath(timeline);
     if (!financeLine) {
-      resetFinance(strings);
+      resetFinance(
+        hasUnavailablePriceBook(scenario.commercialEstimate ?? analysis.commercialEstimate)
+          ? { ...strings, noTariff: strings.priceUnavailable ?? strings.noTariff }
+          : strings
+      );
       return;
     }
 
