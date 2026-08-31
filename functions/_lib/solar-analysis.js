@@ -1,12 +1,24 @@
 import {
   ARMENIA_TARIFF_DATASET,
+  PriceBookRepository,
   buildSolarAnalysis,
+  createUserTariffSelection,
   normalizeConsumption
 } from '../../src/domain/index.js';
 import { ApiError } from './http.js';
 
 const cleanString = (value, maximum = 220) =>
   typeof value === 'string' ? value.replace(/\s+/gu, ' ').trim().slice(0, maximum) || null : null;
+
+const priceBookRepository = new PriceBookRepository();
+
+const selectTariffForP1 = (body) => {
+  const rawRate = body?.tariff?.rateAmdPerKwh;
+  if (rawRate !== undefined && rawRate !== null && rawRate !== '') {
+    return createUserTariffSelection({ rateAmdPerKwh: rawRate });
+  }
+  return null;
+};
 
 const confirmedProperty = (body, validatedInput) => ({
   address: cleanString(body?.property?.address),
@@ -46,9 +58,11 @@ const confirmedRoof = (body, validatedInput) => ({
  */
 export const validateP0AnalysisWorkflow = (body) => {
   const areaSqm = Number(body?.roof?.areaSqm);
-  const consumption = normalizeConsumption(body?.consumption, { tariff: null });
+  const tariffSelection = selectTariffForP1(body);
+  const consumption = normalizeConsumption(body?.consumption, { tariff: tariffSelection });
   const hasConfirmedProperty =
-    body?.property?.confirmed === true && cleanString(body?.property?.address)?.length >= 5;
+    body?.property?.confirmed === true &&
+    (cleanString(body?.property?.address)?.length >= 5 || body?.property?.source === 'manual');
   const hasCompleteRoof =
     body?.roof?.polygonComplete === true && Number.isFinite(areaSqm) && areaSqm > 0;
 
@@ -56,15 +70,28 @@ export const validateP0AnalysisWorkflow = (body) => {
     throw new ApiError('INVALID_INPUT');
   }
 
-  return { consumption };
+  return { consumption, tariffSelection };
 };
 
 /**
- * Joins a real PVGIS response with browser-confirmed inputs. It intentionally
- * leaves tariff and capex unavailable until their reviewed sources exist.
+ * Joins a real PVGIS response with browser-confirmed inputs. A visitor may
+ * supply a tariff copied from a bill; the server chooses any temporary
+ * commercial price book itself and never accepts client-provided capex.
  */
-export const buildP0SolarAnalysis = ({ body, validatedInput, providerAnalysis }) =>
-  buildSolarAnalysis({
+export const buildP0SolarAnalysis = ({
+  body,
+  validatedInput,
+  providerAnalysis,
+  tariffSelection,
+  effectiveDate = new Date()
+}) => {
+  const priceBook = priceBookRepository.getActive({
+    region: 'AM',
+    systemType: 'residential-grid-tied',
+    at: effectiveDate
+  });
+
+  return buildSolarAnalysis({
     property: confirmedProperty(body, validatedInput),
     consumption: body?.consumption,
     roof: confirmedRoof(body, validatedInput),
@@ -80,8 +107,14 @@ export const buildP0SolarAnalysis = ({ body, validatedInput, providerAnalysis })
         verifiedAt: providerAnalysis.sourceLedger?.[0]?.retrievedAt ?? new Date().toISOString()
       }
     },
-    tariffDataset: ARMENIA_TARIFF_DATASET,
+    tariffSelection: tariffSelection ?? undefined,
+    tariffDataset: tariffSelection ? undefined : ARMENIA_TARIFF_DATASET,
     system: {},
+    // The browser never controls capex. A dated server-side price book is the
+    // only provisional commercial source used in this P1 route.
     investment: {},
+    priceBook,
+    effectiveDate,
     assumptions: ['PVGIS_SYSTEM_LOSS_14_PERCENT']
   });
+};

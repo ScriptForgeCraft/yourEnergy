@@ -82,7 +82,7 @@ test('selectEffectiveTariff selects dated, verified records and keeps the P0 reg
   assert.equal(getConfirmedTariffRate(localP0), null);
 });
 
-test('normalizeConsumption uses kWh inputs first and only converts a bill with a confirmed tariff', () => {
+test('normalizeConsumption uses kWh inputs first and only converts a bill with an available tariff', () => {
   const tariff = selectEffectiveTariff(TEST_TARIFF_DATASET, '2026-08-28');
   const monthly = normalizeConsumption({ monthlyKwh: MONTHLY_CONSUMPTION });
   const annual = normalizeConsumption({ annualKwh: 12_000 });
@@ -97,7 +97,7 @@ test('normalizeConsumption uses kWh inputs first and only converts a bill with a
   assert.equal(fromBill.averageMonthlyKwh, 100);
   assert.equal(fromBill.annualKwh, 1_200);
   assert.equal(noTariffBill.available, false);
-  assert.ok(noTariffBill.issues.includes('CONFIRMED_TARIFF_REQUIRED_FOR_BILL'));
+  assert.ok(noTariffBill.issues.includes('TARIFF_REQUIRED_FOR_BILL'));
 });
 
 test('buildSolarAnalysis derives transparent scenarios from explicit inputs only', () => {
@@ -174,7 +174,7 @@ test('roof constraints and missing tariffs suppress unsupported financial claims
   });
 
   assert.ok(scenario.limitations.includes('ROOF_CAPACITY_LIMIT'));
-  assert.ok(scenario.limitations.includes('CONFIRMED_TARIFF_REQUIRED'));
+  assert.ok(scenario.limitations.includes('TARIFF_REQUIRED'));
   assert.equal(scenario.financial.annualSavingsAmd, null);
   assert.equal(scenario.financial.paybackYears, null);
   assert.ok(scenario.coveragePercent < 100);

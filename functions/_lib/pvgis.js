@@ -1,4 +1,4 @@
-import { configuredUrl, providerTimeoutMs } from './config.js';
+import { configuredUrl, envString, providerTimeoutMs } from './config.js';
 import { ApiError } from './http.js';
 import { fetchJsonWithTimeout } from './provider.js';
 
@@ -19,6 +19,11 @@ const compassToPvgisAspect = (azimuthDegrees) => {
   const aspect = ((azimuthDegrees - 180 + 540) % 360) - 180;
   return Object.is(aspect, -0) ? 0 : aspect;
 };
+
+// PVGIS has a public no-key API. Keeping the request server-side prevents the
+// browser from gaining a direct provider dependency and leaves a single point
+// for future endpoint/version changes.
+export const DEFAULT_PVGIS_ENDPOINT = 'https://re.jrc.ec.europa.eu/api/v5_3/PVcalc';
 
 /**
  * The client sends compass azimuth (0 north, 90 east, 180 south, 270 west).
@@ -84,7 +89,9 @@ export const normalizePvgisResult = (payload) => {
 };
 
 export const createPvgisAdapter = (env, { fetchImpl = fetch } = {}) => {
-  const endpoint = configuredUrl(env, 'PVGIS_ENDPOINT', 'PVGIS_NOT_CONFIGURED');
+  const endpoint = envString(env, 'PVGIS_ENDPOINT')
+    ? configuredUrl(env, 'PVGIS_ENDPOINT', 'PVGIS_NOT_CONFIGURED')
+    : new URL(DEFAULT_PVGIS_ENDPOINT);
   const timeoutMs = providerTimeoutMs(env);
 
   return {

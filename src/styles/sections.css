@@ -149,6 +149,10 @@ h3 {
   text-decoration: underline;
 }
 
+.address-manual-point {
+  margin-top: 6px;
+}
+
 .roof-product .roof-visual {
   position: relative;
   min-height: 0;
@@ -2049,6 +2053,16 @@ h3 {
 .lead-grid > div > p:not(.eyebrow),
 .lead-grid > div > small {
   color: var(--soft-ink);
+}
+
+.lead-grid .lead-fallback {
+  margin: 14px 0 8px;
+  font-size: 0.82rem;
+  font-weight: 750;
+}
+
+.lead-fallback a {
+  color: var(--navy);
 }
 
 .lead-form {

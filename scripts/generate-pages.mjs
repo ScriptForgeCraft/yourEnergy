@@ -5,6 +5,9 @@ import { loadEnv } from 'vite';
 import hy from '../src/content/hy.js';
 import ru from '../src/content/ru.js';
 import en from '../src/content/en.js';
+import toolCopy from '../src/content/tools.js';
+import { isPriceBookActive } from '../src/domain/pricebook.js';
+import { TEMPORARY_YOURENERGY_PRICEBOOK } from '../src/data/pricebooks/armenia.js';
 import { GENERATED_CONTENT_LOCALES } from '../src/content/schema.js';
 
 const root = resolve(import.meta.dirname, '..');
@@ -16,9 +19,11 @@ const publicEnv = {
 };
 const template = await readFile(resolve(root, 'src/templates/home.hbs'), 'utf8');
 const supportTemplate = await readFile(resolve(root, 'src/templates/support.hbs'), 'utf8');
+const toolTemplate = await readFile(resolve(root, 'src/templates/tool.hbs'), 'utf8');
 
 const render = Handlebars.compile(template, { noEscape: false });
 const renderSupport = Handlebars.compile(supportTemplate, { noEscape: false });
+const renderTool = Handlebars.compile(toolTemplate, { noEscape: false });
 const writeGenerated = (file, markup) => writeFile(file, markup.replace(/[ \t]+\n/g, '\n'), 'utf8');
 
 const runtimeLocales = Object.freeze(
@@ -44,6 +49,26 @@ const localizedLanguageNames = Object.freeze({
 const createLanguageLinks = (currentLocale) =>
   GENERATED_CONTENT_LOCALES.filter(({ key }) => key !== currentLocale).map(({ key, path }) => ({
     href: path,
+    hreflang: key,
+    label: languageLabels[key],
+    name: localizedLanguageNames[currentLocale][key]
+  }));
+
+const TOOL_TYPES = Object.freeze(['calculator', 'offer-checker']);
+const toolPath = (locale, type) => (locale === 'hy' ? `/${type}/` : `/${locale}/${type}/`);
+const toolFile = (locale, type) =>
+  locale === 'hy' ? `${type}/index.html` : `${locale}/${type}/index.html`;
+const createToolAlternateLinks = (type) =>
+  Object.freeze([
+    ...GENERATED_CONTENT_LOCALES.map(({ key }) => ({
+      hreflang: key,
+      href: `${origin}${toolPath(key, type)}`
+    })),
+    { hreflang: 'x-default', href: `${origin}${toolPath('hy', type)}` }
+  ]);
+const createToolLanguageLinks = (currentLocale, type) =>
+  GENERATED_CONTENT_LOCALES.filter(({ key }) => key !== currentLocale).map(({ key }) => ({
+    href: toolPath(key, type),
     hreflang: key,
     label: languageLabels[key],
     name: localizedLanguageNames[currentLocale][key]
@@ -168,6 +193,106 @@ for (const { file, key } of GENERATED_CONTENT_LOCALES) {
   const output = resolve(root, file);
   await mkdir(dirname(output), { recursive: true });
   await writeGenerated(output, render(createHomeContext(content)));
+}
+
+const scopeItems = (tool) => [
+  { key: 'panels', name: 'scope-panels', label: tool.scope.panels },
+  { key: 'inverter', name: 'scope-inverter', label: tool.scope.inverter },
+  { key: 'mounting', name: 'scope-mounting', label: tool.scope.mounting },
+  {
+    key: 'standard-installation',
+    name: 'scope-standard-installation',
+    label: tool.scope.installation
+  },
+  {
+    key: 'basic-grid-connection',
+    name: 'scope-basic-grid-connection',
+    label: tool.scope.grid
+  },
+  { key: 'battery', name: 'scope-battery', label: tool.scope.battery }
+];
+
+const createToolContext = (content, type) => {
+  const tool = toolCopy[content.locale]?.[type === 'offer-checker' ? 'offerChecker' : type];
+  if (!tool) throw new Error(`Missing ${type} tool copy for ${content.locale}.`);
+
+  const activePriceBook = isPriceBookActive(TEMPORARY_YOURENERGY_PRICEBOOK);
+  const formatter = new Intl.NumberFormat(runtimeLocales[content.locale], {
+    maximumFractionDigits: 0
+  });
+  const priceBookRange = `${formatter.format(
+    TEMPORARY_YOURENERGY_PRICEBOOK.ratesAmdPerWp.p25
+  )}–${formatter.format(TEMPORARY_YOURENERGY_PRICEBOOK.ratesAmdPerWp.p75)} ֏/Wp`;
+  const validUntil = new Intl.DateTimeFormat(runtimeLocales[content.locale], {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+    timeZone: 'UTC'
+  }).format(new Date(`${TEMPORARY_YOURENERGY_PRICEBOOK.validUntil}T00:00:00.000Z`));
+
+  const offerStrings =
+    type === 'offer-checker'
+      ? {
+          invalid: tool.invalid,
+          resultAwaiting: tool.resultAwaiting,
+          notComparable: tool.notComparable,
+          expiry: tool.expiry,
+          status: tool.status,
+          scope: Object.fromEntries(scopeItems(tool).map(({ key, label }) => [key, label])),
+          scopeIncomplete: tool.scopeHelp,
+          reason: {
+            OFFER_PRICE_AND_CAPACITY_REQUIRED: tool.invalid,
+            PRICEBOOK_UNAVAILABLE: tool.expiry,
+            PRICEBOOK_EXPIRED: tool.expiry,
+            UNSUPPORTED_SYSTEM_TYPE: tool.notComparable,
+            BATTERY_SCOPE_UNSUPPORTED: tool.notComparable
+          }
+        }
+      : null;
+
+  return {
+    locale: content.locale,
+    localeCode: content.localeCode,
+    path: toolPath(content.locale, type),
+    homeHref: content.homeHref,
+    contact: content.contact,
+    shared: toolCopy[content.locale].shared,
+    tool,
+    toolType: type,
+    isCalculator: type === 'calculator',
+    calculatorHref: toolPath(content.locale, 'calculator'),
+    offerCheckerHref: toolPath(content.locale, 'offer-checker'),
+    alternateLinks: createToolAlternateLinks(type),
+    languageLinks: createToolLanguageLinks(content.locale, type),
+    scopeItems: type === 'offer-checker' ? scopeItems(tool) : [],
+    priceBookActive: activePriceBook,
+    priceBookRange,
+    priceBookVersion: `YOURENERGY · ${TEMPORARY_YOURENERGY_PRICEBOOK.version}`,
+    priceBookValidUntil: validUntil,
+    pageConfig: escapeJsonForHtml({
+      toolType: type,
+      locale: runtimeLocales[content.locale],
+      homeHref: content.homeHref,
+      priceBook: TEMPORARY_YOURENERGY_PRICEBOOK,
+      strings:
+        type === 'calculator'
+          ? {
+              invalid: tool.invalid,
+              stored: tool.stored,
+              storageUnavailable: tool.storageUnavailable
+            }
+          : offerStrings
+    })
+  };
+};
+
+for (const { key } of GENERATED_CONTENT_LOCALES) {
+  const content = homeContent[key];
+  for (const type of TOOL_TYPES) {
+    const output = resolve(root, toolFile(key, type));
+    await mkdir(dirname(output), { recursive: true });
+    await writeGenerated(output, renderTool(createToolContext(content, type)));
+  }
 }
 
 const commonSoonAnchors = [

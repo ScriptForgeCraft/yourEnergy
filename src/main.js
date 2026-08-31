@@ -1,4 +1,8 @@
-import { normalizeConsumption, SolarPassportRepository } from './domain/index.js';
+import {
+  createUserTariffSelection,
+  normalizeConsumption,
+  SolarPassportRepository
+} from './domain/index.js';
 import { trackProductEvent } from './services/analytics.js';
 import { ProductApiClient, ProductApiError } from './services/api-client.js';
 import { createPropertyMap } from './services/property-map.js';
@@ -14,6 +18,7 @@ import { initScrollers } from './ui/scrollers.js';
 
 const DEFAULT_PVGIS_REQUEST_KWP = 1;
 const DEFAULT_PVGIS_LOSS_PERCENT = 14;
+const CALCULATOR_DRAFT_KEY = 'yourenergy-calculator-draft';
 
 document.documentElement.classList.add('js');
 
@@ -84,6 +89,58 @@ const consumptionControl = initConsumptionInput({
   root: form?.querySelector('[data-consumption-inputs]'),
   strings: product.consumption ?? {}
 });
+
+const tariffSelectionFor = (consumptionInput) =>
+  consumptionInput?.tariff ? createUserTariffSelection(consumptionInput.tariff) : null;
+
+const normalizedConsumptionFor = (consumptionInput) =>
+  normalizeConsumption(consumptionInput?.value, {
+    tariff: tariffSelectionFor(consumptionInput)
+  });
+
+/**
+ * A calculator route can hand a locally-entered draft to the full property
+ * workflow. The draft stays in this browser session and is deleted as soon as
+ * the homepage consumes it; it is never sent until the visitor submits the
+ * analysis request themselves.
+ */
+const applyCalculatorDraft = () => {
+  if (!form || !consumptionControl) return;
+  let draft = null;
+  try {
+    draft = JSON.parse(window.sessionStorage.getItem(CALCULATOR_DRAFT_KEY) ?? 'null');
+    window.sessionStorage.removeItem(CALCULATOR_DRAFT_KEY);
+  } catch {
+    return;
+  }
+  if (!draft || typeof draft !== 'object') return;
+
+  if (typeof draft.address === 'string' && addressInput) addressInput.value = draft.address.slice(0, 220);
+  const consumption = draft.consumption ?? {};
+  const tariffInput = form.querySelector('[data-consumption-tariff]');
+  if (Number.isFinite(Number(draft.tariff?.rateAmdPerKwh)) && Number(draft.tariff.rateAmdPerKwh) > 0) {
+    tariffInput.value = String(draft.tariff.rateAmdPerKwh);
+  }
+  const activate = (mode) => {
+    const radio = form.querySelector(`input[name="consumption-mode"][value="${mode}"]`);
+    if (!radio) return;
+    radio.checked = true;
+    radio.dispatchEvent(new Event('change', { bubbles: true }));
+  };
+  if (Number.isFinite(Number(consumption.averageMonthlyKwh)) && Number(consumption.averageMonthlyKwh) > 0) {
+    activate('usage');
+    form.querySelector('[data-consumption-usage]').value = String(consumption.averageMonthlyKwh);
+  } else if (
+    Number.isFinite(Number(consumption.averageMonthlyBillAmd)) &&
+    Number(consumption.averageMonthlyBillAmd) > 0
+  ) {
+    activate('bill');
+    form.querySelector('[data-consumption-bill]').value = String(consumption.averageMonthlyBillAmd);
+  }
+  form.querySelector('[data-consumption-inputs]')?.dispatchEvent(new Event('input', { bubbles: true }));
+};
+
+applyCalculatorDraft();
 
 const writeStatus = (message, isError = false) => {
   if (!statusElement) return;
@@ -304,8 +361,8 @@ const startGeocoding = async () => {
     writeStatus(consumption?.message ?? product.consumption?.noConsumption, true);
     return;
   }
-  if (!normalizeConsumption(consumption.value, { tariff: null }).available) {
-    writeStatus(product.result?.noTariff ?? product.result?.noSavings, true);
+  if (!normalizedConsumptionFor(consumption).available) {
+    writeStatus(product.consumption?.noConsumption ?? product.result?.noSavings, true);
     return;
   }
 
@@ -402,7 +459,18 @@ const publishAnalysis = (analysis, passport) => {
   requestAnimationFrame(() => resultPanel?.classList.add('is-updated'));
   window.dispatchEvent(
     new CustomEvent('solar:analysis-updated', {
-      detail: { analysis, passport, source: 'provider' }
+      detail: {
+        analysis,
+        passport,
+        source: 'provider',
+        commercialEstimate: analysis.commercialEstimate ?? null,
+        priceBook: analysis.priceBook ?? null,
+        tariffSource: analysis.financial?.tariff ?? null,
+        confidence: analysis.confidence ?? null,
+        scope: analysis.commercialEstimate?.scope ?? [],
+        exclusions: analysis.commercialEstimate?.exclusions ?? [],
+        validUntil: analysis.commercialEstimate?.validUntil ?? null
+      }
     })
   );
 };
@@ -413,10 +481,10 @@ const analyzeRoof = async () => {
     writeStatus(consumptionInput?.message ?? product.consumption?.noConsumption, true);
     return;
   }
-  const consumption = normalizeConsumption(consumptionInput.value, { tariff: null });
+  const consumption = normalizedConsumptionFor(consumptionInput);
   if (!consumption.available) {
-    writeStatus(product.result?.noTariff ?? product.result?.noSavings, true);
-    trackProductEvent('analysis_blocked_missing_tariff', {
+    writeStatus(product.consumption?.noConsumption ?? product.result?.noSavings, true);
+    trackProductEvent('analysis_blocked_invalid_consumption', {
       inputMode: consumptionInput.value.mode
     });
     return;
@@ -452,6 +520,7 @@ const analyzeRoof = async () => {
           verifiedAt: confirmedProperty.source.verifiedAt
         },
         consumption: consumptionInput.value,
+        ...(consumptionInput.tariff ? { tariff: consumptionInput.tariff } : {}),
         roof: {
           areaSqm: roof.areaSqm,
           polygonComplete: true,
@@ -478,7 +547,12 @@ const analyzeRoof = async () => {
     }
     const passport = passportRepository.create(analysis, { locale });
     publishAnalysis(analysis, passport);
-    writeStatus(`${product.result?.ready ?? ''} ${product.result?.noTariff ?? ''}`.trim());
+    const financialUnavailable = analysis.selectedScenario?.financial?.annualSavingsAmd === null;
+    writeStatus(
+      financialUnavailable
+        ? `${product.result?.ready ?? ''} ${product.result?.noTariff ?? ''}`.trim()
+        : (product.result?.ready ?? '')
+    );
     trackProductEvent('analysis_ready', { status: analysis.status, source: 'provider' });
   } catch (error) {
     if (error instanceof ProductApiError && error.code === 'ABORTED') return;
@@ -500,6 +574,9 @@ form?.addEventListener('submit', (event) => {
   void startGeocoding();
 });
 document.querySelector('[data-location-manual]')?.addEventListener('click', () => {
+  void selectManualLocation();
+});
+document.querySelector('[data-location-manual-start]')?.addEventListener('click', () => {
   void selectManualLocation();
 });
 document.querySelector('[data-location-confirm]')?.addEventListener('click', () => {

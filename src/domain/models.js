@@ -61,7 +61,7 @@
  * @property {string} id
  * @property {string} effectiveFrom
  * @property {string|null} effectiveTo
- * @property {'confirmed'|'unavailable'} status
+ * @property {'confirmed'|'provided'|'unavailable'} status
  * @property {number|null} rateAmdPerKwh
  * @property {string} currency
  * @property {SourceReference} source
@@ -75,6 +75,9 @@
  * @property {Consumption} consumption
  * @property {Roof} roof
  * @property {Object} tariff
+ * @property {Object} financial
+ * @property {Object|null} priceBook
+ * @property {Object|null} commercialEstimate
  * @property {Object[]} scenarios
  * @property {Object|null} selectedScenario
  * @property {Object} confidence

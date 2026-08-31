@@ -106,6 +106,9 @@
                 <button class='button button--navy' type='submit'>Analyse</button>
               </div>
               <small id='address-help' class='field-help'>After search, confirm the matched address or select a point manually.</small>
+              <button class='text-button address-manual-point' type='button' data-location-manual-start>
+                Choose a point on the map
+              </button>
               <fieldset class='consumption-inputs' data-consumption-inputs>
                 <legend>Electricity consumption</legend>
                 <p>Choose the most convenient way to provide data for a preliminary estimate.</p>
@@ -241,6 +244,20 @@
                         data-consumption-month
                       /></label></div>
                   <small>Enter kWh for each month when those figures are available.</small>
+                </div>
+                <div class='manual-tariff'>
+                  <label for='consumption-tariff'>Tariff from your bill</label>
+                  <div class='input-with-unit'><input
+                      id='consumption-tariff'
+                      type='number'
+                      min='0.01'
+                      max='1000'
+                      step='0.01'
+                      inputmode='decimal'
+                      aria-describedby='consumption-tariff-help'
+                      data-consumption-tariff
+                    /><span>֏ / kWh</span></div>
+                  <small id='consumption-tariff-help'>Optional for kWh. A bill in AMD needs it to convert the amount to kWh; the Passport will mark it as user-provided.</small>
                 </div>
                 <p class='consumption-total'><span>Estimated annual consumption</span><output
                     data-consumption-annual
@@ -478,6 +495,7 @@
                   <div><dt>Consumption covered</dt><dd data-analysis='coverage'>92
                       <small>%</small></dd></div>
               </dl>
+              <p class='commercial-estimate' data-commercial-estimate hidden></p>
               <a href='#passport'>View the full estimate <span aria-hidden='true'>→</span></a>
             </div>
           </div>
@@ -732,7 +750,8 @@
       <section class='lead-section section section--soft' data-lead-section hidden aria-labelledby='lead-title'>
         <div class='container lead-grid'><div><p class='eyebrow'>YOURENERGY</p><h2
               id='lead-title'
-            >Send this estimate to an engineer</h2><p>Leave your contact details so an engineer can clarify the property data.</p><small>Data are not sent to analytics.</small></div><form
+            >Send this estimate to an engineer</h2><p>Leave your contact details so an engineer can clarify the property data.</p><p class='lead-fallback'><span
+              >Or call an engineer:</span> <a href='tel:+37491095950'>+374 91 095 950</a></p><small>Data are not sent to analytics.</small></div><form
             class='lead-form'
             data-lead-form
             novalidate
@@ -775,7 +794,7 @@
         <div class='container'>
           <div class='section-heading'><div><p class='eyebrow'>Solutions</p><h2
                 id='solutions-title'
-              >Three practical solutions for your home</h2></div><p>Compare capacity, generation and indicative cost. All figures are demonstrations.</p></div>
+              >Three practical solutions for your home</h2></div><p>Compare indicative capacity and generation. A preliminary budget appears after property analysis.</p></div>
           <div class='solution-grid'>
               <article class='solution-card ' data-analysis-scenario='0'>
 
@@ -783,7 +802,7 @@
                 <p class='solution-index'>00</p><h3>Starter</h3><p>Lower initial investment</p>
                 <dl><div><dt>kWp</dt><dd data-analysis-scenario-capacity data-static-value='6.2 kWp'>6.2 kWp</dd></div><div><dt>kWh</dt><dd
                     data-analysis-scenario-generation data-static-value='9,200 kWh / year'>9,200 kWh / year</dd></div></dl>
-                <strong class='solution-price' data-analysis-scenario-price data-static-value='from 2,950,000 ֏'>from 2,950,000 ֏</strong>
+                <strong class='solution-price' data-analysis-scenario-price data-static-value='Preliminary budget after analysis'>Preliminary budget after analysis</strong>
                 <details><summary>View details</summary><ul><li
                       >10–12 panels in the selected class</li><li
                       >Estimated area: 34–40 m²</li><li
@@ -791,12 +810,12 @@
                 <a class='button button--outline' href='#calculator'>Calculate my home</a>
               </article>
               <article class='solution-card solution-card--popular' data-analysis-scenario='1'>
-                <span class='solution-badge' data-analysis-solution-badge>Popular demo option</span>
+                <span class='solution-badge' data-analysis-solution-badge>Popular option</span>
                 <span class='solution-badge' data-analysis-scenario-live hidden>From your confirmed data</span>
                 <p class='solution-index'>01</p><h3>Optimal</h3><p>The best balance of cost and return</p>
                 <dl><div><dt>kWp</dt><dd data-analysis-scenario-capacity data-static-value='9.86 kWp'>9.86 kWp</dd></div><div><dt>kWh</dt><dd
                     data-analysis-scenario-generation data-static-value='14,600 kWh / year'>14,600 kWh / year</dd></div></dl>
-                <strong class='solution-price' data-analysis-scenario-price data-static-value='4,300,000 ֏'>4,300,000 ֏</strong>
+                <strong class='solution-price' data-analysis-scenario-price data-static-value='Preliminary budget after analysis'>Preliminary budget after analysis</strong>
                 <details><summary>View details</summary><ul><li
                       >17 × 580 W panels</li><li
                       >Estimated area: 54–62 m²</li><li
@@ -809,7 +828,7 @@
                 <p class='solution-index'>02</p><h3>Energy independence</h3><p>Maximum coverage plus a battery</p>
                 <dl><div><dt>kWp</dt><dd data-analysis-scenario-capacity data-static-value='12.5 kWp + 10 kWh'>12.5 kWp + 10 kWh</dd></div><div><dt>kWh</dt><dd
                     data-analysis-scenario-generation data-static-value='18,900 kWh / year'>18,900 kWh / year</dd></div></dl>
-                <strong class='solution-price' data-analysis-scenario-price data-static-value='from 6,750,000 ֏'>from 6,750,000 ֏</strong>
+                <strong class='solution-price' data-analysis-scenario-price data-static-value='Needs a separate estimate'>Needs a separate estimate</strong>
                 <details><summary>View details</summary><ul><li
                       >Higher-capacity system</li><li
                       >10 kWh battery in the demonstration configuration</li><li
@@ -967,7 +986,7 @@
         <div class='container finance-grid'>
           <div class='finance-copy'><p class='eyebrow eyebrow--dark'>Financial model</p><h2
               id='finance-title'
-            >An investment that works every day</h2><p>A conservative demonstration scenario with no hidden tariff growth.</p><ul
+            >An investment that works every day</h2><p>The financial chart appears only after PVGIS analysis, an entered or confirmed tariff, and an active price book.</p><ul
               class='check-list check-list--dark'
               role='list'
             ><li><svg class='inline-icon' aria-hidden='true'><use
@@ -988,59 +1007,57 @@
               data-finance-title='How the net result grows'
             ><path
                 data-finance-line-path
-                d='M30 192 C145 180, 176 177, 250 143 S390 92, 478 70 S570 35, 623 26'
+                d=''
                 fill='none'
                 stroke='#f5bd18'
                 stroke-width='4'
                 stroke-linecap='round'
               ></path><path
                 data-finance-baseline
-                d='M30 192 H623'
+                d=''
                 fill='none'
                 stroke='rgba(255,255,255,.22)'
                 stroke-width='1'
-              ></path><circle data-finance-point cx='30' cy='192' r='6' fill='#f5bd18'></circle><circle
+              ></path><circle data-finance-point cx='30' cy='192' r='6' fill='#f5bd18' visibility='hidden'></circle><circle
                 data-finance-point
                 cx='178'
                 cy='177'
                 r='6'
                 fill='#f5bd18'
-              ></circle><circle data-finance-point cx='250' cy='143' r='6' fill='#f5bd18'></circle><circle
+                visibility='hidden'
+              ></circle><circle data-finance-point cx='250' cy='143' r='6' fill='#f5bd18' visibility='hidden'></circle><circle
                 data-finance-point
                 cx='410'
                 cy='86'
                 r='6'
                 fill='#f5bd18'
-              ></circle><circle data-finance-point cx='623' cy='26' r='6' fill='#f5bd18'></circle></svg><ol
-              class='finance-timeline'
-              role='list'
+                visibility='hidden'
+              ></circle><circle data-finance-point cx='623' cy='26' r='6' fill='#f5bd18' visibility='hidden'></circle></svg><ol
+                class='finance-timeline'
+                role='list'
             ><li><span data-analysis-timeline-year>Today</span><strong
-                    data-analysis-timeline='0'
-                  >−4.3m ֏</strong></li><li><span data-analysis-timeline-year>Year 5</span><strong
-                    data-analysis-timeline='1'
-                  >−0.7m ֏</strong></li><li><span data-analysis-timeline-year>Year 6</span><strong
-                    data-analysis-timeline='2'
-                  >+20k ֏</strong></li><li><span data-analysis-timeline-year>Year 10</span><strong
-                    data-analysis-timeline='3'
-                  >+2.9m ֏</strong></li><li><span data-analysis-timeline-year>Year 25</span><strong
-                    data-analysis-timeline='4'
-                  >+13.7m ֏</strong></li></ol></div>
-          <div class='finance-included'><h3>What the demo cost includes</h3><ul role='list'><li><svg class='inline-icon' aria-hidden='true'><use
+                  data-analysis-timeline='0'
+                  >After analysis</strong></li><li><span data-analysis-timeline-year>Year 5</span><strong
+                  data-analysis-timeline='1'
+                  >After analysis</strong></li><li><span data-analysis-timeline-year>Year 10</span><strong
+                  data-analysis-timeline='2'
+                  >After analysis</strong></li><li><span data-analysis-timeline-year>Year 25</span><strong
+                  data-analysis-timeline='3'
+                  >After analysis</strong></li></ol></div>
+          <div class='finance-included'><h3>What the temporary preliminary price includes</h3><ul role='list'><li><svg class='inline-icon' aria-hidden='true'><use
                       href='/icons.svg#check'
                     ></use></svg>Solar panels</li><li><svg class='inline-icon' aria-hidden='true'><use
                       href='/icons.svg#check'
                     ></use></svg>Inverter</li><li><svg class='inline-icon' aria-hidden='true'><use
                       href='/icons.svg#check'
-                    ></use></svg>Installation and materials</li><li><svg class='inline-icon' aria-hidden='true'><use
+                    ></use></svg>Mounting and standard installation</li><li><svg class='inline-icon' aria-hidden='true'><use
                       href='/icons.svg#check'
-                    ></use></svg>Design</li><li><svg class='inline-icon' aria-hidden='true'><use
+                    ></use></svg>Basic grid connection</li><li><svg class='inline-icon' aria-hidden='true'><use
                       href='/icons.svg#check'
-                    ></use></svg>Grid connection</li><li><svg class='inline-icon' aria-hidden='true'><use
+                    ></use></svg>VAT and permits require confirmation</li><li><svg class='inline-icon' aria-hidden='true'><use
                       href='/icons.svg#check'
-                    ></use></svg>System monitoring</li><li><svg class='inline-icon' aria-hidden='true'><use
-                      href='/icons.svg#check'
-                    ></use></svg>Example warranty service</li></ul></div>
-          <p class='finance-disclaimer' data-analysis-finance-disclaimer>4,300,000 ֏ ÷ 720,000 ֏/year &#x3D; 5.97 years. Tariff growth, degradation, service, financing and discounting are not included. Gross savings over 25 years: 18.0m ֏.</p>
+                    ></use></svg>Battery, roof repair and non-standard electrical work are excluded</li></ul></div>
+          <p class='finance-disclaimer' data-analysis-finance-disclaimer>Financial values are not shown before analysis. The model excludes tariff growth, degradation, maintenance, financing, discounting, taxes and export rules.</p>
         </div>
       </section>
 
@@ -1272,9 +1289,9 @@
                   >≈ 6.0 years</dd></div><div><dt>Consumption covered</dt><dd
                     data-analysis='coverage'
                   >92 %</dd></div></dl><p
-            >4,300,000 ֏ ÷ 720,000 ֏/year &#x3D; 5.97 years. Tariff growth, degradation, service, financing and discounting are not included. Gross savings over 25 years: 18.0m ֏.</p></div></div></div></dialog>
+            >Financial values are not shown before analysis. The model excludes tariff growth, degradation, maintenance, financing, discounting, taxes and export rules.</p></div></div></div></dialog>
 
-    <script id='page-config' type='application/json'>{"locale":"en-US","status":{"minAddress":"Enter an address of at least 5 characters.","analyzing":"Preparing a preliminary analysis…","ready":"The preliminary result is ready. Review the data before making a decision.","unavailable":"The preliminary analysis is unavailable. Try again or select a point manually.","invalidFile":"This format is not supported. Choose a PDF, JPG, JPEG or PNG.","largeFile":"The file is too large. The maximum size is 10 MB.","fileSelected":"The file was selected and remains only in browser memory.","fileRemoved":"File removed.","mapReady":"The interactive property map is ready.","mapFailed":"The map is unavailable. The static demonstration fallback remains available.","monthTooltip":"Generation in {month}: {value} kWh"},"product":{"common":{"required":"Required field","optional":"Optional","perMonth":"per month","kwh":"kWh","amd":"֏","complete":"Done","cancel":"Cancel"},"consumption":{"title":"Electricity consumption","copy":"Choose the most convenient way to provide data for a preliminary estimate.","modes":{"bill":"Average bill","usage":"Average consumption","monthly":"Monthly profile"},"billLabel":"Average electricity bill","billHelp":"Enter the average monthly amount in AMD.","usageLabel":"Average monthly consumption","usageHelp":"Enter the average monthly consumption in kWh.","monthlyTitle":"Consumption over 12 months","monthlyHelp":"Enter kWh for each month when those figures are available.","annualLabel":"Estimated annual consumption","invalidNumber":"Enter a number greater than zero.","invalidBill":"Enter a valid bill amount in AMD.","invalidUsage":"Enter a valid consumption amount in kWh.","incompleteMonths":"Complete all 12 months or choose a different method.","noConsumption":"A consumption or bill value is needed for an estimate.","normalized":"The data were normalised to an annual profile."},"location":{"title":"Property location","copy":"Confirm the matched address or select a point manually.","search":"Find address","searching":"Finding address…","resultLabel":"Matched address","confirmPrompt":"Is this your property?","confirm":"Confirm property","edit":"Edit address","noResult":"The address was not found. Select a point on the map manually.","unavailable":"Address search is currently unavailable. Select a point on the map manually.","manualTitle":"Select a point manually","manualCopy":"Click the map to mark the approximate property location.","chooseOnMap":"Choose a point on the map","pointSelected":"Property point selected.","retry":"Try search again"},"roof":{"title":"Roof outline","copy":"Outline the usable part of the roof for a preliminary area estimate.","fallback":"The map is unavailable. Continue after setting a location or try again.","start":"Start outline","addPoint":"Add point","undo":"Undo last point","reset":"Clear outline","finish":"Finish outline","edit":"Edit outline","pointsLabel":"Points in outline: {count}","minimumPoints":"Add at least 3 points to finish the outline.","areaLabel":"Preliminary roof area","orientationLabel":"Roof orientation","tiltLabel":"Roof tilt","tiltHelp":"Choose an approximate tilt if it is known.","pointSelectLabel":"Select point {index}","removePoint":"Remove point","nudgeNorth":"Move point north","nudgeSouth":"Move point south","nudgeEast":"Move point east","nudgeWest":"Move point west","orientationOptions":{"north":"North","southEast":"South-east","southWest":"South-west","east":"East","south":"South","west":"West","custom":"Other"},"unavailable":"A roof outline has not been set yet.","tilesUnavailable":"The basemap is unavailable. You can outline the roof after selecting a point.","locationRequired":"Confirm the property or select a point on the map first."},"result":{"title":"Preliminary analysis","preparing":"Preparing the preliminary analysis…","ready":"The preliminary analysis is ready.","unavailable":"An analysis could not be prepared from the available data.","retry":"Try calculation again","noTariff":"A verified tariff is not connected, so savings and payback are not shown.","noSavings":"There is not enough data to show savings and payback.","chartDescription":"Monthly preliminary generation based on the confirmed inputs and returned solar-resource data.","confidenceTitle":"Estimate confidence","confidence":{"high":"High","medium":"Medium","low":"Low","insufficient":"Not enough data"},"assumptionsTitle":"Calculation assumptions"},"solutions":{"liveBadge":"From your confirmed data","liveCopy":"These three preliminary technical scenarios are calculated from the confirmed property data.","financialUnavailable":"Price and payback appear only after the tariff and system cost are confirmed."},"ledger":{"title":"How this was calculated","copy":"The sources, versions and assumptions behind this preliminary result.","sources":{"consumption":"Consumption data","location":"Property location","roof":"Roof outline and parameters","tariff":"Electricity tariff","solar":"Solar resource","investment":"System price","unavailable":"Source not connected"},"assumptions":{"NO_TARIFF_ESCALATION":"No tariff escalation is modelled.","NO_PANEL_DEGRADATION":"No panel degradation is modelled.","NO_MAINTENANCE_FINANCING_DISCOUNTING_EXPORT_OR_TAXES":"Maintenance, financing, discounting, export rules and taxes are excluded.","MISSING_EVIDENCE_SUPPRESSES_FINANCIAL_RESULT":"Missing verified evidence suppresses financial values.","PVGIS_SYSTEM_LOSS_14_PERCENT":"PVGIS uses a 14% preliminary system-loss assumption; an engineer must confirm it."}},"passport":{"persistenceTitle":"Solar Passport is stored in this browser","persistenceCopy":"This preliminary Passport exists only in the current session memory.","memoryOnly":"The data may be lost when this page is closed.","permanentLink":"A permanent link and PDF will be available after storage is connected.","sourceLedger":"Sources and assumptions","shareUnavailable":"Sharing a link is not available yet.","realTitle":"Your preliminary Solar Passport","sessionBadge":"This session"},"lead":{"title":"Send this estimate to an engineer","copy":"Leave your contact details so an engineer can clarify the property data.","nameLabel":"Your name","phoneLabel":"Phone","emailLabel":"Email","messageLabel":"Property note","consent":"I agree to the processing of my data to answer this request.","submit":"Send request","required":"Complete the required fields and confirm consent.","invalidEmail":"Enter a valid email address.","sending":"Sending request…","sent":"The request was sent. We will contact you after the data are reviewed.","unavailable":"Sending is temporarily unavailable. Please try later.","retry":"Try sending again","privacy":"Data are not sent to analytics."},"status":{"geocodeUnavailable":"The geocoding service is not connected or is temporarily unavailable.","analysisUnavailable":"The solar-analysis service is not connected or is temporarily unavailable.","leadUnavailable":"The lead service is not connected or is temporarily unavailable.","retry":"Try again","canceled":"The previous request was cancelled."},"months":[{"short":"Jan","name":"January"},{"short":"Feb","name":"February"},{"short":"Mar","name":"March"},{"short":"Apr","name":"April"},{"short":"May","name":"May"},{"short":"Jun","name":"June"},{"short":"Jul","name":"July"},{"short":"Aug","name":"August"},{"short":"Sep","name":"September"},{"short":"Oct","name":"October"},{"short":"Nov","name":"November"},{"short":"Dec","name":"December"}]},"map":{"image":"/images/roof-scan-768.webp","tileUrl":"","tileAttribution":""}}</script>
+    <script id='page-config' type='application/json'>{"locale":"en-US","status":{"minAddress":"Enter an address of at least 5 characters.","analyzing":"Preparing a preliminary analysis…","ready":"The preliminary result is ready. Review the data before making a decision.","unavailable":"The preliminary analysis is unavailable. Try again or select a point manually.","invalidFile":"This format is not supported. Choose a PDF, JPG, JPEG or PNG.","largeFile":"The file is too large. The maximum size is 10 MB.","fileSelected":"The file was selected and remains only in browser memory.","fileRemoved":"File removed.","mapReady":"The interactive property map is ready.","mapFailed":"The map is unavailable. The static demonstration fallback remains available.","monthTooltip":"Generation in {month}: {value} kWh"},"product":{"common":{"required":"Required field","optional":"Optional","perMonth":"per month","kwh":"kWh","amd":"֏","complete":"Done","cancel":"Cancel"},"consumption":{"title":"Electricity consumption","copy":"Choose the most convenient way to provide data for a preliminary estimate.","modes":{"bill":"Average bill","usage":"Average consumption","monthly":"Monthly profile"},"billLabel":"Average electricity bill","billHelp":"Enter the average monthly amount in AMD.","tariffLabel":"Tariff from your bill","tariffHelp":"Optional for kWh. A bill in AMD needs it to convert the amount to kWh; the Passport will mark it as user-provided.","usageLabel":"Average monthly consumption","usageHelp":"Enter the average monthly consumption in kWh.","monthlyTitle":"Consumption over 12 months","monthlyHelp":"Enter kWh for each month when those figures are available.","annualLabel":"Estimated annual consumption","invalidNumber":"Enter a number greater than zero.","invalidBill":"Enter a valid bill amount in AMD.","invalidTariff":"Enter a tariff greater than zero in AMD/kWh.","invalidUsage":"Enter a valid consumption amount in kWh.","incompleteMonths":"Complete all 12 months or choose a different method.","noConsumption":"A consumption or bill value is needed for an estimate.","normalized":"The data were normalised to an annual profile."},"location":{"title":"Property location","copy":"Confirm the matched address or select a point manually.","search":"Find address","searching":"Finding address…","resultLabel":"Matched address","confirmPrompt":"Is this your property?","confirm":"Confirm property","edit":"Edit address","noResult":"The address was not found. Select a point on the map manually.","unavailable":"Address search is currently unavailable. Select a point on the map manually.","manualTitle":"Select a point manually","manualCopy":"Click the map to mark the approximate property location.","chooseOnMap":"Choose a point on the map","pointSelected":"Property point selected.","retry":"Try search again"},"roof":{"title":"Roof outline","copy":"Outline the usable part of the roof for a preliminary area estimate.","fallback":"The map is unavailable. Continue after setting a location or try again.","start":"Start outline","addPoint":"Add point","undo":"Undo last point","reset":"Clear outline","finish":"Finish outline","edit":"Edit outline","pointsLabel":"Points in outline: {count}","minimumPoints":"Add at least 3 points to finish the outline.","areaLabel":"Preliminary roof area","orientationLabel":"Roof orientation","tiltLabel":"Roof tilt","tiltHelp":"Choose an approximate tilt if it is known.","pointSelectLabel":"Select point {index}","removePoint":"Remove point","nudgeNorth":"Move point north","nudgeSouth":"Move point south","nudgeEast":"Move point east","nudgeWest":"Move point west","orientationOptions":{"north":"North","southEast":"South-east","southWest":"South-west","east":"East","south":"South","west":"West","custom":"Other"},"unavailable":"A roof outline has not been set yet.","tilesUnavailable":"The basemap is unavailable. You can outline the roof after selecting a point.","locationRequired":"Confirm the property or select a point on the map first."},"result":{"title":"Preliminary analysis","preparing":"Preparing the preliminary analysis…","ready":"The preliminary analysis is ready.","unavailable":"An analysis could not be prepared from the available data.","retry":"Try calculation again","noTariff":"No tariff was entered: capacity, PVGIS generation and a preliminary price remain available, but savings and payback are not shown.","noSavings":"There is not enough data to show savings and payback.","chartDescription":"Monthly preliminary generation based on the confirmed inputs and returned solar-resource data.","confidenceTitle":"Estimate confidence","confidence":{"high":"High","medium":"Medium","low":"Low","insufficient":"Not enough data"},"assumptionsTitle":"Calculation assumptions","commercialEstimate":"Preliminary YOUR ENERGY price · {version} · not an offer: {p25}–{p75}; P50 {p50}. Valid until {validUntil}."},"solutions":{"liveBadge":"From your confirmed data","liveCopy":"These three preliminary technical scenarios are calculated from the confirmed property data.","financialUnavailable":"A preliminary price appears from the active PriceBook; savings and payback require a tariff."},"ledger":{"title":"How this was calculated","copy":"The sources, versions and assumptions behind this preliminary result.","sources":{"consumption":"Consumption data","location":"Property location","roof":"Roof outline and parameters","tariff":"Electricity tariff","solar":"Solar resource","investment":"System price","pricebook":"Temporary YOUR ENERGY price book","unavailable":"Source not connected"},"assumptions":{"NO_TARIFF_ESCALATION":"No tariff escalation is modelled.","NO_PANEL_DEGRADATION":"No panel degradation is modelled.","NO_MAINTENANCE_FINANCING_DISCOUNTING_EXPORT_OR_TAXES":"Maintenance, financing, discounting, export rules and taxes are excluded.","MISSING_EVIDENCE_SUPPRESSES_FINANCIAL_RESULT":"Missing verified evidence suppresses financial values.","PVGIS_SYSTEM_LOSS_14_PERCENT":"PVGIS uses a 14% preliminary system-loss assumption; an engineer must confirm it.","USER_PROVIDED_TARIFF":"The tariff was entered by the visitor from a bill and is not a tariff registry record.","TEMPORARY_PRICEBOOK_NOT_OFFER":"The temporary PriceBook is a preliminary budget guide, not an offer or contractual price."}},"passport":{"persistenceTitle":"Solar Passport is stored in this browser","persistenceCopy":"This preliminary Passport exists only in the current session memory.","memoryOnly":"The data may be lost when this page is closed.","permanentLink":"A permanent link and PDF will be available after storage is connected.","sourceLedger":"Sources and assumptions","shareUnavailable":"Sharing a link is not available yet.","realTitle":"Your preliminary Solar Passport","sessionBadge":"This session"},"lead":{"title":"Send this estimate to an engineer","copy":"Leave your contact details so an engineer can clarify the property data.","nameLabel":"Your name","phoneLabel":"Phone","emailLabel":"Email","messageLabel":"Property note","consent":"I agree to the processing of my data to answer this request.","submit":"Send request","required":"Complete the required fields and confirm consent.","invalidEmail":"Enter a valid email address.","sending":"Sending request…","sent":"The request was sent. We will contact you after the data are reviewed.","unavailable":"Sending is temporarily unavailable. Please try later.","retry":"Try sending again","directCall":"Or call an engineer:","privacy":"Data are not sent to analytics."},"status":{"geocodeUnavailable":"The geocoding service is not connected or is temporarily unavailable.","analysisUnavailable":"The solar-analysis service is not connected or is temporarily unavailable.","leadUnavailable":"The lead service is not connected or is temporarily unavailable.","retry":"Try again","canceled":"The previous request was cancelled."},"months":[{"short":"Jan","name":"January"},{"short":"Feb","name":"February"},{"short":"Mar","name":"March"},{"short":"Apr","name":"April"},{"short":"May","name":"May"},{"short":"Jun","name":"June"},{"short":"Jul","name":"July"},{"short":"Aug","name":"August"},{"short":"Sep","name":"September"},{"short":"Oct","name":"October"},{"short":"Nov","name":"November"},{"short":"Dec","name":"December"}]},"map":{"image":"/images/roof-scan-768.webp","tileUrl":"","tileAttribution":""}}</script>
     <script type='module' src='/src/main.js'></script>
   </body>
 </html>

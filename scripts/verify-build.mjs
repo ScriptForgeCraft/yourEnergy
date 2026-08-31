@@ -5,6 +5,14 @@ import { extname, relative, resolve } from 'node:path';
 const projectRoot = resolve(import.meta.dirname, '..');
 const distRoot = resolve(projectRoot, 'dist');
 const origin = 'https://yourenergy.am';
+const toolPages = [
+  { page: 'calculator/index.html', locale: 'hy', type: 'calculator' },
+  { page: 'ru/calculator/index.html', locale: 'ru', type: 'calculator' },
+  { page: 'en/calculator/index.html', locale: 'en', type: 'calculator' },
+  { page: 'offer-checker/index.html', locale: 'hy', type: 'offer-checker' },
+  { page: 'ru/offer-checker/index.html', locale: 'ru', type: 'offer-checker' },
+  { page: 'en/offer-checker/index.html', locale: 'en', type: 'offer-checker' }
+];
 const expectedPages = [
   'index.html',
   'ru/index.html',
@@ -17,7 +25,8 @@ const expectedPages = [
   'en/index.html',
   'en/privacy/index.html',
   'en/terms/index.html',
-  'en/soon/index.html'
+  'en/soon/index.html',
+  ...toolPages.map(({ page }) => page)
 ];
 
 const failures = [];
@@ -272,11 +281,74 @@ async function validateHomeSeo(html, page, canonical) {
   validateJsonLd(html, page);
 }
 
+async function validateToolSeo(html, page, canonical, type) {
+  const canonicalLink = tagAttributes(html, 'link').find(
+    (attributes) => attributes.get('rel') === 'canonical'
+  );
+  if (canonicalLink?.get('href') !== canonical) fail(`${page}: canonical must be ${canonical}`);
+
+  const alternates = tagAttributes(html, 'link')
+    .filter((attributes) => attributes.get('rel') === 'alternate')
+    .map((attributes) => [attributes.get('hreflang'), attributes.get('href')]);
+  const expected = new Map([
+    ['hy', `${origin}/${type}/`],
+    ['ru', `${origin}/ru/${type}/`],
+    ['en', `${origin}/en/${type}/`],
+    ['x-default', `${origin}/${type}/`]
+  ]);
+  for (const [language, href] of expected) {
+    if (
+      !alternates.some(
+        ([actualLanguage, actualHref]) => actualLanguage === language && actualHref === href
+      )
+    ) {
+      fail(`${page}: missing hreflang ${language} => ${href}`);
+    }
+  }
+
+  for (const [property, content] of [
+    ['property', 'og:title'],
+    ['property', 'og:description'],
+    ['property', 'og:image'],
+    ['name', 'twitter:card']
+  ]) {
+    if (!findMeta(html, property, content)) fail(`${page}: missing ${content} metadata`);
+  }
+
+  const robots = findMeta(html, 'name', 'robots')?.get('content')?.toLowerCase() ?? '';
+  if (robots.includes('noindex')) fail(`${page}: published tool route must remain indexable`);
+  if (/"@type"\s*:\s*"(?:Product|Offer)"/u.test(html)) {
+    fail(`${page}: temporary price must not produce Product or Offer JSON-LD`);
+  }
+}
+
 function validateLanguageSwitcher(html, page, currentLocale) {
   const expected = new Map([
     ['hy', '/'],
     ['ru', '/ru/'],
     ['en', '/en/']
+  ]);
+  const languageLinks = tagAttributes(html, 'a').filter((attributes) =>
+    attributes.get('class')?.split(/\s+/u).includes('language-link')
+  );
+
+  for (const [locale, href] of expected) {
+    if (locale === currentLocale) continue;
+    if (
+      !languageLinks.some(
+        (attributes) => attributes.get('hreflang') === locale && attributes.get('href') === href
+      )
+    ) {
+      fail(`${page}: language switcher is missing ${locale} => ${href}`);
+    }
+  }
+}
+
+function validateToolLanguageSwitcher(html, page, currentLocale, type) {
+  const expected = new Map([
+    ['hy', `/${type}/`],
+    ['ru', `/ru/${type}/`],
+    ['en', `/en/${type}/`]
   ]);
   const languageLinks = tagAttributes(html, 'a').filter((attributes) =>
     attributes.get('class')?.split(/\s+/u).includes('language-link')
@@ -307,20 +379,34 @@ async function validateSitemap() {
   }
   const sitemap = await readFile(sitemapPath, 'utf8');
   const locations = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/giu)].map((match) => match[1].trim());
-  const expected = [`${origin}/`, `${origin}/ru/`, `${origin}/en/`];
+  const homeRoutes = [`${origin}/`, `${origin}/ru/`, `${origin}/en/`];
+  const toolRoutes = toolPages.map(({ locale, type }) =>
+    locale === 'hy' ? `${origin}/${type}/` : `${origin}/${locale}/${type}/`
+  );
+  const expected = [...homeRoutes, ...toolRoutes];
   if (locations.length !== expected.length || expected.some((url) => !locations.includes(url))) {
-    fail(`sitemap must include only ${expected.join(', ')}`);
+    fail(`sitemap must include ${expected.join(', ')}`);
   }
-
-  const expectedAlternates = new Map([
-    ['hy', `${origin}/`],
-    ['ru', `${origin}/ru/`],
-    ['en', `${origin}/en/`],
-    ['x-default', `${origin}/`]
-  ]);
   const entries = [...sitemap.matchAll(/<url>([\s\S]*?)<\/url>/giu)];
   for (const entry of entries) {
     const location = entry[1].match(/<loc>([^<]+)<\/loc>/iu)?.[1]?.trim() ?? 'unknown URL';
+    const matchedTool = toolPages.find(({ locale, type }) => {
+      const url = locale === 'hy' ? `${origin}/${type}/` : `${origin}/${locale}/${type}/`;
+      return location === url;
+    });
+    const expectedAlternates = matchedTool
+      ? new Map([
+          ['hy', `${origin}/${matchedTool.type}/`],
+          ['ru', `${origin}/ru/${matchedTool.type}/`],
+          ['en', `${origin}/en/${matchedTool.type}/`],
+          ['x-default', `${origin}/${matchedTool.type}/`]
+        ])
+      : new Map([
+          ['hy', `${origin}/`],
+          ['ru', `${origin}/ru/`],
+          ['en', `${origin}/en/`],
+          ['x-default', `${origin}/`]
+        ]);
     const alternates = [...entry[1].matchAll(/<xhtml:link\b[^>]*>/giu)].map((match) =>
       attrs(match[0])
     );
@@ -404,12 +490,22 @@ if (pages.has('ru/index.html'))
   validateLanguageSwitcher(pages.get('ru/index.html'), 'ru/index.html', 'ru');
 if (pages.has('en/index.html'))
   validateLanguageSwitcher(pages.get('en/index.html'), 'en/index.html', 'en');
+for (const { page, locale, type } of toolPages) {
+  if (!pages.has(page)) continue;
+  const canonical = locale === 'hy' ? `${origin}/${type}/` : `${origin}/${locale}/${type}/`;
+  await validateToolSeo(pages.get(page), page, canonical, type);
+  validateToolLanguageSwitcher(pages.get(page), page, locale, type);
+}
 for (const page of ['index.html', 'ru/index.html', 'en/index.html']) {
   if (pages.has(page)) validateP0Markup(pages.get(page), page);
 }
-for (const page of expectedPages.filter(
-  (page) => !['index.html', 'ru/index.html', 'en/index.html'].includes(page)
-)) {
+const publishedPages = new Set([
+  'index.html',
+  'ru/index.html',
+  'en/index.html',
+  ...toolPages.map(({ page }) => page)
+]);
+for (const page of expectedPages.filter((page) => !publishedPages.has(page))) {
   if (pages.has(page)) validateSupportNoindex(pages.get(page), page);
 }
 await validateSitemap();

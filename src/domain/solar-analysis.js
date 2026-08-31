@@ -8,7 +8,8 @@ import {
   toFiniteNumberOrNull,
   toPositiveNumberOrNull
 } from './numbers.js';
-import { getConfirmedTariffRate, selectEffectiveTariff } from './tariffs.js';
+import { getUsableTariffRate, selectEffectiveTariff } from './tariffs.js';
+import { buildCommercialEstimate } from './pricebook.js';
 
 export const ANALYSIS_SCHEMA_VERSION = '1.0.0';
 
@@ -213,6 +214,20 @@ const getScenarioCapex = (investment, capacityKwp) => {
   return null;
 };
 
+const financialPrice = (commercialEstimate, capexAmd) => ({
+  kind: commercialEstimate?.available
+    ? commercialEstimate.kind
+    : capexAmd !== null
+      ? 'confirmed'
+      : 'unavailable',
+  source: commercialEstimate?.available
+    ? commercialEstimate.priceBook?.source ?? unavailableSource
+    : capexAmd !== null
+      ? null
+      : unavailableSource,
+  validUntil: commercialEstimate?.available ? commercialEstimate.validUntil : null
+});
+
 const makeTimeline = (capexAmd, annualSavingsAmd) => {
   if (capexAmd === null || annualSavingsAmd === null) return [];
   return [0, 5, 10, 25].map((year) => ({
@@ -233,7 +248,9 @@ export const calculateSolarScenario = ({
   production: suppliedProduction,
   tariff = null,
   investment: suppliedInvestment,
-  system: suppliedSystem
+  system: suppliedSystem,
+  priceBook = null,
+  effectiveDate = new Date()
 } = {}) => {
   const consumption = isNormalizedConsumption(suppliedConsumption)
     ? suppliedConsumption
@@ -266,8 +283,10 @@ export const calculateSolarScenario = ({
         grossSavings25YearsAmd: null,
         capexAmd: null,
         paybackYears: null,
-        timeline: []
-      }
+        timeline: [],
+        price: financialPrice(null, null)
+      },
+      commercialEstimate: buildCommercialEstimate({ capacityKwp: null, priceBook, at: effectiveDate })
     };
   }
 
@@ -288,9 +307,10 @@ export const calculateSolarScenario = ({
   const monthlyKwh = production.monthlyYieldFactors
     ? production.monthlyYieldFactors.map((factor) => annualKwh * factor)
     : null;
-  const rateAmdPerKwh = getConfirmedTariffRate(tariff);
+  const rateAmdPerKwh = getUsableTariffRate(tariff);
   const annualSavingsAmd = rateAmdPerKwh === null ? null : annualKwh * rateAmdPerKwh;
-  const capexAmd = getScenarioCapex(investment, capacityKwp);
+  const commercialEstimate = buildCommercialEstimate({ capacityKwp, priceBook, at: effectiveDate });
+  const capexAmd = getScenarioCapex(investment, capacityKwp) ?? commercialEstimate.primaryAmd;
   const paybackYears =
     capexAmd !== null && annualSavingsAmd !== null && annualSavingsAmd > 0
       ? capexAmd / annualSavingsAmd
@@ -307,7 +327,7 @@ export const calculateSolarScenario = ({
     status: financialReady ? ANALYSIS_STATUS.FINANCIAL_READY : ANALYSIS_STATUS.TECHNICAL_READY,
     limitations: [
       ...(roofLimited ? ['ROOF_CAPACITY_LIMIT'] : []),
-      ...(rateAmdPerKwh === null ? ['CONFIRMED_TARIFF_REQUIRED'] : []),
+      ...(rateAmdPerKwh === null ? ['TARIFF_REQUIRED'] : []),
       ...(capexAmd === null ? ['CAPEX_REQUIRED'] : [])
     ],
     system: {
@@ -324,8 +344,10 @@ export const calculateSolarScenario = ({
       grossSavings25YearsAmd: annualSavingsAmd === null ? null : annualSavingsAmd * 25,
       capexAmd,
       paybackYears,
-      timeline: makeTimeline(capexAmd, annualSavingsAmd)
-    }
+      timeline: makeTimeline(capexAmd, annualSavingsAmd),
+      price: financialPrice(commercialEstimate, capexAmd)
+    },
+    commercialEstimate
   };
 };
 
@@ -347,7 +369,9 @@ export const calculateConfidence = ({
   roof,
   production,
   tariff,
-  investment
+  investment,
+  priceBook = null,
+  effectiveDate = new Date()
 }) => {
   const checks = [
     { key: 'property', complete: property.confirmed },
@@ -357,10 +381,13 @@ export const calculateConfidence = ({
       key: 'production',
       complete: production.available && production.source.status === SOURCE_STATUS.CONFIRMED
     },
-    { key: 'tariff', complete: getConfirmedTariffRate(tariff) !== null },
+    { key: 'tariff', complete: getUsableTariffRate(tariff) !== null },
     {
       key: 'investment',
-      complete: investment.capexAmdPerKwp !== null || investment.capexAmd !== null
+      complete:
+        investment.capexAmdPerKwp !== null ||
+        investment.capexAmd !== null ||
+        buildCommercialEstimate({ capacityKwp: 1, priceBook, at: effectiveDate }).available
     }
   ];
   const score = checks.filter((check) => check.complete).length;
@@ -391,6 +418,7 @@ export const buildSolarAnalysis = (input = {}) => {
   const roof = normalizeRoof(input.roof);
   const system = normalizeSystem(input.system);
   const investment = normalizeInvestment(input.investment);
+  const priceBook = input.priceBook ?? null;
   const tariff =
     input.tariffSelection ?? selectEffectiveTariff(input.tariffDataset, input.effectiveDate);
   const consumption = isNormalizedConsumption(input.consumption)
@@ -405,7 +433,9 @@ export const buildSolarAnalysis = (input = {}) => {
       production,
       tariff,
       investment,
-      system
+      system,
+      priceBook,
+      effectiveDate: input.effectiveDate
     })
   );
   const selectedScenarioId =
@@ -413,6 +443,11 @@ export const buildSolarAnalysis = (input = {}) => {
   const selectedScenario =
     scenarios.find((scenario) => scenario.id === selectedScenarioId) ?? scenarios[0] ?? null;
   const status = selectedScenario?.status ?? ANALYSIS_STATUS.UNAVAILABLE;
+  const commercialEstimate = selectedScenario?.commercialEstimate ?? null;
+  const tariffKind = tariff?.kind === 'user' || tariff?.kind === 'registry' ? tariff.kind : 'unavailable';
+  const priceKind = commercialEstimate?.available
+    ? commercialEstimate.kind
+    : selectedScenario?.financial?.price?.kind ?? 'unavailable';
   const sourceLedger = [
     sourceEntry(
       'property',
@@ -442,13 +477,19 @@ export const buildSolarAnalysis = (input = {}) => {
       'tariff',
       tariff?.source,
       tariff?.available,
-      tariff?.available ? null : (tariff?.reason ?? 'CONFIRMED_TARIFF_REQUIRED')
+      tariff?.available ? null : (tariff?.reason ?? 'TARIFF_REQUIRED')
     ),
     sourceEntry(
       'investment',
       investment.source,
       investment.capexAmdPerKwp !== null || investment.capexAmd !== null,
       investment.capexAmdPerKwp !== null || investment.capexAmd !== null ? null : 'CAPEX_REQUIRED'
+    ),
+    sourceEntry(
+      'pricebook',
+      commercialEstimate?.priceBook?.source,
+      Boolean(commercialEstimate?.available),
+      commercialEstimate?.available ? null : (commercialEstimate?.reason ?? 'PRICEBOOK_UNAVAILABLE')
     )
   ];
 
@@ -463,6 +504,20 @@ export const buildSolarAnalysis = (input = {}) => {
     tariff,
     system,
     investment,
+    priceBook: commercialEstimate?.priceBook ?? null,
+    commercialEstimate,
+    financial: {
+      tariff: {
+        kind: tariffKind,
+        rateAmdPerKwh: getUsableTariffRate(tariff),
+        source: tariff?.source ?? unavailableSource
+      },
+      price: {
+        kind: priceKind,
+        source: commercialEstimate?.priceBook?.source ?? unavailableSource,
+        validUntil: commercialEstimate?.validUntil ?? null
+      }
+    },
     scenarios,
     selectedScenario,
     confidence: calculateConfidence({
@@ -471,11 +526,15 @@ export const buildSolarAnalysis = (input = {}) => {
       roof,
       production,
       tariff,
-      investment
+      investment,
+      priceBook,
+      effectiveDate: input.effectiveDate
     }),
     sourceLedger,
     assumptions: [
       ...ANALYSIS_ASSUMPTIONS,
+      ...(tariffKind === 'user' ? ['USER_PROVIDED_TARIFF'] : []),
+      ...(commercialEstimate?.kind === 'temporary' ? ['TEMPORARY_PRICEBOOK_NOT_OFFER'] : []),
       ...(Array.isArray(input.assumptions)
         ? input.assumptions.filter((assumption) => typeof assumption === 'string' && assumption)
         : [])

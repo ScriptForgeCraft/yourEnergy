@@ -5,7 +5,7 @@ import {
   toNonNegativeNumberOrNull,
   toPositiveNumberOrNull
 } from './numbers.js';
-import { getConfirmedTariffRate } from './tariffs.js';
+import { getUsableTariffRate } from './tariffs.js';
 
 const unavailableSource = Object.freeze({
   kind: SOURCE_KIND.UNAVAILABLE,
@@ -51,7 +51,8 @@ const normalizeMonthlyProfile = (value) => {
  * Turns manual household consumption inputs into a safe, comparable model.
  * Precedence is monthly profile, annual kWh, average monthly kWh, then a bill
  * divided by a confirmed tariff. No seasonal profile is invented when only an
- * annual or bill value exists.
+ * annual or bill value exists. A bill can be converted with either a dated
+ * registry tariff or a rate explicitly copied by the visitor from their bill.
  *
  * @param {{monthlyKwh?: unknown[], annualKwh?: unknown, averageMonthlyKwh?: unknown, averageMonthlyBillAmd?: unknown}} [input]
  * @param {{tariff?: Object|null}} [options]
@@ -109,9 +110,9 @@ export const normalizeConsumption = (input = {}, { tariff = null } = {}) => {
 
   const averageMonthlyBillAmd = toPositiveNumberOrNull(input.averageMonthlyBillAmd);
   if (averageMonthlyBillAmd !== null) {
-    const rateAmdPerKwh = getConfirmedTariffRate(tariff);
+    const rateAmdPerKwh = getUsableTariffRate(tariff);
     if (rateAmdPerKwh === null) {
-      return unavailableConsumption([...issues, 'CONFIRMED_TARIFF_REQUIRED_FOR_BILL']);
+      return unavailableConsumption([...issues, 'TARIFF_REQUIRED_FOR_BILL']);
     }
     const billKwh = averageMonthlyBillAmd / rateAmdPerKwh;
     return {

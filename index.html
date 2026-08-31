@@ -106,6 +106,9 @@
                 <button class='button button--navy' type='submit'>Վերլուծել</button>
               </div>
               <small id='address-help' class='field-help'>Որոնումից հետո հաստատեք գտնված հասցեն կամ նշեք կետը ձեռքով։</small>
+              <button class='text-button address-manual-point' type='button' data-location-manual-start>
+                Ընտրել կետ քարտեզի վրա
+              </button>
               <fieldset class='consumption-inputs' data-consumption-inputs>
                 <legend>Էլեկտրաէներգիայի սպառում</legend>
                 <p>Ընտրեք տվյալները նախնական հաշվարկի համար ներկայացնելու հարմար եղանակը։</p>
@@ -241,6 +244,20 @@
                         data-consumption-month
                       /></label></div>
                   <small>Եթե տվյալները հասանելի են, մուտքագրեք յուրաքանչյուր ամսվա kWh-ը։</small>
+                </div>
+                <div class='manual-tariff'>
+                  <label for='consumption-tariff'>Սակագինը ձեր հաշվից</label>
+                  <div class='input-with-unit'><input
+                      id='consumption-tariff'
+                      type='number'
+                      min='0.01'
+                      max='1000'
+                      step='0.01'
+                      inputmode='decimal'
+                      aria-describedby='consumption-tariff-help'
+                      data-consumption-tariff
+                    /><span>֏ / kWh</span></div>
+                  <small id='consumption-tariff-help'>kWh-ի համար պարտադիր չէ։ Դրամով հաշիվը kWh-ի փոխարկելու համար անհրաժեշտ է, իսկ Passport-ում կնշվի որպես ձեր մուտքագրած տվյալ։</small>
                 </div>
                 <p class='consumption-total'><span>Հաշվարկային տարեկան սպառում</span><output
                     data-consumption-annual
@@ -478,6 +495,7 @@
                   <div><dt>Սպառման ծածկում</dt><dd data-analysis='coverage'>92
                       <small>%</small></dd></div>
               </dl>
+              <p class='commercial-estimate' data-commercial-estimate hidden></p>
               <a href='#passport'>Դիտել ամբողջ հաշվարկը <span aria-hidden='true'>→</span></a>
             </div>
           </div>
@@ -732,7 +750,8 @@
       <section class='lead-section section section--soft' data-lead-section hidden aria-labelledby='lead-title'>
         <div class='container lead-grid'><div><p class='eyebrow'>YOURENERGY</p><h2
               id='lead-title'
-            >Ուղարկել հաշվարկը ինժեներին</h2><p>Թողեք կապի տվյալներ, որպեսզի ինժեները կարողանա ճշտել օբյեկտի տվյալները։</p><small>Տվյալները չեն փոխանցվում վերլուծական ծառայություններին։</small></div><form
+            >Ուղարկել հաշվարկը ինժեներին</h2><p>Թողեք կապի տվյալներ, որպեսզի ինժեները կարողանա ճշտել օբյեկտի տվյալները։</p><p class='lead-fallback'><span
+              >Կամ զանգահարեք ինժեներին՝</span> <a href='tel:+37491095950'>+374 91 095 950</a></p><small>Տվյալները չեն փոխանցվում վերլուծական ծառայություններին։</small></div><form
             class='lead-form'
             data-lead-form
             novalidate
@@ -775,7 +794,7 @@
         <div class='container'>
           <div class='section-heading'><div><p class='eyebrow'>Լուծումներ</p><h2
                 id='solutions-title'
-              >3 օպտիմալ լուծում ձեր տան համար</h2></div><p>Համեմատեք հզորությունը, արտադրությունն ու օրինակային արժեքը։ Բոլոր թվերը ցուցադրական են։</p></div>
+              >3 օպտիմալ լուծում ձեր տան համար</h2></div><p>Համեմատեք մոտավոր հզորությունն ու արտադրությունը։ Նախնական բյուջեն կհայտնվի օբյեկտի վերլուծությունից հետո։</p></div>
           <div class='solution-grid'>
               <article class='solution-card ' data-analysis-scenario='0'>
 
@@ -783,7 +802,7 @@
                 <p class='solution-index'>00</p><h3>Մեկնարկ</h3><p>Համեմատաբար փոքր նախնական ներդրում</p>
                 <dl><div><dt>kWp</dt><dd data-analysis-scenario-capacity data-static-value='6,2 kWp'>6,2 kWp</dd></div><div><dt>kWh</dt><dd
                     data-analysis-scenario-generation data-static-value='9 200 kWh / տարի'>9 200 kWh / տարի</dd></div></dl>
-                <strong class='solution-price' data-analysis-scenario-price data-static-value='սկսած 2 950 000 ֏-ից'>սկսած 2 950 000 ֏-ից</strong>
+                <strong class='solution-price' data-analysis-scenario-price data-static-value='Նախնական բյուջե՝ վերլուծությունից հետո'>Նախնական բյուջե՝ վերլուծությունից հետո</strong>
                 <details><summary>Մանրամասներ</summary><ul><li
                       >Ընտրված դասի 10–12 վահանակ</li><li
                       >Օրինակային մակերես՝ 34–40 մ²</li><li
@@ -791,12 +810,12 @@
                 <a class='button button--outline' href='#calculator'>Հաշվել իմ տունը</a>
               </article>
               <article class='solution-card solution-card--popular' data-analysis-scenario='1'>
-                <span class='solution-badge' data-analysis-solution-badge>Հանրաճանաչ դեմո տարբերակ</span>
+                <span class='solution-badge' data-analysis-solution-badge>Հանրաճանաչ տարբերակ</span>
                 <span class='solution-badge' data-analysis-scenario-live hidden>Ձեր հաստատված տվյալներով</span>
                 <p class='solution-index'>01</p><h3>Օպտիմալ</h3><p>Գնի և օգուտի հավասարակշռված տարբերակ</p>
                 <dl><div><dt>kWp</dt><dd data-analysis-scenario-capacity data-static-value='9,86 kWp'>9,86 kWp</dd></div><div><dt>kWh</dt><dd
                     data-analysis-scenario-generation data-static-value='14 600 kWh / տարի'>14 600 kWh / տարի</dd></div></dl>
-                <strong class='solution-price' data-analysis-scenario-price data-static-value='4 300 000 ֏'>4 300 000 ֏</strong>
+                <strong class='solution-price' data-analysis-scenario-price data-static-value='Նախնական բյուջե՝ վերլուծությունից հետո'>Նախնական բյուջե՝ վերլուծությունից հետո</strong>
                 <details><summary>Մանրամասներ</summary><ul><li
                       >17 × 580 W վահանակ</li><li
                       >Օրինակային մակերես՝ 54–62 մ²</li><li
@@ -809,7 +828,7 @@
                 <p class='solution-index'>02</p><h3>Էներգետիկ անկախություն</h3><p>Առավելագույն ծածկում + կուտակիչ</p>
                 <dl><div><dt>kWp</dt><dd data-analysis-scenario-capacity data-static-value='12,5 kWp + 10 kWh'>12,5 kWp + 10 kWh</dd></div><div><dt>kWh</dt><dd
                     data-analysis-scenario-generation data-static-value='18 900 kWh / տարի'>18 900 kWh / տարի</dd></div></dl>
-                <strong class='solution-price' data-analysis-scenario-price data-static-value='սկսած 6 750 000 ֏-ից'>սկսած 6 750 000 ֏-ից</strong>
+                <strong class='solution-price' data-analysis-scenario-price data-static-value='Պահանջում է առանձին հաշվարկ'>Պահանջում է առանձին հաշվարկ</strong>
                 <details><summary>Մանրամասներ</summary><ul><li
                       >Ավելի մեծ հզորության համակարգ</li><li
                       >10 kWh կուտակիչ՝ դեմո կազմով</li><li
@@ -967,7 +986,7 @@
         <div class='container finance-grid'>
           <div class='finance-copy'><p class='eyebrow eyebrow--dark'>Ֆինանսական մոդել</p><h2
               id='finance-title'
-            >Ներդրում, որն աշխատում է ամեն օր</h2><p>Պահպանողական ցուցադրական սցենար՝ առանց սակագնի թաքնված աճի։</p><ul
+            >Ներդրում, որն աշխատում է ամեն օր</h2><p>Ֆինանսական գրաֆիկը կհայտնվի միայն PVGIS-ի վերլուծությունից, մուտքագրված կամ հաստատված սակագնից և գործող գնացուցակից հետո։</p><ul
               class='check-list check-list--dark'
               role='list'
             ><li><svg class='inline-icon' aria-hidden='true'><use
@@ -988,59 +1007,57 @@
               data-finance-title='Ինչպես է աճում զուտ արդյունքը'
             ><path
                 data-finance-line-path
-                d='M30 192 C145 180, 176 177, 250 143 S390 92, 478 70 S570 35, 623 26'
+                d=''
                 fill='none'
                 stroke='#f5bd18'
                 stroke-width='4'
                 stroke-linecap='round'
               ></path><path
                 data-finance-baseline
-                d='M30 192 H623'
+                d=''
                 fill='none'
                 stroke='rgba(255,255,255,.22)'
                 stroke-width='1'
-              ></path><circle data-finance-point cx='30' cy='192' r='6' fill='#f5bd18'></circle><circle
+              ></path><circle data-finance-point cx='30' cy='192' r='6' fill='#f5bd18' visibility='hidden'></circle><circle
                 data-finance-point
                 cx='178'
                 cy='177'
                 r='6'
                 fill='#f5bd18'
-              ></circle><circle data-finance-point cx='250' cy='143' r='6' fill='#f5bd18'></circle><circle
+                visibility='hidden'
+              ></circle><circle data-finance-point cx='250' cy='143' r='6' fill='#f5bd18' visibility='hidden'></circle><circle
                 data-finance-point
                 cx='410'
                 cy='86'
                 r='6'
                 fill='#f5bd18'
-              ></circle><circle data-finance-point cx='623' cy='26' r='6' fill='#f5bd18'></circle></svg><ol
-              class='finance-timeline'
-              role='list'
+                visibility='hidden'
+              ></circle><circle data-finance-point cx='623' cy='26' r='6' fill='#f5bd18' visibility='hidden'></circle></svg><ol
+                class='finance-timeline'
+                role='list'
             ><li><span data-analysis-timeline-year>Այսօր</span><strong
-                    data-analysis-timeline='0'
-                  >−4,3 մլն ֏</strong></li><li><span data-analysis-timeline-year>5 տարի</span><strong
-                    data-analysis-timeline='1'
-                  >−0,7 մլն ֏</strong></li><li><span data-analysis-timeline-year>6 տարի</span><strong
-                    data-analysis-timeline='2'
-                  >+20 հազ. ֏</strong></li><li><span data-analysis-timeline-year>10 տարի</span><strong
-                    data-analysis-timeline='3'
-                  >+2,9 մլն ֏</strong></li><li><span data-analysis-timeline-year>25 տարի</span><strong
-                    data-analysis-timeline='4'
-                  >+13,7 մլն ֏</strong></li></ol></div>
-          <div class='finance-included'><h3>Ինչ է ներառված դեմո արժեքում</h3><ul role='list'><li><svg class='inline-icon' aria-hidden='true'><use
+                  data-analysis-timeline='0'
+                  >Վերլուծությունից հետո</strong></li><li><span data-analysis-timeline-year>5 տարի</span><strong
+                  data-analysis-timeline='1'
+                  >Վերլուծությունից հետո</strong></li><li><span data-analysis-timeline-year>10 տարի</span><strong
+                  data-analysis-timeline='2'
+                  >Վերլուծությունից հետո</strong></li><li><span data-analysis-timeline-year>25 տարի</span><strong
+                  data-analysis-timeline='3'
+                  >Վերլուծությունից հետո</strong></li></ol></div>
+          <div class='finance-included'><h3>Ինչ է ներառված ժամանակավոր նախնական գնի մեջ</h3><ul role='list'><li><svg class='inline-icon' aria-hidden='true'><use
                       href='/icons.svg#check'
                     ></use></svg>Արևային վահանակներ</li><li><svg class='inline-icon' aria-hidden='true'><use
                       href='/icons.svg#check'
                     ></use></svg>Ինվերտոր</li><li><svg class='inline-icon' aria-hidden='true'><use
                       href='/icons.svg#check'
-                    ></use></svg>Մոնտաժ և նյութեր</li><li><svg class='inline-icon' aria-hidden='true'><use
+                    ></use></svg>Կրեպեժ և ստանդարտ մոնտաժ</li><li><svg class='inline-icon' aria-hidden='true'><use
                       href='/icons.svg#check'
-                    ></use></svg>Նախագծում</li><li><svg class='inline-icon' aria-hidden='true'><use
+                    ></use></svg>Հիմնական միացում ցանցին</li><li><svg class='inline-icon' aria-hidden='true'><use
                       href='/icons.svg#check'
-                    ></use></svg>Միացում ցանցին</li><li><svg class='inline-icon' aria-hidden='true'><use
+                    ></use></svg>ԱԱՀ-ն ու թույլտվությունները պահանջում են հաստատում</li><li><svg class='inline-icon' aria-hidden='true'><use
                       href='/icons.svg#check'
-                    ></use></svg>Համակարգի մոնիտորինգ</li><li><svg class='inline-icon' aria-hidden='true'><use
-                      href='/icons.svg#check'
-                    ></use></svg>Երաշխիքային սպասարկման օրինակ</li></ul></div>
-          <p class='finance-disclaimer' data-analysis-finance-disclaimer>4 300 000 ֏ ÷ 720 000 ֏/տարի &#x3D; 5,97 տարի։ Սակագնի աճը, դեգրադացիան, սպասարկումը, վարկն ու դիսկոնտավորումը չեն հաշվարկվել։ 25 տարվա համախառն խնայողությունը 18,0 մլն ֏ է։</p>
+                    ></use></svg>Կուտակիչը, տանիքի վերանորոգումը և ոչ ստանդարտ էլեկտրական աշխատանքները ներառված չեն</li></ul></div>
+          <p class='finance-disclaimer' data-analysis-finance-disclaimer>Մինչև վերլուծությունը ֆինանսական արժեքներ չեն ցուցադրվում։ Մոդելը չի ներառում սակագնի աճ, դեգրադացիա, սպասարկում, վարկ, դիսկոնտավորում, հարկեր և ցանց արտահանման կանոններ։</p>
         </div>
       </section>
 
@@ -1272,9 +1289,9 @@
                   >≈ 6,0 տարի</dd></div><div><dt>Սպառման ծածկում</dt><dd
                     data-analysis='coverage'
                   >92 %</dd></div></dl><p
-            >4 300 000 ֏ ÷ 720 000 ֏/տարի &#x3D; 5,97 տարի։ Սակագնի աճը, դեգրադացիան, սպասարկումը, վարկն ու դիսկոնտավորումը չեն հաշվարկվել։ 25 տարվա համախառն խնայողությունը 18,0 մլն ֏ է։</p></div></div></div></dialog>
+            >Մինչև վերլուծությունը ֆինանսական արժեքներ չեն ցուցադրվում։ Մոդելը չի ներառում սակագնի աճ, դեգրադացիա, սպասարկում, վարկ, դիսկոնտավորում, հարկեր և ցանց արտահանման կանոններ։</p></div></div></div></dialog>
 
-    <script id='page-config' type='application/json'>{"locale":"hy-AM","status":{"minAddress":"Մուտքագրեք առնվազն 5 նիշ պարունակող հասցե։","analyzing":"Պատրաստում ենք նախնական վերլուծությունը…","ready":"Նախնական արդյունքը պատրաստ է։ Որոշում կայացնելուց առաջ ստուգեք տվյալները։","unavailable":"Նախնական վերլուծությունն այժմ հասանելի չէ։ Փորձեք կրկին կամ նշեք կետը ձեռքով։","invalidFile":"Ձևաչափը չի աջակցվում։ Ընտրեք PDF, JPG, JPEG կամ PNG։","largeFile":"Ֆայլը չափազանց մեծ է։ Առավելագույն չափը 10 ՄԲ է։","fileSelected":"Ֆայլն ընտրված է և մնում է միայն դիտարկիչի հիշողության մեջ։","fileRemoved":"Ֆայլը հեռացվել է։","mapReady":"Օբյեկտի ինտերակտիվ քարտեզը պատրաստ է։","mapFailed":"Քարտեզը հասանելի չէ։ Մնում է ստատիկ ցուցադրական պահուստային տարբերակը։","monthTooltip":"{month} ամսվա արտադրություն՝ {value} kWh"},"product":{"common":{"required":"Պարտադիր դաշտ","optional":"Ընտրովի","perMonth":"ամսական","kwh":"kWh","amd":"֏","complete":"Պատրաստ է","cancel":"Չեղարկել"},"consumption":{"title":"Էլեկտրաէներգիայի սպառում","copy":"Ընտրեք տվյալները նախնական հաշվարկի համար ներկայացնելու հարմար եղանակը։","modes":{"bill":"Միջին հաշիվ","usage":"Միջին սպառում","monthly":"Ամսական պրոֆիլ"},"billLabel":"Էլեկտրաէներգիայի միջին հաշիվ","billHelp":"Մուտքագրեք ամսական միջին գումարը դրամով։","usageLabel":"Միջին ամսական սպառում","usageHelp":"Մուտքագրեք ամսական միջին սպառումը kWh-ով։","monthlyTitle":"Սպառումը 12 ամսվա ընթացքում","monthlyHelp":"Եթե տվյալները հասանելի են, մուտքագրեք յուրաքանչյուր ամսվա kWh-ը։","annualLabel":"Հաշվարկային տարեկան սպառում","invalidNumber":"Մուտքագրեք զրոյից մեծ թիվ։","invalidBill":"Մուտքագրեք ճիշտ գումար դրամով։","invalidUsage":"Մուտքագրեք ճիշտ սպառում kWh-ով։","incompleteMonths":"Լրացրեք բոլոր 12 ամիսները կամ ընտրեք այլ եղանակ։","noConsumption":"Հաշվարկի համար անհրաժեշտ է սպառման կամ հաշվի արժեք։","normalized":"Տվյալները բերվել են տարեկան պրոֆիլի։"},"location":{"title":"Օբյեկտի տեղադրությունը","copy":"Հաստատեք գտնված հասցեն կամ նշեք կետը ձեռքով։","search":"Գտնել հասցեն","searching":"Փնտրում ենք հասցեն…","resultLabel":"Գտնված հասցե","confirmPrompt":"Սա՞ է ձեր օբյեկտը։","confirm":"Հաստատել օբյեկտը","edit":"Փոխել հասցեն","noResult":"Հասցեն չի գտնվել։ Նշեք կետը քարտեզի վրա ձեռքով։","unavailable":"Հասցեների որոնման ծառայությունն այժմ հասանելի չէ։ Նշեք կետը քարտեզի վրա ձեռքով։","manualTitle":"Նշել կետը ձեռքով","manualCopy":"Սեղմեք քարտեզի վրա՝ օբյեկտի մոտավոր դիրքը նշելու համար։","chooseOnMap":"Ընտրել կետ քարտեզի վրա","pointSelected":"Օբյեկտի կետն ընտրված է։","retry":"Կրկնել որոնումը"},"roof":{"title":"Տանիքի ուրվագիծ","copy":"Ուրվագծեք տանիքի հասանելի հատվածը՝ մակերեսի նախնական գնահատման համար։","fallback":"Քարտեզը հասանելի չէ։ Շարունակեք հասցեն նշելուց հետո կամ փորձեք կրկին։","start":"Սկսել ուրվագիծը","addPoint":"Ավելացնել կետ","undo":"Հետարկել վերջին կետը","reset":"Մաքրել ուրվագիծը","finish":"Ավարտել ուրվագիծը","edit":"Փոխել ուրվագիծը","pointsLabel":"Ուրվագծում կետերի քանակը՝ {count}","minimumPoints":"Ուրվագիծն ավարտելու համար ավելացրեք առնվազն 3 կետ։","areaLabel":"Տանիքի նախնական մակերես","orientationLabel":"Տանիքի ուղղվածություն","tiltLabel":"Տանիքի թեքություն","tiltHelp":"Եթե հայտնի է, ընտրեք մոտավոր թեքությունը։","pointSelectLabel":"Ընտրել {index}-րդ կետը","removePoint":"Հեռացնել կետը","nudgeNorth":"Տեղաշարժել կետը դեպի հյուսիս","nudgeSouth":"Տեղաշարժել կետը դեպի հարավ","nudgeEast":"Տեղաշարժել կետը դեպի արևելք","nudgeWest":"Տեղաշարժել կետը դեպի արևմուտք","orientationOptions":{"north":"Հյուսիս","southEast":"Հարավ-արևելք","southWest":"Հարավ-արևմուտք","east":"Արևելք","south":"Հարավ","west":"Արևմուտք","custom":"Այլ"},"unavailable":"Տանիքի ուրվագիծը դեռ նշված չէ։","tilesUnavailable":"Ֆոնային քարտեզը հասանելի չէ։ Կետ ընտրելուց հետո կարող եք նշել ուրվագիծը։","locationRequired":"Սկզբում հաստատեք օբյեկտը կամ ընտրեք կետը քարտեզի վրա։"},"result":{"title":"Նախնական վերլուծություն","preparing":"Պատրաստում ենք նախնական վերլուծությունը…","ready":"Նախնական վերլուծությունը պատրաստ է։","unavailable":"Հասանելի տվյալներով չհաջողվեց պատրաստել վերլուծությունը։","retry":"Կրկնել հաշվարկը","noTariff":"Հաստատված սակագինը միացված չէ. խնայողությունն ու վերադարձման ժամկետը չեն ցուցադրվում։","noSavings":"Տվյալները բավարար չեն խնայողությունն ու վերադարձման ժամկետը ցուցադրելու համար։","chartDescription":"Հաստատված մուտքային տվյալների և ստացված արևային ռեսուրսի հիման վրա ամսական նախնական արտադրություն։","confidenceTitle":"Գնահատման վստահելիություն","confidence":{"high":"Բարձր","medium":"Միջին","low":"Ցածր","insufficient":"Տվյալները բավարար չեն"},"assumptionsTitle":"Հաշվարկի ենթադրություններ"},"solutions":{"liveBadge":"Ձեր հաստատված տվյալներով","liveCopy":"Այս երեք նախնական տեխնիկական սցենարները հաշվարկված են օբյեկտի հաստատված տվյալներից։","financialUnavailable":"Արժեքն ու վերադարձի ժամկետը կցուցադրվեն միայն սակագնի և համակարգի արժեքի հաստատումից հետո։"},"ledger":{"title":"Ինչպես է հաշվարկվել","copy":"Նախնական արդյունքի աղբյուրները, տարբերակները և ենթադրությունները։","sources":{"consumption":"Սպառման տվյալներ","location":"Օբյեկտի տեղադրություն","roof":"Տանիքի ուրվագիծ և պարամետրեր","tariff":"Էլեկտրաէներգիայի սակագին","solar":"Արևային ռեսուրս","investment":"Համակարգի արժեք","unavailable":"Աղբյուրը միացված չէ"},"assumptions":{"NO_TARIFF_ESCALATION":"Սակագնի աճը չի մոդելավորվում։","NO_PANEL_DEGRADATION":"Վահանակների դեգրադացիան չի մոդելավորվում։","NO_MAINTENANCE_FINANCING_DISCOUNTING_EXPORT_OR_TAXES":"Չեն ներառվել սպասարկումը, ֆինանսավորումը, դիսկոնտավորումը, ցանցին արտահանձնելու կանոնները և հարկերը։","MISSING_EVIDENCE_SUPPRESSES_FINANCIAL_RESULT":"Առանց հաստատված տվյալների ֆինանսական արժեքները չեն ցուցադրվում։","PVGIS_SYSTEM_LOSS_14_PERCENT":"PVGIS-ում կիրառվել է համակարգի 14% կորուստների նախնական ենթադրություն, որը պետք է հաստատի ինժեները։"}},"passport":{"persistenceTitle":"Solar Passport-ը պահվում է այս դիտարկիչում","persistenceCopy":"Այս նախնական Passport-ը գոյություն ունի միայն ընթացիկ սեսիայի հիշողության մեջ։","memoryOnly":"Էջը փակելուց հետո տվյալները կարող են կորչել։","permanentLink":"Մշտական հղումն ու PDF-ը հասանելի կլինեն պահոցը միացնելուց հետո։","sourceLedger":"Աղբյուրներ և ենթադրություններ","shareUnavailable":"Հղում ուղարկելն առայժմ հասանելի չէ։","realTitle":"Ձեր նախնական Solar Passport-ը","sessionBadge":"Այս սեսիա"},"lead":{"title":"Ուղարկել հաշվարկը ինժեներին","copy":"Թողեք կապի տվյալներ, որպեսզի ինժեները կարողանա ճշտել օբյեկտի տվյալները։","nameLabel":"Ձեր անունը","phoneLabel":"Հեռախոս","emailLabel":"Էլեկտրոնային փոստ","messageLabel":"Մեկնաբանություն օբյեկտի վերաբերյալ","consent":"Համաձայն եմ տվյալների մշակմանը՝ հարցմանը պատասխանելու համար։","submit":"Ուղարկել հարցումը","required":"Լրացրեք պարտադիր դաշտերը և հաստատեք համաձայնությունը։","invalidEmail":"Մուտքագրեք ճիշտ էլեկտրոնային փոստի հասցե։","sending":"Ուղարկում ենք հարցումը…","sent":"Հարցումն ուղարկվել է։ Տվյալների ստուգումից հետո կկապվենք ձեզ հետ։","unavailable":"Ուղարկումը ժամանակավորապես հասանելի չէ։ Փորձեք ավելի ուշ։","retry":"Կրկնել ուղարկումը","privacy":"Տվյալները չեն փոխանցվում վերլուծական ծառայություններին։"},"status":{"geocodeUnavailable":"Գեոկոդավորման ծառայությունը միացված չէ կամ ժամանակավորապես հասանելի չէ։","analysisUnavailable":"Արևային վերլուծության ծառայությունը միացված չէ կամ ժամանակավորապես հասանելի չէ։","leadUnavailable":"Հարցումների ծառայությունը միացված չէ կամ ժամանակավորապես հասանելի չէ։","retry":"Փորձել կրկին","canceled":"Նախորդ հարցումը չեղարկվել է։"},"months":[{"short":"Հնվ","name":"Հունվար"},{"short":"Փտր","name":"Փետրվար"},{"short":"Մրտ","name":"Մարտ"},{"short":"Ապր","name":"Ապրիլ"},{"short":"Մյս","name":"Մայիս"},{"short":"Հնս","name":"Հունիս"},{"short":"Հլս","name":"Հուլիս"},{"short":"Օգս","name":"Օգոստոս"},{"short":"Սեպ","name":"Սեպտեմբեր"},{"short":"Հոկ","name":"Հոկտեմբեր"},{"short":"Նոյ","name":"Նոյեմբեր"},{"short":"Դեկ","name":"Դեկտեմբեր"}]},"map":{"image":"/images/roof-scan-768.webp","tileUrl":"","tileAttribution":""}}</script>
+    <script id='page-config' type='application/json'>{"locale":"hy-AM","status":{"minAddress":"Մուտքագրեք առնվազն 5 նիշ պարունակող հասցե։","analyzing":"Պատրաստում ենք նախնական վերլուծությունը…","ready":"Նախնական արդյունքը պատրաստ է։ Որոշում կայացնելուց առաջ ստուգեք տվյալները։","unavailable":"Նախնական վերլուծությունն այժմ հասանելի չէ։ Փորձեք կրկին կամ նշեք կետը ձեռքով։","invalidFile":"Ձևաչափը չի աջակցվում։ Ընտրեք PDF, JPG, JPEG կամ PNG։","largeFile":"Ֆայլը չափազանց մեծ է։ Առավելագույն չափը 10 ՄԲ է։","fileSelected":"Ֆայլն ընտրված է և մնում է միայն դիտարկիչի հիշողության մեջ։","fileRemoved":"Ֆայլը հեռացվել է։","mapReady":"Օբյեկտի ինտերակտիվ քարտեզը պատրաստ է։","mapFailed":"Քարտեզը հասանելի չէ։ Մնում է ստատիկ ցուցադրական պահուստային տարբերակը։","monthTooltip":"{month} ամսվա արտադրություն՝ {value} kWh"},"product":{"common":{"required":"Պարտադիր դաշտ","optional":"Ընտրովի","perMonth":"ամսական","kwh":"kWh","amd":"֏","complete":"Պատրաստ է","cancel":"Չեղարկել"},"consumption":{"title":"Էլեկտրաէներգիայի սպառում","copy":"Ընտրեք տվյալները նախնական հաշվարկի համար ներկայացնելու հարմար եղանակը։","modes":{"bill":"Միջին հաշիվ","usage":"Միջին սպառում","monthly":"Ամսական պրոֆիլ"},"billLabel":"Էլեկտրաէներգիայի միջին հաշիվ","billHelp":"Մուտքագրեք ամսական միջին գումարը դրամով։","tariffLabel":"Սակագինը ձեր հաշվից","tariffHelp":"kWh-ի համար պարտադիր չէ։ Դրամով հաշիվը kWh-ի փոխարկելու համար անհրաժեշտ է, իսկ Passport-ում կնշվի որպես ձեր մուտքագրած տվյալ։","usageLabel":"Միջին ամսական սպառում","usageHelp":"Մուտքագրեք ամսական միջին սպառումը kWh-ով։","monthlyTitle":"Սպառումը 12 ամսվա ընթացքում","monthlyHelp":"Եթե տվյալները հասանելի են, մուտքագրեք յուրաքանչյուր ամսվա kWh-ը։","annualLabel":"Հաշվարկային տարեկան սպառում","invalidNumber":"Մուտքագրեք զրոյից մեծ թիվ։","invalidBill":"Մուտքագրեք ճիշտ գումար դրամով։","invalidTariff":"Մուտքագրեք զրոյից մեծ սակագին AMD/kWh-ով։","invalidUsage":"Մուտքագրեք ճիշտ սպառում kWh-ով։","incompleteMonths":"Լրացրեք բոլոր 12 ամիսները կամ ընտրեք այլ եղանակ։","noConsumption":"Հաշվարկի համար անհրաժեշտ է սպառման կամ հաշվի արժեք։","normalized":"Տվյալները բերվել են տարեկան պրոֆիլի։"},"location":{"title":"Օբյեկտի տեղադրությունը","copy":"Հաստատեք գտնված հասցեն կամ նշեք կետը ձեռքով։","search":"Գտնել հասցեն","searching":"Փնտրում ենք հասցեն…","resultLabel":"Գտնված հասցե","confirmPrompt":"Սա՞ է ձեր օբյեկտը։","confirm":"Հաստատել օբյեկտը","edit":"Փոխել հասցեն","noResult":"Հասցեն չի գտնվել։ Նշեք կետը քարտեզի վրա ձեռքով։","unavailable":"Հասցեների որոնման ծառայությունն այժմ հասանելի չէ։ Նշեք կետը քարտեզի վրա ձեռքով։","manualTitle":"Նշել կետը ձեռքով","manualCopy":"Սեղմեք քարտեզի վրա՝ օբյեկտի մոտավոր դիրքը նշելու համար։","chooseOnMap":"Ընտրել կետ քարտեզի վրա","pointSelected":"Օբյեկտի կետն ընտրված է։","retry":"Կրկնել որոնումը"},"roof":{"title":"Տանիքի ուրվագիծ","copy":"Ուրվագծեք տանիքի հասանելի հատվածը՝ մակերեսի նախնական գնահատման համար։","fallback":"Քարտեզը հասանելի չէ։ Շարունակեք հասցեն նշելուց հետո կամ փորձեք կրկին։","start":"Սկսել ուրվագիծը","addPoint":"Ավելացնել կետ","undo":"Հետարկել վերջին կետը","reset":"Մաքրել ուրվագիծը","finish":"Ավարտել ուրվագիծը","edit":"Փոխել ուրվագիծը","pointsLabel":"Ուրվագծում կետերի քանակը՝ {count}","minimumPoints":"Ուրվագիծն ավարտելու համար ավելացրեք առնվազն 3 կետ։","areaLabel":"Տանիքի նախնական մակերես","orientationLabel":"Տանիքի ուղղվածություն","tiltLabel":"Տանիքի թեքություն","tiltHelp":"Եթե հայտնի է, ընտրեք մոտավոր թեքությունը։","pointSelectLabel":"Ընտրել {index}-րդ կետը","removePoint":"Հեռացնել կետը","nudgeNorth":"Տեղաշարժել կետը դեպի հյուսիս","nudgeSouth":"Տեղաշարժել կետը դեպի հարավ","nudgeEast":"Տեղաշարժել կետը դեպի արևելք","nudgeWest":"Տեղաշարժել կետը դեպի արևմուտք","orientationOptions":{"north":"Հյուսիս","southEast":"Հարավ-արևելք","southWest":"Հարավ-արևմուտք","east":"Արևելք","south":"Հարավ","west":"Արևմուտք","custom":"Այլ"},"unavailable":"Տանիքի ուրվագիծը դեռ նշված չէ։","tilesUnavailable":"Ֆոնային քարտեզը հասանելի չէ։ Կետ ընտրելուց հետո կարող եք նշել ուրվագիծը։","locationRequired":"Սկզբում հաստատեք օբյեկտը կամ ընտրեք կետը քարտեզի վրա։"},"result":{"title":"Նախնական վերլուծություն","preparing":"Պատրաստում ենք նախնական վերլուծությունը…","ready":"Նախնական վերլուծությունը պատրաստ է։","unavailable":"Հասանելի տվյալներով չհաջողվեց պատրաստել վերլուծությունը։","retry":"Կրկնել հաշվարկը","noTariff":"Սակագինը նշված չէ․ հզորությունը, PVGIS-ի արտադրությունն ու նախնական գինը հասանելի են, սակայն խնայողությունն ու վերադարձման ժամկետը չեն ցուցադրվում։","noSavings":"Տվյալները բավարար չեն խնայողությունն ու վերադարձման ժամկետը ցուցադրելու համար։","chartDescription":"Հաստատված մուտքային տվյալների և ստացված արևային ռեսուրսի հիման վրա ամսական նախնական արտադրություն։","confidenceTitle":"Գնահատման վստահելիություն","confidence":{"high":"Բարձր","medium":"Միջին","low":"Ցածր","insufficient":"Տվյալները բավարար չեն"},"assumptionsTitle":"Հաշվարկի ենթադրություններ","commercialEstimate":"YOUR ENERGY-ի նախնական գին · {version} · առաջարկ չէ․ {p25}–{p75}; P50 {p50}։ Գործում է մինչև {validUntil}։"},"solutions":{"liveBadge":"Ձեր հաստատված տվյալներով","liveCopy":"Այս երեք նախնական տեխնիկական սցենարները հաշվարկված են օբյեկտի հաստատված տվյալներից։","financialUnavailable":"Նախնական գինը ստացվում է գործող PriceBook-ից․ խնայողությունն ու վերադարձի ժամկետը պահանջում են սակագին։"},"ledger":{"title":"Ինչպես է հաշվարկվել","copy":"Նախնական արդյունքի աղբյուրները, տարբերակները և ենթադրությունները։","sources":{"consumption":"Սպառման տվյալներ","location":"Օբյեկտի տեղադրություն","roof":"Տանիքի ուրվագիծ և պարամետրեր","tariff":"Էլեկտրաէներգիայի սակագին","solar":"Արևային ռեսուրս","investment":"Համակարգի արժեք","pricebook":"YOUR ENERGY-ի ժամանակավոր գնացուցակ","unavailable":"Աղբյուրը միացված չէ"},"assumptions":{"NO_TARIFF_ESCALATION":"Սակագնի աճը չի մոդելավորվում։","NO_PANEL_DEGRADATION":"Վահանակների դեգրադացիան չի մոդելավորվում։","NO_MAINTENANCE_FINANCING_DISCOUNTING_EXPORT_OR_TAXES":"Չեն ներառվել սպասարկումը, ֆինանսավորումը, դիսկոնտավորումը, ցանցին արտահանձնելու կանոնները և հարկերը։","MISSING_EVIDENCE_SUPPRESSES_FINANCIAL_RESULT":"Առանց հաստատված տվյալների ֆինանսական արժեքները չեն ցուցադրվում։","PVGIS_SYSTEM_LOSS_14_PERCENT":"PVGIS-ում կիրառվել է համակարգի 14% կորուստների նախնական ենթադրություն, որը պետք է հաստատի ինժեները։","USER_PROVIDED_TARIFF":"Սակագինը մուտքագրել է օգտվողը իր հաշվից և այն սակագնային գրանցամատյան չէ։","TEMPORARY_PRICEBOOK_NOT_OFFER":"Ժամանակավոր PriceBook-ը նախնական բյուջեի ուղեցույց է, ոչ առաջարկ և ոչ պայմանագրային գին։"}},"passport":{"persistenceTitle":"Solar Passport-ը պահվում է այս դիտարկիչում","persistenceCopy":"Այս նախնական Passport-ը գոյություն ունի միայն ընթացիկ սեսիայի հիշողության մեջ։","memoryOnly":"Էջը փակելուց հետո տվյալները կարող են կորչել։","permanentLink":"Մշտական հղումն ու PDF-ը հասանելի կլինեն պահոցը միացնելուց հետո։","sourceLedger":"Աղբյուրներ և ենթադրություններ","shareUnavailable":"Հղում ուղարկելն առայժմ հասանելի չէ։","realTitle":"Ձեր նախնական Solar Passport-ը","sessionBadge":"Այս սեսիա"},"lead":{"title":"Ուղարկել հաշվարկը ինժեներին","copy":"Թողեք կապի տվյալներ, որպեսզի ինժեները կարողանա ճշտել օբյեկտի տվյալները։","nameLabel":"Ձեր անունը","phoneLabel":"Հեռախոս","emailLabel":"Էլեկտրոնային փոստ","messageLabel":"Մեկնաբանություն օբյեկտի վերաբերյալ","consent":"Համաձայն եմ տվյալների մշակմանը՝ հարցմանը պատասխանելու համար։","submit":"Ուղարկել հարցումը","required":"Լրացրեք պարտադիր դաշտերը և հաստատեք համաձայնությունը։","invalidEmail":"Մուտքագրեք ճիշտ էլեկտրոնային փոստի հասցե։","sending":"Ուղարկում ենք հարցումը…","sent":"Հարցումն ուղարկվել է։ Տվյալների ստուգումից հետո կկապվենք ձեզ հետ։","unavailable":"Ուղարկումը ժամանակավորապես հասանելի չէ։ Փորձեք ավելի ուշ։","retry":"Կրկնել ուղարկումը","directCall":"Կամ զանգահարեք ինժեներին՝","privacy":"Տվյալները չեն փոխանցվում վերլուծական ծառայություններին։"},"status":{"geocodeUnavailable":"Գեոկոդավորման ծառայությունը միացված չէ կամ ժամանակավորապես հասանելի չէ։","analysisUnavailable":"Արևային վերլուծության ծառայությունը միացված չէ կամ ժամանակավորապես հասանելի չէ։","leadUnavailable":"Հարցումների ծառայությունը միացված չէ կամ ժամանակավորապես հասանելի չէ։","retry":"Փորձել կրկին","canceled":"Նախորդ հարցումը չեղարկվել է։"},"months":[{"short":"Հնվ","name":"Հունվար"},{"short":"Փտր","name":"Փետրվար"},{"short":"Մրտ","name":"Մարտ"},{"short":"Ապր","name":"Ապրիլ"},{"short":"Մյս","name":"Մայիս"},{"short":"Հնս","name":"Հունիս"},{"short":"Հլս","name":"Հուլիս"},{"short":"Օգս","name":"Օգոստոս"},{"short":"Սեպ","name":"Սեպտեմբեր"},{"short":"Հոկ","name":"Հոկտեմբեր"},{"short":"Նոյ","name":"Նոյեմբեր"},{"short":"Դեկ","name":"Դեկտեմբեր"}]},"map":{"image":"/images/roof-scan-768.webp","tileUrl":"","tileAttribution":""}}</script>
     <script type='module' src='/src/main.js'></script>
   </body>
 </html>

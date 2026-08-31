@@ -85,6 +85,9 @@ export default {
       },
       billLabel: 'Average electricity bill',
       billHelp: 'Enter the average monthly amount in AMD.',
+      tariffLabel: 'Tariff from your bill',
+      tariffHelp:
+        'Optional for kWh. A bill in AMD needs it to convert the amount to kWh; the Passport will mark it as user-provided.',
       usageLabel: 'Average monthly consumption',
       usageHelp: 'Enter the average monthly consumption in kWh.',
       monthlyTitle: 'Consumption over 12 months',
@@ -92,6 +95,7 @@ export default {
       annualLabel: 'Estimated annual consumption',
       invalidNumber: 'Enter a number greater than zero.',
       invalidBill: 'Enter a valid bill amount in AMD.',
+      invalidTariff: 'Enter a tariff greater than zero in AMD/kWh.',
       invalidUsage: 'Enter a valid consumption amount in kWh.',
       incompleteMonths: 'Complete all 12 months or choose a different method.',
       noConsumption: 'A consumption or bill value is needed for an estimate.',
@@ -156,7 +160,8 @@ export default {
       ready: 'The preliminary analysis is ready.',
       unavailable: 'An analysis could not be prepared from the available data.',
       retry: 'Try calculation again',
-      noTariff: 'A verified tariff is not connected, so savings and payback are not shown.',
+      noTariff:
+        'No tariff was entered: capacity, PVGIS generation and a preliminary price remain available, but savings and payback are not shown.',
       noSavings: 'There is not enough data to show savings and payback.',
       chartDescription:
         'Monthly preliminary generation based on the confirmed inputs and returned solar-resource data.',
@@ -167,14 +172,16 @@ export default {
         low: 'Low',
         insufficient: 'Not enough data'
       },
-      assumptionsTitle: 'Calculation assumptions'
+      assumptionsTitle: 'Calculation assumptions',
+      commercialEstimate:
+        'Preliminary YOUR ENERGY price · {version} · not an offer: {p25}–{p75}; P50 {p50}. Valid until {validUntil}.'
     },
     solutions: {
       liveBadge: 'From your confirmed data',
       liveCopy:
         'These three preliminary technical scenarios are calculated from the confirmed property data.',
       financialUnavailable:
-        'Price and payback appear only after the tariff and system cost are confirmed.'
+        'A preliminary price appears from the active PriceBook; savings and payback require a tariff.'
     },
     ledger: {
       title: 'How this was calculated',
@@ -184,8 +191,10 @@ export default {
         location: 'Property location',
         roof: 'Roof outline and parameters',
         tariff: 'Electricity tariff',
+        userTariff: 'Entered by the visitor from a bill',
         solar: 'Solar resource',
         investment: 'System price',
+        pricebook: 'Temporary YOUR ENERGY price book',
         unavailable: 'Source not connected'
       },
       assumptions: {
@@ -196,7 +205,11 @@ export default {
         MISSING_EVIDENCE_SUPPRESSES_FINANCIAL_RESULT:
           'Missing verified evidence suppresses financial values.',
         PVGIS_SYSTEM_LOSS_14_PERCENT:
-          'PVGIS uses a 14% preliminary system-loss assumption; an engineer must confirm it.'
+          'PVGIS uses a 14% preliminary system-loss assumption; an engineer must confirm it.',
+        USER_PROVIDED_TARIFF:
+          'The tariff was entered by the visitor from a bill and is not a tariff registry record.',
+        TEMPORARY_PRICEBOOK_NOT_OFFER:
+          'The temporary PriceBook is a preliminary budget guide, not an offer or contractual price.'
       }
     },
     passport: {
@@ -224,6 +237,7 @@ export default {
       sent: 'The request was sent. We will contact you after the data are reviewed.',
       unavailable: 'Sending is temporarily unavailable. Please try later.',
       retry: 'Try sending again',
+      directCall: 'Or call an engineer:',
       privacy: 'Data are not sent to analytics.'
     },
     status: {
@@ -334,7 +348,7 @@ export default {
   solutions: {
     eyebrow: 'Solutions',
     title: 'Three practical solutions for your home',
-    copy: 'Compare capacity, generation and indicative cost. All figures are demonstrations.',
+    copy: 'Compare indicative capacity and generation. A preliminary budget appears after property analysis.',
     disclaimer:
       'The final configuration, price and outcome depend on the property and are confirmed after a site visit.',
     items: [
@@ -343,7 +357,7 @@ export default {
         subtitle: 'Lower initial investment',
         capacity: '6.2 kWp',
         generation: '9,200 kWh / year',
-        price: 'from 2,950,000 ֏',
+        price: 'Preliminary budget after analysis',
         popular: false,
         details: [
           '10–12 panels in the selected class',
@@ -356,8 +370,8 @@ export default {
         subtitle: 'The best balance of cost and return',
         capacity: '9.86 kWp',
         generation: '14,600 kWh / year',
-        price: '4,300,000 ֏',
-        badge: 'Popular demo option',
+        price: 'Preliminary budget after analysis',
+        badge: 'Popular option',
         popular: true,
         details: [
           '17 × 580 W panels',
@@ -370,7 +384,7 @@ export default {
         subtitle: 'Maximum coverage plus a battery',
         capacity: '12.5 kWp + 10 kWh',
         generation: '18,900 kWh / year',
-        price: 'from 6,750,000 ֏',
+        price: 'Needs a separate estimate',
         popular: false,
         details: [
           'Higher-capacity system',
@@ -442,7 +456,8 @@ export default {
   finance: {
     eyebrow: 'Financial model',
     title: 'An investment that works every day',
-    copy: 'A conservative demonstration scenario with no hidden tariff growth.',
+    copy:
+      'The financial chart appears only after PVGIS analysis, an entered or confirmed tariff, and an active price book.',
     benefits: [
       'Lower grid consumption',
       'Panels designed for more than 25 years of service',
@@ -451,24 +466,23 @@ export default {
     ],
     timelineTitle: 'How the net result grows',
     timeline: [
-      { year: 'Today', value: '−4.3m ֏', percent: 2 },
-      { year: 'Year 5', value: '−0.7m ֏', percent: 27 },
-      { year: 'Year 6', value: '+20k ֏', percent: 34 },
-      { year: 'Year 10', value: '+2.9m ֏', percent: 51 },
-      { year: 'Year 25', value: '+13.7m ֏', percent: 94 }
+      { year: 'Today' },
+      { year: 'Year 5' },
+      { year: 'Year 10' },
+      { year: 'Year 25' }
     ],
-    includedTitle: 'What the demo cost includes',
+    awaiting: 'After analysis',
+    includedTitle: 'What the temporary preliminary price includes',
     included: [
       'Solar panels',
       'Inverter',
-      'Installation and materials',
-      'Design',
-      'Grid connection',
-      'System monitoring',
-      'Example warranty service'
+      'Mounting and standard installation',
+      'Basic grid connection',
+      'VAT and permits require confirmation',
+      'Battery, roof repair and non-standard electrical work are excluded'
     ],
     disclaimer:
-      '4,300,000 ֏ ÷ 720,000 ֏/year = 5.97 years. Tariff growth, degradation, service, financing and discounting are not included. Gross savings over 25 years: 18.0m ֏.'
+      'Financial values are not shown before analysis. The model excludes tariff growth, degradation, maintenance, financing, discounting, taxes and export rules.'
   },
   engineering: {
     eyebrow: 'A human check',

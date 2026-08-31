@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang='ru'>
+  <head>
+    <meta charset='UTF-8' />
+    <meta name='viewport' content='width=device-width, initial-scale=1.0' />
+    <meta name='theme-color' content='#071a2d' />
+    <meta name='color-scheme' content='light' />
+    <title>Калькулятор солнечной системы: от потребления к анализу крыши | YOURENERGY</title>
+    <meta name='description' content='Начните Solar Passport с данных о потреблении, затем подтвердите точку и контур крыши для реального предварительного анализа PVGIS.' />
+    <meta property='og:type' content='website' />
+    <meta property='og:site_name' content='YOURENERGY' />
+    <meta property='og:locale' content='ru_RU' />
+    <meta property='og:title' content='Начните расчёт солнечной системы | YOURENERGY' />
+    <meta property='og:description' content='Укажите потребление и продолжите к подтверждению точки и крыши.' />
+    <meta property='og:url' content='https://yourenergy.am/ru/calculator/' />
+    <meta property='og:image' content='https://yourenergy.am/og.png' />
+    <meta name='twitter:card' content='summary_large_image' />
+    <meta name='twitter:title' content='Начните расчёт солнечной системы | YOURENERGY' />
+    <meta name='twitter:description' content='Укажите потребление и продолжите к подтверждению точки и крыши.' />
+    <meta name='twitter:image' content='https://yourenergy.am/og.png' />
+    <link rel='canonical' href='https://yourenergy.am/ru/calculator/' />
+    <link rel='alternate' hreflang='hy' href='https://yourenergy.am/calculator/' /><link rel='alternate' hreflang='ru' href='https://yourenergy.am/ru/calculator/' /><link rel='alternate' hreflang='en' href='https://yourenergy.am/en/calculator/' /><link rel='alternate' hreflang='x-default' href='https://yourenergy.am/calculator/' />
+    <link rel='icon' href='/favicon.svg' type='image/svg+xml' />
+    <link rel='stylesheet' href='/src/styles/main.css' />
+  </head>
+  <body class='tool-page tool-page--calculator'>
+    <a class='skip-link' href='#main'>Перейти к основному содержанию</a>
+    <header class='site-header'>
+      <div class='container header-row'>
+        <a class='wordmark' href='/ru/' aria-label='YOURENERGY'><span>YOUR</span><strong
+          >ENERGY</strong></a>
+        <nav class='desktop-nav' aria-label='Основная навигация'>
+          <a href='/ru/'>Главная</a>
+          <a href='/ru/calculator/'>Калькулятор</a>
+          <a href='/ru/offer-checker/'>Проверка КП</a>
+        </nav>
+        <div class='header-actions'>
+          <a class='header-phone' href='tel:+37491095950'><strong>+374 91 095 950</strong><small
+            >Открыто до 21:00</small></a>
+          <nav class='language-switcher' aria-label='Выбор языка'><a
+                class='language-link'
+                href='/calculator/'
+                hreflang='hy'
+                aria-label='AM — Армянский'
+              >AM</a><a
+                class='language-link'
+                href='/en/calculator/'
+                hreflang='en'
+                aria-label='EN — Английский'
+              >EN</a></nav>
+        </div>
+        <details class='mobile-menu'>
+          <summary aria-label='Открыть навигационное меню'><span></span><span></span><span></span></summary>
+          <nav aria-label='Мобильная навигация'>
+            <a href='/ru/'>Главная</a>
+            <a href='/ru/calculator/'>Калькулятор</a>
+            <a href='/ru/offer-checker/'>Проверка КП</a>
+            <a href='tel:+37491095950'>Позвонить инженеру</a>
+            <nav class='mobile-language-switcher' aria-label='Выбор языка'><a
+                  class='language-link'
+                  href='/calculator/'
+                  hreflang='hy'
+                  aria-label='AM — Армянский'
+                >AM</a><a
+                  class='language-link'
+                  href='/en/calculator/'
+                  hreflang='en'
+                  aria-label='EN — Английский'
+                >EN</a></nav>
+          </nav>
+        </details>
+      </div>
+    </header>
+
+    <main id='main' class='tool-main'>
+      <section class='tool-hero' aria-labelledby='tool-title'>
+        <div class='container tool-hero__grid'>
+          <div>
+            <p class='eyebrow'>Солнечный калькулятор</p>
+            <h1 id='tool-title'>Начните Solar Passport с вашего потребления</h1>
+            <p class='tool-intro'>Данные остаются только в текущей сессии браузера, чтобы вы продолжили на главном калькуляторе с подтверждением точки, крыши и PVGIS.</p>
+              <ul class='tool-principles'>
+                <li>Без «готового» результата только по адресу</li><li>Точка и крыша подтверждаются на следующем шаге</li><li>Экономия рассчитывается лишь с подтверждённым или введённым вами тарифом</li>
+              </ul>
+          </div>
+          <aside class='tool-reference' aria-label='Solar Passport'>
+              <p class='eyebrow'>Solar Passport</p>
+              <strong>Эта страница не выдаёт генерацию, экономию или цену. Для них нужны подтверждённая точка, данные крыши и ответ PVGIS.</strong>
+          </aside>
+        </div>
+      </section>
+
+        <section class='tool-workspace section' aria-labelledby='calculator-form-title'>
+          <div class='container tool-workspace__grid'>
+            <form class='tool-form' data-quick-calculator novalidate>
+              <h2 id='calculator-form-title'>Данные о потреблении</h2>
+              <label for='quick-address'>Адрес объекта</label>
+              <input
+                id='quick-address'
+                name='address'
+                autocomplete='street-address'
+                maxlength='160'
+                placeholder='Например: Абовян, Армения'
+              />
+              <small>Необязателен на этом шаге: далее можно найти адрес или поставить точку на карте.</small>
+
+              <fieldset>
+                <legend>Какие данные у вас есть</legend>
+                <label for='quick-monthly-kwh'>Среднее потребление в месяц</label>
+                <div class='tool-input-unit'>
+                  <input
+                    id='quick-monthly-kwh'
+                    name='averageMonthlyKwh'
+                    type='number'
+                    min='0.01'
+                    max='100000'
+                    step='0.01'
+                    inputmode='decimal'
+                    aria-describedby='quick-monthly-kwh-help'
+                  />
+                  <span>kWh / месяц</span>
+                </div>
+                <small id='quick-monthly-kwh-help'>Если в счёте есть kWh, укажите это значение.</small>
+
+                <p class='tool-or' aria-hidden='true'>или</p>
+
+                <label for='quick-monthly-bill'>Средний счёт за месяц</label>
+                <div class='tool-input-unit'>
+                  <input
+                    id='quick-monthly-bill'
+                    name='averageMonthlyBillAmd'
+                    type='number'
+                    min='1'
+                    max='100000000'
+                    step='1'
+                    inputmode='decimal'
+                    aria-describedby='quick-monthly-bill-help'
+                  />
+                  <span>֏ / месяц</span>
+                </div>
+                <small id='quick-monthly-bill-help'>Если известна только сумма счёта, также укажите тариф.</small>
+
+                <label for='quick-tariff'>Тариф из вашего счёта</label>
+                <div class='tool-input-unit'>
+                  <input
+                    id='quick-tariff'
+                    name='tariff'
+                    type='number'
+                    min='0.01'
+                    max='1000'
+                    step='0.01'
+                    inputmode='decimal'
+                    aria-describedby='quick-tariff-help'
+                  />
+                  <span>֏ / kWh</span>
+                </div>
+                <small id='quick-tariff-help'>Он нужен только для перевода счёта в kWh и прозрачного расчёта экономии дальше.</small>
+              </fieldset>
+
+              <p class='form-status' data-tool-status aria-live='polite' role='status'></p>
+              <button class='button button--navy' type='submit'>Продолжить к точке и контуру крыши</button>
+              <noscript>
+                <div class='tool-no-js'>
+                  <strong>JavaScript отключён в браузере</strong>
+                  <p>Откройте полный калькулятор, чтобы вручную указать потребление, точку объекта и контур крыши.</p>
+                  <a class='button' href='/ru/#calculator'>Открыть полный калькулятор</a>
+                </div>
+              </noscript>
+            </form>
+            <aside class='tool-side-note'>
+              <h2>Solar Passport</h2>
+              <p>Эта страница не выдаёт генерацию, экономию или цену. Для них нужны подтверждённая точка, данные крыши и ответ PVGIS.</p>
+              <a href='/ru/#calculator'>Открыть полный калькулятор</a>
+            </aside>
+          </div>
+        </section>
+    </main>
+
+    <footer class='tool-footer'>
+      <div class='container'>
+        <p>YOURENERGY · прозрачные предварительные инструменты для домашних солнечных систем в Армении.</p>
+        <a href='tel:+37491095950'>+374 91 095 950</a>
+      </div>
+    </footer>
+
+    <script id='tool-page-config' type='application/json'>{"toolType":"calculator","locale":"ru-RU","homeHref":"/ru/","priceBook":{"id":"yourenergy-am-residential-grid-v0-1","version":"v0.1","status":"temporary","countryCode":"AM","region":"all-armenia","systemType":"residential-grid-tied","currency":"AMD","checkedAt":"2026-08-29","validFrom":"2026-08-29","validUntil":"2026-09-28","ratesAmdPerWp":{"p25":232,"p50":247,"p75":264},"scope":["panels","inverter","mounting","standard-installation","basic-grid-connection"],"exclusions":["battery","roof-repair","non-standard-electrical-work","financing"],"confirmationRequired":["vat","permits"],"source":{"kind":"registry","status":"estimated","provider":"YOURENERGY temporary price book","reference":"P1-v0.1","verifiedAt":"2026-08-29"}},"strings":{"invalid":"Укажите среднее потребление или сумму счёта; для счёта также нужен тариф больше нуля.","stored":"Данные сохранены только в текущей сессии браузера. Переходим к полному калькулятору.","storageUnavailable":"Локальное хранилище недоступно в этом браузере. Откройте полный калькулятор и укажите данные там."}}</script>
+    <script type='module' src='/src/tools.js'></script>
+  </body>
+</html>

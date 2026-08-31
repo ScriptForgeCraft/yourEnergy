@@ -2,7 +2,12 @@ const text = (value) =>
   value === null || value === undefined || value === '' ? '—' : String(value);
 
 const sourceLabel = (key, sources) => {
-  const aliases = { property: 'location', production: 'solar', investment: 'investment' };
+  const aliases = {
+    property: 'location',
+    production: 'solar',
+    investment: 'investment',
+    pricebook: 'pricebook'
+  };
   return sources[aliases[key] ?? key] ?? sources.unavailable ?? key;
 };
 
@@ -29,9 +34,12 @@ export const renderAnalysisLedger = ({ root, analysis, strings } = {}) => {
   sources.forEach((source) => {
     const sourceDetails = source.source ?? {};
     const label = sourceLabel(source.key, strings.sources ?? {});
-    const detail = [sourceDetails.provider, sourceDetails.reference, sourceDetails.verifiedAt]
-      .filter(Boolean)
-      .join(' · ');
+    const detail =
+      source.key === 'tariff' && sourceDetails.kind === 'manual'
+        ? strings.sources?.userTariff
+        : [sourceDetails.provider, sourceDetails.reference, sourceDetails.verifiedAt]
+            .filter(Boolean)
+            .join(' · ');
     list?.append(row(label, detail || strings.sources.unavailable));
   });
 

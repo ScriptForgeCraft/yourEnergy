@@ -38,7 +38,8 @@ const normalizeRecord = (record, currency) => ({
   id: cleanString(record?.id),
   effectiveFrom: toIsoDate(record?.effectiveFrom),
   effectiveTo: toIsoDate(record?.effectiveTo),
-  status: record?.status === 'confirmed' ? 'confirmed' : 'unavailable',
+  status:
+    record?.status === 'confirmed' ? 'confirmed' : record?.status === 'provided' ? 'provided' : 'unavailable',
   rateAmdPerKwh: toPositiveNumberOrNull(record?.rateAmdPerKwh),
   currency: cleanString(record?.currency) ?? currency ?? 'AMD',
   source: normalizeSource(record?.source)
@@ -81,6 +82,7 @@ export const selectEffectiveTariff = (
 
   if (!requestedDate) {
     return {
+      kind: 'registry',
       available: false,
       requestedDate: null,
       dataset: metadata,
@@ -99,6 +101,7 @@ export const selectEffectiveTariff = (
 
   if (!candidate) {
     return {
+      kind: 'registry',
       available: false,
       requestedDate,
       dataset: metadata,
@@ -110,6 +113,7 @@ export const selectEffectiveTariff = (
 
   if (!canUseRecord(candidate)) {
     return {
+      kind: 'registry',
       available: false,
       requestedDate,
       dataset: metadata,
@@ -120,12 +124,62 @@ export const selectEffectiveTariff = (
   }
 
   return {
+    kind: 'registry',
     available: true,
     requestedDate,
     dataset: metadata,
     tariff: candidate,
     reason: 'CONFIRMED_TARIFF',
     source: candidate.source
+  };
+};
+
+/**
+ * A rate copied from the visitor's electricity bill. It is usable for a
+ * preliminary planning calculation, but it deliberately remains distinct
+ * from a confirmed tariff-registry record in the Passport and source ledger.
+ */
+export const createUserTariffSelection = (input = {}, effectiveDate = new Date()) => {
+  const rateAmdPerKwh = toPositiveNumberOrNull(
+    typeof input === 'object' && input !== null ? input.rateAmdPerKwh : input
+  );
+  const requestedDate = toIsoDate(effectiveDate);
+  const source = {
+    kind: SOURCE_KIND.MANUAL,
+    status: rateAmdPerKwh === null ? SOURCE_STATUS.UNAVAILABLE : SOURCE_STATUS.PROVIDED,
+    provider: rateAmdPerKwh === null ? null : 'User-provided electricity bill',
+    reference: null,
+    verifiedAt: null
+  };
+
+  if (rateAmdPerKwh === null || !requestedDate) {
+    return {
+      kind: 'unavailable',
+      available: false,
+      requestedDate,
+      dataset: null,
+      tariff: null,
+      reason: rateAmdPerKwh === null ? 'USER_TARIFF_INVALID' : 'INVALID_EFFECTIVE_DATE',
+      source
+    };
+  }
+
+  return {
+    kind: 'user',
+    available: true,
+    requestedDate,
+    dataset: null,
+    tariff: {
+      id: 'user-entered-amd-per-kwh',
+      effectiveFrom: requestedDate,
+      effectiveTo: null,
+      status: 'provided',
+      rateAmdPerKwh,
+      currency: 'AMD',
+      source
+    },
+    reason: 'USER_PROVIDED_TARIFF',
+    source
   };
 };
 
@@ -136,6 +190,20 @@ export const getConfirmedTariffRate = (selectionOrTariff) => {
   const available = selection ? selection.available : true;
   const normalized = normalizeRecord(tariff, tariff?.currency);
   return available && canUseRecord(normalized) ? normalized.rateAmdPerKwh : null;
+};
+
+/**
+ * Returns either a dated confirmed registry rate or a clearly-labelled rate
+ * supplied by the visitor. Callers that need an official record must continue
+ * to use getConfirmedTariffRate instead.
+ */
+export const getUsableTariffRate = (selectionOrTariff) => {
+  const selection = selectionOrTariff?.tariff ? selectionOrTariff : null;
+  if (selection?.kind === 'user' && selection.available) {
+    const tariff = normalizeRecord(selection.tariff, selection.tariff?.currency);
+    return tariff.currency === 'AMD' ? tariff.rateAmdPerKwh : null;
+  }
+  return getConfirmedTariffRate(selectionOrTariff);
 };
 
 export const isConfirmedTariff = (selectionOrTariff) =>

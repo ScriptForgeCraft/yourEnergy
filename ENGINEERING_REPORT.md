@@ -1,15 +1,16 @@
-# YOURENERGY — P0 engineering handoff
+# YOURENERGY — P1 engineering handoff
 
-Дата проверки: 29 августа 2026. Проект остаётся локальным: деплой и выдача
+Дата проверки: 31 августа 2026. Проект остаётся локальным: деплой и выдача
 production credentials не выполнялись.
 
 ## 1. Структура
 
 Vite MPA генерирует семантический HTML из Handlebars до запуска браузера.
 Опубликованные homepage-маршруты: Armenian `/`, Russian `/ru/` и English
-`/en/`. Privacy, Terms и Soon существуют для всех трёх локалей и имеют
-`noindex`; post-build validator проверяет 12 маршрутов. В `functions/` лежат
-Cloudflare Pages Functions, а расчётная логика отделена в `src/domain/`.
+`/en/`; для каждой локали добавлены `/calculator/` и `/offer-checker/`.
+Privacy, Terms и Soon существуют для всех трёх локалей и имеют `noindex`.
+В `functions/` лежат Cloudflare Pages Functions, а расчётная логика отделена
+в `src/domain/`.
 
 ## 2. Визуальное соответствие референсу
 
@@ -36,8 +37,10 @@ Sharp, ESLint, `@eslint/js`, globals и Prettier. `npm ls --depth=0` подтв�
 3. На geographic Leaflet map пользователь строит контур крыши, выбирает
    ориентацию/наклон, может выбрать точку, сдвинуть её, отменить или сбросить
    контур. «Завершить» недоступно до трёх точек.
-4. `/api/analysis` запрашивает у PVGIS yield для 1 kWp и прозрачным образом
-   масштабирует его от введённого потребления.
+4. `/api/analysis` запрашивает у server-side PVGIS yield для 1 kWp и
+   прозрачным образом масштабирует его от введённого потребления. Если
+   `PVGIS_ENDPOINT` не задан, Function использует публичный endpoint PVGIS;
+   его ошибка показывает retry/manual-contact, а не demo-цифры.
 5. Dashboard, карта, Passport, chart, ledger и три варианта системы получают
    один `SolarAnalysis`; финансовые поля скрываются, если их источники не
    подтверждены.
@@ -48,10 +51,19 @@ Sharp, ESLint, `@eslint/js`, globals и Prettier. `npm ls --depth=0` подтв�
 
 Pure domain-модули содержат JSDoc-модели Property, Consumption, Roof, Tariff,
 SolarAnalysis, SolarPassport и Confidence. `ARMENIA_TARIFF_DATASET` versioned,
-но намеренно не содержит неподтверждённой ставки. Поэтому счёт в AMD не
-конвертируется без verified tariff, а savings, price и payback не показываются
-без подтверждённых tariff + capex источников. В ledger видны источник,
-полнота и ограничения; PVGIS loss 14% отмечен как допущение.
+но намеренно не содержит неподтверждённой ставки. Пользователь может ввести
+AMD/kWh из собственного счёта: ledger и Passport прямо показывают источник
+`user`, а без usable tariff savings и payback скрыты.
+
+Для предварительного бюджета server-side выбирает единственный versioned
+`PriceBook`: `yourenergy-am-residential-grid-v0-1`, проверен 29.08.2026,
+действует 30 дней до 28.09.2026. Диапазон 232 / 247 / 264 AMD/Wp округляется
+до 10 000 AMD; P50 — основной ориентир. Это «Предварительная цена YOUR ENERGY
+· v0.1 · не является офертой», а не рыночное доказательство. Включены панели,
+инвертор, крепёж, стандартный монтаж и базовое подключение; исключены батарея,
+ремонт крыши, нестандартные электрические работы и финансирование. НДС и
+разрешения требуют подтверждения. После expiry цена скрывается и предлагается
+обследование.
 
 ## 6. Real versus demo content
 
@@ -73,12 +85,15 @@ Artashisyan 48 14 Kotayq, Zovuni, 26 33 str, Yerevan. Проекты, отзыв
 Все provider, CRM и Turnstile secrets читаются только server-side из
 `functions/.dev.vars`; `.env.example` содержит лишь публичные endpoint/map
 поля. API до вызова PVGIS отвергает неподтверждённый объект или незавершённую
-крышу. CSP/headers ограничивают источники self и явным HTTPS tile origin,
-если он конфигурирован. Functions не логируют адрес, координаты или lead PII.
+крышу и игнорирует client capex: активный PriceBook выбирается на сервере.
+OpenStreetMap — явный публичный fallback tile provider с attribution;
+`VITE_MAP_TILE_URL` можно заменить только на утверждённый HTTPS origin, который
+Vite добавит в `img-src` CSP. Functions не логируют адрес, координаты или lead
+PII.
 
 ## 8. Passport, lead и analytics
 
-`SolarPassportRepository` — memory-only реализация P0: permanent URL и PDF
+`SolarPassportRepository` — memory-only реализация P1: permanent URL и PDF
 честно недоступны. Lead form требует имя, телефон и consent; без CRM не
 показывает успех. Turnstile adapter подготовлен, но не заявляется работающим
 без настроенного site key/secret. Browser analytics публикует только
@@ -88,7 +103,8 @@ Artashisyan 48 14 Kotayq, Zovuni, 26 33 str, Yerevan. Проекты, отзыв
 
 Основной HTML crawlable без JavaScript. Есть localized title/description/OG,
 canonical и reciprocal `hy`/`ru`/`en`/`x-default` hreflang, FAQ JSON-LD,
-sitemap только с тремя homepage. Маршруты Privacy/Terms/Soon — noindex.
+а sitemap включает home, calculator и Offer Checker для трёх локалей.
+Маршруты Privacy/Terms/Soon — noindex.
 Проверены один H1, landmarks, skip-link, visible labels/errors, `aria-live`,
 native dialog с Escape/focus return, native details, keyboard map controls,
 reduced motion и текстовые chart/table alternatives.
@@ -129,9 +145,10 @@ JSON reports: `reports/lighthouse/*-p0.json`. Visual QA captures:
 
 ## 12. Launch blockers и следующие три шага
 
-1. Owner must supply and configure an approved geocoder, PVGIS endpoint,
-   map-tile provider, dated verified tariff source/revision, CRM and Turnstile
-   credentials. Until then P0 intentionally shows no property-specific result.
+1. Owner must supply and configure an approved geocoder, dated verified tariff
+   source/revision, CRM and Turnstile credentials. PVGIS/OSM fallbacks are
+   configured, but an approved commercial provider can replace either without
+   changing the browser flow.
 2. Replace every illustrative project/photo/review/price with approved evidence;
    complete Armenian native proofreading and legal approval for Privacy/Terms.
 3. Deploy to staging, repeat browser upload/keyboard/mobile smoke and Lighthouse

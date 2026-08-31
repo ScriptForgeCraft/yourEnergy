@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang='en'>
+  <head>
+    <meta charset='UTF-8' />
+    <meta name='viewport' content='width=device-width, initial-scale=1.0' />
+    <meta name='theme-color' content='#071a2d' />
+    <meta name='color-scheme' content='light' />
+    <title>Solar proposal checker | YOURENERGY</title>
+    <meta name='description' content='Compare the AMD/Wp of a third-party solar proposal to a temporary standard residential range without collecting contact details.' />
+    <meta property='og:type' content='website' />
+    <meta property='og:site_name' content='YOURENERGY' />
+    <meta property='og:locale' content='en_US' />
+    <meta property='og:title' content='Check a solar proposal | YOURENERGY' />
+    <meta property='og:description' content='A transparent AMD/Wp comparison with scope checks and no personal-data collection.' />
+    <meta property='og:url' content='https://yourenergy.am/en/offer-checker/' />
+    <meta property='og:image' content='https://yourenergy.am/og.png' />
+    <meta name='twitter:card' content='summary_large_image' />
+    <meta name='twitter:title' content='Check a solar proposal | YOURENERGY' />
+    <meta name='twitter:description' content='A transparent AMD/Wp comparison with scope checks and no personal-data collection.' />
+    <meta name='twitter:image' content='https://yourenergy.am/og.png' />
+    <link rel='canonical' href='https://yourenergy.am/en/offer-checker/' />
+    <link rel='alternate' hreflang='hy' href='https://yourenergy.am/offer-checker/' /><link rel='alternate' hreflang='ru' href='https://yourenergy.am/ru/offer-checker/' /><link rel='alternate' hreflang='en' href='https://yourenergy.am/en/offer-checker/' /><link rel='alternate' hreflang='x-default' href='https://yourenergy.am/offer-checker/' />
+    <link rel='icon' href='/favicon.svg' type='image/svg+xml' />
+    <link rel='stylesheet' href='/src/styles/main.css' />
+  </head>
+  <body class='tool-page tool-page--offer-checker'>
+    <a class='skip-link' href='#main'>Skip to main content</a>
+    <header class='site-header'>
+      <div class='container header-row'>
+        <a class='wordmark' href='/en/' aria-label='YOURENERGY'><span>YOUR</span><strong
+          >ENERGY</strong></a>
+        <nav class='desktop-nav' aria-label='Primary navigation'>
+          <a href='/en/'>Home</a>
+          <a href='/en/calculator/'>Calculator</a>
+          <a href='/en/offer-checker/'>Proposal checker</a>
+        </nav>
+        <div class='header-actions'>
+          <a class='header-phone' href='tel:+37491095950'><strong>+374 91 095 950</strong><small
+            >Open until 21:00</small></a>
+          <nav class='language-switcher' aria-label='Language selection'><a
+                class='language-link'
+                href='/offer-checker/'
+                hreflang='hy'
+                aria-label='AM — Armenian'
+              >AM</a><a
+                class='language-link'
+                href='/ru/offer-checker/'
+                hreflang='ru'
+                aria-label='RU — Russian'
+              >RU</a></nav>
+        </div>
+        <details class='mobile-menu'>
+          <summary aria-label='Open navigation menu'><span></span><span></span><span></span></summary>
+          <nav aria-label='Mobile navigation'>
+            <a href='/en/'>Home</a>
+            <a href='/en/calculator/'>Calculator</a>
+            <a href='/en/offer-checker/'>Proposal checker</a>
+            <a href='tel:+37491095950'>Call an engineer</a>
+            <nav class='mobile-language-switcher' aria-label='Language selection'><a
+                  class='language-link'
+                  href='/offer-checker/'
+                  hreflang='hy'
+                  aria-label='AM — Armenian'
+                >AM</a><a
+                  class='language-link'
+                  href='/ru/offer-checker/'
+                  hreflang='ru'
+                  aria-label='RU — Russian'
+                >RU</a></nav>
+          </nav>
+        </details>
+      </div>
+    </header>
+
+    <main id='main' class='tool-main'>
+      <section class='tool-hero' aria-labelledby='tool-title'>
+        <div class='container tool-hero__grid'>
+          <div>
+            <p class='eyebrow'>Proposal checker</p>
+            <h1 id='tool-title'>Check whether a proposal is comparable</h1>
+            <p class='tool-intro'>We calculate only the proposal’s AMD/Wp and compare it with a temporary YOUR ENERGY residential range. This tool neither sets a price nor replaces a commercial proposal.</p>
+              <p class='tool-privacy'>No contact or personal data is collected.</p>
+          </div>
+          <aside class='tool-reference' aria-label='Temporary standard range'>
+              <p class='eyebrow'>Temporary standard range</p>
+                <strong>232–264 ֏/Wp</strong>
+                <small>YOURENERGY · v0.1 · September 28, 2026</small>
+              <p>This is a temporary YOURENERGY price book v0.1, not an offer. It is valid only through its shown date and still needs a site survey.</p>
+          </aside>
+        </div>
+      </section>
+
+        <section class='tool-workspace section' aria-labelledby='offer-form-title'>
+          <div class='container tool-workspace__grid'>
+            <form class='tool-form' data-offer-checker novalidate>
+              <h2 id='offer-form-title'>Third-party proposal details</h2>
+              <label for='offer-total'>Total proposal price</label>
+              <div class='tool-input-unit'>
+                <input
+                  id='offer-total'
+                  name='totalAmd'
+                  type='number'
+                  min='1'
+                  max='1000000000'
+                  step='1'
+                  inputmode='decimal'
+                  required
+                />
+                <span>֏</span>
+              </div>
+
+              <label for='offer-capacity'>System capacity</label>
+              <div class='tool-input-unit'>
+                <input
+                  id='offer-capacity'
+                  name='capacityKwp'
+                  type='number'
+                  min='0.01'
+                  max='10000'
+                  step='0.01'
+                  inputmode='decimal'
+                  required
+                />
+                <span>kWp</span>
+              </div>
+
+              <label for='offer-region'>Region</label>
+              <select id='offer-region' name='region'>
+                <option value='AM'>Armenia</option>
+              </select>
+
+              <label for='offer-system'>System type</label>
+              <select id='offer-system' name='systemType'>
+                <option value='residential-grid-tied'>Grid-tied, no battery</option>
+                <option value='battery'>With battery</option>
+                <option value='other'>Other / unknown</option>
+              </select>
+
+              <fieldset class='offer-scope'>
+                <legend>Tick only items explicitly included in the proposal</legend>
+                <p>If a core item is missing or unclear, we do not make a price conclusion.</p>
+                <label><input
+                    type='checkbox'
+                    name='scope-panels'
+                    value='true'
+                  /><span>Solar panels</span></label><label><input
+                    type='checkbox'
+                    name='scope-inverter'
+                    value='true'
+                  /><span>Inverter</span></label><label><input
+                    type='checkbox'
+                    name='scope-mounting'
+                    value='true'
+                  /><span>Mounting structure</span></label><label><input
+                    type='checkbox'
+                    name='scope-standard-installation'
+                    value='true'
+                  /><span>Standard installation</span></label><label><input
+                    type='checkbox'
+                    name='scope-basic-grid-connection'
+                    value='true'
+                  /><span>Basic grid connection</span></label><label><input
+                    type='checkbox'
+                    name='scope-battery'
+                    value='true'
+                  /><span>A battery is included</span></label>
+              </fieldset>
+
+              <p class='form-status' data-tool-status aria-live='polite' role='status'></p>
+              <div class='tool-form-actions'>
+                <button class='button button--navy' type='submit'>Compare proposal</button>
+                <button class='button button--outline' type='reset'>Clear</button>
+              </div>
+              <noscript>
+                <div class='tool-no-js'>
+                  <strong>Manual review option</strong>
+                  <p>With JavaScript disabled, call an engineer and prepare the proposal price, kWp and scope.</p>
+                  <a class='button' href='tel:+37491095950'>Call an engineer</a>
+                </div>
+              </noscript>
+            </form>
+
+            <section
+              class='tool-result'
+              data-offer-result
+              aria-labelledby='offer-result-title'
+              aria-live='polite'
+              tabindex='-1'
+            >
+              <p class='eyebrow'>Proposal checker</p>
+              <h2 id='offer-result-title'>Check result</h2>
+              <p data-offer-result-summary>Enter the details, then choose “Compare proposal”.</p>
+              <dl data-offer-metrics hidden>
+                <div><dt>Proposal price per Wp</dt><dd data-offer-rate>—</dd></div>
+                <div><dt>Comparable range</dt><dd data-offer-range>—</dd></div>
+              </dl>
+              <div data-offer-why hidden>
+                <h3>Why there is no price verdict</h3>
+                <ul data-offer-reasons></ul>
+              </div>
+              <div data-offer-questions hidden>
+                <h3>Questions for the supplier</h3>
+                <ul data-offer-questions-list></ul>
+              </div>
+              <a class='button' data-engineering-cta hidden href='tel:+37491095950'>Request an engineering check</a>
+            </section>
+          </div>
+        </section>
+    </main>
+
+    <footer class='tool-footer'>
+      <div class='container'>
+        <p>YOURENERGY · transparent preliminary tools for residential solar systems in Armenia.</p>
+        <a href='tel:+37491095950'>+374 91 095 950</a>
+      </div>
+    </footer>
+
+    <script id='tool-page-config' type='application/json'>{"toolType":"offer-checker","locale":"en-US","homeHref":"/en/","priceBook":{"id":"yourenergy-am-residential-grid-v0-1","version":"v0.1","status":"temporary","countryCode":"AM","region":"all-armenia","systemType":"residential-grid-tied","currency":"AMD","checkedAt":"2026-08-29","validFrom":"2026-08-29","validUntil":"2026-09-28","ratesAmdPerWp":{"p25":232,"p50":247,"p75":264},"scope":["panels","inverter","mounting","standard-installation","basic-grid-connection"],"exclusions":["battery","roof-repair","non-standard-electrical-work","financing"],"confirmationRequired":["vat","permits"],"source":{"kind":"registry","status":"estimated","provider":"YOURENERGY temporary price book","reference":"P1-v0.1","verifiedAt":"2026-08-29"}},"strings":{"invalid":"Enter a price and capacity above zero.","resultAwaiting":"Enter the details, then choose “Compare proposal”.","notComparable":"A battery, a different system type or incomplete scope cannot be compared with this standard grid-tied range.","expiry":"The temporary range has expired. Request a survey instead of relying on an old price.","status":{"below-range":"Below range","within-range":"Within range","above-range":"Above range","not-comparable":"Not comparable"},"scope":{"panels":"Solar panels","inverter":"Inverter","mounting":"Mounting structure","standard-installation":"Standard installation","basic-grid-connection":"Basic grid connection","battery":"A battery is included"},"scopeIncomplete":"If a core item is missing or unclear, we do not make a price conclusion.","reason":{"OFFER_PRICE_AND_CAPACITY_REQUIRED":"Enter a price and capacity above zero.","PRICEBOOK_UNAVAILABLE":"The temporary range has expired. Request a survey instead of relying on an old price.","PRICEBOOK_EXPIRED":"The temporary range has expired. Request a survey instead of relying on an old price.","UNSUPPORTED_SYSTEM_TYPE":"A battery, a different system type or incomplete scope cannot be compared with this standard grid-tied range.","BATTERY_SCOPE_UNSUPPORTED":"A battery, a different system type or incomplete scope cannot be compared with this standard grid-tied range."}}}</script>
+    <script type='module' src='/src/tools.js'></script>
+  </body>
+</html>

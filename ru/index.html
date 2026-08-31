@@ -106,6 +106,9 @@
                 <button class='button button--navy' type='submit'>Анализировать</button>
               </div>
               <small id='address-help' class='field-help'>После поиска подтвердите найденный адрес или укажите точку вручную.</small>
+              <button class='text-button address-manual-point' type='button' data-location-manual-start>
+                Выбрать точку на карте
+              </button>
               <fieldset class='consumption-inputs' data-consumption-inputs>
                 <legend>Потребление электроэнергии</legend>
                 <p>Выберите удобный способ указать данные для предварительного расчёта.</p>
@@ -241,6 +244,20 @@
                         data-consumption-month
                       /></label></div>
                   <small>Укажите kWh для каждого месяца, если эти данные доступны.</small>
+                </div>
+                <div class='manual-tariff'>
+                  <label for='consumption-tariff'>Тариф из вашего счёта</label>
+                  <div class='input-with-unit'><input
+                      id='consumption-tariff'
+                      type='number'
+                      min='0.01'
+                      max='1000'
+                      step='0.01'
+                      inputmode='decimal'
+                      aria-describedby='consumption-tariff-help'
+                      data-consumption-tariff
+                    /><span>֏ / kWh</span></div>
+                  <small id='consumption-tariff-help'>Необязательно для kWh. Для счёта в драмах он нужен, чтобы перевести сумму в kWh; в Passport будет отмечен как введённый вами.</small>
                 </div>
                 <p class='consumption-total'><span>Расчётное потребление за год</span><output
                     data-consumption-annual
@@ -478,6 +495,7 @@
                   <div><dt>Покрытие потребления</dt><dd data-analysis='coverage'>92
                       <small>%</small></dd></div>
               </dl>
+              <p class='commercial-estimate' data-commercial-estimate hidden></p>
               <a href='#passport'>Смотреть полный расчёт <span aria-hidden='true'>→</span></a>
             </div>
           </div>
@@ -732,7 +750,8 @@
       <section class='lead-section section section--soft' data-lead-section hidden aria-labelledby='lead-title'>
         <div class='container lead-grid'><div><p class='eyebrow'>YOURENERGY</p><h2
               id='lead-title'
-            >Передать расчёт инженеру</h2><p>Оставьте контакты, чтобы инженер мог уточнить данные объекта.</p><small>Данные не передаются в аналитику.</small></div><form
+            >Передать расчёт инженеру</h2><p>Оставьте контакты, чтобы инженер мог уточнить данные объекта.</p><p class='lead-fallback'><span
+              >Или позвоните инженеру:</span> <a href='tel:+37491095950'>+374 91 095 950</a></p><small>Данные не передаются в аналитику.</small></div><form
             class='lead-form'
             data-lead-form
             novalidate
@@ -775,7 +794,7 @@
         <div class='container'>
           <div class='section-heading'><div><p class='eyebrow'>Решения</p><h2
                 id='solutions-title'
-              >3 оптимальных решения для вашего дома</h2></div><p>Сравните мощность, генерацию и примерную стоимость. Все значения демонстрационные.</p></div>
+              >3 оптимальных решения для вашего дома</h2></div><p>Сравните ориентировочную мощность и генерацию. Предварительный бюджет появится после анализа объекта.</p></div>
           <div class='solution-grid'>
               <article class='solution-card ' data-analysis-scenario='0'>
 
@@ -783,7 +802,7 @@
                 <p class='solution-index'>00</p><h3>Старт</h3><p>Минимальные первоначальные вложения</p>
                 <dl><div><dt>kWp</dt><dd data-analysis-scenario-capacity data-static-value='6,2 kWp'>6,2 kWp</dd></div><div><dt>kWh</dt><dd
                     data-analysis-scenario-generation data-static-value='9 200 kWh / год'>9 200 kWh / год</dd></div></dl>
-                <strong class='solution-price' data-analysis-scenario-price data-static-value='от 2 950 000 ֏'>от 2 950 000 ֏</strong>
+                <strong class='solution-price' data-analysis-scenario-price data-static-value='Предварительный бюджет после анализа'>Предварительный бюджет после анализа</strong>
                 <details><summary>Подробнее</summary><ul><li
                       >10–12 панелей выбранного класса</li><li
                       >Ориентировочная площадь: 34–40 м²</li><li
@@ -791,12 +810,12 @@
                 <a class='button button--outline' href='#calculator'>Рассчитать мой дом</a>
               </article>
               <article class='solution-card solution-card--popular' data-analysis-scenario='1'>
-                <span class='solution-badge' data-analysis-solution-badge>Популярный демо-вариант</span>
+                <span class='solution-badge' data-analysis-solution-badge>Популярный вариант</span>
                 <span class='solution-badge' data-analysis-scenario-live hidden>По вашим подтверждённым данным</span>
                 <p class='solution-index'>01</p><h3>Оптимальный</h3><p>Лучший баланс цены и выгоды</p>
                 <dl><div><dt>kWp</dt><dd data-analysis-scenario-capacity data-static-value='9,86 kWp'>9,86 kWp</dd></div><div><dt>kWh</dt><dd
                     data-analysis-scenario-generation data-static-value='14 600 kWh / год'>14 600 kWh / год</dd></div></dl>
-                <strong class='solution-price' data-analysis-scenario-price data-static-value='4 300 000 ֏'>4 300 000 ֏</strong>
+                <strong class='solution-price' data-analysis-scenario-price data-static-value='Предварительный бюджет после анализа'>Предварительный бюджет после анализа</strong>
                 <details><summary>Подробнее</summary><ul><li
                       >17 × 580 W панелей</li><li
                       >Ориентировочная площадь: 54–62 м²</li><li
@@ -809,7 +828,7 @@
                 <p class='solution-index'>02</p><h3>Энергонезависимость</h3><p>Максимальное покрытие + аккумулятор</p>
                 <dl><div><dt>kWp</dt><dd data-analysis-scenario-capacity data-static-value='12,5 kWp + 10 kWh'>12,5 kWp + 10 kWh</dd></div><div><dt>kWh</dt><dd
                     data-analysis-scenario-generation data-static-value='18 900 kWh / год'>18 900 kWh / год</dd></div></dl>
-                <strong class='solution-price' data-analysis-scenario-price data-static-value='от 6 750 000 ֏'>от 6 750 000 ֏</strong>
+                <strong class='solution-price' data-analysis-scenario-price data-static-value='Требует отдельного расчёта'>Требует отдельного расчёта</strong>
                 <details><summary>Подробнее</summary><ul><li
                       >Система повышенной мощности</li><li
                       >Аккумулятор 10 kWh в демо-комплектации</li><li
@@ -967,7 +986,7 @@
         <div class='container finance-grid'>
           <div class='finance-copy'><p class='eyebrow eyebrow--dark'>Финансовая модель</p><h2
               id='finance-title'
-            >Инвестиция, которая работает каждый день</h2><p>Консервативный демонстрационный сценарий без скрытого роста тарифа.</p><ul
+            >Инвестиция, которая работает каждый день</h2><p>Финансовый график появляется только после PVGIS-анализа, введённого или подтверждённого тарифа и действующего прайс-листа.</p><ul
               class='check-list check-list--dark'
               role='list'
             ><li><svg class='inline-icon' aria-hidden='true'><use
@@ -988,59 +1007,57 @@
               data-finance-title='Как растёт чистый результат'
             ><path
                 data-finance-line-path
-                d='M30 192 C145 180, 176 177, 250 143 S390 92, 478 70 S570 35, 623 26'
+                d=''
                 fill='none'
                 stroke='#f5bd18'
                 stroke-width='4'
                 stroke-linecap='round'
               ></path><path
                 data-finance-baseline
-                d='M30 192 H623'
+                d=''
                 fill='none'
                 stroke='rgba(255,255,255,.22)'
                 stroke-width='1'
-              ></path><circle data-finance-point cx='30' cy='192' r='6' fill='#f5bd18'></circle><circle
+              ></path><circle data-finance-point cx='30' cy='192' r='6' fill='#f5bd18' visibility='hidden'></circle><circle
                 data-finance-point
                 cx='178'
                 cy='177'
                 r='6'
                 fill='#f5bd18'
-              ></circle><circle data-finance-point cx='250' cy='143' r='6' fill='#f5bd18'></circle><circle
+                visibility='hidden'
+              ></circle><circle data-finance-point cx='250' cy='143' r='6' fill='#f5bd18' visibility='hidden'></circle><circle
                 data-finance-point
                 cx='410'
                 cy='86'
                 r='6'
                 fill='#f5bd18'
-              ></circle><circle data-finance-point cx='623' cy='26' r='6' fill='#f5bd18'></circle></svg><ol
-              class='finance-timeline'
-              role='list'
+                visibility='hidden'
+              ></circle><circle data-finance-point cx='623' cy='26' r='6' fill='#f5bd18' visibility='hidden'></circle></svg><ol
+                class='finance-timeline'
+                role='list'
             ><li><span data-analysis-timeline-year>Сегодня</span><strong
-                    data-analysis-timeline='0'
-                  >−4,3 млн ֏</strong></li><li><span data-analysis-timeline-year>5 лет</span><strong
-                    data-analysis-timeline='1'
-                  >−0,7 млн ֏</strong></li><li><span data-analysis-timeline-year>6 лет</span><strong
-                    data-analysis-timeline='2'
-                  >+20 тыс. ֏</strong></li><li><span data-analysis-timeline-year>10 лет</span><strong
-                    data-analysis-timeline='3'
-                  >+2,9 млн ֏</strong></li><li><span data-analysis-timeline-year>25 лет</span><strong
-                    data-analysis-timeline='4'
-                  >+13,7 млн ֏</strong></li></ol></div>
-          <div class='finance-included'><h3>Что входит в демо-стоимость</h3><ul role='list'><li><svg class='inline-icon' aria-hidden='true'><use
+                  data-analysis-timeline='0'
+                  >После анализа</strong></li><li><span data-analysis-timeline-year>5 лет</span><strong
+                  data-analysis-timeline='1'
+                  >После анализа</strong></li><li><span data-analysis-timeline-year>10 лет</span><strong
+                  data-analysis-timeline='2'
+                  >После анализа</strong></li><li><span data-analysis-timeline-year>25 лет</span><strong
+                  data-analysis-timeline='3'
+                  >После анализа</strong></li></ol></div>
+          <div class='finance-included'><h3>Что включает временная предварительная цена</h3><ul role='list'><li><svg class='inline-icon' aria-hidden='true'><use
                       href='/icons.svg#check'
                     ></use></svg>Солнечные панели</li><li><svg class='inline-icon' aria-hidden='true'><use
                       href='/icons.svg#check'
                     ></use></svg>Инвертор</li><li><svg class='inline-icon' aria-hidden='true'><use
                       href='/icons.svg#check'
-                    ></use></svg>Монтаж и материалы</li><li><svg class='inline-icon' aria-hidden='true'><use
+                    ></use></svg>Крепёж и стандартный монтаж</li><li><svg class='inline-icon' aria-hidden='true'><use
                       href='/icons.svg#check'
-                    ></use></svg>Проектирование</li><li><svg class='inline-icon' aria-hidden='true'><use
+                    ></use></svg>Базовое подключение к сети</li><li><svg class='inline-icon' aria-hidden='true'><use
                       href='/icons.svg#check'
-                    ></use></svg>Подключение к сети</li><li><svg class='inline-icon' aria-hidden='true'><use
+                    ></use></svg>НДС и разрешения — требуют подтверждения</li><li><svg class='inline-icon' aria-hidden='true'><use
                       href='/icons.svg#check'
-                    ></use></svg>Мониторинг системы</li><li><svg class='inline-icon' aria-hidden='true'><use
-                      href='/icons.svg#check'
-                    ></use></svg>Пример гарантийного сервиса</li></ul></div>
-          <p class='finance-disclaimer' data-analysis-finance-disclaimer>4 300 000 ֏ ÷ 720 000 ֏/год &#x3D; 5,97 года. Не учтены рост тарифа, деградация, сервис, кредит и дисконтирование. Валовая экономия за 25 лет — 18,0 млн ֏.</p>
+                    ></use></svg>Батарея, ремонт крыши и нестандартные работы не включены</li></ul></div>
+          <p class='finance-disclaimer' data-analysis-finance-disclaimer>До анализа финансовые значения не показываются. Модель не учитывает рост тарифа, деградацию, обслуживание, кредит, дисконтирование, налоги и правила отпуска энергии.</p>
         </div>
       </section>
 
@@ -1272,9 +1289,9 @@
                   >≈ 6,0 лет</dd></div><div><dt>Покрытие потребления</dt><dd
                     data-analysis='coverage'
                   >92 %</dd></div></dl><p
-            >4 300 000 ֏ ÷ 720 000 ֏/год &#x3D; 5,97 года. Не учтены рост тарифа, деградация, сервис, кредит и дисконтирование. Валовая экономия за 25 лет — 18,0 млн ֏.</p></div></div></div></dialog>
+            >До анализа финансовые значения не показываются. Модель не учитывает рост тарифа, деградацию, обслуживание, кредит, дисконтирование, налоги и правила отпуска энергии.</p></div></div></div></dialog>
 
-    <script id='page-config' type='application/json'>{"locale":"ru-RU","status":{"minAddress":"Введите адрес длиной не менее 5 символов.","analyzing":"Готовим предварительный анализ…","ready":"Предварительный результат готов. Проверьте данные перед принятием решения.","unavailable":"Предварительный анализ сейчас недоступен. Повторите попытку или укажите точку вручную.","invalidFile":"Формат не поддерживается. Выберите PDF, JPG, JPEG или PNG.","largeFile":"Файл слишком большой. Максимальный размер — 10 МБ.","fileSelected":"Файл выбран и остаётся только в памяти браузера.","fileRemoved":"Файл удалён.","mapReady":"Интерактивная карта объекта готова.","mapFailed":"Карта недоступна. Остаётся статический демонстрационный резервный вариант.","monthTooltip":"Генерация за {month}: {value} kWh"},"product":{"common":{"required":"Обязательное поле","optional":"Необязательно","perMonth":"в месяц","kwh":"kWh","amd":"֏","complete":"Готово","cancel":"Отмена"},"consumption":{"title":"Потребление электроэнергии","copy":"Выберите удобный способ указать данные для предварительного расчёта.","modes":{"bill":"Средний счёт","usage":"Среднее потребление","monthly":"Помесячный профиль"},"billLabel":"Средний счёт за электричество","billHelp":"Укажите среднюю сумму за месяц в драмах.","usageLabel":"Среднее потребление в месяц","usageHelp":"Укажите среднее потребление в kWh за месяц.","monthlyTitle":"Потребление за 12 месяцев","monthlyHelp":"Укажите kWh для каждого месяца, если эти данные доступны.","annualLabel":"Расчётное потребление за год","invalidNumber":"Введите число больше нуля.","invalidBill":"Введите корректную сумму счёта в драмах.","invalidUsage":"Введите корректное потребление в kWh.","incompleteMonths":"Заполните все 12 месяцев или выберите другой способ.","noConsumption":"Для расчёта требуется значение потребления или счёта.","normalized":"Данные приведены к годовому профилю."},"location":{"title":"Местоположение объекта","copy":"Подтвердите найденный адрес или укажите точку вручную.","search":"Найти адрес","searching":"Ищем адрес…","resultLabel":"Найденный адрес","confirmPrompt":"Это ваш объект?","confirm":"Подтвердить объект","edit":"Изменить адрес","noResult":"Адрес не найден. Укажите точку на карте вручную.","unavailable":"Сервис поиска адреса сейчас недоступен. Укажите точку на карте вручную.","manualTitle":"Указать точку вручную","manualCopy":"Нажмите на карту, чтобы отметить примерное положение объекта.","chooseOnMap":"Выбрать точку на карте","pointSelected":"Точка объекта выбрана.","retry":"Повторить поиск"},"roof":{"title":"Контур крыши","copy":"Обведите доступную часть крыши для предварительной оценки площади.","fallback":"Карта недоступна. Продолжите после указания адреса или попробуйте ещё раз.","start":"Начать контур","addPoint":"Добавить точку","undo":"Отменить последнюю точку","reset":"Очистить контур","finish":"Завершить контур","edit":"Изменить контур","pointsLabel":"Точек в контуре: {count}","minimumPoints":"Добавьте минимум 3 точки, чтобы завершить контур.","areaLabel":"Предварительная площадь крыши","orientationLabel":"Ориентация крыши","tiltLabel":"Наклон крыши","tiltHelp":"Выберите приблизительный наклон, если он известен.","pointSelectLabel":"Выбрать точку {index}","removePoint":"Удалить точку","nudgeNorth":"Сместить точку на север","nudgeSouth":"Сместить точку на юг","nudgeEast":"Сместить точку на восток","nudgeWest":"Сместить точку на запад","orientationOptions":{"north":"Север","southEast":"Юго-восток","southWest":"Юго-запад","east":"Восток","south":"Юг","west":"Запад","custom":"Другая"},"unavailable":"Контур крыши пока не указан.","tilesUnavailable":"Фоновая карта недоступна. Контур можно задать после выбора точки.","locationRequired":"Сначала подтвердите объект или выберите точку на карте."},"result":{"title":"Предварительный анализ","preparing":"Готовим предварительный анализ…","ready":"Предварительный анализ готов.","unavailable":"Не удалось подготовить анализ с доступными данными.","retry":"Повторить расчёт","noTariff":"Подтверждённый тариф не подключён: экономия и окупаемость не показаны.","noSavings":"Недостаточно данных, чтобы показать экономию и окупаемость.","chartDescription":"Помесячная предварительная генерация по подтверждённым данным и полученному солнечному ресурсу.","confidenceTitle":"Уверенность в оценке","confidence":{"high":"Высокая","medium":"Средняя","low":"Низкая","insufficient":"Недостаточно данных"},"assumptionsTitle":"Допущения расчёта"},"solutions":{"liveBadge":"По вашим подтверждённым данным","liveCopy":"Три предварительных технических сценария рассчитаны из подтверждённых данных объекта.","financialUnavailable":"Стоимость и окупаемость появятся после подтверждения тарифа и стоимости системы."},"ledger":{"title":"Как рассчитано","copy":"Источники, версии и допущения этого предварительного результата.","sources":{"consumption":"Данные о потреблении","location":"Местоположение объекта","roof":"Контур и параметры крыши","tariff":"Тариф электроэнергии","solar":"Солнечный ресурс","investment":"Стоимость системы","unavailable":"Источник не подключён"},"assumptions":{"NO_TARIFF_ESCALATION":"Рост тарифа не моделируется.","NO_PANEL_DEGRADATION":"Деградация панелей не моделируется.","NO_MAINTENANCE_FINANCING_DISCOUNTING_EXPORT_OR_TAXES":"Не учтены обслуживание, финансирование, дисконтирование, правила отпуска энергии и налоги.","MISSING_EVIDENCE_SUPPRESSES_FINANCIAL_RESULT":"Без подтверждённых данных финансовые значения не показываются.","PVGIS_SYSTEM_LOSS_14_PERCENT":"В PVGIS использовано предварительное допущение о системных потерях 14%; его подтверждает инженер."}},"passport":{"persistenceTitle":"Solar Passport хранится в этом браузере","persistenceCopy":"Этот предварительный Passport существует только в памяти текущего сеанса.","memoryOnly":"После закрытия страницы данные могут быть потеряны.","permanentLink":"Постоянная ссылка и PDF появятся после подключения хранилища.","sourceLedger":"Источники и допущения","shareUnavailable":"Отправка ссылки пока недоступна.","realTitle":"Ваш предварительный Solar Passport","sessionBadge":"Текущий сеанс"},"lead":{"title":"Передать расчёт инженеру","copy":"Оставьте контакты, чтобы инженер мог уточнить данные объекта.","nameLabel":"Ваше имя","phoneLabel":"Телефон","emailLabel":"Электронная почта","messageLabel":"Комментарий к объекту","consent":"Я согласен(на) на обработку данных для ответа на запрос.","submit":"Отправить запрос","required":"Заполните обязательные поля и подтвердите согласие.","invalidEmail":"Введите корректный адрес электронной почты.","sending":"Отправляем запрос…","sent":"Запрос отправлен. Мы свяжемся с вами после проверки данных.","unavailable":"Отправка временно недоступна. Попробуйте позже.","retry":"Повторить отправку","privacy":"Данные не передаются в аналитику."},"status":{"geocodeUnavailable":"Сервис геокодирования не подключён или временно недоступен.","analysisUnavailable":"Сервис солнечного анализа не подключён или временно недоступен.","leadUnavailable":"Сервис заявок не подключён или временно недоступен.","retry":"Попробовать ещё раз","canceled":"Предыдущий запрос отменён."},"months":[{"short":"Янв","name":"Январь"},{"short":"Фев","name":"Февраль"},{"short":"Мар","name":"Март"},{"short":"Апр","name":"Апрель"},{"short":"Май","name":"Май"},{"short":"Июн","name":"Июнь"},{"short":"Июл","name":"Июль"},{"short":"Авг","name":"Август"},{"short":"Сен","name":"Сентябрь"},{"short":"Окт","name":"Октябрь"},{"short":"Ноя","name":"Ноябрь"},{"short":"Дек","name":"Декабрь"}]},"map":{"image":"/images/roof-scan-768.webp","tileUrl":"","tileAttribution":""}}</script>
+    <script id='page-config' type='application/json'>{"locale":"ru-RU","status":{"minAddress":"Введите адрес длиной не менее 5 символов.","analyzing":"Готовим предварительный анализ…","ready":"Предварительный результат готов. Проверьте данные перед принятием решения.","unavailable":"Предварительный анализ сейчас недоступен. Повторите попытку или укажите точку вручную.","invalidFile":"Формат не поддерживается. Выберите PDF, JPG, JPEG или PNG.","largeFile":"Файл слишком большой. Максимальный размер — 10 МБ.","fileSelected":"Файл выбран и остаётся только в памяти браузера.","fileRemoved":"Файл удалён.","mapReady":"Интерактивная карта объекта готова.","mapFailed":"Карта недоступна. Остаётся статический демонстрационный резервный вариант.","monthTooltip":"Генерация за {month}: {value} kWh"},"product":{"common":{"required":"Обязательное поле","optional":"Необязательно","perMonth":"в месяц","kwh":"kWh","amd":"֏","complete":"Готово","cancel":"Отмена"},"consumption":{"title":"Потребление электроэнергии","copy":"Выберите удобный способ указать данные для предварительного расчёта.","modes":{"bill":"Средний счёт","usage":"Среднее потребление","monthly":"Помесячный профиль"},"billLabel":"Средний счёт за электричество","billHelp":"Укажите среднюю сумму за месяц в драмах.","tariffLabel":"Тариф из вашего счёта","tariffHelp":"Необязательно для kWh. Для счёта в драмах он нужен, чтобы перевести сумму в kWh; в Passport будет отмечен как введённый вами.","usageLabel":"Среднее потребление в месяц","usageHelp":"Укажите среднее потребление в kWh за месяц.","monthlyTitle":"Потребление за 12 месяцев","monthlyHelp":"Укажите kWh для каждого месяца, если эти данные доступны.","annualLabel":"Расчётное потребление за год","invalidNumber":"Введите число больше нуля.","invalidBill":"Введите корректную сумму счёта в драмах.","invalidTariff":"Введите тариф больше нуля в AMD/kWh.","invalidUsage":"Введите корректное потребление в kWh.","incompleteMonths":"Заполните все 12 месяцев или выберите другой способ.","noConsumption":"Для расчёта требуется значение потребления или счёта.","normalized":"Данные приведены к годовому профилю."},"location":{"title":"Местоположение объекта","copy":"Подтвердите найденный адрес или укажите точку вручную.","search":"Найти адрес","searching":"Ищем адрес…","resultLabel":"Найденный адрес","confirmPrompt":"Это ваш объект?","confirm":"Подтвердить объект","edit":"Изменить адрес","noResult":"Адрес не найден. Укажите точку на карте вручную.","unavailable":"Сервис поиска адреса сейчас недоступен. Укажите точку на карте вручную.","manualTitle":"Указать точку вручную","manualCopy":"Нажмите на карту, чтобы отметить примерное положение объекта.","chooseOnMap":"Выбрать точку на карте","pointSelected":"Точка объекта выбрана.","retry":"Повторить поиск"},"roof":{"title":"Контур крыши","copy":"Обведите доступную часть крыши для предварительной оценки площади.","fallback":"Карта недоступна. Продолжите после указания адреса или попробуйте ещё раз.","start":"Начать контур","addPoint":"Добавить точку","undo":"Отменить последнюю точку","reset":"Очистить контур","finish":"Завершить контур","edit":"Изменить контур","pointsLabel":"Точек в контуре: {count}","minimumPoints":"Добавьте минимум 3 точки, чтобы завершить контур.","areaLabel":"Предварительная площадь крыши","orientationLabel":"Ориентация крыши","tiltLabel":"Наклон крыши","tiltHelp":"Выберите приблизительный наклон, если он известен.","pointSelectLabel":"Выбрать точку {index}","removePoint":"Удалить точку","nudgeNorth":"Сместить точку на север","nudgeSouth":"Сместить точку на юг","nudgeEast":"Сместить точку на восток","nudgeWest":"Сместить точку на запад","orientationOptions":{"north":"Север","southEast":"Юго-восток","southWest":"Юго-запад","east":"Восток","south":"Юг","west":"Запад","custom":"Другая"},"unavailable":"Контур крыши пока не указан.","tilesUnavailable":"Фоновая карта недоступна. Контур можно задать после выбора точки.","locationRequired":"Сначала подтвердите объект или выберите точку на карте."},"result":{"title":"Предварительный анализ","preparing":"Готовим предварительный анализ…","ready":"Предварительный анализ готов.","unavailable":"Не удалось подготовить анализ с доступными данными.","retry":"Повторить расчёт","noTariff":"Тариф не указан: мощность, генерация PVGIS и предварительная цена доступны, но экономия и окупаемость не показаны.","noSavings":"Недостаточно данных, чтобы показать экономию и окупаемость.","chartDescription":"Помесячная предварительная генерация по подтверждённым данным и полученному солнечному ресурсу.","confidenceTitle":"Уверенность в оценке","confidence":{"high":"Высокая","medium":"Средняя","low":"Низкая","insufficient":"Недостаточно данных"},"assumptionsTitle":"Допущения расчёта","commercialEstimate":"Предварительная цена YOUR ENERGY · {version} · не является офертой: {p25}–{p75}; P50 {p50}. Действует до {validUntil}."},"solutions":{"liveBadge":"По вашим подтверждённым данным","liveCopy":"Три предварительных технических сценария рассчитаны из подтверждённых данных объекта.","financialUnavailable":"Предварительная цена появляется из действующего PriceBook; без тарифа экономия и окупаемость не показываются."},"ledger":{"title":"Как рассчитано","copy":"Источники, версии и допущения этого предварительного результата.","sources":{"consumption":"Данные о потреблении","location":"Местоположение объекта","roof":"Контур и параметры крыши","tariff":"Тариф электроэнергии","solar":"Солнечный ресурс","investment":"Стоимость системы","pricebook":"Временный прайс-лист YOUR ENERGY","unavailable":"Источник не подключён"},"assumptions":{"NO_TARIFF_ESCALATION":"Рост тарифа не моделируется.","NO_PANEL_DEGRADATION":"Деградация панелей не моделируется.","NO_MAINTENANCE_FINANCING_DISCOUNTING_EXPORT_OR_TAXES":"Не учтены обслуживание, финансирование, дисконтирование, правила отпуска энергии и налоги.","MISSING_EVIDENCE_SUPPRESSES_FINANCIAL_RESULT":"Без подтверждённых данных финансовые значения не показываются.","PVGIS_SYSTEM_LOSS_14_PERCENT":"В PVGIS использовано предварительное допущение о системных потерях 14%; его подтверждает инженер.","USER_PROVIDED_TARIFF":"Тариф введён пользователем из счёта и не является тарифным реестром.","TEMPORARY_PRICEBOOK_NOT_OFFER":"Временный PriceBook — ориентир для предварительного бюджета, не оферта и не договорная цена."}},"passport":{"persistenceTitle":"Solar Passport хранится в этом браузере","persistenceCopy":"Этот предварительный Passport существует только в памяти текущего сеанса.","memoryOnly":"После закрытия страницы данные могут быть потеряны.","permanentLink":"Постоянная ссылка и PDF появятся после подключения хранилища.","sourceLedger":"Источники и допущения","shareUnavailable":"Отправка ссылки пока недоступна.","realTitle":"Ваш предварительный Solar Passport","sessionBadge":"Текущий сеанс"},"lead":{"title":"Передать расчёт инженеру","copy":"Оставьте контакты, чтобы инженер мог уточнить данные объекта.","nameLabel":"Ваше имя","phoneLabel":"Телефон","emailLabel":"Электронная почта","messageLabel":"Комментарий к объекту","consent":"Я согласен(на) на обработку данных для ответа на запрос.","submit":"Отправить запрос","required":"Заполните обязательные поля и подтвердите согласие.","invalidEmail":"Введите корректный адрес электронной почты.","sending":"Отправляем запрос…","sent":"Запрос отправлен. Мы свяжемся с вами после проверки данных.","unavailable":"Отправка временно недоступна. Попробуйте позже.","retry":"Повторить отправку","directCall":"Или позвоните инженеру:","privacy":"Данные не передаются в аналитику."},"status":{"geocodeUnavailable":"Сервис геокодирования не подключён или временно недоступен.","analysisUnavailable":"Сервис солнечного анализа не подключён или временно недоступен.","leadUnavailable":"Сервис заявок не подключён или временно недоступен.","retry":"Попробовать ещё раз","canceled":"Предыдущий запрос отменён."},"months":[{"short":"Янв","name":"Январь"},{"short":"Фев","name":"Февраль"},{"short":"Мар","name":"Март"},{"short":"Апр","name":"Апрель"},{"short":"Май","name":"Май"},{"short":"Июн","name":"Июнь"},{"short":"Июл","name":"Июль"},{"short":"Авг","name":"Август"},{"short":"Сен","name":"Сентябрь"},{"short":"Окт","name":"Октябрь"},{"short":"Ноя","name":"Ноябрь"},{"short":"Дек","name":"Декабрь"}]},"map":{"image":"/images/roof-scan-768.webp","tileUrl":"","tileAttribution":""}}</script>
     <script type='module' src='/src/main.js'></script>
   </body>
 </html>

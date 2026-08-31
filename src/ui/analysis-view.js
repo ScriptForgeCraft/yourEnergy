@@ -65,6 +65,39 @@ const timelineYear = (year, locale) => {
       : `${year} лет`;
 };
 
+const token = (value, key, replacement) =>
+  String(value ?? '').replaceAll(`{${key}}`, String(replacement ?? '—'));
+
+const formatCommercialEstimate = (estimate, locale, strings) => {
+  if (!estimate?.available) return null;
+  const format = (value) => (finite(value) ? `${formatNumber(value, locale)} ֏` : '—');
+  const validUntil = estimate.validUntil
+    ? new Intl.DateTimeFormat(locale, { dateStyle: 'medium' }).format(new Date(`${estimate.validUntil}T00:00:00`))
+    : '—';
+  return token(
+    token(
+      token(
+        token(
+          token(
+            strings.commercialEstimate ??
+              'Preliminary YOUR ENERGY price · {version} · not an offer: {p25}–{p75}; P50 {p50}. Valid until {validUntil}.',
+            'version',
+            estimate.priceBook?.version ?? '—'
+          ),
+          'p25',
+          format(estimate.rangeAmd?.p25)
+        ),
+        'p50',
+        format(estimate.rangeAmd?.p50)
+      ),
+      'p75',
+      format(estimate.rangeAmd?.p75)
+    ),
+    'validUntil',
+    validUntil
+  );
+};
+
 const resetFinance = (strings) => {
   document.querySelector('[data-finance-line-path]')?.setAttribute('d', '');
   document.querySelectorAll('[data-finance-point]').forEach((point) => {
@@ -113,8 +146,10 @@ const updateScenarioCards = (scenarios, locale, strings) => {
     const generation = finite(scenario.generation?.annualKwh)
       ? `${formatNumber(scenario.generation.annualKwh, locale)} kWh`
       : null;
-    const price = finite(financial.capexAmd)
-      ? `${formatNumber(financial.capexAmd, locale)} ֏`
+    const price = finite(scenario.commercialEstimate?.primaryAmd)
+      ? `P50 · ${formatNumber(scenario.commercialEstimate.primaryAmd, locale)} ֏`
+      : finite(financial.capexAmd)
+        ? `${formatNumber(financial.capexAmd, locale)} ֏`
       : (strings.financialUnavailable ?? strings.noTariff ?? strings.noSavings ?? '—');
 
     setValue(card.querySelector('[data-analysis-scenario-capacity]'), capacity);
@@ -190,6 +225,17 @@ export const createAnalysisView = ({ locale, strings = {}, solutionStrings = {} 
       ...solutionStrings
     });
 
+    const commercialDisclosure = document.querySelector('[data-commercial-estimate]');
+    if (commercialDisclosure) {
+      const disclosure = formatCommercialEstimate(
+        scenario.commercialEstimate ?? analysis.commercialEstimate,
+        locale,
+        strings
+      );
+      commercialDisclosure.textContent = disclosure ?? '';
+      commercialDisclosure.hidden = !disclosure;
+    }
+
     const timeline = Array.isArray(financial.timeline) ? financial.timeline : [];
     const financeLine = createFinancePath(timeline);
     if (!financeLine) {
@@ -219,7 +265,12 @@ export const createAnalysisView = ({ locale, strings = {}, solutionStrings = {} 
       setValue(element, timeline[index] ? timelineYear(timeline[index].year, locale) : null);
     });
     document.querySelectorAll('[data-analysis-finance-disclaimer]').forEach((element) => {
-      element.textContent = strings.ready ?? '';
+      const disclosure = formatCommercialEstimate(
+        scenario.commercialEstimate ?? analysis.commercialEstimate,
+        locale,
+        strings
+      );
+      element.textContent = [disclosure, strings.ready ?? ''].filter(Boolean).join(' ');
     });
     const chart = document.querySelector('[data-finance-chart]');
     if (chart) {
@@ -239,6 +290,11 @@ export const createAnalysisView = ({ locale, strings = {}, solutionStrings = {} 
       .forEach((element) => setValue(element, null));
     document.querySelectorAll('[data-analysis-roof]').forEach((element) => setValue(element, null));
     document.querySelector('[data-analysis-score-row]')?.removeAttribute('hidden');
+    const commercialDisclosure = document.querySelector('[data-commercial-estimate]');
+    if (commercialDisclosure) {
+      commercialDisclosure.textContent = '';
+      commercialDisclosure.hidden = true;
+    }
     resetFinance(strings);
     resetScenarioCards();
   };

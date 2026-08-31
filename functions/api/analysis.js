@@ -7,7 +7,7 @@ const P0_PVGIS_QUERY = Object.freeze({ capacityKwp: 1, lossPercent: 14 });
 export const analyze = async ({ request, env, fetchImpl }) => {
   const body = await readJsonBody(request);
   const input = validateAnalysisInput(body);
-  validateP0AnalysisWorkflow(body);
+  const workflow = validateP0AnalysisWorkflow(body);
   if (
     input.system.capacityKwp !== P0_PVGIS_QUERY.capacityKwp ||
     input.system.lossPercent !== P0_PVGIS_QUERY.lossPercent
@@ -20,7 +20,8 @@ export const analyze = async ({ request, env, fetchImpl }) => {
     analysis: buildP0SolarAnalysis({
       body,
       validatedInput: input,
-      providerAnalysis
+      providerAnalysis,
+      tariffSelection: workflow.tariffSelection
     })
   };
 };

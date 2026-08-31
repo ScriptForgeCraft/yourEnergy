@@ -4,6 +4,7 @@ import test from 'node:test';
 import { onRequest as analysisOnRequest } from '../functions/api/analysis.js';
 import { onRequest as geocodeOnRequest } from '../functions/api/geocode.js';
 import { onRequest as leadOnRequest } from '../functions/api/lead.js';
+import { buildP0SolarAnalysis } from '../functions/_lib/solar-analysis.js';
 import {
   createGeocodingAdapter,
   normalizeGeocodingCandidate,
@@ -137,22 +138,29 @@ test('PVGIS accepts only explicit roof/system inputs and normalizes a valid twel
   );
 });
 
-test('analysis returns an honest configuration error instead of a generated PVGIS estimate', async () => {
+test('analysis uses the documented server-side PVGIS default when no override is configured', async () => {
+  let requestedUrl = null;
   const response = await analysisOnRequest({
     request: postJson('/analysis', p0AnalysisPayload),
-    env: {}
+    env: {},
+    fetch: async (url) => {
+      requestedUrl = String(url);
+      return new Response(
+        JSON.stringify({
+          outputs: {
+            totals: { fixed: { E_y: 1500 } },
+            monthly: { fixed: Array.from({ length: 12 }, () => ({ E_m: 125 })) }
+          }
+        }),
+        { headers: { 'content-type': 'application/json' } }
+      );
+    }
   });
   const body = await readJson(response);
 
-  assert.equal(response.status, 503);
-  assert.deepEqual(body, {
-    ok: false,
-    error: {
-      code: 'PVGIS_NOT_CONFIGURED',
-      message: 'Solar yield analysis is not configured yet.',
-      retryable: false
-    }
-  });
+  assert.equal(response.status, 200);
+  assert.ok(requestedUrl.startsWith('https://re.jrc.ec.europa.eu/api/v5_3/PVcalc'));
+  assert.equal(body.data.analysis.mode, 'real-analysis');
 });
 
 test('analysis joins real PVGIS yield with confirmed inputs and suppresses unverified finance', async () => {
@@ -185,6 +193,71 @@ test('analysis joins real PVGIS yield with confirmed inputs and suppresses unver
     'PVGIS'
   );
   assert.ok(analysis.assumptions.includes('PVGIS_SYSTEM_LOSS_14_PERCENT'));
+});
+
+test('analysis accepts a manual point and user tariff but ignores client-side capex and price books', async () => {
+  const response = await analysisOnRequest({
+    request: postJson('/analysis', {
+      ...p0AnalysisPayload,
+      property: {
+        latitude: 40.18,
+        longitude: 44.51,
+        confirmed: true,
+        source: 'manual'
+      },
+      tariff: { rateAmdPerKwh: 45 },
+      investment: { capexAmd: 1, capexAmdPerKwp: 1 },
+      priceBook: { ratesAmdPerWp: { p50: 1 } }
+    }),
+    env: { PVGIS_ENDPOINT: 'https://pvgis.example/api' },
+    fetch: async () =>
+      new Response(
+        JSON.stringify({
+          outputs: {
+            totals: { fixed: { E_y: 1500 } },
+            monthly: { fixed: Array.from({ length: 12 }, () => ({ E_m: 125 })) }
+          }
+        }),
+        { headers: { 'content-type': 'application/json' } }
+      )
+  });
+  const body = await readJson(response);
+  const analysis = body.data.analysis;
+
+  assert.equal(response.status, 200);
+  assert.equal(analysis.property.address, null);
+  assert.equal(analysis.financial.tariff.kind, 'user');
+  assert.equal(analysis.selectedScenario.financial.annualSavingsAmd, 486_000);
+  assert.notEqual(analysis.selectedScenario.financial.capexAmd, 1);
+  assert.ok(analysis.assumptions.includes('USER_PROVIDED_TARIFF'));
+});
+
+test('the server selects the dated P1 price book instead of accepting a client price or capex', () => {
+  const analysis = buildP0SolarAnalysis({
+    body: {
+      ...p0AnalysisPayload,
+      tariff: { rateAmdPerKwh: 45 },
+      investment: { capexAmd: 1, capexAmdPerKwp: 1 },
+      priceBook: { version: 'attacker-pricebook', ratesAmdPerWp: { p50: 1 } }
+    },
+    validatedInput: {
+      property: { latitude: 40.18, longitude: 44.51 },
+      roof: { tiltDegrees: 30, azimuthDegrees: 180 }
+    },
+    providerAnalysis: {
+      generation: {
+        annualKwh: 1500,
+        monthlyKwh: Array.from({ length: 12 }, () => 125)
+      },
+      sourceLedger: [{ retrievedAt: '2026-08-31T00:00:00.000Z' }]
+    },
+    effectiveDate: '2026-08-31'
+  });
+
+  assert.equal(analysis.priceBook.version, 'v0.1');
+  assert.equal(analysis.selectedScenario.financial.capexAmd, 1_780_000);
+  assert.notEqual(analysis.selectedScenario.financial.capexAmd, 1);
+  assert.equal(analysis.financial.price.kind, 'temporary');
 });
 
 test('analysis refuses an unconfirmed property or incomplete roof before contacting PVGIS', async () => {

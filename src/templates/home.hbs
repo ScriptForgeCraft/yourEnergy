@@ -100,6 +100,9 @@
                 <button class='button button--navy' type='submit'>{{hero.analyze}}</button>
               </div>
               <small id='address-help' class='field-help'>{{hero.addressHelp}}</small>
+              <button class='text-button address-manual-point' type='button' data-location-manual-start>
+                {{product.location.chooseOnMap}}
+              </button>
               <fieldset class='consumption-inputs' data-consumption-inputs>
                 <legend>{{product.consumption.title}}</legend>
                 <p>{{product.consumption.copy}}</p>
@@ -147,6 +150,20 @@
                         data-consumption-month
                       /></label>{{/each}}</div>
                   <small>{{product.consumption.monthlyHelp}}</small>
+                </div>
+                <div class='manual-tariff'>
+                  <label for='consumption-tariff'>{{product.consumption.tariffLabel}}</label>
+                  <div class='input-with-unit'><input
+                      id='consumption-tariff'
+                      type='number'
+                      min='0.01'
+                      max='1000'
+                      step='0.01'
+                      inputmode='decimal'
+                      aria-describedby='consumption-tariff-help'
+                      data-consumption-tariff
+                    /><span>{{product.common.amd}} / {{product.common.kwh}}</span></div>
+                  <small id='consumption-tariff-help'>{{product.consumption.tariffHelp}}</small>
                 </div>
                 <p class='consumption-total'><span>{{product.consumption.annualLabel}}</span><output
                     data-consumption-annual
@@ -374,6 +391,7 @@
                       <small>{{unit}}</small></dd></div>
                 {{/each}}
               </dl>
+              <p class='commercial-estimate' data-commercial-estimate hidden></p>
               <a href='#passport'>{{map.full}} <span aria-hidden='true'>→</span></a>
             </div>
           </div>
@@ -486,7 +504,8 @@
       <section class='lead-section section section--soft' data-lead-section hidden aria-labelledby='lead-title'>
         <div class='container lead-grid'><div><p class='eyebrow'>YOURENERGY</p><h2
               id='lead-title'
-            >{{product.lead.title}}</h2><p>{{product.lead.copy}}</p><small>{{product.lead.privacy}}</small></div><form
+            >{{product.lead.title}}</h2><p>{{product.lead.copy}}</p><p class='lead-fallback'><span
+              >{{product.lead.directCall}}</span> <a href='{{contact.phoneHref}}'>{{contact.phone}}</a></p><small>{{product.lead.privacy}}</small></div><form
             class='lead-form'
             data-lead-form
             novalidate
@@ -622,35 +641,37 @@
               data-finance-title='{{finance.timelineTitle}}'
             ><path
                 data-finance-line-path
-                d='M30 192 C145 180, 176 177, 250 143 S390 92, 478 70 S570 35, 623 26'
+                d=''
                 fill='none'
                 stroke='#f5bd18'
                 stroke-width='4'
                 stroke-linecap='round'
               ></path><path
                 data-finance-baseline
-                d='M30 192 H623'
+                d=''
                 fill='none'
                 stroke='rgba(255,255,255,.22)'
                 stroke-width='1'
-              ></path><circle data-finance-point cx='30' cy='192' r='6' fill='#f5bd18'></circle><circle
+              ></path><circle data-finance-point cx='30' cy='192' r='6' fill='#f5bd18' visibility='hidden'></circle><circle
                 data-finance-point
                 cx='178'
                 cy='177'
                 r='6'
                 fill='#f5bd18'
-              ></circle><circle data-finance-point cx='250' cy='143' r='6' fill='#f5bd18'></circle><circle
+                visibility='hidden'
+              ></circle><circle data-finance-point cx='250' cy='143' r='6' fill='#f5bd18' visibility='hidden'></circle><circle
                 data-finance-point
                 cx='410'
                 cy='86'
                 r='6'
                 fill='#f5bd18'
-              ></circle><circle data-finance-point cx='623' cy='26' r='6' fill='#f5bd18'></circle></svg><ol
-              class='finance-timeline'
-              role='list'
+                visibility='hidden'
+              ></circle><circle data-finance-point cx='623' cy='26' r='6' fill='#f5bd18' visibility='hidden'></circle></svg><ol
+                class='finance-timeline'
+                role='list'
             >{{#each finance.timeline}}<li><span data-analysis-timeline-year>{{year}}</span><strong
-                    data-analysis-timeline='{{@index}}'
-                  >{{value}}</strong></li>{{/each}}</ol></div>
+                  data-analysis-timeline='{{@index}}'
+                  >{{../finance.awaiting}}</strong></li>{{/each}}</ol></div>
           <div class='finance-included'><h3>{{finance.includedTitle}}</h3><ul role='list'>{{#each
                 finance.included
               }}<li><svg class='inline-icon' aria-hidden='true'><use

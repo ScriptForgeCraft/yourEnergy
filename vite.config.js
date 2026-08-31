@@ -3,6 +3,7 @@ import { resolve } from 'node:path';
 import { defineConfig, loadEnv } from 'vite';
 
 const root = process.cwd();
+const DEFAULT_OSM_TILE_URL = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
 
 const trustedMapOrigin = (tileUrl) => {
   if (!tileUrl) return '';
@@ -27,7 +28,8 @@ const createHeaders = (mapOrigin) => `/*
 
 export default defineConfig(({ mode }) => {
   const publicEnv = loadEnv(mode, root, 'VITE_');
-  const mapOrigin = trustedMapOrigin(publicEnv.VITE_MAP_TILE_URL);
+  const mapTileUrl = publicEnv.VITE_MAP_TILE_URL?.trim() || DEFAULT_OSM_TILE_URL;
+  const mapOrigin = trustedMapOrigin(mapTileUrl);
 
   return {
     plugins: [
@@ -52,7 +54,13 @@ export default defineConfig(({ mode }) => {
           'soon-ru': resolve(root, 'ru/soon/index.html'),
           'privacy-en': resolve(root, 'en/privacy/index.html'),
           'terms-en': resolve(root, 'en/terms/index.html'),
-          'soon-en': resolve(root, 'en/soon/index.html')
+          'soon-en': resolve(root, 'en/soon/index.html'),
+          'calculator-hy': resolve(root, 'calculator/index.html'),
+          'calculator-ru': resolve(root, 'ru/calculator/index.html'),
+          'calculator-en': resolve(root, 'en/calculator/index.html'),
+          'offer-checker-hy': resolve(root, 'offer-checker/index.html'),
+          'offer-checker-ru': resolve(root, 'ru/offer-checker/index.html'),
+          'offer-checker-en': resolve(root, 'en/offer-checker/index.html')
         }
       }
     }
