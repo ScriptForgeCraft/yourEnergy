@@ -75,6 +75,10 @@ export default {
       complete: 'Done',
       cancel: 'Cancel'
     },
+    tools: {
+      calculator: 'Open the full calculator',
+      offerChecker: 'Check a commercial offer'
+    },
     consumption: {
       title: 'Electricity consumption',
       copy: 'Choose the most convenient way to provide data for a preliminary estimate.',
@@ -456,8 +460,7 @@ export default {
   finance: {
     eyebrow: 'Financial model',
     title: 'An investment that works every day',
-    copy:
-      'The financial chart appears only after PVGIS analysis, an entered or confirmed tariff, and an active price book.',
+    copy: 'The financial chart appears only after PVGIS analysis, an entered or confirmed tariff, and an active price book.',
     benefits: [
       'Lower grid consumption',
       'Panels designed for more than 25 years of service',
@@ -465,12 +468,7 @@ export default {
       'A transparent formula with no hidden assumptions'
     ],
     timelineTitle: 'How the net result grows',
-    timeline: [
-      { year: 'Today' },
-      { year: 'Year 5' },
-      { year: 'Year 10' },
-      { year: 'Year 25' }
-    ],
+    timeline: [{ year: 'Today' }, { year: 'Year 5' }, { year: 'Year 10' }, { year: 'Year 25' }],
     awaiting: 'After analysis',
     includedTitle: 'What the temporary preliminary price includes',
     included: [
@@ -547,7 +545,7 @@ export default {
     items: [
       [
         'How much does a solar system cost?',
-        'This page shows demonstration options from 2,950,000 ֏. Actual cost depends on capacity, roof, equipment and connection, and is confirmed only after a site visit.'
+        'After property analysis, a temporary preliminary YOUR ENERGY range may appear from an active PriceBook. It is not an offer: final pricing depends on capacity, roof, equipment and connection and is confirmed after a site visit.'
       ],
       [
         'How is system capacity calculated?',
@@ -555,7 +553,7 @@ export default {
       ],
       [
         'What is the payback period?',
-        'In the base example, 4,300,000 ֏ is divided by annual savings of 720,000 ֏: 5.97 years, rounded to approximately 6.0 years. Tariff growth and additional costs are not included.'
+        'Payback is shown only after PVGIS analysis and an entered or confirmed tariff. The model excludes tariff growth, degradation, maintenance, financing, discounting, taxes and export rules.'
       ],
       [
         'Do solar panels need maintenance?',

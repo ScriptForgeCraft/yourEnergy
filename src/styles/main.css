@@ -230,7 +230,7 @@ input {
   display: grid;
   grid-template-columns: minmax(390px, 0.77fr) minmax(620px, 1.23fr);
   gap: clamp(42px, 5vw, 76px);
-  align-items: center;
+  align-items: start;
 }
 
 .eyebrow {

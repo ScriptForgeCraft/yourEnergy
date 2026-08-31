@@ -221,7 +221,7 @@ const financialPrice = (commercialEstimate, capexAmd) => ({
       ? 'confirmed'
       : 'unavailable',
   source: commercialEstimate?.available
-    ? commercialEstimate.priceBook?.source ?? unavailableSource
+    ? (commercialEstimate.priceBook?.source ?? unavailableSource)
     : capexAmd !== null
       ? null
       : unavailableSource,
@@ -286,7 +286,11 @@ export const calculateSolarScenario = ({
         timeline: [],
         price: financialPrice(null, null)
       },
-      commercialEstimate: buildCommercialEstimate({ capacityKwp: null, priceBook, at: effectiveDate })
+      commercialEstimate: buildCommercialEstimate({
+        capacityKwp: null,
+        priceBook,
+        at: effectiveDate
+      })
     };
   }
 
@@ -444,10 +448,11 @@ export const buildSolarAnalysis = (input = {}) => {
     scenarios.find((scenario) => scenario.id === selectedScenarioId) ?? scenarios[0] ?? null;
   const status = selectedScenario?.status ?? ANALYSIS_STATUS.UNAVAILABLE;
   const commercialEstimate = selectedScenario?.commercialEstimate ?? null;
-  const tariffKind = tariff?.kind === 'user' || tariff?.kind === 'registry' ? tariff.kind : 'unavailable';
+  const tariffKind =
+    tariff?.kind === 'user' || tariff?.kind === 'registry' ? tariff.kind : 'unavailable';
   const priceKind = commercialEstimate?.available
     ? commercialEstimate.kind
-    : selectedScenario?.financial?.price?.kind ?? 'unavailable';
+    : (selectedScenario?.financial?.price?.kind ?? 'unavailable');
   const sourceLedger = [
     sourceEntry(
       'property',

@@ -72,7 +72,9 @@ const formatCommercialEstimate = (estimate, locale, strings) => {
   if (!estimate?.available) return null;
   const format = (value) => (finite(value) ? `${formatNumber(value, locale)} ֏` : '—');
   const validUntil = estimate.validUntil
-    ? new Intl.DateTimeFormat(locale, { dateStyle: 'medium' }).format(new Date(`${estimate.validUntil}T00:00:00`))
+    ? new Intl.DateTimeFormat(locale, { dateStyle: 'medium' }).format(
+        new Date(`${estimate.validUntil}T00:00:00`)
+      )
     : '—';
   return token(
     token(
@@ -150,7 +152,7 @@ const updateScenarioCards = (scenarios, locale, strings) => {
       ? `P50 · ${formatNumber(scenario.commercialEstimate.primaryAmd, locale)} ֏`
       : finite(financial.capexAmd)
         ? `${formatNumber(financial.capexAmd, locale)} ֏`
-      : (strings.financialUnavailable ?? strings.noTariff ?? strings.noSavings ?? '—');
+        : (strings.financialUnavailable ?? strings.noTariff ?? strings.noSavings ?? '—');
 
     setValue(card.querySelector('[data-analysis-scenario-capacity]'), capacity);
     setValue(card.querySelector('[data-analysis-scenario-generation]'), generation);

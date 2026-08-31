@@ -1,4 +1,4 @@
-import { compareOffer } from './domain/index.js';
+import { compareOffer, isPriceBookActive } from './domain/index.js';
 
 const DRAFT_STORAGE_KEY = 'yourenergy-calculator-draft';
 const CORE_SCOPE_KEYS = [
@@ -39,6 +39,39 @@ const numberFormatter = (locale, fractionDigits = 0) =>
   });
 
 const formatAmdPerWp = (value, locale) => `${numberFormatter(locale, 1).format(value)} ֏/Wp`;
+
+const formatPriceBookDate = (value, locale) =>
+  new Intl.DateTimeFormat(locale, {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+    timeZone: 'UTC'
+  }).format(new Date(`${value}T00:00:00.000Z`));
+
+const initPriceBookReference = (config) => {
+  if (config?.toolType !== 'offer-checker') return;
+
+  const reference = document.querySelector('[data-pricebook-reference]');
+  const version = document.querySelector('[data-pricebook-version]');
+  if (!reference || !version) return;
+
+  if (!isPriceBookActive(config.priceBook)) {
+    reference.textContent = config.strings.expiry;
+    version.hidden = true;
+    return;
+  }
+
+  const rates = config.priceBook.ratesAmdPerWp;
+  reference.textContent = `${formatAmdPerWp(rates.p25, config.locale)} – ${formatAmdPerWp(
+    rates.p75,
+    config.locale
+  )}`;
+  version.textContent = `YOURENERGY · ${config.priceBook.version} · ${formatPriceBookDate(
+    config.priceBook.validUntil,
+    config.locale
+  )}`;
+  version.hidden = false;
+};
 
 const saveCalculatorDraft = (draft) => {
   try {
@@ -209,5 +242,6 @@ const initOfferChecker = (config) => {
 };
 
 const config = readConfig();
+initPriceBookReference(config);
 if (config?.toolType === 'calculator') initQuickCalculator(config);
 if (config?.toolType === 'offer-checker') initOfferChecker(config);

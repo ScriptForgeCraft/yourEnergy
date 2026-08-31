@@ -87,12 +87,8 @@
               <strong>{{tool.honestNote}}</strong>
             {{else}}
               <p class='eyebrow'>{{tool.referenceTitle}}</p>
-              {{#if priceBookActive}}
-                <strong>{{priceBookRange}}</strong>
-                <small>{{priceBookVersion}} · {{priceBookValidUntil}}</small>
-              {{else}}
-                <strong>{{tool.expiry}}</strong>
-              {{/if}}
+              <strong data-pricebook-reference>{{tool.priceBookCheck}}</strong>
+              <small data-pricebook-version hidden></small>
               <p>{{tool.referenceCopy}}</p>
             {{/if}}
           </aside>

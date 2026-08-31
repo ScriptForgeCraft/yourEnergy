@@ -106,7 +106,7 @@ const normalizedConsumptionFor = (consumptionInput) =>
  */
 const applyCalculatorDraft = () => {
   if (!form || !consumptionControl) return;
-  let draft = null;
+  let draft;
   try {
     draft = JSON.parse(window.sessionStorage.getItem(CALCULATOR_DRAFT_KEY) ?? 'null');
     window.sessionStorage.removeItem(CALCULATOR_DRAFT_KEY);
@@ -115,11 +115,15 @@ const applyCalculatorDraft = () => {
   }
   if (!draft || typeof draft !== 'object') return;
 
-  if (typeof draft.address === 'string' && addressInput) addressInput.value = draft.address.slice(0, 220);
+  if (typeof draft.address === 'string' && addressInput)
+    addressInput.value = draft.address.slice(0, 220);
   const consumption = draft.consumption ?? {};
   const tariffInput = form.querySelector('[data-consumption-tariff]');
-  if (Number.isFinite(Number(draft.tariff?.rateAmdPerKwh)) && Number(draft.tariff.rateAmdPerKwh) > 0) {
-    tariffInput.value = String(draft.tariff.rateAmdPerKwh);
+  if (
+    Number.isFinite(Number(draft.tariff?.rateAmdPerKwh)) &&
+    Number(draft.tariff.rateAmdPerKwh) > 0
+  ) {
+    if (tariffInput) tariffInput.value = String(draft.tariff.rateAmdPerKwh);
   }
   const activate = (mode) => {
     const radio = form.querySelector(`input[name="consumption-mode"][value="${mode}"]`);
@@ -127,17 +131,24 @@ const applyCalculatorDraft = () => {
     radio.checked = true;
     radio.dispatchEvent(new Event('change', { bubbles: true }));
   };
-  if (Number.isFinite(Number(consumption.averageMonthlyKwh)) && Number(consumption.averageMonthlyKwh) > 0) {
+  let draftedInput = null;
+  if (
+    Number.isFinite(Number(consumption.averageMonthlyKwh)) &&
+    Number(consumption.averageMonthlyKwh) > 0
+  ) {
     activate('usage');
-    form.querySelector('[data-consumption-usage]').value = String(consumption.averageMonthlyKwh);
+    draftedInput = form.querySelector('[data-consumption-usage]');
+    if (draftedInput) draftedInput.value = String(consumption.averageMonthlyKwh);
   } else if (
     Number.isFinite(Number(consumption.averageMonthlyBillAmd)) &&
     Number(consumption.averageMonthlyBillAmd) > 0
   ) {
     activate('bill');
-    form.querySelector('[data-consumption-bill]').value = String(consumption.averageMonthlyBillAmd);
+    draftedInput = form.querySelector('[data-consumption-bill]');
+    if (draftedInput) draftedInput.value = String(consumption.averageMonthlyBillAmd);
   }
-  form.querySelector('[data-consumption-inputs]')?.dispatchEvent(new Event('input', { bubbles: true }));
+  tariffInput?.dispatchEvent(new Event('input', { bubbles: true }));
+  draftedInput?.dispatchEvent(new Event('input', { bubbles: true }));
 };
 
 applyCalculatorDraft();

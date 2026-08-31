@@ -39,7 +39,11 @@ const normalizeRecord = (record, currency) => ({
   effectiveFrom: toIsoDate(record?.effectiveFrom),
   effectiveTo: toIsoDate(record?.effectiveTo),
   status:
-    record?.status === 'confirmed' ? 'confirmed' : record?.status === 'provided' ? 'provided' : 'unavailable',
+    record?.status === 'confirmed'
+      ? 'confirmed'
+      : record?.status === 'provided'
+        ? 'provided'
+        : 'unavailable',
   rateAmdPerKwh: toPositiveNumberOrNull(record?.rateAmdPerKwh),
   currency: cleanString(record?.currency) ?? currency ?? 'AMD',
   source: normalizeSource(record?.source)

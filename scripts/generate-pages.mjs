@@ -6,7 +6,6 @@ import hy from '../src/content/hy.js';
 import ru from '../src/content/ru.js';
 import en from '../src/content/en.js';
 import toolCopy from '../src/content/tools.js';
-import { isPriceBookActive } from '../src/domain/pricebook.js';
 import { TEMPORARY_YOURENERGY_PRICEBOOK } from '../src/data/pricebooks/armenia.js';
 import { GENERATED_CONTENT_LOCALES } from '../src/content/schema.js';
 
@@ -31,6 +30,8 @@ const runtimeLocales = Object.freeze(
 );
 
 const origin = 'https://yourenergy.am';
+const DEFAULT_OSM_TILE_URL = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
+const DEFAULT_OSM_TILE_ATTRIBUTION = '© OpenStreetMap contributors';
 const publishedAlternateLinks = Object.freeze([
   ...GENERATED_CONTENT_LOCALES.map(({ key, path }) => ({
     hreflang: key,
@@ -137,6 +138,8 @@ const createJsonLd = (content) => {
 
 const createHomeContext = (content) => ({
   ...content,
+  calculatorHref: toolPath(content.locale, 'calculator'),
+  offerCheckerHref: toolPath(content.locale, 'offer-checker'),
   alternateLinks: publishedAlternateLinks,
   languageLinks: createLanguageLinks(content.locale),
   solutions: {
@@ -177,8 +180,8 @@ const createHomeContext = (content) => ({
     product: content.product,
     map: {
       image: '/images/roof-scan-768.webp',
-      tileUrl: publicEnv.VITE_MAP_TILE_URL ?? '',
-      tileAttribution: publicEnv.VITE_MAP_ATTRIBUTION ?? ''
+      tileUrl: publicEnv.VITE_MAP_TILE_URL?.trim() || DEFAULT_OSM_TILE_URL,
+      tileAttribution: publicEnv.VITE_MAP_ATTRIBUTION?.trim() || DEFAULT_OSM_TILE_ATTRIBUTION
     }
   })
 });
@@ -216,20 +219,6 @@ const createToolContext = (content, type) => {
   const tool = toolCopy[content.locale]?.[type === 'offer-checker' ? 'offerChecker' : type];
   if (!tool) throw new Error(`Missing ${type} tool copy for ${content.locale}.`);
 
-  const activePriceBook = isPriceBookActive(TEMPORARY_YOURENERGY_PRICEBOOK);
-  const formatter = new Intl.NumberFormat(runtimeLocales[content.locale], {
-    maximumFractionDigits: 0
-  });
-  const priceBookRange = `${formatter.format(
-    TEMPORARY_YOURENERGY_PRICEBOOK.ratesAmdPerWp.p25
-  )}–${formatter.format(TEMPORARY_YOURENERGY_PRICEBOOK.ratesAmdPerWp.p75)} ֏/Wp`;
-  const validUntil = new Intl.DateTimeFormat(runtimeLocales[content.locale], {
-    day: 'numeric',
-    month: 'long',
-    year: 'numeric',
-    timeZone: 'UTC'
-  }).format(new Date(`${TEMPORARY_YOURENERGY_PRICEBOOK.validUntil}T00:00:00.000Z`));
-
   const offerStrings =
     type === 'offer-checker'
       ? {
@@ -265,10 +254,6 @@ const createToolContext = (content, type) => {
     alternateLinks: createToolAlternateLinks(type),
     languageLinks: createToolLanguageLinks(content.locale, type),
     scopeItems: type === 'offer-checker' ? scopeItems(tool) : [],
-    priceBookActive: activePriceBook,
-    priceBookRange,
-    priceBookVersion: `YOURENERGY · ${TEMPORARY_YOURENERGY_PRICEBOOK.version}`,
-    priceBookValidUntil: validUntil,
     pageConfig: escapeJsonForHtml({
       toolType: type,
       locale: runtimeLocales[content.locale],

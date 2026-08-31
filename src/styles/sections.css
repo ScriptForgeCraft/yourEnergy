@@ -149,6 +149,26 @@ h3 {
   text-decoration: underline;
 }
 
+.hero-tool-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 16px;
+  margin: -3px 0 16px;
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.hero-tool-links a {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  color: var(--color-navy);
+  text-decoration: underline;
+  text-decoration-color: #f0bd22;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
+}
+
 .address-manual-point {
   margin-top: 6px;
 }
@@ -864,6 +884,10 @@ h3 {
   align-items: start;
 }
 
+.finance-grid > * {
+  min-width: 0;
+}
+
 .finance h2 {
   max-width: 12ch;
 }
@@ -889,22 +913,27 @@ h3 {
 }
 
 .finance-line {
+  display: block;
+  max-width: 100%;
   width: 100%;
   height: auto;
 }
 
 .finance-timeline {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 6px;
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
+.finance-timeline li,
 .finance-timeline span,
 .finance-timeline strong {
   display: block;
+  min-width: 0;
+  overflow-wrap: anywhere;
 }
 
 .finance-timeline span {
@@ -1527,7 +1556,7 @@ h3 {
   .passport-grid,
   .finance-grid,
   .dialog-report {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
 
   .generation-card {

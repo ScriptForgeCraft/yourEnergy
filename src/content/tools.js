@@ -90,7 +90,9 @@ const tools = {
       reset: 'Մաքրել',
       referenceTitle: 'Ժամանակավոր ստանդարտ միջակայք',
       referenceCopy:
-        'YOUR ENERGY-ի ժամանակավոր գների գրքույկ v0.1 է՝ ոչ օֆերտա։ Այն կիրառելի է միայն նշված ժամկետի ընթացքում և պահանջում է տեղազննում։',
+        'YOUR ENERGY-ի ժամանակավոր գների գրքույկ v0.1 է՝ ոչ օֆերտա։ Այն կիրառելի է միայն գործողության ժամկետի ընթացքում և պահանջում է տեղազննում։',
+      priceBookCheck:
+        'Դիտարկիչը կստուգի ժամանակավոր գնացուցակի գործողությունը․ ժամկետն անցնելու դեպքում գին չի ցուցադրվի։',
       resultTitle: 'Ստուգման արդյունք',
       resultAwaiting: 'Լրացրեք տվյալները և սեղմեք «Համեմատել առաջարկը»։',
       status: {
@@ -211,7 +213,9 @@ const tools = {
       reset: 'Очистить',
       referenceTitle: 'Временный стандартный диапазон',
       referenceCopy:
-        'Это временный прайсбук YOUR ENERGY v0.1, а не оферта. Он действует только до указанной даты и требует обследования объекта.',
+        'Это временный прайсбук YOUR ENERGY v0.1, а не оферта. Он действует только в пределах срока действия и требует обследования объекта.',
+      priceBookCheck:
+        'Браузер проверит срок временного прайсбука; при истечении цена не будет показана.',
       resultTitle: 'Результат проверки',
       resultAwaiting: 'Заполните данные и нажмите «Сравнить предложение».',
       status: {
@@ -335,7 +339,9 @@ const tools = {
       reset: 'Clear',
       referenceTitle: 'Temporary standard range',
       referenceCopy:
-        'This is a temporary YOURENERGY price book v0.1, not an offer. It is valid only through its shown date and still needs a site survey.',
+        'This is a temporary YOURENERGY price book v0.1, not an offer. It is valid only during its validity period and still needs a site survey.',
+      priceBookCheck:
+        'Your browser checks the temporary price book date; no price is shown once it has expired.',
       resultTitle: 'Check result',
       resultAwaiting: 'Enter the details, then choose “Compare proposal”.',
       status: {

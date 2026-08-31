@@ -23,14 +23,13 @@ const toIsoDate = (value) => {
       return value;
     }
   }
-  if (value instanceof Date && Number.isFinite(value.getTime())) return value.toISOString().slice(0, 10);
+  if (value instanceof Date && Number.isFinite(value.getTime()))
+    return value.toISOString().slice(0, 10);
   return null;
 };
 
 const listOfStrings = (value) =>
-  Array.isArray(value)
-    ? [...new Set(value.map(cleanString).filter(Boolean))]
-    : [];
+  Array.isArray(value) ? [...new Set(value.map(cleanString).filter(Boolean))] : [];
 
 const normalizeSource = (source = {}) => ({
   kind: cleanString(source.kind) ?? 'registry',
@@ -58,7 +57,10 @@ export const normalizePriceBook = (input = {}) => {
   return deepFreeze({
     id: cleanString(input.id),
     version: cleanString(input.version),
-    status: input.status === PRICEBOOK_STATUS.CONFIRMED ? PRICEBOOK_STATUS.CONFIRMED : PRICEBOOK_STATUS.TEMPORARY,
+    status:
+      input.status === PRICEBOOK_STATUS.CONFIRMED
+        ? PRICEBOOK_STATUS.CONFIRMED
+        : PRICEBOOK_STATUS.TEMPORARY,
     countryCode: cleanString(input.countryCode) ?? 'AM',
     region: cleanString(input.region) ?? 'all-armenia',
     systemType: cleanString(input.systemType) ?? PRICEBOOK_SYSTEM_TYPE,
@@ -77,7 +79,9 @@ export const normalizePriceBook = (input = {}) => {
 export const isPriceBookActive = (priceBook, at = new Date()) => {
   const normalized = normalizePriceBook(priceBook);
   const date = toIsoDate(at);
-  return Boolean(normalized && date && normalized.validFrom <= date && normalized.validUntil >= date);
+  return Boolean(
+    normalized && date && normalized.validFrom <= date && normalized.validUntil >= date
+  );
 };
 
 /**
@@ -187,7 +191,10 @@ export const compareOffer = ({
   if (total === null || capacity === null) reasons.push('OFFER_PRICE_AND_CAPACITY_REQUIRED');
   if (!normalized) reasons.push('PRICEBOOK_UNAVAILABLE');
   else if (!isPriceBookActive(normalized, at)) reasons.push('PRICEBOOK_EXPIRED');
-  if ((cleanString(systemType) ?? PRICEBOOK_SYSTEM_TYPE) !== (normalized?.systemType ?? PRICEBOOK_SYSTEM_TYPE)) {
+  if (
+    (cleanString(systemType) ?? PRICEBOOK_SYSTEM_TYPE) !==
+    (normalized?.systemType ?? PRICEBOOK_SYSTEM_TYPE)
+  ) {
     reasons.push('UNSUPPORTED_SYSTEM_TYPE');
   }
   if (inclusionValue(inclusions, 'battery')) reasons.push('BATTERY_SCOPE_UNSUPPORTED');
@@ -201,7 +208,9 @@ export const compareOffer = ({
       totalAmd: total,
       capacityKwp: capacity,
       amdPerWp: null,
-      reasons: deepFreeze([...new Set([...reasons, ...(estimate.available ? [] : [estimate.reason])])]),
+      reasons: deepFreeze([
+        ...new Set([...reasons, ...(estimate.available ? [] : [estimate.reason])])
+      ]),
       missingInclusions: deepFreeze(missingInclusions),
       estimate,
       questions: deepFreeze([
