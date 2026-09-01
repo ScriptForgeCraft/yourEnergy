@@ -174,6 +174,8 @@ export default {
       manualCopy:
         'Click the map to mark the approximate property location. This is not address geocoding.',
       chooseOnMap: 'Choose a point on the map',
+      useMapCenter: 'Use the map centre',
+      manualUnavailable: 'Open the map to use its centre as a manual point.',
       pointSelected: 'Property point selected.',
       retry: 'Try search again'
     },
@@ -188,22 +190,29 @@ export default {
       addPoint: 'Add point',
       undo: 'Undo last point',
       reset: 'Clear outline',
-      finish: 'Finish outline',
+      finish: 'Calculate from outline',
+      finishHelp:
+        'Enter the roof-face parameters and consumption, then request a preliminary PVGIS calculation.',
       edit: 'Edit outline',
       pointsLabel: 'Points in outline: {count}',
       minimumPoints: 'Add at least 3 points to finish the outline.',
       areaLabel: 'Preliminary roof area',
       orientationLabel: 'Roof-face direction',
+      orientationHelp:
+        'Choose the roof-face direction. A roof-specific calculation cannot be made without it; the PVGIS benchmark above remains available.',
       customOrientationLabel: 'Custom orientation (0° = north, 180° = south)',
       customOrientationHelp: 'Enter a compass bearing from 0 to 359°.',
       tiltLabel: 'This roof-face tilt',
       tiltHelp:
-        'Enter an approximate angle only if it is known; it is not detected from the address.',
+        'For a roof-specific calculation, enter an approximate angle from 0° to 90°. It is not detected from the address.',
+      parametersRequired:
+        'Enter the roof-face direction and tilt to create a roof-specific calculation.',
       angleGuideTitle: 'Visual check of the roof inputs',
       angleGuideCopy:
         'The arrow shows the roof-face direction you entered. It is different from the PVGIS free-standing benchmark above.',
       angleGuideOrientation: 'Roof-face direction',
       angleGuideTilt: 'Roof-face tilt',
+      angleGuideUnknown: 'Not specified',
       pointSelectLabel: 'Select point {index}',
       removePoint: 'Remove point',
       nudgeNorth: 'Move point north',
@@ -217,7 +226,7 @@ export default {
         east: 'East',
         south: 'South',
         west: 'West',
-        unknown: 'I do not know yet',
+        unknown: 'Choose a direction',
         custom: 'Other'
       },
       unavailable: 'A roof outline has not been set yet.',

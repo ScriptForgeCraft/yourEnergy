@@ -174,6 +174,13 @@ export const createPropertyMap = async ({
       container.dataset.mode = mode;
     },
     setRoofPoints,
+    setLocationAtCenter() {
+      if (mode !== 'location') return false;
+      // Leaflet's canvas is not a practical way to choose a point with a
+      // keyboard alone. The visible map centre is an equivalent, clearly
+      // manual choice; the surrounding UI still requires confirmation.
+      return setLocation(map.getCenter());
+    },
     addPointAtCenter() {
       if (mode !== 'roof') return false;
       // Keyboard users need a meaningful starting polygon too. Repeating the

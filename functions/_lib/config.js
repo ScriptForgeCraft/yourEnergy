@@ -1,6 +1,9 @@
 import { ApiError } from './http.js';
 
 const HEADER_NAME = /^[A-Za-z0-9-]+$/;
+const DEFAULT_PROVIDER_TIMEOUT_MS = 12_000;
+const MIN_PROVIDER_TIMEOUT_MS = 5_000;
+const MAX_PROVIDER_TIMEOUT_MS = 20_000;
 
 export const envString = (env, key) => {
   const value = env?.[key];
@@ -16,11 +19,16 @@ export const envBoolean = (env, key, fallback = false) => {
 };
 
 export const providerTimeoutMs = (env) => {
-  const configured = Number(envString(env, 'API_FETCH_TIMEOUT_MS'));
-  if (!Number.isFinite(configured)) {
-    return 8_000;
+  const configuredValue = envString(env, 'API_FETCH_TIMEOUT_MS');
+  if (configuredValue === null) {
+    return DEFAULT_PROVIDER_TIMEOUT_MS;
   }
-  return Math.max(1_000, Math.min(configured, 20_000));
+  const configured = Number(configuredValue);
+  if (!Number.isFinite(configured)) return DEFAULT_PROVIDER_TIMEOUT_MS;
+  // PVGIS regularly needs more than one second even for a single 1 kWp query.
+  // Clamping an accidentally low staging value keeps a real provider response
+  // possible while retaining a bounded request lifetime.
+  return Math.max(MIN_PROVIDER_TIMEOUT_MS, Math.min(configured, MAX_PROVIDER_TIMEOUT_MS));
 };
 
 export const configuredUrl = (env, key, missingCode) => {

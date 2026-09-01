@@ -82,6 +82,30 @@
             <h1 id='hero-title'>Узнайте потенциал<br />вашего дома<br /><mark
               >за 60 секунд</mark></h1>
             <p class='hero-intro'>Сначала найдите и подтвердите точку, затем увидите потенциал PVGIS. Данные крыши и потребления нужны только для подробного расчёта.</p>
+            <noscript>
+              <style>
+                .calculator-flow-region,
+                .address-form,
+                [data-location-stage],
+                [data-roof-stage],
+                [data-optional-upload],
+                [data-analysis-status],
+                [data-file-status],
+                [data-analysis-region],
+                .hero-tool-links,
+                .hero-benefits,
+                .hero-disclosure,
+                #passport {
+                  display: none !important;
+                }
+              </style>
+              <section class='calculator-noscript' id='manual-consultation' aria-labelledby='calculator-noscript-title'>
+                <h2 id='calculator-noscript-title'>Позвонить инженеру</h2>
+                <p>Калькулятор работает с JavaScript. Для ручной консультации позвоните инженеру:</p>
+                <a class='button button--navy' href='tel:+37491095950'>+374 91 095 950</a>
+                <address>Artashisyan 48 14 Kotayq, Zovuni, 26 33 str, Yerevan</address>
+              </section>
+            </noscript>
             <p class='hero-tool-links'><a href='/ru/calculator/'>Открыть полный калькулятор</a><a
                 href='/ru/offer-checker/'
               >Проверить коммерческое предложение</a></p>
@@ -120,7 +144,7 @@
                 Выбрать точку на карте
               </button>
             </form>
-            <section class='product-stage' data-location-stage hidden aria-labelledby='location-stage-title'>
+            <section class='product-stage' data-location-stage hidden aria-labelledby='location-stage-title' tabindex='-1'>
               <p class='eyebrow'>Местоположение объекта</p>
               <h2 id='location-stage-title'>Это ваш объект?</h2>
               <p data-location-message>Адрес нужен только для поиска точки. Подтвердите найденный объект или укажите точку вручную.</p>
@@ -136,7 +160,11 @@
                   class='button button--outline'
                   type='button'
                   data-location-manual
-                >Выбрать точку на карте</button></div>
+                >Выбрать точку на карте</button><button
+                  class='button button--outline'
+                  type='button'
+                  data-location-center
+                >Использовать центр карты</button></div>
             </section>
             <section class='product-stage roof-editor' data-roof-stage hidden aria-labelledby='roof-stage-title'>
               <p class='eyebrow'>Контур крыши</p>
@@ -162,13 +190,17 @@
               <div class='roof-editor-controls'><label for='roof-orientation'>Направление ската крыши<select
                     id='roof-orientation'
                     data-roof-orientation
-                  ><option value='unknown' selected>Не знаю — уточню позже</option><option value='180'>Юг</option><option
+                    required
+                    aria-required='true'
+                    aria-describedby='roof-orientation-help'
+                    aria-errormessage='analysis-status'
+                  ><option value='' selected>Выберите направление</option><option value='180'>Юг</option><option
                       value='225'
                     >Юго-запад</option><option value='135'
                     >Юго-восток</option><option value='90'
                     >Восток</option><option value='270'
                     >Запад</option><option value='0'
-                    >Север</option><option value='custom'>Другая</option></select></label><label
+                    >Север</option><option value='custom'>Другая</option></select><small id='roof-orientation-help'>Выберите направление ската. Без него расчёт конкретной крыши невозможен; ориентир PVGIS выше остаётся доступен.</small></label><label
                   data-roof-orientation-custom
                   hidden
                   for='roof-orientation-custom'
@@ -180,6 +212,7 @@
                     step='1'
                     inputmode='decimal'
                     aria-describedby='roof-orientation-custom-help'
+                    aria-errormessage='analysis-status'
                     data-roof-orientation-custom-input
                   /><small id='roof-orientation-custom-help'>Введите угол по компасу от 0 до 359°.</small></label><label
                   for='roof-tilt'
@@ -190,8 +223,11 @@
                     max='90'
                     step='1'
                     aria-describedby='roof-tilt-help'
+                    aria-errormessage='analysis-status'
+                    required
+                    aria-required='true'
                     data-roof-tilt
-                  /><small id='roof-tilt-help'>Укажите приблизительный угол только если он известен; это не значение, найденное по адресу.</small></label></div>
+                  /><small id='roof-tilt-help'>Для расчёта конкретного ската укажите приблизительный угол от 0° до 90°. Он не определяется по адресу.</small></label></div>
               <figure class='roof-angle-preview' aria-labelledby='roof-angle-preview-title'>
                 <figcaption id='roof-angle-preview-title'>Визуальная проверка введённых параметров крыши</figcaption>
                 <div class='roof-angle-preview__grid'>
@@ -202,10 +238,14 @@
                 </div>
                 <p>Стрелка показывает направление ската, введённое вами. Оно отличается от PVGIS-ориентира для отдельной конструкции выше.</p>
               </figure>
-              <fieldset class='consumption-inputs' data-consumption-inputs>
+              <fieldset
+                class='consumption-inputs'
+                data-consumption-inputs
+                aria-describedby='consumption-intro'
+              >
                 <legend>Потребление электроэнергии</legend>
-                <p>Это нужно только для мощности системы, бюджета и экономии — не для поиска адреса или потенциала точки.</p>
-                <div class='consumption-modes' role='radiogroup'>
+                <p id='consumption-intro'>Это нужно только для мощности системы, бюджета и экономии — не для поиска адреса или потенциала точки.</p>
+                <div class='consumption-modes'>
                   <label><input type='radio' name='consumption-mode' value='bill' checked /><span
                     >Средний счёт</span></label>
                   <label><input type='radio' name='consumption-mode' value='usage' /><span
@@ -221,9 +261,11 @@
                       min='1'
                       step='1'
                       inputmode='decimal'
+                      aria-describedby='consumption-bill-unit consumption-bill-help'
+                      aria-errormessage='analysis-status'
                       data-consumption-bill
-                    /><span>֏ в месяц</span></div>
-                  <small>Укажите среднюю сумму за месяц в драмах.</small>
+                    /><span id='consumption-bill-unit'>֏ в месяц</span></div>
+                  <small id='consumption-bill-help'>Укажите среднюю сумму за месяц в драмах.</small>
                 </div>
                 <div class='consumption-panel' data-consumption-panel='usage' hidden>
                   <label for='consumption-usage'>Среднее потребление в месяц</label>
@@ -233,19 +275,28 @@
                       min='1'
                       step='1'
                       inputmode='decimal'
+                      aria-describedby='consumption-usage-unit consumption-usage-help'
+                      aria-errormessage='analysis-status'
                       data-consumption-usage
-                    /><span>kWh в месяц</span></div>
-                  <small>Укажите среднее потребление в kWh за месяц.</small>
+                    /><span id='consumption-usage-unit'>kWh в месяц</span></div>
+                  <small id='consumption-usage-help'>Укажите среднее потребление в kWh за месяц.</small>
                 </div>
                 <div class='consumption-panel consumption-panel--months' data-consumption-panel='monthly' hidden>
-                  <p>Потребление за 12 месяцев</p>
-                  <div class='monthly-consumption-grid'><label
+                  <p id='consumption-monthly-title'>Потребление за 12 месяцев</p>
+                  <div
+                    class='monthly-consumption-grid'
+                    role='group'
+                    aria-labelledby='consumption-monthly-title'
+                    aria-describedby='consumption-monthly-unit consumption-monthly-help'
+                  ><label
                       ><span>Янв</span><input
                         type='number'
                         min='0'
                         step='1'
                         inputmode='decimal'
-                        aria-label='Январь'
+                        aria-label='Январь — kWh'
+                        aria-describedby='consumption-monthly-unit consumption-monthly-help'
+                        aria-errormessage='analysis-status'
                         data-consumption-month
                       /></label><label
                       ><span>Фев</span><input
@@ -253,7 +304,9 @@
                         min='0'
                         step='1'
                         inputmode='decimal'
-                        aria-label='Февраль'
+                        aria-label='Февраль — kWh'
+                        aria-describedby='consumption-monthly-unit consumption-monthly-help'
+                        aria-errormessage='analysis-status'
                         data-consumption-month
                       /></label><label
                       ><span>Мар</span><input
@@ -261,7 +314,9 @@
                         min='0'
                         step='1'
                         inputmode='decimal'
-                        aria-label='Март'
+                        aria-label='Март — kWh'
+                        aria-describedby='consumption-monthly-unit consumption-monthly-help'
+                        aria-errormessage='analysis-status'
                         data-consumption-month
                       /></label><label
                       ><span>Апр</span><input
@@ -269,7 +324,9 @@
                         min='0'
                         step='1'
                         inputmode='decimal'
-                        aria-label='Апрель'
+                        aria-label='Апрель — kWh'
+                        aria-describedby='consumption-monthly-unit consumption-monthly-help'
+                        aria-errormessage='analysis-status'
                         data-consumption-month
                       /></label><label
                       ><span>Май</span><input
@@ -277,7 +334,9 @@
                         min='0'
                         step='1'
                         inputmode='decimal'
-                        aria-label='Май'
+                        aria-label='Май — kWh'
+                        aria-describedby='consumption-monthly-unit consumption-monthly-help'
+                        aria-errormessage='analysis-status'
                         data-consumption-month
                       /></label><label
                       ><span>Июн</span><input
@@ -285,7 +344,9 @@
                         min='0'
                         step='1'
                         inputmode='decimal'
-                        aria-label='Июнь'
+                        aria-label='Июнь — kWh'
+                        aria-describedby='consumption-monthly-unit consumption-monthly-help'
+                        aria-errormessage='analysis-status'
                         data-consumption-month
                       /></label><label
                       ><span>Июл</span><input
@@ -293,7 +354,9 @@
                         min='0'
                         step='1'
                         inputmode='decimal'
-                        aria-label='Июль'
+                        aria-label='Июль — kWh'
+                        aria-describedby='consumption-monthly-unit consumption-monthly-help'
+                        aria-errormessage='analysis-status'
                         data-consumption-month
                       /></label><label
                       ><span>Авг</span><input
@@ -301,7 +364,9 @@
                         min='0'
                         step='1'
                         inputmode='decimal'
-                        aria-label='Август'
+                        aria-label='Август — kWh'
+                        aria-describedby='consumption-monthly-unit consumption-monthly-help'
+                        aria-errormessage='analysis-status'
                         data-consumption-month
                       /></label><label
                       ><span>Сен</span><input
@@ -309,7 +374,9 @@
                         min='0'
                         step='1'
                         inputmode='decimal'
-                        aria-label='Сентябрь'
+                        aria-label='Сентябрь — kWh'
+                        aria-describedby='consumption-monthly-unit consumption-monthly-help'
+                        aria-errormessage='analysis-status'
                         data-consumption-month
                       /></label><label
                       ><span>Окт</span><input
@@ -317,7 +384,9 @@
                         min='0'
                         step='1'
                         inputmode='decimal'
-                        aria-label='Октябрь'
+                        aria-label='Октябрь — kWh'
+                        aria-describedby='consumption-monthly-unit consumption-monthly-help'
+                        aria-errormessage='analysis-status'
                         data-consumption-month
                       /></label><label
                       ><span>Ноя</span><input
@@ -325,7 +394,9 @@
                         min='0'
                         step='1'
                         inputmode='decimal'
-                        aria-label='Ноябрь'
+                        aria-label='Ноябрь — kWh'
+                        aria-describedby='consumption-monthly-unit consumption-monthly-help'
+                        aria-errormessage='analysis-status'
                         data-consumption-month
                       /></label><label
                       ><span>Дек</span><input
@@ -333,10 +404,13 @@
                         min='0'
                         step='1'
                         inputmode='decimal'
-                        aria-label='Декабрь'
+                        aria-label='Декабрь — kWh'
+                        aria-describedby='consumption-monthly-unit consumption-monthly-help'
+                        aria-errormessage='analysis-status'
                         data-consumption-month
                       /></label></div>
-                  <small>Укажите kWh для каждого месяца, если эти данные доступны.</small>
+                  <span class='visually-hidden' id='consumption-monthly-unit'>kWh</span>
+                  <small id='consumption-monthly-help'>Укажите kWh для каждого месяца, если эти данные доступны.</small>
                 </div>
                 <div class='manual-tariff'>
                   <label for='consumption-tariff'>Тариф из вашего счёта</label>
@@ -347,13 +421,16 @@
                       max='1000'
                       step='0.01'
                       inputmode='decimal'
-                      aria-describedby='consumption-tariff-help'
+                      aria-describedby='consumption-tariff-unit consumption-tariff-help'
+                      aria-errormessage='analysis-status'
                       data-consumption-tariff
-                    /><span>֏ / kWh</span></div>
+                    /><span id='consumption-tariff-unit'>֏ / kWh</span></div>
                   <small id='consumption-tariff-help'>Необязательно для kWh. Для счёта в драмах он нужен, чтобы перевести сумму в kWh; в Passport будет отмечен как введённый вами.</small>
                 </div>
                 <p class='consumption-total'><span>Расчётное потребление за год</span><output
                     data-consumption-annual
+                    aria-label='Расчётное потребление за год — kWh'
+                    aria-live='polite'
                   >—</output> kWh</p>
               </fieldset>
               <p class='roof-editor__summary'><span data-roof-points>Точек в контуре: {count}</span><strong
@@ -371,7 +448,14 @@
                     data-roof-nudge='south'
                     aria-label='Сместить точку на юг'
                   >↓</button><button type='button' data-roof-remove>Удалить точку</button></div></div>
-              <button class='button' type='button' data-roof-finish disabled>Завершить контур</button>
+              <button
+                class='button'
+                type='button'
+                data-roof-finish
+                aria-describedby='roof-calculate-help'
+                disabled
+              >Рассчитать по контуру</button>
+              <p class='roof-editor__calculate-help' id='roof-calculate-help'>Заполните параметры ската и потребление — затем запросим предварительный расчёт PVGIS.</p>
             </section>
             <div class='upload-block' data-file-drop data-optional-upload hidden>
               <label class='upload-control' for='bill-file'>
@@ -400,9 +484,6 @@
             </div>
             <p class='form-status' id='analysis-status' data-analysis-status aria-live='polite'></p>
             <p class='form-status' id='file-status' data-file-status aria-live='polite'></p>
-            <noscript><p class='noscript-note' id='manual-consultation'>Калькулятор работает с JavaScript. Для ручной консультации позвоните инженеру: <a
-                  href='tel:+37491095950'
-                >+374 91 095 950</a></p></noscript>
             <ul class='hero-benefits' role='list'>
               <li><svg class='inline-icon' aria-hidden='true'><use
                       href='/icons.svg#check'
@@ -531,7 +612,7 @@
               <p>Направление, уклон, площадь, затенение и несущую способность конкретной крыши нужно уточнить ниже и подтвердить инженером.</p>
               <div class='flow-actions'><button class='button button--navy' type='button' data-site-potential-continue>Перейти к расчёту моей крыши</button><button class='button button--outline' type='button' data-site-potential-retry hidden>Повторить потенциал PVGIS</button></div>
             </section>
-            <div class='result-panel' data-result-panel hidden>
+            <div class='result-panel' data-result-panel hidden tabindex='-1'>
 
               <p data-analysis-summary>Предварительный результат — требуется подтверждение</p>
               <dl>
@@ -580,8 +661,8 @@
                   ><use href='/icons.svg#check'></use></svg>Допущения и ограничения расчёта</li></ul>
             <a
               class='button button--outline'
-              href='/ru/calculator/'
-              data-open-passport
+              href='tel:+37491095950'
+
             >Посмотреть пример отчёта</a>
             <p class='passport-persistence' data-passport-persistence hidden><strong
               >Solar Passport хранится в этом браузере</strong><span>Этот предварительный Passport существует только в памяти текущего сеанса.</span><span
@@ -970,7 +1051,7 @@
                   >— %</dd></div></dl><p
             >До анализа финансовые значения не показываются. Модель не учитывает рост тарифа, деградацию, обслуживание, кредит, дисконтирование, налоги и правила отпуска энергии.</p></div></div></div></dialog>
 
-      <script id='page-config' type='application/json'>{"locale":"ru-RU","status":{"minAddress":"Введите адрес длиной не менее 5 символов.","analyzing":"Готовим предварительный анализ…","ready":"Предварительный результат готов. Проверьте данные перед принятием решения.","unavailable":"Предварительный анализ сейчас недоступен. Повторите попытку или укажите точку вручную.","invalidFile":"Формат не поддерживается. Выберите PDF, JPG, JPEG или PNG.","largeFile":"Файл слишком большой. Максимальный размер — 10 МБ.","fileSelected":"Файл выбран и остаётся только в памяти браузера.","fileRemoved":"Файл удалён.","mapReady":"Интерактивная карта объекта готова.","mapFailed":"Карта недоступна. Остаётся статический демонстрационный резервный вариант.","monthTooltip":"Генерация за {month}: {value} kWh"},"product":{"common":{"required":"Обязательное поле","optional":"Необязательно","perMonth":"в месяц","kwh":"kWh","amd":"֏","complete":"Готово","cancel":"Отмена","noJsCalculator":"Калькулятор работает с JavaScript. Для ручной консультации позвоните инженеру:"},"tools":{"calculator":"Открыть полный калькулятор","offerChecker":"Проверить коммерческое предложение"},"flow":{"title":"Как устроен расчёт","steps":[{"number":"01","title":"Найдите участок","copy":"Введите адрес или поставьте точку на карте и подтвердите её."},{"number":"02","title":"Посмотрите потенциал места","copy":"PVGIS покажет ориентир для выбранной точки — до расчёта вашей крыши."},{"number":"03","title":"Уточните крышу и потребление","copy":"Обведите доступную площадь и укажите фактическое направление, наклон и расход энергии."},{"number":"04","title":"Получите предварительный расчёт","copy":"Система, бюджет и экономия появятся только из подтверждённых входных данных."}]},"potential":{"eyebrow":"Шаг 2 · Потенциал участка","title":"Солнечный ориентир для выбранной точки","loading":"Запрашиваем PVGIS для подтверждённой точки…","annualYieldLabel":"Ожидаемая генерация на 1 kWp в год","orientationLabel":"Оптимальное направление для отдельной конструкции","tiltLabel":"Оптимальный наклон для отдельной конструкции","source":"Источник: PVGIS · предварительное допущение о системных потерях 14%","disclosure":"Это ориентир PVGIS для свободно стоящей фиксированной системы в выбранной точке. Это не измерение вашей крыши и не рекомендация по монтажу на ней.","roofDisclosure":"Направление, уклон, площадь, затенение и несущую способность конкретной крыши нужно уточнить ниже и подтвердить инженером.","unavailable":"Не удалось получить потенциал PVGIS. Продолжите с контуром крыши или повторите запрос; цифры не будут подменены примером.","retry":"Повторить потенциал PVGIS","continue":"Перейти к расчёту моей крыши","directions":{"north":"север","northEast":"северо-восток","east":"восток","southEast":"юго-восток","south":"юг","southWest":"юго-запад","west":"запад","northWest":"северо-запад"}},"consumption":{"title":"Потребление электроэнергии","copy":"Это нужно только для мощности системы, бюджета и экономии — не для поиска адреса или потенциала точки.","modes":{"bill":"Средний счёт","usage":"Среднее потребление","monthly":"Помесячный профиль"},"billLabel":"Средний счёт за электричество","billHelp":"Укажите среднюю сумму за месяц в драмах.","tariffLabel":"Тариф из вашего счёта","tariffHelp":"Необязательно для kWh. Для счёта в драмах он нужен, чтобы перевести сумму в kWh; в Passport будет отмечен как введённый вами.","usageLabel":"Среднее потребление в месяц","usageHelp":"Укажите среднее потребление в kWh за месяц.","monthlyTitle":"Потребление за 12 месяцев","monthlyHelp":"Укажите kWh для каждого месяца, если эти данные доступны.","annualLabel":"Расчётное потребление за год","invalidNumber":"Введите число больше нуля.","invalidBill":"Введите корректную сумму счёта в драмах.","invalidTariff":"Введите тариф больше нуля в AMD/kWh.","invalidUsage":"Введите корректное потребление в kWh.","incompleteMonths":"Заполните все 12 месяцев или выберите другой способ.","noConsumption":"Для расчёта требуется значение потребления или счёта.","normalized":"Данные приведены к годовому профилю."},"location":{"title":"Местоположение объекта","copy":"Адрес нужен только для поиска точки. Подтвердите найденный объект или укажите точку вручную.","search":"Найти адрес","searching":"Ищем адрес…","resultLabel":"Найденный адрес","confirmPrompt":"Это ваш объект?","confirm":"Подтвердить объект","edit":"Изменить адрес","noResult":"Адрес не найден. Укажите точку на карте вручную.","unavailable":"Сервис поиска адреса сейчас недоступен. Укажите точку на карте вручную.","manualTitle":"Указать точку вручную","manualCopy":"Нажмите на карту, чтобы отметить примерное положение объекта. Это не геокодирование адреса.","chooseOnMap":"Выбрать точку на карте","pointSelected":"Точка объекта выбрана.","retry":"Повторить поиск"},"roof":{"title":"Контур крыши","copy":"Обведите доступную часть крыши и задайте фактические параметры ската для предварительной оценки.","mapDisclosure":"Карта помогает поставить точку и примерный контур. Без подключённого аэроснимка или 3D-модели она не определяет автоматически крышу, её угол или затенение.","fallback":"Карта недоступна. Продолжите после указания адреса или попробуйте ещё раз.","start":"Начать контур","addPointAtCenter":"Добавить точку в центре карты","addPoint":"Добавить точку","undo":"Отменить последнюю точку","reset":"Очистить контур","finish":"Завершить контур","edit":"Изменить контур","pointsLabel":"Точек в контуре: {count}","minimumPoints":"Добавьте минимум 3 точки, чтобы завершить контур.","areaLabel":"Предварительная площадь крыши","orientationLabel":"Направление ската крыши","customOrientationLabel":"Своя ориентация (0° = север, 180° = юг)","customOrientationHelp":"Введите угол по компасу от 0 до 359°.","tiltLabel":"Наклон этого ската крыши","tiltHelp":"Укажите приблизительный угол только если он известен; это не значение, найденное по адресу.","angleGuideTitle":"Визуальная проверка введённых параметров крыши","angleGuideCopy":"Стрелка показывает направление ската, введённое вами. Оно отличается от PVGIS-ориентира для отдельной конструкции выше.","angleGuideOrientation":"Направление ската","angleGuideTilt":"Наклон ската","pointSelectLabel":"Выбрать точку {index}","removePoint":"Удалить точку","nudgeNorth":"Сместить точку на север","nudgeSouth":"Сместить точку на юг","nudgeEast":"Сместить точку на восток","nudgeWest":"Сместить точку на запад","orientationOptions":{"north":"Север","southEast":"Юго-восток","southWest":"Юго-запад","east":"Восток","south":"Юг","west":"Запад","unknown":"Не знаю — уточню позже","custom":"Другая"},"unavailable":"Контур крыши пока не указан.","tilesUnavailable":"Фоновая карта недоступна. Контур можно задать после выбора точки.","locationRequired":"Сначала подтвердите объект или выберите точку на карте."},"result":{"title":"Предварительный анализ","preparing":"Готовим предварительный анализ…","ready":"Предварительный анализ готов.","unavailable":"Не удалось подготовить анализ с доступными данными.","retry":"Повторить расчёт","noTariff":"Тариф не указан: мощность, генерация PVGIS и предварительная цена доступны, но экономия и окупаемость не показаны.","priceUnavailable":"Временный прайсбук недоступен или его срок истёк: запросите обследование у инженера. Для экономии и окупаемости также нужен тариф.","noSavings":"Недостаточно данных, чтобы показать экономию и окупаемость.","chartDescription":"Помесячная предварительная генерация по подтверждённым данным и полученному солнечному ресурсу.","confidenceTitle":"Уверенность в оценке","confidence":{"high":"Высокая","medium":"Средняя","low":"Низкая","insufficient":"Недостаточно данных"},"assumptionsTitle":"Допущения расчёта","commercialEstimate":"Предварительная цена YOUR ENERGY · {version} · не является офертой: {p25}–{p75}; P50 {p50}. Действует до {validUntil}."},"solutions":{"liveBadge":"По вашим подтверждённым данным","liveCopy":"Три предварительных технических сценария рассчитаны из подтверждённых данных объекта.","financialUnavailable":"Предварительная цена появляется из действующего PriceBook; без тарифа экономия и окупаемость не показываются.","priceUnavailable":"Временный прайсбук недоступен или его срок истёк: запросите обследование у инженера."},"ledger":{"title":"Как рассчитано","copy":"Источники, версии и допущения этого предварительного результата.","sources":{"consumption":"Данные о потреблении","location":"Местоположение объекта","roof":"Контур и параметры крыши","tariff":"Тариф электроэнергии","userTariff":"Введено пользователем из счёта","solar":"Солнечный ресурс","investment":"Стоимость системы","pricebook":"Временный прайс-лист YOUR ENERGY","unavailable":"Источник не подключён"},"assumptions":{"NO_TARIFF_ESCALATION":"Рост тарифа не моделируется.","NO_PANEL_DEGRADATION":"Деградация панелей не моделируется.","NO_MAINTENANCE_FINANCING_DISCOUNTING_EXPORT_OR_TAXES":"Не учтены обслуживание, финансирование, дисконтирование, правила отпуска энергии и налоги.","MISSING_EVIDENCE_SUPPRESSES_FINANCIAL_RESULT":"Без подтверждённых данных финансовые значения не показываются.","PVGIS_SYSTEM_LOSS_14_PERCENT":"В PVGIS использовано предварительное допущение о системных потерях 14%; его подтверждает инженер.","PRELIMINARY_ROOF_USABLE_AREA_70_PERCENT":"Для предварительной вместимости использовано 70% отмеченной площади крыши. Реальную полезную площадь, отступы и проходы проверяет инженер.","PRELIMINARY_PANEL_SIZE_580W_2M2":"Для предварительной вместимости использован модуль 580 W площадью 2 м²; это не подтверждённая комплектация.","USER_PROVIDED_TARIFF":"Тариф введён пользователем из счёта и не является тарифным реестром.","TEMPORARY_PRICEBOOK_NOT_OFFER":"Временный PriceBook — ориентир для предварительного бюджета, не оферта и не договорная цена."}},"passport":{"persistenceTitle":"Solar Passport хранится в этом браузере","persistenceCopy":"Этот предварительный Passport существует только в памяти текущего сеанса.","memoryOnly":"После закрытия страницы данные могут быть потеряны.","permanentLink":"Постоянная ссылка и PDF появятся после подключения хранилища.","sourceLedger":"Источники и допущения","shareUnavailable":"Отправка ссылки пока недоступна.","pendingBadge":"После расчёта","pendingAddress":"Появится после подтверждения объекта","pendingDate":"Создаётся в текущем сеансе","pendingSource":"Источник: ожидается ответ PVGIS","pendingChartDescription":"Помесячная генерация появится после расчёта PVGIS.","pendingTitle":"Solar Passport появится после расчёта","realTitle":"Ваш предварительный Solar Passport","sessionBadge":"Текущий сеанс"},"lead":{"title":"Передать расчёт инженеру","copy":"Оставьте контакты, чтобы инженер мог уточнить данные объекта.","nameLabel":"Ваше имя","phoneLabel":"Телефон","emailLabel":"Электронная почта","messageLabel":"Комментарий к объекту","consent":"Я согласен(на) на обработку данных для ответа на запрос.","submit":"Отправить запрос","required":"Заполните обязательные поля и подтвердите согласие.","invalidEmail":"Введите корректный адрес электронной почты.","sending":"Отправляем запрос…","sent":"Запрос отправлен. Мы свяжемся с вами после проверки данных.","unavailable":"Отправка временно недоступна. Попробуйте позже.","retry":"Повторить отправку","directCall":"Или позвоните инженеру:","privacy":"Данные не передаются в аналитику."},"status":{"geocodeUnavailable":"Сервис геокодирования не подключён или временно недоступен.","analysisUnavailable":"Сервис солнечного анализа не подключён или временно недоступен.","leadUnavailable":"Сервис заявок не подключён или временно недоступен.","retry":"Попробовать ещё раз","canceled":"Предыдущий запрос отменён."},"months":[{"short":"Янв","name":"Январь"},{"short":"Фев","name":"Февраль"},{"short":"Мар","name":"Март"},{"short":"Апр","name":"Апрель"},{"short":"Май","name":"Май"},{"short":"Июн","name":"Июнь"},{"short":"Июл","name":"Июль"},{"short":"Авг","name":"Август"},{"short":"Сен","name":"Сентябрь"},{"short":"Окт","name":"Октябрь"},{"short":"Ноя","name":"Ноябрь"},{"short":"Дек","name":"Декабрь"}]},"map":{"image":"/images/roof-scan-768.webp","tileUrl":"https://tile.openstreetmap.org/{z}/{x}/{y}.png","tileAttribution":"© OpenStreetMap contributors"},"endpoints":{"geocode":"/api/geocode","potential":"/api/potential","analysis":"/api/analysis"}}</script>
+      <script id='page-config' type='application/json'>{"locale":"ru-RU","status":{"minAddress":"Введите адрес длиной не менее 5 символов.","analyzing":"Готовим предварительный анализ…","ready":"Предварительный результат готов. Проверьте данные перед принятием решения.","unavailable":"Предварительный анализ сейчас недоступен. Повторите попытку или укажите точку вручную.","invalidFile":"Формат не поддерживается. Выберите PDF, JPG, JPEG или PNG.","largeFile":"Файл слишком большой. Максимальный размер — 10 МБ.","fileSelected":"Файл выбран и остаётся только в памяти браузера.","fileRemoved":"Файл удалён.","mapReady":"Интерактивная карта объекта готова.","mapFailed":"Карта недоступна. Остаётся статический демонстрационный резервный вариант.","monthTooltip":"Генерация за {month}: {value} kWh"},"product":{"common":{"required":"Обязательное поле","optional":"Необязательно","perMonth":"в месяц","kwh":"kWh","amd":"֏","complete":"Готово","cancel":"Отмена","noJsCalculator":"Калькулятор работает с JavaScript. Для ручной консультации позвоните инженеру:"},"tools":{"calculator":"Открыть полный калькулятор","offerChecker":"Проверить коммерческое предложение"},"flow":{"title":"Как устроен расчёт","steps":[{"number":"01","title":"Найдите участок","copy":"Введите адрес или поставьте точку на карте и подтвердите её."},{"number":"02","title":"Посмотрите потенциал места","copy":"PVGIS покажет ориентир для выбранной точки — до расчёта вашей крыши."},{"number":"03","title":"Уточните крышу и потребление","copy":"Обведите доступную площадь и укажите фактическое направление, наклон и расход энергии."},{"number":"04","title":"Получите предварительный расчёт","copy":"Система, бюджет и экономия появятся только из подтверждённых входных данных."}]},"potential":{"eyebrow":"Шаг 2 · Потенциал участка","title":"Солнечный ориентир для выбранной точки","loading":"Запрашиваем PVGIS для подтверждённой точки…","annualYieldLabel":"Ожидаемая генерация на 1 kWp в год","orientationLabel":"Оптимальное направление для отдельной конструкции","tiltLabel":"Оптимальный наклон для отдельной конструкции","source":"Источник: PVGIS · предварительное допущение о системных потерях 14%","disclosure":"Это ориентир PVGIS для свободно стоящей фиксированной системы в выбранной точке. Это не измерение вашей крыши и не рекомендация по монтажу на ней.","roofDisclosure":"Направление, уклон, площадь, затенение и несущую способность конкретной крыши нужно уточнить ниже и подтвердить инженером.","unavailable":"Не удалось получить потенциал PVGIS. Продолжите с контуром крыши или повторите запрос; цифры не будут подменены примером.","retry":"Повторить потенциал PVGIS","continue":"Перейти к расчёту моей крыши","directions":{"north":"север","northEast":"северо-восток","east":"восток","southEast":"юго-восток","south":"юг","southWest":"юго-запад","west":"запад","northWest":"северо-запад"}},"consumption":{"title":"Потребление электроэнергии","copy":"Это нужно только для мощности системы, бюджета и экономии — не для поиска адреса или потенциала точки.","modes":{"bill":"Средний счёт","usage":"Среднее потребление","monthly":"Помесячный профиль"},"billLabel":"Средний счёт за электричество","billHelp":"Укажите среднюю сумму за месяц в драмах.","tariffLabel":"Тариф из вашего счёта","tariffHelp":"Необязательно для kWh. Для счёта в драмах он нужен, чтобы перевести сумму в kWh; в Passport будет отмечен как введённый вами.","usageLabel":"Среднее потребление в месяц","usageHelp":"Укажите среднее потребление в kWh за месяц.","monthlyTitle":"Потребление за 12 месяцев","monthlyHelp":"Укажите kWh для каждого месяца, если эти данные доступны.","annualLabel":"Расчётное потребление за год","invalidNumber":"Введите число больше нуля.","invalidBill":"Введите корректную сумму счёта в драмах.","invalidTariff":"Введите тариф больше нуля в AMD/kWh.","invalidUsage":"Введите корректное потребление в kWh.","incompleteMonths":"Заполните все 12 месяцев или выберите другой способ.","noConsumption":"Для расчёта требуется значение потребления или счёта.","normalized":"Данные приведены к годовому профилю."},"location":{"title":"Местоположение объекта","copy":"Адрес нужен только для поиска точки. Подтвердите найденный объект или укажите точку вручную.","search":"Найти адрес","searching":"Ищем адрес…","resultLabel":"Найденный адрес","confirmPrompt":"Это ваш объект?","confirm":"Подтвердить объект","edit":"Изменить адрес","noResult":"Адрес не найден. Укажите точку на карте вручную.","unavailable":"Сервис поиска адреса сейчас недоступен. Укажите точку на карте вручную.","manualTitle":"Указать точку вручную","manualCopy":"Нажмите на карту, чтобы отметить примерное положение объекта. Это не геокодирование адреса.","chooseOnMap":"Выбрать точку на карте","useMapCenter":"Использовать центр карты","manualUnavailable":"Откройте карту, чтобы использовать её центр как ручную точку.","pointSelected":"Точка объекта выбрана.","retry":"Повторить поиск"},"roof":{"title":"Контур крыши","copy":"Обведите доступную часть крыши и задайте фактические параметры ската для предварительной оценки.","mapDisclosure":"Карта помогает поставить точку и примерный контур. Без подключённого аэроснимка или 3D-модели она не определяет автоматически крышу, её угол или затенение.","fallback":"Карта недоступна. Продолжите после указания адреса или попробуйте ещё раз.","start":"Начать контур","addPointAtCenter":"Добавить точку в центре карты","addPoint":"Добавить точку","undo":"Отменить последнюю точку","reset":"Очистить контур","finish":"Рассчитать по контуру","finishHelp":"Заполните параметры ската и потребление — затем запросим предварительный расчёт PVGIS.","edit":"Изменить контур","pointsLabel":"Точек в контуре: {count}","minimumPoints":"Добавьте минимум 3 точки, чтобы завершить контур.","areaLabel":"Предварительная площадь крыши","orientationLabel":"Направление ската крыши","orientationHelp":"Выберите направление ската. Без него расчёт конкретной крыши невозможен; ориентир PVGIS выше остаётся доступен.","customOrientationLabel":"Своя ориентация (0° = север, 180° = юг)","customOrientationHelp":"Введите угол по компасу от 0 до 359°.","tiltLabel":"Наклон этого ската крыши","tiltHelp":"Для расчёта конкретного ската укажите приблизительный угол от 0° до 90°. Он не определяется по адресу.","parametersRequired":"Укажите направление и наклон ската, чтобы построить расчёт конкретной крыши.","angleGuideTitle":"Визуальная проверка введённых параметров крыши","angleGuideCopy":"Стрелка показывает направление ската, введённое вами. Оно отличается от PVGIS-ориентира для отдельной конструкции выше.","angleGuideOrientation":"Направление ската","angleGuideTilt":"Наклон ската","angleGuideUnknown":"Не указано","pointSelectLabel":"Выбрать точку {index}","removePoint":"Удалить точку","nudgeNorth":"Сместить точку на север","nudgeSouth":"Сместить точку на юг","nudgeEast":"Сместить точку на восток","nudgeWest":"Сместить точку на запад","orientationOptions":{"north":"Север","southEast":"Юго-восток","southWest":"Юго-запад","east":"Восток","south":"Юг","west":"Запад","unknown":"Выберите направление","custom":"Другая"},"unavailable":"Контур крыши пока не указан.","tilesUnavailable":"Фоновая карта недоступна. Контур можно задать после выбора точки.","locationRequired":"Сначала подтвердите объект или выберите точку на карте."},"result":{"title":"Предварительный анализ","preparing":"Готовим предварительный анализ…","ready":"Предварительный анализ готов.","unavailable":"Не удалось подготовить анализ с доступными данными.","retry":"Повторить расчёт","noTariff":"Тариф не указан: мощность, генерация PVGIS и предварительная цена доступны, но экономия и окупаемость не показаны.","priceUnavailable":"Временный прайсбук недоступен или его срок истёк: запросите обследование у инженера. Для экономии и окупаемости также нужен тариф.","noSavings":"Недостаточно данных, чтобы показать экономию и окупаемость.","chartDescription":"Помесячная предварительная генерация по подтверждённым данным и полученному солнечному ресурсу.","confidenceTitle":"Уверенность в оценке","confidence":{"high":"Высокая","medium":"Средняя","low":"Низкая","insufficient":"Недостаточно данных"},"assumptionsTitle":"Допущения расчёта","commercialEstimate":"Предварительная цена YOUR ENERGY · {version} · не является офертой: {p25}–{p75}; P50 {p50}. Действует до {validUntil}."},"solutions":{"liveBadge":"По вашим подтверждённым данным","liveCopy":"Три предварительных технических сценария рассчитаны из подтверждённых данных объекта.","financialUnavailable":"Предварительная цена появляется из действующего PriceBook; без тарифа экономия и окупаемость не показываются.","priceUnavailable":"Временный прайсбук недоступен или его срок истёк: запросите обследование у инженера."},"ledger":{"title":"Как рассчитано","copy":"Источники, версии и допущения этого предварительного результата.","sources":{"consumption":"Данные о потреблении","location":"Местоположение объекта","roof":"Контур и параметры крыши","tariff":"Тариф электроэнергии","userTariff":"Введено пользователем из счёта","solar":"Солнечный ресурс","investment":"Стоимость системы","pricebook":"Временный прайс-лист YOUR ENERGY","unavailable":"Источник не подключён"},"assumptions":{"NO_TARIFF_ESCALATION":"Рост тарифа не моделируется.","NO_PANEL_DEGRADATION":"Деградация панелей не моделируется.","NO_MAINTENANCE_FINANCING_DISCOUNTING_EXPORT_OR_TAXES":"Не учтены обслуживание, финансирование, дисконтирование, правила отпуска энергии и налоги.","MISSING_EVIDENCE_SUPPRESSES_FINANCIAL_RESULT":"Без подтверждённых данных финансовые значения не показываются.","PVGIS_SYSTEM_LOSS_14_PERCENT":"В PVGIS использовано предварительное допущение о системных потерях 14%; его подтверждает инженер.","PRELIMINARY_ROOF_USABLE_AREA_70_PERCENT":"Для предварительной вместимости использовано 70% отмеченной площади крыши. Реальную полезную площадь, отступы и проходы проверяет инженер.","PRELIMINARY_PANEL_SIZE_580W_2M2":"Для предварительной вместимости использован модуль 580 W площадью 2 м²; это не подтверждённая комплектация.","USER_PROVIDED_TARIFF":"Тариф введён пользователем из счёта и не является тарифным реестром.","TEMPORARY_PRICEBOOK_NOT_OFFER":"Временный PriceBook — ориентир для предварительного бюджета, не оферта и не договорная цена."}},"passport":{"persistenceTitle":"Solar Passport хранится в этом браузере","persistenceCopy":"Этот предварительный Passport существует только в памяти текущего сеанса.","memoryOnly":"После закрытия страницы данные могут быть потеряны.","permanentLink":"Постоянная ссылка и PDF появятся после подключения хранилища.","sourceLedger":"Источники и допущения","shareUnavailable":"Отправка ссылки пока недоступна.","pendingBadge":"После расчёта","pendingAddress":"Появится после подтверждения объекта","pendingDate":"Создаётся в текущем сеансе","pendingSource":"Источник: ожидается ответ PVGIS","pendingChartDescription":"Помесячная генерация появится после расчёта PVGIS.","pendingTitle":"Solar Passport появится после расчёта","realTitle":"Ваш предварительный Solar Passport","sessionBadge":"Текущий сеанс"},"lead":{"title":"Передать расчёт инженеру","copy":"Оставьте контакты, чтобы инженер мог уточнить данные объекта.","nameLabel":"Ваше имя","phoneLabel":"Телефон","emailLabel":"Электронная почта","messageLabel":"Комментарий к объекту","consent":"Я согласен(на) на обработку данных для ответа на запрос.","submit":"Отправить запрос","required":"Заполните обязательные поля и подтвердите согласие.","invalidEmail":"Введите корректный адрес электронной почты.","sending":"Отправляем запрос…","sent":"Запрос отправлен. Мы свяжемся с вами после проверки данных.","unavailable":"Отправка временно недоступна. Попробуйте позже.","retry":"Повторить отправку","directCall":"Или позвоните инженеру:","privacy":"Данные не передаются в аналитику."},"status":{"geocodeUnavailable":"Сервис геокодирования не подключён или временно недоступен.","analysisUnavailable":"Сервис солнечного анализа не подключён или временно недоступен.","leadUnavailable":"Сервис заявок не подключён или временно недоступен.","retry":"Попробовать ещё раз","canceled":"Предыдущий запрос отменён."},"months":[{"short":"Янв","name":"Январь"},{"short":"Фев","name":"Февраль"},{"short":"Мар","name":"Март"},{"short":"Апр","name":"Апрель"},{"short":"Май","name":"Май"},{"short":"Июн","name":"Июнь"},{"short":"Июл","name":"Июль"},{"short":"Авг","name":"Август"},{"short":"Сен","name":"Сентябрь"},{"short":"Окт","name":"Октябрь"},{"short":"Ноя","name":"Ноябрь"},{"short":"Дек","name":"Декабрь"}]},"map":{"image":"/images/roof-scan-768.webp","tileUrl":"https://tile.openstreetmap.org/{z}/{x}/{y}.png","tileAttribution":"© OpenStreetMap contributors"},"endpoints":{"geocode":"/api/geocode","potential":"/api/potential","analysis":"/api/analysis"}}</script>
       <script type='module' src='/src/main.js'></script>
   </body>
 </html>

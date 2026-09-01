@@ -153,7 +153,7 @@ Set these in the Cloudflare dashboard / `wrangler secret put`, never in
 | `CRM_API_KEY`                                                              | Optional          | Sent server-to-server using `CRM_API_KEY_HEADER` / `CRM_API_KEY_PREFIX`.                                                                            |
 | `TURNSTILE_SECRET_KEY`                                                     | Optional          | Enables server verification. When set, a token is required for each lead.                                                                           |
 | `LEAD_REQUIRE_TURNSTILE`                                                   | Optional          | Set to `true` to reject leads until Turnstile is configured. Default is `false`.                                                                    |
-| `API_FETCH_TIMEOUT_MS`                                                     | Optional          | Server fetch timeout, clamped to 1–20 seconds; default 8 seconds.                                                                                   |
+| `API_FETCH_TIMEOUT_MS`                                                     | Optional          | Server fetch timeout, clamped to 5–20 seconds; default 12 seconds. Values below 5 seconds are raised because a valid PVGIS request can take longer. |
 | `ALLOW_INSECURE_PROVIDER_URLS`                                             | Local dev only    | Set `true` only for `http://localhost`, `127.0.0.1` or `[::1]` test adapters.                                                                       |
 
 The generic geocoder normalizes GeoJSON `features`, Nominatim-style arrays, and

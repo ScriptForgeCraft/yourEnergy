@@ -35,8 +35,9 @@ Prettier are development dependencies. There are no browser API keys.
    for a fixed free-standing system. The UI says explicitly that this is not a
    survey of the actual roof.
 4. Only after that, the visitor proceeds to the detailed step: they outline a
-   usable roof face, provide its actual direction/tilt when known, and enter
-   average or monthly electricity consumption.
+   usable roof face, provide its actual direction and approximate tilt (both
+   are required for a roof-specific result), and enter average or monthly
+   electricity consumption.
 5. `/api/analysis` asks the server-side PVGIS adapter for a **1 kWp** yield.
    It uses the public PVGIS endpoint by default or an approved server-side
    override. The pure domain layer scales that provider yield transparently

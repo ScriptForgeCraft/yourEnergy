@@ -44,10 +44,12 @@ dependencies. Устаревший модуль `CRS.Simple` удалён.
    orientation/tilt для свободно стоящей фиксированной системы. Это отдельный
    статус «Потенциал участка», а не заявление об угле реальной крыши.
 4. Только затем посетитель продолжает в detailed flow: на geographic Leaflet
-   map строит контур доступного ската и при наличии данных указывает его
-   направление/наклон. Можно выбрать точку, сдвинуть её, отменить или сбросить
-   контур. «Завершить» недоступно до трёх точек; среднее kWh либо 12-месячный
-   профиль требуются только на этом шаге.
+   map строит контур доступного ската и указывает его направление/примерный
+   наклон — оба поля обязательны для roof-specific расчёта. Клавиатурный
+   fallback позволяет выбрать центр карты, затем подтвердить точку. Можно
+   выбрать точку контура, сдвинуть её, отменить или сбросить контур. Кнопка
+   «Рассчитать по контуру» недоступна до трёх точек; среднее kWh либо
+   12-месячный профиль требуются только на этом шаге.
 5. `/api/analysis` запрашивает у server-side PVGIS yield для 1 kWp и
    прозрачным образом масштабирует его от введённого потребления. Если
    `PVGIS_ENDPOINT` не задан, Function использует публичный endpoint PVGIS;
@@ -113,6 +115,15 @@ OpenStreetMap — явный публичный fallback tile provider с attrib
 Vite добавит в `img-src` CSP. Functions не логируют адрес, координаты или lead
 PII.
 
+1 сентября на предоставленном тестовом Pages URL `/api/potential` отвечал
+`PVGIS_TIMEOUT` примерно через 1,3 секунды. Причина найдена в config parser:
+отсутствующее `API_FETCH_TIMEOUT_MS` превращалось через `Number(null)` в `0`
+и попадало в старый односекундный минимум. Исходник исправлен: отсутствие
+переменной теперь даёт 12 секунд, а заданное значение ограничивается 5–20
+секундами. Прямой запрос PVGIS для тестовой точки ответил примерно за 1,4 с.
+Изменение ещё требует деплоя в Pages; это не результат, выданный за
+производственную проверку.
+
 OSM не является спутниковой/3D моделью. Поэтому адрес и карта не могут честно
 определить фактический наклон, полезную площадь, затенение или несущую
 способность крыши. Для автоматического roof-scan нужен отдельный approved
@@ -139,13 +150,14 @@ reduced motion и текстовые chart/table alternatives.
 
 ## 10. QA
 
-Свежий `npm run check` проходит: 32 Node unit/API tests покрывают
+Свежий `npm run check` проходит: 34 Node unit/API tests покрывают
 consumption/tariffs, finite values, Passport memory flow, API envelopes,
 PVGIS normalization and free-standing optimum calculation, unconfirmed property
 rejection, provider failure without demo fallback, aborts, polygon area and
 roof-capacity limit, P25/P50/P75 и округление, expiry PriceBook, ручной тариф,
 скрытие финансов без тарифа, server-selected pricebook/client-capex rejection
-и статусы Offer Checker. `npm run lint`, `npm run format:check`, `npm run build`
+и статусы Offer Checker, пустое числовое поле без ложного `0`, а также default
+и границы provider timeout. `npm run lint`, `npm run format:check`, `npm run build`
 и `npm run verify:build` входят в эту команду; verifier подтверждает 18 routes,
 canonical/hreflang, JSON-LD, anchors, template tokens и assets.
 
@@ -154,6 +166,7 @@ responsive menu, no-overflow, отсутствие calculator form/map/file inpu
 homepage, прямые CTA homepage → same-locale Calculator, ручная точка на карте,
 отдельный четырёхшаговый flow «точка → PVGIS → крыша → расчёт», скрытый до
 подтверждённого provider-ответа result panel, контур крыши с keyboard-кнопкой,
+выбором центра карты и фокусом на подтверждении, обязательными direction/tilt,
 custom azimuth, Escape для Passport dialog и provider-failure state без
 подстановки цифр. Найденный overlay статической roof-card, блокировавший клики
 по интерактивной карте, устранён; скрытые controls больше не отображаются из-за
@@ -171,8 +184,8 @@ provider mocks. MIME/size rules upload покрыты unit-тестом; Chrome 
 ## 11. Build и performance
 
 Fresh production build: homepage enhancement is 0.11 KB gzip (plus shared
-navigation/scroller chunks), full Calculator `main` is 11.98 KB gzip + shared
-domain chunk 3.98 KB gzip, CSS 11.21 KB gzip; Leaflet 43.38 KB gzip remains a
+navigation/scroller chunks), full Calculator `main` is 12.19 KB gzip + shared
+domain chunk 3.98 KB gzip, CSS 11.33 KB gzip; Leaflet 43.38 KB gzip remains a
 lazy chunk and the separate Offer Checker enhancement is 1.54 KB gzip.
 
 The 31.08 Lighthouse table in `reports/lighthouse/*-p1.json` belongs to the
@@ -198,5 +211,6 @@ and intentionally ignored by Git.
    can replace either without changing the browser flow.
 2. Replace every illustrative project/photo/review/price with approved evidence;
    complete Armenian native proofreading and legal approval for Privacy/Terms.
-3. Deploy to staging, repeat browser upload/keyboard/mobile smoke and Lighthouse
-   on the real origin, then record actual production results.
+3. Deploy to staging (including the PVGIS timeout fix), repeat browser
+   upload/keyboard/mobile smoke and Lighthouse on the real origin, then record
+   actual production results.

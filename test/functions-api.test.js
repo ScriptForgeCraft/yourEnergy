@@ -5,6 +5,7 @@ import { onRequest as analysisOnRequest } from '../functions/api/analysis.js';
 import { onRequest as geocodeOnRequest } from '../functions/api/geocode.js';
 import { onRequest as leadOnRequest } from '../functions/api/lead.js';
 import { onRequest as potentialOnRequest } from '../functions/api/potential.js';
+import { providerTimeoutMs } from '../functions/_lib/config.js';
 import { buildP0SolarAnalysis } from '../functions/_lib/solar-analysis.js';
 import {
   createGeocodingAdapter,
@@ -47,6 +48,13 @@ const p0AnalysisPayload = Object.freeze({
   consumption: { averageMonthlyKwh: 1000 },
   roof: { areaSqm: 70, polygonComplete: true, tiltDegrees: 30, azimuthDegrees: 180 },
   system: { capacityKwp: 1, lossPercent: 14 }
+});
+
+test('provider timeout allows a realistic PVGIS response even when staging config is too low', () => {
+  assert.equal(providerTimeoutMs({}), 12_000);
+  assert.equal(providerTimeoutMs({ API_FETCH_TIMEOUT_MS: '1000' }), 5_000);
+  assert.equal(providerTimeoutMs({ API_FETCH_TIMEOUT_MS: '7000' }), 7_000);
+  assert.equal(providerTimeoutMs({ API_FETCH_TIMEOUT_MS: '25000' }), 20_000);
 });
 
 test('geocoding validates input and normalizes provider candidates without exposing fake locations', async () => {

@@ -139,9 +139,12 @@ h3 {
 }
 
 .text-button {
-  min-height: 36px;
+  min-width: 44px;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
   border-radius: 7px;
-  padding: 0 8px;
+  padding: 0 10px;
   color: #153653;
   background: transparent;
   font-weight: 800;
@@ -1787,6 +1790,40 @@ h3 {
   font-size: 0.76rem;
 }
 
+.calculator-noscript {
+  margin: 18px 0 0;
+  border: 1px solid #dbe3e7;
+  border-radius: 14px;
+  padding: 16px;
+  color: var(--soft-ink);
+  background: rgb(255 255 255 / 78%);
+}
+
+.calculator-noscript h2,
+.calculator-noscript p {
+  margin: 0;
+}
+
+.calculator-noscript h2 {
+  color: var(--color-navy);
+  font-size: 1rem;
+}
+
+.calculator-noscript p {
+  margin-top: 8px;
+  font-size: 0.82rem;
+}
+
+.calculator-noscript .button {
+  margin-top: 14px;
+}
+
+.calculator-noscript address {
+  margin-top: 12px;
+  font-size: 0.76rem;
+  font-style: normal;
+}
+
 .consumption-modes {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -1969,6 +2006,12 @@ h3 {
   background: #fff9e5;
 }
 
+.location-candidate[aria-pressed='true'] {
+  border-color: #c88700;
+  box-shadow: 0 0 0 3px rgb(245 189 24 / 24%);
+  background: #fff7d8;
+}
+
 .flow-actions {
   display: flex;
   flex-wrap: wrap;
@@ -2094,6 +2137,12 @@ h3 {
 
 .roof-editor__summary strong {
   color: #142c42;
+}
+
+.roof-editor__calculate-help {
+  max-width: 58ch;
+  margin: 9px 0 0 !important;
+  line-height: 1.45;
 }
 
 .roof-nudge-controls {

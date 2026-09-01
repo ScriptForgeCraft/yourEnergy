@@ -3,6 +3,7 @@ import {
   normalizeConsumption,
   SolarPassportRepository
 } from './domain/index.js';
+import { toFiniteNumberOrNull } from './domain/numbers.js';
 import { trackProductEvent } from './services/analytics.js';
 import { ProductApiClient, ProductApiError } from './services/api-client.js';
 import { createPropertyMap } from './services/property-map.js';
@@ -235,7 +236,7 @@ const errorCopy = (error, fallback) => {
   return fallback;
 };
 
-const updateLocationStage = ({ message } = {}) => {
+const updateLocationStage = ({ message, focus = false } = {}) => {
   if (!locationStage) return;
   locationStage.hidden = false;
   if (locationMessage) locationMessage.textContent = message ?? product.location?.copy ?? '';
@@ -247,6 +248,12 @@ const updateLocationStage = ({ message } = {}) => {
       : '';
   }
   if (locationConfirm) locationConfirm.disabled = !candidate;
+  if (focus) {
+    requestAnimationFrame(() => {
+      locationStage.scrollIntoView({ block: 'nearest' });
+      locationStage.focus({ preventScroll: true });
+    });
+  }
 };
 
 const resetDetailedFlow = () => {
@@ -337,7 +344,11 @@ const renderCandidates = (candidates, source) => {
     button.className = 'location-candidate';
     button.type = 'button';
     button.textContent = candidate.label;
+    button.setAttribute('aria-pressed', 'false');
     button.addEventListener('click', async () => {
+      locationCandidates.querySelectorAll('.location-candidate').forEach((candidateButton) => {
+        candidateButton.setAttribute('aria-pressed', String(candidateButton === button));
+      });
       resetDetailedFlow();
       pendingLocation = {
         address: candidate.label,
@@ -354,6 +365,7 @@ const renderCandidates = (candidates, source) => {
       updateLocationStage();
       const propertyMap = await ensurePropertyMap('location');
       propertyMap?.setLocation(pendingLocation.coordinates, { notify: false });
+      requestAnimationFrame(() => locationConfirm?.focus({ preventScroll: true }));
     });
     locationCandidates.append(button);
   });
@@ -366,7 +378,7 @@ const selectManualLocation = async () => {
   pendingLocation = null;
   clearCalculatedState();
   renderCandidates([], null);
-  updateLocationStage({ message: product.location?.manualCopy });
+  updateLocationStage({ message: product.location?.manualCopy, focus: true });
   const propertyMap = await ensurePropertyMap('location');
   propertyMap?.setMode('location');
   writeStatus(product.location?.manualCopy);
@@ -515,7 +527,7 @@ const startGeocoding = async () => {
     const location = response.location;
     const candidates = Array.isArray(location?.candidates) ? location.candidates : [];
     if (!candidates.length) {
-      updateLocationStage({ message: product.location?.noResult });
+      updateLocationStage({ message: product.location?.noResult, focus: true });
       await ensurePropertyMap('location');
       writeStatus(product.location?.noResult, true);
       return;
@@ -524,13 +536,20 @@ const startGeocoding = async () => {
     if (candidates.length === 1) {
       locationCandidates?.querySelector('button')?.click();
     } else {
-      updateLocationStage({ message: product.location?.copy });
+      updateLocationStage({ message: product.location?.copy, focus: true });
+      requestAnimationFrame(() =>
+        locationCandidates?.querySelector('button')?.focus({ preventScroll: true })
+      );
     }
     trackProductEvent('geocode_candidates_received', { count: candidates.length });
   } catch (error) {
     if (error instanceof ProductApiError && error.code === 'ABORTED') return;
     updateLocationStage({
-      message: errorCopy(error, product.location?.unavailable ?? product.status?.geocodeUnavailable)
+      message: errorCopy(
+        error,
+        product.location?.unavailable ?? product.status?.geocodeUnavailable
+      ),
+      focus: true
     });
     await ensurePropertyMap('location');
     writeStatus(errorCopy(error, product.status?.geocodeUnavailable), true);
@@ -544,8 +563,8 @@ const startGeocoding = async () => {
 };
 
 const numericRoofInput = (input, { minimum, maximum }) => {
-  const value = Number(input?.value);
-  return Number.isFinite(value) && value >= minimum && value <= maximum ? value : null;
+  const value = toFiniteNumberOrNull(input?.value);
+  return value !== null && value >= minimum && value <= maximum ? value : null;
 };
 
 const updateCustomOrientationControl = ({ focus = false } = {}) => {
@@ -568,6 +587,7 @@ const roofAzimuth = () =>
 const updateRoofAnglePreview = () => {
   const azimuth = roofAzimuth();
   const tilt = numericRoofInput(roofTilt, { minimum: 0, maximum: 90 });
+  const unknownValue = product.roof?.angleGuideUnknown ?? '—';
   if (roofPreviewArrow) {
     roofPreviewArrow.setAttribute(
       'transform',
@@ -577,10 +597,10 @@ const updateRoofAnglePreview = () => {
   if (roofPreviewOrientation) {
     roofPreviewOrientation.textContent = Number.isFinite(azimuth)
       ? formatCompassDirection(azimuth)
-      : '—';
+      : unknownValue;
   }
   if (roofPreviewTilt)
-    roofPreviewTilt.textContent = Number.isFinite(tilt) ? formatDegrees(tilt) : '—';
+    roofPreviewTilt.textContent = Number.isFinite(tilt) ? formatDegrees(tilt) : unknownValue;
 };
 
 const publishAnalysis = (analysis, passport) => {
@@ -620,7 +640,11 @@ const publishAnalysis = (analysis, passport) => {
   if (resultSummary) resultSummary.textContent = product.result?.ready ?? '';
   if (resultPanel) resultPanel.hidden = false;
   resultPanel?.classList.remove('is-updated');
-  requestAnimationFrame(() => resultPanel?.classList.add('is-updated'));
+  requestAnimationFrame(() => {
+    resultPanel?.classList.add('is-updated');
+    resultPanel?.scrollIntoView({ block: 'start' });
+    resultPanel?.focus({ preventScroll: true });
+  });
   updateCalculatorFlow('result', 'complete');
   window.dispatchEvent(
     new CustomEvent('solar:analysis-updated', {
@@ -641,6 +665,33 @@ const publishAnalysis = (analysis, passport) => {
 };
 
 const analyzeRoof = async () => {
+  const roof = mapController?.getRoof() ?? currentRoof;
+  if (!confirmedProperty?.coordinates || !roof?.complete) {
+    writeStatus(product.roof?.minimumPoints ?? product.roof?.unavailable, true);
+    return;
+  }
+  const tiltDegrees = numericRoofInput(roofTilt, { minimum: 0, maximum: 90 });
+  const azimuthDegrees = roofAzimuth();
+  if (tiltDegrees === null || azimuthDegrees === null) {
+    const orientationInput =
+      roofOrientation?.value === 'custom' ? roofOrientationCustomInput : roofOrientation;
+    roofOrientation?.removeAttribute('aria-invalid');
+    roofOrientationCustomInput?.removeAttribute('aria-invalid');
+    if (azimuthDegrees === null) orientationInput?.setAttribute('aria-invalid', 'true');
+    if (tiltDegrees === null) roofTilt?.setAttribute('aria-invalid', 'true');
+    else roofTilt?.removeAttribute('aria-invalid');
+    writeStatus(
+      product.roof?.parametersRequired ??
+        `${product.roof?.orientationLabel}: ${product.common?.required}`,
+      true
+    );
+    (azimuthDegrees === null ? orientationInput : roofTilt)?.focus({ preventScroll: true });
+    return;
+  }
+  roofOrientationCustomInput?.removeAttribute('aria-invalid');
+  roofOrientation?.removeAttribute('aria-invalid');
+  roofTilt?.removeAttribute('aria-invalid');
+
   const consumptionInput = consumptionControl?.read();
   if (!consumptionInput?.valid) {
     writeStatus(consumptionInput?.message ?? product.consumption?.noConsumption, true);
@@ -654,26 +705,6 @@ const analyzeRoof = async () => {
     });
     return;
   }
-  const roof = mapController?.getRoof() ?? currentRoof;
-  if (!confirmedProperty?.coordinates || !roof?.complete) {
-    writeStatus(product.roof?.minimumPoints ?? product.roof?.unavailable, true);
-    return;
-  }
-  const tiltDegrees = numericRoofInput(roofTilt, { minimum: 0, maximum: 90 });
-  const azimuthDegrees = roofAzimuth();
-  if (tiltDegrees === null || azimuthDegrees === null) {
-    if (roofOrientation?.value === 'custom') {
-      roofOrientationCustomInput?.setAttribute('aria-invalid', 'true');
-    } else {
-      roofOrientation?.setAttribute('aria-invalid', 'true');
-    }
-    if (tiltDegrees === null) roofTilt?.setAttribute('aria-invalid', 'true');
-    writeStatus(`${product.roof?.orientationLabel}: ${product.common?.required}`, true);
-    return;
-  }
-  roofOrientationCustomInput?.removeAttribute('aria-invalid');
-  roofOrientation?.removeAttribute('aria-invalid');
-  roofTilt?.removeAttribute('aria-invalid');
 
   stopActiveRequest();
   const controller = new AbortController();
@@ -759,6 +790,13 @@ document.querySelector('[data-location-manual]')?.addEventListener('click', () =
 });
 document.querySelector('[data-location-manual-start]')?.addEventListener('click', () => {
   void selectManualLocation();
+});
+document.querySelector('[data-location-center]')?.addEventListener('click', () => {
+  if (!mapController?.setLocationAtCenter()) {
+    writeStatus(product.location?.manualUnavailable ?? product.roof?.fallback, true);
+    return;
+  }
+  requestAnimationFrame(() => locationConfirm?.focus({ preventScroll: true }));
 });
 document.querySelector('[data-location-confirm]')?.addEventListener('click', () => {
   void confirmLocation();

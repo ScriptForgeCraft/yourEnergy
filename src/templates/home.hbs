@@ -103,6 +103,30 @@
             <h1 id='hero-title'>{{hero.titleLead}}<br />{{hero.titleMiddle}}<br /><mark
               >{{hero.titleAccent}}</mark></h1>
             <p class='hero-intro'>{{hero.calculatorCopy}}</p>
+            <noscript>
+              <style>
+                .calculator-flow-region,
+                .address-form,
+                [data-location-stage],
+                [data-roof-stage],
+                [data-optional-upload],
+                [data-analysis-status],
+                [data-file-status],
+                [data-analysis-region],
+                .hero-tool-links,
+                .hero-benefits,
+                .hero-disclosure,
+                #passport {
+                  display: none !important;
+                }
+              </style>
+              <section class='calculator-noscript' id='manual-consultation' aria-labelledby='calculator-noscript-title'>
+                <h2 id='calculator-noscript-title'>{{toolShared.phone}}</h2>
+                <p>{{product.common.noJsCalculator}}</p>
+                <a class='button button--navy' href='{{contact.phoneHref}}'>{{contact.phone}}</a>
+                <address>{{contact.address}}</address>
+              </section>
+            </noscript>
             <p class='hero-tool-links'><a href='{{calculatorHref}}'>{{product.tools.calculator}}</a><a
                 href='{{offerCheckerHref}}'
               >{{product.tools.offerChecker}}</a></p>
@@ -135,7 +159,7 @@
                 {{product.location.chooseOnMap}}
               </button>
             </form>
-            <section class='product-stage' data-location-stage hidden aria-labelledby='location-stage-title'>
+            <section class='product-stage' data-location-stage hidden aria-labelledby='location-stage-title' tabindex='-1'>
               <p class='eyebrow'>{{product.location.title}}</p>
               <h2 id='location-stage-title'>{{product.location.confirmPrompt}}</h2>
               <p data-location-message>{{product.location.copy}}</p>
@@ -151,7 +175,11 @@
                   class='button button--outline'
                   type='button'
                   data-location-manual
-                >{{product.location.chooseOnMap}}</button></div>
+                >{{product.location.chooseOnMap}}</button><button
+                  class='button button--outline'
+                  type='button'
+                  data-location-center
+                >{{product.location.useMapCenter}}</button></div>
             </section>
             <section class='product-stage roof-editor' data-roof-stage hidden aria-labelledby='roof-stage-title'>
               <p class='eyebrow'>{{product.roof.title}}</p>
@@ -177,13 +205,17 @@
               <div class='roof-editor-controls'><label for='roof-orientation'>{{product.roof.orientationLabel}}<select
                     id='roof-orientation'
                     data-roof-orientation
-                  ><option value='unknown' selected>{{product.roof.orientationOptions.unknown}}</option><option value='180'>{{product.roof.orientationOptions.south}}</option><option
+                    required
+                    aria-required='true'
+                    aria-describedby='roof-orientation-help'
+                    aria-errormessage='analysis-status'
+                  ><option value='' selected>{{product.roof.orientationOptions.unknown}}</option><option value='180'>{{product.roof.orientationOptions.south}}</option><option
                       value='225'
                     >{{product.roof.orientationOptions.southWest}}</option><option value='135'
                     >{{product.roof.orientationOptions.southEast}}</option><option value='90'
                     >{{product.roof.orientationOptions.east}}</option><option value='270'
                     >{{product.roof.orientationOptions.west}}</option><option value='0'
-                    >{{product.roof.orientationOptions.north}}</option><option value='custom'>{{product.roof.orientationOptions.custom}}</option></select></label><label
+                    >{{product.roof.orientationOptions.north}}</option><option value='custom'>{{product.roof.orientationOptions.custom}}</option></select><small id='roof-orientation-help'>{{product.roof.orientationHelp}}</small></label><label
                   data-roof-orientation-custom
                   hidden
                   for='roof-orientation-custom'
@@ -195,6 +227,7 @@
                     step='1'
                     inputmode='decimal'
                     aria-describedby='roof-orientation-custom-help'
+                    aria-errormessage='analysis-status'
                     data-roof-orientation-custom-input
                   /><small id='roof-orientation-custom-help'>{{product.roof.customOrientationHelp}}</small></label><label
                   for='roof-tilt'
@@ -205,6 +238,9 @@
                     max='90'
                     step='1'
                     aria-describedby='roof-tilt-help'
+                    aria-errormessage='analysis-status'
+                    required
+                    aria-required='true'
                     data-roof-tilt
                   /><small id='roof-tilt-help'>{{product.roof.tiltHelp}}</small></label></div>
               <figure class='roof-angle-preview' aria-labelledby='roof-angle-preview-title'>
@@ -217,10 +253,14 @@
                 </div>
                 <p>{{product.roof.angleGuideCopy}}</p>
               </figure>
-              <fieldset class='consumption-inputs' data-consumption-inputs>
+              <fieldset
+                class='consumption-inputs'
+                data-consumption-inputs
+                aria-describedby='consumption-intro'
+              >
                 <legend>{{product.consumption.title}}</legend>
-                <p>{{product.consumption.copy}}</p>
-                <div class='consumption-modes' role='radiogroup'>
+                <p id='consumption-intro'>{{product.consumption.copy}}</p>
+                <div class='consumption-modes'>
                   <label><input type='radio' name='consumption-mode' value='bill' checked /><span
                     >{{product.consumption.modes.bill}}</span></label>
                   <label><input type='radio' name='consumption-mode' value='usage' /><span
@@ -236,9 +276,11 @@
                       min='1'
                       step='1'
                       inputmode='decimal'
+                      aria-describedby='consumption-bill-unit consumption-bill-help'
+                      aria-errormessage='analysis-status'
                       data-consumption-bill
-                    /><span>{{product.common.amd}} {{product.common.perMonth}}</span></div>
-                  <small>{{product.consumption.billHelp}}</small>
+                    /><span id='consumption-bill-unit'>{{product.common.amd}} {{product.common.perMonth}}</span></div>
+                  <small id='consumption-bill-help'>{{product.consumption.billHelp}}</small>
                 </div>
                 <div class='consumption-panel' data-consumption-panel='usage' hidden>
                   <label for='consumption-usage'>{{product.consumption.usageLabel}}</label>
@@ -248,22 +290,32 @@
                       min='1'
                       step='1'
                       inputmode='decimal'
+                      aria-describedby='consumption-usage-unit consumption-usage-help'
+                      aria-errormessage='analysis-status'
                       data-consumption-usage
-                    /><span>{{product.common.kwh}} {{product.common.perMonth}}</span></div>
-                  <small>{{product.consumption.usageHelp}}</small>
+                    /><span id='consumption-usage-unit'>{{product.common.kwh}} {{product.common.perMonth}}</span></div>
+                  <small id='consumption-usage-help'>{{product.consumption.usageHelp}}</small>
                 </div>
                 <div class='consumption-panel consumption-panel--months' data-consumption-panel='monthly' hidden>
-                  <p>{{product.consumption.monthlyTitle}}</p>
-                  <div class='monthly-consumption-grid'>{{#each passport.months}}<label
+                  <p id='consumption-monthly-title'>{{product.consumption.monthlyTitle}}</p>
+                  <div
+                    class='monthly-consumption-grid'
+                    role='group'
+                    aria-labelledby='consumption-monthly-title'
+                    aria-describedby='consumption-monthly-unit consumption-monthly-help'
+                  >{{#each passport.months}}<label
                       ><span>{{short}}</span><input
                         type='number'
                         min='0'
                         step='1'
                         inputmode='decimal'
-                        aria-label='{{name}}'
+                        aria-label='{{name}} — {{../product.common.kwh}}'
+                        aria-describedby='consumption-monthly-unit consumption-monthly-help'
+                        aria-errormessage='analysis-status'
                         data-consumption-month
                       /></label>{{/each}}</div>
-                  <small>{{product.consumption.monthlyHelp}}</small>
+                  <span class='visually-hidden' id='consumption-monthly-unit'>{{product.common.kwh}}</span>
+                  <small id='consumption-monthly-help'>{{product.consumption.monthlyHelp}}</small>
                 </div>
                 <div class='manual-tariff'>
                   <label for='consumption-tariff'>{{product.consumption.tariffLabel}}</label>
@@ -274,13 +326,16 @@
                       max='1000'
                       step='0.01'
                       inputmode='decimal'
-                      aria-describedby='consumption-tariff-help'
+                      aria-describedby='consumption-tariff-unit consumption-tariff-help'
+                      aria-errormessage='analysis-status'
                       data-consumption-tariff
-                    /><span>{{product.common.amd}} / {{product.common.kwh}}</span></div>
+                    /><span id='consumption-tariff-unit'>{{product.common.amd}} / {{product.common.kwh}}</span></div>
                   <small id='consumption-tariff-help'>{{product.consumption.tariffHelp}}</small>
                 </div>
                 <p class='consumption-total'><span>{{product.consumption.annualLabel}}</span><output
                     data-consumption-annual
+                    aria-label='{{product.consumption.annualLabel}} — {{product.common.kwh}}'
+                    aria-live='polite'
                   >—</output> {{product.common.kwh}}</p>
               </fieldset>
               <p class='roof-editor__summary'><span data-roof-points>{{product.roof.pointsLabel}}</span><strong
@@ -298,7 +353,14 @@
                     data-roof-nudge='south'
                     aria-label='{{product.roof.nudgeSouth}}'
                   >↓</button><button type='button' data-roof-remove>{{product.roof.removePoint}}</button></div></div>
-              <button class='button' type='button' data-roof-finish disabled>{{product.roof.finish}}</button>
+              <button
+                class='button'
+                type='button'
+                data-roof-finish
+                aria-describedby='roof-calculate-help'
+                disabled
+              >{{product.roof.finish}}</button>
+              <p class='roof-editor__calculate-help' id='roof-calculate-help'>{{product.roof.finishHelp}}</p>
             </section>
             <div class='upload-block' data-file-drop data-optional-upload hidden>
               <label class='upload-control' for='bill-file'>
@@ -327,9 +389,6 @@
             </div>
             <p class='form-status' id='analysis-status' data-analysis-status aria-live='polite'></p>
             <p class='form-status' id='file-status' data-file-status aria-live='polite'></p>
-            <noscript><p class='noscript-note' id='manual-consultation'>{{product.common.noJsCalculator}} <a
-                  href='{{contact.phoneHref}}'
-                >{{contact.phone}}</a></p></noscript>
             <ul class='hero-benefits' role='list'>
               {{#each hero.benefits}}<li><svg class='inline-icon' aria-hidden='true'><use
                       href='/icons.svg#check'
@@ -452,7 +511,7 @@
               <p>{{product.potential.roofDisclosure}}</p>
               <div class='flow-actions'><button class='button button--navy' type='button' data-site-potential-continue>{{product.potential.continue}}</button><button class='button button--outline' type='button' data-site-potential-retry hidden>{{product.potential.retry}}</button></div>
             </section>
-            <div class='result-panel' data-result-panel {{#if isCalculatorPage}}hidden{{/if}}>
+            <div class='result-panel' data-result-panel {{#if isCalculatorPage}}hidden{{/if}} tabindex='-1'>
               {{#unless isCalculatorPage}}<span class='demo-badge demo-badge--inline'>{{common.demo}}</span>{{/unless}}
               <p data-analysis-summary>{{map.result}}</p>
               <dl>
@@ -568,8 +627,8 @@
                   ><use href='/icons.svg#check'></use></svg>{{this}}</li>{{/each}}</ul>
             <a
               class='button button--outline'
-              href='{{calculatorHref}}'
-              data-open-passport
+              href='{{#if isCalculatorPage}}{{contact.phoneHref}}{{else}}{{calculatorHref}}{{/if}}'
+              {{#unless isCalculatorPage}}data-open-passport{{/unless}}
             >{{passport.cta}}</a>
             <p class='passport-persistence' data-passport-persistence hidden><strong
               >{{product.passport.persistenceTitle}}</strong><span>{{product.passport.persistenceCopy}}</span><span

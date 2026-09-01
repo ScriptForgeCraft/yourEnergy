@@ -11,6 +11,7 @@ import {
   normalizeConsumption,
   selectEffectiveTariff
 } from '../src/domain/index.js';
+import { toFiniteNumberOrNull } from '../src/domain/numbers.js';
 
 const TEST_TARIFF_DATASET = Object.freeze({
   id: 'test-am-retail-electricity',
@@ -66,6 +67,13 @@ const assertFiniteTree = (value, path = 'value', seen = new WeakSet()) => {
     assertFiniteTree(nested, `${path}.${key}`, seen);
   }
 };
+
+test('blank numeric fields do not become a false zero, while an explicit zero remains valid', () => {
+  assert.equal(toFiniteNumberOrNull(''), null);
+  assert.equal(toFiniteNumberOrNull('   '), null);
+  assert.equal(toFiniteNumberOrNull('0'), 0);
+  assert.equal(toFiniteNumberOrNull(0), 0);
+});
 
 test('selectEffectiveTariff selects dated, verified records and keeps the P0 registry unavailable', () => {
   const historic = selectEffectiveTariff(TEST_TARIFF_DATASET, '2025-06-01');

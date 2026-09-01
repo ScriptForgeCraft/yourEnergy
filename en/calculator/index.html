@@ -82,6 +82,30 @@
             <h1 id='hero-title'>Discover your home’s<br />solar potential<br /><mark
               >in 60 seconds</mark></h1>
             <p class='hero-intro'>First find and confirm a point, then see its PVGIS potential. Roof and consumption data are only needed for the detailed estimate.</p>
+            <noscript>
+              <style>
+                .calculator-flow-region,
+                .address-form,
+                [data-location-stage],
+                [data-roof-stage],
+                [data-optional-upload],
+                [data-analysis-status],
+                [data-file-status],
+                [data-analysis-region],
+                .hero-tool-links,
+                .hero-benefits,
+                .hero-disclosure,
+                #passport {
+                  display: none !important;
+                }
+              </style>
+              <section class='calculator-noscript' id='manual-consultation' aria-labelledby='calculator-noscript-title'>
+                <h2 id='calculator-noscript-title'>Call an engineer</h2>
+                <p>The calculator requires JavaScript. For a manual consultation, call an engineer:</p>
+                <a class='button button--navy' href='tel:+37491095950'>+374 91 095 950</a>
+                <address>Artashisyan 48 14 Kotayq, Zovuni, 26 33 str, Yerevan</address>
+              </section>
+            </noscript>
             <p class='hero-tool-links'><a href='/en/calculator/'>Open the full calculator</a><a
                 href='/en/offer-checker/'
               >Check a commercial offer</a></p>
@@ -120,7 +144,7 @@
                 Choose a point on the map
               </button>
             </form>
-            <section class='product-stage' data-location-stage hidden aria-labelledby='location-stage-title'>
+            <section class='product-stage' data-location-stage hidden aria-labelledby='location-stage-title' tabindex='-1'>
               <p class='eyebrow'>Property location</p>
               <h2 id='location-stage-title'>Is this your property?</h2>
               <p data-location-message>The address is only used to find a map point. Confirm the matched property or select a point manually.</p>
@@ -136,7 +160,11 @@
                   class='button button--outline'
                   type='button'
                   data-location-manual
-                >Choose a point on the map</button></div>
+                >Choose a point on the map</button><button
+                  class='button button--outline'
+                  type='button'
+                  data-location-center
+                >Use the map centre</button></div>
             </section>
             <section class='product-stage roof-editor' data-roof-stage hidden aria-labelledby='roof-stage-title'>
               <p class='eyebrow'>Roof outline</p>
@@ -162,13 +190,17 @@
               <div class='roof-editor-controls'><label for='roof-orientation'>Roof-face direction<select
                     id='roof-orientation'
                     data-roof-orientation
-                  ><option value='unknown' selected>I do not know yet</option><option value='180'>South</option><option
+                    required
+                    aria-required='true'
+                    aria-describedby='roof-orientation-help'
+                    aria-errormessage='analysis-status'
+                  ><option value='' selected>Choose a direction</option><option value='180'>South</option><option
                       value='225'
                     >South-west</option><option value='135'
                     >South-east</option><option value='90'
                     >East</option><option value='270'
                     >West</option><option value='0'
-                    >North</option><option value='custom'>Other</option></select></label><label
+                    >North</option><option value='custom'>Other</option></select><small id='roof-orientation-help'>Choose the roof-face direction. A roof-specific calculation cannot be made without it; the PVGIS benchmark above remains available.</small></label><label
                   data-roof-orientation-custom
                   hidden
                   for='roof-orientation-custom'
@@ -180,6 +212,7 @@
                     step='1'
                     inputmode='decimal'
                     aria-describedby='roof-orientation-custom-help'
+                    aria-errormessage='analysis-status'
                     data-roof-orientation-custom-input
                   /><small id='roof-orientation-custom-help'>Enter a compass bearing from 0 to 359°.</small></label><label
                   for='roof-tilt'
@@ -190,8 +223,11 @@
                     max='90'
                     step='1'
                     aria-describedby='roof-tilt-help'
+                    aria-errormessage='analysis-status'
+                    required
+                    aria-required='true'
                     data-roof-tilt
-                  /><small id='roof-tilt-help'>Enter an approximate angle only if it is known; it is not detected from the address.</small></label></div>
+                  /><small id='roof-tilt-help'>For a roof-specific calculation, enter an approximate angle from 0° to 90°. It is not detected from the address.</small></label></div>
               <figure class='roof-angle-preview' aria-labelledby='roof-angle-preview-title'>
                 <figcaption id='roof-angle-preview-title'>Visual check of the roof inputs</figcaption>
                 <div class='roof-angle-preview__grid'>
@@ -202,10 +238,14 @@
                 </div>
                 <p>The arrow shows the roof-face direction you entered. It is different from the PVGIS free-standing benchmark above.</p>
               </figure>
-              <fieldset class='consumption-inputs' data-consumption-inputs>
+              <fieldset
+                class='consumption-inputs'
+                data-consumption-inputs
+                aria-describedby='consumption-intro'
+              >
                 <legend>Electricity consumption</legend>
-                <p>This is only needed for system sizing, budget and savings — not to find an address or the potential of a point.</p>
-                <div class='consumption-modes' role='radiogroup'>
+                <p id='consumption-intro'>This is only needed for system sizing, budget and savings — not to find an address or the potential of a point.</p>
+                <div class='consumption-modes'>
                   <label><input type='radio' name='consumption-mode' value='bill' checked /><span
                     >Average bill</span></label>
                   <label><input type='radio' name='consumption-mode' value='usage' /><span
@@ -221,9 +261,11 @@
                       min='1'
                       step='1'
                       inputmode='decimal'
+                      aria-describedby='consumption-bill-unit consumption-bill-help'
+                      aria-errormessage='analysis-status'
                       data-consumption-bill
-                    /><span>֏ per month</span></div>
-                  <small>Enter the average monthly amount in AMD.</small>
+                    /><span id='consumption-bill-unit'>֏ per month</span></div>
+                  <small id='consumption-bill-help'>Enter the average monthly amount in AMD.</small>
                 </div>
                 <div class='consumption-panel' data-consumption-panel='usage' hidden>
                   <label for='consumption-usage'>Average monthly consumption</label>
@@ -233,19 +275,28 @@
                       min='1'
                       step='1'
                       inputmode='decimal'
+                      aria-describedby='consumption-usage-unit consumption-usage-help'
+                      aria-errormessage='analysis-status'
                       data-consumption-usage
-                    /><span>kWh per month</span></div>
-                  <small>Enter the average monthly consumption in kWh.</small>
+                    /><span id='consumption-usage-unit'>kWh per month</span></div>
+                  <small id='consumption-usage-help'>Enter the average monthly consumption in kWh.</small>
                 </div>
                 <div class='consumption-panel consumption-panel--months' data-consumption-panel='monthly' hidden>
-                  <p>Consumption over 12 months</p>
-                  <div class='monthly-consumption-grid'><label
+                  <p id='consumption-monthly-title'>Consumption over 12 months</p>
+                  <div
+                    class='monthly-consumption-grid'
+                    role='group'
+                    aria-labelledby='consumption-monthly-title'
+                    aria-describedby='consumption-monthly-unit consumption-monthly-help'
+                  ><label
                       ><span>Jan</span><input
                         type='number'
                         min='0'
                         step='1'
                         inputmode='decimal'
-                        aria-label='January'
+                        aria-label='January — kWh'
+                        aria-describedby='consumption-monthly-unit consumption-monthly-help'
+                        aria-errormessage='analysis-status'
                         data-consumption-month
                       /></label><label
                       ><span>Feb</span><input
@@ -253,7 +304,9 @@
                         min='0'
                         step='1'
                         inputmode='decimal'
-                        aria-label='February'
+                        aria-label='February — kWh'
+                        aria-describedby='consumption-monthly-unit consumption-monthly-help'
+                        aria-errormessage='analysis-status'
                         data-consumption-month
                       /></label><label
                       ><span>Mar</span><input
@@ -261,7 +314,9 @@
                         min='0'
                         step='1'
                         inputmode='decimal'
-                        aria-label='March'
+                        aria-label='March — kWh'
+                        aria-describedby='consumption-monthly-unit consumption-monthly-help'
+                        aria-errormessage='analysis-status'
                         data-consumption-month
                       /></label><label
                       ><span>Apr</span><input
@@ -269,7 +324,9 @@
                         min='0'
                         step='1'
                         inputmode='decimal'
-                        aria-label='April'
+                        aria-label='April — kWh'
+                        aria-describedby='consumption-monthly-unit consumption-monthly-help'
+                        aria-errormessage='analysis-status'
                         data-consumption-month
                       /></label><label
                       ><span>May</span><input
@@ -277,7 +334,9 @@
                         min='0'
                         step='1'
                         inputmode='decimal'
-                        aria-label='May'
+                        aria-label='May — kWh'
+                        aria-describedby='consumption-monthly-unit consumption-monthly-help'
+                        aria-errormessage='analysis-status'
                         data-consumption-month
                       /></label><label
                       ><span>Jun</span><input
@@ -285,7 +344,9 @@
                         min='0'
                         step='1'
                         inputmode='decimal'
-                        aria-label='June'
+                        aria-label='June — kWh'
+                        aria-describedby='consumption-monthly-unit consumption-monthly-help'
+                        aria-errormessage='analysis-status'
                         data-consumption-month
                       /></label><label
                       ><span>Jul</span><input
@@ -293,7 +354,9 @@
                         min='0'
                         step='1'
                         inputmode='decimal'
-                        aria-label='July'
+                        aria-label='July — kWh'
+                        aria-describedby='consumption-monthly-unit consumption-monthly-help'
+                        aria-errormessage='analysis-status'
                         data-consumption-month
                       /></label><label
                       ><span>Aug</span><input
@@ -301,7 +364,9 @@
                         min='0'
                         step='1'
                         inputmode='decimal'
-                        aria-label='August'
+                        aria-label='August — kWh'
+                        aria-describedby='consumption-monthly-unit consumption-monthly-help'
+                        aria-errormessage='analysis-status'
                         data-consumption-month
                       /></label><label
                       ><span>Sep</span><input
@@ -309,7 +374,9 @@
                         min='0'
                         step='1'
                         inputmode='decimal'
-                        aria-label='September'
+                        aria-label='September — kWh'
+                        aria-describedby='consumption-monthly-unit consumption-monthly-help'
+                        aria-errormessage='analysis-status'
                         data-consumption-month
                       /></label><label
                       ><span>Oct</span><input
@@ -317,7 +384,9 @@
                         min='0'
                         step='1'
                         inputmode='decimal'
-                        aria-label='October'
+                        aria-label='October — kWh'
+                        aria-describedby='consumption-monthly-unit consumption-monthly-help'
+                        aria-errormessage='analysis-status'
                         data-consumption-month
                       /></label><label
                       ><span>Nov</span><input
@@ -325,7 +394,9 @@
                         min='0'
                         step='1'
                         inputmode='decimal'
-                        aria-label='November'
+                        aria-label='November — kWh'
+                        aria-describedby='consumption-monthly-unit consumption-monthly-help'
+                        aria-errormessage='analysis-status'
                         data-consumption-month
                       /></label><label
                       ><span>Dec</span><input
@@ -333,10 +404,13 @@
                         min='0'
                         step='1'
                         inputmode='decimal'
-                        aria-label='December'
+                        aria-label='December — kWh'
+                        aria-describedby='consumption-monthly-unit consumption-monthly-help'
+                        aria-errormessage='analysis-status'
                         data-consumption-month
                       /></label></div>
-                  <small>Enter kWh for each month when those figures are available.</small>
+                  <span class='visually-hidden' id='consumption-monthly-unit'>kWh</span>
+                  <small id='consumption-monthly-help'>Enter kWh for each month when those figures are available.</small>
                 </div>
                 <div class='manual-tariff'>
                   <label for='consumption-tariff'>Tariff from your bill</label>
@@ -347,13 +421,16 @@
                       max='1000'
                       step='0.01'
                       inputmode='decimal'
-                      aria-describedby='consumption-tariff-help'
+                      aria-describedby='consumption-tariff-unit consumption-tariff-help'
+                      aria-errormessage='analysis-status'
                       data-consumption-tariff
-                    /><span>֏ / kWh</span></div>
+                    /><span id='consumption-tariff-unit'>֏ / kWh</span></div>
                   <small id='consumption-tariff-help'>Optional for kWh. A bill in AMD needs it to convert the amount to kWh; the Passport will mark it as user-provided.</small>
                 </div>
                 <p class='consumption-total'><span>Estimated annual consumption</span><output
                     data-consumption-annual
+                    aria-label='Estimated annual consumption — kWh'
+                    aria-live='polite'
                   >—</output> kWh</p>
               </fieldset>
               <p class='roof-editor__summary'><span data-roof-points>Points in outline: {count}</span><strong
@@ -371,7 +448,14 @@
                     data-roof-nudge='south'
                     aria-label='Move point south'
                   >↓</button><button type='button' data-roof-remove>Remove point</button></div></div>
-              <button class='button' type='button' data-roof-finish disabled>Finish outline</button>
+              <button
+                class='button'
+                type='button'
+                data-roof-finish
+                aria-describedby='roof-calculate-help'
+                disabled
+              >Calculate from outline</button>
+              <p class='roof-editor__calculate-help' id='roof-calculate-help'>Enter the roof-face parameters and consumption, then request a preliminary PVGIS calculation.</p>
             </section>
             <div class='upload-block' data-file-drop data-optional-upload hidden>
               <label class='upload-control' for='bill-file'>
@@ -400,9 +484,6 @@
             </div>
             <p class='form-status' id='analysis-status' data-analysis-status aria-live='polite'></p>
             <p class='form-status' id='file-status' data-file-status aria-live='polite'></p>
-            <noscript><p class='noscript-note' id='manual-consultation'>The calculator requires JavaScript. For a manual consultation, call an engineer: <a
-                  href='tel:+37491095950'
-                >+374 91 095 950</a></p></noscript>
             <ul class='hero-benefits' role='list'>
               <li><svg class='inline-icon' aria-hidden='true'><use
                       href='/icons.svg#check'
@@ -531,7 +612,7 @@
               <p>The direction, pitch, area, shading and structural suitability of the actual roof must be entered below and confirmed by an engineer.</p>
               <div class='flow-actions'><button class='button button--navy' type='button' data-site-potential-continue>Continue to my roof estimate</button><button class='button button--outline' type='button' data-site-potential-retry hidden>Retry PVGIS potential</button></div>
             </section>
-            <div class='result-panel' data-result-panel hidden>
+            <div class='result-panel' data-result-panel hidden tabindex='-1'>
 
               <p data-analysis-summary>Preliminary result — confirmation required</p>
               <dl>
@@ -580,8 +661,8 @@
                   ><use href='/icons.svg#check'></use></svg>Estimate assumptions and limitations</li></ul>
             <a
               class='button button--outline'
-              href='/en/calculator/'
-              data-open-passport
+              href='tel:+37491095950'
+
             >View report example</a>
             <p class='passport-persistence' data-passport-persistence hidden><strong
               >Solar Passport is stored in this browser</strong><span>This preliminary Passport exists only in the current session memory.</span><span
@@ -970,7 +1051,7 @@
                   >— %</dd></div></dl><p
             >Financial values are not shown before analysis. The model excludes tariff growth, degradation, maintenance, financing, discounting, taxes and export rules.</p></div></div></div></dialog>
 
-      <script id='page-config' type='application/json'>{"locale":"en-US","status":{"minAddress":"Enter an address of at least 5 characters.","analyzing":"Preparing a preliminary analysis…","ready":"The preliminary result is ready. Review the data before making a decision.","unavailable":"The preliminary analysis is unavailable. Try again or select a point manually.","invalidFile":"This format is not supported. Choose a PDF, JPG, JPEG or PNG.","largeFile":"The file is too large. The maximum size is 10 MB.","fileSelected":"The file was selected and remains only in browser memory.","fileRemoved":"File removed.","mapReady":"The interactive property map is ready.","mapFailed":"The map is unavailable. The static demonstration fallback remains available.","monthTooltip":"Generation in {month}: {value} kWh"},"product":{"common":{"required":"Required field","optional":"Optional","perMonth":"per month","kwh":"kWh","amd":"֏","complete":"Done","cancel":"Cancel","noJsCalculator":"The calculator requires JavaScript. For a manual consultation, call an engineer:"},"tools":{"calculator":"Open the full calculator","offerChecker":"Check a commercial offer"},"flow":{"title":"How the estimate works","steps":[{"number":"01","title":"Find the property","copy":"Enter an address or place a point on the map, then confirm it."},{"number":"02","title":"See the location potential","copy":"PVGIS shows a benchmark for the chosen point before your roof is calculated."},{"number":"03","title":"Describe the roof and consumption","copy":"Outline the usable area and enter the real roof direction, tilt and energy use."},{"number":"04","title":"Get a preliminary estimate","copy":"System size, budget and savings appear only from confirmed inputs."}]},"potential":{"eyebrow":"Step 2 · Site potential","title":"Solar benchmark for the selected point","loading":"Requesting PVGIS for the confirmed point…","annualYieldLabel":"Expected generation per 1 kWp each year","orientationLabel":"Optimum direction for a free-standing system","tiltLabel":"Optimum tilt for a free-standing system","source":"Source: PVGIS · preliminary 14% system-loss assumption","disclosure":"This is a PVGIS benchmark for a fixed free-standing system at the chosen point. It is not a survey of your roof or an installation recommendation for it.","roofDisclosure":"The direction, pitch, area, shading and structural suitability of the actual roof must be entered below and confirmed by an engineer.","unavailable":"PVGIS potential could not be retrieved. Continue with the roof outline or retry; no example figures will be substituted.","retry":"Retry PVGIS potential","continue":"Continue to my roof estimate","directions":{"north":"north","northEast":"north-east","east":"east","southEast":"south-east","south":"south","southWest":"south-west","west":"west","northWest":"north-west"}},"consumption":{"title":"Electricity consumption","copy":"This is only needed for system sizing, budget and savings — not to find an address or the potential of a point.","modes":{"bill":"Average bill","usage":"Average consumption","monthly":"Monthly profile"},"billLabel":"Average electricity bill","billHelp":"Enter the average monthly amount in AMD.","tariffLabel":"Tariff from your bill","tariffHelp":"Optional for kWh. A bill in AMD needs it to convert the amount to kWh; the Passport will mark it as user-provided.","usageLabel":"Average monthly consumption","usageHelp":"Enter the average monthly consumption in kWh.","monthlyTitle":"Consumption over 12 months","monthlyHelp":"Enter kWh for each month when those figures are available.","annualLabel":"Estimated annual consumption","invalidNumber":"Enter a number greater than zero.","invalidBill":"Enter a valid bill amount in AMD.","invalidTariff":"Enter a tariff greater than zero in AMD/kWh.","invalidUsage":"Enter a valid consumption amount in kWh.","incompleteMonths":"Complete all 12 months or choose a different method.","noConsumption":"A consumption or bill value is needed for an estimate.","normalized":"The data were normalised to an annual profile."},"location":{"title":"Property location","copy":"The address is only used to find a map point. Confirm the matched property or select a point manually.","search":"Find address","searching":"Finding address…","resultLabel":"Matched address","confirmPrompt":"Is this your property?","confirm":"Confirm property","edit":"Edit address","noResult":"The address was not found. Select a point on the map manually.","unavailable":"Address search is currently unavailable. Select a point on the map manually.","manualTitle":"Select a point manually","manualCopy":"Click the map to mark the approximate property location. This is not address geocoding.","chooseOnMap":"Choose a point on the map","pointSelected":"Property point selected.","retry":"Try search again"},"roof":{"title":"Roof outline","copy":"Outline the usable roof area and enter the actual roof-face parameters for a preliminary estimate.","mapDisclosure":"The map helps place a point and an approximate outline. Without aerial imagery or a 3D model, it cannot automatically detect the roof, its pitch or shading.","fallback":"The map is unavailable. Continue after setting a location or try again.","start":"Start outline","addPointAtCenter":"Add a point at the map centre","addPoint":"Add point","undo":"Undo last point","reset":"Clear outline","finish":"Finish outline","edit":"Edit outline","pointsLabel":"Points in outline: {count}","minimumPoints":"Add at least 3 points to finish the outline.","areaLabel":"Preliminary roof area","orientationLabel":"Roof-face direction","customOrientationLabel":"Custom orientation (0° = north, 180° = south)","customOrientationHelp":"Enter a compass bearing from 0 to 359°.","tiltLabel":"This roof-face tilt","tiltHelp":"Enter an approximate angle only if it is known; it is not detected from the address.","angleGuideTitle":"Visual check of the roof inputs","angleGuideCopy":"The arrow shows the roof-face direction you entered. It is different from the PVGIS free-standing benchmark above.","angleGuideOrientation":"Roof-face direction","angleGuideTilt":"Roof-face tilt","pointSelectLabel":"Select point {index}","removePoint":"Remove point","nudgeNorth":"Move point north","nudgeSouth":"Move point south","nudgeEast":"Move point east","nudgeWest":"Move point west","orientationOptions":{"north":"North","southEast":"South-east","southWest":"South-west","east":"East","south":"South","west":"West","unknown":"I do not know yet","custom":"Other"},"unavailable":"A roof outline has not been set yet.","tilesUnavailable":"The basemap is unavailable. You can outline the roof after selecting a point.","locationRequired":"Confirm the property or select a point on the map first."},"result":{"title":"Preliminary analysis","preparing":"Preparing the preliminary analysis…","ready":"The preliminary analysis is ready.","unavailable":"An analysis could not be prepared from the available data.","retry":"Try calculation again","noTariff":"No tariff was entered: capacity, PVGIS generation and a preliminary price remain available, but savings and payback are not shown.","priceUnavailable":"The temporary price book is unavailable or has expired. Request an engineer survey; savings and payback also require a tariff.","noSavings":"There is not enough data to show savings and payback.","chartDescription":"Monthly preliminary generation based on the confirmed inputs and returned solar-resource data.","confidenceTitle":"Estimate confidence","confidence":{"high":"High","medium":"Medium","low":"Low","insufficient":"Not enough data"},"assumptionsTitle":"Calculation assumptions","commercialEstimate":"Preliminary YOUR ENERGY price · {version} · not an offer: {p25}–{p75}; P50 {p50}. Valid until {validUntil}."},"solutions":{"liveBadge":"From your confirmed data","liveCopy":"These three preliminary technical scenarios are calculated from the confirmed property data.","financialUnavailable":"A preliminary price appears from the active PriceBook; savings and payback require a tariff.","priceUnavailable":"The temporary price book is unavailable or has expired. Request an engineer survey."},"ledger":{"title":"How this was calculated","copy":"The sources, versions and assumptions behind this preliminary result.","sources":{"consumption":"Consumption data","location":"Property location","roof":"Roof outline and parameters","tariff":"Electricity tariff","userTariff":"Entered by the visitor from a bill","solar":"Solar resource","investment":"System price","pricebook":"Temporary YOUR ENERGY price book","unavailable":"Source not connected"},"assumptions":{"NO_TARIFF_ESCALATION":"No tariff escalation is modelled.","NO_PANEL_DEGRADATION":"No panel degradation is modelled.","NO_MAINTENANCE_FINANCING_DISCOUNTING_EXPORT_OR_TAXES":"Maintenance, financing, discounting, export rules and taxes are excluded.","MISSING_EVIDENCE_SUPPRESSES_FINANCIAL_RESULT":"Missing verified evidence suppresses financial values.","PVGIS_SYSTEM_LOSS_14_PERCENT":"PVGIS uses a 14% preliminary system-loss assumption; an engineer must confirm it.","PRELIMINARY_ROOF_USABLE_AREA_70_PERCENT":"Preliminary capacity uses 70% of the outlined roof area. An engineer verifies actual usable area, setbacks and access paths.","PRELIMINARY_PANEL_SIZE_580W_2M2":"Preliminary capacity uses a 580 W, 2 m² module; this is not a confirmed equipment specification.","USER_PROVIDED_TARIFF":"The tariff was entered by the visitor from a bill and is not a tariff registry record.","TEMPORARY_PRICEBOOK_NOT_OFFER":"The temporary PriceBook is a preliminary budget guide, not an offer or contractual price."}},"passport":{"persistenceTitle":"Solar Passport is stored in this browser","persistenceCopy":"This preliminary Passport exists only in the current session memory.","memoryOnly":"The data may be lost when this page is closed.","permanentLink":"A permanent link and PDF will be available after storage is connected.","sourceLedger":"Sources and assumptions","shareUnavailable":"Sharing a link is not available yet.","pendingBadge":"After calculation","pendingAddress":"Appears after the property is confirmed","pendingDate":"Created in this session","pendingSource":"Source: awaiting a PVGIS response","pendingChartDescription":"Monthly generation appears after the PVGIS calculation.","pendingTitle":"Your Solar Passport appears after calculation","realTitle":"Your preliminary Solar Passport","sessionBadge":"This session"},"lead":{"title":"Send this estimate to an engineer","copy":"Leave your contact details so an engineer can clarify the property data.","nameLabel":"Your name","phoneLabel":"Phone","emailLabel":"Email","messageLabel":"Property note","consent":"I agree to the processing of my data to answer this request.","submit":"Send request","required":"Complete the required fields and confirm consent.","invalidEmail":"Enter a valid email address.","sending":"Sending request…","sent":"The request was sent. We will contact you after the data are reviewed.","unavailable":"Sending is temporarily unavailable. Please try later.","retry":"Try sending again","directCall":"Or call an engineer:","privacy":"Data are not sent to analytics."},"status":{"geocodeUnavailable":"The geocoding service is not connected or is temporarily unavailable.","analysisUnavailable":"The solar-analysis service is not connected or is temporarily unavailable.","leadUnavailable":"The lead service is not connected or is temporarily unavailable.","retry":"Try again","canceled":"The previous request was cancelled."},"months":[{"short":"Jan","name":"January"},{"short":"Feb","name":"February"},{"short":"Mar","name":"March"},{"short":"Apr","name":"April"},{"short":"May","name":"May"},{"short":"Jun","name":"June"},{"short":"Jul","name":"July"},{"short":"Aug","name":"August"},{"short":"Sep","name":"September"},{"short":"Oct","name":"October"},{"short":"Nov","name":"November"},{"short":"Dec","name":"December"}]},"map":{"image":"/images/roof-scan-768.webp","tileUrl":"https://tile.openstreetmap.org/{z}/{x}/{y}.png","tileAttribution":"© OpenStreetMap contributors"},"endpoints":{"geocode":"/api/geocode","potential":"/api/potential","analysis":"/api/analysis"}}</script>
+      <script id='page-config' type='application/json'>{"locale":"en-US","status":{"minAddress":"Enter an address of at least 5 characters.","analyzing":"Preparing a preliminary analysis…","ready":"The preliminary result is ready. Review the data before making a decision.","unavailable":"The preliminary analysis is unavailable. Try again or select a point manually.","invalidFile":"This format is not supported. Choose a PDF, JPG, JPEG or PNG.","largeFile":"The file is too large. The maximum size is 10 MB.","fileSelected":"The file was selected and remains only in browser memory.","fileRemoved":"File removed.","mapReady":"The interactive property map is ready.","mapFailed":"The map is unavailable. The static demonstration fallback remains available.","monthTooltip":"Generation in {month}: {value} kWh"},"product":{"common":{"required":"Required field","optional":"Optional","perMonth":"per month","kwh":"kWh","amd":"֏","complete":"Done","cancel":"Cancel","noJsCalculator":"The calculator requires JavaScript. For a manual consultation, call an engineer:"},"tools":{"calculator":"Open the full calculator","offerChecker":"Check a commercial offer"},"flow":{"title":"How the estimate works","steps":[{"number":"01","title":"Find the property","copy":"Enter an address or place a point on the map, then confirm it."},{"number":"02","title":"See the location potential","copy":"PVGIS shows a benchmark for the chosen point before your roof is calculated."},{"number":"03","title":"Describe the roof and consumption","copy":"Outline the usable area and enter the real roof direction, tilt and energy use."},{"number":"04","title":"Get a preliminary estimate","copy":"System size, budget and savings appear only from confirmed inputs."}]},"potential":{"eyebrow":"Step 2 · Site potential","title":"Solar benchmark for the selected point","loading":"Requesting PVGIS for the confirmed point…","annualYieldLabel":"Expected generation per 1 kWp each year","orientationLabel":"Optimum direction for a free-standing system","tiltLabel":"Optimum tilt for a free-standing system","source":"Source: PVGIS · preliminary 14% system-loss assumption","disclosure":"This is a PVGIS benchmark for a fixed free-standing system at the chosen point. It is not a survey of your roof or an installation recommendation for it.","roofDisclosure":"The direction, pitch, area, shading and structural suitability of the actual roof must be entered below and confirmed by an engineer.","unavailable":"PVGIS potential could not be retrieved. Continue with the roof outline or retry; no example figures will be substituted.","retry":"Retry PVGIS potential","continue":"Continue to my roof estimate","directions":{"north":"north","northEast":"north-east","east":"east","southEast":"south-east","south":"south","southWest":"south-west","west":"west","northWest":"north-west"}},"consumption":{"title":"Electricity consumption","copy":"This is only needed for system sizing, budget and savings — not to find an address or the potential of a point.","modes":{"bill":"Average bill","usage":"Average consumption","monthly":"Monthly profile"},"billLabel":"Average electricity bill","billHelp":"Enter the average monthly amount in AMD.","tariffLabel":"Tariff from your bill","tariffHelp":"Optional for kWh. A bill in AMD needs it to convert the amount to kWh; the Passport will mark it as user-provided.","usageLabel":"Average monthly consumption","usageHelp":"Enter the average monthly consumption in kWh.","monthlyTitle":"Consumption over 12 months","monthlyHelp":"Enter kWh for each month when those figures are available.","annualLabel":"Estimated annual consumption","invalidNumber":"Enter a number greater than zero.","invalidBill":"Enter a valid bill amount in AMD.","invalidTariff":"Enter a tariff greater than zero in AMD/kWh.","invalidUsage":"Enter a valid consumption amount in kWh.","incompleteMonths":"Complete all 12 months or choose a different method.","noConsumption":"A consumption or bill value is needed for an estimate.","normalized":"The data were normalised to an annual profile."},"location":{"title":"Property location","copy":"The address is only used to find a map point. Confirm the matched property or select a point manually.","search":"Find address","searching":"Finding address…","resultLabel":"Matched address","confirmPrompt":"Is this your property?","confirm":"Confirm property","edit":"Edit address","noResult":"The address was not found. Select a point on the map manually.","unavailable":"Address search is currently unavailable. Select a point on the map manually.","manualTitle":"Select a point manually","manualCopy":"Click the map to mark the approximate property location. This is not address geocoding.","chooseOnMap":"Choose a point on the map","useMapCenter":"Use the map centre","manualUnavailable":"Open the map to use its centre as a manual point.","pointSelected":"Property point selected.","retry":"Try search again"},"roof":{"title":"Roof outline","copy":"Outline the usable roof area and enter the actual roof-face parameters for a preliminary estimate.","mapDisclosure":"The map helps place a point and an approximate outline. Without aerial imagery or a 3D model, it cannot automatically detect the roof, its pitch or shading.","fallback":"The map is unavailable. Continue after setting a location or try again.","start":"Start outline","addPointAtCenter":"Add a point at the map centre","addPoint":"Add point","undo":"Undo last point","reset":"Clear outline","finish":"Calculate from outline","finishHelp":"Enter the roof-face parameters and consumption, then request a preliminary PVGIS calculation.","edit":"Edit outline","pointsLabel":"Points in outline: {count}","minimumPoints":"Add at least 3 points to finish the outline.","areaLabel":"Preliminary roof area","orientationLabel":"Roof-face direction","orientationHelp":"Choose the roof-face direction. A roof-specific calculation cannot be made without it; the PVGIS benchmark above remains available.","customOrientationLabel":"Custom orientation (0° = north, 180° = south)","customOrientationHelp":"Enter a compass bearing from 0 to 359°.","tiltLabel":"This roof-face tilt","tiltHelp":"For a roof-specific calculation, enter an approximate angle from 0° to 90°. It is not detected from the address.","parametersRequired":"Enter the roof-face direction and tilt to create a roof-specific calculation.","angleGuideTitle":"Visual check of the roof inputs","angleGuideCopy":"The arrow shows the roof-face direction you entered. It is different from the PVGIS free-standing benchmark above.","angleGuideOrientation":"Roof-face direction","angleGuideTilt":"Roof-face tilt","angleGuideUnknown":"Not specified","pointSelectLabel":"Select point {index}","removePoint":"Remove point","nudgeNorth":"Move point north","nudgeSouth":"Move point south","nudgeEast":"Move point east","nudgeWest":"Move point west","orientationOptions":{"north":"North","southEast":"South-east","southWest":"South-west","east":"East","south":"South","west":"West","unknown":"Choose a direction","custom":"Other"},"unavailable":"A roof outline has not been set yet.","tilesUnavailable":"The basemap is unavailable. You can outline the roof after selecting a point.","locationRequired":"Confirm the property or select a point on the map first."},"result":{"title":"Preliminary analysis","preparing":"Preparing the preliminary analysis…","ready":"The preliminary analysis is ready.","unavailable":"An analysis could not be prepared from the available data.","retry":"Try calculation again","noTariff":"No tariff was entered: capacity, PVGIS generation and a preliminary price remain available, but savings and payback are not shown.","priceUnavailable":"The temporary price book is unavailable or has expired. Request an engineer survey; savings and payback also require a tariff.","noSavings":"There is not enough data to show savings and payback.","chartDescription":"Monthly preliminary generation based on the confirmed inputs and returned solar-resource data.","confidenceTitle":"Estimate confidence","confidence":{"high":"High","medium":"Medium","low":"Low","insufficient":"Not enough data"},"assumptionsTitle":"Calculation assumptions","commercialEstimate":"Preliminary YOUR ENERGY price · {version} · not an offer: {p25}–{p75}; P50 {p50}. Valid until {validUntil}."},"solutions":{"liveBadge":"From your confirmed data","liveCopy":"These three preliminary technical scenarios are calculated from the confirmed property data.","financialUnavailable":"A preliminary price appears from the active PriceBook; savings and payback require a tariff.","priceUnavailable":"The temporary price book is unavailable or has expired. Request an engineer survey."},"ledger":{"title":"How this was calculated","copy":"The sources, versions and assumptions behind this preliminary result.","sources":{"consumption":"Consumption data","location":"Property location","roof":"Roof outline and parameters","tariff":"Electricity tariff","userTariff":"Entered by the visitor from a bill","solar":"Solar resource","investment":"System price","pricebook":"Temporary YOUR ENERGY price book","unavailable":"Source not connected"},"assumptions":{"NO_TARIFF_ESCALATION":"No tariff escalation is modelled.","NO_PANEL_DEGRADATION":"No panel degradation is modelled.","NO_MAINTENANCE_FINANCING_DISCOUNTING_EXPORT_OR_TAXES":"Maintenance, financing, discounting, export rules and taxes are excluded.","MISSING_EVIDENCE_SUPPRESSES_FINANCIAL_RESULT":"Missing verified evidence suppresses financial values.","PVGIS_SYSTEM_LOSS_14_PERCENT":"PVGIS uses a 14% preliminary system-loss assumption; an engineer must confirm it.","PRELIMINARY_ROOF_USABLE_AREA_70_PERCENT":"Preliminary capacity uses 70% of the outlined roof area. An engineer verifies actual usable area, setbacks and access paths.","PRELIMINARY_PANEL_SIZE_580W_2M2":"Preliminary capacity uses a 580 W, 2 m² module; this is not a confirmed equipment specification.","USER_PROVIDED_TARIFF":"The tariff was entered by the visitor from a bill and is not a tariff registry record.","TEMPORARY_PRICEBOOK_NOT_OFFER":"The temporary PriceBook is a preliminary budget guide, not an offer or contractual price."}},"passport":{"persistenceTitle":"Solar Passport is stored in this browser","persistenceCopy":"This preliminary Passport exists only in the current session memory.","memoryOnly":"The data may be lost when this page is closed.","permanentLink":"A permanent link and PDF will be available after storage is connected.","sourceLedger":"Sources and assumptions","shareUnavailable":"Sharing a link is not available yet.","pendingBadge":"After calculation","pendingAddress":"Appears after the property is confirmed","pendingDate":"Created in this session","pendingSource":"Source: awaiting a PVGIS response","pendingChartDescription":"Monthly generation appears after the PVGIS calculation.","pendingTitle":"Your Solar Passport appears after calculation","realTitle":"Your preliminary Solar Passport","sessionBadge":"This session"},"lead":{"title":"Send this estimate to an engineer","copy":"Leave your contact details so an engineer can clarify the property data.","nameLabel":"Your name","phoneLabel":"Phone","emailLabel":"Email","messageLabel":"Property note","consent":"I agree to the processing of my data to answer this request.","submit":"Send request","required":"Complete the required fields and confirm consent.","invalidEmail":"Enter a valid email address.","sending":"Sending request…","sent":"The request was sent. We will contact you after the data are reviewed.","unavailable":"Sending is temporarily unavailable. Please try later.","retry":"Try sending again","directCall":"Or call an engineer:","privacy":"Data are not sent to analytics."},"status":{"geocodeUnavailable":"The geocoding service is not connected or is temporarily unavailable.","analysisUnavailable":"The solar-analysis service is not connected or is temporarily unavailable.","leadUnavailable":"The lead service is not connected or is temporarily unavailable.","retry":"Try again","canceled":"The previous request was cancelled."},"months":[{"short":"Jan","name":"January"},{"short":"Feb","name":"February"},{"short":"Mar","name":"March"},{"short":"Apr","name":"April"},{"short":"May","name":"May"},{"short":"Jun","name":"June"},{"short":"Jul","name":"July"},{"short":"Aug","name":"August"},{"short":"Sep","name":"September"},{"short":"Oct","name":"October"},{"short":"Nov","name":"November"},{"short":"Dec","name":"December"}]},"map":{"image":"/images/roof-scan-768.webp","tileUrl":"https://tile.openstreetmap.org/{z}/{x}/{y}.png","tileAttribution":"© OpenStreetMap contributors"},"endpoints":{"geocode":"/api/geocode","potential":"/api/potential","analysis":"/api/analysis"}}</script>
       <script type='module' src='/src/main.js'></script>
   </body>
 </html>
