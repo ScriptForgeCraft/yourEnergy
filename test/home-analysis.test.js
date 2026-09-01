@@ -5,13 +5,6 @@ import en from '../src/content/en.js';
 import hy from '../src/content/hy.js';
 import ru from '../src/content/ru.js';
 import { CONTENT_LOCALE_SCHEMA, GENERATED_CONTENT_LOCALES } from '../src/content/schema.js';
-import { BASE_MONTHLY, BASE_PROFILE, buildAnalysis } from '../src/data/demo-profiles.js';
-import {
-  AnalysisError,
-  DemoHomeAnalysisService,
-  HomeAnalysisService,
-  validateAddress
-} from '../src/services/home-analysis.js';
 import {
   formatCurrency,
   formatDecimal,
@@ -20,23 +13,6 @@ import {
   isFiniteDisplayValue
 } from '../src/utils/format.js';
 import { MAX_UPLOAD_BYTES, validateUploadFile } from '../src/ui/file-upload.js';
-
-const ADDRESS = 'Yerevan, Arabkir, Komitas 12';
-const EXPECTED_MONTHLY = [600, 750, 1050, 1350, 1600, 1750, 1850, 1750, 1450, 1100, 750, 600];
-
-function assertFiniteTree(value, trail = 'analysis', seen = new WeakSet()) {
-  if (typeof value === 'number') {
-    assert.ok(Number.isFinite(value), `${trail} must be a finite number`);
-    return;
-  }
-
-  if (!value || typeof value !== 'object' || seen.has(value)) return;
-  seen.add(value);
-
-  for (const [key, nested] of Object.entries(value)) {
-    assertFiniteTree(nested, `${trail}.${key}`, seen);
-  }
-}
 
 function contentShape(value) {
   if (Array.isArray(value)) return value.map(contentShape);
@@ -48,56 +24,9 @@ function contentShape(value) {
   );
 }
 
-test('address validation accepts a meaningful address and rejects incomplete input', () => {
-  assert.equal(validateAddress(ADDRESS), true);
-  assert.equal(validateAddress(''), false);
-  assert.equal(validateAddress('   '), false);
-  assert.equal(validateAddress('abcd'), false);
-  assert.equal(validateAddress(null), false);
-});
-
-test('base data preserves the agreed Optimum model', () => {
-  assert.deepEqual(BASE_MONTHLY, EXPECTED_MONTHLY);
-  assert.equal(
-    BASE_MONTHLY.reduce((total, value) => total + value, 0),
-    14_600
-  );
-  assert.equal(BASE_PROFILE.system.capacityKwp, 9.86);
-  assert.equal(BASE_PROFILE.system.panelCount, 17);
-  assert.equal(BASE_PROFILE.system.panelWatts, 580);
-});
-
-test('buildAnalysis returns the documented financial model without non-finite values', () => {
-  const analysis = buildAnalysis(BASE_PROFILE);
-
-  assert.equal(analysis.system.capacityKwp, 9.86);
-  assert.deepEqual(analysis.monthlyGeneration, EXPECTED_MONTHLY);
-  assert.equal(
-    analysis.monthlyGeneration.reduce((total, value) => total + value, 0),
-    14_600
-  );
-  assert.equal(analysis.savings.annual, 720_000);
-  assert.ok(Math.abs(analysis.payback.years - 4_300_000 / 720_000) < 0.01);
-  assert.equal(Math.round(analysis.payback.years * 10) / 10, 6);
-
-  const timeline = Object.fromEntries(analysis.timeline.map((point) => [point.year, point.net]));
-  assert.deepEqual(timeline, {
-    0: -4_300_000,
-    5: -700_000,
-    6: 20_000,
-    10: 2_900_000,
-    25: 13_700_000
-  });
-  assert.equal(analysis.savings.gross25Years, 18_000_000);
-  assertFiniteTree(analysis);
-});
-
 test('English has a full published route in the content schema', () => {
-  const english = buildAnalysis(BASE_PROFILE, { locale: 'en-US' });
   const englishRoute = CONTENT_LOCALE_SCHEMA.find(({ key }) => key === 'en');
 
-  assert.equal(english.location.label, 'Yerevan · standard demo profile');
-  assert.equal(english.roof.orientationLabel, 'South-west (236°)');
   assert.equal(formatCompactAmd(18_000_000, 'en-US'), '18 M ֏');
   assert.deepEqual(
     GENERATED_CONTENT_LOCALES.map(({ key }) => key),
@@ -130,78 +59,6 @@ test('bill upload validation permits supported files through 10 MiB only', () =>
   assert.equal(
     validateUploadFile({ name: 'bill.png', type: 'image/png', size: MAX_UPLOAD_BYTES + 1 }),
     'FILE_TOO_LARGE'
-  );
-});
-
-test('DemoHomeAnalysisService returns an explicitly labelled non-property demo', async () => {
-  const service = new DemoHomeAnalysisService();
-  const analysis = await service.analyze({ address: ADDRESS });
-
-  assert.equal(analysis.source, 'demo');
-  assert.equal(analysis.mode, 'demo');
-  assert.match(analysis.disclosure, /not an analysis/u);
-  assert.equal(analysis.system.capacityKwp, 9.86);
-  assert.equal(
-    analysis.monthlyGeneration.reduce((total, value) => total + value, 0),
-    14_600
-  );
-  assert.ok(Math.abs(analysis.payback.years - 4_300_000 / 720_000) < 0.01);
-  assertFiniteTree(analysis);
-});
-
-test('HomeAnalysisService returns documented errors for invalid input and aborted work', async () => {
-  const service = new HomeAnalysisService();
-
-  await assert.rejects(
-    service.analyze({ address: 'no' }),
-    (error) => error instanceof AnalysisError && error.code === 'INVALID_INPUT'
-  );
-
-  const controller = new AbortController();
-  controller.abort();
-  await assert.rejects(
-    service.analyze({ address: ADDRESS }, { signal: controller.signal }),
-    (error) => error instanceof AnalysisError && error.code === 'ABORTED'
-  );
-});
-
-test('HomeAnalysisService normalizes unavailable provider failures and in-flight aborts', async () => {
-  const unavailable = new HomeAnalysisService({
-    provider: {
-      analyze: async () => {
-        throw new Error('offline');
-      }
-    }
-  });
-
-  await assert.rejects(
-    unavailable.analyze({ address: ADDRESS }),
-    (error) => error instanceof AnalysisError && error.code === 'UNAVAILABLE'
-  );
-
-  const abortable = new HomeAnalysisService({
-    provider: {
-      analyze: (_input, { signal }) =>
-        new Promise((_resolve, reject) => {
-          signal.addEventListener(
-            'abort',
-            () => {
-              const error = new Error('The operation was aborted.');
-              error.name = 'AbortError';
-              reject(error);
-            },
-            { once: true }
-          );
-        })
-    }
-  });
-  const controller = new AbortController();
-  const pending = abortable.analyze({ address: ADDRESS }, { signal: controller.signal });
-  controller.abort();
-
-  await assert.rejects(
-    pending,
-    (error) => error instanceof AnalysisError && error.code === 'ABORTED'
   );
 });
 

@@ -169,6 +169,19 @@ h3 {
   text-underline-offset: 4px;
 }
 
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.hero-route-note {
+  max-width: 58ch;
+  margin: 16px 0 0;
+  color: var(--color-muted);
+  font-size: 0.78rem;
+}
+
 .address-manual-point {
   margin-top: 6px;
 }
@@ -243,24 +256,6 @@ h3 {
   width: fit-content;
 }
 
-.leaflet-map {
-  position: absolute;
-  z-index: 3;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  background: #10263b;
-}
-
-.leaflet-map[hidden] {
-  display: none;
-}
-
-.roof-visual.has-map .roof-overlay,
-.roof-visual.has-map .roof-shade {
-  opacity: 0;
-}
-
 .leaflet-container {
   font: inherit;
   background: #10263b;
@@ -283,6 +278,13 @@ h3 {
   color: #9eb0be;
   font-size: 0.62em;
   font-weight: 700;
+}
+
+.result-panel .demo-badge--inline {
+  position: static;
+  display: inline-flex;
+  width: fit-content;
+  margin: 0 0 10px;
 }
 
 .passport-grid {
@@ -399,6 +401,15 @@ h3 {
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+
+.passport-card__placeholder {
+  min-height: 150px;
+  border: 1px dashed #c8d6dd;
+  border-radius: 12px;
+  background:
+    linear-gradient(135deg, transparent 48%, #e6eef1 49% 51%, transparent 52%) 0 0 / 34px 34px,
+    linear-gradient(45deg, #f8fbfc, #eef4f5);
 }
 
 .mini-panels {
@@ -1662,6 +1673,95 @@ h3 {
 
 /* P0 real-analysis controls. The initial aerial image remains a labelled fallback
    until a person chooses a provider result or a manual point. */
+.calculator-flow-region {
+  margin: 20px 0;
+  border-top: 1px solid #dce5e9;
+  border-bottom: 1px solid #dce5e9;
+  padding: 15px 0;
+}
+
+.calculator-flow-region h2 {
+  margin: 0 0 11px;
+  color: #233a4f;
+  font-size: 0.82rem;
+  letter-spacing: 0.01em;
+}
+
+.calculator-flow {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.calculator-flow li {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: start;
+  gap: 7px;
+  min-width: 0;
+  color: #6a7b88;
+}
+
+.calculator-flow__number {
+  display: grid;
+  place-items: center;
+  width: 25px;
+  height: 25px;
+  border: 1px solid #cbd7df;
+  border-radius: 999px;
+  color: #506677;
+  background: #fff;
+  font-size: 0.61rem;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.calculator-flow strong,
+.calculator-flow small {
+  display: block;
+}
+
+.calculator-flow strong {
+  color: currentcolor;
+  font-size: 0.67rem;
+  line-height: 1.25;
+}
+
+.calculator-flow small {
+  margin-top: 3px;
+  font-size: 0.59rem;
+  line-height: 1.35;
+}
+
+.calculator-flow li[data-state='active'] {
+  color: #102f4b;
+}
+
+.calculator-flow li[data-state='active'] .calculator-flow__number {
+  border-color: #e3ad10;
+  color: #102f4b;
+  background: #f9c438;
+}
+
+.calculator-flow li[data-state='complete'] {
+  color: #245a42;
+}
+
+.calculator-flow li[data-state='complete'] .calculator-flow__number {
+  border-color: #8ab69a;
+  color: #fff;
+  background: #327250;
+}
+
+.calculator-flow li[data-state='attention'] .calculator-flow__number {
+  border-color: #d49428;
+  color: #82530b;
+  background: #fff4d8;
+}
+
 .consumption-inputs,
 .product-stage {
   margin: 18px 0 0;
@@ -1726,6 +1826,10 @@ h3 {
   color: #30465a;
   font-size: 0.74rem;
   font-weight: 800;
+}
+
+.roof-editor-controls label[hidden] {
+  display: none;
 }
 
 .consumption-panel small,
@@ -1886,6 +1990,101 @@ h3 {
   margin-top: 14px;
 }
 
+.roof-angle-preview {
+  margin: 14px 0;
+  border: 1px solid #dce5e9;
+  border-radius: 12px;
+  padding: 12px;
+  background: #f8fbfc;
+}
+
+.roof-angle-preview figcaption {
+  color: #20384d;
+  font-size: 0.73rem;
+  font-weight: 850;
+}
+
+.roof-angle-preview__grid {
+  display: grid;
+  grid-template-columns: 100px minmax(0, 1fr);
+  align-items: center;
+  gap: 12px;
+  margin-top: 9px;
+}
+
+.roof-angle-preview__compass,
+.site-potential__compass {
+  width: 100%;
+  max-width: 120px;
+  overflow: visible;
+}
+
+.roof-angle-preview__compass circle,
+.site-potential__compass circle {
+  fill: #fff;
+  stroke: #cbd7df;
+  stroke-width: 2;
+}
+
+.roof-angle-preview__compass > path,
+.site-potential__compass > path {
+  stroke: #ccd8df;
+  stroke-width: 1.5;
+}
+
+.roof-angle-preview__compass text,
+.site-potential__compass text {
+  fill: #557080;
+  font-size: 15px;
+  font-weight: 850;
+  text-anchor: middle;
+}
+
+.roof-angle-preview__compass g path:first-child,
+.site-potential__compass g path:first-child {
+  fill: #f2b819;
+}
+
+.roof-angle-preview__compass g path:last-child,
+.site-potential__compass g path:last-child {
+  fill: #173b58;
+}
+
+.roof-angle-preview dl,
+.site-potential dl {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+}
+
+.roof-angle-preview dl > div,
+.site-potential dl > div {
+  border-bottom: 1px solid #e2eaee;
+  padding-bottom: 7px;
+}
+
+.roof-angle-preview dt,
+.site-potential dt {
+  color: #667b89;
+  font-size: 0.65rem;
+  font-weight: 750;
+}
+
+.roof-angle-preview dd,
+.site-potential dd {
+  margin: 3px 0 0;
+  color: #15344d;
+  font-size: 0.82rem;
+  font-weight: 850;
+}
+
+.roof-angle-preview > p {
+  margin: 10px 0 0;
+  color: var(--soft-ink);
+  font-size: 0.68rem;
+  line-height: 1.45;
+}
+
 .roof-editor__summary {
   display: flex;
   justify-content: space-between;
@@ -1927,7 +2126,8 @@ h3 {
 .roof-visual.has-property-map > picture,
 .roof-visual.has-property-map > .roof-shade,
 .roof-visual.has-property-map > .roof-overlay,
-.roof-visual.has-property-map > .map-caption {
+.roof-visual.has-property-map > .map-caption,
+.roof-visual.has-property-map > .roof-info {
   display: none;
 }
 
@@ -1973,6 +2173,66 @@ h3 {
   min-width: 44px;
   min-height: 44px;
   line-height: 44px !important;
+}
+
+.site-potential {
+  display: grid;
+  gap: 10px;
+  margin-top: 16px;
+  border: 1px solid #c8d9dc;
+  border-radius: 16px;
+  padding: clamp(16px, 2vw, 22px);
+  background: linear-gradient(135deg, rgb(245 189 24 / 16%), transparent 46%), #f8fcfb;
+}
+
+.site-potential[hidden],
+.site-potential__values[hidden] {
+  display: none;
+}
+
+.site-potential > .eyebrow {
+  margin: 0;
+}
+
+.site-potential h2 {
+  max-width: 18ch;
+  margin: 0;
+  color: #132f48;
+  font-size: clamp(1.2rem, 2.2vw, 1.55rem);
+  line-height: 1.05;
+}
+
+.site-potential__status,
+.site-potential > p:not(.eyebrow):not(.site-potential__source) {
+  margin: 0;
+  color: #4f6878;
+  font-size: 0.75rem;
+  line-height: 1.45;
+}
+
+.site-potential__status:empty {
+  display: none;
+}
+
+.site-potential__values {
+  display: grid;
+  grid-template-columns: minmax(110px, 0.5fr) minmax(0, 1fr);
+  align-items: center;
+  gap: 16px;
+  border-top: 1px solid #d8e3e3;
+  border-bottom: 1px solid #d8e3e3;
+  padding: 12px 0;
+}
+
+.site-potential__compass {
+  justify-self: center;
+}
+
+.site-potential__source {
+  margin: 0;
+  color: #2a5360;
+  font-size: 0.68rem;
+  font-weight: 750;
 }
 
 .passport-persistence {
@@ -2146,6 +2406,10 @@ h3 {
 }
 
 @media (max-width: 680px) {
+  .calculator-flow {
+    grid-template-columns: 1fr 1fr;
+  }
+
   .consumption-modes,
   .roof-editor-controls,
   .roof-nudge-controls,
@@ -2157,6 +2421,16 @@ h3 {
 
   .monthly-consumption-grid {
     grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .roof-angle-preview__grid,
+  .site-potential__values {
+    grid-template-columns: 1fr;
+  }
+
+  .roof-angle-preview__compass,
+  .site-potential__compass {
+    justify-self: center;
   }
 
   .analysis-ledger > :first-child,

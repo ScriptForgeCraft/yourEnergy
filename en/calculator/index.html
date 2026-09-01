@@ -22,18 +22,19 @@
     <link rel='alternate' hreflang='hy' href='https://yourenergy.am/calculator/' /><link rel='alternate' hreflang='ru' href='https://yourenergy.am/ru/calculator/' /><link rel='alternate' hreflang='en' href='https://yourenergy.am/en/calculator/' /><link rel='alternate' hreflang='x-default' href='https://yourenergy.am/calculator/' />
     <link rel='icon' href='/favicon.svg' type='image/svg+xml' />
     <link rel='stylesheet' href='/src/styles/main.css' />
+    <script type='application/ld+json'>{"@context":"https://schema.org","@graph":[{"@type":"WebSite","@id":"https://yourenergy.am/#website","name":"YOURENERGY","url":"https://yourenergy.am/"},{"@type":"Organization","@id":"https://yourenergy.am/#organization","name":"Your Energy LLC","alternateName":"YOURENERGY","url":"https://yourenergy.am/","telephone":"+374 91 095 950","address":{"@type":"PostalAddress","streetAddress":"Artashisyan 48 14 Kotayq, Zovuni, 26 33 str, Yerevan","addressCountry":"AM"}},{"@type":"Service","@id":"https://yourenergy.am/en/calculator/#service","name":"Preliminary solar-system analysis","serviceType":"Preliminary solar-system analysis","url":"https://yourenergy.am/en/calculator/","provider":{"@id":"https://yourenergy.am/#organization"},"areaServed":{"@type":"Country","name":"Armenia"}}]}</script>
   </head>
-  <body class='tool-page tool-page--calculator'>
+  <body>
     <a class='skip-link' href='#main'>Skip to main content</a>
-    <header class='site-header'>
+    <header class='site-header' data-header>
       <div class='container header-row'>
-        <a class='wordmark' href='/en/' aria-label='YOURENERGY'><span>YOUR</span><strong
+        <a class='wordmark' href='/en/' aria-label='YOURENERGY — home page'><span>YOUR</span><strong
           >ENERGY</strong></a>
-        <nav class='desktop-nav' aria-label='Primary navigation'>
-          <a href='/en/'>Home</a>
-          <a href='/en/calculator/'>Calculator</a>
-          <a href='/en/offer-checker/'>Proposal checker</a>
-        </nav>
+          <nav class='desktop-nav' aria-label='Primary navigation'>
+            <a href='/en/'>Home</a>
+            <a href='/en/calculator/'>Calculator</a>
+            <a href='/en/offer-checker/'>Proposal checker</a>
+          </nav>
         <div class='header-actions'>
           <a class='header-phone' href='tel:+37491095950'><strong>+374 91 095 950</strong><small
             >Open until 21:00</small></a>
@@ -48,15 +49,16 @@
                 hreflang='ru'
                 aria-label='RU — Russian'
               >RU</a></nav>
+            <a class='button button--small' href='/en/offer-checker/'>Proposal checker</a>
         </div>
-        <details class='mobile-menu'>
+        <details class='mobile-menu' data-mobile-menu>
           <summary aria-label='Open navigation menu'><span></span><span></span><span></span></summary>
           <nav aria-label='Mobile navigation'>
-            <a href='/en/'>Home</a>
-            <a href='/en/calculator/'>Calculator</a>
-            <a href='/en/offer-checker/'>Proposal checker</a>
-            <a href='tel:+37491095950'>Call an engineer</a>
-            <nav class='mobile-language-switcher' aria-label='Language selection'><a
+              <a href='/en/'>Home</a>
+              <a href='/en/calculator/'>Calculator</a>
+              <a href='/en/offer-checker/'>Proposal checker</a>
+              <a href='tel:+37491095950'>Call an engineer</a>
+            <div class='mobile-language-switcher' role='group' aria-label='Language selection'><a
                   class='language-link'
                   href='/calculator/'
                   hreflang='hy'
@@ -66,124 +68,909 @@
                   href='/ru/calculator/'
                   hreflang='ru'
                   aria-label='RU — Russian'
-                >RU</a></nav>
+                >RU</a></div>
           </nav>
         </details>
       </div>
     </header>
 
-    <main id='main' class='tool-main'>
-      <section class='tool-hero' aria-labelledby='tool-title'>
-        <div class='container tool-hero__grid'>
-          <div>
-            <p class='eyebrow'>Solar calculator</p>
-            <h1 id='tool-title'>Start your Solar Passport with consumption</h1>
-            <p class='tool-intro'>The details stay in this browser session only, so you can continue in the full calculator with property-point, roof and PVGIS confirmation.</p>
-              <ul class='tool-principles'>
-                <li>No “ready” result from an address alone</li><li>The property point and roof are confirmed in the next step</li><li>Savings are calculated only with a confirmed or user-entered tariff</li>
-              </ul>
+    <main id='main'>
+      <section class='hero section' id='calculator' aria-labelledby='hero-title'>
+        <div class='container hero-grid'>
+          <div class='hero-copy'>
+            <p class='eyebrow'>A personal solar-system estimate for your home</p>
+            <h1 id='hero-title'>Discover your home’s<br />solar potential<br /><mark
+              >in 60 seconds</mark></h1>
+            <p class='hero-intro'>First find and confirm a point, then see its PVGIS potential. Roof and consumption data are only needed for the detailed estimate.</p>
+            <p class='hero-tool-links'><a href='/en/calculator/'>Open the full calculator</a><a
+                href='/en/offer-checker/'
+              >Check a commercial offer</a></p>
+            <section class='calculator-flow-region' aria-labelledby='calculator-flow-title'>
+              <h2 id='calculator-flow-title'>How the estimate works</h2>
+              <ol class='calculator-flow' data-calculator-flow>
+                <li data-calculator-flow-step='0'><span
+                    class='calculator-flow__number'
+                  >01</span><span><strong>Find the property</strong><small>Enter an address or place a point on the map, then confirm it.</small></span></li><li data-calculator-flow-step='1'><span
+                    class='calculator-flow__number'
+                  >02</span><span><strong>See the location potential</strong><small>PVGIS shows a benchmark for the chosen point before your roof is calculated.</small></span></li><li data-calculator-flow-step='2'><span
+                    class='calculator-flow__number'
+                  >03</span><span><strong>Describe the roof and consumption</strong><small>Outline the usable area and enter the real roof direction, tilt and energy use.</small></span></li><li data-calculator-flow-step='3'><span
+                    class='calculator-flow__number'
+                  >04</span><span><strong>Get a preliminary estimate</strong><small>System size, budget and savings appear only from confirmed inputs.</small></span></li>
+              </ol>
+            </section>
+            <form class='address-form' data-address-form action='#manual-consultation' novalidate>
+              <label for='address'>Your home address</label>
+              <div class='address-control'>
+                <svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#pin'></use></svg>
+                <input
+                  id='address'
+                  name='address'
+                  autocomplete='street-address'
+                  placeholder='For example: Yerevan, Arabkir'
+                  minlength='5'
+                  maxlength='160'
+                  aria-describedby='address-help analysis-status'
+                  required
+                />
+                <button class='button button--navy' type='submit'>Find address</button>
+              </div>
+              <small id='address-help' class='field-help'>This step only finds a map point; it does not detect your roof angle, area or shading.</small>
+              <button class='text-button address-manual-point' type='button' data-location-manual-start>
+                Choose a point on the map
+              </button>
+            </form>
+            <section class='product-stage' data-location-stage hidden aria-labelledby='location-stage-title'>
+              <p class='eyebrow'>Property location</p>
+              <h2 id='location-stage-title'>Is this your property?</h2>
+              <p data-location-message>The address is only used to find a map point. Confirm the matched property or select a point manually.</p>
+              <p class='location-result'><span>Matched address</span><strong
+                  data-location-address
+                ></strong><small data-location-coordinates></small></p>
+              <div class='location-candidates' data-location-candidates hidden></div>
+              <div class='flow-actions'><button
+                  class='button button--navy'
+                  type='button'
+                  data-location-confirm
+                >Confirm property</button><button
+                  class='button button--outline'
+                  type='button'
+                  data-location-manual
+                >Choose a point on the map</button></div>
+            </section>
+            <section class='product-stage roof-editor' data-roof-stage hidden aria-labelledby='roof-stage-title'>
+              <p class='eyebrow'>Roof outline</p>
+              <h2 id='roof-stage-title'>Outline the usable roof area and enter the actual roof-face parameters for a preliminary estimate.</h2>
+              <p data-roof-message>Confirm the property or select a point on the map first.</p>
+              <div class='flow-actions'><button
+                  class='button button--navy'
+                  type='button'
+                  data-roof-start
+                >Start outline</button><button
+                  class='button button--outline'
+                  type='button'
+                  data-roof-add-center
+                >Add a point at the map centre</button><button
+                  class='button button--outline'
+                  type='button'
+                  data-roof-undo
+                >Undo last point</button><button
+                  class='button button--outline'
+                  type='button'
+                  data-roof-reset
+                >Clear outline</button></div>
+              <div class='roof-editor-controls'><label for='roof-orientation'>Roof-face direction<select
+                    id='roof-orientation'
+                    data-roof-orientation
+                  ><option value='unknown' selected>I do not know yet</option><option value='180'>South</option><option
+                      value='225'
+                    >South-west</option><option value='135'
+                    >South-east</option><option value='90'
+                    >East</option><option value='270'
+                    >West</option><option value='0'
+                    >North</option><option value='custom'>Other</option></select></label><label
+                  data-roof-orientation-custom
+                  hidden
+                  for='roof-orientation-custom'
+                >Custom orientation (0° &#x3D; north, 180° &#x3D; south)<input
+                    id='roof-orientation-custom'
+                    type='number'
+                    min='0'
+                    max='359.999'
+                    step='1'
+                    inputmode='decimal'
+                    aria-describedby='roof-orientation-custom-help'
+                    data-roof-orientation-custom-input
+                  /><small id='roof-orientation-custom-help'>Enter a compass bearing from 0 to 359°.</small></label><label
+                  for='roof-tilt'
+                >This roof-face tilt<input
+                    id='roof-tilt'
+                    type='number'
+                    min='0'
+                    max='90'
+                    step='1'
+                    aria-describedby='roof-tilt-help'
+                    data-roof-tilt
+                  /><small id='roof-tilt-help'>Enter an approximate angle only if it is known; it is not detected from the address.</small></label></div>
+              <figure class='roof-angle-preview' aria-labelledby='roof-angle-preview-title'>
+                <figcaption id='roof-angle-preview-title'>Visual check of the roof inputs</figcaption>
+                <div class='roof-angle-preview__grid'>
+                  <svg class='roof-angle-preview__compass' viewBox='0 0 200 200' aria-hidden='true' focusable='false'>
+                    <circle cx='100' cy='100' r='73'></circle><path d='M100 21V179M21 100H179'></path><text x='100' y='15'>N</text><text x='187' y='105'>E</text><text x='100' y='196'>S</text><text x='7' y='105'>W</text><g data-roof-preview-arrow transform='rotate(180 100 100)'><path d='M100 34 88 84h24z'></path><path d='M100 166 88 116h24z'></path></g>
+                  </svg>
+                  <dl><div><dt>Roof-face direction</dt><dd data-roof-preview-orientation>—</dd></div><div><dt>Roof-face tilt</dt><dd data-roof-preview-tilt>—</dd></div></dl>
+                </div>
+                <p>The arrow shows the roof-face direction you entered. It is different from the PVGIS free-standing benchmark above.</p>
+              </figure>
+              <fieldset class='consumption-inputs' data-consumption-inputs>
+                <legend>Electricity consumption</legend>
+                <p>This is only needed for system sizing, budget and savings — not to find an address or the potential of a point.</p>
+                <div class='consumption-modes' role='radiogroup'>
+                  <label><input type='radio' name='consumption-mode' value='bill' checked /><span
+                    >Average bill</span></label>
+                  <label><input type='radio' name='consumption-mode' value='usage' /><span
+                    >Average consumption</span></label>
+                  <label><input type='radio' name='consumption-mode' value='monthly' /><span
+                    >Monthly profile</span></label>
+                </div>
+                <div class='consumption-panel' data-consumption-panel='bill'>
+                  <label for='consumption-bill'>Average electricity bill</label>
+                  <div class='input-with-unit'><input
+                      id='consumption-bill'
+                      type='number'
+                      min='1'
+                      step='1'
+                      inputmode='decimal'
+                      data-consumption-bill
+                    /><span>֏ per month</span></div>
+                  <small>Enter the average monthly amount in AMD.</small>
+                </div>
+                <div class='consumption-panel' data-consumption-panel='usage' hidden>
+                  <label for='consumption-usage'>Average monthly consumption</label>
+                  <div class='input-with-unit'><input
+                      id='consumption-usage'
+                      type='number'
+                      min='1'
+                      step='1'
+                      inputmode='decimal'
+                      data-consumption-usage
+                    /><span>kWh per month</span></div>
+                  <small>Enter the average monthly consumption in kWh.</small>
+                </div>
+                <div class='consumption-panel consumption-panel--months' data-consumption-panel='monthly' hidden>
+                  <p>Consumption over 12 months</p>
+                  <div class='monthly-consumption-grid'><label
+                      ><span>Jan</span><input
+                        type='number'
+                        min='0'
+                        step='1'
+                        inputmode='decimal'
+                        aria-label='January'
+                        data-consumption-month
+                      /></label><label
+                      ><span>Feb</span><input
+                        type='number'
+                        min='0'
+                        step='1'
+                        inputmode='decimal'
+                        aria-label='February'
+                        data-consumption-month
+                      /></label><label
+                      ><span>Mar</span><input
+                        type='number'
+                        min='0'
+                        step='1'
+                        inputmode='decimal'
+                        aria-label='March'
+                        data-consumption-month
+                      /></label><label
+                      ><span>Apr</span><input
+                        type='number'
+                        min='0'
+                        step='1'
+                        inputmode='decimal'
+                        aria-label='April'
+                        data-consumption-month
+                      /></label><label
+                      ><span>May</span><input
+                        type='number'
+                        min='0'
+                        step='1'
+                        inputmode='decimal'
+                        aria-label='May'
+                        data-consumption-month
+                      /></label><label
+                      ><span>Jun</span><input
+                        type='number'
+                        min='0'
+                        step='1'
+                        inputmode='decimal'
+                        aria-label='June'
+                        data-consumption-month
+                      /></label><label
+                      ><span>Jul</span><input
+                        type='number'
+                        min='0'
+                        step='1'
+                        inputmode='decimal'
+                        aria-label='July'
+                        data-consumption-month
+                      /></label><label
+                      ><span>Aug</span><input
+                        type='number'
+                        min='0'
+                        step='1'
+                        inputmode='decimal'
+                        aria-label='August'
+                        data-consumption-month
+                      /></label><label
+                      ><span>Sep</span><input
+                        type='number'
+                        min='0'
+                        step='1'
+                        inputmode='decimal'
+                        aria-label='September'
+                        data-consumption-month
+                      /></label><label
+                      ><span>Oct</span><input
+                        type='number'
+                        min='0'
+                        step='1'
+                        inputmode='decimal'
+                        aria-label='October'
+                        data-consumption-month
+                      /></label><label
+                      ><span>Nov</span><input
+                        type='number'
+                        min='0'
+                        step='1'
+                        inputmode='decimal'
+                        aria-label='November'
+                        data-consumption-month
+                      /></label><label
+                      ><span>Dec</span><input
+                        type='number'
+                        min='0'
+                        step='1'
+                        inputmode='decimal'
+                        aria-label='December'
+                        data-consumption-month
+                      /></label></div>
+                  <small>Enter kWh for each month when those figures are available.</small>
+                </div>
+                <div class='manual-tariff'>
+                  <label for='consumption-tariff'>Tariff from your bill</label>
+                  <div class='input-with-unit'><input
+                      id='consumption-tariff'
+                      type='number'
+                      min='0.01'
+                      max='1000'
+                      step='0.01'
+                      inputmode='decimal'
+                      aria-describedby='consumption-tariff-help'
+                      data-consumption-tariff
+                    /><span>֏ / kWh</span></div>
+                  <small id='consumption-tariff-help'>Optional for kWh. A bill in AMD needs it to convert the amount to kWh; the Passport will mark it as user-provided.</small>
+                </div>
+                <p class='consumption-total'><span>Estimated annual consumption</span><output
+                    data-consumption-annual
+                  >—</output> kWh</p>
+              </fieldset>
+              <p class='roof-editor__summary'><span data-roof-points>Points in outline: {count}</span><strong
+                  data-roof-area
+                >—</strong></p>
+              <div class='roof-nudge-controls' data-roof-nudge-controls hidden><label
+                  for='roof-point-select'
+                >Select point {index}<select id='roof-point-select' data-roof-point-select></select></label><div
+                  ><button type='button' data-roof-nudge='north' aria-label='Move point north'>↑</button><button
+                    type='button'
+                    data-roof-nudge='west'
+                    aria-label='Move point west'
+                  >←</button><button type='button' data-roof-nudge='east' aria-label='Move point east'>→</button><button
+                    type='button'
+                    data-roof-nudge='south'
+                    aria-label='Move point south'
+                  >↓</button><button type='button' data-roof-remove>Remove point</button></div></div>
+              <button class='button' type='button' data-roof-finish disabled>Finish outline</button>
+            </section>
+            <div class='upload-block' data-file-drop data-optional-upload hidden>
+              <label class='upload-control' for='bill-file'>
+                <span class='upload-icon' aria-hidden='true'><svg class='inline-icon'><use
+                      href='/icons.svg#file'
+                    ></use></svg></span>
+                <span><strong>Attach an electricity bill (optional)</strong><small>Choose a file or drag it here
+                    ·
+                    PDF, JPG or PNG up to 10 MB. The file stays out of the server and is not read automatically; enter values manually.</small></span>
+                <input
+                  id='bill-file'
+                  class='upload-control__input'
+                  type='file'
+                  accept='.pdf,.jpg,.jpeg,.png,application/pdf,image/jpeg,image/png'
+                  aria-describedby='file-status'
+                />
+              </label>
+              <div class='file-selection' data-file-meta hidden>
+                <span data-file-name></span>
+                <button
+                  class='text-button'
+                  type='button'
+                  data-file-remove
+                >Remove file</button>
+              </div>
+            </div>
+            <p class='form-status' id='analysis-status' data-analysis-status aria-live='polite'></p>
+            <p class='form-status' id='file-status' data-file-status aria-live='polite'></p>
+            <noscript><p class='noscript-note' id='manual-consultation'>The calculator requires JavaScript. For a manual consultation, call an engineer: <a
+                  href='tel:+37491095950'
+                >+374 91 095 950</a></p></noscript>
+            <ul class='hero-benefits' role='list'>
+              <li><svg class='inline-icon' aria-hidden='true'><use
+                      href='/icons.svg#check'
+                    ></use></svg>No call or obligation</li><li><svg class='inline-icon' aria-hidden='true'><use
+                      href='/icons.svg#check'
+                    ></use></svg>Confirm the property on a map</li><li><svg class='inline-icon' aria-hidden='true'><use
+                      href='/icons.svg#check'
+                    ></use></svg>Provide consumption data</li><li><svg class='inline-icon' aria-hidden='true'><use
+                      href='/icons.svg#check'
+                    ></use></svg>See sources and assumptions</li>
+            </ul>
+            <p class='hero-disclosure'>A preliminary result requires property confirmation and does not replace a site visit, engineering design or commercial proposal.</p>
           </div>
-          <aside class='tool-reference' aria-label='Solar Passport'>
-              <p class='eyebrow'>Solar Passport</p>
-              <strong>This page does not produce generation, savings or a price. Those require a confirmed point, roof data and a PVGIS response.</strong>
-          </aside>
+
+          <div class='roof-product' data-analysis-region aria-label='Preliminary roof assessment'>
+            <figure class='roof-visual' data-map-shell>
+              <picture>
+                <source
+                  type='image/avif'
+                  srcset='/images/roof-scan-480.avif 480w, /images/roof-scan-768.avif 768w, /images/roof-scan-1200.avif 1200w, /images/roof-scan-1600.avif 1600w'
+                  sizes='(max-width: 760px) 100vw, 50vw'
+                />
+                <source
+                  type='image/webp'
+                  srcset='/images/roof-scan-480.webp 480w, /images/roof-scan-768.webp 768w, /images/roof-scan-1200.webp 1200w, /images/roof-scan-1600.webp 1600w'
+                  sizes='(max-width: 760px) 100vw, 50vw'
+                />
+                <img
+                  src='/images/roof-scan-1200.jpg'
+                  srcset='/images/roof-scan-480.jpg 480w, /images/roof-scan-768.jpg 768w, /images/roof-scan-1200.jpg 1200w, /images/roof-scan-1600.jpg 1600w'
+                  sizes='(max-width: 760px) 100vw, 50vw'
+                  width='1600'
+                  height='1067'
+                  alt='Illustrative aerial roof image before a property is confirmed'
+                  fetchpriority='high'
+                  decoding='async'
+                />
+              </picture>
+              <div class='roof-shade' aria-hidden='true'></div>
+              <svg class='roof-overlay' viewBox='0 0 1000 660' aria-hidden='true' focusable='false'>
+                <polygon points='295,125 670,214 616,499 239,410' class='roof-boundary'></polygon>
+                <g class='panel-grid'>
+                  <rect x='330' y='195' width='66' height='49'></rect><rect
+                    x='400'
+                    y='212'
+                    width='66'
+                    height='49'
+                  ></rect><rect x='470' y='229' width='66' height='49'></rect><rect
+                    x='540'
+                    y='246'
+                    width='66'
+                    height='49'
+                  ></rect>
+                  <rect x='314' y='261' width='66' height='49'></rect><rect
+                    x='384'
+                    y='278'
+                    width='66'
+                    height='49'
+                  ></rect><rect x='454' y='295' width='66' height='49'></rect><rect
+                    x='524'
+                    y='312'
+                    width='66'
+                    height='49'
+                  ></rect>
+                  <rect x='298' y='327' width='66' height='49'></rect><rect
+                    x='368'
+                    y='344'
+                    width='66'
+                    height='49'
+                  ></rect><rect x='438' y='361' width='66' height='49'></rect><rect
+                    x='508'
+                    y='378'
+                    width='66'
+                    height='49'
+                  ></rect>
+                  <rect x='282' y='393' width='66' height='49'></rect><rect
+                    x='352'
+                    y='410'
+                    width='66'
+                    height='49'
+                  ></rect><rect x='422' y='427' width='66' height='49'></rect><rect
+                    x='492'
+                    y='444'
+                    width='66'
+                    height='49'
+                  ></rect>
+                </g>
+              </svg>
+              <figcaption class='map-caption'><span class='demo-badge'>Static demonstration fallback</span><span
+                >This static image and panel layout are used only as a labelled fallback before a property is confirmed.</span></figcaption>
+              <div
+                class='property-map'
+                data-property-map
+                hidden
+                aria-label='Select a point manually'
+              ></div>
+              <p class='property-map-note' data-property-map-note hidden></p>
+              <aside class='roof-info'>
+                <strong data-analysis-location>Illustrative location</strong>
+                <dl>
+                  <div><dt>Roof area</dt><dd
+                      data-analysis-roof='area'
+                    >Example: 124 m²</dd></div>
+                  <div><dt>Orientation</dt><dd
+                      data-analysis-roof='orientation'
+                    >Example: south-west (236°)</dd></div>
+                  <div><dt>Tilt</dt><dd
+                      data-analysis-roof='tilt'
+                    >Example: 32°</dd></div>
+                  <div class='success' data-analysis-score-row><dt>Solar Score</dt><dd>Example only</dd></div>
+                </dl>
+              </aside>
+            </figure>
+            <section class='site-potential' data-site-potential hidden aria-live='polite' aria-labelledby='site-potential-title' tabindex='-1'>
+              <p class='eyebrow'>Step 2 · Site potential</p>
+              <h2 id='site-potential-title'>Solar benchmark for the selected point</h2>
+              <p class='site-potential__status' data-site-potential-status></p>
+              <div class='site-potential__values' data-site-potential-values hidden>
+                <svg class='site-potential__compass' viewBox='0 0 200 200' aria-hidden='true' focusable='false'>
+                  <circle cx='100' cy='100' r='73'></circle><path d='M100 21V179M21 100H179'></path><text x='100' y='15'>N</text><text x='187' y='105'>E</text><text x='100' y='196'>S</text><text x='7' y='105'>W</text><g data-site-potential-arrow><path d='M100 34 88 84h24z'></path><path d='M100 166 88 116h24z'></path></g>
+                </svg>
+                <dl><div><dt>Expected generation per 1 kWp each year</dt><dd data-site-potential-yield>—</dd></div><div><dt>Optimum direction for a free-standing system</dt><dd data-site-potential-orientation>—</dd></div><div><dt>Optimum tilt for a free-standing system</dt><dd data-site-potential-tilt>—</dd></div></dl>
+              </div>
+              <p class='site-potential__source' data-site-potential-source>Source: PVGIS · preliminary 14% system-loss assumption</p>
+              <p>This is a PVGIS benchmark for a fixed free-standing system at the chosen point. It is not a survey of your roof or an installation recommendation for it.</p>
+              <p>The direction, pitch, area, shading and structural suitability of the actual roof must be entered below and confirmed by an engineer.</p>
+              <div class='flow-actions'><button class='button button--navy' type='button' data-site-potential-continue>Continue to my roof estimate</button><button class='button button--outline' type='button' data-site-potential-retry hidden>Retry PVGIS potential</button></div>
+            </section>
+            <div class='result-panel' data-result-panel hidden>
+
+              <p data-analysis-summary>Preliminary result — confirmation required</p>
+              <dl>
+                  <div><dt>Annual generation</dt><dd data-analysis='generation'>—
+                      <small>kWh</small></dd></div>
+                  <div><dt>Annual savings</dt><dd data-analysis='savings'>—
+                      <small>֏</small></dd></div>
+                  <div><dt>Simple payback</dt><dd data-analysis='payback'>—
+                      <small>years</small></dd></div>
+                  <div><dt>Consumption covered</dt><dd data-analysis='coverage'>—
+                      <small>%</small></dd></div>
+              </dl>
+              <p class='commercial-estimate' data-commercial-estimate hidden></p>
+              <a href='#passport'>View the full estimate <span aria-hidden='true'>→</span></a>
+            </div>
+          </div>
         </div>
       </section>
 
-        <section class='tool-workspace section' aria-labelledby='calculator-form-title'>
-          <div class='container tool-workspace__grid'>
-            <form class='tool-form' data-quick-calculator novalidate>
-              <h2 id='calculator-form-title'>Consumption details</h2>
-              <label for='quick-address'>Property address</label>
-              <input
-                id='quick-address'
-                name='address'
-                autocomplete='street-address'
-                maxlength='160'
-                placeholder='For example: Abovyan, Armenia'
-              />
-              <small>Optional at this step. On the next page you can search it or place a point on the map.</small>
 
-              <fieldset>
-                <legend>What information do you have?</legend>
-                <label for='quick-monthly-kwh'>Average monthly consumption</label>
-                <div class='tool-input-unit'>
-                  <input
-                    id='quick-monthly-kwh'
-                    name='averageMonthlyKwh'
-                    type='number'
-                    min='0.01'
-                    max='100000'
-                    step='0.01'
-                    inputmode='decimal'
-                    aria-describedby='quick-monthly-kwh-help'
-                  />
-                  <span>kWh / month</span>
-                </div>
-                <small id='quick-monthly-kwh-help'>Enter this if your bill shows kWh.</small>
-
-                <p class='tool-or' aria-hidden='true'>or</p>
-
-                <label for='quick-monthly-bill'>Average monthly bill</label>
-                <div class='tool-input-unit'>
-                  <input
-                    id='quick-monthly-bill'
-                    name='averageMonthlyBillAmd'
-                    type='number'
-                    min='1'
-                    max='100000000'
-                    step='1'
-                    inputmode='decimal'
-                    aria-describedby='quick-monthly-bill-help'
-                  />
-                  <span>֏ / month</span>
-                </div>
-                <small id='quick-monthly-bill-help'>If you only know the bill amount, enter your tariff too.</small>
-
-                <label for='quick-tariff'>Tariff from your bill</label>
-                <div class='tool-input-unit'>
-                  <input
-                    id='quick-tariff'
-                    name='tariff'
-                    type='number'
-                    min='0.01'
-                    max='1000'
-                    step='0.01'
-                    inputmode='decimal'
-                    aria-describedby='quick-tariff-help'
-                  />
-                  <span>֏ / kWh</span>
-                </div>
-                <small id='quick-tariff-help'>It is used only to convert a bill to kWh and explain later savings transparently.</small>
-              </fieldset>
-
-              <p class='form-status' data-tool-status aria-live='polite' role='status'></p>
-              <button class='button button--navy' type='submit'>Continue to property point and roof</button>
-              <noscript>
-                <div class='tool-no-js'>
-                  <strong>JavaScript is disabled in this browser</strong>
-                  <p>Open the full calculator to enter consumption, a property point and a roof outline manually.</p>
-                  <a class='button' href='/en/#calculator'>Open the full calculator</a>
-                </div>
-              </noscript>
-            </form>
-            <aside class='tool-side-note'>
-              <h2>Solar Passport</h2>
-              <p>This page does not produce generation, savings or a price. Those require a confirmed point, roof data and a PVGIS response.</p>
-              <a href='/en/#calculator'>Open the full calculator</a>
-            </aside>
+      <section
+        class='passport section section--soft'
+        id='passport'
+        aria-labelledby='passport-title'
+      >
+        <div class='container passport-grid'>
+          <div class='passport-copy'>
+            <p class='eyebrow'>A digital report for your property</p>
+            <h2 id='passport-title'>Your personal Solar Passport</h2>
+            <p>A roof map, system parameters, monthly generation and a clear financial model in one report.</p>
+            <ul class='check-list' role='list'><li><svg
+                    class='inline-icon'
+                    aria-hidden='true'
+                  ><use href='/icons.svg#check'></use></svg>Roof map and example panel layout</li><li><svg
+                    class='inline-icon'
+                    aria-hidden='true'
+                  ><use href='/icons.svg#check'></use></svg>Monthly generation</li><li><svg
+                    class='inline-icon'
+                    aria-hidden='true'
+                  ><use href='/icons.svg#check'></use></svg>A 25-year financial model</li><li><svg
+                    class='inline-icon'
+                    aria-hidden='true'
+                  ><use href='/icons.svg#check'></use></svg>Recommended equipment</li><li><svg
+                    class='inline-icon'
+                    aria-hidden='true'
+                  ><use href='/icons.svg#check'></use></svg>Estimate assumptions and limitations</li></ul>
+            <a
+              class='button button--outline'
+              href='/en/calculator/'
+              data-open-passport
+            >View report example</a>
+            <p class='passport-persistence' data-passport-persistence hidden><strong
+              >Solar Passport is stored in this browser</strong><span>This preliminary Passport exists only in the current session memory.</span><span
+                >A permanent link and PDF will be available after storage is connected.</span></p>
           </div>
+          <article class='passport-card' aria-label='Your Solar Passport appears after calculation'>
+            <div class='passport-card__top'><span class='wordmark wordmark--small'><span
+              >YOUR</span><strong>ENERGY</strong></span><span
+                class='pill'
+                data-passport-badge
+              >After calculation</span></div>
+            <p class='passport-label'>SOLAR PASSPORT</p>
+            <h3 data-analysis-location>Appears after the property is confirmed</h3>
+            <p class='passport-date' data-passport-date>Created in this session</p>
+            <div class='passport-card__placeholder' aria-hidden='true'></div>
+            <dl class='passport-specs'>
+              <div><dt>Recommended system</dt><dd
+                  data-analysis='capacity'
+                >—</dd></div>
+              <div><dt data-passport-source-label>Source: awaiting a PVGIS response</dt><dd
+                  data-analysis='panels'
+                >—</dd></div>
+            </dl>
+          </article>
+          <div class='generation-card' data-chart-card>
+            <h3>Monthly generation, kWh</h3>
+            <p id='generation-chart-description'>Monthly generation appears after the PVGIS calculation.</p>
+            <div class='bar-chart' aria-describedby='generation-chart-description'>
+                <button
+                  class='chart-bar'
+                  type='button'
+                  style='--bar-height: 0%;'
+                  title='Jan · January: — kWh'
+                  aria-label='Jan · January: — kWh'
+                  data-chart-bar
+                  data-short='Jan'
+                  data-month='January'
+                  data-value='—'
+                ><span class='chart-bar__fill'></span><span>Jan</span></button>
+                <button
+                  class='chart-bar'
+                  type='button'
+                  style='--bar-height: 0%;'
+                  title='Feb · February: — kWh'
+                  aria-label='Feb · February: — kWh'
+                  data-chart-bar
+                  data-short='Feb'
+                  data-month='February'
+                  data-value='—'
+                ><span class='chart-bar__fill'></span><span>Feb</span></button>
+                <button
+                  class='chart-bar'
+                  type='button'
+                  style='--bar-height: 0%;'
+                  title='Mar · March: — kWh'
+                  aria-label='Mar · March: — kWh'
+                  data-chart-bar
+                  data-short='Mar'
+                  data-month='March'
+                  data-value='—'
+                ><span class='chart-bar__fill'></span><span>Mar</span></button>
+                <button
+                  class='chart-bar'
+                  type='button'
+                  style='--bar-height: 0%;'
+                  title='Apr · April: — kWh'
+                  aria-label='Apr · April: — kWh'
+                  data-chart-bar
+                  data-short='Apr'
+                  data-month='April'
+                  data-value='—'
+                ><span class='chart-bar__fill'></span><span>Apr</span></button>
+                <button
+                  class='chart-bar'
+                  type='button'
+                  style='--bar-height: 0%;'
+                  title='May · May: — kWh'
+                  aria-label='May · May: — kWh'
+                  data-chart-bar
+                  data-short='May'
+                  data-month='May'
+                  data-value='—'
+                ><span class='chart-bar__fill'></span><span>May</span></button>
+                <button
+                  class='chart-bar'
+                  type='button'
+                  style='--bar-height: 0%;'
+                  title='Jun · June: — kWh'
+                  aria-label='Jun · June: — kWh'
+                  data-chart-bar
+                  data-short='Jun'
+                  data-month='June'
+                  data-value='—'
+                ><span class='chart-bar__fill'></span><span>Jun</span></button>
+                <button
+                  class='chart-bar'
+                  type='button'
+                  style='--bar-height: 0%;'
+                  title='Jul · July: — kWh'
+                  aria-label='Jul · July: — kWh'
+                  data-chart-bar
+                  data-short='Jul'
+                  data-month='July'
+                  data-value='—'
+                ><span class='chart-bar__fill'></span><span>Jul</span></button>
+                <button
+                  class='chart-bar'
+                  type='button'
+                  style='--bar-height: 0%;'
+                  title='Aug · August: — kWh'
+                  aria-label='Aug · August: — kWh'
+                  data-chart-bar
+                  data-short='Aug'
+                  data-month='August'
+                  data-value='—'
+                ><span class='chart-bar__fill'></span><span>Aug</span></button>
+                <button
+                  class='chart-bar'
+                  type='button'
+                  style='--bar-height: 0%;'
+                  title='Sep · September: — kWh'
+                  aria-label='Sep · September: — kWh'
+                  data-chart-bar
+                  data-short='Sep'
+                  data-month='September'
+                  data-value='—'
+                ><span class='chart-bar__fill'></span><span>Sep</span></button>
+                <button
+                  class='chart-bar'
+                  type='button'
+                  style='--bar-height: 0%;'
+                  title='Oct · October: — kWh'
+                  aria-label='Oct · October: — kWh'
+                  data-chart-bar
+                  data-short='Oct'
+                  data-month='October'
+                  data-value='—'
+                ><span class='chart-bar__fill'></span><span>Oct</span></button>
+                <button
+                  class='chart-bar'
+                  type='button'
+                  style='--bar-height: 0%;'
+                  title='Nov · November: — kWh'
+                  aria-label='Nov · November: — kWh'
+                  data-chart-bar
+                  data-short='Nov'
+                  data-month='November'
+                  data-value='—'
+                ><span class='chart-bar__fill'></span><span>Nov</span></button>
+                <button
+                  class='chart-bar'
+                  type='button'
+                  style='--bar-height: 0%;'
+                  title='Dec · December: — kWh'
+                  aria-label='Dec · December: — kWh'
+                  data-chart-bar
+                  data-short='Dec'
+                  data-month='December'
+                  data-value='—'
+                ><span class='chart-bar__fill'></span><span>Dec</span></button>
+            </div>
+            <details class='chart-data'><summary>Monthly generation data table</summary><table><caption
+                  class='visually-hidden'
+                >Monthly generation data table</caption><thead><tr><th scope='col'>Month</th><th scope='col'>kWh</th></tr></thead><tbody
+                ><tr><td>January</td><td
+                      data-chart-value>—</td></tr><tr><td>February</td><td
+                      data-chart-value>—</td></tr><tr><td>March</td><td
+                      data-chart-value>—</td></tr><tr><td>April</td><td
+                      data-chart-value>—</td></tr><tr><td>May</td><td
+                      data-chart-value>—</td></tr><tr><td>June</td><td
+                      data-chart-value>—</td></tr><tr><td>July</td><td
+                      data-chart-value>—</td></tr><tr><td>August</td><td
+                      data-chart-value>—</td></tr><tr><td>September</td><td
+                      data-chart-value>—</td></tr><tr><td>October</td><td
+                      data-chart-value>—</td></tr><tr><td>November</td><td
+                      data-chart-value>—</td></tr><tr><td>December</td><td
+                      data-chart-value>—</td></tr></tbody></table></details>
+          </div>
+        </div>
+        <section class='analysis-ledger' data-analysis-ledger hidden aria-labelledby='analysis-ledger-title'>
+          <div><p class='eyebrow'>Preliminary analysis</p><h3
+              id='analysis-ledger-title'
+            >How this was calculated</h3><p>The sources, versions and assumptions behind this preliminary result.</p></div><div
+            class='analysis-ledger__confidence'
+          ><span>Estimate confidence</span><strong data-analysis-confidence></strong><p
+              data-analysis-confidence-detail
+            ></p></div><dl data-analysis-ledger-list></dl><div><h3
+              >Calculation assumptions</h3><ul data-analysis-assumptions></ul></div>
         </section>
+      </section>
+
+      <section class='lead-section section section--soft' data-lead-section hidden aria-labelledby='lead-title'>
+        <div class='container lead-grid'><div><p class='eyebrow'>YOURENERGY</p><h2
+              id='lead-title'
+            >Send this estimate to an engineer</h2><p>Leave your contact details so an engineer can clarify the property data.</p><p class='lead-fallback'><span
+              >Or call an engineer:</span> <a href='tel:+37491095950'>+374 91 095 950</a></p><small>Data are not sent to analytics.</small></div><form
+            class='lead-form'
+            data-lead-form
+            novalidate
+          ><label>Your name<input name='name' autocomplete='name' /></label><label
+              >Phone<input name='phone' autocomplete='tel' inputmode='tel' /></label><label
+              >Email<input name='email' type='email' autocomplete='email' inputmode='email' /></label><label
+              >Property note <span>Optional</span><textarea
+                name='message'
+                rows='3'
+              ></textarea></label><label class='lead-consent'><input name='consent' type='checkbox' /><span
+              >I agree to the processing of my data to answer this request.</span></label><button class='button' type='submit'>Send request</button><p
+              class='form-status'
+              data-lead-status
+              aria-live='polite'
+            ></p></form></div>
+      </section>
+
+
+      <section class='solutions section' id='solutions' aria-labelledby='solutions-title'>
+        <div class='container'>
+          <div class='section-heading'><div><p class='eyebrow'>Solutions</p><h2
+                id='solutions-title'
+              >Three practical solutions for your home</h2></div><p>Compare indicative capacity and generation. A preliminary budget appears after property analysis.</p></div>
+          <div class='solution-grid'>
+              <article class='solution-card ' data-analysis-scenario='0'>
+
+                <span class='solution-badge' data-analysis-scenario-live hidden>From your confirmed data</span>
+                <p class='solution-index'>00</p><h3>Starter</h3><p>Lower initial investment</p>
+                <dl><div><dt>kWp</dt><dd data-analysis-scenario-capacity data-static-value='—'>—</dd></div><div><dt>kWh</dt><dd
+                    data-analysis-scenario-generation data-static-value='—'>—</dd></div></dl>
+                <strong class='solution-price' data-analysis-scenario-price data-static-value='Preliminary budget after analysis'>Preliminary budget after analysis</strong>
+                <details><summary>View details</summary><ul><li
+                      >10–12 panels in the selected class</li><li
+                      >Estimated area: 34–40 m²</li><li
+                      >Inverter, installation and basic monitoring</li></ul></details>
+                <a class='button button--outline' href='#calculator'>Calculate my home</a>
+              </article>
+              <article class='solution-card solution-card--popular' data-analysis-scenario='1'>
+                <span class='solution-badge' data-analysis-solution-badge>Popular option</span>
+                <span class='solution-badge' data-analysis-scenario-live hidden>From your confirmed data</span>
+                <p class='solution-index'>01</p><h3>Optimal</h3><p>The best balance of cost and return</p>
+                <dl><div><dt>kWp</dt><dd data-analysis-scenario-capacity data-static-value='—'>—</dd></div><div><dt>kWh</dt><dd
+                    data-analysis-scenario-generation data-static-value='—'>—</dd></div></dl>
+                <strong class='solution-price' data-analysis-scenario-price data-static-value='Preliminary budget after analysis'>Preliminary budget after analysis</strong>
+                <details><summary>View details</summary><ul><li
+                      >17 × 580 W panels</li><li
+                      >Estimated area: 54–62 m²</li><li
+                      >Inverter, design, installation and monitoring</li></ul></details>
+                <a class='button ' href='#calculator'>Calculate my home</a>
+              </article>
+              <article class='solution-card ' data-analysis-scenario='2'>
+
+                <span class='solution-badge' data-analysis-scenario-live hidden>From your confirmed data</span>
+                <p class='solution-index'>02</p><h3>Energy independence</h3><p>Maximum coverage plus a battery</p>
+                <dl><div><dt>kWp</dt><dd data-analysis-scenario-capacity data-static-value='—'>—</dd></div><div><dt>kWh</dt><dd
+                    data-analysis-scenario-generation data-static-value='—'>—</dd></div></dl>
+                <strong class='solution-price' data-analysis-scenario-price data-static-value='Needs a separate estimate'>Needs a separate estimate</strong>
+                <details><summary>View details</summary><ul><li
+                      >Higher-capacity system</li><li
+                      >10 kWh battery in the demonstration configuration</li><li
+                      >Hybrid inverter and backup scenarios</li></ul></details>
+                <a class='button button--outline' href='#calculator'>Calculate my home</a>
+              </article>
+          </div>
+          <p class='section-disclosure' data-analysis-scenario-disclosure data-static-value='The final configuration, price and outcome depend on the property and are confirmed after a site visit.'>The final configuration, price and outcome depend on the property and are confirmed after a site visit.</p>
+        </div>
+      </section>
+
+
+      <section class='finance section' id='investment' aria-labelledby='finance-title'>
+        <div class='container finance-grid'>
+          <div class='finance-copy'><p class='eyebrow eyebrow--dark'>Financial model</p><h2
+              id='finance-title'
+            >An investment that works every day</h2><p>The financial chart appears only after PVGIS analysis, an entered or confirmed tariff, and an active price book.</p><ul
+              class='check-list check-list--dark'
+              role='list'
+            ><li><svg class='inline-icon' aria-hidden='true'><use
+                      href='/icons.svg#check'
+                    ></use></svg>Lower grid consumption</li><li><svg class='inline-icon' aria-hidden='true'><use
+                      href='/icons.svg#check'
+                    ></use></svg>Panels designed for more than 25 years of service</li><li><svg class='inline-icon' aria-hidden='true'><use
+                      href='/icons.svg#check'
+                    ></use></svg>Greater energy independence</li><li><svg class='inline-icon' aria-hidden='true'><use
+                      href='/icons.svg#check'
+                    ></use></svg>A transparent formula with no hidden assumptions</li></ul></div>
+          <div class='finance-chart'><h3>How the net result grows</h3><svg
+              class='finance-line'
+              viewBox='0 0 650 250'
+              role='img'
+              aria-label='How the net result grows'
+              data-finance-chart
+              data-finance-title='How the net result grows'
+            ><path
+                data-finance-line-path
+                d=''
+                fill='none'
+                stroke='#f5bd18'
+                stroke-width='4'
+                stroke-linecap='round'
+              ></path><path
+                data-finance-baseline
+                d=''
+                fill='none'
+                stroke='rgba(255,255,255,.22)'
+                stroke-width='1'
+              ></path><circle data-finance-point cx='30' cy='192' r='6' fill='#f5bd18' visibility='hidden'></circle><circle
+                data-finance-point
+                cx='178'
+                cy='177'
+                r='6'
+                fill='#f5bd18'
+                visibility='hidden'
+              ></circle><circle data-finance-point cx='250' cy='143' r='6' fill='#f5bd18' visibility='hidden'></circle><circle
+                data-finance-point
+                cx='410'
+                cy='86'
+                r='6'
+                fill='#f5bd18'
+                visibility='hidden'
+              ></circle><circle data-finance-point cx='623' cy='26' r='6' fill='#f5bd18' visibility='hidden'></circle></svg><ol
+                class='finance-timeline'
+                role='list'
+            ><li><span data-analysis-timeline-year>Today</span><strong
+                  data-analysis-timeline='0'
+                  >After analysis</strong></li><li><span data-analysis-timeline-year>Year 5</span><strong
+                  data-analysis-timeline='1'
+                  >After analysis</strong></li><li><span data-analysis-timeline-year>Year 10</span><strong
+                  data-analysis-timeline='2'
+                  >After analysis</strong></li><li><span data-analysis-timeline-year>Year 25</span><strong
+                  data-analysis-timeline='3'
+                  >After analysis</strong></li></ol></div>
+          <div class='finance-included'><h3>What the temporary preliminary price includes</h3><ul role='list'><li><svg class='inline-icon' aria-hidden='true'><use
+                      href='/icons.svg#check'
+                    ></use></svg>Solar panels</li><li><svg class='inline-icon' aria-hidden='true'><use
+                      href='/icons.svg#check'
+                    ></use></svg>Inverter</li><li><svg class='inline-icon' aria-hidden='true'><use
+                      href='/icons.svg#check'
+                    ></use></svg>Mounting and standard installation</li><li><svg class='inline-icon' aria-hidden='true'><use
+                      href='/icons.svg#check'
+                    ></use></svg>Basic grid connection</li><li><svg class='inline-icon' aria-hidden='true'><use
+                      href='/icons.svg#check'
+                    ></use></svg>VAT and permits require confirmation</li><li><svg class='inline-icon' aria-hidden='true'><use
+                      href='/icons.svg#check'
+                    ></use></svg>Battery, roof repair and non-standard electrical work are excluded</li></ul></div>
+          <p class='finance-disclaimer' data-analysis-finance-disclaimer>Financial values are not shown before analysis. The model excludes tariff growth, degradation, maintenance, financing, discounting, taxes and export rules.</p>
+        </div>
+      </section>
+
     </main>
 
-    <footer class='tool-footer'>
-      <div class='container'>
-        <p>YOURENERGY · transparent preliminary tools for residential solar systems in Armenia.</p>
-        <a href='tel:+37491095950'>+374 91 095 950</a>
-      </div>
-    </footer>
+      <footer class='tool-footer'>
+        <div class='container'>
+          <p>YOURENERGY · transparent preliminary tools for residential solar systems in Armenia.</p>
+          <a href='tel:+37491095950'>+374 91 095 950</a>
+        </div>
+      </footer>
 
-    <script id='tool-page-config' type='application/json'>{"toolType":"calculator","locale":"en-US","homeHref":"/en/","priceBook":{"id":"yourenergy-am-residential-grid-v0-1","version":"v0.1","status":"temporary","countryCode":"AM","region":"all-armenia","systemType":"residential-grid-tied","currency":"AMD","checkedAt":"2026-08-29","validFrom":"2026-08-29","validUntil":"2026-09-28","ratesAmdPerWp":{"p25":232,"p50":247,"p75":264},"scope":["panels","inverter","mounting","standard-installation","basic-grid-connection"],"exclusions":["battery","roof-repair","non-standard-electrical-work","financing"],"confirmationRequired":["vat","permits"],"source":{"kind":"registry","status":"estimated","provider":"YOURENERGY temporary price book","reference":"P1-v0.1","verifiedAt":"2026-08-29"}},"strings":{"invalid":"Enter average consumption or a bill amount; a bill amount also requires a tariff above zero.","stored":"Your entries were saved only for this browser session. Continuing to the full calculator.","storageUnavailable":"Local storage is unavailable in this browser. Open the full calculator and enter the details there."}}</script>
-    <script type='module' src='/src/tools.js'></script>
+    <dialog class='passport-dialog' data-passport-dialog aria-labelledby='dialog-title'><form
+        method='dialog'
+        class='dialog-close'
+      ><button class='round-button' aria-label='Close report'><span
+            aria-hidden='true'
+          >×</span></button></form><div class='dialog-content'><p
+          class='eyebrow'
+        data-passport-dialog-eyebrow
+        >SOLAR PASSPORT · Preliminary analysis</p><h2
+          id='dialog-title'
+          data-passport-dialog-title
+        >Your Solar Passport appears after calculation</h2><div class='dialog-report'><article class='passport-card'><div
+              class='passport-card__top'
+            ><span class='wordmark wordmark--small'><span>YOUR</span><strong
+                >ENERGY</strong></span><span class='pill' data-passport-badge>After calculation</span></div><p
+              class='passport-label'
+            >SOLAR PASSPORT</p><h3
+              data-analysis-location
+            >Appears after the property is confirmed</h3><dl class='passport-specs'><div><dt
+                >Recommended system</dt><dd
+                  data-analysis='capacity'
+                >—</dd></div><div><dt data-passport-source-label>Source: awaiting a PVGIS response</dt><dd
+                  data-analysis='panels'
+                >—</dd></div></dl></article><div class='dialog-numbers'><h3
+            >Monthly generation, kWh</h3><dl><div><dt>Annual generation</dt><dd
+                    data-analysis='generation'
+                  >— kWh</dd></div><div><dt>Annual savings</dt><dd
+                    data-analysis='savings'
+                  >— ֏</dd></div><div><dt>Simple payback</dt><dd
+                    data-analysis='payback'
+                  >— years</dd></div><div><dt>Consumption covered</dt><dd
+                    data-analysis='coverage'
+                  >— %</dd></div></dl><p
+            >Financial values are not shown before analysis. The model excludes tariff growth, degradation, maintenance, financing, discounting, taxes and export rules.</p></div></div></div></dialog>
+
+      <script id='page-config' type='application/json'>{"locale":"en-US","status":{"minAddress":"Enter an address of at least 5 characters.","analyzing":"Preparing a preliminary analysis…","ready":"The preliminary result is ready. Review the data before making a decision.","unavailable":"The preliminary analysis is unavailable. Try again or select a point manually.","invalidFile":"This format is not supported. Choose a PDF, JPG, JPEG or PNG.","largeFile":"The file is too large. The maximum size is 10 MB.","fileSelected":"The file was selected and remains only in browser memory.","fileRemoved":"File removed.","mapReady":"The interactive property map is ready.","mapFailed":"The map is unavailable. The static demonstration fallback remains available.","monthTooltip":"Generation in {month}: {value} kWh"},"product":{"common":{"required":"Required field","optional":"Optional","perMonth":"per month","kwh":"kWh","amd":"֏","complete":"Done","cancel":"Cancel","noJsCalculator":"The calculator requires JavaScript. For a manual consultation, call an engineer:"},"tools":{"calculator":"Open the full calculator","offerChecker":"Check a commercial offer"},"flow":{"title":"How the estimate works","steps":[{"number":"01","title":"Find the property","copy":"Enter an address or place a point on the map, then confirm it."},{"number":"02","title":"See the location potential","copy":"PVGIS shows a benchmark for the chosen point before your roof is calculated."},{"number":"03","title":"Describe the roof and consumption","copy":"Outline the usable area and enter the real roof direction, tilt and energy use."},{"number":"04","title":"Get a preliminary estimate","copy":"System size, budget and savings appear only from confirmed inputs."}]},"potential":{"eyebrow":"Step 2 · Site potential","title":"Solar benchmark for the selected point","loading":"Requesting PVGIS for the confirmed point…","annualYieldLabel":"Expected generation per 1 kWp each year","orientationLabel":"Optimum direction for a free-standing system","tiltLabel":"Optimum tilt for a free-standing system","source":"Source: PVGIS · preliminary 14% system-loss assumption","disclosure":"This is a PVGIS benchmark for a fixed free-standing system at the chosen point. It is not a survey of your roof or an installation recommendation for it.","roofDisclosure":"The direction, pitch, area, shading and structural suitability of the actual roof must be entered below and confirmed by an engineer.","unavailable":"PVGIS potential could not be retrieved. Continue with the roof outline or retry; no example figures will be substituted.","retry":"Retry PVGIS potential","continue":"Continue to my roof estimate","directions":{"north":"north","northEast":"north-east","east":"east","southEast":"south-east","south":"south","southWest":"south-west","west":"west","northWest":"north-west"}},"consumption":{"title":"Electricity consumption","copy":"This is only needed for system sizing, budget and savings — not to find an address or the potential of a point.","modes":{"bill":"Average bill","usage":"Average consumption","monthly":"Monthly profile"},"billLabel":"Average electricity bill","billHelp":"Enter the average monthly amount in AMD.","tariffLabel":"Tariff from your bill","tariffHelp":"Optional for kWh. A bill in AMD needs it to convert the amount to kWh; the Passport will mark it as user-provided.","usageLabel":"Average monthly consumption","usageHelp":"Enter the average monthly consumption in kWh.","monthlyTitle":"Consumption over 12 months","monthlyHelp":"Enter kWh for each month when those figures are available.","annualLabel":"Estimated annual consumption","invalidNumber":"Enter a number greater than zero.","invalidBill":"Enter a valid bill amount in AMD.","invalidTariff":"Enter a tariff greater than zero in AMD/kWh.","invalidUsage":"Enter a valid consumption amount in kWh.","incompleteMonths":"Complete all 12 months or choose a different method.","noConsumption":"A consumption or bill value is needed for an estimate.","normalized":"The data were normalised to an annual profile."},"location":{"title":"Property location","copy":"The address is only used to find a map point. Confirm the matched property or select a point manually.","search":"Find address","searching":"Finding address…","resultLabel":"Matched address","confirmPrompt":"Is this your property?","confirm":"Confirm property","edit":"Edit address","noResult":"The address was not found. Select a point on the map manually.","unavailable":"Address search is currently unavailable. Select a point on the map manually.","manualTitle":"Select a point manually","manualCopy":"Click the map to mark the approximate property location. This is not address geocoding.","chooseOnMap":"Choose a point on the map","pointSelected":"Property point selected.","retry":"Try search again"},"roof":{"title":"Roof outline","copy":"Outline the usable roof area and enter the actual roof-face parameters for a preliminary estimate.","mapDisclosure":"The map helps place a point and an approximate outline. Without aerial imagery or a 3D model, it cannot automatically detect the roof, its pitch or shading.","fallback":"The map is unavailable. Continue after setting a location or try again.","start":"Start outline","addPointAtCenter":"Add a point at the map centre","addPoint":"Add point","undo":"Undo last point","reset":"Clear outline","finish":"Finish outline","edit":"Edit outline","pointsLabel":"Points in outline: {count}","minimumPoints":"Add at least 3 points to finish the outline.","areaLabel":"Preliminary roof area","orientationLabel":"Roof-face direction","customOrientationLabel":"Custom orientation (0° = north, 180° = south)","customOrientationHelp":"Enter a compass bearing from 0 to 359°.","tiltLabel":"This roof-face tilt","tiltHelp":"Enter an approximate angle only if it is known; it is not detected from the address.","angleGuideTitle":"Visual check of the roof inputs","angleGuideCopy":"The arrow shows the roof-face direction you entered. It is different from the PVGIS free-standing benchmark above.","angleGuideOrientation":"Roof-face direction","angleGuideTilt":"Roof-face tilt","pointSelectLabel":"Select point {index}","removePoint":"Remove point","nudgeNorth":"Move point north","nudgeSouth":"Move point south","nudgeEast":"Move point east","nudgeWest":"Move point west","orientationOptions":{"north":"North","southEast":"South-east","southWest":"South-west","east":"East","south":"South","west":"West","unknown":"I do not know yet","custom":"Other"},"unavailable":"A roof outline has not been set yet.","tilesUnavailable":"The basemap is unavailable. You can outline the roof after selecting a point.","locationRequired":"Confirm the property or select a point on the map first."},"result":{"title":"Preliminary analysis","preparing":"Preparing the preliminary analysis…","ready":"The preliminary analysis is ready.","unavailable":"An analysis could not be prepared from the available data.","retry":"Try calculation again","noTariff":"No tariff was entered: capacity, PVGIS generation and a preliminary price remain available, but savings and payback are not shown.","priceUnavailable":"The temporary price book is unavailable or has expired. Request an engineer survey; savings and payback also require a tariff.","noSavings":"There is not enough data to show savings and payback.","chartDescription":"Monthly preliminary generation based on the confirmed inputs and returned solar-resource data.","confidenceTitle":"Estimate confidence","confidence":{"high":"High","medium":"Medium","low":"Low","insufficient":"Not enough data"},"assumptionsTitle":"Calculation assumptions","commercialEstimate":"Preliminary YOUR ENERGY price · {version} · not an offer: {p25}–{p75}; P50 {p50}. Valid until {validUntil}."},"solutions":{"liveBadge":"From your confirmed data","liveCopy":"These three preliminary technical scenarios are calculated from the confirmed property data.","financialUnavailable":"A preliminary price appears from the active PriceBook; savings and payback require a tariff.","priceUnavailable":"The temporary price book is unavailable or has expired. Request an engineer survey."},"ledger":{"title":"How this was calculated","copy":"The sources, versions and assumptions behind this preliminary result.","sources":{"consumption":"Consumption data","location":"Property location","roof":"Roof outline and parameters","tariff":"Electricity tariff","userTariff":"Entered by the visitor from a bill","solar":"Solar resource","investment":"System price","pricebook":"Temporary YOUR ENERGY price book","unavailable":"Source not connected"},"assumptions":{"NO_TARIFF_ESCALATION":"No tariff escalation is modelled.","NO_PANEL_DEGRADATION":"No panel degradation is modelled.","NO_MAINTENANCE_FINANCING_DISCOUNTING_EXPORT_OR_TAXES":"Maintenance, financing, discounting, export rules and taxes are excluded.","MISSING_EVIDENCE_SUPPRESSES_FINANCIAL_RESULT":"Missing verified evidence suppresses financial values.","PVGIS_SYSTEM_LOSS_14_PERCENT":"PVGIS uses a 14% preliminary system-loss assumption; an engineer must confirm it.","PRELIMINARY_ROOF_USABLE_AREA_70_PERCENT":"Preliminary capacity uses 70% of the outlined roof area. An engineer verifies actual usable area, setbacks and access paths.","PRELIMINARY_PANEL_SIZE_580W_2M2":"Preliminary capacity uses a 580 W, 2 m² module; this is not a confirmed equipment specification.","USER_PROVIDED_TARIFF":"The tariff was entered by the visitor from a bill and is not a tariff registry record.","TEMPORARY_PRICEBOOK_NOT_OFFER":"The temporary PriceBook is a preliminary budget guide, not an offer or contractual price."}},"passport":{"persistenceTitle":"Solar Passport is stored in this browser","persistenceCopy":"This preliminary Passport exists only in the current session memory.","memoryOnly":"The data may be lost when this page is closed.","permanentLink":"A permanent link and PDF will be available after storage is connected.","sourceLedger":"Sources and assumptions","shareUnavailable":"Sharing a link is not available yet.","pendingBadge":"After calculation","pendingAddress":"Appears after the property is confirmed","pendingDate":"Created in this session","pendingSource":"Source: awaiting a PVGIS response","pendingChartDescription":"Monthly generation appears after the PVGIS calculation.","pendingTitle":"Your Solar Passport appears after calculation","realTitle":"Your preliminary Solar Passport","sessionBadge":"This session"},"lead":{"title":"Send this estimate to an engineer","copy":"Leave your contact details so an engineer can clarify the property data.","nameLabel":"Your name","phoneLabel":"Phone","emailLabel":"Email","messageLabel":"Property note","consent":"I agree to the processing of my data to answer this request.","submit":"Send request","required":"Complete the required fields and confirm consent.","invalidEmail":"Enter a valid email address.","sending":"Sending request…","sent":"The request was sent. We will contact you after the data are reviewed.","unavailable":"Sending is temporarily unavailable. Please try later.","retry":"Try sending again","directCall":"Or call an engineer:","privacy":"Data are not sent to analytics."},"status":{"geocodeUnavailable":"The geocoding service is not connected or is temporarily unavailable.","analysisUnavailable":"The solar-analysis service is not connected or is temporarily unavailable.","leadUnavailable":"The lead service is not connected or is temporarily unavailable.","retry":"Try again","canceled":"The previous request was cancelled."},"months":[{"short":"Jan","name":"January"},{"short":"Feb","name":"February"},{"short":"Mar","name":"March"},{"short":"Apr","name":"April"},{"short":"May","name":"May"},{"short":"Jun","name":"June"},{"short":"Jul","name":"July"},{"short":"Aug","name":"August"},{"short":"Sep","name":"September"},{"short":"Oct","name":"October"},{"short":"Nov","name":"November"},{"short":"Dec","name":"December"}]},"map":{"image":"/images/roof-scan-768.webp","tileUrl":"https://tile.openstreetmap.org/{z}/{x}/{y}.png","tileAttribution":"© OpenStreetMap contributors"},"endpoints":{"geocode":"/api/geocode","potential":"/api/potential","analysis":"/api/analysis"}}</script>
+      <script type='module' src='/src/main.js'></script>
   </body>
 </html>

@@ -73,15 +73,69 @@ export default {
       kwh: 'kWh',
       amd: '֏',
       complete: 'Done',
-      cancel: 'Cancel'
+      cancel: 'Cancel',
+      noJsCalculator:
+        'The calculator requires JavaScript. For a manual consultation, call an engineer:'
     },
     tools: {
       calculator: 'Open the full calculator',
       offerChecker: 'Check a commercial offer'
     },
+    flow: {
+      title: 'How the estimate works',
+      steps: [
+        {
+          number: '01',
+          title: 'Find the property',
+          copy: 'Enter an address or place a point on the map, then confirm it.'
+        },
+        {
+          number: '02',
+          title: 'See the location potential',
+          copy: 'PVGIS shows a benchmark for the chosen point before your roof is calculated.'
+        },
+        {
+          number: '03',
+          title: 'Describe the roof and consumption',
+          copy: 'Outline the usable area and enter the real roof direction, tilt and energy use.'
+        },
+        {
+          number: '04',
+          title: 'Get a preliminary estimate',
+          copy: 'System size, budget and savings appear only from confirmed inputs.'
+        }
+      ]
+    },
+    potential: {
+      eyebrow: 'Step 2 · Site potential',
+      title: 'Solar benchmark for the selected point',
+      loading: 'Requesting PVGIS for the confirmed point…',
+      annualYieldLabel: 'Expected generation per 1 kWp each year',
+      orientationLabel: 'Optimum direction for a free-standing system',
+      tiltLabel: 'Optimum tilt for a free-standing system',
+      source: 'Source: PVGIS · preliminary 14% system-loss assumption',
+      disclosure:
+        'This is a PVGIS benchmark for a fixed free-standing system at the chosen point. It is not a survey of your roof or an installation recommendation for it.',
+      roofDisclosure:
+        'The direction, pitch, area, shading and structural suitability of the actual roof must be entered below and confirmed by an engineer.',
+      unavailable:
+        'PVGIS potential could not be retrieved. Continue with the roof outline or retry; no example figures will be substituted.',
+      retry: 'Retry PVGIS potential',
+      continue: 'Continue to my roof estimate',
+      directions: {
+        north: 'north',
+        northEast: 'north-east',
+        east: 'east',
+        southEast: 'south-east',
+        south: 'south',
+        southWest: 'south-west',
+        west: 'west',
+        northWest: 'north-west'
+      }
+    },
     consumption: {
       title: 'Electricity consumption',
-      copy: 'Choose the most convenient way to provide data for a preliminary estimate.',
+      copy: 'This is only needed for system sizing, budget and savings — not to find an address or the potential of a point.',
       modes: {
         bill: 'Average bill',
         usage: 'Average consumption',
@@ -107,7 +161,7 @@ export default {
     },
     location: {
       title: 'Property location',
-      copy: 'Confirm the matched address or select a point manually.',
+      copy: 'The address is only used to find a map point. Confirm the matched property or select a point manually.',
       search: 'Find address',
       searching: 'Finding address…',
       resultLabel: 'Matched address',
@@ -117,16 +171,20 @@ export default {
       noResult: 'The address was not found. Select a point on the map manually.',
       unavailable: 'Address search is currently unavailable. Select a point on the map manually.',
       manualTitle: 'Select a point manually',
-      manualCopy: 'Click the map to mark the approximate property location.',
+      manualCopy:
+        'Click the map to mark the approximate property location. This is not address geocoding.',
       chooseOnMap: 'Choose a point on the map',
       pointSelected: 'Property point selected.',
       retry: 'Try search again'
     },
     roof: {
       title: 'Roof outline',
-      copy: 'Outline the usable part of the roof for a preliminary area estimate.',
+      copy: 'Outline the usable roof area and enter the actual roof-face parameters for a preliminary estimate.',
+      mapDisclosure:
+        'The map helps place a point and an approximate outline. Without aerial imagery or a 3D model, it cannot automatically detect the roof, its pitch or shading.',
       fallback: 'The map is unavailable. Continue after setting a location or try again.',
       start: 'Start outline',
+      addPointAtCenter: 'Add a point at the map centre',
       addPoint: 'Add point',
       undo: 'Undo last point',
       reset: 'Clear outline',
@@ -135,9 +193,17 @@ export default {
       pointsLabel: 'Points in outline: {count}',
       minimumPoints: 'Add at least 3 points to finish the outline.',
       areaLabel: 'Preliminary roof area',
-      orientationLabel: 'Roof orientation',
-      tiltLabel: 'Roof tilt',
-      tiltHelp: 'Choose an approximate tilt if it is known.',
+      orientationLabel: 'Roof-face direction',
+      customOrientationLabel: 'Custom orientation (0° = north, 180° = south)',
+      customOrientationHelp: 'Enter a compass bearing from 0 to 359°.',
+      tiltLabel: 'This roof-face tilt',
+      tiltHelp:
+        'Enter an approximate angle only if it is known; it is not detected from the address.',
+      angleGuideTitle: 'Visual check of the roof inputs',
+      angleGuideCopy:
+        'The arrow shows the roof-face direction you entered. It is different from the PVGIS free-standing benchmark above.',
+      angleGuideOrientation: 'Roof-face direction',
+      angleGuideTilt: 'Roof-face tilt',
       pointSelectLabel: 'Select point {index}',
       removePoint: 'Remove point',
       nudgeNorth: 'Move point north',
@@ -151,6 +217,7 @@ export default {
         east: 'East',
         south: 'South',
         west: 'West',
+        unknown: 'I do not know yet',
         custom: 'Other'
       },
       unavailable: 'A roof outline has not been set yet.',
@@ -214,6 +281,10 @@ export default {
           'Missing verified evidence suppresses financial values.',
         PVGIS_SYSTEM_LOSS_14_PERCENT:
           'PVGIS uses a 14% preliminary system-loss assumption; an engineer must confirm it.',
+        PRELIMINARY_ROOF_USABLE_AREA_70_PERCENT:
+          'Preliminary capacity uses 70% of the outlined roof area. An engineer verifies actual usable area, setbacks and access paths.',
+        PRELIMINARY_PANEL_SIZE_580W_2M2:
+          'Preliminary capacity uses a 580 W, 2 m² module; this is not a confirmed equipment specification.',
         USER_PROVIDED_TARIFF:
           'The tariff was entered by the visitor from a bill and is not a tariff registry record.',
         TEMPORARY_PRICEBOOK_NOT_OFFER:
@@ -227,6 +298,12 @@ export default {
       permanentLink: 'A permanent link and PDF will be available after storage is connected.',
       sourceLedger: 'Sources and assumptions',
       shareUnavailable: 'Sharing a link is not available yet.',
+      pendingBadge: 'After calculation',
+      pendingAddress: 'Appears after the property is confirmed',
+      pendingDate: 'Created in this session',
+      pendingSource: 'Source: awaiting a PVGIS response',
+      pendingChartDescription: 'Monthly generation appears after the PVGIS calculation.',
+      pendingTitle: 'Your Solar Passport appears after calculation',
       realTitle: 'Your preliminary Solar Passport',
       sessionBadge: 'This session'
     },
@@ -263,16 +340,22 @@ export default {
     titleLead: 'Discover your home’s',
     titleMiddle: 'solar potential',
     titleAccent: 'in 60 seconds',
-    copy: 'Enter an address and consumption data to start a preliminary estimate.',
+    homeCopy:
+      'Open the full calculator: enter consumption, confirm the property point and roof outline, then receive a preliminary PVGIS estimate.',
+    calculatorCopy:
+      'First find and confirm a point, then see its PVGIS potential. Roof and consumption data are only needed for the detailed estimate.',
     disclosure:
       'A preliminary result requires property confirmation and does not replace a site visit, engineering design or commercial proposal.',
     addressLabel: 'Your home address',
     addressPlaceholder: 'For example: Yerevan, Arabkir',
-    addressHelp: 'After search, confirm the matched address or select a point manually.',
-    analyze: 'Analyse',
-    uploadTitle: 'Upload your electricity bill',
+    addressHelp:
+      'This step only finds a map point; it does not detect your roof angle, area or shading.',
+    analyze: 'Find address',
+    openCalculator: 'Open calculator',
+    uploadTitle: 'Attach an electricity bill (optional)',
     uploadPrompt: 'Choose a file or drag it here',
-    uploadHelp: 'PDF, JPG or PNG up to 10 MB. The file is not sent to a server.',
+    uploadHelp:
+      'PDF, JPG or PNG up to 10 MB. The file stays out of the server and is not read automatically; enter values manually.',
     removeFile: 'Remove file',
     benefits: [
       'No call or obligation',

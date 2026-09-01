@@ -454,7 +454,7 @@ async function validateHeaders() {
   if (/\*\s*;|\*$/u.test(csp)) fail('_headers CSP must not use a wildcard source');
 }
 
-function validateP0Markup(html, page) {
+function validateCalculatorMarkup(html, page) {
   for (const marker of [
     'data-consumption-inputs',
     'data-location-stage',
@@ -471,6 +471,27 @@ function validateP0Markup(html, page) {
     (!html.includes('map-caption') || !html.includes('demo-badge'))
   ) {
     fail(`${page}: static map fallback lacks an explicit label`);
+  }
+}
+
+function validateHomeCalculatorSeparation(html, page, calculatorHref) {
+  for (const marker of [
+    'data-address-form',
+    'data-consumption-inputs',
+    'data-location-stage',
+    'data-property-map',
+    'data-roof-stage',
+    'data-analysis-ledger',
+    'data-lead-form',
+    "id='page-config'"
+  ]) {
+    if (html.includes(marker)) {
+      fail(`${page}: full calculator marker ${marker} must live on the calculator route`);
+    }
+  }
+
+  if (!html.includes(`href='${calculatorHref}'`)) {
+    fail(`${page}: homepage needs a direct link to ${calculatorHref}`);
   }
 }
 
@@ -506,6 +527,13 @@ if (pages.has('ru/index.html'))
   validateLanguageSwitcher(pages.get('ru/index.html'), 'ru/index.html', 'ru');
 if (pages.has('en/index.html'))
   validateLanguageSwitcher(pages.get('en/index.html'), 'en/index.html', 'en');
+for (const [page, calculatorHref] of [
+  ['index.html', '/calculator/'],
+  ['ru/index.html', '/ru/calculator/'],
+  ['en/index.html', '/en/calculator/']
+]) {
+  if (pages.has(page)) validateHomeCalculatorSeparation(pages.get(page), page, calculatorHref);
+}
 for (const { page, locale, type } of toolPages) {
   if (!pages.has(page)) continue;
   const canonical = locale === 'hy' ? `${origin}/${type}/` : `${origin}/${locale}/${type}/`;
@@ -513,8 +541,10 @@ for (const { page, locale, type } of toolPages) {
   validateToolLanguageSwitcher(pages.get(page), page, locale, type);
   if (type === 'offer-checker') validateOfferCheckerPriceBookFallback(pages.get(page), page);
 }
-for (const page of ['index.html', 'ru/index.html', 'en/index.html']) {
-  if (pages.has(page)) validateP0Markup(pages.get(page), page);
+for (const { page, type } of toolPages) {
+  if (type === 'calculator' && pages.has(page)) {
+    validateCalculatorMarkup(pages.get(page), page);
+  }
 }
 const publishedPages = new Set([
   'index.html',

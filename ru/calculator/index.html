@@ -22,18 +22,19 @@
     <link rel='alternate' hreflang='hy' href='https://yourenergy.am/calculator/' /><link rel='alternate' hreflang='ru' href='https://yourenergy.am/ru/calculator/' /><link rel='alternate' hreflang='en' href='https://yourenergy.am/en/calculator/' /><link rel='alternate' hreflang='x-default' href='https://yourenergy.am/calculator/' />
     <link rel='icon' href='/favicon.svg' type='image/svg+xml' />
     <link rel='stylesheet' href='/src/styles/main.css' />
+    <script type='application/ld+json'>{"@context":"https://schema.org","@graph":[{"@type":"WebSite","@id":"https://yourenergy.am/#website","name":"YOURENERGY","url":"https://yourenergy.am/"},{"@type":"Organization","@id":"https://yourenergy.am/#organization","name":"Your Energy LLC","alternateName":"YOURENERGY","url":"https://yourenergy.am/","telephone":"+374 91 095 950","address":{"@type":"PostalAddress","streetAddress":"Artashisyan 48 14 Kotayq, Zovuni, 26 33 str, Yerevan","addressCountry":"AM"}},{"@type":"Service","@id":"https://yourenergy.am/ru/calculator/#service","name":"Предварительный анализ солнечной системы","serviceType":"Предварительный анализ солнечной системы","url":"https://yourenergy.am/ru/calculator/","provider":{"@id":"https://yourenergy.am/#organization"},"areaServed":{"@type":"Country","name":"Armenia"}}]}</script>
   </head>
-  <body class='tool-page tool-page--calculator'>
+  <body>
     <a class='skip-link' href='#main'>Перейти к основному содержанию</a>
-    <header class='site-header'>
+    <header class='site-header' data-header>
       <div class='container header-row'>
-        <a class='wordmark' href='/ru/' aria-label='YOURENERGY'><span>YOUR</span><strong
+        <a class='wordmark' href='/ru/' aria-label='YOURENERGY — главная страница'><span>YOUR</span><strong
           >ENERGY</strong></a>
-        <nav class='desktop-nav' aria-label='Основная навигация'>
-          <a href='/ru/'>Главная</a>
-          <a href='/ru/calculator/'>Калькулятор</a>
-          <a href='/ru/offer-checker/'>Проверка КП</a>
-        </nav>
+          <nav class='desktop-nav' aria-label='Основная навигация'>
+            <a href='/ru/'>Главная</a>
+            <a href='/ru/calculator/'>Калькулятор</a>
+            <a href='/ru/offer-checker/'>Проверка КП</a>
+          </nav>
         <div class='header-actions'>
           <a class='header-phone' href='tel:+37491095950'><strong>+374 91 095 950</strong><small
             >Открыто до 21:00</small></a>
@@ -48,15 +49,16 @@
                 hreflang='en'
                 aria-label='EN — Английский'
               >EN</a></nav>
+            <a class='button button--small' href='/ru/offer-checker/'>Проверка КП</a>
         </div>
-        <details class='mobile-menu'>
+        <details class='mobile-menu' data-mobile-menu>
           <summary aria-label='Открыть навигационное меню'><span></span><span></span><span></span></summary>
           <nav aria-label='Мобильная навигация'>
-            <a href='/ru/'>Главная</a>
-            <a href='/ru/calculator/'>Калькулятор</a>
-            <a href='/ru/offer-checker/'>Проверка КП</a>
-            <a href='tel:+37491095950'>Позвонить инженеру</a>
-            <nav class='mobile-language-switcher' aria-label='Выбор языка'><a
+              <a href='/ru/'>Главная</a>
+              <a href='/ru/calculator/'>Калькулятор</a>
+              <a href='/ru/offer-checker/'>Проверка КП</a>
+              <a href='tel:+37491095950'>Позвонить инженеру</a>
+            <div class='mobile-language-switcher' role='group' aria-label='Выбор языка'><a
                   class='language-link'
                   href='/calculator/'
                   hreflang='hy'
@@ -66,124 +68,909 @@
                   href='/en/calculator/'
                   hreflang='en'
                   aria-label='EN — Английский'
-                >EN</a></nav>
+                >EN</a></div>
           </nav>
         </details>
       </div>
     </header>
 
-    <main id='main' class='tool-main'>
-      <section class='tool-hero' aria-labelledby='tool-title'>
-        <div class='container tool-hero__grid'>
-          <div>
-            <p class='eyebrow'>Солнечный калькулятор</p>
-            <h1 id='tool-title'>Начните Solar Passport с вашего потребления</h1>
-            <p class='tool-intro'>Данные остаются только в текущей сессии браузера, чтобы вы продолжили на главном калькуляторе с подтверждением точки, крыши и PVGIS.</p>
-              <ul class='tool-principles'>
-                <li>Без «готового» результата только по адресу</li><li>Точка и крыша подтверждаются на следующем шаге</li><li>Экономия рассчитывается лишь с подтверждённым или введённым вами тарифом</li>
-              </ul>
+    <main id='main'>
+      <section class='hero section' id='calculator' aria-labelledby='hero-title'>
+        <div class='container hero-grid'>
+          <div class='hero-copy'>
+            <p class='eyebrow'>Персональный расчёт солнечной системы</p>
+            <h1 id='hero-title'>Узнайте потенциал<br />вашего дома<br /><mark
+              >за 60 секунд</mark></h1>
+            <p class='hero-intro'>Сначала найдите и подтвердите точку, затем увидите потенциал PVGIS. Данные крыши и потребления нужны только для подробного расчёта.</p>
+            <p class='hero-tool-links'><a href='/ru/calculator/'>Открыть полный калькулятор</a><a
+                href='/ru/offer-checker/'
+              >Проверить коммерческое предложение</a></p>
+            <section class='calculator-flow-region' aria-labelledby='calculator-flow-title'>
+              <h2 id='calculator-flow-title'>Как устроен расчёт</h2>
+              <ol class='calculator-flow' data-calculator-flow>
+                <li data-calculator-flow-step='0'><span
+                    class='calculator-flow__number'
+                  >01</span><span><strong>Найдите участок</strong><small>Введите адрес или поставьте точку на карте и подтвердите её.</small></span></li><li data-calculator-flow-step='1'><span
+                    class='calculator-flow__number'
+                  >02</span><span><strong>Посмотрите потенциал места</strong><small>PVGIS покажет ориентир для выбранной точки — до расчёта вашей крыши.</small></span></li><li data-calculator-flow-step='2'><span
+                    class='calculator-flow__number'
+                  >03</span><span><strong>Уточните крышу и потребление</strong><small>Обведите доступную площадь и укажите фактическое направление, наклон и расход энергии.</small></span></li><li data-calculator-flow-step='3'><span
+                    class='calculator-flow__number'
+                  >04</span><span><strong>Получите предварительный расчёт</strong><small>Система, бюджет и экономия появятся только из подтверждённых входных данных.</small></span></li>
+              </ol>
+            </section>
+            <form class='address-form' data-address-form action='#manual-consultation' novalidate>
+              <label for='address'>Адрес вашего дома</label>
+              <div class='address-control'>
+                <svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#pin'></use></svg>
+                <input
+                  id='address'
+                  name='address'
+                  autocomplete='street-address'
+                  placeholder='Например, Ереван, Арабкир'
+                  minlength='5'
+                  maxlength='160'
+                  aria-describedby='address-help analysis-status'
+                  required
+                />
+                <button class='button button--navy' type='submit'>Найти адрес</button>
+              </div>
+              <small id='address-help' class='field-help'>Этот шаг только находит точку на карте; он не определяет угол, площадь или затенение вашей крыши.</small>
+              <button class='text-button address-manual-point' type='button' data-location-manual-start>
+                Выбрать точку на карте
+              </button>
+            </form>
+            <section class='product-stage' data-location-stage hidden aria-labelledby='location-stage-title'>
+              <p class='eyebrow'>Местоположение объекта</p>
+              <h2 id='location-stage-title'>Это ваш объект?</h2>
+              <p data-location-message>Адрес нужен только для поиска точки. Подтвердите найденный объект или укажите точку вручную.</p>
+              <p class='location-result'><span>Найденный адрес</span><strong
+                  data-location-address
+                ></strong><small data-location-coordinates></small></p>
+              <div class='location-candidates' data-location-candidates hidden></div>
+              <div class='flow-actions'><button
+                  class='button button--navy'
+                  type='button'
+                  data-location-confirm
+                >Подтвердить объект</button><button
+                  class='button button--outline'
+                  type='button'
+                  data-location-manual
+                >Выбрать точку на карте</button></div>
+            </section>
+            <section class='product-stage roof-editor' data-roof-stage hidden aria-labelledby='roof-stage-title'>
+              <p class='eyebrow'>Контур крыши</p>
+              <h2 id='roof-stage-title'>Обведите доступную часть крыши и задайте фактические параметры ската для предварительной оценки.</h2>
+              <p data-roof-message>Сначала подтвердите объект или выберите точку на карте.</p>
+              <div class='flow-actions'><button
+                  class='button button--navy'
+                  type='button'
+                  data-roof-start
+                >Начать контур</button><button
+                  class='button button--outline'
+                  type='button'
+                  data-roof-add-center
+                >Добавить точку в центре карты</button><button
+                  class='button button--outline'
+                  type='button'
+                  data-roof-undo
+                >Отменить последнюю точку</button><button
+                  class='button button--outline'
+                  type='button'
+                  data-roof-reset
+                >Очистить контур</button></div>
+              <div class='roof-editor-controls'><label for='roof-orientation'>Направление ската крыши<select
+                    id='roof-orientation'
+                    data-roof-orientation
+                  ><option value='unknown' selected>Не знаю — уточню позже</option><option value='180'>Юг</option><option
+                      value='225'
+                    >Юго-запад</option><option value='135'
+                    >Юго-восток</option><option value='90'
+                    >Восток</option><option value='270'
+                    >Запад</option><option value='0'
+                    >Север</option><option value='custom'>Другая</option></select></label><label
+                  data-roof-orientation-custom
+                  hidden
+                  for='roof-orientation-custom'
+                >Своя ориентация (0° &#x3D; север, 180° &#x3D; юг)<input
+                    id='roof-orientation-custom'
+                    type='number'
+                    min='0'
+                    max='359.999'
+                    step='1'
+                    inputmode='decimal'
+                    aria-describedby='roof-orientation-custom-help'
+                    data-roof-orientation-custom-input
+                  /><small id='roof-orientation-custom-help'>Введите угол по компасу от 0 до 359°.</small></label><label
+                  for='roof-tilt'
+                >Наклон этого ската крыши<input
+                    id='roof-tilt'
+                    type='number'
+                    min='0'
+                    max='90'
+                    step='1'
+                    aria-describedby='roof-tilt-help'
+                    data-roof-tilt
+                  /><small id='roof-tilt-help'>Укажите приблизительный угол только если он известен; это не значение, найденное по адресу.</small></label></div>
+              <figure class='roof-angle-preview' aria-labelledby='roof-angle-preview-title'>
+                <figcaption id='roof-angle-preview-title'>Визуальная проверка введённых параметров крыши</figcaption>
+                <div class='roof-angle-preview__grid'>
+                  <svg class='roof-angle-preview__compass' viewBox='0 0 200 200' aria-hidden='true' focusable='false'>
+                    <circle cx='100' cy='100' r='73'></circle><path d='M100 21V179M21 100H179'></path><text x='100' y='15'>N</text><text x='187' y='105'>E</text><text x='100' y='196'>S</text><text x='7' y='105'>W</text><g data-roof-preview-arrow transform='rotate(180 100 100)'><path d='M100 34 88 84h24z'></path><path d='M100 166 88 116h24z'></path></g>
+                  </svg>
+                  <dl><div><dt>Направление ската</dt><dd data-roof-preview-orientation>—</dd></div><div><dt>Наклон ската</dt><dd data-roof-preview-tilt>—</dd></div></dl>
+                </div>
+                <p>Стрелка показывает направление ската, введённое вами. Оно отличается от PVGIS-ориентира для отдельной конструкции выше.</p>
+              </figure>
+              <fieldset class='consumption-inputs' data-consumption-inputs>
+                <legend>Потребление электроэнергии</legend>
+                <p>Это нужно только для мощности системы, бюджета и экономии — не для поиска адреса или потенциала точки.</p>
+                <div class='consumption-modes' role='radiogroup'>
+                  <label><input type='radio' name='consumption-mode' value='bill' checked /><span
+                    >Средний счёт</span></label>
+                  <label><input type='radio' name='consumption-mode' value='usage' /><span
+                    >Среднее потребление</span></label>
+                  <label><input type='radio' name='consumption-mode' value='monthly' /><span
+                    >Помесячный профиль</span></label>
+                </div>
+                <div class='consumption-panel' data-consumption-panel='bill'>
+                  <label for='consumption-bill'>Средний счёт за электричество</label>
+                  <div class='input-with-unit'><input
+                      id='consumption-bill'
+                      type='number'
+                      min='1'
+                      step='1'
+                      inputmode='decimal'
+                      data-consumption-bill
+                    /><span>֏ в месяц</span></div>
+                  <small>Укажите среднюю сумму за месяц в драмах.</small>
+                </div>
+                <div class='consumption-panel' data-consumption-panel='usage' hidden>
+                  <label for='consumption-usage'>Среднее потребление в месяц</label>
+                  <div class='input-with-unit'><input
+                      id='consumption-usage'
+                      type='number'
+                      min='1'
+                      step='1'
+                      inputmode='decimal'
+                      data-consumption-usage
+                    /><span>kWh в месяц</span></div>
+                  <small>Укажите среднее потребление в kWh за месяц.</small>
+                </div>
+                <div class='consumption-panel consumption-panel--months' data-consumption-panel='monthly' hidden>
+                  <p>Потребление за 12 месяцев</p>
+                  <div class='monthly-consumption-grid'><label
+                      ><span>Янв</span><input
+                        type='number'
+                        min='0'
+                        step='1'
+                        inputmode='decimal'
+                        aria-label='Январь'
+                        data-consumption-month
+                      /></label><label
+                      ><span>Фев</span><input
+                        type='number'
+                        min='0'
+                        step='1'
+                        inputmode='decimal'
+                        aria-label='Февраль'
+                        data-consumption-month
+                      /></label><label
+                      ><span>Мар</span><input
+                        type='number'
+                        min='0'
+                        step='1'
+                        inputmode='decimal'
+                        aria-label='Март'
+                        data-consumption-month
+                      /></label><label
+                      ><span>Апр</span><input
+                        type='number'
+                        min='0'
+                        step='1'
+                        inputmode='decimal'
+                        aria-label='Апрель'
+                        data-consumption-month
+                      /></label><label
+                      ><span>Май</span><input
+                        type='number'
+                        min='0'
+                        step='1'
+                        inputmode='decimal'
+                        aria-label='Май'
+                        data-consumption-month
+                      /></label><label
+                      ><span>Июн</span><input
+                        type='number'
+                        min='0'
+                        step='1'
+                        inputmode='decimal'
+                        aria-label='Июнь'
+                        data-consumption-month
+                      /></label><label
+                      ><span>Июл</span><input
+                        type='number'
+                        min='0'
+                        step='1'
+                        inputmode='decimal'
+                        aria-label='Июль'
+                        data-consumption-month
+                      /></label><label
+                      ><span>Авг</span><input
+                        type='number'
+                        min='0'
+                        step='1'
+                        inputmode='decimal'
+                        aria-label='Август'
+                        data-consumption-month
+                      /></label><label
+                      ><span>Сен</span><input
+                        type='number'
+                        min='0'
+                        step='1'
+                        inputmode='decimal'
+                        aria-label='Сентябрь'
+                        data-consumption-month
+                      /></label><label
+                      ><span>Окт</span><input
+                        type='number'
+                        min='0'
+                        step='1'
+                        inputmode='decimal'
+                        aria-label='Октябрь'
+                        data-consumption-month
+                      /></label><label
+                      ><span>Ноя</span><input
+                        type='number'
+                        min='0'
+                        step='1'
+                        inputmode='decimal'
+                        aria-label='Ноябрь'
+                        data-consumption-month
+                      /></label><label
+                      ><span>Дек</span><input
+                        type='number'
+                        min='0'
+                        step='1'
+                        inputmode='decimal'
+                        aria-label='Декабрь'
+                        data-consumption-month
+                      /></label></div>
+                  <small>Укажите kWh для каждого месяца, если эти данные доступны.</small>
+                </div>
+                <div class='manual-tariff'>
+                  <label for='consumption-tariff'>Тариф из вашего счёта</label>
+                  <div class='input-with-unit'><input
+                      id='consumption-tariff'
+                      type='number'
+                      min='0.01'
+                      max='1000'
+                      step='0.01'
+                      inputmode='decimal'
+                      aria-describedby='consumption-tariff-help'
+                      data-consumption-tariff
+                    /><span>֏ / kWh</span></div>
+                  <small id='consumption-tariff-help'>Необязательно для kWh. Для счёта в драмах он нужен, чтобы перевести сумму в kWh; в Passport будет отмечен как введённый вами.</small>
+                </div>
+                <p class='consumption-total'><span>Расчётное потребление за год</span><output
+                    data-consumption-annual
+                  >—</output> kWh</p>
+              </fieldset>
+              <p class='roof-editor__summary'><span data-roof-points>Точек в контуре: {count}</span><strong
+                  data-roof-area
+                >—</strong></p>
+              <div class='roof-nudge-controls' data-roof-nudge-controls hidden><label
+                  for='roof-point-select'
+                >Выбрать точку {index}<select id='roof-point-select' data-roof-point-select></select></label><div
+                  ><button type='button' data-roof-nudge='north' aria-label='Сместить точку на север'>↑</button><button
+                    type='button'
+                    data-roof-nudge='west'
+                    aria-label='Сместить точку на запад'
+                  >←</button><button type='button' data-roof-nudge='east' aria-label='Сместить точку на восток'>→</button><button
+                    type='button'
+                    data-roof-nudge='south'
+                    aria-label='Сместить точку на юг'
+                  >↓</button><button type='button' data-roof-remove>Удалить точку</button></div></div>
+              <button class='button' type='button' data-roof-finish disabled>Завершить контур</button>
+            </section>
+            <div class='upload-block' data-file-drop data-optional-upload hidden>
+              <label class='upload-control' for='bill-file'>
+                <span class='upload-icon' aria-hidden='true'><svg class='inline-icon'><use
+                      href='/icons.svg#file'
+                    ></use></svg></span>
+                <span><strong>Прикрепите счёт за электричество (необязательно)</strong><small>Выберите или перетащите файл
+                    ·
+                    PDF, JPG или PNG до 10 МБ. Файл не отправляется на сервер и не считывается автоматически; внесите значения вручную.</small></span>
+                <input
+                  id='bill-file'
+                  class='upload-control__input'
+                  type='file'
+                  accept='.pdf,.jpg,.jpeg,.png,application/pdf,image/jpeg,image/png'
+                  aria-describedby='file-status'
+                />
+              </label>
+              <div class='file-selection' data-file-meta hidden>
+                <span data-file-name></span>
+                <button
+                  class='text-button'
+                  type='button'
+                  data-file-remove
+                >Удалить файл</button>
+              </div>
+            </div>
+            <p class='form-status' id='analysis-status' data-analysis-status aria-live='polite'></p>
+            <p class='form-status' id='file-status' data-file-status aria-live='polite'></p>
+            <noscript><p class='noscript-note' id='manual-consultation'>Калькулятор работает с JavaScript. Для ручной консультации позвоните инженеру: <a
+                  href='tel:+37491095950'
+                >+374 91 095 950</a></p></noscript>
+            <ul class='hero-benefits' role='list'>
+              <li><svg class='inline-icon' aria-hidden='true'><use
+                      href='/icons.svg#check'
+                    ></use></svg>Без звонка и обязательств</li><li><svg class='inline-icon' aria-hidden='true'><use
+                      href='/icons.svg#check'
+                    ></use></svg>Подтвердите объект на карте</li><li><svg class='inline-icon' aria-hidden='true'><use
+                      href='/icons.svg#check'
+                    ></use></svg>Укажите данные о потреблении</li><li><svg class='inline-icon' aria-hidden='true'><use
+                      href='/icons.svg#check'
+                    ></use></svg>Источники и допущения видимы</li>
+            </ul>
+            <p class='hero-disclosure'>Предварительный результат требует подтверждения объекта и не заменяет осмотр, инженерный проект или коммерческое предложение.</p>
           </div>
-          <aside class='tool-reference' aria-label='Solar Passport'>
-              <p class='eyebrow'>Solar Passport</p>
-              <strong>Эта страница не выдаёт генерацию, экономию или цену. Для них нужны подтверждённая точка, данные крыши и ответ PVGIS.</strong>
-          </aside>
+
+          <div class='roof-product' data-analysis-region aria-label='Предварительная оценка крыши'>
+            <figure class='roof-visual' data-map-shell>
+              <picture>
+                <source
+                  type='image/avif'
+                  srcset='/images/roof-scan-480.avif 480w, /images/roof-scan-768.avif 768w, /images/roof-scan-1200.avif 1200w, /images/roof-scan-1600.avif 1600w'
+                  sizes='(max-width: 760px) 100vw, 50vw'
+                />
+                <source
+                  type='image/webp'
+                  srcset='/images/roof-scan-480.webp 480w, /images/roof-scan-768.webp 768w, /images/roof-scan-1200.webp 1200w, /images/roof-scan-1600.webp 1600w'
+                  sizes='(max-width: 760px) 100vw, 50vw'
+                />
+                <img
+                  src='/images/roof-scan-1200.jpg'
+                  srcset='/images/roof-scan-480.jpg 480w, /images/roof-scan-768.jpg 768w, /images/roof-scan-1200.jpg 1200w, /images/roof-scan-1600.jpg 1600w'
+                  sizes='(max-width: 760px) 100vw, 50vw'
+                  width='1600'
+                  height='1067'
+                  alt='Иллюстративный аэрофотоснимок крыши до подтверждения объекта'
+                  fetchpriority='high'
+                  decoding='async'
+                />
+              </picture>
+              <div class='roof-shade' aria-hidden='true'></div>
+              <svg class='roof-overlay' viewBox='0 0 1000 660' aria-hidden='true' focusable='false'>
+                <polygon points='295,125 670,214 616,499 239,410' class='roof-boundary'></polygon>
+                <g class='panel-grid'>
+                  <rect x='330' y='195' width='66' height='49'></rect><rect
+                    x='400'
+                    y='212'
+                    width='66'
+                    height='49'
+                  ></rect><rect x='470' y='229' width='66' height='49'></rect><rect
+                    x='540'
+                    y='246'
+                    width='66'
+                    height='49'
+                  ></rect>
+                  <rect x='314' y='261' width='66' height='49'></rect><rect
+                    x='384'
+                    y='278'
+                    width='66'
+                    height='49'
+                  ></rect><rect x='454' y='295' width='66' height='49'></rect><rect
+                    x='524'
+                    y='312'
+                    width='66'
+                    height='49'
+                  ></rect>
+                  <rect x='298' y='327' width='66' height='49'></rect><rect
+                    x='368'
+                    y='344'
+                    width='66'
+                    height='49'
+                  ></rect><rect x='438' y='361' width='66' height='49'></rect><rect
+                    x='508'
+                    y='378'
+                    width='66'
+                    height='49'
+                  ></rect>
+                  <rect x='282' y='393' width='66' height='49'></rect><rect
+                    x='352'
+                    y='410'
+                    width='66'
+                    height='49'
+                  ></rect><rect x='422' y='427' width='66' height='49'></rect><rect
+                    x='492'
+                    y='444'
+                    width='66'
+                    height='49'
+                  ></rect>
+                </g>
+              </svg>
+              <figcaption class='map-caption'><span class='demo-badge'>Статический демонстрационный резервный вариант</span><span
+                >Статическое изображение и размещение панелей используются только как помеченный резервный вариант до подтверждения объекта.</span></figcaption>
+              <div
+                class='property-map'
+                data-property-map
+                hidden
+                aria-label='Указать точку вручную'
+              ></div>
+              <p class='property-map-note' data-property-map-note hidden></p>
+              <aside class='roof-info'>
+                <strong data-analysis-location>Иллюстративное местоположение</strong>
+                <dl>
+                  <div><dt>Площадь крыши</dt><dd
+                      data-analysis-roof='area'
+                    >Пример: 124 м²</dd></div>
+                  <div><dt>Ориентация</dt><dd
+                      data-analysis-roof='orientation'
+                    >Пример: юго-запад (236°)</dd></div>
+                  <div><dt>Наклон</dt><dd
+                      data-analysis-roof='tilt'
+                    >Пример: 32°</dd></div>
+                  <div class='success' data-analysis-score-row><dt>Solar Score</dt><dd>Только пример</dd></div>
+                </dl>
+              </aside>
+            </figure>
+            <section class='site-potential' data-site-potential hidden aria-live='polite' aria-labelledby='site-potential-title' tabindex='-1'>
+              <p class='eyebrow'>Шаг 2 · Потенциал участка</p>
+              <h2 id='site-potential-title'>Солнечный ориентир для выбранной точки</h2>
+              <p class='site-potential__status' data-site-potential-status></p>
+              <div class='site-potential__values' data-site-potential-values hidden>
+                <svg class='site-potential__compass' viewBox='0 0 200 200' aria-hidden='true' focusable='false'>
+                  <circle cx='100' cy='100' r='73'></circle><path d='M100 21V179M21 100H179'></path><text x='100' y='15'>N</text><text x='187' y='105'>E</text><text x='100' y='196'>S</text><text x='7' y='105'>W</text><g data-site-potential-arrow><path d='M100 34 88 84h24z'></path><path d='M100 166 88 116h24z'></path></g>
+                </svg>
+                <dl><div><dt>Ожидаемая генерация на 1 kWp в год</dt><dd data-site-potential-yield>—</dd></div><div><dt>Оптимальное направление для отдельной конструкции</dt><dd data-site-potential-orientation>—</dd></div><div><dt>Оптимальный наклон для отдельной конструкции</dt><dd data-site-potential-tilt>—</dd></div></dl>
+              </div>
+              <p class='site-potential__source' data-site-potential-source>Источник: PVGIS · предварительное допущение о системных потерях 14%</p>
+              <p>Это ориентир PVGIS для свободно стоящей фиксированной системы в выбранной точке. Это не измерение вашей крыши и не рекомендация по монтажу на ней.</p>
+              <p>Направление, уклон, площадь, затенение и несущую способность конкретной крыши нужно уточнить ниже и подтвердить инженером.</p>
+              <div class='flow-actions'><button class='button button--navy' type='button' data-site-potential-continue>Перейти к расчёту моей крыши</button><button class='button button--outline' type='button' data-site-potential-retry hidden>Повторить потенциал PVGIS</button></div>
+            </section>
+            <div class='result-panel' data-result-panel hidden>
+
+              <p data-analysis-summary>Предварительный результат — требуется подтверждение</p>
+              <dl>
+                  <div><dt>Годовая генерация</dt><dd data-analysis='generation'>—
+                      <small>kWh</small></dd></div>
+                  <div><dt>Экономия в год</dt><dd data-analysis='savings'>—
+                      <small>֏</small></dd></div>
+                  <div><dt>Простая окупаемость</dt><dd data-analysis='payback'>—
+                      <small>лет</small></dd></div>
+                  <div><dt>Покрытие потребления</dt><dd data-analysis='coverage'>—
+                      <small>%</small></dd></div>
+              </dl>
+              <p class='commercial-estimate' data-commercial-estimate hidden></p>
+              <a href='#passport'>Смотреть полный расчёт <span aria-hidden='true'>→</span></a>
+            </div>
+          </div>
         </div>
       </section>
 
-        <section class='tool-workspace section' aria-labelledby='calculator-form-title'>
-          <div class='container tool-workspace__grid'>
-            <form class='tool-form' data-quick-calculator novalidate>
-              <h2 id='calculator-form-title'>Данные о потреблении</h2>
-              <label for='quick-address'>Адрес объекта</label>
-              <input
-                id='quick-address'
-                name='address'
-                autocomplete='street-address'
-                maxlength='160'
-                placeholder='Например: Абовян, Армения'
-              />
-              <small>Необязателен на этом шаге: далее можно найти адрес или поставить точку на карте.</small>
 
-              <fieldset>
-                <legend>Какие данные у вас есть</legend>
-                <label for='quick-monthly-kwh'>Среднее потребление в месяц</label>
-                <div class='tool-input-unit'>
-                  <input
-                    id='quick-monthly-kwh'
-                    name='averageMonthlyKwh'
-                    type='number'
-                    min='0.01'
-                    max='100000'
-                    step='0.01'
-                    inputmode='decimal'
-                    aria-describedby='quick-monthly-kwh-help'
-                  />
-                  <span>kWh / месяц</span>
-                </div>
-                <small id='quick-monthly-kwh-help'>Если в счёте есть kWh, укажите это значение.</small>
-
-                <p class='tool-or' aria-hidden='true'>или</p>
-
-                <label for='quick-monthly-bill'>Средний счёт за месяц</label>
-                <div class='tool-input-unit'>
-                  <input
-                    id='quick-monthly-bill'
-                    name='averageMonthlyBillAmd'
-                    type='number'
-                    min='1'
-                    max='100000000'
-                    step='1'
-                    inputmode='decimal'
-                    aria-describedby='quick-monthly-bill-help'
-                  />
-                  <span>֏ / месяц</span>
-                </div>
-                <small id='quick-monthly-bill-help'>Если известна только сумма счёта, также укажите тариф.</small>
-
-                <label for='quick-tariff'>Тариф из вашего счёта</label>
-                <div class='tool-input-unit'>
-                  <input
-                    id='quick-tariff'
-                    name='tariff'
-                    type='number'
-                    min='0.01'
-                    max='1000'
-                    step='0.01'
-                    inputmode='decimal'
-                    aria-describedby='quick-tariff-help'
-                  />
-                  <span>֏ / kWh</span>
-                </div>
-                <small id='quick-tariff-help'>Он нужен только для перевода счёта в kWh и прозрачного расчёта экономии дальше.</small>
-              </fieldset>
-
-              <p class='form-status' data-tool-status aria-live='polite' role='status'></p>
-              <button class='button button--navy' type='submit'>Продолжить к точке и контуру крыши</button>
-              <noscript>
-                <div class='tool-no-js'>
-                  <strong>JavaScript отключён в браузере</strong>
-                  <p>Откройте полный калькулятор, чтобы вручную указать потребление, точку объекта и контур крыши.</p>
-                  <a class='button' href='/ru/#calculator'>Открыть полный калькулятор</a>
-                </div>
-              </noscript>
-            </form>
-            <aside class='tool-side-note'>
-              <h2>Solar Passport</h2>
-              <p>Эта страница не выдаёт генерацию, экономию или цену. Для них нужны подтверждённая точка, данные крыши и ответ PVGIS.</p>
-              <a href='/ru/#calculator'>Открыть полный калькулятор</a>
-            </aside>
+      <section
+        class='passport section section--soft'
+        id='passport'
+        aria-labelledby='passport-title'
+      >
+        <div class='container passport-grid'>
+          <div class='passport-copy'>
+            <p class='eyebrow'>Цифровой отчёт по вашему объекту</p>
+            <h2 id='passport-title'>Ваш персональный Solar Passport</h2>
+            <p>Карта крыши, параметры системы, помесячная генерация и понятная финансовая модель — в одном отчёте.</p>
+            <ul class='check-list' role='list'><li><svg
+                    class='inline-icon'
+                    aria-hidden='true'
+                  ><use href='/icons.svg#check'></use></svg>Карта крыши и пример размещения панелей</li><li><svg
+                    class='inline-icon'
+                    aria-hidden='true'
+                  ><use href='/icons.svg#check'></use></svg>Помесячная генерация</li><li><svg
+                    class='inline-icon'
+                    aria-hidden='true'
+                  ><use href='/icons.svg#check'></use></svg>Финансовая модель на 25 лет</li><li><svg
+                    class='inline-icon'
+                    aria-hidden='true'
+                  ><use href='/icons.svg#check'></use></svg>Рекомендуемое оборудование</li><li><svg
+                    class='inline-icon'
+                    aria-hidden='true'
+                  ><use href='/icons.svg#check'></use></svg>Допущения и ограничения расчёта</li></ul>
+            <a
+              class='button button--outline'
+              href='/ru/calculator/'
+              data-open-passport
+            >Посмотреть пример отчёта</a>
+            <p class='passport-persistence' data-passport-persistence hidden><strong
+              >Solar Passport хранится в этом браузере</strong><span>Этот предварительный Passport существует только в памяти текущего сеанса.</span><span
+                >Постоянная ссылка и PDF появятся после подключения хранилища.</span></p>
           </div>
+          <article class='passport-card' aria-label='Solar Passport появится после расчёта'>
+            <div class='passport-card__top'><span class='wordmark wordmark--small'><span
+              >YOUR</span><strong>ENERGY</strong></span><span
+                class='pill'
+                data-passport-badge
+              >После расчёта</span></div>
+            <p class='passport-label'>SOLAR PASSPORT</p>
+            <h3 data-analysis-location>Появится после подтверждения объекта</h3>
+            <p class='passport-date' data-passport-date>Создаётся в текущем сеансе</p>
+            <div class='passport-card__placeholder' aria-hidden='true'></div>
+            <dl class='passport-specs'>
+              <div><dt>Рекомендованная система</dt><dd
+                  data-analysis='capacity'
+                >—</dd></div>
+              <div><dt data-passport-source-label>Источник: ожидается ответ PVGIS</dt><dd
+                  data-analysis='panels'
+                >—</dd></div>
+            </dl>
+          </article>
+          <div class='generation-card' data-chart-card>
+            <h3>Помесячная генерация, kWh</h3>
+            <p id='generation-chart-description'>Помесячная генерация появится после расчёта PVGIS.</p>
+            <div class='bar-chart' aria-describedby='generation-chart-description'>
+                <button
+                  class='chart-bar'
+                  type='button'
+                  style='--bar-height: 0%;'
+                  title='Янв · Январь: — kWh'
+                  aria-label='Янв · Январь: — kWh'
+                  data-chart-bar
+                  data-short='Янв'
+                  data-month='Январь'
+                  data-value='—'
+                ><span class='chart-bar__fill'></span><span>Янв</span></button>
+                <button
+                  class='chart-bar'
+                  type='button'
+                  style='--bar-height: 0%;'
+                  title='Фев · Февраль: — kWh'
+                  aria-label='Фев · Февраль: — kWh'
+                  data-chart-bar
+                  data-short='Фев'
+                  data-month='Февраль'
+                  data-value='—'
+                ><span class='chart-bar__fill'></span><span>Фев</span></button>
+                <button
+                  class='chart-bar'
+                  type='button'
+                  style='--bar-height: 0%;'
+                  title='Мар · Март: — kWh'
+                  aria-label='Мар · Март: — kWh'
+                  data-chart-bar
+                  data-short='Мар'
+                  data-month='Март'
+                  data-value='—'
+                ><span class='chart-bar__fill'></span><span>Мар</span></button>
+                <button
+                  class='chart-bar'
+                  type='button'
+                  style='--bar-height: 0%;'
+                  title='Апр · Апрель: — kWh'
+                  aria-label='Апр · Апрель: — kWh'
+                  data-chart-bar
+                  data-short='Апр'
+                  data-month='Апрель'
+                  data-value='—'
+                ><span class='chart-bar__fill'></span><span>Апр</span></button>
+                <button
+                  class='chart-bar'
+                  type='button'
+                  style='--bar-height: 0%;'
+                  title='Май · Май: — kWh'
+                  aria-label='Май · Май: — kWh'
+                  data-chart-bar
+                  data-short='Май'
+                  data-month='Май'
+                  data-value='—'
+                ><span class='chart-bar__fill'></span><span>Май</span></button>
+                <button
+                  class='chart-bar'
+                  type='button'
+                  style='--bar-height: 0%;'
+                  title='Июн · Июнь: — kWh'
+                  aria-label='Июн · Июнь: — kWh'
+                  data-chart-bar
+                  data-short='Июн'
+                  data-month='Июнь'
+                  data-value='—'
+                ><span class='chart-bar__fill'></span><span>Июн</span></button>
+                <button
+                  class='chart-bar'
+                  type='button'
+                  style='--bar-height: 0%;'
+                  title='Июл · Июль: — kWh'
+                  aria-label='Июл · Июль: — kWh'
+                  data-chart-bar
+                  data-short='Июл'
+                  data-month='Июль'
+                  data-value='—'
+                ><span class='chart-bar__fill'></span><span>Июл</span></button>
+                <button
+                  class='chart-bar'
+                  type='button'
+                  style='--bar-height: 0%;'
+                  title='Авг · Август: — kWh'
+                  aria-label='Авг · Август: — kWh'
+                  data-chart-bar
+                  data-short='Авг'
+                  data-month='Август'
+                  data-value='—'
+                ><span class='chart-bar__fill'></span><span>Авг</span></button>
+                <button
+                  class='chart-bar'
+                  type='button'
+                  style='--bar-height: 0%;'
+                  title='Сен · Сентябрь: — kWh'
+                  aria-label='Сен · Сентябрь: — kWh'
+                  data-chart-bar
+                  data-short='Сен'
+                  data-month='Сентябрь'
+                  data-value='—'
+                ><span class='chart-bar__fill'></span><span>Сен</span></button>
+                <button
+                  class='chart-bar'
+                  type='button'
+                  style='--bar-height: 0%;'
+                  title='Окт · Октябрь: — kWh'
+                  aria-label='Окт · Октябрь: — kWh'
+                  data-chart-bar
+                  data-short='Окт'
+                  data-month='Октябрь'
+                  data-value='—'
+                ><span class='chart-bar__fill'></span><span>Окт</span></button>
+                <button
+                  class='chart-bar'
+                  type='button'
+                  style='--bar-height: 0%;'
+                  title='Ноя · Ноябрь: — kWh'
+                  aria-label='Ноя · Ноябрь: — kWh'
+                  data-chart-bar
+                  data-short='Ноя'
+                  data-month='Ноябрь'
+                  data-value='—'
+                ><span class='chart-bar__fill'></span><span>Ноя</span></button>
+                <button
+                  class='chart-bar'
+                  type='button'
+                  style='--bar-height: 0%;'
+                  title='Дек · Декабрь: — kWh'
+                  aria-label='Дек · Декабрь: — kWh'
+                  data-chart-bar
+                  data-short='Дек'
+                  data-month='Декабрь'
+                  data-value='—'
+                ><span class='chart-bar__fill'></span><span>Дек</span></button>
+            </div>
+            <details class='chart-data'><summary>Числовые данные помесячной генерации</summary><table><caption
+                  class='visually-hidden'
+                >Числовые данные помесячной генерации</caption><thead><tr><th scope='col'>Месяц</th><th scope='col'>kWh</th></tr></thead><tbody
+                ><tr><td>Январь</td><td
+                      data-chart-value>—</td></tr><tr><td>Февраль</td><td
+                      data-chart-value>—</td></tr><tr><td>Март</td><td
+                      data-chart-value>—</td></tr><tr><td>Апрель</td><td
+                      data-chart-value>—</td></tr><tr><td>Май</td><td
+                      data-chart-value>—</td></tr><tr><td>Июнь</td><td
+                      data-chart-value>—</td></tr><tr><td>Июль</td><td
+                      data-chart-value>—</td></tr><tr><td>Август</td><td
+                      data-chart-value>—</td></tr><tr><td>Сентябрь</td><td
+                      data-chart-value>—</td></tr><tr><td>Октябрь</td><td
+                      data-chart-value>—</td></tr><tr><td>Ноябрь</td><td
+                      data-chart-value>—</td></tr><tr><td>Декабрь</td><td
+                      data-chart-value>—</td></tr></tbody></table></details>
+          </div>
+        </div>
+        <section class='analysis-ledger' data-analysis-ledger hidden aria-labelledby='analysis-ledger-title'>
+          <div><p class='eyebrow'>Предварительный анализ</p><h3
+              id='analysis-ledger-title'
+            >Как рассчитано</h3><p>Источники, версии и допущения этого предварительного результата.</p></div><div
+            class='analysis-ledger__confidence'
+          ><span>Уверенность в оценке</span><strong data-analysis-confidence></strong><p
+              data-analysis-confidence-detail
+            ></p></div><dl data-analysis-ledger-list></dl><div><h3
+              >Допущения расчёта</h3><ul data-analysis-assumptions></ul></div>
         </section>
+      </section>
+
+      <section class='lead-section section section--soft' data-lead-section hidden aria-labelledby='lead-title'>
+        <div class='container lead-grid'><div><p class='eyebrow'>YOURENERGY</p><h2
+              id='lead-title'
+            >Передать расчёт инженеру</h2><p>Оставьте контакты, чтобы инженер мог уточнить данные объекта.</p><p class='lead-fallback'><span
+              >Или позвоните инженеру:</span> <a href='tel:+37491095950'>+374 91 095 950</a></p><small>Данные не передаются в аналитику.</small></div><form
+            class='lead-form'
+            data-lead-form
+            novalidate
+          ><label>Ваше имя<input name='name' autocomplete='name' /></label><label
+              >Телефон<input name='phone' autocomplete='tel' inputmode='tel' /></label><label
+              >Электронная почта<input name='email' type='email' autocomplete='email' inputmode='email' /></label><label
+              >Комментарий к объекту <span>Необязательно</span><textarea
+                name='message'
+                rows='3'
+              ></textarea></label><label class='lead-consent'><input name='consent' type='checkbox' /><span
+              >Я согласен(на) на обработку данных для ответа на запрос.</span></label><button class='button' type='submit'>Отправить запрос</button><p
+              class='form-status'
+              data-lead-status
+              aria-live='polite'
+            ></p></form></div>
+      </section>
+
+
+      <section class='solutions section' id='solutions' aria-labelledby='solutions-title'>
+        <div class='container'>
+          <div class='section-heading'><div><p class='eyebrow'>Решения</p><h2
+                id='solutions-title'
+              >3 оптимальных решения для вашего дома</h2></div><p>Сравните ориентировочную мощность и генерацию. Предварительный бюджет появится после анализа объекта.</p></div>
+          <div class='solution-grid'>
+              <article class='solution-card ' data-analysis-scenario='0'>
+
+                <span class='solution-badge' data-analysis-scenario-live hidden>По вашим подтверждённым данным</span>
+                <p class='solution-index'>00</p><h3>Старт</h3><p>Минимальные первоначальные вложения</p>
+                <dl><div><dt>kWp</dt><dd data-analysis-scenario-capacity data-static-value='—'>—</dd></div><div><dt>kWh</dt><dd
+                    data-analysis-scenario-generation data-static-value='—'>—</dd></div></dl>
+                <strong class='solution-price' data-analysis-scenario-price data-static-value='Предварительный бюджет после анализа'>Предварительный бюджет после анализа</strong>
+                <details><summary>Подробнее</summary><ul><li
+                      >10–12 панелей выбранного класса</li><li
+                      >Ориентировочная площадь: 34–40 м²</li><li
+                      >Инвертор, монтаж и базовый мониторинг</li></ul></details>
+                <a class='button button--outline' href='#calculator'>Рассчитать мой дом</a>
+              </article>
+              <article class='solution-card solution-card--popular' data-analysis-scenario='1'>
+                <span class='solution-badge' data-analysis-solution-badge>Популярный вариант</span>
+                <span class='solution-badge' data-analysis-scenario-live hidden>По вашим подтверждённым данным</span>
+                <p class='solution-index'>01</p><h3>Оптимальный</h3><p>Лучший баланс цены и выгоды</p>
+                <dl><div><dt>kWp</dt><dd data-analysis-scenario-capacity data-static-value='—'>—</dd></div><div><dt>kWh</dt><dd
+                    data-analysis-scenario-generation data-static-value='—'>—</dd></div></dl>
+                <strong class='solution-price' data-analysis-scenario-price data-static-value='Предварительный бюджет после анализа'>Предварительный бюджет после анализа</strong>
+                <details><summary>Подробнее</summary><ul><li
+                      >17 × 580 W панелей</li><li
+                      >Ориентировочная площадь: 54–62 м²</li><li
+                      >Инвертор, проектирование, монтаж и мониторинг</li></ul></details>
+                <a class='button ' href='#calculator'>Рассчитать мой дом</a>
+              </article>
+              <article class='solution-card ' data-analysis-scenario='2'>
+
+                <span class='solution-badge' data-analysis-scenario-live hidden>По вашим подтверждённым данным</span>
+                <p class='solution-index'>02</p><h3>Энергонезависимость</h3><p>Максимальное покрытие + аккумулятор</p>
+                <dl><div><dt>kWp</dt><dd data-analysis-scenario-capacity data-static-value='—'>—</dd></div><div><dt>kWh</dt><dd
+                    data-analysis-scenario-generation data-static-value='—'>—</dd></div></dl>
+                <strong class='solution-price' data-analysis-scenario-price data-static-value='Требует отдельного расчёта'>Требует отдельного расчёта</strong>
+                <details><summary>Подробнее</summary><ul><li
+                      >Система повышенной мощности</li><li
+                      >Аккумулятор 10 kWh в демо-комплектации</li><li
+                      >Гибридный инвертор и резервные сценарии</li></ul></details>
+                <a class='button button--outline' href='#calculator'>Рассчитать мой дом</a>
+              </article>
+          </div>
+          <p class='section-disclosure' data-analysis-scenario-disclosure data-static-value='Точный состав, цена и результат зависят от объекта и подтверждаются после осмотра.'>Точный состав, цена и результат зависят от объекта и подтверждаются после осмотра.</p>
+        </div>
+      </section>
+
+
+      <section class='finance section' id='investment' aria-labelledby='finance-title'>
+        <div class='container finance-grid'>
+          <div class='finance-copy'><p class='eyebrow eyebrow--dark'>Финансовая модель</p><h2
+              id='finance-title'
+            >Инвестиция, которая работает каждый день</h2><p>Финансовый график появляется только после PVGIS-анализа, введённого или подтверждённого тарифа и действующего прайс-листа.</p><ul
+              class='check-list check-list--dark'
+              role='list'
+            ><li><svg class='inline-icon' aria-hidden='true'><use
+                      href='/icons.svg#check'
+                    ></use></svg>Снижение сетевого потребления</li><li><svg class='inline-icon' aria-hidden='true'><use
+                      href='/icons.svg#check'
+                    ></use></svg>Срок службы панелей более 25 лет</li><li><svg class='inline-icon' aria-hidden='true'><use
+                      href='/icons.svg#check'
+                    ></use></svg>Больше энергетической независимости</li><li><svg class='inline-icon' aria-hidden='true'><use
+                      href='/icons.svg#check'
+                    ></use></svg>Понятная формула без скрытых допущений</li></ul></div>
+          <div class='finance-chart'><h3>Как растёт чистый результат</h3><svg
+              class='finance-line'
+              viewBox='0 0 650 250'
+              role='img'
+              aria-label='Как растёт чистый результат'
+              data-finance-chart
+              data-finance-title='Как растёт чистый результат'
+            ><path
+                data-finance-line-path
+                d=''
+                fill='none'
+                stroke='#f5bd18'
+                stroke-width='4'
+                stroke-linecap='round'
+              ></path><path
+                data-finance-baseline
+                d=''
+                fill='none'
+                stroke='rgba(255,255,255,.22)'
+                stroke-width='1'
+              ></path><circle data-finance-point cx='30' cy='192' r='6' fill='#f5bd18' visibility='hidden'></circle><circle
+                data-finance-point
+                cx='178'
+                cy='177'
+                r='6'
+                fill='#f5bd18'
+                visibility='hidden'
+              ></circle><circle data-finance-point cx='250' cy='143' r='6' fill='#f5bd18' visibility='hidden'></circle><circle
+                data-finance-point
+                cx='410'
+                cy='86'
+                r='6'
+                fill='#f5bd18'
+                visibility='hidden'
+              ></circle><circle data-finance-point cx='623' cy='26' r='6' fill='#f5bd18' visibility='hidden'></circle></svg><ol
+                class='finance-timeline'
+                role='list'
+            ><li><span data-analysis-timeline-year>Сегодня</span><strong
+                  data-analysis-timeline='0'
+                  >После анализа</strong></li><li><span data-analysis-timeline-year>5 лет</span><strong
+                  data-analysis-timeline='1'
+                  >После анализа</strong></li><li><span data-analysis-timeline-year>10 лет</span><strong
+                  data-analysis-timeline='2'
+                  >После анализа</strong></li><li><span data-analysis-timeline-year>25 лет</span><strong
+                  data-analysis-timeline='3'
+                  >После анализа</strong></li></ol></div>
+          <div class='finance-included'><h3>Что включает временная предварительная цена</h3><ul role='list'><li><svg class='inline-icon' aria-hidden='true'><use
+                      href='/icons.svg#check'
+                    ></use></svg>Солнечные панели</li><li><svg class='inline-icon' aria-hidden='true'><use
+                      href='/icons.svg#check'
+                    ></use></svg>Инвертор</li><li><svg class='inline-icon' aria-hidden='true'><use
+                      href='/icons.svg#check'
+                    ></use></svg>Крепёж и стандартный монтаж</li><li><svg class='inline-icon' aria-hidden='true'><use
+                      href='/icons.svg#check'
+                    ></use></svg>Базовое подключение к сети</li><li><svg class='inline-icon' aria-hidden='true'><use
+                      href='/icons.svg#check'
+                    ></use></svg>НДС и разрешения — требуют подтверждения</li><li><svg class='inline-icon' aria-hidden='true'><use
+                      href='/icons.svg#check'
+                    ></use></svg>Батарея, ремонт крыши и нестандартные работы не включены</li></ul></div>
+          <p class='finance-disclaimer' data-analysis-finance-disclaimer>До анализа финансовые значения не показываются. Модель не учитывает рост тарифа, деградацию, обслуживание, кредит, дисконтирование, налоги и правила отпуска энергии.</p>
+        </div>
+      </section>
+
     </main>
 
-    <footer class='tool-footer'>
-      <div class='container'>
-        <p>YOURENERGY · прозрачные предварительные инструменты для домашних солнечных систем в Армении.</p>
-        <a href='tel:+37491095950'>+374 91 095 950</a>
-      </div>
-    </footer>
+      <footer class='tool-footer'>
+        <div class='container'>
+          <p>YOURENERGY · прозрачные предварительные инструменты для домашних солнечных систем в Армении.</p>
+          <a href='tel:+37491095950'>+374 91 095 950</a>
+        </div>
+      </footer>
 
-    <script id='tool-page-config' type='application/json'>{"toolType":"calculator","locale":"ru-RU","homeHref":"/ru/","priceBook":{"id":"yourenergy-am-residential-grid-v0-1","version":"v0.1","status":"temporary","countryCode":"AM","region":"all-armenia","systemType":"residential-grid-tied","currency":"AMD","checkedAt":"2026-08-29","validFrom":"2026-08-29","validUntil":"2026-09-28","ratesAmdPerWp":{"p25":232,"p50":247,"p75":264},"scope":["panels","inverter","mounting","standard-installation","basic-grid-connection"],"exclusions":["battery","roof-repair","non-standard-electrical-work","financing"],"confirmationRequired":["vat","permits"],"source":{"kind":"registry","status":"estimated","provider":"YOURENERGY temporary price book","reference":"P1-v0.1","verifiedAt":"2026-08-29"}},"strings":{"invalid":"Укажите среднее потребление или сумму счёта; для счёта также нужен тариф больше нуля.","stored":"Данные сохранены только в текущей сессии браузера. Переходим к полному калькулятору.","storageUnavailable":"Локальное хранилище недоступно в этом браузере. Откройте полный калькулятор и укажите данные там."}}</script>
-    <script type='module' src='/src/tools.js'></script>
+    <dialog class='passport-dialog' data-passport-dialog aria-labelledby='dialog-title'><form
+        method='dialog'
+        class='dialog-close'
+      ><button class='round-button' aria-label='Закрыть отчёт'><span
+            aria-hidden='true'
+          >×</span></button></form><div class='dialog-content'><p
+          class='eyebrow'
+        data-passport-dialog-eyebrow
+        >SOLAR PASSPORT · Предварительный анализ</p><h2
+          id='dialog-title'
+          data-passport-dialog-title
+        >Solar Passport появится после расчёта</h2><div class='dialog-report'><article class='passport-card'><div
+              class='passport-card__top'
+            ><span class='wordmark wordmark--small'><span>YOUR</span><strong
+                >ENERGY</strong></span><span class='pill' data-passport-badge>После расчёта</span></div><p
+              class='passport-label'
+            >SOLAR PASSPORT</p><h3
+              data-analysis-location
+            >Появится после подтверждения объекта</h3><dl class='passport-specs'><div><dt
+                >Рекомендованная система</dt><dd
+                  data-analysis='capacity'
+                >—</dd></div><div><dt data-passport-source-label>Источник: ожидается ответ PVGIS</dt><dd
+                  data-analysis='panels'
+                >—</dd></div></dl></article><div class='dialog-numbers'><h3
+            >Помесячная генерация, kWh</h3><dl><div><dt>Годовая генерация</dt><dd
+                    data-analysis='generation'
+                  >— kWh</dd></div><div><dt>Экономия в год</dt><dd
+                    data-analysis='savings'
+                  >— ֏</dd></div><div><dt>Простая окупаемость</dt><dd
+                    data-analysis='payback'
+                  >— лет</dd></div><div><dt>Покрытие потребления</dt><dd
+                    data-analysis='coverage'
+                  >— %</dd></div></dl><p
+            >До анализа финансовые значения не показываются. Модель не учитывает рост тарифа, деградацию, обслуживание, кредит, дисконтирование, налоги и правила отпуска энергии.</p></div></div></div></dialog>
+
+      <script id='page-config' type='application/json'>{"locale":"ru-RU","status":{"minAddress":"Введите адрес длиной не менее 5 символов.","analyzing":"Готовим предварительный анализ…","ready":"Предварительный результат готов. Проверьте данные перед принятием решения.","unavailable":"Предварительный анализ сейчас недоступен. Повторите попытку или укажите точку вручную.","invalidFile":"Формат не поддерживается. Выберите PDF, JPG, JPEG или PNG.","largeFile":"Файл слишком большой. Максимальный размер — 10 МБ.","fileSelected":"Файл выбран и остаётся только в памяти браузера.","fileRemoved":"Файл удалён.","mapReady":"Интерактивная карта объекта готова.","mapFailed":"Карта недоступна. Остаётся статический демонстрационный резервный вариант.","monthTooltip":"Генерация за {month}: {value} kWh"},"product":{"common":{"required":"Обязательное поле","optional":"Необязательно","perMonth":"в месяц","kwh":"kWh","amd":"֏","complete":"Готово","cancel":"Отмена","noJsCalculator":"Калькулятор работает с JavaScript. Для ручной консультации позвоните инженеру:"},"tools":{"calculator":"Открыть полный калькулятор","offerChecker":"Проверить коммерческое предложение"},"flow":{"title":"Как устроен расчёт","steps":[{"number":"01","title":"Найдите участок","copy":"Введите адрес или поставьте точку на карте и подтвердите её."},{"number":"02","title":"Посмотрите потенциал места","copy":"PVGIS покажет ориентир для выбранной точки — до расчёта вашей крыши."},{"number":"03","title":"Уточните крышу и потребление","copy":"Обведите доступную площадь и укажите фактическое направление, наклон и расход энергии."},{"number":"04","title":"Получите предварительный расчёт","copy":"Система, бюджет и экономия появятся только из подтверждённых входных данных."}]},"potential":{"eyebrow":"Шаг 2 · Потенциал участка","title":"Солнечный ориентир для выбранной точки","loading":"Запрашиваем PVGIS для подтверждённой точки…","annualYieldLabel":"Ожидаемая генерация на 1 kWp в год","orientationLabel":"Оптимальное направление для отдельной конструкции","tiltLabel":"Оптимальный наклон для отдельной конструкции","source":"Источник: PVGIS · предварительное допущение о системных потерях 14%","disclosure":"Это ориентир PVGIS для свободно стоящей фиксированной системы в выбранной точке. Это не измерение вашей крыши и не рекомендация по монтажу на ней.","roofDisclosure":"Направление, уклон, площадь, затенение и несущую способность конкретной крыши нужно уточнить ниже и подтвердить инженером.","unavailable":"Не удалось получить потенциал PVGIS. Продолжите с контуром крыши или повторите запрос; цифры не будут подменены примером.","retry":"Повторить потенциал PVGIS","continue":"Перейти к расчёту моей крыши","directions":{"north":"север","northEast":"северо-восток","east":"восток","southEast":"юго-восток","south":"юг","southWest":"юго-запад","west":"запад","northWest":"северо-запад"}},"consumption":{"title":"Потребление электроэнергии","copy":"Это нужно только для мощности системы, бюджета и экономии — не для поиска адреса или потенциала точки.","modes":{"bill":"Средний счёт","usage":"Среднее потребление","monthly":"Помесячный профиль"},"billLabel":"Средний счёт за электричество","billHelp":"Укажите среднюю сумму за месяц в драмах.","tariffLabel":"Тариф из вашего счёта","tariffHelp":"Необязательно для kWh. Для счёта в драмах он нужен, чтобы перевести сумму в kWh; в Passport будет отмечен как введённый вами.","usageLabel":"Среднее потребление в месяц","usageHelp":"Укажите среднее потребление в kWh за месяц.","monthlyTitle":"Потребление за 12 месяцев","monthlyHelp":"Укажите kWh для каждого месяца, если эти данные доступны.","annualLabel":"Расчётное потребление за год","invalidNumber":"Введите число больше нуля.","invalidBill":"Введите корректную сумму счёта в драмах.","invalidTariff":"Введите тариф больше нуля в AMD/kWh.","invalidUsage":"Введите корректное потребление в kWh.","incompleteMonths":"Заполните все 12 месяцев или выберите другой способ.","noConsumption":"Для расчёта требуется значение потребления или счёта.","normalized":"Данные приведены к годовому профилю."},"location":{"title":"Местоположение объекта","copy":"Адрес нужен только для поиска точки. Подтвердите найденный объект или укажите точку вручную.","search":"Найти адрес","searching":"Ищем адрес…","resultLabel":"Найденный адрес","confirmPrompt":"Это ваш объект?","confirm":"Подтвердить объект","edit":"Изменить адрес","noResult":"Адрес не найден. Укажите точку на карте вручную.","unavailable":"Сервис поиска адреса сейчас недоступен. Укажите точку на карте вручную.","manualTitle":"Указать точку вручную","manualCopy":"Нажмите на карту, чтобы отметить примерное положение объекта. Это не геокодирование адреса.","chooseOnMap":"Выбрать точку на карте","pointSelected":"Точка объекта выбрана.","retry":"Повторить поиск"},"roof":{"title":"Контур крыши","copy":"Обведите доступную часть крыши и задайте фактические параметры ската для предварительной оценки.","mapDisclosure":"Карта помогает поставить точку и примерный контур. Без подключённого аэроснимка или 3D-модели она не определяет автоматически крышу, её угол или затенение.","fallback":"Карта недоступна. Продолжите после указания адреса или попробуйте ещё раз.","start":"Начать контур","addPointAtCenter":"Добавить точку в центре карты","addPoint":"Добавить точку","undo":"Отменить последнюю точку","reset":"Очистить контур","finish":"Завершить контур","edit":"Изменить контур","pointsLabel":"Точек в контуре: {count}","minimumPoints":"Добавьте минимум 3 точки, чтобы завершить контур.","areaLabel":"Предварительная площадь крыши","orientationLabel":"Направление ската крыши","customOrientationLabel":"Своя ориентация (0° = север, 180° = юг)","customOrientationHelp":"Введите угол по компасу от 0 до 359°.","tiltLabel":"Наклон этого ската крыши","tiltHelp":"Укажите приблизительный угол только если он известен; это не значение, найденное по адресу.","angleGuideTitle":"Визуальная проверка введённых параметров крыши","angleGuideCopy":"Стрелка показывает направление ската, введённое вами. Оно отличается от PVGIS-ориентира для отдельной конструкции выше.","angleGuideOrientation":"Направление ската","angleGuideTilt":"Наклон ската","pointSelectLabel":"Выбрать точку {index}","removePoint":"Удалить точку","nudgeNorth":"Сместить точку на север","nudgeSouth":"Сместить точку на юг","nudgeEast":"Сместить точку на восток","nudgeWest":"Сместить точку на запад","orientationOptions":{"north":"Север","southEast":"Юго-восток","southWest":"Юго-запад","east":"Восток","south":"Юг","west":"Запад","unknown":"Не знаю — уточню позже","custom":"Другая"},"unavailable":"Контур крыши пока не указан.","tilesUnavailable":"Фоновая карта недоступна. Контур можно задать после выбора точки.","locationRequired":"Сначала подтвердите объект или выберите точку на карте."},"result":{"title":"Предварительный анализ","preparing":"Готовим предварительный анализ…","ready":"Предварительный анализ готов.","unavailable":"Не удалось подготовить анализ с доступными данными.","retry":"Повторить расчёт","noTariff":"Тариф не указан: мощность, генерация PVGIS и предварительная цена доступны, но экономия и окупаемость не показаны.","priceUnavailable":"Временный прайсбук недоступен или его срок истёк: запросите обследование у инженера. Для экономии и окупаемости также нужен тариф.","noSavings":"Недостаточно данных, чтобы показать экономию и окупаемость.","chartDescription":"Помесячная предварительная генерация по подтверждённым данным и полученному солнечному ресурсу.","confidenceTitle":"Уверенность в оценке","confidence":{"high":"Высокая","medium":"Средняя","low":"Низкая","insufficient":"Недостаточно данных"},"assumptionsTitle":"Допущения расчёта","commercialEstimate":"Предварительная цена YOUR ENERGY · {version} · не является офертой: {p25}–{p75}; P50 {p50}. Действует до {validUntil}."},"solutions":{"liveBadge":"По вашим подтверждённым данным","liveCopy":"Три предварительных технических сценария рассчитаны из подтверждённых данных объекта.","financialUnavailable":"Предварительная цена появляется из действующего PriceBook; без тарифа экономия и окупаемость не показываются.","priceUnavailable":"Временный прайсбук недоступен или его срок истёк: запросите обследование у инженера."},"ledger":{"title":"Как рассчитано","copy":"Источники, версии и допущения этого предварительного результата.","sources":{"consumption":"Данные о потреблении","location":"Местоположение объекта","roof":"Контур и параметры крыши","tariff":"Тариф электроэнергии","userTariff":"Введено пользователем из счёта","solar":"Солнечный ресурс","investment":"Стоимость системы","pricebook":"Временный прайс-лист YOUR ENERGY","unavailable":"Источник не подключён"},"assumptions":{"NO_TARIFF_ESCALATION":"Рост тарифа не моделируется.","NO_PANEL_DEGRADATION":"Деградация панелей не моделируется.","NO_MAINTENANCE_FINANCING_DISCOUNTING_EXPORT_OR_TAXES":"Не учтены обслуживание, финансирование, дисконтирование, правила отпуска энергии и налоги.","MISSING_EVIDENCE_SUPPRESSES_FINANCIAL_RESULT":"Без подтверждённых данных финансовые значения не показываются.","PVGIS_SYSTEM_LOSS_14_PERCENT":"В PVGIS использовано предварительное допущение о системных потерях 14%; его подтверждает инженер.","PRELIMINARY_ROOF_USABLE_AREA_70_PERCENT":"Для предварительной вместимости использовано 70% отмеченной площади крыши. Реальную полезную площадь, отступы и проходы проверяет инженер.","PRELIMINARY_PANEL_SIZE_580W_2M2":"Для предварительной вместимости использован модуль 580 W площадью 2 м²; это не подтверждённая комплектация.","USER_PROVIDED_TARIFF":"Тариф введён пользователем из счёта и не является тарифным реестром.","TEMPORARY_PRICEBOOK_NOT_OFFER":"Временный PriceBook — ориентир для предварительного бюджета, не оферта и не договорная цена."}},"passport":{"persistenceTitle":"Solar Passport хранится в этом браузере","persistenceCopy":"Этот предварительный Passport существует только в памяти текущего сеанса.","memoryOnly":"После закрытия страницы данные могут быть потеряны.","permanentLink":"Постоянная ссылка и PDF появятся после подключения хранилища.","sourceLedger":"Источники и допущения","shareUnavailable":"Отправка ссылки пока недоступна.","pendingBadge":"После расчёта","pendingAddress":"Появится после подтверждения объекта","pendingDate":"Создаётся в текущем сеансе","pendingSource":"Источник: ожидается ответ PVGIS","pendingChartDescription":"Помесячная генерация появится после расчёта PVGIS.","pendingTitle":"Solar Passport появится после расчёта","realTitle":"Ваш предварительный Solar Passport","sessionBadge":"Текущий сеанс"},"lead":{"title":"Передать расчёт инженеру","copy":"Оставьте контакты, чтобы инженер мог уточнить данные объекта.","nameLabel":"Ваше имя","phoneLabel":"Телефон","emailLabel":"Электронная почта","messageLabel":"Комментарий к объекту","consent":"Я согласен(на) на обработку данных для ответа на запрос.","submit":"Отправить запрос","required":"Заполните обязательные поля и подтвердите согласие.","invalidEmail":"Введите корректный адрес электронной почты.","sending":"Отправляем запрос…","sent":"Запрос отправлен. Мы свяжемся с вами после проверки данных.","unavailable":"Отправка временно недоступна. Попробуйте позже.","retry":"Повторить отправку","directCall":"Или позвоните инженеру:","privacy":"Данные не передаются в аналитику."},"status":{"geocodeUnavailable":"Сервис геокодирования не подключён или временно недоступен.","analysisUnavailable":"Сервис солнечного анализа не подключён или временно недоступен.","leadUnavailable":"Сервис заявок не подключён или временно недоступен.","retry":"Попробовать ещё раз","canceled":"Предыдущий запрос отменён."},"months":[{"short":"Янв","name":"Январь"},{"short":"Фев","name":"Февраль"},{"short":"Мар","name":"Март"},{"short":"Апр","name":"Апрель"},{"short":"Май","name":"Май"},{"short":"Июн","name":"Июнь"},{"short":"Июл","name":"Июль"},{"short":"Авг","name":"Август"},{"short":"Сен","name":"Сентябрь"},{"short":"Окт","name":"Октябрь"},{"short":"Ноя","name":"Ноябрь"},{"short":"Дек","name":"Декабрь"}]},"map":{"image":"/images/roof-scan-768.webp","tileUrl":"https://tile.openstreetmap.org/{z}/{x}/{y}.png","tileAttribution":"© OpenStreetMap contributors"},"endpoints":{"geocode":"/api/geocode","potential":"/api/potential","analysis":"/api/analysis"}}</script>
+      <script type='module' src='/src/main.js'></script>
   </body>
 </html>

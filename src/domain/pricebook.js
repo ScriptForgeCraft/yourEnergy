@@ -213,10 +213,7 @@ export const compareOffer = ({
       ]),
       missingInclusions: deepFreeze(missingInclusions),
       estimate,
-      questions: deepFreeze([
-        'Confirm the panel, inverter, mounting, installation and grid-connection scope.',
-        'Confirm VAT, permits, warranty and any non-standard electrical work separately.'
-      ])
+      questionKeys: deepFreeze(['standardScope', 'commercialTerms'])
     });
   }
 
@@ -237,9 +234,7 @@ export const compareOffer = ({
     reasons: deepFreeze([]),
     missingInclusions: deepFreeze([]),
     estimate,
-    questions: deepFreeze([
-      'Confirm the exact equipment models, warranty terms, VAT and permits before signing.'
-    ])
+    questionKeys: deepFreeze(['equipmentTerms'])
   });
 };
 

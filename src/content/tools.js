@@ -1,57 +1,16 @@
 /**
- * Copy used only by the two P1 utility routes. Keeping it separate from the
- * homepage dictionary makes the tools independently publishable while the
- * shared generator still provides their canonical and language metadata.
+ * Copy used by the independently publishable P1 utility pages. Calculator
+ * content itself lives with the primary product copy, so this file only keeps
+ * its route metadata plus the Proposal Checker dictionary.
  */
 const tools = {
   hy: {
-    calculator: {
-      meta: {
-        title: 'Արևային հաշվիչ՝ սպառումից մինչև տանիքի վերլուծություն | YOURENERGY',
-        description:
-          'Սկսեք ձեր Solar Passport-ը սպառման տվյալներից, ապա հաստատեք կետն ու տանիքի ուրվագիծը իրական PVGIS նախնական վերլուծության համար։',
-        ogTitle: 'Սկսեք ձեր արևային հաշվարկը | YOURENERGY',
-        ogDescription: 'Մուտքագրեք սպառումը և շարունակեք կետի ու տանիքի հաստատմանը։'
-      },
-      label: 'Արևային հաշվիչ',
-      referenceTitle: 'Solar Passport',
-      title: 'Սկսեք Solar Passport-ը ձեր սպառումից',
-      intro:
-        'Մուտքագրված տվյալները պահվում են միայն այս դիտարկչի ընթացիկ նստաշրջանում, որպեսզի գլխավոր հաշվիչում շարունակեք կետի, տանիքի և PVGIS-ի քայլերով։',
-      principles: [
-        'Առանց հասցեի «պատրաստի» արդյունքի',
-        'Տանիքն ու տեղադրությունը հաստատվում են հաջորդ քայլում',
-        'Խնայողությունը հաշվարկվում է միայն հաստատված կամ ձեր մուտքագրած սակագնով'
-      ],
-      formTitle: 'Սպառման տվյալներ',
-      addressLabel: 'Օբյեկտի հասցե',
-      addressHelp: 'Ընտրովի է այս քայլում․ հաջորդ էջում կարող եք որոնել կամ կետ դնել քարտեզի վրա։',
-      addressPlaceholder: 'Օրինակ՝ Աբովյան, Հայաստան',
-      consumptionLegend: 'Ինչ տվյալ ունեք',
-      monthlyKwhLabel: 'Միջին ամսական սպառում',
-      monthlyKwhHelp: 'Եթե ձեր հաշվում տեսնում եք kWh-ը, մուտքագրեք այն այստեղ։',
-      billLabel: 'Միջին ամսական հաշիվ',
-      billHelp: 'Եթե գիտեք միայն հաշվի գումարը, նշեք նաև սակագինը։',
-      tariffLabel: 'Սակագին ձեր հաշվից',
-      tariffHelp:
-        'Օգտագործվում է միայն հաշիվը kWh-ի փոխարկելու և հետագա խնայողությունը բացատրելու համար։',
-      unitKwh: 'kWh / ամիս',
-      unitAmd: '֏ / ամիս',
-      unitTariff: '֏ / kWh',
-      or: 'կամ',
-      submit: 'Շարունակել կետի և տանիքի հաստատմանը',
-      invalid:
-        'Մուտքագրեք միջին սպառումը կամ հաշվի գումարը, իսկ հաշվի համար՝ նաև զրոյից մեծ սակագին։',
-      stored:
-        'Տվյալները պահպանվել են այս դիտարկչի ընթացիկ նստաշրջանում։ Շարունակվում ենք լիարժեք հաշվիչին։',
-      storageUnavailable:
-        'Այս դիտարկիչում տեղային պահեստը հասանելի չէ։ Բացեք լիարժեք հաշվիչը և մուտքագրեք տվյալները այնտեղ։',
-      noJsTitle: 'Դիտարկչում JavaScript-ը միացված չէ',
-      noJsCopy:
-        'Բացեք լիարժեք հաշվիչը՝ ձեռքով մուտքագրելու սպառումը, տեղադրության կետը և տանիքի ուրվագիծը։',
-      noJsCta: 'Բացել լիարժեք հաշվիչը',
-      honestNote:
-        'Այս էջը չի ստեղծում արտադրության, խնայողության կամ արժեքի արդյունք։ Դրանք պահանջում են հաստատված կետ, տանիքի տվյալներ և PVGIS-ի պատասխան։'
+    calculatorMeta: {
+      title: 'Արևային հաշվիչ՝ սպառումից մինչև տանիքի վերլուծություն | YOURENERGY',
+      description:
+        'Սկսեք ձեր Solar Passport-ը սպառման տվյալներից, ապա հաստատեք կետն ու տանիքի ուրվագիծը իրական PVGIS նախնական վերլուծության համար։',
+      ogTitle: 'Սկսեք ձեր արևային հաշվարկը | YOURENERGY',
+      ogDescription: 'Մուտքագրեք սպառումը և շարունակեք կետի ու տանիքի հաստատմանը։'
     },
     offerChecker: {
       meta: {
@@ -106,6 +65,24 @@ const tools = {
       resultWhy: 'Ինչու եզրակացություն չկա',
       resultQuestions: 'Հարցեր մատակարարին',
       invalid: 'Մուտքագրեք զրոյից մեծ գին և հզորություն։',
+      scopeIncomplete: 'Առաջարկում հստակ նշված չեն հետևյալ հիմնական կետերը',
+      reason: {
+        OFFER_PRICE_AND_CAPACITY_REQUIRED: 'Նշեք առաջարկի գինն ու հզորությունը։',
+        PRICEBOOK_UNAVAILABLE: 'Ժամանակավոր գնացուցակը հիմա հասանելի չէ։',
+        PRICEBOOK_EXPIRED: 'Ժամանակավոր գնացուցակի ժամկետն անցել է։',
+        UNSUPPORTED_SYSTEM_TYPE:
+          'Համակարգի այս տեսակը չի համեմատվում ստանդարտ ցանցային միջակայքի հետ։',
+        BATTERY_SCOPE_UNSUPPORTED:
+          'Մարտկոցով առաջարկը չի համեմատվում ստանդարտ ցանցային միջակայքի հետ։'
+      },
+      questions: {
+        standardScope:
+          'Հաստատեք, որ առաջարկը ներառում է վահանակներ, ինվերտոր, կրող կառուցվածք, տեղադրում և ցանցային միացում։',
+        commercialTerms:
+          'Առանձին հստակեցրեք ԱԱՀ-ը, թույլտվությունները, երաշխիքը և ոչ ստանդարտ էլեկտրական աշխատանքները։',
+        equipmentTerms:
+          'Պայմանագիր կնքելուց առաջ հստակեցրեք սարքավորումների մոդելները, երաշխիքի պայմանները, ԱԱՀ-ը և թույլտվությունները։'
+      },
       notComparable:
         'Մարտկոցով, այլ տեսակի կամ թերի կազմով առաջարկը չի համեմատվում այս ստանդարտ ցանցային միջակայքի հետ։',
       engineeringCta: 'Ստանալ ինժեների ստուգում',
@@ -128,53 +105,12 @@ const tools = {
     }
   },
   ru: {
-    calculator: {
-      meta: {
-        title: 'Калькулятор солнечной системы: от потребления к анализу крыши | YOURENERGY',
-        description:
-          'Начните Solar Passport с данных о потреблении, затем подтвердите точку и контур крыши для реального предварительного анализа PVGIS.',
-        ogTitle: 'Начните расчёт солнечной системы | YOURENERGY',
-        ogDescription: 'Укажите потребление и продолжите к подтверждению точки и крыши.'
-      },
-      label: 'Солнечный калькулятор',
-      referenceTitle: 'Solar Passport',
-      title: 'Начните Solar Passport с вашего потребления',
-      intro:
-        'Данные остаются только в текущей сессии браузера, чтобы вы продолжили на главном калькуляторе с подтверждением точки, крыши и PVGIS.',
-      principles: [
-        'Без «готового» результата только по адресу',
-        'Точка и крыша подтверждаются на следующем шаге',
-        'Экономия рассчитывается лишь с подтверждённым или введённым вами тарифом'
-      ],
-      formTitle: 'Данные о потреблении',
-      addressLabel: 'Адрес объекта',
-      addressHelp:
-        'Необязателен на этом шаге: далее можно найти адрес или поставить точку на карте.',
-      addressPlaceholder: 'Например: Абовян, Армения',
-      consumptionLegend: 'Какие данные у вас есть',
-      monthlyKwhLabel: 'Среднее потребление в месяц',
-      monthlyKwhHelp: 'Если в счёте есть kWh, укажите это значение.',
-      billLabel: 'Средний счёт за месяц',
-      billHelp: 'Если известна только сумма счёта, также укажите тариф.',
-      tariffLabel: 'Тариф из вашего счёта',
-      tariffHelp: 'Он нужен только для перевода счёта в kWh и прозрачного расчёта экономии дальше.',
-      unitKwh: 'kWh / месяц',
-      unitAmd: '֏ / месяц',
-      unitTariff: '֏ / kWh',
-      or: 'или',
-      submit: 'Продолжить к точке и контуру крыши',
-      invalid:
-        'Укажите среднее потребление или сумму счёта; для счёта также нужен тариф больше нуля.',
-      stored:
-        'Данные сохранены только в текущей сессии браузера. Переходим к полному калькулятору.',
-      storageUnavailable:
-        'Локальное хранилище недоступно в этом браузере. Откройте полный калькулятор и укажите данные там.',
-      noJsTitle: 'JavaScript отключён в браузере',
-      noJsCopy:
-        'Откройте полный калькулятор, чтобы вручную указать потребление, точку объекта и контур крыши.',
-      noJsCta: 'Открыть полный калькулятор',
-      honestNote:
-        'Эта страница не выдаёт генерацию, экономию или цену. Для них нужны подтверждённая точка, данные крыши и ответ PVGIS.'
+    calculatorMeta: {
+      title: 'Калькулятор солнечной системы: от потребления к анализу крыши | YOURENERGY',
+      description:
+        'Начните Solar Passport с данных о потреблении, затем подтвердите точку и контур крыши для реального предварительного анализа PVGIS.',
+      ogTitle: 'Начните расчёт солнечной системы | YOURENERGY',
+      ogDescription: 'Укажите потребление и продолжите к подтверждению точки и крыши.'
     },
     offerChecker: {
       meta: {
@@ -229,6 +165,24 @@ const tools = {
       resultWhy: 'Почему нет ценового вывода',
       resultQuestions: 'Что спросить у поставщика',
       invalid: 'Укажите цену и мощность больше нуля.',
+      scopeIncomplete: 'В предложении не подтверждены следующие основные позиции',
+      reason: {
+        OFFER_PRICE_AND_CAPACITY_REQUIRED: 'Укажите цену и мощность предложения.',
+        PRICEBOOK_UNAVAILABLE: 'Временный прайсбук сейчас недоступен.',
+        PRICEBOOK_EXPIRED: 'Срок временного прайсбука истёк.',
+        UNSUPPORTED_SYSTEM_TYPE:
+          'Этот тип системы не сравнивается со стандартным сетевым диапазоном.',
+        BATTERY_SCOPE_UNSUPPORTED:
+          'Предложение с батареей не сравнивается со стандартным сетевым диапазоном.'
+      },
+      questions: {
+        standardScope:
+          'Подтвердите, что в предложение входят панели, инвертор, крепёж, монтаж и подключение к сети.',
+        commercialTerms:
+          'Отдельно уточните НДС, разрешения, гарантию и нестандартные электромонтажные работы.',
+        equipmentTerms:
+          'До подписания уточните точные модели оборудования, условия гарантии, НДС и разрешения.'
+      },
       notComparable:
         'Предложение с батареей, другим типом системы или неполным составом не сравнивается с этим стандартным сетевым диапазоном.',
       engineeringCta: 'Получить инженерную проверку',
@@ -253,54 +207,12 @@ const tools = {
     }
   },
   en: {
-    calculator: {
-      meta: {
-        title: 'Solar calculator: from consumption to roof analysis | YOURENERGY',
-        description:
-          'Start a Solar Passport with consumption data, then confirm the property point and roof outline for a real preliminary PVGIS analysis.',
-        ogTitle: 'Start your solar calculation | YOURENERGY',
-        ogDescription: 'Enter consumption and continue to property-point and roof confirmation.'
-      },
-      label: 'Solar calculator',
-      referenceTitle: 'Solar Passport',
-      title: 'Start your Solar Passport with consumption',
-      intro:
-        'The details stay in this browser session only, so you can continue in the full calculator with property-point, roof and PVGIS confirmation.',
-      principles: [
-        'No “ready” result from an address alone',
-        'The property point and roof are confirmed in the next step',
-        'Savings are calculated only with a confirmed or user-entered tariff'
-      ],
-      formTitle: 'Consumption details',
-      addressLabel: 'Property address',
-      addressHelp:
-        'Optional at this step. On the next page you can search it or place a point on the map.',
-      addressPlaceholder: 'For example: Abovyan, Armenia',
-      consumptionLegend: 'What information do you have?',
-      monthlyKwhLabel: 'Average monthly consumption',
-      monthlyKwhHelp: 'Enter this if your bill shows kWh.',
-      billLabel: 'Average monthly bill',
-      billHelp: 'If you only know the bill amount, enter your tariff too.',
-      tariffLabel: 'Tariff from your bill',
-      tariffHelp:
-        'It is used only to convert a bill to kWh and explain later savings transparently.',
-      unitKwh: 'kWh / month',
-      unitAmd: '֏ / month',
-      unitTariff: '֏ / kWh',
-      or: 'or',
-      submit: 'Continue to property point and roof',
-      invalid:
-        'Enter average consumption or a bill amount; a bill amount also requires a tariff above zero.',
-      stored:
-        'Your entries were saved only for this browser session. Continuing to the full calculator.',
-      storageUnavailable:
-        'Local storage is unavailable in this browser. Open the full calculator and enter the details there.',
-      noJsTitle: 'JavaScript is disabled in this browser',
-      noJsCopy:
-        'Open the full calculator to enter consumption, a property point and a roof outline manually.',
-      noJsCta: 'Open the full calculator',
-      honestNote:
-        'This page does not produce generation, savings or a price. Those require a confirmed point, roof data and a PVGIS response.'
+    calculatorMeta: {
+      title: 'Solar calculator: from consumption to roof analysis | YOURENERGY',
+      description:
+        'Start a Solar Passport with consumption data, then confirm the property point and roof outline for a real preliminary PVGIS analysis.',
+      ogTitle: 'Start your solar calculation | YOURENERGY',
+      ogDescription: 'Enter consumption and continue to property-point and roof confirmation.'
     },
     offerChecker: {
       meta: {
@@ -355,6 +267,24 @@ const tools = {
       resultWhy: 'Why there is no price verdict',
       resultQuestions: 'Questions for the supplier',
       invalid: 'Enter a price and capacity above zero.',
+      scopeIncomplete: 'The proposal does not confirm these core items',
+      reason: {
+        OFFER_PRICE_AND_CAPACITY_REQUIRED: 'Enter the proposal price and capacity.',
+        PRICEBOOK_UNAVAILABLE: 'The temporary price book is unavailable.',
+        PRICEBOOK_EXPIRED: 'The temporary price book has expired.',
+        UNSUPPORTED_SYSTEM_TYPE:
+          'This system type cannot be compared with the standard grid-tied range.',
+        BATTERY_SCOPE_UNSUPPORTED:
+          'A proposal with a battery cannot be compared with the standard grid-tied range.'
+      },
+      questions: {
+        standardScope:
+          'Confirm that panels, inverter, mounting, installation and grid connection are included.',
+        commercialTerms:
+          'Confirm VAT, permits, warranty and any non-standard electrical work separately.',
+        equipmentTerms:
+          'Confirm the exact equipment models, warranty terms, VAT and permits before signing.'
+      },
       notComparable:
         'A battery, a different system type or incomplete scope cannot be compared with this standard grid-tied range.',
       engineeringCta: 'Request an engineering check',

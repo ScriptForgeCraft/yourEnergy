@@ -32,6 +32,10 @@ const runtimeLocales = Object.freeze(
 const origin = 'https://yourenergy.am';
 const DEFAULT_OSM_TILE_URL = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
 const DEFAULT_OSM_TILE_ATTRIBUTION = '© OpenStreetMap contributors';
+const sameOriginPath = (value, fallback) => {
+  const candidate = value?.trim();
+  return candidate && /^\/(?!\/)/u.test(candidate) ? candidate : fallback;
+};
 const publishedAlternateLinks = Object.freeze([
   ...GENERATED_CONTENT_LOCALES.map(({ key, path }) => ({
     hreflang: key,
@@ -83,7 +87,7 @@ const escapeJsonForHtml = (value) =>
     .replaceAll('\u2028', '\\u2028')
     .replaceAll('\u2029', '\\u2029');
 
-const createJsonLd = (content) => {
+const createJsonLd = (content, { includeFaq = true } = {}) => {
   const canonical = `https://yourenergy.am${content.path}`;
   const serviceName =
     content.locale === 'hy'
@@ -92,53 +96,58 @@ const createJsonLd = (content) => {
         ? 'Предварительный анализ солнечной системы'
         : 'Preliminary solar-system analysis';
 
+  const graph = [
+    {
+      '@type': 'WebSite',
+      '@id': 'https://yourenergy.am/#website',
+      name: 'YOURENERGY',
+      url: 'https://yourenergy.am/'
+    },
+    {
+      '@type': 'Organization',
+      '@id': 'https://yourenergy.am/#organization',
+      name: 'Your Energy LLC',
+      alternateName: 'YOURENERGY',
+      url: 'https://yourenergy.am/',
+      telephone: content.contact.phone,
+      address: {
+        '@type': 'PostalAddress',
+        streetAddress: content.contact.address,
+        addressCountry: 'AM'
+      }
+    },
+    {
+      '@type': 'Service',
+      '@id': `${canonical}#service`,
+      name: serviceName,
+      serviceType: serviceName,
+      url: canonical,
+      provider: { '@id': 'https://yourenergy.am/#organization' },
+      areaServed: { '@type': 'Country', name: 'Armenia' }
+    }
+  ];
+
+  if (includeFaq) {
+    graph.push({
+      '@type': 'FAQPage',
+      mainEntity: content.faq.items.map(({ question, answer }) => ({
+        '@type': 'Question',
+        name: question,
+        acceptedAnswer: { '@type': 'Answer', text: answer }
+      }))
+    });
+  }
+
   return {
     '@context': 'https://schema.org',
-    '@graph': [
-      {
-        '@type': 'WebSite',
-        '@id': 'https://yourenergy.am/#website',
-        name: 'YOURENERGY',
-        url: 'https://yourenergy.am/'
-      },
-      {
-        '@type': 'Organization',
-        '@id': 'https://yourenergy.am/#organization',
-        name: 'Your Energy LLC',
-        alternateName: 'YOURENERGY',
-        url: 'https://yourenergy.am/',
-        telephone: content.contact.phone,
-        address: {
-          '@type': 'PostalAddress',
-          streetAddress: content.contact.address,
-          addressLocality: 'Yerevan',
-          addressCountry: 'AM'
-        }
-      },
-      {
-        '@type': 'Service',
-        '@id': `${canonical}#service`,
-        name: serviceName,
-        serviceType: serviceName,
-        url: canonical,
-        provider: { '@id': 'https://yourenergy.am/#organization' },
-        areaServed: { '@type': 'Country', name: 'Armenia' }
-      },
-      {
-        '@type': 'FAQPage',
-        mainEntity: content.faq.items.map(({ question, answer }) => ({
-          '@type': 'Question',
-          name: question,
-          acceptedAnswer: { '@type': 'Answer', text: answer }
-        }))
-      }
-    ]
+    '@graph': graph
   };
 };
 
 const createHomeContext = (content) => ({
   ...content,
   calculatorHref: toolPath(content.locale, 'calculator'),
+  solutionHref: toolPath(content.locale, 'calculator'),
   offerCheckerHref: toolPath(content.locale, 'offer-checker'),
   alternateLinks: publishedAlternateLinks,
   languageLinks: createLanguageLinks(content.locale),
@@ -150,6 +159,16 @@ const createHomeContext = (content) => ({
       buttonClass: item.popular ? '' : 'button--outline',
       detailsLabel: content.common.details,
       ctaLabel: content.common.cta
+    }))
+  },
+  footer: {
+    ...content.footer,
+    columns: content.footer.columns.map((column) => ({
+      ...column,
+      links: column.links.map(([label, href]) => [
+        label,
+        href === '#calculator' ? toolPath(content.locale, 'calculator') : href
+      ])
     }))
   },
   projects: {
@@ -182,9 +201,55 @@ const createHomeContext = (content) => ({
       image: '/images/roof-scan-768.webp',
       tileUrl: publicEnv.VITE_MAP_TILE_URL?.trim() || DEFAULT_OSM_TILE_URL,
       tileAttribution: publicEnv.VITE_MAP_ATTRIBUTION?.trim() || DEFAULT_OSM_TILE_ATTRIBUTION
+    },
+    endpoints: {
+      geocode: sameOriginPath(publicEnv.VITE_GEOCODING_ENDPOINT, '/api/geocode'),
+      potential: sameOriginPath(publicEnv.VITE_POTENTIAL_ENDPOINT, '/api/potential'),
+      analysis: sameOriginPath(publicEnv.VITE_ANALYSIS_ENDPOINT, '/api/analysis')
     }
   })
 });
+
+const createCalculatorContext = (content) => {
+  const calculatorMeta = toolCopy[content.locale]?.calculatorMeta;
+  if (!calculatorMeta) throw new Error(`Missing calculator metadata for ${content.locale}.`);
+
+  const path = toolPath(content.locale, 'calculator');
+  const base = createHomeContext(content);
+  const pendingPassport = content.product?.passport ?? {};
+  return {
+    ...base,
+    isCalculatorPage: true,
+    path,
+    solutionHref: '#calculator',
+    meta: calculatorMeta,
+    metrics: content.metrics.map((metric) => ({ ...metric, value: '—' })),
+    solutions: {
+      ...base.solutions,
+      items: base.solutions.items.map((item) => ({
+        ...item,
+        capacity: '—',
+        generation: '—'
+      }))
+    },
+    passport: {
+      ...base.passport,
+      badge: pendingPassport.pendingBadge,
+      dialogTitle: pendingPassport.pendingTitle,
+      reportAddress: pendingPassport.pendingAddress,
+      reportDate: pendingPassport.pendingDate,
+      capacity: '—',
+      panels: '—',
+      source: pendingPassport.pendingSource,
+      chartDescription: pendingPassport.pendingChartDescription,
+      months: base.passport.months.map((month) => ({ ...month, percent: 0, value: '—' }))
+    },
+    alternateLinks: createToolAlternateLinks('calculator'),
+    languageLinks: createToolLanguageLinks(content.locale, 'calculator'),
+    toolShared: toolCopy[content.locale].shared,
+    jsonLd: escapeJsonForHtml(createJsonLd({ ...content, path }, { includeFaq: false }))
+  };
+};
 
 const homeContent = { hy, ru, en };
 
@@ -215,68 +280,56 @@ const scopeItems = (tool) => [
   { key: 'battery', name: 'scope-battery', label: tool.scope.battery }
 ];
 
-const createToolContext = (content, type) => {
-  const tool = toolCopy[content.locale]?.[type === 'offer-checker' ? 'offerChecker' : type];
-  if (!tool) throw new Error(`Missing ${type} tool copy for ${content.locale}.`);
+const createOfferCheckerContext = (content) => {
+  const tool = toolCopy[content.locale]?.offerChecker;
+  if (!tool) throw new Error(`Missing offer checker copy for ${content.locale}.`);
 
-  const offerStrings =
-    type === 'offer-checker'
-      ? {
-          invalid: tool.invalid,
-          resultAwaiting: tool.resultAwaiting,
-          notComparable: tool.notComparable,
-          expiry: tool.expiry,
-          status: tool.status,
-          scope: Object.fromEntries(scopeItems(tool).map(({ key, label }) => [key, label])),
-          scopeIncomplete: tool.scopeHelp,
-          reason: {
-            OFFER_PRICE_AND_CAPACITY_REQUIRED: tool.invalid,
-            PRICEBOOK_UNAVAILABLE: tool.expiry,
-            PRICEBOOK_EXPIRED: tool.expiry,
-            UNSUPPORTED_SYSTEM_TYPE: tool.notComparable,
-            BATTERY_SCOPE_UNSUPPORTED: tool.notComparable
-          }
-        }
-      : null;
+  const offerStrings = {
+    invalid: tool.invalid,
+    resultAwaiting: tool.resultAwaiting,
+    notComparable: tool.notComparable,
+    expiry: tool.expiry,
+    status: tool.status,
+    scope: Object.fromEntries(scopeItems(tool).map(({ key, label }) => [key, label])),
+    scopeIncomplete: tool.scopeIncomplete,
+    reason: tool.reason,
+    questions: tool.questions
+  };
 
   return {
     locale: content.locale,
     localeCode: content.localeCode,
-    path: toolPath(content.locale, type),
+    path: toolPath(content.locale, 'offer-checker'),
     homeHref: content.homeHref,
     contact: content.contact,
     shared: toolCopy[content.locale].shared,
     tool,
-    toolType: type,
-    isCalculator: type === 'calculator',
+    toolType: 'offer-checker',
     calculatorHref: toolPath(content.locale, 'calculator'),
     offerCheckerHref: toolPath(content.locale, 'offer-checker'),
-    alternateLinks: createToolAlternateLinks(type),
-    languageLinks: createToolLanguageLinks(content.locale, type),
-    scopeItems: type === 'offer-checker' ? scopeItems(tool) : [],
+    alternateLinks: createToolAlternateLinks('offer-checker'),
+    languageLinks: createToolLanguageLinks(content.locale, 'offer-checker'),
+    scopeItems: scopeItems(tool),
     pageConfig: escapeJsonForHtml({
-      toolType: type,
+      toolType: 'offer-checker',
       locale: runtimeLocales[content.locale],
       homeHref: content.homeHref,
       priceBook: TEMPORARY_YOURENERGY_PRICEBOOK,
-      strings:
-        type === 'calculator'
-          ? {
-              invalid: tool.invalid,
-              stored: tool.stored,
-              storageUnavailable: tool.storageUnavailable
-            }
-          : offerStrings
+      strings: offerStrings
     })
   };
 };
 
 for (const { key } of GENERATED_CONTENT_LOCALES) {
   const content = homeContent[key];
-  for (const type of TOOL_TYPES) {
+  const calculatorOutput = resolve(root, toolFile(key, 'calculator'));
+  await mkdir(dirname(calculatorOutput), { recursive: true });
+  await writeGenerated(calculatorOutput, render(createCalculatorContext(content)));
+
+  for (const type of TOOL_TYPES.filter((entry) => entry !== 'calculator')) {
     const output = resolve(root, toolFile(key, type));
     await mkdir(dirname(output), { recursive: true });
-    await writeGenerated(output, renderTool(createToolContext(content, type)));
+    await writeGenerated(output, renderTool(createOfferCheckerContext(content)));
   }
 }
 

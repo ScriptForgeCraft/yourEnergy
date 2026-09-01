@@ -18,7 +18,6 @@ import { initScrollers } from './ui/scrollers.js';
 
 const DEFAULT_PVGIS_REQUEST_KWP = 1;
 const DEFAULT_PVGIS_LOSS_PERCENT = 14;
-const CALCULATOR_DRAFT_KEY = 'yourenergy-calculator-draft';
 
 document.documentElement.classList.add('js');
 
@@ -35,7 +34,7 @@ const locale = config.locale ?? 'ru-RU';
 const status = config.status ?? {};
 const product = config.product ?? {};
 const mapConfig = config.map ?? {};
-const apiClient = new ProductApiClient();
+const apiClient = new ProductApiClient({ endpoints: config.endpoints ?? {} });
 const passportRepository = new SolarPassportRepository();
 
 const form = document.querySelector('[data-address-form]');
@@ -43,6 +42,7 @@ const addressInput = form?.querySelector('input[name="address"]');
 const statusElement = document.querySelector('[data-analysis-status]');
 const resultPanel = document.querySelector('[data-result-panel]');
 const resultSummary = document.querySelector('[data-analysis-summary]');
+const calculatorFlowSteps = [...document.querySelectorAll('[data-calculator-flow-step]')];
 const locationStage = document.querySelector('[data-location-stage]');
 const locationMessage = document.querySelector('[data-location-message]');
 const locationAddress = document.querySelector('[data-location-address]');
@@ -54,6 +54,8 @@ const roofMessage = document.querySelector('[data-roof-message]');
 const roofPoints = document.querySelector('[data-roof-points]');
 const roofArea = document.querySelector('[data-roof-area]');
 const roofOrientation = document.querySelector('[data-roof-orientation]');
+const roofOrientationCustom = document.querySelector('[data-roof-orientation-custom]');
+const roofOrientationCustomInput = document.querySelector('[data-roof-orientation-custom-input]');
 const roofTilt = document.querySelector('[data-roof-tilt]');
 const roofPointSelect = document.querySelector('[data-roof-point-select]');
 const roofNudgeControls = document.querySelector('[data-roof-nudge-controls]');
@@ -61,6 +63,19 @@ const roofFinish = document.querySelector('[data-roof-finish]');
 const mapShell = document.querySelector('[data-map-shell]');
 const propertyMapContainer = document.querySelector('[data-property-map]');
 const propertyMapNote = document.querySelector('[data-property-map-note]');
+const sitePotentialRoot = document.querySelector('[data-site-potential]');
+const sitePotentialStatus = document.querySelector('[data-site-potential-status]');
+const sitePotentialValues = document.querySelector('[data-site-potential-values]');
+const sitePotentialYield = document.querySelector('[data-site-potential-yield]');
+const sitePotentialOrientation = document.querySelector('[data-site-potential-orientation]');
+const sitePotentialTilt = document.querySelector('[data-site-potential-tilt]');
+const sitePotentialArrow = document.querySelector('[data-site-potential-arrow]');
+const sitePotentialRetry = document.querySelector('[data-site-potential-retry]');
+const sitePotentialContinue = document.querySelector('[data-site-potential-continue]');
+const roofPreviewArrow = document.querySelector('[data-roof-preview-arrow]');
+const roofPreviewOrientation = document.querySelector('[data-roof-preview-orientation]');
+const roofPreviewTilt = document.querySelector('[data-roof-preview-tilt]');
+const optionalUpload = document.querySelector('[data-optional-upload]');
 const ledgerRoot = document.querySelector('[data-analysis-ledger]');
 const passportPersistence = document.querySelector('[data-passport-persistence]');
 const leadSection = document.querySelector('[data-lead-section]');
@@ -68,6 +83,7 @@ const leadStatus = document.querySelector('[data-lead-status]');
 const passportDialogEyebrow = document.querySelector('[data-passport-dialog-eyebrow]');
 
 let activeRequest = null;
+let activePotentialRequest = null;
 let mapController = null;
 let pendingLocation = null;
 let confirmedProperty = null;
@@ -86,7 +102,7 @@ const analysisView = createAnalysisView({
 });
 const chart = initGenerationChart({ locale, status });
 const consumptionControl = initConsumptionInput({
-  root: form?.querySelector('[data-consumption-inputs]'),
+  root: document.querySelector('[data-consumption-inputs]'),
   strings: product.consumption ?? {}
 });
 
@@ -97,61 +113,6 @@ const normalizedConsumptionFor = (consumptionInput) =>
   normalizeConsumption(consumptionInput?.value, {
     tariff: tariffSelectionFor(consumptionInput)
   });
-
-/**
- * A calculator route can hand a locally-entered draft to the full property
- * workflow. The draft stays in this browser session and is deleted as soon as
- * the homepage consumes it; it is never sent until the visitor submits the
- * analysis request themselves.
- */
-const applyCalculatorDraft = () => {
-  if (!form || !consumptionControl) return;
-  let draft;
-  try {
-    draft = JSON.parse(window.sessionStorage.getItem(CALCULATOR_DRAFT_KEY) ?? 'null');
-    window.sessionStorage.removeItem(CALCULATOR_DRAFT_KEY);
-  } catch {
-    return;
-  }
-  if (!draft || typeof draft !== 'object') return;
-
-  if (typeof draft.address === 'string' && addressInput)
-    addressInput.value = draft.address.slice(0, 220);
-  const consumption = draft.consumption ?? {};
-  const tariffInput = form.querySelector('[data-consumption-tariff]');
-  if (
-    Number.isFinite(Number(draft.tariff?.rateAmdPerKwh)) &&
-    Number(draft.tariff.rateAmdPerKwh) > 0
-  ) {
-    if (tariffInput) tariffInput.value = String(draft.tariff.rateAmdPerKwh);
-  }
-  const activate = (mode) => {
-    const radio = form.querySelector(`input[name="consumption-mode"][value="${mode}"]`);
-    if (!radio) return;
-    radio.checked = true;
-    radio.dispatchEvent(new Event('change', { bubbles: true }));
-  };
-  let draftedInput = null;
-  if (
-    Number.isFinite(Number(consumption.averageMonthlyKwh)) &&
-    Number(consumption.averageMonthlyKwh) > 0
-  ) {
-    activate('usage');
-    draftedInput = form.querySelector('[data-consumption-usage]');
-    if (draftedInput) draftedInput.value = String(consumption.averageMonthlyKwh);
-  } else if (
-    Number.isFinite(Number(consumption.averageMonthlyBillAmd)) &&
-    Number(consumption.averageMonthlyBillAmd) > 0
-  ) {
-    activate('bill');
-    draftedInput = form.querySelector('[data-consumption-bill]');
-    if (draftedInput) draftedInput.value = String(consumption.averageMonthlyBillAmd);
-  }
-  tariffInput?.dispatchEvent(new Event('input', { bubbles: true }));
-  draftedInput?.dispatchEvent(new Event('input', { bubbles: true }));
-};
-
-applyCalculatorDraft();
 
 const writeStatus = (message, isError = false) => {
   if (!statusElement) return;
@@ -167,6 +128,46 @@ const formatArea = (value) => {
   return `${new Intl.NumberFormat(locale, { maximumFractionDigits: 0 }).format(value)} m²`;
 };
 
+const formatNumber = (value, options = {}) =>
+  Number.isFinite(Number(value))
+    ? new Intl.NumberFormat(locale, options).format(Number(value))
+    : '—';
+
+const formatDegrees = (value) =>
+  Number.isFinite(Number(value)) ? `${formatNumber(value, { maximumFractionDigits: 0 })}°` : '—';
+
+const directionForAzimuth = (value) => {
+  if (!Number.isFinite(Number(value))) return null;
+  const keys = [
+    'north',
+    'northEast',
+    'east',
+    'southEast',
+    'south',
+    'southWest',
+    'west',
+    'northWest'
+  ];
+  const index = Math.round((((Number(value) % 360) + 360) % 360) / 45) % keys.length;
+  return product.potential?.directions?.[keys[index]] ?? null;
+};
+
+const formatCompassDirection = (value) => {
+  const degrees = formatDegrees(value);
+  const direction = directionForAzimuth(value);
+  return direction ? `${degrees} · ${direction}` : degrees;
+};
+
+const flowIndex = Object.freeze({ location: 0, potential: 1, roof: 2, result: 3 });
+
+const updateCalculatorFlow = (stage, state = 'active') => {
+  const activeIndex = flowIndex[stage] ?? 0;
+  calculatorFlowSteps.forEach((step, index) => {
+    step.dataset.state =
+      index < activeIndex ? 'complete' : index === activeIndex ? state : 'pending';
+  });
+};
+
 const replaceToken = (value, token, replacement) =>
   String(value ?? '').replace(`{${token}}`, String(replacement));
 
@@ -178,9 +179,24 @@ const locationSource = (kind, details = {}) => ({
   verifiedAt: details.verifiedAt ?? null
 });
 
+const resetSitePotential = ({ abort = true } = {}) => {
+  if (abort) stopPotentialRequest();
+  if (sitePotentialRoot) sitePotentialRoot.hidden = true;
+  if (sitePotentialStatus) sitePotentialStatus.textContent = '';
+  if (sitePotentialValues) sitePotentialValues.hidden = true;
+  if (sitePotentialYield) sitePotentialYield.textContent = '—';
+  if (sitePotentialOrientation) sitePotentialOrientation.textContent = '—';
+  if (sitePotentialTilt) sitePotentialTilt.textContent = '—';
+  if (sitePotentialArrow) sitePotentialArrow.setAttribute('transform', 'rotate(0 100 100)');
+  if (sitePotentialRetry) sitePotentialRetry.hidden = true;
+  if (sitePotentialContinue) sitePotentialContinue.disabled = true;
+};
+
 const clearCalculatedState = () => {
   currentPassport = null;
   analysisView.reset();
+  if (resultPanel) resultPanel.hidden = true;
+  resetSitePotential();
   if (ledgerRoot) ledgerRoot.hidden = true;
   if (passportPersistence) passportPersistence.hidden = true;
   if (leadSection) leadSection.hidden = true;
@@ -207,6 +223,11 @@ const stopActiveRequest = () => {
   activeRequest = null;
 };
 
+const stopPotentialRequest = () => {
+  activePotentialRequest?.abort();
+  activePotentialRequest = null;
+};
+
 const errorCopy = (error, fallback) => {
   if (error instanceof ProductApiError && error.code === 'ABORTED') {
     return product.status?.canceled ?? fallback;
@@ -228,7 +249,17 @@ const updateLocationStage = ({ message } = {}) => {
   if (locationConfirm) locationConfirm.disabled = !candidate;
 };
 
+const resetDetailedFlow = () => {
+  confirmedProperty = null;
+  currentRoof = null;
+  if (roofStage) roofStage.hidden = true;
+  if (optionalUpload) optionalUpload.hidden = true;
+  mapController?.resetRoof();
+  updateCalculatorFlow('location');
+};
+
 const onMapLocationChange = (coordinates) => {
+  resetDetailedFlow();
   pendingLocation = {
     address: addressInput?.value.trim() || null,
     coordinates,
@@ -265,7 +296,7 @@ const ensurePropertyMap = async (mode = 'location') => {
   if (propertyMapNote) {
     propertyMapNote.hidden = false;
     propertyMapNote.textContent = mapConfig.tileUrl
-      ? (product.location?.manualCopy ?? '')
+      ? ((mode === 'roof' ? product.roof?.mapDisclosure : product.location?.manualCopy) ?? '')
       : (product.roof?.tilesUnavailable ?? '');
   }
   mapShell?.classList.add('has-property-map');
@@ -307,6 +338,7 @@ const renderCandidates = (candidates, source) => {
     button.type = 'button';
     button.textContent = candidate.label;
     button.addEventListener('click', async () => {
+      resetDetailedFlow();
       pendingLocation = {
         address: candidate.label,
         coordinates: {
@@ -330,6 +362,7 @@ const renderCandidates = (candidates, source) => {
 
 const selectManualLocation = async () => {
   stopActiveRequest();
+  resetDetailedFlow();
   pendingLocation = null;
   clearCalculatedState();
   renderCandidates([], null);
@@ -337,6 +370,100 @@ const selectManualLocation = async () => {
   const propertyMap = await ensurePropertyMap('location');
   propertyMap?.setMode('location');
   writeStatus(product.location?.manualCopy);
+};
+
+const beginRoofFlow = async () => {
+  if (!confirmedProperty?.coordinates) return;
+  if (roofStage && !roofStage.hidden) return;
+  if (roofStage) roofStage.hidden = false;
+  if (optionalUpload) optionalUpload.hidden = false;
+  if (sitePotentialContinue) sitePotentialContinue.disabled = true;
+  if (roofMessage) roofMessage.textContent = product.roof?.copy ?? '';
+  const propertyMap = await ensurePropertyMap('roof');
+  propertyMap?.setLocation(confirmedProperty.coordinates, { notify: false });
+  propertyMap?.setMode('roof');
+  propertyMap?.resetRoof();
+  updateRoofAnglePreview();
+  updateCalculatorFlow('roof');
+  writeStatus(product.roof?.copy);
+};
+
+const loadSitePotential = async () => {
+  if (!confirmedProperty?.coordinates) return;
+
+  stopPotentialRequest();
+  resetSitePotential({ abort: false });
+  if (sitePotentialRoot) sitePotentialRoot.hidden = false;
+  if (sitePotentialStatus) sitePotentialStatus.textContent = product.potential?.loading ?? '';
+  if (sitePotentialRetry) sitePotentialRetry.hidden = true;
+  if (sitePotentialContinue) sitePotentialContinue.disabled = true;
+  requestAnimationFrame(() => {
+    sitePotentialRoot?.scrollIntoView({ block: 'start' });
+    sitePotentialRoot?.focus({ preventScroll: true });
+  });
+  updateCalculatorFlow('potential');
+
+  const controller = new AbortController();
+  activePotentialRequest = controller;
+  try {
+    const response = await apiClient.potential(
+      {
+        property: {
+          latitude: confirmedProperty.coordinates.lat,
+          longitude: confirmedProperty.coordinates.lng,
+          confirmed: true
+        }
+      },
+      { signal: controller.signal }
+    );
+    if (controller.signal.aborted || activePotentialRequest !== controller) return;
+
+    const potential = response?.potential;
+    const annualYield = Number(potential?.annualYieldKwhPerKwp);
+    const tilt = Number(potential?.orientation?.tiltDegrees);
+    const azimuth = Number(potential?.orientation?.azimuthDegrees);
+    const monthly = potential?.monthlyYieldKwhPerKwp;
+    if (
+      potential?.mode !== 'site-potential' ||
+      !Number.isFinite(annualYield) ||
+      !Number.isFinite(tilt) ||
+      !Number.isFinite(azimuth) ||
+      !Array.isArray(monthly) ||
+      monthly.length !== 12 ||
+      monthly.some((value) => !Number.isFinite(Number(value)))
+    ) {
+      throw new ProductApiError('MALFORMED_RESPONSE', { retryable: true });
+    }
+
+    if (sitePotentialYield) {
+      sitePotentialYield.textContent = `${formatNumber(annualYield, {
+        maximumFractionDigits: 0
+      })} kWh`;
+    }
+    if (sitePotentialOrientation)
+      sitePotentialOrientation.textContent = formatCompassDirection(azimuth);
+    if (sitePotentialTilt) sitePotentialTilt.textContent = formatDegrees(tilt);
+    if (sitePotentialArrow) {
+      sitePotentialArrow.setAttribute('transform', `rotate(${azimuth.toFixed(2)} 100 100)`);
+    }
+    if (sitePotentialStatus) sitePotentialStatus.textContent = '';
+    if (sitePotentialValues) sitePotentialValues.hidden = false;
+    if (sitePotentialContinue) sitePotentialContinue.disabled = false;
+    updateCalculatorFlow('potential', 'complete');
+    trackProductEvent('site_potential_ready', { source: 'provider' });
+  } catch (error) {
+    if (error instanceof ProductApiError && error.code === 'ABORTED') return;
+    if (sitePotentialStatus) {
+      sitePotentialStatus.textContent = errorCopy(error, product.potential?.unavailable ?? '');
+    }
+    if (sitePotentialValues) sitePotentialValues.hidden = true;
+    if (sitePotentialRetry) sitePotentialRetry.hidden = false;
+    if (sitePotentialContinue) sitePotentialContinue.disabled = false;
+    updateCalculatorFlow('potential', 'attention');
+    trackProductEvent('site_potential_unavailable', { code: error?.code ?? 'UNAVAILABLE' });
+  } finally {
+    if (activePotentialRequest === controller) activePotentialRequest = null;
+  }
 };
 
 const confirmLocation = async () => {
@@ -347,33 +474,22 @@ const confirmLocation = async () => {
     source: { ...pendingLocation.source, status: 'confirmed' }
   };
   if (locationStage) locationStage.hidden = true;
-  if (roofStage) roofStage.hidden = false;
-  if (roofMessage) roofMessage.textContent = product.roof?.copy ?? '';
-  const propertyMap = await ensurePropertyMap('roof');
+  const propertyMap = await ensurePropertyMap('location');
   propertyMap?.setLocation(confirmedProperty.coordinates, { notify: false });
-  propertyMap?.setMode('roof');
-  propertyMap?.resetRoof();
-  writeStatus(product.roof?.copy);
+  propertyMap?.setMode('location');
+  writeStatus(product.potential?.loading);
   trackProductEvent('property_confirmed', { source: confirmedProperty.source.kind });
+  void loadSitePotential();
 };
 
 const validateAddress = (value) => typeof value === 'string' && value.trim().length >= 5;
 
 const startGeocoding = async () => {
   const address = addressInput?.value.trim() ?? '';
-  const consumption = consumptionControl?.read();
   if (!validateAddress(address)) {
     addressInput?.setAttribute('aria-invalid', 'true');
     addressInput?.focus();
-    writeStatus(status.minAddress ?? product.consumption?.noConsumption, true);
-    return;
-  }
-  if (!consumption?.valid) {
-    writeStatus(consumption?.message ?? product.consumption?.noConsumption, true);
-    return;
-  }
-  if (!normalizedConsumptionFor(consumption).available) {
-    writeStatus(product.consumption?.noConsumption ?? product.result?.noSavings, true);
+    writeStatus(status.minAddress, true);
     return;
   }
 
@@ -382,8 +498,7 @@ const startGeocoding = async () => {
   clearCalculatedState();
   hidePropertyMap();
   pendingLocation = null;
-  confirmedProperty = null;
-  currentRoof = null;
+  resetDetailedFlow();
   renderCandidates([], null);
   const controller = new AbortController();
   activeRequest = controller;
@@ -401,6 +516,7 @@ const startGeocoding = async () => {
     const candidates = Array.isArray(location?.candidates) ? location.candidates : [];
     if (!candidates.length) {
       updateLocationStage({ message: product.location?.noResult });
+      await ensurePropertyMap('location');
       writeStatus(product.location?.noResult, true);
       return;
     }
@@ -416,6 +532,7 @@ const startGeocoding = async () => {
     updateLocationStage({
       message: errorCopy(error, product.location?.unavailable ?? product.status?.geocodeUnavailable)
     });
+    await ensurePropertyMap('location');
     writeStatus(errorCopy(error, product.status?.geocodeUnavailable), true);
     trackProductEvent('geocode_unavailable', { code: error?.code ?? 'UNAVAILABLE' });
   } finally {
@@ -429,6 +546,41 @@ const startGeocoding = async () => {
 const numericRoofInput = (input, { minimum, maximum }) => {
   const value = Number(input?.value);
   return Number.isFinite(value) && value >= minimum && value <= maximum ? value : null;
+};
+
+const updateCustomOrientationControl = ({ focus = false } = {}) => {
+  const isCustom = roofOrientation?.value === 'custom';
+  if (roofOrientationCustom) roofOrientationCustom.hidden = !isCustom;
+  if (!isCustom) roofOrientationCustomInput?.removeAttribute('aria-invalid');
+  if (isCustom && focus) roofOrientationCustomInput?.focus({ preventScroll: true });
+  updateRoofAnglePreview();
+};
+
+const roofAzimuth = () =>
+  numericRoofInput(
+    roofOrientation?.value === 'custom' ? roofOrientationCustomInput : roofOrientation,
+    {
+      minimum: 0,
+      maximum: 359.999
+    }
+  );
+
+const updateRoofAnglePreview = () => {
+  const azimuth = roofAzimuth();
+  const tilt = numericRoofInput(roofTilt, { minimum: 0, maximum: 90 });
+  if (roofPreviewArrow) {
+    roofPreviewArrow.setAttribute(
+      'transform',
+      `rotate(${Number.isFinite(azimuth) ? azimuth.toFixed(2) : 0} 100 100)`
+    );
+  }
+  if (roofPreviewOrientation) {
+    roofPreviewOrientation.textContent = Number.isFinite(azimuth)
+      ? formatCompassDirection(azimuth)
+      : '—';
+  }
+  if (roofPreviewTilt)
+    roofPreviewTilt.textContent = Number.isFinite(tilt) ? formatDegrees(tilt) : '—';
 };
 
 const publishAnalysis = (analysis, passport) => {
@@ -466,8 +618,10 @@ const publishAnalysis = (analysis, passport) => {
   const chartDescription = document.querySelector('#generation-chart-description');
   if (chartDescription) chartDescription.textContent = product.result?.chartDescription ?? '';
   if (resultSummary) resultSummary.textContent = product.result?.ready ?? '';
+  if (resultPanel) resultPanel.hidden = false;
   resultPanel?.classList.remove('is-updated');
   requestAnimationFrame(() => resultPanel?.classList.add('is-updated'));
+  updateCalculatorFlow('result', 'complete');
   window.dispatchEvent(
     new CustomEvent('solar:analysis-updated', {
       detail: {
@@ -506,16 +660,26 @@ const analyzeRoof = async () => {
     return;
   }
   const tiltDegrees = numericRoofInput(roofTilt, { minimum: 0, maximum: 90 });
-  const azimuthDegrees = numericRoofInput(roofOrientation, { minimum: 0, maximum: 359.999 });
+  const azimuthDegrees = roofAzimuth();
   if (tiltDegrees === null || azimuthDegrees === null) {
+    if (roofOrientation?.value === 'custom') {
+      roofOrientationCustomInput?.setAttribute('aria-invalid', 'true');
+    } else {
+      roofOrientation?.setAttribute('aria-invalid', 'true');
+    }
+    if (tiltDegrees === null) roofTilt?.setAttribute('aria-invalid', 'true');
     writeStatus(`${product.roof?.orientationLabel}: ${product.common?.required}`, true);
     return;
   }
+  roofOrientationCustomInput?.removeAttribute('aria-invalid');
+  roofOrientation?.removeAttribute('aria-invalid');
+  roofTilt?.removeAttribute('aria-invalid');
 
   stopActiveRequest();
   const controller = new AbortController();
   activeRequest = controller;
   setRequestBusy(roofFinish, true);
+  updateCalculatorFlow('result');
   writeStatus(product.result?.preparing ?? status.analyzing);
 
   try {
@@ -572,6 +736,7 @@ const analyzeRoof = async () => {
     trackProductEvent('analysis_ready', { status: analysis.status, source: 'provider' });
   } catch (error) {
     if (error instanceof ProductApiError && error.code === 'ABORTED') return;
+    updateCalculatorFlow('roof', 'attention');
     writeStatus(
       errorCopy(error, product.status?.analysisUnavailable ?? product.result?.unavailable),
       true
@@ -602,6 +767,14 @@ document.querySelector('[data-roof-start]')?.addEventListener('click', () => {
   mapController?.setMode('roof');
   writeStatus(product.roof?.addPoint);
 });
+document.querySelector('[data-roof-add-center]')?.addEventListener('click', () => {
+  mapController?.setMode('roof');
+  if (!mapController?.addPointAtCenter()) {
+    writeStatus(product.roof?.fallback ?? product.roof?.unavailable, true);
+    return;
+  }
+  writeStatus(product.roof?.addPoint);
+});
 document.querySelector('[data-roof-undo]')?.addEventListener('click', () => mapController?.undo());
 document
   .querySelector('[data-roof-reset]')
@@ -623,6 +796,24 @@ document.querySelectorAll('[data-roof-nudge]').forEach((button) => {
 document
   .querySelector('[data-roof-remove]')
   ?.addEventListener('click', () => mapController?.removeSelected());
+roofOrientation?.addEventListener('change', () => updateCustomOrientationControl({ focus: true }));
+roofOrientationCustomInput?.addEventListener('input', () => {
+  roofOrientationCustomInput.removeAttribute('aria-invalid');
+  updateRoofAnglePreview();
+});
+roofTilt?.addEventListener('input', () => {
+  roofTilt.removeAttribute('aria-invalid');
+  updateRoofAnglePreview();
+});
+sitePotentialRetry?.addEventListener('click', () => void loadSitePotential());
+document.querySelector('[data-site-potential-continue]')?.addEventListener('click', () => {
+  void beginRoofFlow().then(() => {
+    roofStage?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    document.querySelector('[data-roof-start]')?.focus({ preventScroll: true });
+  });
+});
+updateCustomOrientationControl();
+updateCalculatorFlow('location');
 
 initLeadForm({
   form: document.querySelector('[data-lead-form]'),

@@ -23,7 +23,7 @@
     <link rel='icon' href='/favicon.svg' type='image/svg+xml' />
     <link rel='stylesheet' href='/src/styles/main.css' />
   </head>
-  <body class='tool-page tool-page--{{toolType}}'>
+  <body class='tool-page tool-page--offer-checker'>
     <a class='skip-link' href='#main'>{{shared.skip}}</a>
     <header class='site-header'>
       <div class='container header-row'>
@@ -53,14 +53,12 @@
             <a href='{{calculatorHref}}'>{{shared.calculator}}</a>
             <a href='{{offerCheckerHref}}'>{{shared.offerChecker}}</a>
             <a href='{{contact.phoneHref}}'>{{shared.phone}}</a>
-            <nav class='mobile-language-switcher' aria-label='{{shared.language}}'>{{#each
-                languageLinks
-              }}<a
+            <div class='mobile-language-switcher'>{{#each languageLinks}}<a
                   class='language-link'
                   href='{{href}}'
                   hreflang='{{hreflang}}'
                   aria-label='{{label}} — {{name}}'
-                >{{label}}</a>{{/each}}</nav>
+                >{{label}}</a>{{/each}}</div>
           </nav>
         </details>
       </div>
@@ -73,211 +71,113 @@
             <p class='eyebrow'>{{tool.label}}</p>
             <h1 id='tool-title'>{{tool.title}}</h1>
             <p class='tool-intro'>{{tool.intro}}</p>
-            {{#if isCalculator}}
-              <ul class='tool-principles'>
-                {{#each tool.principles}}<li>{{this}}</li>{{/each}}
-              </ul>
-            {{else}}
-              <p class='tool-privacy'>{{tool.privacy}}</p>
-            {{/if}}
+            <p class='tool-privacy'>{{tool.privacy}}</p>
           </div>
           <aside class='tool-reference' aria-label='{{tool.referenceTitle}}'>
-            {{#if isCalculator}}
-              <p class='eyebrow'>Solar Passport</p>
-              <strong>{{tool.honestNote}}</strong>
-            {{else}}
-              <p class='eyebrow'>{{tool.referenceTitle}}</p>
-              <strong data-pricebook-reference>{{tool.priceBookCheck}}</strong>
-              <small data-pricebook-version hidden></small>
-              <p>{{tool.referenceCopy}}</p>
-            {{/if}}
+            <p class='eyebrow'>{{tool.referenceTitle}}</p>
+            <strong data-pricebook-reference>{{tool.priceBookCheck}}</strong>
+            <small data-pricebook-version hidden></small>
+            <p>{{tool.referenceCopy}}</p>
           </aside>
         </div>
       </section>
 
-      {{#if isCalculator}}
-        <section class='tool-workspace section' aria-labelledby='calculator-form-title'>
-          <div class='container tool-workspace__grid'>
-            <form class='tool-form' data-quick-calculator novalidate>
-              <h2 id='calculator-form-title'>{{tool.formTitle}}</h2>
-              <label for='quick-address'>{{tool.addressLabel}}</label>
+      <section class='tool-workspace section' aria-labelledby='offer-form-title'>
+        <div class='container tool-workspace__grid'>
+          <form class='tool-form' data-offer-checker novalidate>
+            <h2 id='offer-form-title'>{{tool.formTitle}}</h2>
+            <label for='offer-total'>{{tool.totalLabel}}</label>
+            <div class='tool-input-unit'>
               <input
-                id='quick-address'
-                name='address'
-                autocomplete='street-address'
-                maxlength='160'
-                placeholder='{{tool.addressPlaceholder}}'
+                id='offer-total'
+                name='totalAmd'
+                type='number'
+                min='1'
+                max='1000000000'
+                step='1'
+                inputmode='decimal'
+                required
               />
-              <small>{{tool.addressHelp}}</small>
+              <span>֏</span>
+            </div>
 
-              <fieldset>
-                <legend>{{tool.consumptionLegend}}</legend>
-                <label for='quick-monthly-kwh'>{{tool.monthlyKwhLabel}}</label>
-                <div class='tool-input-unit'>
-                  <input
-                    id='quick-monthly-kwh'
-                    name='averageMonthlyKwh'
-                    type='number'
-                    min='0.01'
-                    max='100000'
-                    step='0.01'
-                    inputmode='decimal'
-                    aria-describedby='quick-monthly-kwh-help'
-                  />
-                  <span>{{tool.unitKwh}}</span>
-                </div>
-                <small id='quick-monthly-kwh-help'>{{tool.monthlyKwhHelp}}</small>
+            <label for='offer-capacity'>{{tool.capacityLabel}}</label>
+            <div class='tool-input-unit'>
+              <input
+                id='offer-capacity'
+                name='capacityKwp'
+                type='number'
+                min='0.01'
+                max='10000'
+                step='0.01'
+                inputmode='decimal'
+                required
+              />
+              <span>kWp</span>
+            </div>
 
-                <p class='tool-or' aria-hidden='true'>{{tool.or}}</p>
+            <label for='offer-region'>{{tool.regionLabel}}</label>
+            <select id='offer-region' name='region'>
+              <option value='AM'>{{tool.regionArmenia}}</option>
+            </select>
 
-                <label for='quick-monthly-bill'>{{tool.billLabel}}</label>
-                <div class='tool-input-unit'>
-                  <input
-                    id='quick-monthly-bill'
-                    name='averageMonthlyBillAmd'
-                    type='number'
-                    min='1'
-                    max='100000000'
-                    step='1'
-                    inputmode='decimal'
-                    aria-describedby='quick-monthly-bill-help'
-                  />
-                  <span>{{tool.unitAmd}}</span>
-                </div>
-                <small id='quick-monthly-bill-help'>{{tool.billHelp}}</small>
+            <label for='offer-system'>{{tool.systemLabel}}</label>
+            <select id='offer-system' name='systemType'>
+              <option value='residential-grid-tied'>{{tool.systemGrid}}</option>
+              <option value='battery'>{{tool.systemBattery}}</option>
+              <option value='other'>{{tool.systemOther}}</option>
+            </select>
 
-                <label for='quick-tariff'>{{tool.tariffLabel}}</label>
-                <div class='tool-input-unit'>
-                  <input
-                    id='quick-tariff'
-                    name='tariff'
-                    type='number'
-                    min='0.01'
-                    max='1000'
-                    step='0.01'
-                    inputmode='decimal'
-                    aria-describedby='quick-tariff-help'
-                  />
-                  <span>{{tool.unitTariff}}</span>
-                </div>
-                <small id='quick-tariff-help'>{{tool.tariffHelp}}</small>
-              </fieldset>
+            <fieldset class='offer-scope'>
+              <legend>{{tool.scopeLegend}}</legend>
+              <p>{{tool.scopeHelp}}</p>
+              {{#each scopeItems}}<label><input
+                  type='checkbox'
+                  name='{{name}}'
+                  value='true'
+                /><span>{{label}}</span></label>{{/each}}
+            </fieldset>
 
-              <p class='form-status' data-tool-status aria-live='polite' role='status'></p>
+            <p class='form-status' data-tool-status aria-live='polite' role='status'></p>
+            <div class='tool-form-actions'>
               <button class='button button--navy' type='submit'>{{tool.submit}}</button>
-              <noscript>
-                <div class='tool-no-js'>
-                  <strong>{{tool.noJsTitle}}</strong>
-                  <p>{{tool.noJsCopy}}</p>
-                  <a class='button' href='{{homeHref}}#calculator'>{{tool.noJsCta}}</a>
-                </div>
-              </noscript>
-            </form>
-            <aside class='tool-side-note'>
-              <h2>Solar Passport</h2>
-              <p>{{tool.honestNote}}</p>
-              <a href='{{homeHref}}#calculator'>{{tool.noJsCta}}</a>
-            </aside>
-          </div>
-        </section>
-      {{else}}
-        <section class='tool-workspace section' aria-labelledby='offer-form-title'>
-          <div class='container tool-workspace__grid'>
-            <form class='tool-form' data-offer-checker novalidate>
-              <h2 id='offer-form-title'>{{tool.formTitle}}</h2>
-              <label for='offer-total'>{{tool.totalLabel}}</label>
-              <div class='tool-input-unit'>
-                <input
-                  id='offer-total'
-                  name='totalAmd'
-                  type='number'
-                  min='1'
-                  max='1000000000'
-                  step='1'
-                  inputmode='decimal'
-                  required
-                />
-                <span>֏</span>
+              <button class='button button--outline' type='reset'>{{tool.reset}}</button>
+            </div>
+            <noscript>
+              <div class='tool-no-js'>
+                <strong>{{tool.noJsTitle}}</strong>
+                <p>{{tool.noJsCopy}}</p>
+                <a class='button' href='{{contact.phoneHref}}'>{{shared.phone}}</a>
               </div>
+            </noscript>
+          </form>
 
-              <label for='offer-capacity'>{{tool.capacityLabel}}</label>
-              <div class='tool-input-unit'>
-                <input
-                  id='offer-capacity'
-                  name='capacityKwp'
-                  type='number'
-                  min='0.01'
-                  max='10000'
-                  step='0.01'
-                  inputmode='decimal'
-                  required
-                />
-                <span>kWp</span>
-              </div>
-
-              <label for='offer-region'>{{tool.regionLabel}}</label>
-              <select id='offer-region' name='region'>
-                <option value='AM'>{{tool.regionArmenia}}</option>
-              </select>
-
-              <label for='offer-system'>{{tool.systemLabel}}</label>
-              <select id='offer-system' name='systemType'>
-                <option value='residential-grid-tied'>{{tool.systemGrid}}</option>
-                <option value='battery'>{{tool.systemBattery}}</option>
-                <option value='other'>{{tool.systemOther}}</option>
-              </select>
-
-              <fieldset class='offer-scope'>
-                <legend>{{tool.scopeLegend}}</legend>
-                <p>{{tool.scopeHelp}}</p>
-                {{#each scopeItems}}<label><input
-                    type='checkbox'
-                    name='{{name}}'
-                    value='true'
-                  /><span>{{label}}</span></label>{{/each}}
-              </fieldset>
-
-              <p class='form-status' data-tool-status aria-live='polite' role='status'></p>
-              <div class='tool-form-actions'>
-                <button class='button button--navy' type='submit'>{{tool.submit}}</button>
-                <button class='button button--outline' type='reset'>{{tool.reset}}</button>
-              </div>
-              <noscript>
-                <div class='tool-no-js'>
-                  <strong>{{tool.noJsTitle}}</strong>
-                  <p>{{tool.noJsCopy}}</p>
-                  <a class='button' href='{{contact.phoneHref}}'>{{shared.phone}}</a>
-                </div>
-              </noscript>
-            </form>
-
-            <section
-              class='tool-result'
-              data-offer-result
-              aria-labelledby='offer-result-title'
-              aria-live='polite'
-              tabindex='-1'
-            >
-              <p class='eyebrow'>{{tool.label}}</p>
-              <h2 id='offer-result-title'>{{tool.resultTitle}}</h2>
-              <p data-offer-result-summary>{{tool.resultAwaiting}}</p>
-              <dl data-offer-metrics hidden>
-                <div><dt>{{tool.resultRate}}</dt><dd data-offer-rate>—</dd></div>
-                <div><dt>{{tool.resultRange}}</dt><dd data-offer-range>—</dd></div>
-              </dl>
-              <div data-offer-why hidden>
-                <h3>{{tool.resultWhy}}</h3>
-                <ul data-offer-reasons></ul>
-              </div>
-              <div data-offer-questions hidden>
-                <h3>{{tool.resultQuestions}}</h3>
-                <ul data-offer-questions-list></ul>
-              </div>
-              <a class='button' data-engineering-cta hidden href='{{contact.phoneHref}}'>{{tool.engineeringCta}}</a>
-            </section>
-          </div>
-        </section>
-      {{/if}}
+          <section
+            class='tool-result'
+            data-offer-result
+            aria-labelledby='offer-result-title'
+            aria-live='polite'
+            tabindex='-1'
+          >
+            <p class='eyebrow'>{{tool.label}}</p>
+            <h2 id='offer-result-title'>{{tool.resultTitle}}</h2>
+            <p data-offer-result-summary>{{tool.resultAwaiting}}</p>
+            <dl data-offer-metrics hidden>
+              <div><dt>{{tool.resultRate}}</dt><dd data-offer-rate>—</dd></div>
+              <div><dt>{{tool.resultRange}}</dt><dd data-offer-range>—</dd></div>
+            </dl>
+            <div data-offer-why hidden>
+              <h3>{{tool.resultWhy}}</h3>
+              <ul data-offer-reasons></ul>
+            </div>
+            <div data-offer-questions hidden>
+              <h3>{{tool.resultQuestions}}</h3>
+              <ul data-offer-questions-list></ul>
+            </div>
+            <a class='button' data-engineering-cta hidden href='{{contact.phoneHref}}'>{{tool.engineeringCta}}</a>
+          </section>
+        </div>
+      </section>
     </main>
 
     <footer class='tool-footer'>

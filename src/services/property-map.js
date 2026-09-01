@@ -129,6 +129,15 @@ export const createPropertyMap = async ({
     });
   };
 
+  const addRoofPoint = (point) => {
+    if (!isFinitePoint(point)) return false;
+    roofPoints.push(normalizePoint(point));
+    selectedPointIndex = roofPoints.length - 1;
+    drawRoof();
+    emitRoof();
+    return true;
+  };
+
   const setLocation = (candidate, { fit = true, notify = true } = {}) => {
     if (!isFinitePoint(candidate)) return false;
     const location = normalizePoint(candidate);
@@ -150,10 +159,7 @@ export const createPropertyMap = async ({
 
   map.on('click', (event) => {
     if (mode === 'roof') {
-      roofPoints.push(normalizePoint(event.latlng));
-      selectedPointIndex = roofPoints.length - 1;
-      drawRoof();
-      emitRoof();
+      addRoofPoint(event.latlng);
       return;
     }
     setLocation(event.latlng);
@@ -168,6 +174,27 @@ export const createPropertyMap = async ({
       container.dataset.mode = mode;
     },
     setRoofPoints,
+    addPointAtCenter() {
+      if (mode !== 'roof') return false;
+      // Keyboard users need a meaningful starting polygon too. Repeating the
+      // exact centre would create a zero-area polygon, so seed consecutive
+      // points around it (roughly three metres apart). The outline remains a
+      // preliminary estimate and can be refined with the nudge controls.
+      const centre = map.getCenter();
+      const offsets = [
+        { north: 3, east: -3 },
+        { north: -3, east: -3 },
+        { north: -3, east: 3 },
+        { north: 3, east: 3 }
+      ];
+      const offset = offsets[roofPoints.length % offsets.length];
+      const latitudeDelta = offset.north / 111_320;
+      const longitudeDelta = offset.east / (111_320 * Math.cos((centre.lat * Math.PI) / 180));
+      return addRoofPoint({
+        lat: centre.lat + latitudeDelta,
+        lng: centre.lng + longitudeDelta
+      });
+    },
     getRoof() {
       return {
         points: roofPoints.map(normalizePoint),

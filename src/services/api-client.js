@@ -1,5 +1,6 @@
 const defaultEndpoints = Object.freeze({
   geocode: '/api/geocode',
+  potential: '/api/potential',
   analysis: '/api/analysis',
   lead: '/api/lead'
 });
@@ -69,6 +70,10 @@ export class ProductApiClient {
 
   geocode({ query, locale }, options) {
     return this.request(this.endpoints.geocode, { query, locale }, options);
+  }
+
+  potential(input, options) {
+    return this.request(this.endpoints.potential, input, options);
   }
 
   analyze(input, options) {

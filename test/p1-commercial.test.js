@@ -178,6 +178,7 @@ test('Offer Checker only compares a complete standard scope and returns P1 range
   assert.equal(within.status, 'within-range');
   assert.equal(above.status, 'above-range');
   assert.equal(within.amdPerWp, 247);
+  assert.deepEqual(within.questionKeys, ['equipmentTerms']);
   assertFiniteTree(below);
   assertFiniteTree(within);
   assertFiniteTree(above);
@@ -207,6 +208,7 @@ test('Offer Checker refuses a price verdict for battery or incomplete scope', ()
   assert.equal(incomplete.comparable, false);
   assert.ok(incomplete.reasons.includes('CORE_SCOPE_INCOMPLETE'));
   assert.deepEqual(incomplete.missingInclusions, ['inverter']);
+  assert.deepEqual(incomplete.questionKeys, ['standardScope', 'commercialTerms']);
   assertFiniteTree(battery);
   assertFiniteTree(incomplete);
 });

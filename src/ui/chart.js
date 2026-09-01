@@ -5,10 +5,15 @@ export const initGenerationChart = ({ locale, status }) => {
     return { update() {} };
   }
 
-  const label = (short, month, value) =>
-    `${short} · ${status.monthTooltip
+  const label = (short, month, value) => {
+    const numericValue = Number(value);
+    const displayValue = Number.isFinite(numericValue)
+      ? new Intl.NumberFormat(locale).format(numericValue)
+      : '—';
+    return `${short} · ${status.monthTooltip
       .replace('{month}', month)
-      .replace('{value}', new Intl.NumberFormat(locale).format(value))}`;
+      .replace('{value}', displayValue)}`;
+  };
   bars.forEach((bar) => {
     const text = label(bar.dataset.short, bar.dataset.month, Number(bar.dataset.value));
     bar.setAttribute('aria-label', text);

@@ -86,6 +86,19 @@
  */
 
 /**
+ * @typedef {Object} SitePotential
+ * @property {'site-potential'} mode
+ * @property {'provider'} source
+ * @property {{coordinates: GeoPoint, confirmed: true}} property
+ * @property {{capacityKwp: 1, lossPercent: 14}} system
+ * @property {number} annualYieldKwhPerKwp
+ * @property {number[]} monthlyYieldKwhPerKwp
+ * @property {{azimuthDegrees: number, tiltDegrees: number, basis: string}} orientation
+ * @property {Object[]} sourceLedger
+ * @property {string[]} limitations
+ */
+
+/**
  * @typedef {Object} SolarPassport
  * @property {string} id
  * @property {string} schemaVersion

@@ -1,5 +1,5 @@
 import { configuredUrl, envString, providerTimeoutMs } from './config.js';
-import { ApiError } from './http.js';
+import { ApiError, isApiError } from './http.js';
 import { fetchJsonWithTimeout } from './provider.js';
 
 const numberInRange = (value, minimum, maximum) => {
@@ -18,6 +18,11 @@ const numberInRange = (value, minimum, maximum) => {
 const compassToPvgisAspect = (azimuthDegrees) => {
   const aspect = ((azimuthDegrees - 180 + 540) % 360) - 180;
   return Object.is(aspect, -0) ? 0 : aspect;
+};
+
+const pvgisAspectToCompass = (aspectDegrees) => {
+  const compass = (((Number(aspectDegrees) + 180) % 360) + 360) % 360;
+  return Object.is(compass, -0) ? 0 : compass;
 };
 
 // PVGIS has a public no-key API. Keeping the request server-side prevents the
@@ -59,14 +64,39 @@ export const validateAnalysisInput = (body) => {
   };
 };
 
-export const buildPvgisUrl = (endpoint, input) => {
+/**
+ * The quick potential step deliberately needs only a confirmed geographic
+ * point. It returns PVGIS's fixed free-standing optimum, not a claim about
+ * the physical roof or shading at that address.
+ */
+export const validatePotentialInput = (body) => {
+  const latitude = numberInRange(body?.property?.latitude, -90, 90);
+  const longitude = numberInRange(body?.property?.longitude, -180, 180);
+
+  if (body?.property?.confirmed !== true || latitude === null || longitude === null) {
+    throw new ApiError('INVALID_INPUT');
+  }
+
+  return {
+    property: { latitude, longitude },
+    system: { capacityKwp: 1, lossPercent: 14 }
+  };
+};
+
+export const buildPvgisUrl = (endpoint, input, { optimalAngles = false } = {}) => {
   const url = new URL(endpoint);
   url.searchParams.set('lat', String(input.property.latitude));
   url.searchParams.set('lon', String(input.property.longitude));
   url.searchParams.set('peakpower', String(input.system.capacityKwp));
   url.searchParams.set('loss', String(input.system.lossPercent));
-  url.searchParams.set('angle', String(input.roof.tiltDegrees));
-  url.searchParams.set('aspect', String(input.roof.pvgisAspectDegrees));
+  if (optimalAngles) {
+    // PVGIS ignores angle/aspect when this is true. Omitting them makes it
+    // explicit that this is only a free-standing optimum benchmark.
+    url.searchParams.set('optimalangles', '1');
+  } else {
+    url.searchParams.set('angle', String(input.roof.tiltDegrees));
+    url.searchParams.set('aspect', String(input.roof.pvgisAspectDegrees));
+  }
   url.searchParams.set('outputformat', 'json');
   return url;
 };
@@ -86,6 +116,31 @@ export const normalizePvgisResult = (payload) => {
   }
 
   return { annualKwh, monthlyKwh };
+};
+
+/**
+ * PVGIS returns the selected optimum in its input echo using its own azimuth
+ * convention (0 south, 90 west, -90 east). The browser uses compass degrees
+ * instead (0 north, 180 south), so the conversion is kept server-side.
+ */
+export const normalizePvgisOptimalResult = (payload) => {
+  const generation = normalizePvgisResult(payload);
+  const tiltDegrees = numberInRange(payload?.inputs?.mounting_system?.fixed?.slope?.value, 0, 90);
+  const pvgisAspectDegrees = numberInRange(
+    payload?.inputs?.mounting_system?.fixed?.azimuth?.value,
+    -180,
+    180
+  );
+
+  if (tiltDegrees === null || pvgisAspectDegrees === null) {
+    throw new ApiError('PVGIS_RESPONSE_INVALID');
+  }
+
+  return {
+    generation,
+    tiltDegrees,
+    azimuthDegrees: pvgisAspectToCompass(pvgisAspectDegrees)
+  };
 };
 
 export const createPvgisAdapter = (env, { fetchImpl = fetch } = {}) => {
@@ -127,6 +182,42 @@ export const createPvgisAdapter = (env, { fetchImpl = fetch } = {}) => {
           }
         ]
       };
+    },
+    async potential(input, { signal } = {}) {
+      try {
+        const payload = await fetchJsonWithTimeout(
+          fetchImpl,
+          buildPvgisUrl(endpoint, input, { optimalAngles: true }),
+          { method: 'GET', headers: { accept: 'application/json' } },
+          {
+            signal,
+            timeoutMs,
+            timeoutCode: 'PVGIS_TIMEOUT',
+            unavailableCode: 'PVGIS_UNAVAILABLE',
+            invalidResponseCode: 'PVGIS_RESPONSE_INVALID'
+          }
+        );
+        const optimum = normalizePvgisOptimalResult(payload);
+
+        return {
+          source: 'provider',
+          provider: 'pvgis',
+          input,
+          optimum,
+          sourceLedger: [
+            {
+              kind: 'solar-potential-optimum',
+              provider: 'PVGIS',
+              retrievedAt: new Date().toISOString()
+            }
+          ]
+        };
+      } catch (error) {
+        // The potential endpoint itself should surface provider failures. This
+        // branch merely preserves the documented cancellation code.
+        if (isApiError(error)) throw error;
+        throw new ApiError('PVGIS_UNAVAILABLE');
+      }
     }
   };
 };

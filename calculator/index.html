@@ -22,18 +22,19 @@
     <link rel='alternate' hreflang='hy' href='https://yourenergy.am/calculator/' /><link rel='alternate' hreflang='ru' href='https://yourenergy.am/ru/calculator/' /><link rel='alternate' hreflang='en' href='https://yourenergy.am/en/calculator/' /><link rel='alternate' hreflang='x-default' href='https://yourenergy.am/calculator/' />
     <link rel='icon' href='/favicon.svg' type='image/svg+xml' />
     <link rel='stylesheet' href='/src/styles/main.css' />
+    <script type='application/ld+json'>{"@context":"https://schema.org","@graph":[{"@type":"WebSite","@id":"https://yourenergy.am/#website","name":"YOURENERGY","url":"https://yourenergy.am/"},{"@type":"Organization","@id":"https://yourenergy.am/#organization","name":"Your Energy LLC","alternateName":"YOURENERGY","url":"https://yourenergy.am/","telephone":"+374 91 095 950","address":{"@type":"PostalAddress","streetAddress":"Artashisyan 48 14 Kotayq, Zovuni, 26 33 str, Yerevan","addressCountry":"AM"}},{"@type":"Service","@id":"https://yourenergy.am/calculator/#service","name":"Արևային համակարգի նախնական վերլուծություն","serviceType":"Արևային համակարգի նախնական վերլուծություն","url":"https://yourenergy.am/calculator/","provider":{"@id":"https://yourenergy.am/#organization"},"areaServed":{"@type":"Country","name":"Armenia"}}]}</script>
   </head>
-  <body class='tool-page tool-page--calculator'>
+  <body>
     <a class='skip-link' href='#main'>Անցնել հիմնական բովանդակությանը</a>
-    <header class='site-header'>
+    <header class='site-header' data-header>
       <div class='container header-row'>
-        <a class='wordmark' href='/' aria-label='YOURENERGY'><span>YOUR</span><strong
+        <a class='wordmark' href='/' aria-label='YOURENERGY — գլխավոր էջ'><span>YOUR</span><strong
           >ENERGY</strong></a>
-        <nav class='desktop-nav' aria-label='Հիմնական նավիգացիա'>
-          <a href='/'>Գլխավոր էջ</a>
-          <a href='/calculator/'>Արևային հաշվիչ</a>
-          <a href='/offer-checker/'>Առաջարկի ստուգիչ</a>
-        </nav>
+          <nav class='desktop-nav' aria-label='Հիմնական նավիգացիա'>
+            <a href='/'>Գլխավոր էջ</a>
+            <a href='/calculator/'>Արևային հաշվիչ</a>
+            <a href='/offer-checker/'>Առաջարկի ստուգիչ</a>
+          </nav>
         <div class='header-actions'>
           <a class='header-phone' href='tel:+37491095950'><strong>+374 91 095 950</strong><small
             >Բաց է մինչև 21:00</small></a>
@@ -48,15 +49,16 @@
                 hreflang='en'
                 aria-label='EN — Անգլերեն'
               >EN</a></nav>
+            <a class='button button--small' href='/offer-checker/'>Առաջարկի ստուգիչ</a>
         </div>
-        <details class='mobile-menu'>
+        <details class='mobile-menu' data-mobile-menu>
           <summary aria-label='Բացել նավիգացիոն ցանկը'><span></span><span></span><span></span></summary>
           <nav aria-label='Բջջային նավիգացիա'>
-            <a href='/'>Գլխավոր էջ</a>
-            <a href='/calculator/'>Արևային հաշվիչ</a>
-            <a href='/offer-checker/'>Առաջարկի ստուգիչ</a>
-            <a href='tel:+37491095950'>Զանգել ինժեներին</a>
-            <nav class='mobile-language-switcher' aria-label='Լեզվի ընտրություն'><a
+              <a href='/'>Գլխավոր էջ</a>
+              <a href='/calculator/'>Արևային հաշվիչ</a>
+              <a href='/offer-checker/'>Առաջարկի ստուգիչ</a>
+              <a href='tel:+37491095950'>Զանգել ինժեներին</a>
+            <div class='mobile-language-switcher' role='group' aria-label='Լեզվի ընտրություն'><a
                   class='language-link'
                   href='/ru/calculator/'
                   hreflang='ru'
@@ -66,124 +68,909 @@
                   href='/en/calculator/'
                   hreflang='en'
                   aria-label='EN — Անգլերեն'
-                >EN</a></nav>
+                >EN</a></div>
           </nav>
         </details>
       </div>
     </header>
 
-    <main id='main' class='tool-main'>
-      <section class='tool-hero' aria-labelledby='tool-title'>
-        <div class='container tool-hero__grid'>
-          <div>
-            <p class='eyebrow'>Արևային հաշվիչ</p>
-            <h1 id='tool-title'>Սկսեք Solar Passport-ը ձեր սպառումից</h1>
-            <p class='tool-intro'>Մուտքագրված տվյալները պահվում են միայն այս դիտարկչի ընթացիկ նստաշրջանում, որպեսզի գլխավոր հաշվիչում շարունակեք կետի, տանիքի և PVGIS-ի քայլերով։</p>
-              <ul class='tool-principles'>
-                <li>Առանց հասցեի «պատրաստի» արդյունքի</li><li>Տանիքն ու տեղադրությունը հաստատվում են հաջորդ քայլում</li><li>Խնայողությունը հաշվարկվում է միայն հաստատված կամ ձեր մուտքագրած սակագնով</li>
-              </ul>
+    <main id='main'>
+      <section class='hero section' id='calculator' aria-labelledby='hero-title'>
+        <div class='container hero-grid'>
+          <div class='hero-copy'>
+            <p class='eyebrow'>Տան արևային համակարգի անհատական նախնական հաշվարկ</p>
+            <h1 id='hero-title'>Բացահայտեք ձեր տան<br />արևային ներուժը<br /><mark
+              >60 վայրկյանում</mark></h1>
+            <p class='hero-intro'>Սկզբում գտեք և հաստատեք կետը, ապա տեսեք դրա PVGIS ներուժը։ Տանիքի և սպառման տվյալները պետք են միայն մանրամասն հաշվարկի համար։</p>
+            <p class='hero-tool-links'><a href='/calculator/'>Բացել ամբողջական հաշվիչը</a><a
+                href='/offer-checker/'
+              >Ստուգել կոմերցիոն առաջարկը</a></p>
+            <section class='calculator-flow-region' aria-labelledby='calculator-flow-title'>
+              <h2 id='calculator-flow-title'>Ինչպես է աշխատում հաշվարկը</h2>
+              <ol class='calculator-flow' data-calculator-flow>
+                <li data-calculator-flow-step='0'><span
+                    class='calculator-flow__number'
+                  >01</span><span><strong>Գտեք օբյեկտը</strong><small>Մուտքագրեք հասցեն կամ քարտեզի վրա նշեք կետ, ապա հաստատեք այն։</small></span></li><li data-calculator-flow-step='1'><span
+                    class='calculator-flow__number'
+                  >02</span><span><strong>Տեսեք տեղանքի արևային ներուժը</strong><small>PVGIS-ը ցույց է տալիս ընտրված կետի ուղեցույցը՝ մինչև ձեր տանիքի հաշվարկը։</small></span></li><li data-calculator-flow-step='2'><span
+                    class='calculator-flow__number'
+                  >03</span><span><strong>Նշեք տանիքն ու սպառումը</strong><small>Ուրվագծեք հասանելի մակերեսը և նշեք տանիքի իրական ուղղությունը, թեքությունն ու էներգիայի սպառումը։</small></span></li><li data-calculator-flow-step='3'><span
+                    class='calculator-flow__number'
+                  >04</span><span><strong>Ստացեք նախնական հաշվարկ</strong><small>Համակարգը, բյուջեն և խնայողությունը երևում են միայն հաստատված մուտքային տվյալներից։</small></span></li>
+              </ol>
+            </section>
+            <form class='address-form' data-address-form action='#manual-consultation' novalidate>
+              <label for='address'>Ձեր տան հասցեն</label>
+              <div class='address-control'>
+                <svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#pin'></use></svg>
+                <input
+                  id='address'
+                  name='address'
+                  autocomplete='street-address'
+                  placeholder='Օրինակ՝ Երևան, Արաբկիր'
+                  minlength='5'
+                  maxlength='160'
+                  aria-describedby='address-help analysis-status'
+                  required
+                />
+                <button class='button button--navy' type='submit'>Գտնել հասցեն</button>
+              </div>
+              <small id='address-help' class='field-help'>Այս քայլը միայն գտնում է քարտեզի կետը․ այն չի որոշում տանիքի անկյունը, մակերեսը կամ ստվերումը։</small>
+              <button class='text-button address-manual-point' type='button' data-location-manual-start>
+                Ընտրել կետ քարտեզի վրա
+              </button>
+            </form>
+            <section class='product-stage' data-location-stage hidden aria-labelledby='location-stage-title'>
+              <p class='eyebrow'>Օբյեկտի տեղադրությունը</p>
+              <h2 id='location-stage-title'>Սա՞ է ձեր օբյեկտը։</h2>
+              <p data-location-message>Հասցեն օգտագործվում է միայն քարտեզի կետը գտնելու համար։ Հաստատեք գտնված օբյեկտը կամ նշեք կետը ձեռքով։</p>
+              <p class='location-result'><span>Գտնված հասցե</span><strong
+                  data-location-address
+                ></strong><small data-location-coordinates></small></p>
+              <div class='location-candidates' data-location-candidates hidden></div>
+              <div class='flow-actions'><button
+                  class='button button--navy'
+                  type='button'
+                  data-location-confirm
+                >Հաստատել օբյեկտը</button><button
+                  class='button button--outline'
+                  type='button'
+                  data-location-manual
+                >Ընտրել կետ քարտեզի վրա</button></div>
+            </section>
+            <section class='product-stage roof-editor' data-roof-stage hidden aria-labelledby='roof-stage-title'>
+              <p class='eyebrow'>Տանիքի ուրվագիծ</p>
+              <h2 id='roof-stage-title'>Ուրվագծեք տանիքի հասանելի հատվածը և նշեք լանջի իրական պարամետրերը՝ նախնական գնահատման համար։</h2>
+              <p data-roof-message>Սկզբում հաստատեք օբյեկտը կամ ընտրեք կետը քարտեզի վրա։</p>
+              <div class='flow-actions'><button
+                  class='button button--navy'
+                  type='button'
+                  data-roof-start
+                >Սկսել ուրվագիծը</button><button
+                  class='button button--outline'
+                  type='button'
+                  data-roof-add-center
+                >Ավելացնել կետը քարտեզի կենտրոնում</button><button
+                  class='button button--outline'
+                  type='button'
+                  data-roof-undo
+                >Հետարկել վերջին կետը</button><button
+                  class='button button--outline'
+                  type='button'
+                  data-roof-reset
+                >Մաքրել ուրվագիծը</button></div>
+              <div class='roof-editor-controls'><label for='roof-orientation'>Տանիքի լանջի ուղղություն<select
+                    id='roof-orientation'
+                    data-roof-orientation
+                  ><option value='unknown' selected>Դեռ չգիտեմ</option><option value='180'>Հարավ</option><option
+                      value='225'
+                    >Հարավ-արևմուտք</option><option value='135'
+                    >Հարավ-արևելք</option><option value='90'
+                    >Արևելք</option><option value='270'
+                    >Արևմուտք</option><option value='0'
+                    >Հյուսիս</option><option value='custom'>Այլ</option></select></label><label
+                  data-roof-orientation-custom
+                  hidden
+                  for='roof-orientation-custom'
+                >Ձեր ուղղվածությունը (0° &#x3D; հյուսիս, 180° &#x3D; հարավ)<input
+                    id='roof-orientation-custom'
+                    type='number'
+                    min='0'
+                    max='359.999'
+                    step='1'
+                    inputmode='decimal'
+                    aria-describedby='roof-orientation-custom-help'
+                    data-roof-orientation-custom-input
+                  /><small id='roof-orientation-custom-help'>Մուտքագրեք կողմնացույցի անկյունը 0-ից 359°։</small></label><label
+                  for='roof-tilt'
+                >Այս լանջի թեքություն<input
+                    id='roof-tilt'
+                    type='number'
+                    min='0'
+                    max='90'
+                    step='1'
+                    aria-describedby='roof-tilt-help'
+                    data-roof-tilt
+                  /><small id='roof-tilt-help'>Նշեք մոտավոր անկյունը միայն եթե հայտնի է․ այն հասցեով չի որոշվում։</small></label></div>
+              <figure class='roof-angle-preview' aria-labelledby='roof-angle-preview-title'>
+                <figcaption id='roof-angle-preview-title'>Տանիքի մուտքագրված պարամետրերի տեսողական ստուգում</figcaption>
+                <div class='roof-angle-preview__grid'>
+                  <svg class='roof-angle-preview__compass' viewBox='0 0 200 200' aria-hidden='true' focusable='false'>
+                    <circle cx='100' cy='100' r='73'></circle><path d='M100 21V179M21 100H179'></path><text x='100' y='15'>N</text><text x='187' y='105'>E</text><text x='100' y='196'>S</text><text x='7' y='105'>W</text><g data-roof-preview-arrow transform='rotate(180 100 100)'><path d='M100 34 88 84h24z'></path><path d='M100 166 88 116h24z'></path></g>
+                  </svg>
+                  <dl><div><dt>Լանջի ուղղություն</dt><dd data-roof-preview-orientation>—</dd></div><div><dt>Լանջի թեքություն</dt><dd data-roof-preview-tilt>—</dd></div></dl>
+                </div>
+                <p>Սլաքը ցույց է տալիս ձեր մուտքագրած լանջի ուղղությունը։ Այն տարբերվում է վերևում տրված ազատ կանգնած համակարգի PVGIS ուղեցույցից։</p>
+              </figure>
+              <fieldset class='consumption-inputs' data-consumption-inputs>
+                <legend>Էլեկտրաէներգիայի սպառում</legend>
+                <p>Սա անհրաժեշտ է միայն համակարգի հզորության, բյուջեի և խնայողության համար, ոչ հասցե կամ կետի ներուժ գտնելու համար։</p>
+                <div class='consumption-modes' role='radiogroup'>
+                  <label><input type='radio' name='consumption-mode' value='bill' checked /><span
+                    >Միջին հաշիվ</span></label>
+                  <label><input type='radio' name='consumption-mode' value='usage' /><span
+                    >Միջին սպառում</span></label>
+                  <label><input type='radio' name='consumption-mode' value='monthly' /><span
+                    >Ամսական պրոֆիլ</span></label>
+                </div>
+                <div class='consumption-panel' data-consumption-panel='bill'>
+                  <label for='consumption-bill'>Էլեկտրաէներգիայի միջին հաշիվ</label>
+                  <div class='input-with-unit'><input
+                      id='consumption-bill'
+                      type='number'
+                      min='1'
+                      step='1'
+                      inputmode='decimal'
+                      data-consumption-bill
+                    /><span>֏ ամսական</span></div>
+                  <small>Մուտքագրեք ամսական միջին գումարը դրամով։</small>
+                </div>
+                <div class='consumption-panel' data-consumption-panel='usage' hidden>
+                  <label for='consumption-usage'>Միջին ամսական սպառում</label>
+                  <div class='input-with-unit'><input
+                      id='consumption-usage'
+                      type='number'
+                      min='1'
+                      step='1'
+                      inputmode='decimal'
+                      data-consumption-usage
+                    /><span>kWh ամսական</span></div>
+                  <small>Մուտքագրեք ամսական միջին սպառումը kWh-ով։</small>
+                </div>
+                <div class='consumption-panel consumption-panel--months' data-consumption-panel='monthly' hidden>
+                  <p>Սպառումը 12 ամսվա ընթացքում</p>
+                  <div class='monthly-consumption-grid'><label
+                      ><span>Հնվ</span><input
+                        type='number'
+                        min='0'
+                        step='1'
+                        inputmode='decimal'
+                        aria-label='Հունվար'
+                        data-consumption-month
+                      /></label><label
+                      ><span>Փտր</span><input
+                        type='number'
+                        min='0'
+                        step='1'
+                        inputmode='decimal'
+                        aria-label='Փետրվար'
+                        data-consumption-month
+                      /></label><label
+                      ><span>Մրտ</span><input
+                        type='number'
+                        min='0'
+                        step='1'
+                        inputmode='decimal'
+                        aria-label='Մարտ'
+                        data-consumption-month
+                      /></label><label
+                      ><span>Ապր</span><input
+                        type='number'
+                        min='0'
+                        step='1'
+                        inputmode='decimal'
+                        aria-label='Ապրիլ'
+                        data-consumption-month
+                      /></label><label
+                      ><span>Մյս</span><input
+                        type='number'
+                        min='0'
+                        step='1'
+                        inputmode='decimal'
+                        aria-label='Մայիս'
+                        data-consumption-month
+                      /></label><label
+                      ><span>Հնս</span><input
+                        type='number'
+                        min='0'
+                        step='1'
+                        inputmode='decimal'
+                        aria-label='Հունիս'
+                        data-consumption-month
+                      /></label><label
+                      ><span>Հլս</span><input
+                        type='number'
+                        min='0'
+                        step='1'
+                        inputmode='decimal'
+                        aria-label='Հուլիս'
+                        data-consumption-month
+                      /></label><label
+                      ><span>Օգս</span><input
+                        type='number'
+                        min='0'
+                        step='1'
+                        inputmode='decimal'
+                        aria-label='Օգոստոս'
+                        data-consumption-month
+                      /></label><label
+                      ><span>Սեպ</span><input
+                        type='number'
+                        min='0'
+                        step='1'
+                        inputmode='decimal'
+                        aria-label='Սեպտեմբեր'
+                        data-consumption-month
+                      /></label><label
+                      ><span>Հոկ</span><input
+                        type='number'
+                        min='0'
+                        step='1'
+                        inputmode='decimal'
+                        aria-label='Հոկտեմբեր'
+                        data-consumption-month
+                      /></label><label
+                      ><span>Նոյ</span><input
+                        type='number'
+                        min='0'
+                        step='1'
+                        inputmode='decimal'
+                        aria-label='Նոյեմբեր'
+                        data-consumption-month
+                      /></label><label
+                      ><span>Դեկ</span><input
+                        type='number'
+                        min='0'
+                        step='1'
+                        inputmode='decimal'
+                        aria-label='Դեկտեմբեր'
+                        data-consumption-month
+                      /></label></div>
+                  <small>Եթե տվյալները հասանելի են, մուտքագրեք յուրաքանչյուր ամսվա kWh-ը։</small>
+                </div>
+                <div class='manual-tariff'>
+                  <label for='consumption-tariff'>Սակագինը ձեր հաշվից</label>
+                  <div class='input-with-unit'><input
+                      id='consumption-tariff'
+                      type='number'
+                      min='0.01'
+                      max='1000'
+                      step='0.01'
+                      inputmode='decimal'
+                      aria-describedby='consumption-tariff-help'
+                      data-consumption-tariff
+                    /><span>֏ / kWh</span></div>
+                  <small id='consumption-tariff-help'>kWh-ի համար պարտադիր չէ։ Դրամով հաշիվը kWh-ի փոխարկելու համար անհրաժեշտ է, իսկ Passport-ում կնշվի որպես ձեր մուտքագրած տվյալ։</small>
+                </div>
+                <p class='consumption-total'><span>Հաշվարկային տարեկան սպառում</span><output
+                    data-consumption-annual
+                  >—</output> kWh</p>
+              </fieldset>
+              <p class='roof-editor__summary'><span data-roof-points>Ուրվագծում կետերի քանակը՝ {count}</span><strong
+                  data-roof-area
+                >—</strong></p>
+              <div class='roof-nudge-controls' data-roof-nudge-controls hidden><label
+                  for='roof-point-select'
+                >Ընտրել {index}-րդ կետը<select id='roof-point-select' data-roof-point-select></select></label><div
+                  ><button type='button' data-roof-nudge='north' aria-label='Տեղաշարժել կետը դեպի հյուսիս'>↑</button><button
+                    type='button'
+                    data-roof-nudge='west'
+                    aria-label='Տեղաշարժել կետը դեպի արևմուտք'
+                  >←</button><button type='button' data-roof-nudge='east' aria-label='Տեղաշարժել կետը դեպի արևելք'>→</button><button
+                    type='button'
+                    data-roof-nudge='south'
+                    aria-label='Տեղաշարժել կետը դեպի հարավ'
+                  >↓</button><button type='button' data-roof-remove>Հեռացնել կետը</button></div></div>
+              <button class='button' type='button' data-roof-finish disabled>Ավարտել ուրվագիծը</button>
+            </section>
+            <div class='upload-block' data-file-drop data-optional-upload hidden>
+              <label class='upload-control' for='bill-file'>
+                <span class='upload-icon' aria-hidden='true'><svg class='inline-icon'><use
+                      href='/icons.svg#file'
+                    ></use></svg></span>
+                <span><strong>Կցեք էլեկտրաէներգիայի հաշիվը (ընտրովի)</strong><small>Ընտրեք կամ քաշեք ֆայլը այստեղ
+                    ·
+                    PDF, JPG կամ PNG՝ մինչև 10 ՄԲ։ Ֆայլը չի ուղարկվում սերվեր և ավտոմատ չի կարդացվում․ արժեքները մուտքագրեք ձեռքով։</small></span>
+                <input
+                  id='bill-file'
+                  class='upload-control__input'
+                  type='file'
+                  accept='.pdf,.jpg,.jpeg,.png,application/pdf,image/jpeg,image/png'
+                  aria-describedby='file-status'
+                />
+              </label>
+              <div class='file-selection' data-file-meta hidden>
+                <span data-file-name></span>
+                <button
+                  class='text-button'
+                  type='button'
+                  data-file-remove
+                >Հեռացնել ֆայլը</button>
+              </div>
+            </div>
+            <p class='form-status' id='analysis-status' data-analysis-status aria-live='polite'></p>
+            <p class='form-status' id='file-status' data-file-status aria-live='polite'></p>
+            <noscript><p class='noscript-note' id='manual-consultation'>Հաշվիչն աշխատում է JavaScript-ով։ Ձեռքով խորհրդատվության համար զանգահարեք ինժեներին՝ <a
+                  href='tel:+37491095950'
+                >+374 91 095 950</a></p></noscript>
+            <ul class='hero-benefits' role='list'>
+              <li><svg class='inline-icon' aria-hidden='true'><use
+                      href='/icons.svg#check'
+                    ></use></svg>Առանց զանգի և պարտավորության</li><li><svg class='inline-icon' aria-hidden='true'><use
+                      href='/icons.svg#check'
+                    ></use></svg>Հաստատեք օբյեկտը քարտեզի վրա</li><li><svg class='inline-icon' aria-hidden='true'><use
+                      href='/icons.svg#check'
+                    ></use></svg>Նշեք սպառման տվյալները</li><li><svg class='inline-icon' aria-hidden='true'><use
+                      href='/icons.svg#check'
+                    ></use></svg>Տեսեք աղբյուրներն ու ենթադրությունները</li>
+            </ul>
+            <p class='hero-disclosure'>Նախնական արդյունքը պահանջում է օբյեկտի հաստատում և չի փոխարինում տեղազննմանը, ինժեներական նախագծին կամ առևտրային առաջարկին։</p>
           </div>
-          <aside class='tool-reference' aria-label='Solar Passport'>
-              <p class='eyebrow'>Solar Passport</p>
-              <strong>Այս էջը չի ստեղծում արտադրության, խնայողության կամ արժեքի արդյունք։ Դրանք պահանջում են հաստատված կետ, տանիքի տվյալներ և PVGIS-ի պատասխան։</strong>
-          </aside>
+
+          <div class='roof-product' data-analysis-region aria-label='Տանիքի նախնական գնահատում'>
+            <figure class='roof-visual' data-map-shell>
+              <picture>
+                <source
+                  type='image/avif'
+                  srcset='/images/roof-scan-480.avif 480w, /images/roof-scan-768.avif 768w, /images/roof-scan-1200.avif 1200w, /images/roof-scan-1600.avif 1600w'
+                  sizes='(max-width: 760px) 100vw, 50vw'
+                />
+                <source
+                  type='image/webp'
+                  srcset='/images/roof-scan-480.webp 480w, /images/roof-scan-768.webp 768w, /images/roof-scan-1200.webp 1200w, /images/roof-scan-1600.webp 1600w'
+                  sizes='(max-width: 760px) 100vw, 50vw'
+                />
+                <img
+                  src='/images/roof-scan-1200.jpg'
+                  srcset='/images/roof-scan-480.jpg 480w, /images/roof-scan-768.jpg 768w, /images/roof-scan-1200.jpg 1200w, /images/roof-scan-1600.jpg 1600w'
+                  sizes='(max-width: 760px) 100vw, 50vw'
+                  width='1600'
+                  height='1067'
+                  alt='Տանիքի պատկերազարդող օդային պատկեր՝ մինչև օբյեկտի հաստատումը'
+                  fetchpriority='high'
+                  decoding='async'
+                />
+              </picture>
+              <div class='roof-shade' aria-hidden='true'></div>
+              <svg class='roof-overlay' viewBox='0 0 1000 660' aria-hidden='true' focusable='false'>
+                <polygon points='295,125 670,214 616,499 239,410' class='roof-boundary'></polygon>
+                <g class='panel-grid'>
+                  <rect x='330' y='195' width='66' height='49'></rect><rect
+                    x='400'
+                    y='212'
+                    width='66'
+                    height='49'
+                  ></rect><rect x='470' y='229' width='66' height='49'></rect><rect
+                    x='540'
+                    y='246'
+                    width='66'
+                    height='49'
+                  ></rect>
+                  <rect x='314' y='261' width='66' height='49'></rect><rect
+                    x='384'
+                    y='278'
+                    width='66'
+                    height='49'
+                  ></rect><rect x='454' y='295' width='66' height='49'></rect><rect
+                    x='524'
+                    y='312'
+                    width='66'
+                    height='49'
+                  ></rect>
+                  <rect x='298' y='327' width='66' height='49'></rect><rect
+                    x='368'
+                    y='344'
+                    width='66'
+                    height='49'
+                  ></rect><rect x='438' y='361' width='66' height='49'></rect><rect
+                    x='508'
+                    y='378'
+                    width='66'
+                    height='49'
+                  ></rect>
+                  <rect x='282' y='393' width='66' height='49'></rect><rect
+                    x='352'
+                    y='410'
+                    width='66'
+                    height='49'
+                  ></rect><rect x='422' y='427' width='66' height='49'></rect><rect
+                    x='492'
+                    y='444'
+                    width='66'
+                    height='49'
+                  ></rect>
+                </g>
+              </svg>
+              <figcaption class='map-caption'><span class='demo-badge'>Ստատիկ ցուցադրական պահուստային տարբերակ</span><span
+                >Այս ստատիկ պատկերը և վահանակների դասավորությունը կիրառվում են միայն որպես նշված պահուստային տարբերակ՝ մինչև օբյեկտի հաստատումը։</span></figcaption>
+              <div
+                class='property-map'
+                data-property-map
+                hidden
+                aria-label='Նշել կետը ձեռքով'
+              ></div>
+              <p class='property-map-note' data-property-map-note hidden></p>
+              <aside class='roof-info'>
+                <strong data-analysis-location>Պատկերազարդող տեղադրություն</strong>
+                <dl>
+                  <div><dt>Տանիքի մակերես</dt><dd
+                      data-analysis-roof='area'
+                    >Օրինակ՝ 124 մ²</dd></div>
+                  <div><dt>Կողմնորոշում</dt><dd
+                      data-analysis-roof='orientation'
+                    >Օրինակ՝ հարավ-արևմուտք (236°)</dd></div>
+                  <div><dt>Թեքություն</dt><dd
+                      data-analysis-roof='tilt'
+                    >Օրինակ՝ 32°</dd></div>
+                  <div class='success' data-analysis-score-row><dt>Solar Score</dt><dd>Միայն օրինակ</dd></div>
+                </dl>
+              </aside>
+            </figure>
+            <section class='site-potential' data-site-potential hidden aria-live='polite' aria-labelledby='site-potential-title' tabindex='-1'>
+              <p class='eyebrow'>Քայլ 2 · Տեղանքի ներուժ</p>
+              <h2 id='site-potential-title'>Արևային ուղեցույց ընտրված կետի համար</h2>
+              <p class='site-potential__status' data-site-potential-status></p>
+              <div class='site-potential__values' data-site-potential-values hidden>
+                <svg class='site-potential__compass' viewBox='0 0 200 200' aria-hidden='true' focusable='false'>
+                  <circle cx='100' cy='100' r='73'></circle><path d='M100 21V179M21 100H179'></path><text x='100' y='15'>N</text><text x='187' y='105'>E</text><text x='100' y='196'>S</text><text x='7' y='105'>W</text><g data-site-potential-arrow><path d='M100 34 88 84h24z'></path><path d='M100 166 88 116h24z'></path></g>
+                </svg>
+                <dl><div><dt>Սպասվող տարեկան արտադրություն՝ 1 kWp-ի համար</dt><dd data-site-potential-yield>—</dd></div><div><dt>Օպտիմալ ուղղություն ազատ կանգնած համակարգի համար</dt><dd data-site-potential-orientation>—</dd></div><div><dt>Օպտիմալ թեքություն ազատ կանգնած համակարգի համար</dt><dd data-site-potential-tilt>—</dd></div></dl>
+              </div>
+              <p class='site-potential__source' data-site-potential-source>Աղբյուր՝ PVGIS · համակարգի կորուստների նախնական ենթադրություն՝ 14%</p>
+              <p>Սա PVGIS-ի ուղեցույցն է ընտրված կետում ազատ կանգնած ֆիքսված համակարգի համար։ Այն ձեր տանիքի չափագրում կամ դրա վրա տեղադրման առաջարկ չէ։</p>
+              <p>Կոնկրետ տանիքի ուղղությունը, թեքությունը, մակերեսը, ստվերումը և կրողունակությունը պետք է նշվեն ներքևում և հաստատվեն ինժեների կողմից։</p>
+              <div class='flow-actions'><button class='button button--navy' type='button' data-site-potential-continue>Անցնել իմ տանիքի հաշվարկին</button><button class='button button--outline' type='button' data-site-potential-retry hidden>Կրկնել PVGIS-ի ներուժը</button></div>
+            </section>
+            <div class='result-panel' data-result-panel hidden>
+
+              <p data-analysis-summary>Նախնական արդյունք՝ պահանջվում է հաստատում</p>
+              <dl>
+                  <div><dt>Տարեկան արտադրություն</dt><dd data-analysis='generation'>—
+                      <small>kWh</small></dd></div>
+                  <div><dt>Տարեկան խնայողություն</dt><dd data-analysis='savings'>—
+                      <small>֏</small></dd></div>
+                  <div><dt>Պարզ վերադարձի ժամկետ</dt><dd data-analysis='payback'>—
+                      <small>տարի</small></dd></div>
+                  <div><dt>Սպառման ծածկում</dt><dd data-analysis='coverage'>—
+                      <small>%</small></dd></div>
+              </dl>
+              <p class='commercial-estimate' data-commercial-estimate hidden></p>
+              <a href='#passport'>Դիտել ամբողջ հաշվարկը <span aria-hidden='true'>→</span></a>
+            </div>
+          </div>
         </div>
       </section>
 
-        <section class='tool-workspace section' aria-labelledby='calculator-form-title'>
-          <div class='container tool-workspace__grid'>
-            <form class='tool-form' data-quick-calculator novalidate>
-              <h2 id='calculator-form-title'>Սպառման տվյալներ</h2>
-              <label for='quick-address'>Օբյեկտի հասցե</label>
-              <input
-                id='quick-address'
-                name='address'
-                autocomplete='street-address'
-                maxlength='160'
-                placeholder='Օրինակ՝ Աբովյան, Հայաստան'
-              />
-              <small>Ընտրովի է այս քայլում․ հաջորդ էջում կարող եք որոնել կամ կետ դնել քարտեզի վրա։</small>
 
-              <fieldset>
-                <legend>Ինչ տվյալ ունեք</legend>
-                <label for='quick-monthly-kwh'>Միջին ամսական սպառում</label>
-                <div class='tool-input-unit'>
-                  <input
-                    id='quick-monthly-kwh'
-                    name='averageMonthlyKwh'
-                    type='number'
-                    min='0.01'
-                    max='100000'
-                    step='0.01'
-                    inputmode='decimal'
-                    aria-describedby='quick-monthly-kwh-help'
-                  />
-                  <span>kWh / ամիս</span>
-                </div>
-                <small id='quick-monthly-kwh-help'>Եթե ձեր հաշվում տեսնում եք kWh-ը, մուտքագրեք այն այստեղ։</small>
-
-                <p class='tool-or' aria-hidden='true'>կամ</p>
-
-                <label for='quick-monthly-bill'>Միջին ամսական հաշիվ</label>
-                <div class='tool-input-unit'>
-                  <input
-                    id='quick-monthly-bill'
-                    name='averageMonthlyBillAmd'
-                    type='number'
-                    min='1'
-                    max='100000000'
-                    step='1'
-                    inputmode='decimal'
-                    aria-describedby='quick-monthly-bill-help'
-                  />
-                  <span>֏ / ամիս</span>
-                </div>
-                <small id='quick-monthly-bill-help'>Եթե գիտեք միայն հաշվի գումարը, նշեք նաև սակագինը։</small>
-
-                <label for='quick-tariff'>Սակագին ձեր հաշվից</label>
-                <div class='tool-input-unit'>
-                  <input
-                    id='quick-tariff'
-                    name='tariff'
-                    type='number'
-                    min='0.01'
-                    max='1000'
-                    step='0.01'
-                    inputmode='decimal'
-                    aria-describedby='quick-tariff-help'
-                  />
-                  <span>֏ / kWh</span>
-                </div>
-                <small id='quick-tariff-help'>Օգտագործվում է միայն հաշիվը kWh-ի փոխարկելու և հետագա խնայողությունը բացատրելու համար։</small>
-              </fieldset>
-
-              <p class='form-status' data-tool-status aria-live='polite' role='status'></p>
-              <button class='button button--navy' type='submit'>Շարունակել կետի և տանիքի հաստատմանը</button>
-              <noscript>
-                <div class='tool-no-js'>
-                  <strong>Դիտարկչում JavaScript-ը միացված չէ</strong>
-                  <p>Բացեք լիարժեք հաշվիչը՝ ձեռքով մուտքագրելու սպառումը, տեղադրության կետը և տանիքի ուրվագիծը։</p>
-                  <a class='button' href='/#calculator'>Բացել լիարժեք հաշվիչը</a>
-                </div>
-              </noscript>
-            </form>
-            <aside class='tool-side-note'>
-              <h2>Solar Passport</h2>
-              <p>Այս էջը չի ստեղծում արտադրության, խնայողության կամ արժեքի արդյունք։ Դրանք պահանջում են հաստատված կետ, տանիքի տվյալներ և PVGIS-ի պատասխան։</p>
-              <a href='/#calculator'>Բացել լիարժեք հաշվիչը</a>
-            </aside>
+      <section
+        class='passport section section--soft'
+        id='passport'
+        aria-labelledby='passport-title'
+      >
+        <div class='container passport-grid'>
+          <div class='passport-copy'>
+            <p class='eyebrow'>Ձեր օբյեկտի թվային հաշվետվությունը</p>
+            <h2 id='passport-title'>Ձեր անհատական Solar Passport-ը</h2>
+            <p>Տանիքի քարտեզը, համակարգի պարամետրերը, ամսական արտադրությունն ու պարզ ֆինանսական մոդելը՝ մեկ հաշվետվությունում։</p>
+            <ul class='check-list' role='list'><li><svg
+                    class='inline-icon'
+                    aria-hidden='true'
+                  ><use href='/icons.svg#check'></use></svg>Տանիքի քարտեզ և վահանակների օրինակային դասավորություն</li><li><svg
+                    class='inline-icon'
+                    aria-hidden='true'
+                  ><use href='/icons.svg#check'></use></svg>Ամսական արտադրություն</li><li><svg
+                    class='inline-icon'
+                    aria-hidden='true'
+                  ><use href='/icons.svg#check'></use></svg>25-ամյա ֆինանսական մոդել</li><li><svg
+                    class='inline-icon'
+                    aria-hidden='true'
+                  ><use href='/icons.svg#check'></use></svg>Առաջարկվող սարքավորումներ</li><li><svg
+                    class='inline-icon'
+                    aria-hidden='true'
+                  ><use href='/icons.svg#check'></use></svg>Ենթադրություններ և հաշվարկի սահմանափակումներ</li></ul>
+            <a
+              class='button button--outline'
+              href='/calculator/'
+              data-open-passport
+            >Դիտել հաշվետվության օրինակը</a>
+            <p class='passport-persistence' data-passport-persistence hidden><strong
+              >Solar Passport-ը պահվում է այս դիտարկիչում</strong><span>Այս նախնական Passport-ը գոյություն ունի միայն ընթացիկ սեսիայի հիշողության մեջ։</span><span
+                >Մշտական հղումն ու PDF-ը հասանելի կլինեն պահոցը միացնելուց հետո։</span></p>
           </div>
+          <article class='passport-card' aria-label='Solar Passport-ը կհայտնվի հաշվարկից հետո'>
+            <div class='passport-card__top'><span class='wordmark wordmark--small'><span
+              >YOUR</span><strong>ENERGY</strong></span><span
+                class='pill'
+                data-passport-badge
+              >Հաշվարկից հետո</span></div>
+            <p class='passport-label'>SOLAR PASSPORT</p>
+            <h3 data-analysis-location>Կերևա օբյեկտը հաստատելուց հետո</h3>
+            <p class='passport-date' data-passport-date>Ստեղծվում է ընթացիկ սեսիայում</p>
+            <div class='passport-card__placeholder' aria-hidden='true'></div>
+            <dl class='passport-specs'>
+              <div><dt>Առաջարկվող համակարգ</dt><dd
+                  data-analysis='capacity'
+                >—</dd></div>
+              <div><dt data-passport-source-label>Աղբյուր՝ սպասվում է PVGIS-ի պատասխան</dt><dd
+                  data-analysis='panels'
+                >—</dd></div>
+            </dl>
+          </article>
+          <div class='generation-card' data-chart-card>
+            <h3>Ամսական արտադրություն, kWh</h3>
+            <p id='generation-chart-description'>Ամսական արտադրությունը կերևա PVGIS-ի հաշվարկից հետո։</p>
+            <div class='bar-chart' aria-describedby='generation-chart-description'>
+                <button
+                  class='chart-bar'
+                  type='button'
+                  style='--bar-height: 0%;'
+                  title='Հնվ · Հունվար: — kWh'
+                  aria-label='Հնվ · Հունվար: — kWh'
+                  data-chart-bar
+                  data-short='Հնվ'
+                  data-month='Հունվար'
+                  data-value='—'
+                ><span class='chart-bar__fill'></span><span>Հնվ</span></button>
+                <button
+                  class='chart-bar'
+                  type='button'
+                  style='--bar-height: 0%;'
+                  title='Փտր · Փետրվար: — kWh'
+                  aria-label='Փտր · Փետրվար: — kWh'
+                  data-chart-bar
+                  data-short='Փտր'
+                  data-month='Փետրվար'
+                  data-value='—'
+                ><span class='chart-bar__fill'></span><span>Փտր</span></button>
+                <button
+                  class='chart-bar'
+                  type='button'
+                  style='--bar-height: 0%;'
+                  title='Մրտ · Մարտ: — kWh'
+                  aria-label='Մրտ · Մարտ: — kWh'
+                  data-chart-bar
+                  data-short='Մրտ'
+                  data-month='Մարտ'
+                  data-value='—'
+                ><span class='chart-bar__fill'></span><span>Մրտ</span></button>
+                <button
+                  class='chart-bar'
+                  type='button'
+                  style='--bar-height: 0%;'
+                  title='Ապր · Ապրիլ: — kWh'
+                  aria-label='Ապր · Ապրիլ: — kWh'
+                  data-chart-bar
+                  data-short='Ապր'
+                  data-month='Ապրիլ'
+                  data-value='—'
+                ><span class='chart-bar__fill'></span><span>Ապր</span></button>
+                <button
+                  class='chart-bar'
+                  type='button'
+                  style='--bar-height: 0%;'
+                  title='Մյս · Մայիս: — kWh'
+                  aria-label='Մյս · Մայիս: — kWh'
+                  data-chart-bar
+                  data-short='Մյս'
+                  data-month='Մայիս'
+                  data-value='—'
+                ><span class='chart-bar__fill'></span><span>Մյս</span></button>
+                <button
+                  class='chart-bar'
+                  type='button'
+                  style='--bar-height: 0%;'
+                  title='Հնս · Հունիս: — kWh'
+                  aria-label='Հնս · Հունիս: — kWh'
+                  data-chart-bar
+                  data-short='Հնս'
+                  data-month='Հունիս'
+                  data-value='—'
+                ><span class='chart-bar__fill'></span><span>Հնս</span></button>
+                <button
+                  class='chart-bar'
+                  type='button'
+                  style='--bar-height: 0%;'
+                  title='Հլս · Հուլիս: — kWh'
+                  aria-label='Հլս · Հուլիս: — kWh'
+                  data-chart-bar
+                  data-short='Հլս'
+                  data-month='Հուլիս'
+                  data-value='—'
+                ><span class='chart-bar__fill'></span><span>Հլս</span></button>
+                <button
+                  class='chart-bar'
+                  type='button'
+                  style='--bar-height: 0%;'
+                  title='Օգս · Օգոստոս: — kWh'
+                  aria-label='Օգս · Օգոստոս: — kWh'
+                  data-chart-bar
+                  data-short='Օգս'
+                  data-month='Օգոստոս'
+                  data-value='—'
+                ><span class='chart-bar__fill'></span><span>Օգս</span></button>
+                <button
+                  class='chart-bar'
+                  type='button'
+                  style='--bar-height: 0%;'
+                  title='Սեպ · Սեպտեմբեր: — kWh'
+                  aria-label='Սեպ · Սեպտեմբեր: — kWh'
+                  data-chart-bar
+                  data-short='Սեպ'
+                  data-month='Սեպտեմբեր'
+                  data-value='—'
+                ><span class='chart-bar__fill'></span><span>Սեպ</span></button>
+                <button
+                  class='chart-bar'
+                  type='button'
+                  style='--bar-height: 0%;'
+                  title='Հոկ · Հոկտեմբեր: — kWh'
+                  aria-label='Հոկ · Հոկտեմբեր: — kWh'
+                  data-chart-bar
+                  data-short='Հոկ'
+                  data-month='Հոկտեմբեր'
+                  data-value='—'
+                ><span class='chart-bar__fill'></span><span>Հոկ</span></button>
+                <button
+                  class='chart-bar'
+                  type='button'
+                  style='--bar-height: 0%;'
+                  title='Նոյ · Նոյեմբեր: — kWh'
+                  aria-label='Նոյ · Նոյեմբեր: — kWh'
+                  data-chart-bar
+                  data-short='Նոյ'
+                  data-month='Նոյեմբեր'
+                  data-value='—'
+                ><span class='chart-bar__fill'></span><span>Նոյ</span></button>
+                <button
+                  class='chart-bar'
+                  type='button'
+                  style='--bar-height: 0%;'
+                  title='Դեկ · Դեկտեմբեր: — kWh'
+                  aria-label='Դեկ · Դեկտեմբեր: — kWh'
+                  data-chart-bar
+                  data-short='Դեկ'
+                  data-month='Դեկտեմբեր'
+                  data-value='—'
+                ><span class='chart-bar__fill'></span><span>Դեկ</span></button>
+            </div>
+            <details class='chart-data'><summary>Ամսական արտադրության թվային տվյալներ</summary><table><caption
+                  class='visually-hidden'
+                >Ամսական արտադրության թվային տվյալներ</caption><thead><tr><th scope='col'>Ամիս</th><th scope='col'>kWh</th></tr></thead><tbody
+                ><tr><td>Հունվար</td><td
+                      data-chart-value>—</td></tr><tr><td>Փետրվար</td><td
+                      data-chart-value>—</td></tr><tr><td>Մարտ</td><td
+                      data-chart-value>—</td></tr><tr><td>Ապրիլ</td><td
+                      data-chart-value>—</td></tr><tr><td>Մայիս</td><td
+                      data-chart-value>—</td></tr><tr><td>Հունիս</td><td
+                      data-chart-value>—</td></tr><tr><td>Հուլիս</td><td
+                      data-chart-value>—</td></tr><tr><td>Օգոստոս</td><td
+                      data-chart-value>—</td></tr><tr><td>Սեպտեմբեր</td><td
+                      data-chart-value>—</td></tr><tr><td>Հոկտեմբեր</td><td
+                      data-chart-value>—</td></tr><tr><td>Նոյեմբեր</td><td
+                      data-chart-value>—</td></tr><tr><td>Դեկտեմբեր</td><td
+                      data-chart-value>—</td></tr></tbody></table></details>
+          </div>
+        </div>
+        <section class='analysis-ledger' data-analysis-ledger hidden aria-labelledby='analysis-ledger-title'>
+          <div><p class='eyebrow'>Նախնական վերլուծություն</p><h3
+              id='analysis-ledger-title'
+            >Ինչպես է հաշվարկվել</h3><p>Նախնական արդյունքի աղբյուրները, տարբերակները և ենթադրությունները։</p></div><div
+            class='analysis-ledger__confidence'
+          ><span>Գնահատման վստահելիություն</span><strong data-analysis-confidence></strong><p
+              data-analysis-confidence-detail
+            ></p></div><dl data-analysis-ledger-list></dl><div><h3
+              >Հաշվարկի ենթադրություններ</h3><ul data-analysis-assumptions></ul></div>
         </section>
+      </section>
+
+      <section class='lead-section section section--soft' data-lead-section hidden aria-labelledby='lead-title'>
+        <div class='container lead-grid'><div><p class='eyebrow'>YOURENERGY</p><h2
+              id='lead-title'
+            >Ուղարկել հաշվարկը ինժեներին</h2><p>Թողեք կապի տվյալներ, որպեսզի ինժեները կարողանա ճշտել օբյեկտի տվյալները։</p><p class='lead-fallback'><span
+              >Կամ զանգահարեք ինժեներին՝</span> <a href='tel:+37491095950'>+374 91 095 950</a></p><small>Տվյալները չեն փոխանցվում վերլուծական ծառայություններին։</small></div><form
+            class='lead-form'
+            data-lead-form
+            novalidate
+          ><label>Ձեր անունը<input name='name' autocomplete='name' /></label><label
+              >Հեռախոս<input name='phone' autocomplete='tel' inputmode='tel' /></label><label
+              >Էլեկտրոնային փոստ<input name='email' type='email' autocomplete='email' inputmode='email' /></label><label
+              >Մեկնաբանություն օբյեկտի վերաբերյալ <span>Ընտրովի</span><textarea
+                name='message'
+                rows='3'
+              ></textarea></label><label class='lead-consent'><input name='consent' type='checkbox' /><span
+              >Համաձայն եմ տվյալների մշակմանը՝ հարցմանը պատասխանելու համար։</span></label><button class='button' type='submit'>Ուղարկել հարցումը</button><p
+              class='form-status'
+              data-lead-status
+              aria-live='polite'
+            ></p></form></div>
+      </section>
+
+
+      <section class='solutions section' id='solutions' aria-labelledby='solutions-title'>
+        <div class='container'>
+          <div class='section-heading'><div><p class='eyebrow'>Լուծումներ</p><h2
+                id='solutions-title'
+              >3 օպտիմալ լուծում ձեր տան համար</h2></div><p>Համեմատեք մոտավոր հզորությունն ու արտադրությունը։ Նախնական բյուջեն կհայտնվի օբյեկտի վերլուծությունից հետո։</p></div>
+          <div class='solution-grid'>
+              <article class='solution-card ' data-analysis-scenario='0'>
+
+                <span class='solution-badge' data-analysis-scenario-live hidden>Ձեր հաստատված տվյալներով</span>
+                <p class='solution-index'>00</p><h3>Մեկնարկ</h3><p>Համեմատաբար փոքր նախնական ներդրում</p>
+                <dl><div><dt>kWp</dt><dd data-analysis-scenario-capacity data-static-value='—'>—</dd></div><div><dt>kWh</dt><dd
+                    data-analysis-scenario-generation data-static-value='—'>—</dd></div></dl>
+                <strong class='solution-price' data-analysis-scenario-price data-static-value='Նախնական բյուջե՝ վերլուծությունից հետո'>Նախնական բյուջե՝ վերլուծությունից հետո</strong>
+                <details><summary>Մանրամասներ</summary><ul><li
+                      >Ընտրված դասի 10–12 վահանակ</li><li
+                      >Օրինակային մակերես՝ 34–40 մ²</li><li
+                      >Ինվերտոր, մոնտաժ և հիմնական մոնիտորինգ</li></ul></details>
+                <a class='button button--outline' href='#calculator'>Հաշվել իմ տունը</a>
+              </article>
+              <article class='solution-card solution-card--popular' data-analysis-scenario='1'>
+                <span class='solution-badge' data-analysis-solution-badge>Հանրաճանաչ տարբերակ</span>
+                <span class='solution-badge' data-analysis-scenario-live hidden>Ձեր հաստատված տվյալներով</span>
+                <p class='solution-index'>01</p><h3>Օպտիմալ</h3><p>Գնի և օգուտի հավասարակշռված տարբերակ</p>
+                <dl><div><dt>kWp</dt><dd data-analysis-scenario-capacity data-static-value='—'>—</dd></div><div><dt>kWh</dt><dd
+                    data-analysis-scenario-generation data-static-value='—'>—</dd></div></dl>
+                <strong class='solution-price' data-analysis-scenario-price data-static-value='Նախնական բյուջե՝ վերլուծությունից հետո'>Նախնական բյուջե՝ վերլուծությունից հետո</strong>
+                <details><summary>Մանրամասներ</summary><ul><li
+                      >17 × 580 W վահանակ</li><li
+                      >Օրինակային մակերես՝ 54–62 մ²</li><li
+                      >Ինվերտոր, նախագծում, մոնտաժ և մոնիտորինգ</li></ul></details>
+                <a class='button ' href='#calculator'>Հաշվել իմ տունը</a>
+              </article>
+              <article class='solution-card ' data-analysis-scenario='2'>
+
+                <span class='solution-badge' data-analysis-scenario-live hidden>Ձեր հաստատված տվյալներով</span>
+                <p class='solution-index'>02</p><h3>Էներգետիկ անկախություն</h3><p>Առավելագույն ծածկում + կուտակիչ</p>
+                <dl><div><dt>kWp</dt><dd data-analysis-scenario-capacity data-static-value='—'>—</dd></div><div><dt>kWh</dt><dd
+                    data-analysis-scenario-generation data-static-value='—'>—</dd></div></dl>
+                <strong class='solution-price' data-analysis-scenario-price data-static-value='Պահանջում է առանձին հաշվարկ'>Պահանջում է առանձին հաշվարկ</strong>
+                <details><summary>Մանրամասներ</summary><ul><li
+                      >Ավելի մեծ հզորության համակարգ</li><li
+                      >10 kWh կուտակիչ՝ դեմո կազմով</li><li
+                      >Հիբրիդային ինվերտոր և պահուստային սցենարներ</li></ul></details>
+                <a class='button button--outline' href='#calculator'>Հաշվել իմ տունը</a>
+              </article>
+          </div>
+          <p class='section-disclosure' data-analysis-scenario-disclosure data-static-value='Վերջնական կազմը, արժեքն ու արդյունքը կախված են օբյեկտից և հաստատվում են տեղազննումից հետո։'>Վերջնական կազմը, արժեքն ու արդյունքը կախված են օբյեկտից և հաստատվում են տեղազննումից հետո։</p>
+        </div>
+      </section>
+
+
+      <section class='finance section' id='investment' aria-labelledby='finance-title'>
+        <div class='container finance-grid'>
+          <div class='finance-copy'><p class='eyebrow eyebrow--dark'>Ֆինանսական մոդել</p><h2
+              id='finance-title'
+            >Ներդրում, որն աշխատում է ամեն օր</h2><p>Ֆինանսական գրաֆիկը կհայտնվի միայն PVGIS-ի վերլուծությունից, մուտքագրված կամ հաստատված սակագնից և գործող գնացուցակից հետո։</p><ul
+              class='check-list check-list--dark'
+              role='list'
+            ><li><svg class='inline-icon' aria-hidden='true'><use
+                      href='/icons.svg#check'
+                    ></use></svg>Ցանցային սպառման նվազեցում</li><li><svg class='inline-icon' aria-hidden='true'><use
+                      href='/icons.svg#check'
+                    ></use></svg>Վահանակների ավելի քան 25 տարվա ծառայություն</li><li><svg class='inline-icon' aria-hidden='true'><use
+                      href='/icons.svg#check'
+                    ></use></svg>Ավելի մեծ էներգետիկ անկախություն</li><li><svg class='inline-icon' aria-hidden='true'><use
+                      href='/icons.svg#check'
+                    ></use></svg>Հստակ բանաձև՝ առանց թաքնված ենթադրությունների</li></ul></div>
+          <div class='finance-chart'><h3>Ինչպես է աճում զուտ արդյունքը</h3><svg
+              class='finance-line'
+              viewBox='0 0 650 250'
+              role='img'
+              aria-label='Ինչպես է աճում զուտ արդյունքը'
+              data-finance-chart
+              data-finance-title='Ինչպես է աճում զուտ արդյունքը'
+            ><path
+                data-finance-line-path
+                d=''
+                fill='none'
+                stroke='#f5bd18'
+                stroke-width='4'
+                stroke-linecap='round'
+              ></path><path
+                data-finance-baseline
+                d=''
+                fill='none'
+                stroke='rgba(255,255,255,.22)'
+                stroke-width='1'
+              ></path><circle data-finance-point cx='30' cy='192' r='6' fill='#f5bd18' visibility='hidden'></circle><circle
+                data-finance-point
+                cx='178'
+                cy='177'
+                r='6'
+                fill='#f5bd18'
+                visibility='hidden'
+              ></circle><circle data-finance-point cx='250' cy='143' r='6' fill='#f5bd18' visibility='hidden'></circle><circle
+                data-finance-point
+                cx='410'
+                cy='86'
+                r='6'
+                fill='#f5bd18'
+                visibility='hidden'
+              ></circle><circle data-finance-point cx='623' cy='26' r='6' fill='#f5bd18' visibility='hidden'></circle></svg><ol
+                class='finance-timeline'
+                role='list'
+            ><li><span data-analysis-timeline-year>Այսօր</span><strong
+                  data-analysis-timeline='0'
+                  >Վերլուծությունից հետո</strong></li><li><span data-analysis-timeline-year>5 տարի</span><strong
+                  data-analysis-timeline='1'
+                  >Վերլուծությունից հետո</strong></li><li><span data-analysis-timeline-year>10 տարի</span><strong
+                  data-analysis-timeline='2'
+                  >Վերլուծությունից հետո</strong></li><li><span data-analysis-timeline-year>25 տարի</span><strong
+                  data-analysis-timeline='3'
+                  >Վերլուծությունից հետո</strong></li></ol></div>
+          <div class='finance-included'><h3>Ինչ է ներառված ժամանակավոր նախնական գնի մեջ</h3><ul role='list'><li><svg class='inline-icon' aria-hidden='true'><use
+                      href='/icons.svg#check'
+                    ></use></svg>Արևային վահանակներ</li><li><svg class='inline-icon' aria-hidden='true'><use
+                      href='/icons.svg#check'
+                    ></use></svg>Ինվերտոր</li><li><svg class='inline-icon' aria-hidden='true'><use
+                      href='/icons.svg#check'
+                    ></use></svg>Կրեպեժ և ստանդարտ մոնտաժ</li><li><svg class='inline-icon' aria-hidden='true'><use
+                      href='/icons.svg#check'
+                    ></use></svg>Հիմնական միացում ցանցին</li><li><svg class='inline-icon' aria-hidden='true'><use
+                      href='/icons.svg#check'
+                    ></use></svg>ԱԱՀ-ն ու թույլտվությունները պահանջում են հաստատում</li><li><svg class='inline-icon' aria-hidden='true'><use
+                      href='/icons.svg#check'
+                    ></use></svg>Կուտակիչը, տանիքի վերանորոգումը և ոչ ստանդարտ էլեկտրական աշխատանքները ներառված չեն</li></ul></div>
+          <p class='finance-disclaimer' data-analysis-finance-disclaimer>Մինչև վերլուծությունը ֆինանսական արժեքներ չեն ցուցադրվում։ Մոդելը չի ներառում սակագնի աճ, դեգրադացիա, սպասարկում, վարկ, դիսկոնտավորում, հարկեր և ցանց արտահանման կանոններ։</p>
+        </div>
+      </section>
+
     </main>
 
-    <footer class='tool-footer'>
-      <div class='container'>
-        <p>YOURENERGY · բնակելի արևային համակարգերի նախնական, թափանցիկ գործիքներ Հայաստանում։</p>
-        <a href='tel:+37491095950'>+374 91 095 950</a>
-      </div>
-    </footer>
+      <footer class='tool-footer'>
+        <div class='container'>
+          <p>YOURENERGY · բնակելի արևային համակարգերի նախնական, թափանցիկ գործիքներ Հայաստանում։</p>
+          <a href='tel:+37491095950'>+374 91 095 950</a>
+        </div>
+      </footer>
 
-    <script id='tool-page-config' type='application/json'>{"toolType":"calculator","locale":"hy-AM","homeHref":"/","priceBook":{"id":"yourenergy-am-residential-grid-v0-1","version":"v0.1","status":"temporary","countryCode":"AM","region":"all-armenia","systemType":"residential-grid-tied","currency":"AMD","checkedAt":"2026-08-29","validFrom":"2026-08-29","validUntil":"2026-09-28","ratesAmdPerWp":{"p25":232,"p50":247,"p75":264},"scope":["panels","inverter","mounting","standard-installation","basic-grid-connection"],"exclusions":["battery","roof-repair","non-standard-electrical-work","financing"],"confirmationRequired":["vat","permits"],"source":{"kind":"registry","status":"estimated","provider":"YOURENERGY temporary price book","reference":"P1-v0.1","verifiedAt":"2026-08-29"}},"strings":{"invalid":"Մուտքագրեք միջին սպառումը կամ հաշվի գումարը, իսկ հաշվի համար՝ նաև զրոյից մեծ սակագին։","stored":"Տվյալները պահպանվել են այս դիտարկչի ընթացիկ նստաշրջանում։ Շարունակվում ենք լիարժեք հաշվիչին։","storageUnavailable":"Այս դիտարկիչում տեղային պահեստը հասանելի չէ։ Բացեք լիարժեք հաշվիչը և մուտքագրեք տվյալները այնտեղ։"}}</script>
-    <script type='module' src='/src/tools.js'></script>
+    <dialog class='passport-dialog' data-passport-dialog aria-labelledby='dialog-title'><form
+        method='dialog'
+        class='dialog-close'
+      ><button class='round-button' aria-label='Փակել հաշվետվությունը'><span
+            aria-hidden='true'
+          >×</span></button></form><div class='dialog-content'><p
+          class='eyebrow'
+        data-passport-dialog-eyebrow
+        >SOLAR PASSPORT · Նախնական վերլուծություն</p><h2
+          id='dialog-title'
+          data-passport-dialog-title
+        >Solar Passport-ը կհայտնվի հաշվարկից հետո</h2><div class='dialog-report'><article class='passport-card'><div
+              class='passport-card__top'
+            ><span class='wordmark wordmark--small'><span>YOUR</span><strong
+                >ENERGY</strong></span><span class='pill' data-passport-badge>Հաշվարկից հետո</span></div><p
+              class='passport-label'
+            >SOLAR PASSPORT</p><h3
+              data-analysis-location
+            >Կերևա օբյեկտը հաստատելուց հետո</h3><dl class='passport-specs'><div><dt
+                >Առաջարկվող համակարգ</dt><dd
+                  data-analysis='capacity'
+                >—</dd></div><div><dt data-passport-source-label>Աղբյուր՝ սպասվում է PVGIS-ի պատասխան</dt><dd
+                  data-analysis='panels'
+                >—</dd></div></dl></article><div class='dialog-numbers'><h3
+            >Ամսական արտադրություն, kWh</h3><dl><div><dt>Տարեկան արտադրություն</dt><dd
+                    data-analysis='generation'
+                  >— kWh</dd></div><div><dt>Տարեկան խնայողություն</dt><dd
+                    data-analysis='savings'
+                  >— ֏</dd></div><div><dt>Պարզ վերադարձի ժամկետ</dt><dd
+                    data-analysis='payback'
+                  >— տարի</dd></div><div><dt>Սպառման ծածկում</dt><dd
+                    data-analysis='coverage'
+                  >— %</dd></div></dl><p
+            >Մինչև վերլուծությունը ֆինանսական արժեքներ չեն ցուցադրվում։ Մոդելը չի ներառում սակագնի աճ, դեգրադացիա, սպասարկում, վարկ, դիսկոնտավորում, հարկեր և ցանց արտահանման կանոններ։</p></div></div></div></dialog>
+
+      <script id='page-config' type='application/json'>{"locale":"hy-AM","status":{"minAddress":"Մուտքագրեք առնվազն 5 նիշ պարունակող հասցե։","analyzing":"Պատրաստում ենք նախնական վերլուծությունը…","ready":"Նախնական արդյունքը պատրաստ է։ Որոշում կայացնելուց առաջ ստուգեք տվյալները։","unavailable":"Նախնական վերլուծությունն այժմ հասանելի չէ։ Փորձեք կրկին կամ նշեք կետը ձեռքով։","invalidFile":"Ձևաչափը չի աջակցվում։ Ընտրեք PDF, JPG, JPEG կամ PNG։","largeFile":"Ֆայլը չափազանց մեծ է։ Առավելագույն չափը 10 ՄԲ է։","fileSelected":"Ֆայլն ընտրված է և մնում է միայն դիտարկիչի հիշողության մեջ։","fileRemoved":"Ֆայլը հեռացվել է։","mapReady":"Օբյեկտի ինտերակտիվ քարտեզը պատրաստ է։","mapFailed":"Քարտեզը հասանելի չէ։ Մնում է ստատիկ ցուցադրական պահուստային տարբերակը։","monthTooltip":"{month} ամսվա արտադրություն՝ {value} kWh"},"product":{"common":{"required":"Պարտադիր դաշտ","optional":"Ընտրովի","perMonth":"ամսական","kwh":"kWh","amd":"֏","complete":"Պատրաստ է","cancel":"Չեղարկել","noJsCalculator":"Հաշվիչն աշխատում է JavaScript-ով։ Ձեռքով խորհրդատվության համար զանգահարեք ինժեներին՝"},"tools":{"calculator":"Բացել ամբողջական հաշվիչը","offerChecker":"Ստուգել կոմերցիոն առաջարկը"},"flow":{"title":"Ինչպես է աշխատում հաշվարկը","steps":[{"number":"01","title":"Գտեք օբյեկտը","copy":"Մուտքագրեք հասցեն կամ քարտեզի վրա նշեք կետ, ապա հաստատեք այն։"},{"number":"02","title":"Տեսեք տեղանքի արևային ներուժը","copy":"PVGIS-ը ցույց է տալիս ընտրված կետի ուղեցույցը՝ մինչև ձեր տանիքի հաշվարկը։"},{"number":"03","title":"Նշեք տանիքն ու սպառումը","copy":"Ուրվագծեք հասանելի մակերեսը և նշեք տանիքի իրական ուղղությունը, թեքությունն ու էներգիայի սպառումը։"},{"number":"04","title":"Ստացեք նախնական հաշվարկ","copy":"Համակարգը, բյուջեն և խնայողությունը երևում են միայն հաստատված մուտքային տվյալներից։"}]},"potential":{"eyebrow":"Քայլ 2 · Տեղանքի ներուժ","title":"Արևային ուղեցույց ընտրված կետի համար","loading":"Հաստատված կետի համար հարցում ենք PVGIS…","annualYieldLabel":"Սպասվող տարեկան արտադրություն՝ 1 kWp-ի համար","orientationLabel":"Օպտիմալ ուղղություն ազատ կանգնած համակարգի համար","tiltLabel":"Օպտիմալ թեքություն ազատ կանգնած համակարգի համար","source":"Աղբյուր՝ PVGIS · համակարգի կորուստների նախնական ենթադրություն՝ 14%","disclosure":"Սա PVGIS-ի ուղեցույցն է ընտրված կետում ազատ կանգնած ֆիքսված համակարգի համար։ Այն ձեր տանիքի չափագրում կամ դրա վրա տեղադրման առաջարկ չէ։","roofDisclosure":"Կոնկրետ տանիքի ուղղությունը, թեքությունը, մակերեսը, ստվերումը և կրողունակությունը պետք է նշվեն ներքևում և հաստատվեն ինժեների կողմից։","unavailable":"Չհաջողվեց ստանալ PVGIS-ի ներուժը։ Շարունակեք տանիքի ուրվագծով կամ կրկնեք հարցումը․ օրինակային թվեր չեն ցուցադրվի։","retry":"Կրկնել PVGIS-ի ներուժը","continue":"Անցնել իմ տանիքի հաշվարկին","directions":{"north":"հյուսիս","northEast":"հյուսիս-արևելք","east":"արևելք","southEast":"հարավ-արևելք","south":"հարավ","southWest":"հարավ-արևմուտք","west":"արևմուտք","northWest":"հյուսիս-արևմուտք"}},"consumption":{"title":"Էլեկտրաէներգիայի սպառում","copy":"Սա անհրաժեշտ է միայն համակարգի հզորության, բյուջեի և խնայողության համար, ոչ հասցե կամ կետի ներուժ գտնելու համար։","modes":{"bill":"Միջին հաշիվ","usage":"Միջին սպառում","monthly":"Ամսական պրոֆիլ"},"billLabel":"Էլեկտրաէներգիայի միջին հաշիվ","billHelp":"Մուտքագրեք ամսական միջին գումարը դրամով։","tariffLabel":"Սակագինը ձեր հաշվից","tariffHelp":"kWh-ի համար պարտադիր չէ։ Դրամով հաշիվը kWh-ի փոխարկելու համար անհրաժեշտ է, իսկ Passport-ում կնշվի որպես ձեր մուտքագրած տվյալ։","usageLabel":"Միջին ամսական սպառում","usageHelp":"Մուտքագրեք ամսական միջին սպառումը kWh-ով։","monthlyTitle":"Սպառումը 12 ամսվա ընթացքում","monthlyHelp":"Եթե տվյալները հասանելի են, մուտքագրեք յուրաքանչյուր ամսվա kWh-ը։","annualLabel":"Հաշվարկային տարեկան սպառում","invalidNumber":"Մուտքագրեք զրոյից մեծ թիվ։","invalidBill":"Մուտքագրեք ճիշտ գումար դրամով։","invalidTariff":"Մուտքագրեք զրոյից մեծ սակագին AMD/kWh-ով։","invalidUsage":"Մուտքագրեք ճիշտ սպառում kWh-ով։","incompleteMonths":"Լրացրեք բոլոր 12 ամիսները կամ ընտրեք այլ եղանակ։","noConsumption":"Հաշվարկի համար անհրաժեշտ է սպառման կամ հաշվի արժեք։","normalized":"Տվյալները բերվել են տարեկան պրոֆիլի։"},"location":{"title":"Օբյեկտի տեղադրությունը","copy":"Հասցեն օգտագործվում է միայն քարտեզի կետը գտնելու համար։ Հաստատեք գտնված օբյեկտը կամ նշեք կետը ձեռքով։","search":"Գտնել հասցեն","searching":"Փնտրում ենք հասցեն…","resultLabel":"Գտնված հասցե","confirmPrompt":"Սա՞ է ձեր օբյեկտը։","confirm":"Հաստատել օբյեկտը","edit":"Փոխել հասցեն","noResult":"Հասցեն չի գտնվել։ Նշեք կետը քարտեզի վրա ձեռքով։","unavailable":"Հասցեների որոնման ծառայությունն այժմ հասանելի չէ։ Նշեք կետը քարտեզի վրա ձեռքով։","manualTitle":"Նշել կետը ձեռքով","manualCopy":"Սեղմեք քարտեզի վրա՝ օբյեկտի մոտավոր դիրքը նշելու համար։ Սա հասցեի գեոկոդավորում չէ։","chooseOnMap":"Ընտրել կետ քարտեզի վրա","pointSelected":"Օբյեկտի կետն ընտրված է։","retry":"Կրկնել որոնումը"},"roof":{"title":"Տանիքի ուրվագիծ","copy":"Ուրվագծեք տանիքի հասանելի հատվածը և նշեք լանջի իրական պարամետրերը՝ նախնական գնահատման համար։","mapDisclosure":"Քարտեզը օգնում է նշել կետն ու մոտավոր ուրվագիծը։ Առանց օդային պատկերի կամ 3D մոդելի այն ավտոմատ չի որոշում տանիքը, դրա թեքությունն ու ստվերումը։","fallback":"Քարտեզը հասանելի չէ։ Շարունակեք հասցեն նշելուց հետո կամ փորձեք կրկին։","start":"Սկսել ուրվագիծը","addPointAtCenter":"Ավելացնել կետը քարտեզի կենտրոնում","addPoint":"Ավելացնել կետ","undo":"Հետարկել վերջին կետը","reset":"Մաքրել ուրվագիծը","finish":"Ավարտել ուրվագիծը","edit":"Փոխել ուրվագիծը","pointsLabel":"Ուրվագծում կետերի քանակը՝ {count}","minimumPoints":"Ուրվագիծն ավարտելու համար ավելացրեք առնվազն 3 կետ։","areaLabel":"Տանիքի նախնական մակերես","orientationLabel":"Տանիքի լանջի ուղղություն","customOrientationLabel":"Ձեր ուղղվածությունը (0° = հյուսիս, 180° = հարավ)","customOrientationHelp":"Մուտքագրեք կողմնացույցի անկյունը 0-ից 359°։","tiltLabel":"Այս լանջի թեքություն","tiltHelp":"Նշեք մոտավոր անկյունը միայն եթե հայտնի է․ այն հասցեով չի որոշվում։","angleGuideTitle":"Տանիքի մուտքագրված պարամետրերի տեսողական ստուգում","angleGuideCopy":"Սլաքը ցույց է տալիս ձեր մուտքագրած լանջի ուղղությունը։ Այն տարբերվում է վերևում տրված ազատ կանգնած համակարգի PVGIS ուղեցույցից։","angleGuideOrientation":"Լանջի ուղղություն","angleGuideTilt":"Լանջի թեքություն","pointSelectLabel":"Ընտրել {index}-րդ կետը","removePoint":"Հեռացնել կետը","nudgeNorth":"Տեղաշարժել կետը դեպի հյուսիս","nudgeSouth":"Տեղաշարժել կետը դեպի հարավ","nudgeEast":"Տեղաշարժել կետը դեպի արևելք","nudgeWest":"Տեղաշարժել կետը դեպի արևմուտք","orientationOptions":{"north":"Հյուսիս","southEast":"Հարավ-արևելք","southWest":"Հարավ-արևմուտք","east":"Արևելք","south":"Հարավ","west":"Արևմուտք","unknown":"Դեռ չգիտեմ","custom":"Այլ"},"unavailable":"Տանիքի ուրվագիծը դեռ նշված չէ։","tilesUnavailable":"Ֆոնային քարտեզը հասանելի չէ։ Կետ ընտրելուց հետո կարող եք նշել ուրվագիծը։","locationRequired":"Սկզբում հաստատեք օբյեկտը կամ ընտրեք կետը քարտեզի վրա։"},"result":{"title":"Նախնական վերլուծություն","preparing":"Պատրաստում ենք նախնական վերլուծությունը…","ready":"Նախնական վերլուծությունը պատրաստ է։","unavailable":"Հասանելի տվյալներով չհաջողվեց պատրաստել վերլուծությունը։","retry":"Կրկնել հաշվարկը","noTariff":"Սակագինը նշված չէ․ հզորությունը, PVGIS-ի արտադրությունն ու նախնական գինը հասանելի են, սակայն խնայողությունն ու վերադարձման ժամկետը չեն ցուցադրվում։","priceUnavailable":"Ժամանակավոր գնացուցակը հասանելի չէ կամ դրա ժամկետն անցել է․ խնդրեք ինժեների տեղազննում։ Խնայողության և վերադարձման ժամկետի համար նաև սակագին է պետք։","noSavings":"Տվյալները բավարար չեն խնայողությունն ու վերադարձման ժամկետը ցուցադրելու համար։","chartDescription":"Հաստատված մուտքային տվյալների և ստացված արևային ռեսուրսի հիման վրա ամսական նախնական արտադրություն։","confidenceTitle":"Գնահատման վստահելիություն","confidence":{"high":"Բարձր","medium":"Միջին","low":"Ցածր","insufficient":"Տվյալները բավարար չեն"},"assumptionsTitle":"Հաշվարկի ենթադրություններ","commercialEstimate":"YOUR ENERGY-ի նախնական գին · {version} · առաջարկ չէ․ {p25}–{p75}; P50 {p50}։ Գործում է մինչև {validUntil}։"},"solutions":{"liveBadge":"Ձեր հաստատված տվյալներով","liveCopy":"Այս երեք նախնական տեխնիկական սցենարները հաշվարկված են օբյեկտի հաստատված տվյալներից։","financialUnavailable":"Նախնական գինը ստացվում է գործող PriceBook-ից․ խնայողությունն ու վերադարձի ժամկետը պահանջում են սակագին։","priceUnavailable":"Ժամանակավոր գնացուցակը հասանելի չէ կամ դրա ժամկետն անցել է․ խնդրեք ինժեների տեղազննում։"},"ledger":{"title":"Ինչպես է հաշվարկվել","copy":"Նախնական արդյունքի աղբյուրները, տարբերակները և ենթադրությունները։","sources":{"consumption":"Սպառման տվյալներ","location":"Օբյեկտի տեղադրություն","roof":"Տանիքի ուրվագիծ և պարամետրեր","tariff":"Էլեկտրաէներգիայի սակագին","userTariff":"Մուտքագրված է օգտվողի կողմից հաշվից","solar":"Արևային ռեսուրս","investment":"Համակարգի արժեք","pricebook":"YOUR ENERGY-ի ժամանակավոր գնացուցակ","unavailable":"Աղբյուրը միացված չէ"},"assumptions":{"NO_TARIFF_ESCALATION":"Սակագնի աճը չի մոդելավորվում։","NO_PANEL_DEGRADATION":"Վահանակների դեգրադացիան չի մոդելավորվում։","NO_MAINTENANCE_FINANCING_DISCOUNTING_EXPORT_OR_TAXES":"Չեն ներառվել սպասարկումը, ֆինանսավորումը, դիսկոնտավորումը, ցանցին արտահանձնելու կանոնները և հարկերը։","MISSING_EVIDENCE_SUPPRESSES_FINANCIAL_RESULT":"Առանց հաստատված տվյալների ֆինանսական արժեքները չեն ցուցադրվում։","PVGIS_SYSTEM_LOSS_14_PERCENT":"PVGIS-ում կիրառվել է համակարգի 14% կորուստների նախնական ենթադրություն, որը պետք է հաստատի ինժեները։","PRELIMINARY_ROOF_USABLE_AREA_70_PERCENT":"Նախնական հզորությունը օգտագործում է նշված տանիքի մակերեսի 70%-ը։ Իրական օգտակար մակերեսը, անցումները և հեռավորությունները ստուգում է ինժեները։","PRELIMINARY_PANEL_SIZE_580W_2M2":"Նախնական հզորության համար կիրառվում է 580 W, 2 մ² մոդուլ․ սա հաստատված սարքավորման կազմ չէ։","USER_PROVIDED_TARIFF":"Սակագինը մուտքագրել է օգտվողը իր հաշվից և այն սակագնային գրանցամատյան չէ։","TEMPORARY_PRICEBOOK_NOT_OFFER":"Ժամանակավոր PriceBook-ը նախնական բյուջեի ուղեցույց է, ոչ առաջարկ և ոչ պայմանագրային գին։"}},"passport":{"persistenceTitle":"Solar Passport-ը պահվում է այս դիտարկիչում","persistenceCopy":"Այս նախնական Passport-ը գոյություն ունի միայն ընթացիկ սեսիայի հիշողության մեջ։","memoryOnly":"Էջը փակելուց հետո տվյալները կարող են կորչել։","permanentLink":"Մշտական հղումն ու PDF-ը հասանելի կլինեն պահոցը միացնելուց հետո։","sourceLedger":"Աղբյուրներ և ենթադրություններ","shareUnavailable":"Հղում ուղարկելն առայժմ հասանելի չէ։","pendingBadge":"Հաշվարկից հետո","pendingAddress":"Կերևա օբյեկտը հաստատելուց հետո","pendingDate":"Ստեղծվում է ընթացիկ սեսիայում","pendingSource":"Աղբյուր՝ սպասվում է PVGIS-ի պատասխան","pendingChartDescription":"Ամսական արտադրությունը կերևա PVGIS-ի հաշվարկից հետո։","pendingTitle":"Solar Passport-ը կհայտնվի հաշվարկից հետո","realTitle":"Ձեր նախնական Solar Passport-ը","sessionBadge":"Այս սեսիա"},"lead":{"title":"Ուղարկել հաշվարկը ինժեներին","copy":"Թողեք կապի տվյալներ, որպեսզի ինժեները կարողանա ճշտել օբյեկտի տվյալները։","nameLabel":"Ձեր անունը","phoneLabel":"Հեռախոս","emailLabel":"Էլեկտրոնային փոստ","messageLabel":"Մեկնաբանություն օբյեկտի վերաբերյալ","consent":"Համաձայն եմ տվյալների մշակմանը՝ հարցմանը պատասխանելու համար։","submit":"Ուղարկել հարցումը","required":"Լրացրեք պարտադիր դաշտերը և հաստատեք համաձայնությունը։","invalidEmail":"Մուտքագրեք ճիշտ էլեկտրոնային փոստի հասցե։","sending":"Ուղարկում ենք հարցումը…","sent":"Հարցումն ուղարկվել է։ Տվյալների ստուգումից հետո կկապվենք ձեզ հետ։","unavailable":"Ուղարկումը ժամանակավորապես հասանելի չէ։ Փորձեք ավելի ուշ։","retry":"Կրկնել ուղարկումը","directCall":"Կամ զանգահարեք ինժեներին՝","privacy":"Տվյալները չեն փոխանցվում վերլուծական ծառայություններին։"},"status":{"geocodeUnavailable":"Գեոկոդավորման ծառայությունը միացված չէ կամ ժամանակավորապես հասանելի չէ։","analysisUnavailable":"Արևային վերլուծության ծառայությունը միացված չէ կամ ժամանակավորապես հասանելի չէ։","leadUnavailable":"Հարցումների ծառայությունը միացված չէ կամ ժամանակավորապես հասանելի չէ։","retry":"Փորձել կրկին","canceled":"Նախորդ հարցումը չեղարկվել է։"},"months":[{"short":"Հնվ","name":"Հունվար"},{"short":"Փտր","name":"Փետրվար"},{"short":"Մրտ","name":"Մարտ"},{"short":"Ապր","name":"Ապրիլ"},{"short":"Մյս","name":"Մայիս"},{"short":"Հնս","name":"Հունիս"},{"short":"Հլս","name":"Հուլիս"},{"short":"Օգս","name":"Օգոստոս"},{"short":"Սեպ","name":"Սեպտեմբեր"},{"short":"Հոկ","name":"Հոկտեմբեր"},{"short":"Նոյ","name":"Նոյեմբեր"},{"short":"Դեկ","name":"Դեկտեմբեր"}]},"map":{"image":"/images/roof-scan-768.webp","tileUrl":"https://tile.openstreetmap.org/{z}/{x}/{y}.png","tileAttribution":"© OpenStreetMap contributors"},"endpoints":{"geocode":"/api/geocode","potential":"/api/potential","analysis":"/api/analysis"}}</script>
+      <script type='module' src='/src/main.js'></script>
   </body>
 </html>

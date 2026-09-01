@@ -4,6 +4,7 @@ import test from 'node:test';
 import { onRequest as analysisOnRequest } from '../functions/api/analysis.js';
 import { onRequest as geocodeOnRequest } from '../functions/api/geocode.js';
 import { onRequest as leadOnRequest } from '../functions/api/lead.js';
+import { onRequest as potentialOnRequest } from '../functions/api/potential.js';
 import { buildP0SolarAnalysis } from '../functions/_lib/solar-analysis.js';
 import {
   createGeocodingAdapter,
@@ -12,7 +13,9 @@ import {
 } from '../functions/_lib/geocoding.js';
 import {
   buildPvgisUrl,
+  normalizePvgisOptimalResult,
   normalizePvgisResult,
+  validatePotentialInput,
   validateAnalysisInput
 } from '../functions/_lib/pvgis.js';
 
@@ -138,6 +141,82 @@ test('PVGIS accepts only explicit roof/system inputs and normalizes a valid twel
   );
 });
 
+test('site potential requests PVGIS optimum angles only for a confirmed point', async () => {
+  const input = validatePotentialInput({
+    property: { latitude: 40.18, longitude: 44.51, confirmed: true }
+  });
+  const url = buildPvgisUrl('https://pvgis.example/api', input, { optimalAngles: true });
+  const normalized = normalizePvgisOptimalResult({
+    inputs: { mounting_system: { fixed: { slope: { value: 33 }, azimuth: { value: 0 } } } },
+    outputs: {
+      totals: { fixed: { E_y: 1600 } },
+      monthly: { fixed: Array.from({ length: 12 }, () => ({ E_m: 133.333 })) }
+    }
+  });
+
+  assert.equal(url.searchParams.get('optimalangles'), '1');
+  assert.equal(url.searchParams.has('angle'), false);
+  assert.equal(url.searchParams.has('aspect'), false);
+  assert.equal(normalized.tiltDegrees, 33);
+  assert.equal(normalized.azimuthDegrees, 180);
+  assert.equal(normalized.generation.annualKwh, 1600);
+  assert.throws(
+    () => validatePotentialInput({ property: { latitude: 40.18, longitude: 44.51 } }),
+    (error) => error.code === 'INVALID_INPUT'
+  );
+
+  let requestedUrl = null;
+  const response = await potentialOnRequest({
+    request: postJson('/potential', {
+      property: { latitude: 40.18, longitude: 44.51, confirmed: true }
+    }),
+    env: { PVGIS_ENDPOINT: 'https://pvgis.example/api' },
+    fetch: async (requestUrl) => {
+      requestedUrl = new URL(requestUrl);
+      return new Response(
+        JSON.stringify({
+          inputs: { mounting_system: { fixed: { slope: { value: 31 }, azimuth: { value: -10 } } } },
+          outputs: {
+            totals: { fixed: { E_y: 1555 } },
+            monthly: { fixed: Array.from({ length: 12 }, () => ({ E_m: 129.583 })) }
+          }
+        }),
+        { headers: { 'content-type': 'application/json' } }
+      );
+    }
+  });
+  const body = await readJson(response);
+
+  assert.equal(response.status, 200);
+  assert.equal(requestedUrl.searchParams.get('optimalangles'), '1');
+  assert.equal(body.data.potential.mode, 'site-potential');
+  assert.equal(body.data.potential.annualYieldKwhPerKwp, 1555);
+  assert.equal(body.data.potential.orientation.tiltDegrees, 31);
+  assert.equal(body.data.potential.orientation.azimuthDegrees, 170);
+  assert.equal(body.data.potential.monthlyYieldKwhPerKwp.length, 12);
+  assert.ok(
+    body.data.potential.limitations.includes('PVGIS_FREE_STANDING_OPTIMUM_NOT_ROOF_SURVEY')
+  );
+});
+
+test('site potential reports a provider failure instead of returning example values', async () => {
+  const response = await potentialOnRequest({
+    request: postJson('/potential', {
+      property: { latitude: 40.18, longitude: 44.51, confirmed: true }
+    }),
+    env: { PVGIS_ENDPOINT: 'https://pvgis.example/api' },
+    fetch: async () => {
+      throw new TypeError('offline');
+    }
+  });
+  const body = await readJson(response);
+
+  assert.equal(response.status, 503);
+  assert.equal(body.ok, false);
+  assert.equal(body.error.code, 'PVGIS_UNAVAILABLE');
+  assert.equal(body.data, undefined);
+});
+
 test('analysis uses the documented server-side PVGIS default when no override is configured', async () => {
   let requestedUrl = null;
   const response = await analysisOnRequest({
@@ -184,8 +263,9 @@ test('analysis joins real PVGIS yield with confirmed inputs and suppresses unver
   assert.equal(response.status, 200);
   assert.equal(analysis.mode, 'real-analysis');
   assert.equal(analysis.property.confirmed, true);
-  assert.equal(analysis.selectedScenario.system.capacityKwp, 7.2);
-  assert.equal(analysis.selectedScenario.generation.annualKwh, 10_800);
+  assert.equal(analysis.selectedScenario.system.capacityKwp, 7.54);
+  assert.equal(analysis.selectedScenario.system.panelCount, 13);
+  assert.equal(analysis.selectedScenario.generation.annualKwh, 11_310);
   assert.equal(analysis.selectedScenario.financial.annualSavingsAmd, null);
   assert.equal(analysis.selectedScenario.financial.paybackYears, null);
   assert.equal(
@@ -193,6 +273,7 @@ test('analysis joins real PVGIS yield with confirmed inputs and suppresses unver
     'PVGIS'
   );
   assert.ok(analysis.assumptions.includes('PVGIS_SYSTEM_LOSS_14_PERCENT'));
+  assert.ok(analysis.assumptions.includes('PRELIMINARY_ROOF_USABLE_AREA_70_PERCENT'));
 });
 
 test('analysis accepts a manual point and user tariff but ignores client-side capex and price books', async () => {
@@ -227,7 +308,7 @@ test('analysis accepts a manual point and user tariff but ignores client-side ca
   assert.equal(response.status, 200);
   assert.equal(analysis.property.address, null);
   assert.equal(analysis.financial.tariff.kind, 'user');
-  assert.equal(analysis.selectedScenario.financial.annualSavingsAmd, 486_000);
+  assert.equal(analysis.selectedScenario.financial.annualSavingsAmd, 508_950);
   assert.notEqual(analysis.selectedScenario.financial.capexAmd, 1);
   assert.ok(analysis.assumptions.includes('USER_PROVIDED_TARIFF'));
 });
@@ -255,9 +336,36 @@ test('the server selects the dated P1 price book instead of accepting a client p
   });
 
   assert.equal(analysis.priceBook.version, 'v0.1');
-  assert.equal(analysis.selectedScenario.financial.capexAmd, 1_780_000);
+  assert.equal(analysis.selectedScenario.financial.capexAmd, 1_860_000);
   assert.notEqual(analysis.selectedScenario.financial.capexAmd, 1);
   assert.equal(analysis.financial.price.kind, 'temporary');
+});
+
+test('the server makes a small outlined roof a visible preliminary capacity constraint', () => {
+  const analysis = buildP0SolarAnalysis({
+    body: {
+      ...p0AnalysisPayload,
+      roof: { ...p0AnalysisPayload.roof, areaSqm: 4 }
+    },
+    validatedInput: {
+      property: { latitude: 40.18, longitude: 44.51 },
+      roof: { tiltDegrees: 30, azimuthDegrees: 180 }
+    },
+    providerAnalysis: {
+      generation: {
+        annualKwh: 1500,
+        monthlyKwh: Array.from({ length: 12 }, () => 125)
+      },
+      sourceLedger: [{ retrievedAt: '2026-08-31T00:00:00.000Z' }]
+    },
+    effectiveDate: '2026-08-31'
+  });
+
+  assert.equal(analysis.selectedScenario.system.maximumPanelCount, 1);
+  assert.equal(analysis.selectedScenario.system.panelCount, 1);
+  assert.equal(analysis.selectedScenario.system.capacityKwp, 0.58);
+  assert.ok(analysis.selectedScenario.limitations.includes('ROOF_CAPACITY_LIMIT'));
+  assert.ok(analysis.assumptions.includes('PRELIMINARY_PANEL_SIZE_580W_2M2'));
 });
 
 test('analysis refuses an unconfirmed property or incomplete roof before contacting PVGIS', async () => {

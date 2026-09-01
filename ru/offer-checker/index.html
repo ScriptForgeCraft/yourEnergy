@@ -56,7 +56,7 @@
             <a href='/ru/calculator/'>Калькулятор</a>
             <a href='/ru/offer-checker/'>Проверка КП</a>
             <a href='tel:+37491095950'>Позвонить инженеру</a>
-            <nav class='mobile-language-switcher' aria-label='Выбор языка'><a
+            <div class='mobile-language-switcher'><a
                   class='language-link'
                   href='/offer-checker/'
                   hreflang='hy'
@@ -66,7 +66,7 @@
                   href='/en/offer-checker/'
                   hreflang='en'
                   aria-label='EN — Английский'
-                >EN</a></nav>
+                >EN</a></div>
           </nav>
         </details>
       </div>
@@ -79,133 +79,133 @@
             <p class='eyebrow'>Проверка предложения</p>
             <h1 id='tool-title'>Проверьте, можно ли сопоставить предложение</h1>
             <p class='tool-intro'>Мы считаем только AMD/Wp предложения и сопоставляем его с временным residential-диапазоном YOUR ENERGY. Инструмент не назначает цену и не заменяет коммерческое предложение.</p>
-              <p class='tool-privacy'>Мы не собираем контактные или персональные данные.</p>
+            <p class='tool-privacy'>Мы не собираем контактные или персональные данные.</p>
           </div>
           <aside class='tool-reference' aria-label='Временный стандартный диапазон'>
-              <p class='eyebrow'>Временный стандартный диапазон</p>
-              <strong data-pricebook-reference>Браузер проверит срок временного прайсбука; при истечении цена не будет показана.</strong>
-              <small data-pricebook-version hidden></small>
-              <p>Это временный прайсбук YOUR ENERGY v0.1, а не оферта. Он действует только в пределах срока действия и требует обследования объекта.</p>
+            <p class='eyebrow'>Временный стандартный диапазон</p>
+            <strong data-pricebook-reference>Браузер проверит срок временного прайсбука; при истечении цена не будет показана.</strong>
+            <small data-pricebook-version hidden></small>
+            <p>Это временный прайсбук YOUR ENERGY v0.1, а не оферта. Он действует только в пределах срока действия и требует обследования объекта.</p>
           </aside>
         </div>
       </section>
 
-        <section class='tool-workspace section' aria-labelledby='offer-form-title'>
-          <div class='container tool-workspace__grid'>
-            <form class='tool-form' data-offer-checker novalidate>
-              <h2 id='offer-form-title'>Данные предложения другого поставщика</h2>
-              <label for='offer-total'>Полная стоимость предложения</label>
-              <div class='tool-input-unit'>
-                <input
-                  id='offer-total'
-                  name='totalAmd'
-                  type='number'
-                  min='1'
-                  max='1000000000'
-                  step='1'
-                  inputmode='decimal'
-                  required
-                />
-                <span>֏</span>
+      <section class='tool-workspace section' aria-labelledby='offer-form-title'>
+        <div class='container tool-workspace__grid'>
+          <form class='tool-form' data-offer-checker novalidate>
+            <h2 id='offer-form-title'>Данные предложения другого поставщика</h2>
+            <label for='offer-total'>Полная стоимость предложения</label>
+            <div class='tool-input-unit'>
+              <input
+                id='offer-total'
+                name='totalAmd'
+                type='number'
+                min='1'
+                max='1000000000'
+                step='1'
+                inputmode='decimal'
+                required
+              />
+              <span>֏</span>
+            </div>
+
+            <label for='offer-capacity'>Мощность системы</label>
+            <div class='tool-input-unit'>
+              <input
+                id='offer-capacity'
+                name='capacityKwp'
+                type='number'
+                min='0.01'
+                max='10000'
+                step='0.01'
+                inputmode='decimal'
+                required
+              />
+              <span>kWp</span>
+            </div>
+
+            <label for='offer-region'>Регион</label>
+            <select id='offer-region' name='region'>
+              <option value='AM'>Армения</option>
+            </select>
+
+            <label for='offer-system'>Тип системы</label>
+            <select id='offer-system' name='systemType'>
+              <option value='residential-grid-tied'>Сетевая, без батареи</option>
+              <option value='battery'>С батареей</option>
+              <option value='other'>Другое / неизвестно</option>
+            </select>
+
+            <fieldset class='offer-scope'>
+              <legend>Отметьте только позиции, явно включённые в предложение</legend>
+              <p>Если основной пункт отсутствует или неясен, ценовой вывод не показывается.</p>
+              <label><input
+                  type='checkbox'
+                  name='scope-panels'
+                  value='true'
+                /><span>Солнечные панели</span></label><label><input
+                  type='checkbox'
+                  name='scope-inverter'
+                  value='true'
+                /><span>Инвертор</span></label><label><input
+                  type='checkbox'
+                  name='scope-mounting'
+                  value='true'
+                /><span>Крепёжная система</span></label><label><input
+                  type='checkbox'
+                  name='scope-standard-installation'
+                  value='true'
+                /><span>Стандартный монтаж</span></label><label><input
+                  type='checkbox'
+                  name='scope-basic-grid-connection'
+                  value='true'
+                /><span>Базовое подключение к сети</span></label><label><input
+                  type='checkbox'
+                  name='scope-battery'
+                  value='true'
+                /><span>Включена батарея</span></label>
+            </fieldset>
+
+            <p class='form-status' data-tool-status aria-live='polite' role='status'></p>
+            <div class='tool-form-actions'>
+              <button class='button button--navy' type='submit'>Сравнить предложение</button>
+              <button class='button button--outline' type='reset'>Очистить</button>
+            </div>
+            <noscript>
+              <div class='tool-no-js'>
+                <strong>Вариант без JavaScript</strong>
+                <p>Если JavaScript отключён, позвоните инженеру и подготовьте цену, kWp и состав предложения.</p>
+                <a class='button' href='tel:+37491095950'>Позвонить инженеру</a>
               </div>
+            </noscript>
+          </form>
 
-              <label for='offer-capacity'>Мощность системы</label>
-              <div class='tool-input-unit'>
-                <input
-                  id='offer-capacity'
-                  name='capacityKwp'
-                  type='number'
-                  min='0.01'
-                  max='10000'
-                  step='0.01'
-                  inputmode='decimal'
-                  required
-                />
-                <span>kWp</span>
-              </div>
-
-              <label for='offer-region'>Регион</label>
-              <select id='offer-region' name='region'>
-                <option value='AM'>Армения</option>
-              </select>
-
-              <label for='offer-system'>Тип системы</label>
-              <select id='offer-system' name='systemType'>
-                <option value='residential-grid-tied'>Сетевая, без батареи</option>
-                <option value='battery'>С батареей</option>
-                <option value='other'>Другое / неизвестно</option>
-              </select>
-
-              <fieldset class='offer-scope'>
-                <legend>Отметьте только позиции, явно включённые в предложение</legend>
-                <p>Если основной пункт отсутствует или неясен, ценовой вывод не показывается.</p>
-                <label><input
-                    type='checkbox'
-                    name='scope-panels'
-                    value='true'
-                  /><span>Солнечные панели</span></label><label><input
-                    type='checkbox'
-                    name='scope-inverter'
-                    value='true'
-                  /><span>Инвертор</span></label><label><input
-                    type='checkbox'
-                    name='scope-mounting'
-                    value='true'
-                  /><span>Крепёжная система</span></label><label><input
-                    type='checkbox'
-                    name='scope-standard-installation'
-                    value='true'
-                  /><span>Стандартный монтаж</span></label><label><input
-                    type='checkbox'
-                    name='scope-basic-grid-connection'
-                    value='true'
-                  /><span>Базовое подключение к сети</span></label><label><input
-                    type='checkbox'
-                    name='scope-battery'
-                    value='true'
-                  /><span>Включена батарея</span></label>
-              </fieldset>
-
-              <p class='form-status' data-tool-status aria-live='polite' role='status'></p>
-              <div class='tool-form-actions'>
-                <button class='button button--navy' type='submit'>Сравнить предложение</button>
-                <button class='button button--outline' type='reset'>Очистить</button>
-              </div>
-              <noscript>
-                <div class='tool-no-js'>
-                  <strong>Вариант без JavaScript</strong>
-                  <p>Если JavaScript отключён, позвоните инженеру и подготовьте цену, kWp и состав предложения.</p>
-                  <a class='button' href='tel:+37491095950'>Позвонить инженеру</a>
-                </div>
-              </noscript>
-            </form>
-
-            <section
-              class='tool-result'
-              data-offer-result
-              aria-labelledby='offer-result-title'
-              aria-live='polite'
-              tabindex='-1'
-            >
-              <p class='eyebrow'>Проверка предложения</p>
-              <h2 id='offer-result-title'>Результат проверки</h2>
-              <p data-offer-result-summary>Заполните данные и нажмите «Сравнить предложение».</p>
-              <dl data-offer-metrics hidden>
-                <div><dt>Цена предложения за Wp</dt><dd data-offer-rate>—</dd></div>
-                <div><dt>Сопоставимый диапазон</dt><dd data-offer-range>—</dd></div>
-              </dl>
-              <div data-offer-why hidden>
-                <h3>Почему нет ценового вывода</h3>
-                <ul data-offer-reasons></ul>
-              </div>
-              <div data-offer-questions hidden>
-                <h3>Что спросить у поставщика</h3>
-                <ul data-offer-questions-list></ul>
-              </div>
-              <a class='button' data-engineering-cta hidden href='tel:+37491095950'>Получить инженерную проверку</a>
-            </section>
-          </div>
-        </section>
+          <section
+            class='tool-result'
+            data-offer-result
+            aria-labelledby='offer-result-title'
+            aria-live='polite'
+            tabindex='-1'
+          >
+            <p class='eyebrow'>Проверка предложения</p>
+            <h2 id='offer-result-title'>Результат проверки</h2>
+            <p data-offer-result-summary>Заполните данные и нажмите «Сравнить предложение».</p>
+            <dl data-offer-metrics hidden>
+              <div><dt>Цена предложения за Wp</dt><dd data-offer-rate>—</dd></div>
+              <div><dt>Сопоставимый диапазон</dt><dd data-offer-range>—</dd></div>
+            </dl>
+            <div data-offer-why hidden>
+              <h3>Почему нет ценового вывода</h3>
+              <ul data-offer-reasons></ul>
+            </div>
+            <div data-offer-questions hidden>
+              <h3>Что спросить у поставщика</h3>
+              <ul data-offer-questions-list></ul>
+            </div>
+            <a class='button' data-engineering-cta hidden href='tel:+37491095950'>Получить инженерную проверку</a>
+          </section>
+        </div>
+      </section>
     </main>
 
     <footer class='tool-footer'>
@@ -215,7 +215,7 @@
       </div>
     </footer>
 
-    <script id='tool-page-config' type='application/json'>{"toolType":"offer-checker","locale":"ru-RU","homeHref":"/ru/","priceBook":{"id":"yourenergy-am-residential-grid-v0-1","version":"v0.1","status":"temporary","countryCode":"AM","region":"all-armenia","systemType":"residential-grid-tied","currency":"AMD","checkedAt":"2026-08-29","validFrom":"2026-08-29","validUntil":"2026-09-28","ratesAmdPerWp":{"p25":232,"p50":247,"p75":264},"scope":["panels","inverter","mounting","standard-installation","basic-grid-connection"],"exclusions":["battery","roof-repair","non-standard-electrical-work","financing"],"confirmationRequired":["vat","permits"],"source":{"kind":"registry","status":"estimated","provider":"YOURENERGY temporary price book","reference":"P1-v0.1","verifiedAt":"2026-08-29"}},"strings":{"invalid":"Укажите цену и мощность больше нуля.","resultAwaiting":"Заполните данные и нажмите «Сравнить предложение».","notComparable":"Предложение с батареей, другим типом системы или неполным составом не сравнивается с этим стандартным сетевым диапазоном.","expiry":"Срок временного диапазона истёк: запросите обследование, а не ориентируйтесь на устаревшую цену.","status":{"below-range":"Ниже диапазона","within-range":"В диапазоне","above-range":"Выше диапазона","not-comparable":"Несопоставимо"},"scope":{"panels":"Солнечные панели","inverter":"Инвертор","mounting":"Крепёжная система","standard-installation":"Стандартный монтаж","basic-grid-connection":"Базовое подключение к сети","battery":"Включена батарея"},"scopeIncomplete":"Если основной пункт отсутствует или неясен, ценовой вывод не показывается.","reason":{"OFFER_PRICE_AND_CAPACITY_REQUIRED":"Укажите цену и мощность больше нуля.","PRICEBOOK_UNAVAILABLE":"Срок временного диапазона истёк: запросите обследование, а не ориентируйтесь на устаревшую цену.","PRICEBOOK_EXPIRED":"Срок временного диапазона истёк: запросите обследование, а не ориентируйтесь на устаревшую цену.","UNSUPPORTED_SYSTEM_TYPE":"Предложение с батареей, другим типом системы или неполным составом не сравнивается с этим стандартным сетевым диапазоном.","BATTERY_SCOPE_UNSUPPORTED":"Предложение с батареей, другим типом системы или неполным составом не сравнивается с этим стандартным сетевым диапазоном."}}}</script>
+    <script id='tool-page-config' type='application/json'>{"toolType":"offer-checker","locale":"ru-RU","homeHref":"/ru/","priceBook":{"id":"yourenergy-am-residential-grid-v0-1","version":"v0.1","status":"temporary","countryCode":"AM","region":"all-armenia","systemType":"residential-grid-tied","currency":"AMD","checkedAt":"2026-08-29","validFrom":"2026-08-29","validUntil":"2026-09-28","ratesAmdPerWp":{"p25":232,"p50":247,"p75":264},"scope":["panels","inverter","mounting","standard-installation","basic-grid-connection"],"exclusions":["battery","roof-repair","non-standard-electrical-work","financing"],"confirmationRequired":["vat","permits"],"source":{"kind":"registry","status":"estimated","provider":"YOURENERGY temporary price book","reference":"P1-v0.1","verifiedAt":"2026-08-29"}},"strings":{"invalid":"Укажите цену и мощность больше нуля.","resultAwaiting":"Заполните данные и нажмите «Сравнить предложение».","notComparable":"Предложение с батареей, другим типом системы или неполным составом не сравнивается с этим стандартным сетевым диапазоном.","expiry":"Срок временного диапазона истёк: запросите обследование, а не ориентируйтесь на устаревшую цену.","status":{"below-range":"Ниже диапазона","within-range":"В диапазоне","above-range":"Выше диапазона","not-comparable":"Несопоставимо"},"scope":{"panels":"Солнечные панели","inverter":"Инвертор","mounting":"Крепёжная система","standard-installation":"Стандартный монтаж","basic-grid-connection":"Базовое подключение к сети","battery":"Включена батарея"},"scopeIncomplete":"В предложении не подтверждены следующие основные позиции","reason":{"OFFER_PRICE_AND_CAPACITY_REQUIRED":"Укажите цену и мощность предложения.","PRICEBOOK_UNAVAILABLE":"Временный прайсбук сейчас недоступен.","PRICEBOOK_EXPIRED":"Срок временного прайсбука истёк.","UNSUPPORTED_SYSTEM_TYPE":"Этот тип системы не сравнивается со стандартным сетевым диапазоном.","BATTERY_SCOPE_UNSUPPORTED":"Предложение с батареей не сравнивается со стандартным сетевым диапазоном."},"questions":{"standardScope":"Подтвердите, что в предложение входят панели, инвертор, крепёж, монтаж и подключение к сети.","commercialTerms":"Отдельно уточните НДС, разрешения, гарантию и нестандартные электромонтажные работы.","equipmentTerms":"До подписания уточните точные модели оборудования, условия гарантии, НДС и разрешения."}}}</script>
     <script type='module' src='/src/tools.js'></script>
   </body>
 </html>

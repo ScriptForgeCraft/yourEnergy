@@ -42,6 +42,28 @@ source ledger.
 The browser must show the candidates and require the user to select or manually
 place a point; it must not treat a text query as a confirmed property.
 
+### `POST /api/potential`
+
+Request:
+
+```json
+{
+  "property": { "latitude": 40.2, "longitude": 44.5, "confirmed": true }
+}
+```
+
+This is the fast, location-level PVGIS step. It returns
+`data.potential.annualYieldKwhPerKwp`, a 12-month 1 kWp yield profile and the
+PVGIS optimum fixed tilt/orientation for a free-standing system at the confirmed
+point. The Function fixes the query at 1 kWp and 14% system losses, sends
+`optimalangles=1`, and never accepts a client roof angle or system price.
+
+The response is deliberately not a roof survey: it contains no roof area,
+panel layout, system size, savings, price or shading claim. The browser must
+say that the PVGIS optimum is a free-standing benchmark; the real roof face,
+usable area, obstacles, shading and structural suitability need the detailed
+workflow and an engineer.
+
 ### `POST /api/analysis`
 
 Request (PVGIS numeric inputs are deliberately required; the rest becomes the
@@ -86,6 +108,11 @@ provider result from confirmed consumption. The endpoint accepts only that
 `1 kWp` / `14%` loss normalization query, so a caller cannot distort the
 specific-yield calculation. The loss assumption appears in the visible Passport
 ledger.
+
+For a preliminary physical fit limit, the server uses 70% of the manually
+outlined roof area plus a 580 W / 2 m² module assumption. It may limit the
+preliminary system capacity, but it is not a panel layout or engineering survey;
+the visible ledger must disclose both assumptions.
 
 ### `POST /api/lead`
 
@@ -142,8 +169,8 @@ Shared validation: `METHOD_NOT_ALLOWED`, `INVALID_CONTENT_TYPE`, `INVALID_JSON`,
 Geocode: `GEOCODER_NOT_CONFIGURED`, `GEOCODER_TIMEOUT`,
 `GEOCODER_UNAVAILABLE`, `GEOCODER_RESPONSE_INVALID`.
 
-Analysis: `PVGIS_NOT_CONFIGURED`, `PVGIS_TIMEOUT`, `PVGIS_UNAVAILABLE`,
-`PVGIS_RESPONSE_INVALID`.
+Potential and analysis: `PVGIS_NOT_CONFIGURED`, `PVGIS_TIMEOUT`,
+`PVGIS_UNAVAILABLE`, `PVGIS_RESPONSE_INVALID`.
 
 Lead: `CRM_NOT_CONFIGURED`, `CRM_TIMEOUT`, `CRM_UNAVAILABLE`, `CRM_REJECTED`,
 `TURNSTILE_NOT_CONFIGURED`, `BOT_VERIFICATION_REQUIRED`,

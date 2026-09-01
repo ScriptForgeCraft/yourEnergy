@@ -1,6 +1,4 @@
 import { compareOffer, isPriceBookActive } from './domain/index.js';
-
-const DRAFT_STORAGE_KEY = 'yourenergy-calculator-draft';
 const CORE_SCOPE_KEYS = [
   'panels',
   'inverter',
@@ -8,6 +6,10 @@ const CORE_SCOPE_KEYS = [
   'standard-installation',
   'basic-grid-connection'
 ];
+const SCOPE_LABEL_KEYS = Object.freeze({
+  'standard-installation': 'installation',
+  'basic-grid-connection': 'grid'
+});
 
 const positiveNumber = (value) => {
   const number = Number(value);
@@ -73,56 +75,6 @@ const initPriceBookReference = (config) => {
   version.hidden = false;
 };
 
-const saveCalculatorDraft = (draft) => {
-  try {
-    window.sessionStorage.setItem(DRAFT_STORAGE_KEY, JSON.stringify(draft));
-    return true;
-  } catch {
-    return false;
-  }
-};
-
-const initQuickCalculator = (config) => {
-  const form = document.querySelector('[data-quick-calculator]');
-  if (!form) return;
-
-  const status = form.querySelector('[data-tool-status]');
-  form.addEventListener('submit', (event) => {
-    event.preventDefault();
-    const values = new FormData(form);
-    const averageMonthlyKwh = positiveNumber(values.get('averageMonthlyKwh'));
-    const averageMonthlyBillAmd = positiveNumber(values.get('averageMonthlyBillAmd'));
-    const tariffRate = positiveNumber(values.get('tariff'));
-    const tariffProvided = String(values.get('tariff') ?? '').trim().length > 0;
-
-    if (
-      (!averageMonthlyKwh && !averageMonthlyBillAmd) ||
-      (averageMonthlyBillAmd && !tariffRate) ||
-      (tariffProvided && !tariffRate)
-    ) {
-      setStatus(status, config.strings.invalid, true);
-      return;
-    }
-
-    const consumption = averageMonthlyKwh ? { averageMonthlyKwh } : { averageMonthlyBillAmd };
-    const draft = {
-      address: String(values.get('address') ?? '').trim(),
-      consumption,
-      tariff: tariffRate ? { rateAmdPerKwh: tariffRate } : null
-    };
-
-    if (!saveCalculatorDraft(draft)) {
-      setStatus(status, config.strings.storageUnavailable, true);
-      return;
-    }
-
-    setStatus(status, config.strings.stored);
-    window.setTimeout(() => {
-      window.location.assign(`${config.homeHref}#calculator`);
-    }, 60);
-  });
-};
-
 const populateList = (list, items) => {
   if (!list) return;
   list.replaceChildren();
@@ -166,15 +118,15 @@ const initOfferChecker = (config) => {
   };
 
   const resultReason = (reason, comparison) => {
-    const localized = config.strings.reason[reason];
-    if (localized) return localized;
     if (reason === 'CORE_SCOPE_INCOMPLETE' && comparison.missingInclusions.length) {
       const missing = comparison.missingInclusions
-        .map((key) => config.strings.scope[key])
+        .map((key) => config.strings.scope[SCOPE_LABEL_KEYS[key] ?? key])
         .filter(Boolean)
         .join(', ');
       return `${config.strings.scopeIncomplete}: ${missing}.`;
     }
+    const localized = config.strings.reason?.[reason];
+    if (localized) return localized;
     return config.strings.notComparable;
   };
 
@@ -229,7 +181,10 @@ const initOfferChecker = (config) => {
       populateList(reasons, [...new Set(messages)]);
     }
 
-    populateList(questionsList, comparison.questions);
+    populateList(
+      questionsList,
+      comparison.questionKeys.map((key) => config.strings.questions?.[key]).filter(Boolean)
+    );
     result.focus({ preventScroll: false });
   });
 
@@ -243,5 +198,4 @@ const initOfferChecker = (config) => {
 
 const config = readConfig();
 initPriceBookReference(config);
-if (config?.toolType === 'calculator') initQuickCalculator(config);
 if (config?.toolType === 'offer-checker') initOfferChecker(config);

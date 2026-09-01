@@ -12,6 +12,12 @@ const cleanString = (value, maximum = 220) =>
 
 const priceBookRepository = new PriceBookRepository();
 
+// Conservative, server-owned assumptions make a manually outlined roof part
+// of the preliminary capacity constraint without presenting it as a layout.
+const PRELIMINARY_PANEL_WATTS = 580;
+const PRELIMINARY_PANEL_AREA_SQM = 2;
+const PRELIMINARY_USABLE_ROOF_RATIO = 0.7;
+
 const selectTariffForP1 = (body) => {
   const rawRate = body?.tariff?.rateAmdPerKwh;
   if (rawRate !== undefined && rawRate !== null && rawRate !== '') {
@@ -39,6 +45,7 @@ const confirmedProperty = (body, validatedInput) => ({
 
 const confirmedRoof = (body, validatedInput) => ({
   areaSqm: body?.roof?.areaSqm,
+  usableAreaRatio: PRELIMINARY_USABLE_ROOF_RATIO,
   orientationDegrees: validatedInput.roof.azimuthDegrees,
   tiltDegrees: validatedInput.roof.tiltDegrees,
   polygonComplete: body?.roof?.polygonComplete === true,
@@ -109,12 +116,19 @@ export const buildP0SolarAnalysis = ({
     },
     tariffSelection: tariffSelection ?? undefined,
     tariffDataset: tariffSelection ? undefined : ARMENIA_TARIFF_DATASET,
-    system: {},
+    system: {
+      panelWatts: PRELIMINARY_PANEL_WATTS,
+      panelAreaSqm: PRELIMINARY_PANEL_AREA_SQM
+    },
     // The browser never controls capex. A dated server-side price book is the
     // only provisional commercial source used in this P1 route.
     investment: {},
     priceBook,
     effectiveDate,
-    assumptions: ['PVGIS_SYSTEM_LOSS_14_PERCENT']
+    assumptions: [
+      'PVGIS_SYSTEM_LOSS_14_PERCENT',
+      'PRELIMINARY_ROOF_USABLE_AREA_70_PERCENT',
+      'PRELIMINARY_PANEL_SIZE_580W_2M2'
+    ]
   });
 };

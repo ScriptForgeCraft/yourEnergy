@@ -30,15 +30,23 @@
       <div class='container header-row'>
         <a class='wordmark' href='{{homeHref}}' aria-label='{{aria.logo}}'><span>YOUR</span><strong
           >ENERGY</strong></a>
-        <nav class='desktop-nav' aria-label='{{aria.primaryNav}}'>
-          <a href='#calculator'>{{nav.home}}</a>
-          <a href='{{supportBase}}/soon/#business'>{{nav.business}}</a>
-          <a href='#projects'>{{nav.projects}}</a>
-          <a href='#process'>{{nav.process}}</a>
-          <a href='#engineering'>{{nav.about}}</a>
-          <a href='{{supportBase}}/soon/#blog'>{{nav.blog}}</a>
-          <a href='#contacts'>{{nav.contacts}}</a>
-        </nav>
+        {{#if isCalculatorPage}}
+          <nav class='desktop-nav' aria-label='{{toolShared.primaryNav}}'>
+            <a href='{{homeHref}}'>{{toolShared.home}}</a>
+            <a href='{{calculatorHref}}'>{{toolShared.calculator}}</a>
+            <a href='{{offerCheckerHref}}'>{{toolShared.offerChecker}}</a>
+          </nav>
+        {{else}}
+          <nav class='desktop-nav' aria-label='{{aria.primaryNav}}'>
+            <a href='{{calculatorHref}}'>{{nav.home}}</a>
+            <a href='{{supportBase}}/soon/#business'>{{nav.business}}</a>
+            <a href='#projects'>{{nav.projects}}</a>
+            <a href='#process'>{{nav.process}}</a>
+            <a href='#engineering'>{{nav.about}}</a>
+            <a href='{{supportBase}}/soon/#blog'>{{nav.blog}}</a>
+            <a href='#contacts'>{{nav.contacts}}</a>
+          </nav>
+        {{/if}}
         <div class='header-actions'>
           <a class='header-phone' href='{{contact.phoneHref}}'><strong>{{contact.phone}}</strong><small
             >{{contact.hours}}</small></a>
@@ -50,43 +58,63 @@
                 hreflang='{{hreflang}}'
                 aria-label='{{label}} — {{name}}'
               >{{label}}</a>{{/each}}</nav>
-          <a class='button button--small' href='#calculator'>{{common.cta}}</a>
+          {{#if isCalculatorPage}}
+            <a class='button button--small' href='{{offerCheckerHref}}'>{{toolShared.offerChecker}}</a>
+          {{else}}
+            <a class='button button--small' href='{{calculatorHref}}'>{{common.cta}}</a>
+          {{/if}}
         </div>
         <details class='mobile-menu' data-mobile-menu>
           <summary aria-label='{{aria.menu}}'><span></span><span></span><span></span></summary>
-          <nav aria-label='{{aria.mobileNav}}'>
-            <a href='#calculator'>{{nav.home}}</a>
-            <a href='{{supportBase}}/soon/#business'>{{nav.business}}</a>
-            <a href='#projects'>{{nav.projects}}</a>
-            <a href='#process'>{{nav.process}}</a>
-            <a href='#engineering'>{{nav.about}}</a>
-            <a href='{{supportBase}}/soon/#blog'>{{nav.blog}}</a>
-            <a href='#contacts'>{{nav.contacts}}</a>
-            <nav class='mobile-language-switcher' aria-label='{{aria.languageNav}}'>{{#each
+          <nav aria-label='{{#if isCalculatorPage}}{{toolShared.mobileNav}}{{else}}{{aria.mobileNav}}{{/if}}'>
+            {{#if isCalculatorPage}}
+              <a href='{{homeHref}}'>{{toolShared.home}}</a>
+              <a href='{{calculatorHref}}'>{{toolShared.calculator}}</a>
+              <a href='{{offerCheckerHref}}'>{{toolShared.offerChecker}}</a>
+              <a href='{{contact.phoneHref}}'>{{toolShared.phone}}</a>
+            {{else}}
+              <a href='{{calculatorHref}}'>{{nav.home}}</a>
+              <a href='{{supportBase}}/soon/#business'>{{nav.business}}</a>
+              <a href='#projects'>{{nav.projects}}</a>
+              <a href='#process'>{{nav.process}}</a>
+              <a href='#engineering'>{{nav.about}}</a>
+              <a href='{{supportBase}}/soon/#blog'>{{nav.blog}}</a>
+              <a href='#contacts'>{{nav.contacts}}</a>
+            {{/if}}
+            <div class='mobile-language-switcher' role='group' aria-label='{{aria.languageNav}}'>{{#each
                 languageLinks
               }}<a
                   class='language-link'
                   href='{{href}}'
                   hreflang='{{hreflang}}'
                   aria-label='{{label}} — {{name}}'
-                >{{label}}</a>{{/each}}</nav>
+                >{{label}}</a>{{/each}}</div>
           </nav>
         </details>
       </div>
     </header>
 
     <main id='main'>
+      {{#if isCalculatorPage}}
       <section class='hero section' id='calculator' aria-labelledby='hero-title'>
         <div class='container hero-grid'>
           <div class='hero-copy'>
             <p class='eyebrow'>{{hero.eyebrow}}</p>
             <h1 id='hero-title'>{{hero.titleLead}}<br />{{hero.titleMiddle}}<br /><mark
               >{{hero.titleAccent}}</mark></h1>
-            <p class='hero-intro'>{{hero.copy}}</p>
+            <p class='hero-intro'>{{hero.calculatorCopy}}</p>
             <p class='hero-tool-links'><a href='{{calculatorHref}}'>{{product.tools.calculator}}</a><a
                 href='{{offerCheckerHref}}'
               >{{product.tools.offerChecker}}</a></p>
-            <form class='address-form' data-address-form action='#calculator' novalidate>
+            <section class='calculator-flow-region' aria-labelledby='calculator-flow-title'>
+              <h2 id='calculator-flow-title'>{{product.flow.title}}</h2>
+              <ol class='calculator-flow' data-calculator-flow>
+                {{#each product.flow.steps}}<li data-calculator-flow-step='{{@index}}'><span
+                    class='calculator-flow__number'
+                  >{{number}}</span><span><strong>{{title}}</strong><small>{{copy}}</small></span></li>{{/each}}
+              </ol>
+            </section>
+            <form class='address-form' data-address-form action='#manual-consultation' novalidate>
               <label for='address'>{{hero.addressLabel}}</label>
               <div class='address-control'>
                 <svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#pin'></use></svg>
@@ -106,6 +134,89 @@
               <button class='text-button address-manual-point' type='button' data-location-manual-start>
                 {{product.location.chooseOnMap}}
               </button>
+            </form>
+            <section class='product-stage' data-location-stage hidden aria-labelledby='location-stage-title'>
+              <p class='eyebrow'>{{product.location.title}}</p>
+              <h2 id='location-stage-title'>{{product.location.confirmPrompt}}</h2>
+              <p data-location-message>{{product.location.copy}}</p>
+              <p class='location-result'><span>{{product.location.resultLabel}}</span><strong
+                  data-location-address
+                ></strong><small data-location-coordinates></small></p>
+              <div class='location-candidates' data-location-candidates hidden></div>
+              <div class='flow-actions'><button
+                  class='button button--navy'
+                  type='button'
+                  data-location-confirm
+                >{{product.location.confirm}}</button><button
+                  class='button button--outline'
+                  type='button'
+                  data-location-manual
+                >{{product.location.chooseOnMap}}</button></div>
+            </section>
+            <section class='product-stage roof-editor' data-roof-stage hidden aria-labelledby='roof-stage-title'>
+              <p class='eyebrow'>{{product.roof.title}}</p>
+              <h2 id='roof-stage-title'>{{product.roof.copy}}</h2>
+              <p data-roof-message>{{product.roof.locationRequired}}</p>
+              <div class='flow-actions'><button
+                  class='button button--navy'
+                  type='button'
+                  data-roof-start
+                >{{product.roof.start}}</button><button
+                  class='button button--outline'
+                  type='button'
+                  data-roof-add-center
+                >{{product.roof.addPointAtCenter}}</button><button
+                  class='button button--outline'
+                  type='button'
+                  data-roof-undo
+                >{{product.roof.undo}}</button><button
+                  class='button button--outline'
+                  type='button'
+                  data-roof-reset
+                >{{product.roof.reset}}</button></div>
+              <div class='roof-editor-controls'><label for='roof-orientation'>{{product.roof.orientationLabel}}<select
+                    id='roof-orientation'
+                    data-roof-orientation
+                  ><option value='unknown' selected>{{product.roof.orientationOptions.unknown}}</option><option value='180'>{{product.roof.orientationOptions.south}}</option><option
+                      value='225'
+                    >{{product.roof.orientationOptions.southWest}}</option><option value='135'
+                    >{{product.roof.orientationOptions.southEast}}</option><option value='90'
+                    >{{product.roof.orientationOptions.east}}</option><option value='270'
+                    >{{product.roof.orientationOptions.west}}</option><option value='0'
+                    >{{product.roof.orientationOptions.north}}</option><option value='custom'>{{product.roof.orientationOptions.custom}}</option></select></label><label
+                  data-roof-orientation-custom
+                  hidden
+                  for='roof-orientation-custom'
+                >{{product.roof.customOrientationLabel}}<input
+                    id='roof-orientation-custom'
+                    type='number'
+                    min='0'
+                    max='359.999'
+                    step='1'
+                    inputmode='decimal'
+                    aria-describedby='roof-orientation-custom-help'
+                    data-roof-orientation-custom-input
+                  /><small id='roof-orientation-custom-help'>{{product.roof.customOrientationHelp}}</small></label><label
+                  for='roof-tilt'
+                >{{product.roof.tiltLabel}}<input
+                    id='roof-tilt'
+                    type='number'
+                    min='0'
+                    max='90'
+                    step='1'
+                    aria-describedby='roof-tilt-help'
+                    data-roof-tilt
+                  /><small id='roof-tilt-help'>{{product.roof.tiltHelp}}</small></label></div>
+              <figure class='roof-angle-preview' aria-labelledby='roof-angle-preview-title'>
+                <figcaption id='roof-angle-preview-title'>{{product.roof.angleGuideTitle}}</figcaption>
+                <div class='roof-angle-preview__grid'>
+                  <svg class='roof-angle-preview__compass' viewBox='0 0 200 200' aria-hidden='true' focusable='false'>
+                    <circle cx='100' cy='100' r='73'></circle><path d='M100 21V179M21 100H179'></path><text x='100' y='15'>N</text><text x='187' y='105'>E</text><text x='100' y='196'>S</text><text x='7' y='105'>W</text><g data-roof-preview-arrow transform='rotate(180 100 100)'><path d='M100 34 88 84h24z'></path><path d='M100 166 88 116h24z'></path></g>
+                  </svg>
+                  <dl><div><dt>{{product.roof.angleGuideOrientation}}</dt><dd data-roof-preview-orientation>—</dd></div><div><dt>{{product.roof.angleGuideTilt}}</dt><dd data-roof-preview-tilt>—</dd></div></dl>
+                </div>
+                <p>{{product.roof.angleGuideCopy}}</p>
+              </figure>
               <fieldset class='consumption-inputs' data-consumption-inputs>
                 <legend>{{product.consumption.title}}</legend>
                 <p>{{product.consumption.copy}}</p>
@@ -172,62 +283,6 @@
                     data-consumption-annual
                   >—</output> {{product.common.kwh}}</p>
               </fieldset>
-            </form>
-            <section class='product-stage' data-location-stage hidden aria-labelledby='location-stage-title'>
-              <p class='eyebrow'>{{product.location.title}}</p>
-              <h2 id='location-stage-title'>{{product.location.confirmPrompt}}</h2>
-              <p data-location-message>{{product.location.copy}}</p>
-              <p class='location-result'><span>{{product.location.resultLabel}}</span><strong
-                  data-location-address
-                ></strong><small data-location-coordinates></small></p>
-              <div class='location-candidates' data-location-candidates hidden></div>
-              <div class='flow-actions'><button
-                  class='button button--navy'
-                  type='button'
-                  data-location-confirm
-                >{{product.location.confirm}}</button><button
-                  class='button button--outline'
-                  type='button'
-                  data-location-manual
-                >{{product.location.chooseOnMap}}</button></div>
-            </section>
-            <section class='product-stage roof-editor' data-roof-stage hidden aria-labelledby='roof-stage-title'>
-              <p class='eyebrow'>{{product.roof.title}}</p>
-              <h2 id='roof-stage-title'>{{product.roof.copy}}</h2>
-              <p data-roof-message>{{product.roof.locationRequired}}</p>
-              <div class='flow-actions'><button
-                  class='button button--navy'
-                  type='button'
-                  data-roof-start
-                >{{product.roof.start}}</button><button
-                  class='button button--outline'
-                  type='button'
-                  data-roof-undo
-                >{{product.roof.undo}}</button><button
-                  class='button button--outline'
-                  type='button'
-                  data-roof-reset
-                >{{product.roof.reset}}</button></div>
-              <div class='roof-editor-controls'><label for='roof-orientation'>{{product.roof.orientationLabel}}<select
-                    id='roof-orientation'
-                    data-roof-orientation
-                  ><option value='180'>{{product.roof.orientationOptions.south}}</option><option
-                      value='225'
-                    >{{product.roof.orientationOptions.southWest}}</option><option value='135'
-                    >{{product.roof.orientationOptions.southEast}}</option><option value='90'
-                    >{{product.roof.orientationOptions.east}}</option><option value='270'
-                    >{{product.roof.orientationOptions.west}}</option><option value='0'
-                    >{{product.roof.orientationOptions.north}}</option><option value=''>{{product.roof.orientationOptions.custom}}</option></select></label><label
-                  for='roof-tilt'
-                >{{product.roof.tiltLabel}}<input
-                    id='roof-tilt'
-                    type='number'
-                    min='0'
-                    max='60'
-                    step='1'
-                    value='25'
-                    data-roof-tilt
-                  /></label></div>
               <p class='roof-editor__summary'><span data-roof-points>{{product.roof.pointsLabel}}</span><strong
                   data-roof-area
                 >—</strong></p>
@@ -245,7 +300,7 @@
                   >↓</button><button type='button' data-roof-remove>{{product.roof.removePoint}}</button></div></div>
               <button class='button' type='button' data-roof-finish disabled>{{product.roof.finish}}</button>
             </section>
-            <div class='upload-block' data-file-drop>
+            <div class='upload-block' data-file-drop data-optional-upload hidden>
               <label class='upload-control' for='bill-file'>
                 <span class='upload-icon' aria-hidden='true'><svg class='inline-icon'><use
                       href='/icons.svg#file'
@@ -272,7 +327,9 @@
             </div>
             <p class='form-status' id='analysis-status' data-analysis-status aria-live='polite'></p>
             <p class='form-status' id='file-status' data-file-status aria-live='polite'></p>
-            <noscript><p class='noscript-note'>{{hero.disclosure}}</p></noscript>
+            <noscript><p class='noscript-note' id='manual-consultation'>{{product.common.noJsCalculator}} <a
+                  href='{{contact.phoneHref}}'
+                >{{contact.phone}}</a></p></noscript>
             <ul class='hero-benefits' role='list'>
               {{#each hero.benefits}}<li><svg class='inline-icon' aria-hidden='true'><use
                       href='/icons.svg#check'
@@ -358,12 +415,6 @@
               <figcaption class='map-caption'><span class='demo-badge'>{{map.demo}}</span><span
                 >{{map.disclosure}}</span></figcaption>
               <div
-                class='leaflet-map'
-                data-leaflet-map
-                hidden
-                aria-label='{{map.interactive}}'
-              ></div>
-              <div
                 class='property-map'
                 data-property-map
                 hidden
@@ -386,7 +437,23 @@
                 </dl>
               </aside>
             </figure>
-            <div class='result-panel' data-result-panel>
+            <section class='site-potential' data-site-potential hidden aria-live='polite' aria-labelledby='site-potential-title' tabindex='-1'>
+              <p class='eyebrow'>{{product.potential.eyebrow}}</p>
+              <h2 id='site-potential-title'>{{product.potential.title}}</h2>
+              <p class='site-potential__status' data-site-potential-status></p>
+              <div class='site-potential__values' data-site-potential-values hidden>
+                <svg class='site-potential__compass' viewBox='0 0 200 200' aria-hidden='true' focusable='false'>
+                  <circle cx='100' cy='100' r='73'></circle><path d='M100 21V179M21 100H179'></path><text x='100' y='15'>N</text><text x='187' y='105'>E</text><text x='100' y='196'>S</text><text x='7' y='105'>W</text><g data-site-potential-arrow><path d='M100 34 88 84h24z'></path><path d='M100 166 88 116h24z'></path></g>
+                </svg>
+                <dl><div><dt>{{product.potential.annualYieldLabel}}</dt><dd data-site-potential-yield>—</dd></div><div><dt>{{product.potential.orientationLabel}}</dt><dd data-site-potential-orientation>—</dd></div><div><dt>{{product.potential.tiltLabel}}</dt><dd data-site-potential-tilt>—</dd></div></dl>
+              </div>
+              <p class='site-potential__source' data-site-potential-source>{{product.potential.source}}</p>
+              <p>{{product.potential.disclosure}}</p>
+              <p>{{product.potential.roofDisclosure}}</p>
+              <div class='flow-actions'><button class='button button--navy' type='button' data-site-potential-continue>{{product.potential.continue}}</button><button class='button button--outline' type='button' data-site-potential-retry hidden>{{product.potential.retry}}</button></div>
+            </section>
+            <div class='result-panel' data-result-panel {{#if isCalculatorPage}}hidden{{/if}}>
+              {{#unless isCalculatorPage}}<span class='demo-badge demo-badge--inline'>{{common.demo}}</span>{{/unless}}
               <p data-analysis-summary>{{map.result}}</p>
               <dl>
                 {{#each metrics}}
@@ -400,6 +467,90 @@
           </div>
         </div>
       </section>
+
+      {{else}}
+      <section class='hero section home-hero' id='top' aria-labelledby='hero-title'>
+        <div class='container hero-grid'>
+          <div class='hero-copy'>
+            <p class='eyebrow'>{{hero.eyebrow}}</p>
+            <h1 id='hero-title'>{{hero.titleLead}}<br />{{hero.titleMiddle}}<br /><mark
+              >{{hero.titleAccent}}</mark></h1>
+            <p class='hero-intro'>{{hero.homeCopy}}</p>
+            <p class='hero-tool-links'><a href='{{calculatorHref}}'>{{product.tools.calculator}}</a><a
+                href='{{offerCheckerHref}}'
+              >{{product.tools.offerChecker}}</a></p>
+            <div class='hero-actions'>
+              <a class='button button--navy' href='{{calculatorHref}}'>{{hero.openCalculator}}</a>
+              <a class='button button--outline' href='{{offerCheckerHref}}'>{{product.tools.offerChecker}}</a>
+            </div>
+            <p class='hero-route-note'>{{hero.disclosure}}</p>
+            <ul class='hero-benefits' role='list'>
+              {{#each hero.benefits}}<li><svg class='inline-icon' aria-hidden='true'><use
+                      href='/icons.svg#check'
+                    ></use></svg>{{this}}</li>{{/each}}
+            </ul>
+          </div>
+
+          <div class='roof-product' aria-label='{{map.title}}'>
+            <figure class='roof-visual'>
+              <picture>
+                <source
+                  type='image/avif'
+                  srcset='/images/roof-scan-480.avif 480w, /images/roof-scan-768.avif 768w, /images/roof-scan-1200.avif 1200w, /images/roof-scan-1600.avif 1600w'
+                  sizes='(max-width: 760px) 100vw, 50vw'
+                />
+                <source
+                  type='image/webp'
+                  srcset='/images/roof-scan-480.webp 480w, /images/roof-scan-768.webp 768w, /images/roof-scan-1200.webp 1200w, /images/roof-scan-1600.webp 1600w'
+                  sizes='(max-width: 760px) 100vw, 50vw'
+                />
+                <img
+                  src='/images/roof-scan-1200.jpg'
+                  srcset='/images/roof-scan-480.jpg 480w, /images/roof-scan-768.jpg 768w, /images/roof-scan-1200.jpg 1200w, /images/roof-scan-1600.jpg 1600w'
+                  sizes='(max-width: 760px) 100vw, 50vw'
+                  width='1600'
+                  height='1067'
+                  alt='{{map.imageAlt}}'
+                  fetchpriority='high'
+                  decoding='async'
+                />
+              </picture>
+              <div class='roof-shade' aria-hidden='true'></div>
+              <svg class='roof-overlay' viewBox='0 0 1000 660' aria-hidden='true' focusable='false'>
+                <polygon points='295,125 670,214 616,499 239,410' class='roof-boundary'></polygon>
+                <g class='panel-grid'>
+                  <rect x='330' y='195' width='66' height='49'></rect><rect x='400' y='212' width='66' height='49'></rect><rect x='470' y='229' width='66' height='49'></rect><rect x='540' y='246' width='66' height='49'></rect>
+                  <rect x='314' y='261' width='66' height='49'></rect><rect x='384' y='278' width='66' height='49'></rect><rect x='454' y='295' width='66' height='49'></rect><rect x='524' y='312' width='66' height='49'></rect>
+                  <rect x='298' y='327' width='66' height='49'></rect><rect x='368' y='344' width='66' height='49'></rect><rect x='438' y='361' width='66' height='49'></rect><rect x='508' y='378' width='66' height='49'></rect>
+                  <rect x='282' y='393' width='66' height='49'></rect><rect x='352' y='410' width='66' height='49'></rect><rect x='422' y='427' width='66' height='49'></rect><rect x='492' y='444' width='66' height='49'></rect>
+                </g>
+              </svg>
+              <figcaption class='map-caption'><span class='demo-badge'>{{map.demo}}</span><span
+                >{{map.disclosure}}</span></figcaption>
+              <aside class='roof-info'>
+                <strong>{{map.location}}</strong>
+                <dl>
+                  <div><dt>{{map.roofArea}}</dt><dd>{{map.roofAreaValue}}</dd></div>
+                  <div><dt>{{map.orientation}}</dt><dd>{{map.orientationValue}}</dd></div>
+                  <div><dt>{{map.tilt}}</dt><dd>{{map.tiltValue}}</dd></div>
+                  <div class='success'><dt>{{map.score}}</dt><dd>{{map.scoreValue}}</dd></div>
+                </dl>
+              </aside>
+            </figure>
+            <div class='result-panel'>
+              <span class='demo-badge demo-badge--inline'>{{common.demo}}</span>
+              <p>{{map.result}}</p>
+              <dl>
+                {{#each metrics}}
+                  <div><dt>{{label}}</dt><dd>{{value}} <small>{{unit}}</small></dd></div>
+                {{/each}}
+              </dl>
+              <a href='{{calculatorHref}}'>{{map.full}} <span aria-hidden='true'>→</span></a>
+            </div>
+          </div>
+        </div>
+      </section>
+      {{/if}}
 
       <section
         class='passport section section--soft'
@@ -417,7 +568,7 @@
                   ><use href='/icons.svg#check'></use></svg>{{this}}</li>{{/each}}</ul>
             <a
               class='button button--outline'
-              href='#calculator'
+              href='{{calculatorHref}}'
               data-open-passport
             >{{passport.cta}}</a>
             <p class='passport-persistence' data-passport-persistence hidden><strong
@@ -433,6 +584,9 @@
             <p class='passport-label'>{{passport.reportLabel}}</p>
             <h3 data-analysis-location>{{passport.reportAddress}}</h3>
             <p class='passport-date' data-passport-date>{{passport.reportDate}}</p>
+            {{#if isCalculatorPage}}
+            <div class='passport-card__placeholder' aria-hidden='true'></div>
+            {{else}}
             <div class='passport-card__visual'>
               <picture>
                 <source
@@ -458,6 +612,7 @@
               </picture>
               <span class='mini-panels' aria-hidden='true'></span><span class='demo-badge'>{{map.demo}}</span>
             </div>
+            {{/if}}
             <dl class='passport-specs'>
               <div><dt>{{passport.system}}</dt><dd
                   data-analysis='capacity'
@@ -492,6 +647,7 @@
                       data-chart-value>{{value}}</td></tr>{{/each}}</tbody></table></details>
           </div>
         </div>
+        {{#if isCalculatorPage}}
         <section class='analysis-ledger' data-analysis-ledger hidden aria-labelledby='analysis-ledger-title'>
           <div><p class='eyebrow'>{{product.result.title}}</p><h3
               id='analysis-ledger-title'
@@ -502,8 +658,10 @@
             ></p></div><dl data-analysis-ledger-list></dl><div><h3
               >{{product.result.assumptionsTitle}}</h3><ul data-analysis-assumptions></ul></div>
         </section>
+        {{/if}}
       </section>
 
+      {{#if isCalculatorPage}}
       <section class='lead-section section section--soft' data-lead-section hidden aria-labelledby='lead-title'>
         <div class='container lead-grid'><div><p class='eyebrow'>YOURENERGY</p><h2
               id='lead-title'
@@ -525,7 +683,9 @@
               aria-live='polite'
             ></p></form></div>
       </section>
+      {{/if}}
 
+      {{#unless isCalculatorPage}}
       <aside class='trust-strip' aria-label='{{trust.disclosure}}'>
         <div class='container trust-strip__inner'>
           {{#each trust.items}}
@@ -536,6 +696,7 @@
         </div>
         <p class='trust-disclosure'>{{trust.disclosure}}</p>
       </aside>
+      {{/unless}}
 
       <section class='solutions section' id='solutions' aria-labelledby='solutions-title'>
         <div class='container'>
@@ -553,7 +714,7 @@
                 <strong class='solution-price' data-analysis-scenario-price data-static-value='{{price}}'>{{price}}</strong>
                 <details><summary>{{detailsLabel}}</summary><ul>{{#each details}}<li
                       >{{this}}</li>{{/each}}</ul></details>
-                <a class='button {{buttonClass}}' href='#calculator'>{{ctaLabel}}</a>
+                <a class='button {{buttonClass}}' href='{{../solutionHref}}'>{{ctaLabel}}</a>
               </article>
             {{/each}}
           </div>
@@ -561,6 +722,7 @@
         </div>
       </section>
 
+      {{#unless isCalculatorPage}}
       <section
         class='projects section section--soft'
         id='projects'
@@ -624,6 +786,7 @@
                 >{{copy}}</p></li>{{/each}}</ol>
         </div>
       </section>
+      {{/unless}}
 
       <section class='finance section' id='investment' aria-labelledby='finance-title'>
         <div class='container finance-grid'>
@@ -684,6 +847,7 @@
         </div>
       </section>
 
+      {{#unless isCalculatorPage}}
       <section class='engineering section' id='engineering' aria-labelledby='engineering-title'><div
           class='container engineering-grid'
         ><div class='engineering-photo'><picture><source
@@ -785,14 +949,23 @@
               id='final-title'
             >{{finalCta.title}}</h2><p>{{finalCta.copy}}</p></div><div class='final-cta__actions'><a
               class='button'
-              href='#calculator'
+              href='{{calculatorHref}}'
             >{{finalCta.primary}}</a><a
               class='button button--ghost'
               href='#passport'
               data-open-passport
             >{{finalCta.secondary}}</a><small>{{finalCta.note}}</small></div></div></section>
+      {{/unless}}
     </main>
 
+    {{#if isCalculatorPage}}
+      <footer class='tool-footer'>
+        <div class='container'>
+          <p>{{toolShared.footer}}</p>
+          <a href='{{contact.phoneHref}}'>{{contact.phone}}</a>
+        </div>
+      </footer>
+    {{else}}
     <footer class='site-footer' id='contacts'><div class='container footer-grid'><div><a
             class='wordmark'
             href='{{homeHref}}'
@@ -818,6 +991,7 @@
           >{{footer.privacy}}</a><a
             href='{{supportBase}}/terms/'
           >{{footer.terms}}</a></span></div></footer>
+    {{/if}}
 
     <dialog class='passport-dialog' data-passport-dialog aria-labelledby='dialog-title'><form
         method='dialog'
@@ -827,7 +1001,7 @@
           >×</span></button></form><div class='dialog-content'><p
           class='eyebrow'
         data-passport-dialog-eyebrow
-        >{{passport.reportLabel}} · {{common.demo}}</p><h2
+        >{{passport.reportLabel}} · {{#if isCalculatorPage}}{{product.result.title}}{{else}}{{common.demo}}{{/if}}</p><h2
           id='dialog-title'
           data-passport-dialog-title
         >{{passport.dialogTitle}}</h2><div class='dialog-report'><article class='passport-card'><div
@@ -848,7 +1022,11 @@
                   >{{value}} {{unit}}</dd></div>{{/each}}</dl><p
             >{{finance.disclaimer}}</p></div></div></div></dialog>
 
-    <script id='page-config' type='application/json'>{{{pageConfig}}}</script>
-    <script type='module' src='/src/main.js'></script>
+    {{#if isCalculatorPage}}
+      <script id='page-config' type='application/json'>{{{pageConfig}}}</script>
+      <script type='module' src='/src/main.js'></script>
+    {{else}}
+      <script type='module' src='/src/home.js'></script>
+    {{/if}}
   </body>
 </html>
