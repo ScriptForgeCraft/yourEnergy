@@ -1,5 +1,6 @@
 import { configuredUrl, envString, providerTimeoutMs } from './config.js';
 import { ApiError, isApiError } from './http.js';
+import { createPvgisCache } from './pvgis-cache.js';
 import { fetchJsonWithTimeout } from './provider.js';
 
 const numberInRange = (value, minimum, maximum) => {
@@ -143,7 +144,39 @@ export const normalizePvgisOptimalResult = (payload) => {
   };
 };
 
-export const createPvgisAdapter = (env, { fetchImpl = fetch } = {}) => {
+const providerLedger = (kind, retrievedAt, cache) => [
+  {
+    kind,
+    provider: 'PVGIS',
+    retrievedAt,
+    cache
+  }
+];
+
+const responseFromCachedAnalysis = ({ input, generation, cache }) => ({
+  source: 'provider',
+  provider: 'pvgis',
+  inputs: input,
+  generation,
+  cache,
+  providerRetrievedAt: cache.providerRetrievedAt,
+  sourceLedger: providerLedger('solar-yield', cache.providerRetrievedAt, cache)
+});
+
+const responseFromCachedPotential = ({ input, optimum, cache }) => ({
+  source: 'provider',
+  provider: 'pvgis',
+  input,
+  optimum,
+  cache,
+  providerRetrievedAt: cache.providerRetrievedAt,
+  sourceLedger: providerLedger('solar-potential-optimum', cache.providerRetrievedAt, cache)
+});
+
+export const createPvgisAdapter = (
+  env,
+  { fetchImpl = fetch, cache = createPvgisCache(env) } = {}
+) => {
   const endpoint = envString(env, 'PVGIS_ENDPOINT')
     ? configuredUrl(env, 'PVGIS_ENDPOINT', 'PVGIS_NOT_CONFIGURED')
     : new URL(DEFAULT_PVGIS_ENDPOINT);
@@ -151,6 +184,14 @@ export const createPvgisAdapter = (env, { fetchImpl = fetch } = {}) => {
 
   return {
     async analyze(input, { signal } = {}) {
+      const cached = await cache.read({ mode: 'manual-roof-plane', input });
+      if (cached.hit) {
+        return responseFromCachedAnalysis({
+          input,
+          generation: cached.value.generation,
+          cache: cached.cache
+        });
+      }
       const payload = await fetchJsonWithTimeout(
         fetchImpl,
         buildPvgisUrl(endpoint, input),
@@ -164,27 +205,24 @@ export const createPvgisAdapter = (env, { fetchImpl = fetch } = {}) => {
         }
       );
       const generation = normalizePvgisResult(payload);
+      const cacheMetadata = await cache.write({
+        mode: 'manual-roof-plane',
+        input,
+        value: { generation }
+      });
 
-      return {
-        source: 'provider',
-        provider: 'pvgis',
-        inputs: input,
-        generation,
-        confidence: {
-          status: 'provider-data',
-          provider: 'pvgis'
-        },
-        sourceLedger: [
-          {
-            kind: 'solar-yield',
-            provider: 'PVGIS',
-            retrievedAt: new Date().toISOString()
-          }
-        ]
-      };
+      return responseFromCachedAnalysis({ input, generation, cache: cacheMetadata });
     },
     async potential(input, { signal } = {}) {
       try {
+        const cached = await cache.read({ mode: 'site-benchmark', input });
+        if (cached.hit) {
+          return responseFromCachedPotential({
+            input,
+            optimum: cached.value.optimum,
+            cache: cached.cache
+          });
+        }
         const payload = await fetchJsonWithTimeout(
           fetchImpl,
           buildPvgisUrl(endpoint, input, { optimalAngles: true }),
@@ -198,20 +236,13 @@ export const createPvgisAdapter = (env, { fetchImpl = fetch } = {}) => {
           }
         );
         const optimum = normalizePvgisOptimalResult(payload);
-
-        return {
-          source: 'provider',
-          provider: 'pvgis',
+        const cacheMetadata = await cache.write({
+          mode: 'site-benchmark',
           input,
-          optimum,
-          sourceLedger: [
-            {
-              kind: 'solar-potential-optimum',
-              provider: 'PVGIS',
-              retrievedAt: new Date().toISOString()
-            }
-          ]
-        };
+          value: { optimum }
+        });
+
+        return responseFromCachedPotential({ input, optimum, cache: cacheMetadata });
       } catch (error) {
         // The potential endpoint itself should surface provider failures. This
         // branch merely preserves the documented cancellation code.

@@ -86,8 +86,8 @@ export default {
       steps: [
         {
           number: '01',
-          title: 'Find the property',
-          copy: 'Enter an address or place a point on the map, then confirm it.'
+          title: 'Choose the property point',
+          copy: 'Place and confirm a point manually. An address is only an optional label for an engineer.'
         },
         {
           number: '02',
@@ -114,12 +114,15 @@ export default {
       orientationLabel: 'Optimum direction for a free-standing system',
       tiltLabel: 'Optimum tilt for a free-standing system',
       source: 'Source: PVGIS · preliminary 14% system-loss assumption',
+      cacheHit: 'The PVGIS response came from the protected cache; source date: {date}.',
+      cacheMiss: 'PVGIS responded now; the cache protects the service from repeated requests.',
       disclosure:
         'This is a PVGIS benchmark for a fixed free-standing system at the chosen point. It is not a survey of your roof or an installation recommendation for it.',
       roofDisclosure:
         'The direction, pitch, area, shading and structural suitability of the actual roof must be entered below and confirmed by an engineer.',
       unavailable:
-        'PVGIS potential could not be retrieved. Continue with the roof outline or retry; no example figures will be substituted.',
+        'PVGIS potential could not be retrieved. Retry or contact an engineer; no example figures will be substituted.',
+      contactPrefix: 'Need a manual check? Call an engineer:',
       retry: 'Retry PVGIS potential',
       continue: 'Continue to my roof estimate',
       directions: {
@@ -161,11 +164,11 @@ export default {
     },
     location: {
       title: 'Property location',
-      copy: 'The address is only used to find a map point. Confirm the matched property or select a point manually.',
-      search: 'Find address',
+      copy: 'The primary path is to place and confirm a point manually. An address remains only a label and is not treated as geocoding.',
+      search: 'Choose a point on the map',
       searching: 'Finding address…',
-      resultLabel: 'Matched address',
-      confirmPrompt: 'Is this your property?',
+      resultLabel: 'Selected point',
+      confirmPrompt: 'Confirm the selected point',
       confirm: 'Confirm property',
       edit: 'Edit address',
       noResult: 'The address was not found. Select a point on the map manually.',
@@ -177,14 +180,21 @@ export default {
       useMapCenter: 'Use the map centre',
       manualUnavailable: 'Open the map to use its centre as a manual point.',
       pointSelected: 'Property point selected.',
-      retry: 'Try search again'
+      retry: 'Try search again',
+      coordinatesTitle: 'Enter coordinates if the map is unavailable',
+      coordinatesHelp:
+        'Latitude and longitude are used only for PVGIS. Check them before confirming.',
+      latitudeLabel: 'Latitude',
+      longitudeLabel: 'Longitude',
+      useCoordinates: 'Use these coordinates',
+      invalidCoordinates: 'Enter valid property coordinates.'
     },
     roof: {
       title: 'Roof outline',
       copy: 'Outline the usable roof area and enter the actual roof-face parameters for a preliminary estimate.',
       mapDisclosure:
         'The map helps place a point and an approximate outline. Without aerial imagery or a 3D model, it cannot automatically detect the roof, its pitch or shading.',
-      fallback: 'The map is unavailable. Continue after setting a location or try again.',
+      fallback: 'The map is unavailable. Enter and manually confirm the property coordinates.',
       start: 'Start outline',
       addPointAtCenter: 'Add a point at the map centre',
       addPoint: 'Add point',
@@ -197,6 +207,24 @@ export default {
       pointsLabel: 'Points in outline: {count}',
       minimumPoints: 'Add at least 3 points to finish the outline.',
       areaLabel: 'Preliminary roof area',
+      mountingModeLabel: 'Mounting approach',
+      mountingModeHelp:
+        'For roof-parallel mounting, the entered plane is calculated. For an elevated system, the PVGIS benchmark is compared with the planned plane.',
+      mountingModes: {
+        roofParallel: 'Parallel to the roof face',
+        elevated: 'Elevated / free-standing structure'
+      },
+      areaMethodTitle: 'How the area is provided',
+      areaMethodHelp:
+        'A map outline is the area from above, not the sloped roof-face area. Use a measured roof-face area for a steep roof.',
+      areaMethods: {
+        mapProjected: 'Map outline — projected area from above',
+        measuredPlane: 'Measured roof-face area'
+      },
+      planeAreaLabel: 'Measured roof-face area',
+      planeAreaHelp:
+        'Enter the measured area of one roof face in m². It is still preliminary until an engineer visit.',
+      planeAreaSummary: 'Preliminary roof-plane area used for calculation',
       orientationLabel: 'Roof-face direction',
       orientationHelp:
         'Choose the roof-face direction. A roof-specific calculation cannot be made without it; the PVGIS benchmark above remains available.',
@@ -212,6 +240,8 @@ export default {
         'The arrow shows the roof-face direction you entered. It is different from the PVGIS free-standing benchmark above.',
       angleGuideOrientation: 'Roof-face direction',
       angleGuideTilt: 'Roof-face tilt',
+      benchmarkOrientation: 'PVGIS benchmark for a free-standing plane',
+      benchmarkTilt: 'PVGIS tilt benchmark for a free-standing plane',
       angleGuideUnknown: 'Not specified',
       pointSelectLabel: 'Select point {index}',
       removePoint: 'Remove point',
@@ -247,14 +277,16 @@ export default {
       noSavings: 'There is not enough data to show savings and payback.',
       chartDescription:
         'Monthly preliminary generation based on the confirmed inputs and returned solar-resource data.',
-      confidenceTitle: 'Estimate confidence',
+      confidenceTitle: 'Input-data completeness',
       confidence: {
-        high: 'High',
-        medium: 'Medium',
-        low: 'Low',
+        preliminary: 'Preliminary inputs',
+        incomplete: 'Incomplete inputs',
+        high: 'Preliminary inputs',
+        medium: 'Preliminary inputs',
+        low: 'Incomplete inputs',
         insufficient: 'Not enough data'
       },
-      assumptionsTitle: 'Calculation assumptions',
+      assumptionsTitle: 'Assumptions and limits',
       commercialEstimate:
         'Preliminary YOUR ENERGY price · {version} · not an offer: {p25}–{p75}; P50 {p50}. Valid until {validUntil}.'
     },
@@ -269,7 +301,7 @@ export default {
     },
     ledger: {
       title: 'How this was calculated',
-      copy: 'The sources, versions and assumptions behind this preliminary result.',
+      copy: 'The sources, versions, assumptions and limits behind this preliminary result.',
       sources: {
         consumption: 'Consumption data',
         location: 'Property location',
@@ -297,7 +329,21 @@ export default {
         USER_PROVIDED_TARIFF:
           'The tariff was entered by the visitor from a bill and is not a tariff registry record.',
         TEMPORARY_PRICEBOOK_NOT_OFFER:
-          'The temporary PriceBook is a preliminary budget guide, not an offer or contractual price.'
+          'The temporary PriceBook is a preliminary budget guide, not an offer or contractual price.',
+        MAP_PROJECTED_AREA_CONVERTED_TO_ROOF_PLANE:
+          'The map outline area was converted from a top view to a preliminary roof-plane area using the entered tilt.',
+        USER_MEASURED_ROOF_PLANE_AREA:
+          'The roof-face area was entered by the visitor and needs engineering verification.',
+        MANUAL_PROPERTY_POINT:
+          'The property point was selected manually; it does not verify the address or ownership.',
+        MANUAL_ROOF_PLANE:
+          'Roof direction, tilt and area were entered manually; no automatic roof scan was performed.',
+        LOCAL_OBSTACLES_AND_STRUCTURE_NOT_MEASURED:
+          'Local obstacles, shade, structural suitability and grid connection were not measured.',
+        PVGIS_FREE_STANDING_BENCHMARK_FOR_ELEVATED_MOUNT:
+          'For an elevated structure, the PVGIS optimum is only a benchmark; an engineer confirms the design.',
+        ROOF_PARALLEL_MOUNT_REQUIRES_ENGINEER_CONFIRMATION:
+          'For a roof-parallel system, an engineer confirms the final parameters.'
       }
     },
     passport: {
@@ -338,6 +384,17 @@ export default {
       geocodeUnavailable: 'The geocoding service is not connected or is temporarily unavailable.',
       analysisUnavailable:
         'The solar-analysis service is not connected or is temporarily unavailable.',
+      outsideServiceArea:
+        'This free preliminary calculator currently serves points in Armenia only.',
+      cacheNotConfigured:
+        'PVGIS analysis is not enabled yet because its protected cache is not configured.',
+      cacheUnavailable: 'The protected PVGIS cache is temporarily unavailable. Try again later.',
+      roofAreaRequiresMeasured:
+        'For a very steep roof, enter a measured roof-face area instead of a top-view area.',
+      potentialCooldown: 'A repeat request for this point will be available in {seconds} s.',
+      analysisCooldown: 'A repeat calculation with the same data will be available in {seconds} s.',
+      inputsChanged:
+        'Inputs changed. The previous preliminary result is hidden until you calculate again.',
       leadUnavailable: 'The lead service is not connected or is temporarily unavailable.',
       retry: 'Try again',
       canceled: 'The previous request was cancelled.'
@@ -352,14 +409,14 @@ export default {
     homeCopy:
       'Open the full calculator: enter consumption, confirm the property point and roof outline, then receive a preliminary PVGIS estimate.',
     calculatorCopy:
-      'First find and confirm a point, then see its PVGIS potential. Roof and consumption data are only needed for the detailed estimate.',
+      'First choose and confirm a point manually, then see its PVGIS potential. Roof and consumption data are only needed for the detailed estimate.',
     disclosure:
       'A preliminary result requires property confirmation and does not replace a site visit, engineering design or commercial proposal.',
-    addressLabel: 'Your home address',
+    addressLabel: 'Address for the engineer (optional)',
     addressPlaceholder: 'For example: Yerevan, Arabkir',
     addressHelp:
-      'This step only finds a map point; it does not detect your roof angle, area or shading.',
-    analyze: 'Find address',
+      'The address is not geocoded. Open the map, choose a point manually or enter coordinates below.',
+    analyze: 'Open point selection',
     openCalculator: 'Open calculator',
     uploadTitle: 'Attach an electricity bill (optional)',
     uploadPrompt: 'Choose a file or drag it here',

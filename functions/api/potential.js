@@ -1,5 +1,6 @@
 import { createPvgisAdapter, validatePotentialInput } from '../_lib/pvgis.js';
 import { handlePost, readJsonBody } from '../_lib/http.js';
+import { assertArmeniaServiceArea } from '../_lib/service-area.js';
 
 const P0_PVGIS_QUERY = Object.freeze({ capacityKwp: 1, lossPercent: 14 });
 
@@ -10,13 +11,19 @@ const P0_PVGIS_QUERY = Object.freeze({ capacityKwp: 1, lossPercent: 14 });
  */
 export const potential = async ({ request, env, fetchImpl }) => {
   const input = validatePotentialInput(await readJsonBody(request));
+  assertArmeniaServiceArea({
+    latitude: input.property.latitude,
+    longitude: input.property.longitude
+  });
   const adapter = createPvgisAdapter(env, { fetchImpl });
   const providerPotential = await adapter.potential(input, { signal: request.signal });
-  const retrievedAt = providerPotential.sourceLedger?.[0]?.retrievedAt ?? new Date().toISOString();
+  const retrievedAt = providerPotential.providerRetrievedAt ?? new Date().toISOString();
 
   return {
     potential: {
       mode: 'site-potential',
+      scope: 'site-benchmark',
+      dataCompleteness: 'site-benchmark',
       source: 'provider',
       property: {
         coordinates: {
@@ -33,6 +40,8 @@ export const potential = async ({ request, env, fetchImpl }) => {
         tiltDegrees: providerPotential.optimum.tiltDegrees,
         basis: 'pvgis-fixed-free-standing-optimum'
       },
+      cache: providerPotential.cache ?? { state: 'miss', providerRetrievedAt: retrievedAt },
+      providerRetrievedAt: retrievedAt,
       sourceLedger: [
         {
           key: 'solar-potential-optimum',
@@ -47,7 +56,8 @@ export const potential = async ({ request, env, fetchImpl }) => {
       ],
       limitations: [
         'PVGIS_FREE_STANDING_OPTIMUM_NOT_ROOF_SURVEY',
-        'ROOF_GEOMETRY_SHADING_AND_STRUCTURAL_CHECK_REQUIRED'
+        'ROOF_GEOMETRY_SHADING_AND_STRUCTURAL_CHECK_REQUIRED',
+        'LOCAL_OBSTACLES_AND_STRUCTURE_NOT_MEASURED'
       ]
     }
   };

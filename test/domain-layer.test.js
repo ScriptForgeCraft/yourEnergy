@@ -154,7 +154,7 @@ test('buildSolarAnalysis derives transparent scenarios from explicit inputs only
     analysis.selectedScenario.generation.monthlyKwh.reduce((total, item) => total + item, 0),
     analysis.selectedScenario.generation.annualKwh
   );
-  assert.equal(analysis.confidence.level, 'high');
+  assert.equal(analysis.dataCompleteness.level, 'preliminary');
   assert.equal(analysis.sourceLedger.find((entry) => entry.key === 'tariff').available, true);
   assertFiniteTree(analysis);
 });

@@ -1,4 +1,4 @@
-# YOURENERGY — P1 engineering handoff
+# YOURENERGY — P1 honest PVGIS Roof Flow handoff
 
 Дата проверки: 1 сентября 2026. Тестовый Cloudflare Pages URL предоставлен
 владельцем, но текущая переработка ещё не деплоится автоматически.
@@ -33,43 +33,47 @@ Sharp, ESLint, `@eslint/js`, globals и Prettier. `npm ls --depth=0` подтв�
 свежий `npx --yes knip --dependencies` не нашёл неиспользуемых declared
 dependencies. Устаревший модуль `CRS.Simple` удалён.
 
-## 4. Честный P0 real-analysis flow
+## 4. Честный PVGIS Roof Flow
 
-1. На отдельной странице Calculator посетитель сначала вводит адрес **или**
-   выбирает ручную точку; потребление на этом шаге не требуется.
-2. `/api/geocode` возвращает только кандидатов; выбор точки всегда требует
-   явного подтверждения. При недоступности доступна ручная точка.
+1. На отдельной странице Calculator посетитель сначала вручную выбирает и
+   подтверждает точку на карте либо вводит координаты; адрес — только
+   необязательная подпись для инженера и не геокодируется. Потребление на этом
+   шаге не требуется.
+2. `/api/geocode` остаётся выключенным future-adapter до подключения
+   утверждённого provider; он не является browser fallback.
 3. После подтверждения `/api/potential` запрашивает PVGIS для этой точки и
    показывает годовую/месячную генерацию на 1 kWp, а также ориентир optimum
    orientation/tilt для свободно стоящей фиксированной системы. Это отдельный
    статус «Потенциал участка», а не заявление об угле реальной крыши.
 4. Только затем посетитель продолжает в detailed flow: на geographic Leaflet
-   map строит контур доступного ската и указывает его направление/примерный
-   наклон — оба поля обязательны для roof-specific расчёта. Клавиатурный
-   fallback позволяет выбрать центр карты, затем подтвердить точку. Можно
-   выбрать точку контура, сдвинуть её, отменить или сбросить контур. Кнопка
-   «Рассчитать по контуру» недоступна до трёх точек; среднее kWh либо
-   12-месячный профиль требуются только на этом шаге.
-5. `/api/analysis` запрашивает у server-side PVGIS yield для 1 kWp и
-   прозрачным образом масштабирует его от введённого потребления. Если
-   `PVGIS_ENDPOINT` не задан, Function использует публичный endpoint PVGIS;
-   его ошибка показывает retry/manual-contact, а не demo-цифры.
+   map строит контур доступного ската **либо** вводит измеренную площадь
+   плоскости, указывает монтаж, направление и примерный наклон. Контур — это
+   площадь сверху; до 75° она предварительно переводится в площадь ската, а
+   для более крутого ската требуется измеренная площадь. Клавиатурный fallback
+   позволяет выбрать центр карты, затем подтвердить точку. Можно выбрать точку
+   контура, сдвинуть её, отменить или сбросить контур.
+5. `/api/analysis` запрашивает server-side PVGIS yield для 1 kWp и прозрачно
+   масштабирует его от введённого потребления. Для `roof-parallel` используется
+   введённая плоскость ската; для `elevated` — PVGIS-ориентир свободно стоящей
+   конструкции. Любой запрос требует KV-кэш и salt; ошибка даёт
+   retry/manual-contact, а не demo-цифры.
 6. Dashboard, карта, Passport, chart, ledger и три варианта системы получают
    один `SolarAnalysis`; финансовые поля скрываются, если их источники не
-   подтверждены.
+   подтверждены. `dataCompleteness` никогда не выше `preliminary`.
 7. Если provider/configuration недоступны, UI показывает ошибку и очищенные
    значения, а не demo-результат.
 
 ## 5. Consumption, tariffs и расчёт
 
 Pure domain-модули содержат JSDoc-модели Property, Consumption, Roof, Tariff,
-SolarAnalysis, SolarPassport и Confidence. `ARMENIA_TARIFF_DATASET` versioned,
+SolarAnalysis, SolarPassport и DataCompleteness. `ARMENIA_TARIFF_DATASET` versioned,
 но намеренно не содержит неподтверждённой ставки. Пользователь может ввести
 AMD/kWh из собственного счёта: ledger и Passport прямо показывают источник
 `user`, а без usable tariff savings и payback скрыты.
 
-Контур крыши теперь влияет на предварительную мощность: server-side применяет
-консервативные 70% отмеченной площади и модуль 580 W / 2 м². Оба допущения
+Контур крыши теперь влияет на предварительную мощность: server-side сначала
+получает предварительную площадь плоскости ската, затем применяет
+консервативные 70% этой площади и модуль 580 W / 2 м². Оба допущения
 видны в ledger. Это ограничение вместимости, а не раскладка панелей и не
 инженерное измерение.
 
@@ -101,28 +105,31 @@ provider-ответа.
 
 Есть same-origin JSON endpoints:
 
-- `POST /api/geocode` — provider candidates;
-- `POST /api/potential` — PVGIS-ориентир для подтверждённой точки;
-- `POST /api/analysis` — подтверждённый property + контур + PVGIS + ledger;
+- `POST /api/geocode` — выключенный по умолчанию future provider-adapter;
+- `POST /api/potential` — PVGIS site-benchmark для подтверждённой точки;
+- `POST /api/analysis` — ручная плоскость крыши + PVGIS + ledger;
 - `POST /api/lead` — валидированный lead после результата.
 
 Все provider, CRM и Turnstile secrets читаются только server-side из
 `functions/.dev.vars`; `.env.example` содержит лишь публичные endpoint/map
-поля. API до вызова PVGIS отвергает неподтверждённый объект или незавершённую
-крышу и игнорирует client capex: активный PriceBook выбирается на сервере.
+поля. `PVGIS_CACHE` — обязательный Cloudflare KV binding, а
+`PVGIS_CACHE_SALT` — обязательный secret. Ключ кэша — salted hash
+нормализованного PVGIS-запроса; в KV остаётся только normalized PVGIS answer с
+timestamp на 7 дней, без адреса, расхода, тарифа или точек контура. API до
+вызова PVGIS отвергает неподтверждённый объект, координаты вне Армении,
+незавершённую/некорректную крышу и игнорирует client capex: активный PriceBook
+выбирается на сервере.
 OpenStreetMap — явный публичный fallback tile provider с attribution;
 `VITE_MAP_TILE_URL` можно заменить только на утверждённый HTTPS origin, который
 Vite добавит в `img-src` CSP. Functions не логируют адрес, координаты или lead
 PII.
 
-1 сентября на предоставленном тестовом Pages URL `/api/potential` отвечал
-`PVGIS_TIMEOUT` примерно через 1,3 секунды. Причина найдена в config parser:
-отсутствующее `API_FETCH_TIMEOUT_MS` превращалось через `Number(null)` в `0`
-и попадало в старый односекундный минимум. Исходник исправлен: отсутствие
-переменной теперь даёт 12 секунд, а заданное значение ограничивается 5–20
-секундами. Прямой запрос PVGIS для тестовой точки ответил примерно за 1,4 с.
-Изменение ещё требует деплоя в Pages; это не результат, выданный за
-производственную проверку.
+До установки KV binding и `PVGIS_CACHE_SALT` на Pages `/api/potential` и
+`/api/analysis` намеренно отвечают `PVGIS_CACHE_NOT_CONFIGURED`. Это
+безопасное состояние: публичный сайт не выполняет безлимитные запросы к
+бесплатному PVGIS и не подставляет демонстрационные цифры. После настройки
+нужен отдельный живой smoke: ручная точка в Армении → potential → контур →
+analysis → Passport.
 
 OSM не является спутниковой/3D моделью. Поэтому адрес и карта не могут честно
 определить фактический наклон, полезную площадь, затенение или несущую
@@ -170,7 +177,11 @@ homepage, прямые CTA homepage → same-locale Calculator, ручная т�
 custom azimuth, Escape для Passport dialog и provider-failure state без
 подстановки цифр. Найденный overlay статической roof-card, блокировавший клики
 по интерактивной карте, устранён; скрытые controls больше не отображаются из-за
-CSS. Offer Checker проверен в сценариях
+CSS. Leaflet markers не зависят от относительного `marker-icon-2x.png`: это
+локальные CSS/HTML markers, поэтому не появляется broken/undefined image. Map
+дополнительно invalidates размер после двух кадров раскладки и наблюдает размер
+контейнера; в fresh preview она проверена сразу на 1920 px, на 768 px и после
+возврата к 1920 px. Offer Checker проверен в сценариях
 P50 «в диапазоне» и неполной комплектации «несопоставимо»; в обоих случаях
 copy локализован. Leaflet/OSM загружается лениво с attribution; console errors
 не обнаружены.
@@ -184,8 +195,8 @@ provider mocks. MIME/size rules upload покрыты unit-тестом; Chrome 
 ## 11. Build и performance
 
 Fresh production build: homepage enhancement is 0.11 KB gzip (plus shared
-navigation/scroller chunks), full Calculator `main` is 12.19 KB gzip + shared
-domain chunk 3.98 KB gzip, CSS 11.33 KB gzip; Leaflet 43.38 KB gzip remains a
+navigation/scroller chunks), full Calculator `main` is 12.51 KB gzip + shared
+domain chunk 3.98 KB gzip, CSS 11.44 KB gzip; Leaflet 43.38 KB gzip remains a
 lazy chunk and the separate Offer Checker enhancement is 1.54 KB gzip.
 
 The 31.08 Lighthouse table in `reports/lighthouse/*-p1.json` belongs to the

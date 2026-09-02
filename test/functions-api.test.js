@@ -31,6 +31,28 @@ const postJson = (path, body, contentType = 'application/json') =>
 
 const readJson = async (response) => response.json();
 
+const createMemoryKv = () => {
+  const records = new Map();
+  const writes = [];
+  return {
+    records,
+    writes,
+    async get(key) {
+      return records.get(key) ?? null;
+    },
+    async put(key, value, options) {
+      writes.push({ key, value, options });
+      records.set(key, value);
+    }
+  };
+};
+
+const pvgisEnv = (overrides = {}) => ({
+  PVGIS_CACHE: createMemoryKv(),
+  PVGIS_CACHE_SALT: 'test-cache-salt',
+  ...overrides
+});
+
 const analysisPayload = Object.freeze({
   property: { latitude: 40.18, longitude: 44.51 },
   system: { capacityKwp: 6.96, lossPercent: 14 },
@@ -46,7 +68,14 @@ const p0AnalysisPayload = Object.freeze({
     source: 'manual'
   },
   consumption: { averageMonthlyKwh: 1000 },
-  roof: { areaSqm: 70, polygonComplete: true, tiltDegrees: 30, azimuthDegrees: 180 },
+  roof: {
+    areaMethod: 'map-projected',
+    mountingMode: 'roof-parallel',
+    projectedAreaSqm: 70,
+    polygonComplete: true,
+    tiltDegrees: 30,
+    azimuthDegrees: 180
+  },
   system: { capacityKwp: 1, lossPercent: 14 }
 });
 
@@ -178,7 +207,7 @@ test('site potential requests PVGIS optimum angles only for a confirmed point', 
     request: postJson('/potential', {
       property: { latitude: 40.18, longitude: 44.51, confirmed: true }
     }),
-    env: { PVGIS_ENDPOINT: 'https://pvgis.example/api' },
+    env: pvgisEnv({ PVGIS_ENDPOINT: 'https://pvgis.example/api' }),
     fetch: async (requestUrl) => {
       requestedUrl = new URL(requestUrl);
       return new Response(
@@ -212,7 +241,7 @@ test('site potential reports a provider failure instead of returning example val
     request: postJson('/potential', {
       property: { latitude: 40.18, longitude: 44.51, confirmed: true }
     }),
-    env: { PVGIS_ENDPOINT: 'https://pvgis.example/api' },
+    env: pvgisEnv({ PVGIS_ENDPOINT: 'https://pvgis.example/api' }),
     fetch: async () => {
       throw new TypeError('offline');
     }
@@ -229,7 +258,7 @@ test('analysis uses the documented server-side PVGIS default when no override is
   let requestedUrl = null;
   const response = await analysisOnRequest({
     request: postJson('/analysis', p0AnalysisPayload),
-    env: {},
+    env: pvgisEnv(),
     fetch: async (url) => {
       requestedUrl = String(url);
       return new Response(
@@ -253,7 +282,7 @@ test('analysis uses the documented server-side PVGIS default when no override is
 test('analysis joins real PVGIS yield with confirmed inputs and suppresses unverified finance', async () => {
   const response = await analysisOnRequest({
     request: postJson('/analysis', p0AnalysisPayload),
-    env: { PVGIS_ENDPOINT: 'https://pvgis.example/api' },
+    env: pvgisEnv({ PVGIS_ENDPOINT: 'https://pvgis.example/api' }),
     fetch: async () =>
       new Response(
         JSON.stringify({
@@ -298,7 +327,7 @@ test('analysis accepts a manual point and user tariff but ignores client-side ca
       investment: { capexAmd: 1, capexAmdPerKwp: 1 },
       priceBook: { ratesAmdPerWp: { p50: 1 } }
     }),
-    env: { PVGIS_ENDPOINT: 'https://pvgis.example/api' },
+    env: pvgisEnv({ PVGIS_ENDPOINT: 'https://pvgis.example/api' }),
     fetch: async () =>
       new Response(
         JSON.stringify({
@@ -353,7 +382,7 @@ test('the server makes a small outlined roof a visible preliminary capacity cons
   const analysis = buildP0SolarAnalysis({
     body: {
       ...p0AnalysisPayload,
-      roof: { ...p0AnalysisPayload.roof, areaSqm: 4 }
+      roof: { ...p0AnalysisPayload.roof, projectedAreaSqm: 4 }
     },
     validatedInput: {
       property: { latitude: 40.18, longitude: 44.51 },
@@ -383,7 +412,7 @@ test('analysis refuses an unconfirmed property or incomplete roof before contact
       ...p0AnalysisPayload,
       property: { ...p0AnalysisPayload.property, confirmed: false }
     }),
-    env: { PVGIS_ENDPOINT: 'https://pvgis.example/api' },
+    env: pvgisEnv({ PVGIS_ENDPOINT: 'https://pvgis.example/api' }),
     fetch: async () => {
       providerCalls += 1;
       return new Response('{}', { headers: { 'content-type': 'application/json' } });
@@ -403,7 +432,7 @@ test('analysis accepts only the documented 1 kWp / 14% PVGIS normalization query
       ...p0AnalysisPayload,
       system: { capacityKwp: 2, lossPercent: 14 }
     }),
-    env: { PVGIS_ENDPOINT: 'https://pvgis.example/api' },
+    env: pvgisEnv({ PVGIS_ENDPOINT: 'https://pvgis.example/api' }),
     fetch: async () => {
       providerCalls += 1;
       return new Response('{}', { headers: { 'content-type': 'application/json' } });

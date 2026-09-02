@@ -1,9 +1,11 @@
 # YOURENERGY Pages Functions
 
-These Cloudflare Pages Functions are an honest server boundary for address lookup,
-PVGIS yield data and lead delivery. They do not log request payloads, fabricate a
-location, fabricate a solar result, or acknowledge a lead before the configured
-CRM accepts it.
+These Cloudflare Pages Functions are an honest server boundary for optional
+address lookup, PVGIS yield data and lead delivery. They do not log request
+payloads, fabricate a location or solar result, or acknowledge a lead before
+the configured CRM accepts it. The browser's production calculator uses a
+manual point/coordinate flow; `/api/geocode` remains an opt-in future adapter,
+not a fallback that silently interprets an address as a property location.
 
 They are intentionally independent of Vite. `vite dev` does not execute Pages
 Functions; use `wrangler pages dev` (or the Cloudflare deployment preview) when
@@ -38,9 +40,10 @@ Request:
 `address` is accepted as a backward-compatible alias for `query`. The response
 contains `data.location.candidates` (provider-returned label, latitude,
 longitude and optional provider confidence), `selectionRequired: true`, and a
-source ledger.
-The browser must show the candidates and require the user to select or manually
-place a point; it must not treat a text query as a confirmed property.
+source ledger. It is intentionally not called by the current public browser
+flow until an approved provider is configured. Any future caller must require
+the visitor to select or manually place a point; a text query is never a
+confirmed property.
 
 ### `POST /api/potential`
 
@@ -52,7 +55,8 @@ Request:
 }
 ```
 
-This is the fast, location-level PVGIS step. It returns
+This is the fast, location-level PVGIS step. It accepts only points within the
+Armenia service-area guard and returns `scope: "site-benchmark"`,
 `data.potential.annualYieldKwhPerKwp`, a 12-month 1 kWp yield profile and the
 PVGIS optimum fixed tilt/orientation for a free-standing system at the confirmed
 point. The Function fixes the query at 1 kWp and 14% system losses, sends
@@ -64,6 +68,14 @@ say that the PVGIS optimum is a free-standing benchmark; the real roof face,
 usable area, obstacles, shading and structural suitability need the detailed
 workflow and an engineer.
 
+Every PVGIS request requires the `PVGIS_CACHE` KV binding and the secret
+`PVGIS_CACHE_SALT`. The seven-day cache key is a salted hash of only the
+normalized PVGIS query. The cache contains normalized PVGIS output and provider
+timestamps — never an address, consumption, tariff, roof outline or lead data.
+When either cache prerequisite is missing, the endpoint returns
+`PVGIS_CACHE_NOT_CONFIGURED` rather than calling a free provider without a
+protective limit.
+
 ### `POST /api/analysis`
 
 Request (PVGIS numeric inputs are deliberately required; the rest becomes the
@@ -72,7 +84,7 @@ transparent source ledger):
 ```json
 {
   "property": {
-    "address": "26/33 Zovuni, Yerevan",
+    "address": "Optional engineer label",
     "latitude": 40.2,
     "longitude": 44.5,
     "confirmed": true,
@@ -81,7 +93,9 @@ transparent source ledger):
   "consumption": { "averageMonthlyKwh": 1000 },
   "tariff": { "rateAmdPerKwh": 45 },
   "roof": {
-    "areaSqm": 70,
+    "areaMethod": "map-projected",
+    "mountingMode": "roof-parallel",
+    "projectedAreaSqm": 70,
     "polygonComplete": true,
     "tiltDegrees": 30,
     "azimuthDegrees": 180
@@ -90,13 +104,24 @@ transparent source ledger):
 }
 ```
 
-`tariff` is optional. Its rate is treated as user-provided and is recorded as
+`address` is optional and remains a label only. `tariff` is optional. Its rate
+is treated as user-provided and is recorded as
 such in the source ledger; without it (or a future approved tariff registry),
 savings, payback and the financial timeline remain unavailable. `azimuthDegrees`
 is compass bearing (0 north, 180 south). The function converts it to PVGIS
-aspect and returns `data.analysis`: a P1 domain analysis with PVGIS generation,
-the confirmed property/roof/consumption ledger, tariff state, confidence and
-assumptions.
+aspect and returns `data.analysis` with `scope: "manual-roof-plane"` and a
+maximum `dataCompleteness.level` of `"preliminary"`. It is never an exact roof,
+shading, construction or tariff claim.
+
+For `areaMethod: "map-projected"`, the manual outline is a top-view area and is
+converted provisionally to roof-face area using `projectedArea / cos(tilt)`.
+At 75° or steeper the endpoint rejects the request with
+`ROOF_AREA_REQUIRES_MEASURED_PLANE`; callers must use
+`areaMethod: "measured-plane"` with `planeAreaSqm`. `mountingMode:
+"roof-parallel"` requests PVGIS using the visitor's entered roof plane. For
+`"elevated"`, it uses the PVGIS fixed/free-standing optimum and returns it as a
+benchmark mounting recommendation. Neither mode measures local obstacles or
+structural capacity.
 
 The server independently selects the active dated YOURENERGY PriceBook for a
 standard grid-tied residential preliminary budget. That temporary price range
@@ -141,20 +166,22 @@ name, phone, email, message, coordinates or provider URL is echoed back.
 Set these in the Cloudflare dashboard / `wrangler secret put`, never in
 `VITE_*` variables or committed files:
 
-| Binding                                                                    | Required for      | Notes                                                                                                                                               |
-| -------------------------------------------------------------------------- | ----------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `GEOCODING_ENDPOINT`                                                       | `/api/geocode`    | HTTPS provider endpoint. It receives `q`, `language`, and `limit` by default; `{query}` and `{locale}` placeholders are supported.                  |
-| `GEOCODING_PROVIDER`                                                       | Optional          | A human-readable source name returned to the browser.                                                                                               |
-| `GEOCODING_API_KEY`                                                        | Optional          | Sent in a header, never as a browser value.                                                                                                         |
-| `GEOCODING_API_KEY_HEADER` / `GEOCODING_API_KEY_PREFIX`                    | Optional          | Header defaults to `authorization`; use prefix such as `Bearer `.                                                                                   |
-| `GEOCODING_QUERY_PARAM`, `GEOCODING_LOCALE_PARAM`, `GEOCODING_LIMIT_PARAM` | Optional          | Use only for a provider with matching query parameter names.                                                                                        |
-| `PVGIS_ENDPOINT`                                                           | Optional override | HTTPS PVGIS `PVcalc` endpoint. If absent, the Function uses the documented public PVGIS endpoint server-side; no URL or key is sent by the browser. |
-| `CRM_ENDPOINT`                                                             | `/api/lead`       | HTTPS CRM/webhook endpoint. A missing value produces `CRM_NOT_CONFIGURED`, never a false success.                                                   |
-| `CRM_API_KEY`                                                              | Optional          | Sent server-to-server using `CRM_API_KEY_HEADER` / `CRM_API_KEY_PREFIX`.                                                                            |
-| `TURNSTILE_SECRET_KEY`                                                     | Optional          | Enables server verification. When set, a token is required for each lead.                                                                           |
-| `LEAD_REQUIRE_TURNSTILE`                                                   | Optional          | Set to `true` to reject leads until Turnstile is configured. Default is `false`.                                                                    |
-| `API_FETCH_TIMEOUT_MS`                                                     | Optional          | Server fetch timeout, clamped to 5–20 seconds; default 12 seconds. Values below 5 seconds are raised because a valid PVGIS request can take longer. |
-| `ALLOW_INSECURE_PROVIDER_URLS`                                             | Local dev only    | Set `true` only for `http://localhost`, `127.0.0.1` or `[::1]` test adapters.                                                                       |
+| Binding                                                                    | Required for                      | Notes                                                                                                                                               |
+| -------------------------------------------------------------------------- | --------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `GEOCODING_ENDPOINT`                                                       | `/api/geocode`                    | HTTPS provider endpoint. It receives `q`, `language`, and `limit` by default; `{query}` and `{locale}` placeholders are supported.                  |
+| `GEOCODING_PROVIDER`                                                       | Optional                          | A human-readable source name returned to the browser.                                                                                               |
+| `GEOCODING_API_KEY`                                                        | Optional                          | Sent in a header, never as a browser value.                                                                                                         |
+| `GEOCODING_API_KEY_HEADER` / `GEOCODING_API_KEY_PREFIX`                    | Optional                          | Header defaults to `authorization`; use prefix such as `Bearer `.                                                                                   |
+| `GEOCODING_QUERY_PARAM`, `GEOCODING_LOCALE_PARAM`, `GEOCODING_LIMIT_PARAM` | Optional                          | Use only for a provider with matching query parameter names.                                                                                        |
+| `PVGIS_CACHE`                                                              | `/api/potential`, `/api/analysis` | Cloudflare KV namespace binding. It is mandatory; use exactly this binding name.                                                                    |
+| `PVGIS_CACHE_SALT`                                                         | `/api/potential`, `/api/analysis` | Secret used only to salt cache keys. Never expose it in `VITE_*`, logs or source control.                                                           |
+| `PVGIS_ENDPOINT`                                                           | Optional override                 | HTTPS PVGIS `PVcalc` endpoint. If absent, the Function uses the documented public PVGIS endpoint server-side; no URL or key is sent by the browser. |
+| `CRM_ENDPOINT`                                                             | `/api/lead`                       | HTTPS CRM/webhook endpoint. A missing value produces `CRM_NOT_CONFIGURED`, never a false success.                                                   |
+| `CRM_API_KEY`                                                              | Optional                          | Sent server-to-server using `CRM_API_KEY_HEADER` / `CRM_API_KEY_PREFIX`.                                                                            |
+| `TURNSTILE_SECRET_KEY`                                                     | Optional                          | Enables server verification. When set, a token is required for each lead.                                                                           |
+| `LEAD_REQUIRE_TURNSTILE`                                                   | Optional                          | Set to `true` to reject leads until Turnstile is configured. Default is `false`.                                                                    |
+| `API_FETCH_TIMEOUT_MS`                                                     | Optional                          | Server fetch timeout, clamped to 5–20 seconds; default 12 seconds. Values below 5 seconds are raised because a valid PVGIS request can take longer. |
+| `ALLOW_INSECURE_PROVIDER_URLS`                                             | Local dev only                    | Set `true` only for `http://localhost`, `127.0.0.1` or `[::1]` test adapters.                                                                       |
 
 The generic geocoder normalizes GeoJSON `features`, Nominatim-style arrays, and
 objects with `results` or `data` arrays. A provider with another wire format
@@ -170,7 +197,9 @@ Geocode: `GEOCODER_NOT_CONFIGURED`, `GEOCODER_TIMEOUT`,
 `GEOCODER_UNAVAILABLE`, `GEOCODER_RESPONSE_INVALID`.
 
 Potential and analysis: `PVGIS_NOT_CONFIGURED`, `PVGIS_TIMEOUT`,
-`PVGIS_UNAVAILABLE`, `PVGIS_RESPONSE_INVALID`.
+`PVGIS_UNAVAILABLE`, `PVGIS_RESPONSE_INVALID`,
+`PVGIS_CACHE_NOT_CONFIGURED`, `PVGIS_CACHE_UNAVAILABLE`,
+`OUTSIDE_SERVICE_AREA`, `ROOF_AREA_REQUIRES_MEASURED_PLANE`.
 
 Lead: `CRM_NOT_CONFIGURED`, `CRM_TIMEOUT`, `CRM_UNAVAILABLE`, `CRM_REJECTED`,
 `TURNSTILE_NOT_CONFIGURED`, `BOT_VERIFICATION_REQUIRED`,
@@ -181,4 +210,6 @@ Lead: `CRM_NOT_CONFIGURED`, `CRM_TIMEOUT`, `CRM_UNAVAILABLE`, `CRM_REJECTED`,
 The handlers export pure validation, URL construction, response normalization and
 adapter factories. Unit tests can import them directly and inject `fetchImpl`;
 no network call or Cloudflare account is needed. For an end-to-end Pages test,
-provide non-production `.dev.vars` values locally and keep that file ignored.
+bind a local KV namespace as `PVGIS_CACHE`, set a non-production
+`PVGIS_CACHE_SALT` in ignored `.dev.vars`, and keep all local credentials out
+of source control.

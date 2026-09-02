@@ -48,11 +48,11 @@ export const initConsumptionInput = ({ root, strings, onChange = () => {} } = {}
     if (annualOutput) annualOutput.textContent = annual === null ? '—' : String(Math.round(annual));
   };
 
-  const updateMode = () => {
+  const updateMode = ({ notify = true } = {}) => {
     const mode = activeMode();
     panels.forEach((panel) => togglePanel(panel, panel.dataset.consumptionPanel === mode));
     updateAnnualOutput();
-    onChange();
+    if (notify) onChange();
   };
 
   modeInputs.forEach((input) => input.addEventListener('change', updateMode));
@@ -63,7 +63,7 @@ export const initConsumptionInput = ({ root, strings, onChange = () => {} } = {}
       onChange();
     });
   });
-  updateMode();
+  updateMode({ notify: false });
 
   const setInvalid = (inputs, message) => {
     inputs.filter(Boolean).forEach((input) => input.setAttribute('aria-invalid', 'true'));

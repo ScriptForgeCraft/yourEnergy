@@ -17,6 +17,50 @@ const priceBookRepository = new PriceBookRepository();
 const PRELIMINARY_PANEL_WATTS = 580;
 const PRELIMINARY_PANEL_AREA_SQM = 2;
 const PRELIMINARY_USABLE_ROOF_RATIO = 0.7;
+const MAX_PROJECTED_AREA_TILT_DEGREES = 75;
+
+const positiveNumber = (value) => {
+  const number = Number(value);
+  return Number.isFinite(number) && number > 0 ? number : null;
+};
+
+const validAreaMethod = (value) =>
+  value === 'map-projected' || value === 'measured-plane' ? value : null;
+
+const validMountingMode = (value) =>
+  value === 'roof-parallel' || value === 'elevated' ? value : null;
+
+const roofAreaFromBody = (body, validatedInput) => {
+  const method = validAreaMethod(body?.roof?.areaMethod);
+  const mountingMode = validMountingMode(body?.roof?.mountingMode);
+  const projectedAreaSqm = positiveNumber(body?.roof?.projectedAreaSqm ?? body?.roof?.areaSqm);
+  const measuredPlaneAreaSqm = positiveNumber(body?.roof?.planeAreaSqm);
+  if (!method || !mountingMode) throw new ApiError('INVALID_INPUT');
+
+  if (method === 'measured-plane') {
+    if (measuredPlaneAreaSqm === null) throw new ApiError('INVALID_INPUT');
+    return {
+      method,
+      mountingMode,
+      projectedAreaSqm: null,
+      planeAreaSqm: measuredPlaneAreaSqm
+    };
+  }
+
+  if (projectedAreaSqm === null) throw new ApiError('INVALID_INPUT');
+  if (validatedInput.roof.tiltDegrees >= MAX_PROJECTED_AREA_TILT_DEGREES) {
+    throw new ApiError('ROOF_AREA_REQUIRES_MEASURED_PLANE');
+  }
+  const cosine = Math.cos((validatedInput.roof.tiltDegrees * Math.PI) / 180);
+  if (!Number.isFinite(cosine) || cosine <= 0)
+    throw new ApiError('ROOF_AREA_REQUIRES_MEASURED_PLANE');
+  return {
+    method,
+    mountingMode,
+    projectedAreaSqm,
+    planeAreaSqm: projectedAreaSqm / cosine
+  };
+};
 
 const selectTariffForP1 = (body) => {
   const rawRate = body?.tariff?.rateAmdPerKwh;
@@ -43,41 +87,52 @@ const confirmedProperty = (body, validatedInput) => ({
   }
 });
 
-const confirmedRoof = (body, validatedInput) => ({
-  areaSqm: body?.roof?.areaSqm,
-  usableAreaRatio: PRELIMINARY_USABLE_ROOF_RATIO,
-  orientationDegrees: validatedInput.roof.azimuthDegrees,
-  tiltDegrees: validatedInput.roof.tiltDegrees,
-  polygonComplete: body?.roof?.polygonComplete === true,
-  source: {
-    kind: 'manual',
-    status: body?.roof?.polygonComplete === true ? 'confirmed' : 'provided',
-    provider: null,
-    reference: null,
-    verifiedAt: null
-  }
-});
+const confirmedRoof = (body, validatedInput, validatedArea = null) => {
+  const area = validatedArea ?? roofAreaFromBody(body, validatedInput);
+  return {
+    areaSqm: area.planeAreaSqm,
+    areaMethod: area.method,
+    projectedAreaSqm: area.projectedAreaSqm,
+    planeAreaSqm: area.planeAreaSqm,
+    mountingMode: area.mountingMode,
+    usableAreaRatio: PRELIMINARY_USABLE_ROOF_RATIO,
+    orientationDegrees: validatedInput.roof.azimuthDegrees,
+    tiltDegrees: validatedInput.roof.tiltDegrees,
+    polygonComplete: body?.roof?.polygonComplete === true,
+    source: {
+      kind: 'manual',
+      status: body?.roof?.polygonComplete === true ? 'confirmed' : 'provided',
+      provider: null,
+      reference: null,
+      verifiedAt: null
+    }
+  };
+};
 
 /**
  * The browser guides this sequence, but the public endpoint must enforce it
  * too. This prevents a caller from obtaining what looks like a property-level
  * result before explicitly confirming a point and outlining a usable roof.
  */
-export const validateP0AnalysisWorkflow = (body) => {
-  const areaSqm = Number(body?.roof?.areaSqm);
+export const validateP0AnalysisWorkflow = (body, validatedInput) => {
   const tariffSelection = selectTariffForP1(body);
   const consumption = normalizeConsumption(body?.consumption, { tariff: tariffSelection });
   const hasConfirmedProperty =
     body?.property?.confirmed === true &&
     (cleanString(body?.property?.address)?.length >= 5 || body?.property?.source === 'manual');
   const hasCompleteRoof =
-    body?.roof?.polygonComplete === true && Number.isFinite(areaSqm) && areaSqm > 0;
+    body?.roof?.polygonComplete === true ||
+    validAreaMethod(body?.roof?.areaMethod) === 'measured-plane';
 
   if (!hasConfirmedProperty || !hasCompleteRoof || !consumption.available) {
     throw new ApiError('INVALID_INPUT');
   }
 
-  return { consumption, tariffSelection };
+  return {
+    consumption,
+    tariffSelection,
+    roofArea: roofAreaFromBody(body, validatedInput)
+  };
 };
 
 /**
@@ -90,6 +145,7 @@ export const buildP0SolarAnalysis = ({
   validatedInput,
   providerAnalysis,
   tariffSelection,
+  roofArea,
   effectiveDate = new Date()
 }) => {
   const priceBook = priceBookRepository.getActive({
@@ -101,7 +157,7 @@ export const buildP0SolarAnalysis = ({
   return buildSolarAnalysis({
     property: confirmedProperty(body, validatedInput),
     consumption: body?.consumption,
-    roof: confirmedRoof(body, validatedInput),
+    roof: confirmedRoof(body, validatedInput, roofArea),
     production: {
       // P0 requests exactly 1 kWp, so PVGIS annual generation is a specific yield.
       annualYieldKwhPerKwp: providerAnalysis.generation.annualKwh,
@@ -125,10 +181,34 @@ export const buildP0SolarAnalysis = ({
     investment: {},
     priceBook,
     effectiveDate,
+    scope: 'manual-roof-plane',
+    dataCompleteness: 'preliminary',
+    cache: providerAnalysis.cache ?? null,
+    providerRetrievedAt:
+      providerAnalysis.providerRetrievedAt ??
+      providerAnalysis.sourceLedger?.[0]?.retrievedAt ??
+      null,
+    mountingRecommendation: providerAnalysis.recommendedMounting ?? null,
+    limitations: [
+      'MANUAL_PROPERTY_POINT',
+      'MANUAL_ROOF_PLANE',
+      'LOCAL_OBSTACLES_AND_STRUCTURE_NOT_MEASURED',
+      ...(body?.roof?.mountingMode === 'elevated'
+        ? ['PVGIS_FREE_STANDING_BENCHMARK_FOR_ELEVATED_MOUNT']
+        : ['ROOF_PARALLEL_MOUNT_REQUIRES_ENGINEER_CONFIRMATION'])
+    ],
     assumptions: [
       'PVGIS_SYSTEM_LOSS_14_PERCENT',
       'PRELIMINARY_ROOF_USABLE_AREA_70_PERCENT',
-      'PRELIMINARY_PANEL_SIZE_580W_2M2'
+      'PRELIMINARY_PANEL_SIZE_580W_2M2',
+      ...(body?.roof?.areaMethod === 'map-projected'
+        ? ['MAP_PROJECTED_AREA_CONVERTED_TO_ROOF_PLANE']
+        : ['USER_MEASURED_ROOF_PLANE_AREA'])
     ]
   });
 };
+
+export const __private__ = Object.freeze({
+  MAX_PROJECTED_AREA_TILT_DEGREES,
+  roofAreaFromBody
+});

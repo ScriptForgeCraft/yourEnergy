@@ -1,4 +1,4 @@
-export { ANALYSIS_STATUS, CONFIDENCE_LEVEL, SOURCE_KIND, SOURCE_STATUS } from './models.js';
+export { ANALYSIS_STATUS, DATA_COMPLETENESS_LEVEL, SOURCE_KIND, SOURCE_STATUS } from './models.js';
 export { normalizeConsumption, isNormalizedConsumption } from './consumption.js';
 export {
   getConfirmedTariffRate,
@@ -23,7 +23,8 @@ export {
   ANALYSIS_SCHEMA_VERSION,
   DEFAULT_SCENARIO_TARGETS,
   buildSolarAnalysis,
-  calculateConfidence,
+  calculateDataCompleteness,
+  calculateRoofPlaneArea,
   calculateSolarScenario,
   normalizeInvestment,
   normalizeProduction,

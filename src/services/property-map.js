@@ -60,6 +60,7 @@ export const createPropertyMap = async ({
   container,
   tileUrl = '',
   tileAttribution = '',
+  locationPointLabel = 'Selected property point',
   roofPointLabel = (index) => `Roof point ${index + 1}`,
   onLocationChange = () => {},
   onRoofChange = () => {}
@@ -74,6 +75,50 @@ export const createPropertyMap = async ({
   let roofPoints = [];
   let selectedPointIndex = -1;
   let mode = 'location';
+  let resizeFrame = null;
+  let resizeObserver = null;
+  let destroyed = false;
+
+  // Leaflet's default icon points at marker-icon-2x.png relative to the
+  // current document. Vite does not emit that URL, so use tiny local HTML/CSS
+  // markers instead of a fragile image asset.
+  const locationIcon = L.divIcon({
+    className: 'property-map__marker property-map__marker--location',
+    html: '<span aria-hidden="true"></span>',
+    iconSize: [34, 34],
+    iconAnchor: [17, 17]
+  });
+  const roofPointIcon = (index) =>
+    L.divIcon({
+      className: 'property-map__marker property-map__marker--roof',
+      html: `<span aria-hidden="true">${index + 1}</span>`,
+      iconSize: [28, 28],
+      iconAnchor: [14, 14]
+    });
+
+  const invalidateSizeAfterLayout = () => {
+    if (destroyed) return;
+    if (resizeFrame) cancelAnimationFrame(resizeFrame);
+    // The map is revealed by changing both `hidden` and its parent's visual
+    // layer. Two frames let CSS calculate the final desktop width before
+    // Leaflet reads it; ResizeObserver covers later grid/layout changes.
+    resizeFrame = requestAnimationFrame(() => {
+      resizeFrame = requestAnimationFrame(() => {
+        resizeFrame = null;
+        if (!destroyed) map.invalidateSize({ pan: false, debounceMoveend: true });
+      });
+    });
+  };
+
+  if (typeof ResizeObserver === 'function') {
+    resizeObserver = new ResizeObserver((entries) => {
+      if (entries.some((entry) => entry.contentRect.width > 0 && entry.contentRect.height > 0)) {
+        invalidateSizeAfterLayout();
+      }
+    });
+    resizeObserver.observe(container);
+  }
+  map.whenReady(invalidateSizeAfterLayout);
 
   if (tileUrl) {
     L.tileLayer(tileUrl, {
@@ -111,9 +156,11 @@ export const createPropertyMap = async ({
 
     roofMarkers = roofPoints.map((point, index) => {
       const marker = L.marker(point, {
+        icon: roofPointIcon(index),
         draggable: true,
         keyboard: true,
-        title: roofPointLabel(index)
+        title: roofPointLabel(index),
+        alt: roofPointLabel(index)
       }).addTo(map);
       marker.on('click', () => {
         selectedPointIndex = index;
@@ -142,7 +189,12 @@ export const createPropertyMap = async ({
     if (!isFinitePoint(candidate)) return false;
     const location = normalizePoint(candidate);
     locationMarker?.remove();
-    locationMarker = L.marker(location, { keyboard: true }).addTo(map);
+    locationMarker = L.marker(location, {
+      icon: locationIcon,
+      keyboard: true,
+      title: locationPointLabel,
+      alt: locationPointLabel
+    }).addTo(map);
     if (fit) map.setView(location, Math.max(map.getZoom(), 18), { animate: false });
     if (notify) onLocationChange(location);
     return true;
@@ -250,9 +302,12 @@ export const createPropertyMap = async ({
       setRoofPoints([]);
     },
     resize() {
-      map.invalidateSize();
+      invalidateSizeAfterLayout();
     },
     destroy() {
+      destroyed = true;
+      if (resizeFrame) cancelAnimationFrame(resizeFrame);
+      resizeObserver?.disconnect();
       map.remove();
     }
   };

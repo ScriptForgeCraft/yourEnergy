@@ -8,7 +8,7 @@
 
 /** @typedef {'manual'|'provider'|'registry'|'unavailable'} SourceKind */
 /** @typedef {'confirmed'|'provided'|'estimated'|'unavailable'} SourceStatus */
-/** @typedef {'high'|'medium'|'low'|'unavailable'} ConfidenceLevel */
+/** @typedef {'preliminary'|'incomplete'|'unavailable'} DataCompletenessLevel */
 /** @typedef {'unavailable'|'technical-ready'|'financial-ready'} AnalysisStatus */
 
 /**
@@ -49,6 +49,10 @@
 /**
  * @typedef {Object} Roof
  * @property {number|null} areaSqm
+ * @property {'map-projected'|'measured-plane'|null} areaMethod
+ * @property {number|null} projectedAreaSqm
+ * @property {number|null} planeAreaSqm
+ * @property {'roof-parallel'|'elevated'|null} mountingMode
  * @property {number|null} orientationDegrees
  * @property {number|null} tiltDegrees
  * @property {number|null} usableAreaRatio
@@ -80,7 +84,12 @@
  * @property {Object|null} commercialEstimate
  * @property {Object[]} scenarios
  * @property {Object|null} selectedScenario
- * @property {Object} confidence
+ * @property {'manual-roof-plane'|string} scope
+ * @property {Object} dataCompleteness
+ * @property {Object|null} cache
+ * @property {string|null} providerRetrievedAt
+ * @property {Object|null} mountingRecommendation
+ * @property {string[]} limitations
  * @property {Object[]} sourceLedger
  * @property {string[]} assumptions
  */
@@ -110,10 +119,9 @@
  * @property {string[]} assumptions
  */
 
-export const CONFIDENCE_LEVEL = Object.freeze({
-  HIGH: 'high',
-  MEDIUM: 'medium',
-  LOW: 'low',
+export const DATA_COMPLETENESS_LEVEL = Object.freeze({
+  PRELIMINARY: 'preliminary',
+  INCOMPLETE: 'incomplete',
   UNAVAILABLE: 'unavailable'
 });
 

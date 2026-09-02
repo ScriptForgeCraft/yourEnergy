@@ -76,6 +76,26 @@ const ERROR_DEFINITIONS = Object.freeze({
     message: 'Solar yield analysis returned an unusable response.',
     retryable: true
   },
+  PVGIS_CACHE_NOT_CONFIGURED: {
+    status: 503,
+    message: 'Solar analysis is not enabled until its protected provider cache is configured.',
+    retryable: false
+  },
+  PVGIS_CACHE_UNAVAILABLE: {
+    status: 503,
+    message: 'Solar analysis cache is temporarily unavailable. Try again later.',
+    retryable: true
+  },
+  OUTSIDE_SERVICE_AREA: {
+    status: 422,
+    message: 'This preliminary calculator currently serves locations in Armenia only.',
+    retryable: false
+  },
+  ROOF_AREA_REQUIRES_MEASURED_PLANE: {
+    status: 422,
+    message: 'Use a measured roof-face area for a very steep roof.',
+    retryable: false
+  },
   CRM_NOT_CONFIGURED: {
     status: 503,
     message: 'Lead delivery is not configured yet.',

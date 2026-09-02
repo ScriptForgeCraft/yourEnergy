@@ -1,5 +1,5 @@
 import { normalizeConsumption, isNormalizedConsumption } from './consumption.js';
-import { ANALYSIS_STATUS, CONFIDENCE_LEVEL, SOURCE_KIND, SOURCE_STATUS } from './models.js';
+import { ANALYSIS_STATUS, DATA_COMPLETENESS_LEVEL, SOURCE_KIND, SOURCE_STATUS } from './models.js';
 import {
   cleanString,
   MONTHS_PER_YEAR,
@@ -33,6 +33,9 @@ export const ANALYSIS_ASSUMPTIONS = Object.freeze([
 
 const sourceKinds = new Set(Object.values(SOURCE_KIND));
 const sourceStatuses = new Set(Object.values(SOURCE_STATUS));
+const areaMethods = new Set(['map-projected', 'measured-plane']);
+const mountingModes = new Set(['roof-parallel', 'elevated']);
+const MAX_PROJECTED_AREA_TILT_DEGREES = 75;
 
 const unavailableSource = Object.freeze({
   kind: SOURCE_KIND.UNAVAILABLE,
@@ -84,9 +87,40 @@ export const normalizeProperty = (input = {}) => {
   };
 };
 
+const validAreaMethod = (value) => (areaMethods.has(value) ? value : null);
+const validMountingMode = (value) => (mountingModes.has(value) ? value : null);
+
+/**
+ * Converts the plan-view area from a manual map outline into a preliminary
+ * roof-plane area. A near-vertical roof must use a measured plane area rather
+ * than magnifying a 2D outline. This is a geometric conversion, not a survey.
+ */
+export const calculateRoofPlaneArea = ({
+  areaMethod,
+  projectedAreaSqm,
+  planeAreaSqm,
+  tiltDegrees
+} = {}) => {
+  const method = validAreaMethod(areaMethod);
+  const measured = toPositiveNumberOrNull(planeAreaSqm);
+  const projected = toPositiveNumberOrNull(projectedAreaSqm);
+  const tilt = toFiniteNumberOrNull(tiltDegrees);
+  if (method === 'measured-plane') return measured;
+  if (
+    method !== 'map-projected' ||
+    projected === null ||
+    tilt === null ||
+    tilt < 0 ||
+    tilt >= MAX_PROJECTED_AREA_TILT_DEGREES
+  ) {
+    return null;
+  }
+  const cosine = Math.cos((tilt * Math.PI) / 180);
+  return Number.isFinite(cosine) && cosine > 0 ? projected / cosine : null;
+};
+
 /** @returns {import('./models.js').Roof} */
 export const normalizeRoof = (input = {}) => {
-  const areaSqm = toPositiveNumberOrNull(input.areaSqm);
   const orientationCandidate = toFiniteNumberOrNull(input.orientationDegrees);
   const tiltCandidate = toFiniteNumberOrNull(input.tiltDegrees);
   const usableAreaCandidate = toFiniteNumberOrNull(input.usableAreaRatio);
@@ -101,12 +135,32 @@ export const normalizeRoof = (input = {}) => {
       ? usableAreaCandidate
       : null;
   const polygonComplete = Boolean(input.polygonComplete);
+  const areaMethod = validAreaMethod(input.areaMethod);
+  const mountingMode = validMountingMode(input.mountingMode);
+  const projectedAreaSqm = toPositiveNumberOrNull(input.projectedAreaSqm);
+  const planeAreaSqm = toPositiveNumberOrNull(input.planeAreaSqm);
+  const derivedPlaneArea = calculateRoofPlaneArea({
+    areaMethod,
+    projectedAreaSqm,
+    planeAreaSqm,
+    tiltDegrees
+  });
+  const areaSqm = derivedPlaneArea ?? toPositiveNumberOrNull(input.areaSqm);
   const hasRoofInput = Boolean(
-    areaSqm || polygonComplete || orientationDegrees !== null || tiltDegrees !== null
+    areaSqm ||
+    projectedAreaSqm ||
+    planeAreaSqm ||
+    polygonComplete ||
+    orientationDegrees !== null ||
+    tiltDegrees !== null
   );
 
   return {
     areaSqm,
+    areaMethod,
+    projectedAreaSqm,
+    planeAreaSqm: derivedPlaneArea ?? planeAreaSqm,
+    mountingMode,
     orientationDegrees,
     tiltDegrees,
     usableAreaRatio,
@@ -367,7 +421,7 @@ const sourceEntry = (key, source, available, reason = null) => ({
  * Builds a transparent completeness score. It measures evidence available to
  * this calculation, rather than the physical quality of the proposed system.
  */
-export const calculateConfidence = ({
+export const calculateDataCompleteness = ({
   property,
   consumption,
   roof,
@@ -398,12 +452,10 @@ export const calculateConfidence = ({
   const missing = checks.filter((check) => !check.complete).map((check) => check.key);
   const essentialMissing = !consumption.available || !production.available;
   const level = essentialMissing
-    ? CONFIDENCE_LEVEL.UNAVAILABLE
-    : score >= 5
-      ? CONFIDENCE_LEVEL.HIGH
-      : score >= 3
-        ? CONFIDENCE_LEVEL.MEDIUM
-        : CONFIDENCE_LEVEL.LOW;
+    ? DATA_COMPLETENESS_LEVEL.UNAVAILABLE
+    : score >= 3
+      ? DATA_COMPLETENESS_LEVEL.PRELIMINARY
+      : DATA_COMPLETENESS_LEVEL.INCOMPLETE;
 
   return { level, score, maximumScore: checks.length, missing };
 };
@@ -498,6 +550,20 @@ export const buildSolarAnalysis = (input = {}) => {
     )
   ];
 
+  const dataCompleteness = calculateDataCompleteness({
+    property,
+    consumption,
+    roof,
+    production,
+    tariff,
+    investment,
+    priceBook,
+    effectiveDate: input.effectiveDate
+  });
+  const limitations = Array.isArray(input.limitations)
+    ? input.limitations.filter((limitation) => typeof limitation === 'string' && limitation)
+    : [];
+
   return {
     schemaVersion: ANALYSIS_SCHEMA_VERSION,
     mode: 'real-analysis',
@@ -511,6 +577,20 @@ export const buildSolarAnalysis = (input = {}) => {
     investment,
     priceBook: commercialEstimate?.priceBook ?? null,
     commercialEstimate,
+    scope: cleanString(input.scope) ?? 'manual-roof-plane',
+    dataCompleteness,
+    cache: input.cache && typeof input.cache === 'object' ? input.cache : null,
+    providerRetrievedAt: cleanString(input.providerRetrievedAt),
+    mountingRecommendation:
+      input.mountingRecommendation && typeof input.mountingRecommendation === 'object'
+        ? {
+            mountingMode: cleanString(input.mountingRecommendation.mountingMode),
+            tiltDegrees: toFiniteNumberOrNull(input.mountingRecommendation.tiltDegrees),
+            azimuthDegrees: toFiniteNumberOrNull(input.mountingRecommendation.azimuthDegrees),
+            basis: cleanString(input.mountingRecommendation.basis)
+          }
+        : null,
+    limitations,
     financial: {
       tariff: {
         kind: tariffKind,
@@ -525,16 +605,6 @@ export const buildSolarAnalysis = (input = {}) => {
     },
     scenarios,
     selectedScenario,
-    confidence: calculateConfidence({
-      property,
-      consumption,
-      roof,
-      production,
-      tariff,
-      investment,
-      priceBook,
-      effectiveDate: input.effectiveDate
-    }),
     sourceLedger,
     assumptions: [
       ...ANALYSIS_ASSUMPTIONS,

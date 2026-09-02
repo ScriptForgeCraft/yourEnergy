@@ -11,7 +11,7 @@ lives only on the localized calculator route.
 
 - `src/content/` — localized, crawlable page dictionaries.
 - `src/templates/` and `scripts/generate-pages.mjs` — Handlebars build-time HTML.
-- `src/domain/` — pure consumption, tariff, scenario, confidence and Passport models.
+- `src/domain/` — pure consumption, tariff, scenario, data-completeness and Passport models.
 - `src/data/tariffs/` — dated tariff registry; no rate is invented when it is unavailable.
 - `src/data/pricebooks/` — versioned, temporary commercial budget inputs, isolated from UI templates.
 - `src/services/` and `src/ui/` — small browser enhancements only.
@@ -26,23 +26,26 @@ Prettier are development dependencies. There are no browser API keys.
 
 ## 3. Real-analysis flow
 
-1. On `/calculator/`, a visitor enters an address or deliberately places a
-   manual point. Consumption is not required at this stage.
-2. `/api/geocode` returns provider candidates. The visitor selects and confirms
-   one, or confirms the manual point.
+1. On `/calculator/`, a visitor deliberately places and confirms a manual map
+   point or enters coordinates. An address is only an optional label for an
+   engineer; it is not geocoded. Consumption is not required at this stage.
+2. `/api/geocode` is kept as a disabled future adapter. It is not a production
+   browser fallback until an approved geocoding provider is connected.
 3. `/api/potential` immediately returns a PVGIS **site-potential benchmark**:
    annual and monthly yield for **1 kWp** and PVGIS’s optimum orientation/tilt
    for a fixed free-standing system. The UI says explicitly that this is not a
    survey of the actual roof.
 4. Only after that, the visitor proceeds to the detailed step: they outline a
-   usable roof face, provide its actual direction and approximate tilt (both
-   are required for a roof-specific result), and enter average or monthly
-   electricity consumption.
+   usable roof face or enter a measured roof-face area, select roof-parallel or
+   elevated mounting, provide the actual direction and approximate tilt, and
+   enter average or monthly electricity consumption. A map outline is a
+   top-view area; it is converted to preliminary roof-face area only below 75°.
 5. `/api/analysis` asks the server-side PVGIS adapter for a **1 kWp** yield.
-   It uses the public PVGIS endpoint by default or an approved server-side
-   override. The pure domain layer scales that provider yield transparently
-   from the entered consumption; the 14% PVGIS system-loss assumption appears
-   in the ledger. A PVGIS failure shows retry/manual-contact, never demo data.
+   Roof-parallel mounting uses the entered roof plane; elevated mounting uses
+   the PVGIS fixed/free-standing benchmark. The pure domain layer scales that
+   provider yield transparently from the entered consumption; the 14% PVGIS
+   system-loss assumption appears in the ledger. A PVGIS failure shows
+   retry/manual-contact, never demo data.
 6. A memory-only Solar Passport snapshots the result, its sources and its
    assumptions. A permanent link/PDF is intentionally unavailable in P1.
 
@@ -51,9 +54,10 @@ the same returned `SolarAnalysis`. A tariff entered from the visitor's bill is
 explicitly identified as user-provided. The server selects any temporary
 commercial price book; the client cannot submit a capex value to obtain a quote.
 
-No address is treated as geocoded until the person confirms it. An unavailable
-geocoder, map, PVGIS adapter or CRM never falls back to a fabricated real result
-or delivery success.
+No address is treated as geocoded. An unavailable map, PVGIS adapter or CRM
+never falls back to a fabricated real result or delivery success. The free
+PVGIS flow is limited to the Armenia service area and reports only
+`preliminary` input-data completeness, never an exact/high roof confidence.
 
 ## 4. Demo versus real content
 
@@ -89,7 +93,7 @@ verification date; add matching tests before release.
 All endpoints are same-origin POST JSON and use the envelope
 `{ ok: true, data }` or `{ ok: false, error }`.
 
-- `/api/geocode` — normalized provider candidates; never a confirmation.
+- `/api/geocode` — disabled-by-default future provider adapter; never a confirmation.
 - `/api/potential` — location-level PVGIS benchmark for a confirmed point;
   never a roof survey, layout, price or savings claim.
 - `/api/analysis` — PVGIS yield plus server-selected temporary price-book data;
@@ -110,9 +114,11 @@ four-step guide separates location potential from detailed roof analysis. After
 a real/manual location action, Leaflet is lazy-loaded using geographic
 coordinates; `CRS.Simple` is not part of the production analysis flow. The
 polygon supports click-to-add, marker drag, point selection, keyboard-accessible
-nudge, undo, reset and finish. The domain layer limits preliminary capacity from
-70% of the outlined area using a disclosed 580 W / 2 m² module assumption. It
-is explicitly not a panel layout or survey.
+nudge, undo, reset and finish. A map outline is top-view area, not measured roof
+surface; the app converts it by the entered roof tilt below 75° or requires a
+manual measured plane area. The domain layer limits preliminary capacity from
+70% of that preliminary plane area using a disclosed 580 W / 2 m² module
+assumption. It is explicitly not a panel layout or survey.
 
 The manual map starts with the public OpenStreetMap tile fallback
 `https://tile.openstreetmap.org/{z}/{x}/{y}.png` and visible attribution after
@@ -125,6 +131,13 @@ cannot honestly determine a roof pitch, usable surface, shading or structural
 capacity. Automatic roof detection requires an approved aerial/3D roof-data
 provider; until then, users enter/outline preliminary roof data and an engineer
 confirms it.
+
+`PVGIS_CACHE` is a mandatory Cloudflare KV binding for `/api/potential` and
+`/api/analysis`; `PVGIS_CACHE_SALT` is the corresponding server secret. The
+cache retains a salted-hash key plus normalized provider response for seven
+days, never addresses, consumption, tariffs, roof polygons or leads. Without
+both settings the browser receives an honest disabled-service message rather
+than an unbounded provider call.
 
 ## 8. Passport and lead handling
 
@@ -170,11 +183,13 @@ local bindings.
 
 ## 12. Before launch
 
-1. Obtain and configure a geocoder, dated tariff source/revision, CRM and
-   Turnstile credentials. To automate actual roof measurement, also approve an
-   aerial/3D roof-data provider; address lookup and OSM alone cannot provide
-   that. Optionally replace the public PVGIS/OSM fallbacks with approved
-   server-side PVGIS and public tile providers.
+1. Bind Cloudflare KV as `PVGIS_CACHE` and configure the `PVGIS_CACHE_SALT`
+   secret before enabling real PVGIS on Pages. Obtain an approved geocoder only
+   if address search is deliberately enabled, plus a dated tariff
+   source/revision, CRM and Turnstile credentials. To automate actual roof
+   measurement, also approve an aerial/3D roof-data provider; address lookup
+   and OSM alone cannot provide that. Optionally replace the public PVGIS/OSM
+   fallbacks with approved server-side PVGIS and public tile providers.
 2. Have Armenian copy, legal pages, tariff records, actual project evidence and
    all public claims reviewed by their owners.
 3. Run `npm run check`, browser keyboard/mobile smoke tests and production

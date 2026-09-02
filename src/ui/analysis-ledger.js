@@ -21,6 +21,13 @@ const row = (term, definition) => {
   return wrapper;
 };
 
+/** Combines calculation assumptions and explicit limitations without duplicates. */
+export const collectAnalysisNotes = (analysis = {}) =>
+  [
+    ...(Array.isArray(analysis.assumptions) ? analysis.assumptions : []),
+    ...(Array.isArray(analysis.limitations) ? analysis.limitations : [])
+  ].filter((note, index, values) => typeof note === 'string' && values.indexOf(note) === index);
+
 /** Renders only source metadata returned by the real analysis API. */
 export const renderAnalysisLedger = ({ root, analysis, strings } = {}) => {
   if (!root || !analysis) return;
@@ -44,20 +51,22 @@ export const renderAnalysisLedger = ({ root, analysis, strings } = {}) => {
   });
 
   assumptions?.replaceChildren();
-  (analysis.assumptions ?? []).forEach((assumption) => {
+  const notes = collectAnalysisNotes(analysis);
+  notes.forEach((assumption) => {
     const item = document.createElement('li');
     item.textContent = text(strings.assumptions?.[assumption] ?? assumption);
     assumptions?.append(item);
   });
 
-  const level = analysis.confidence?.level ?? 'unavailable';
+  const dataCompleteness = analysis.dataCompleteness ?? {};
+  const level = dataCompleteness.level ?? 'unavailable';
   if (confidence) {
     confidence.textContent = strings.confidence?.[level] ?? strings.confidence?.insufficient ?? '—';
   }
   if (confidenceDetail) {
-    const missing = Array.isArray(analysis.confidence?.missing) ? analysis.confidence.missing : [];
-    const score = analysis.confidence?.score;
-    const maximum = analysis.confidence?.maximumScore;
+    const missing = Array.isArray(dataCompleteness.missing) ? dataCompleteness.missing : [];
+    const score = dataCompleteness.score;
+    const maximum = dataCompleteness.maximumScore;
     const scoreText =
       Number.isFinite(score) && Number.isFinite(maximum) ? `${score}/${maximum}` : '';
     const missingText = missing.map((key) => sourceLabel(key, strings.sources ?? {})).join(' · ');

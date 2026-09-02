@@ -147,10 +147,8 @@
                   name='address'
                   autocomplete='street-address'
                   placeholder='{{hero.addressPlaceholder}}'
-                  minlength='5'
                   maxlength='160'
                   aria-describedby='address-help analysis-status'
-                  required
                 />
                 <button class='button button--navy' type='submit'>{{hero.analyze}}</button>
               </div>
@@ -166,7 +164,30 @@
               <p class='location-result'><span>{{product.location.resultLabel}}</span><strong
                   data-location-address
                 ></strong><small data-location-coordinates></small></p>
-              <div class='location-candidates' data-location-candidates hidden></div>
+              <fieldset class='coordinate-fallback' aria-describedby='location-coordinates-help'>
+                <legend>{{product.location.coordinatesTitle}}</legend>
+                <p id='location-coordinates-help'>{{product.location.coordinatesHelp}}</p>
+                <div><label for='location-latitude'>{{product.location.latitudeLabel}}<input
+                      id='location-latitude'
+                      type='number'
+                      min='35'
+                      max='44'
+                      step='0.00001'
+                      inputmode='decimal'
+                      autocomplete='off'
+                      data-location-latitude
+                    /></label><label for='location-longitude'>{{product.location.longitudeLabel}}<input
+                      id='location-longitude'
+                      type='number'
+                      min='40'
+                      max='50'
+                      step='0.00001'
+                      inputmode='decimal'
+                      autocomplete='off'
+                      data-location-longitude
+                    /></label></div>
+                <button class='button button--outline' type='button' data-location-coordinates-submit>{{product.location.useCoordinates}}</button>
+              </fieldset>
               <div class='flow-actions'><button
                   class='button button--navy'
                   type='button'
@@ -202,7 +223,11 @@
                   type='button'
                   data-roof-reset
                 >{{product.roof.reset}}</button></div>
-              <div class='roof-editor-controls'><label for='roof-orientation'>{{product.roof.orientationLabel}}<select
+              <div class='roof-editor-controls'><label for='roof-mounting-mode'>{{product.roof.mountingModeLabel}}<select
+                    id='roof-mounting-mode'
+                    data-roof-mounting-mode
+                    aria-describedby='roof-mounting-mode-help'
+                  ><option value='roof-parallel'>{{product.roof.mountingModes.roofParallel}}</option><option value='elevated'>{{product.roof.mountingModes.elevated}}</option></select><small id='roof-mounting-mode-help'>{{product.roof.mountingModeHelp}}</small></label><label for='roof-orientation'>{{product.roof.orientationLabel}}<select
                     id='roof-orientation'
                     data-roof-orientation
                     required
@@ -243,13 +268,30 @@
                     aria-required='true'
                     data-roof-tilt
                   /><small id='roof-tilt-help'>{{product.roof.tiltHelp}}</small></label></div>
+              <fieldset class='roof-area-method' aria-describedby='roof-area-method-help'>
+                <legend>{{product.roof.areaMethodTitle}}</legend>
+                <p id='roof-area-method-help'>{{product.roof.areaMethodHelp}}</p>
+                <label><input type='radio' name='roof-area-method' value='map-projected' checked data-roof-area-method /><span>{{product.roof.areaMethods.mapProjected}}</span></label>
+                <label><input type='radio' name='roof-area-method' value='measured-plane' data-roof-area-method /><span>{{product.roof.areaMethods.measuredPlane}}</span></label>
+                <label data-roof-plane-area-wrap hidden for='roof-plane-area'>{{product.roof.planeAreaLabel}}<div class='input-with-unit'><input
+                      id='roof-plane-area'
+                      type='number'
+                      min='1'
+                      max='100000'
+                      step='0.1'
+                      inputmode='decimal'
+                      aria-describedby='roof-plane-area-help'
+                      aria-errormessage='analysis-status'
+                      data-roof-plane-area
+                    /><span>m²</span></div><small id='roof-plane-area-help'>{{product.roof.planeAreaHelp}}</small></label>
+              </fieldset>
               <figure class='roof-angle-preview' aria-labelledby='roof-angle-preview-title'>
                 <figcaption id='roof-angle-preview-title'>{{product.roof.angleGuideTitle}}</figcaption>
                 <div class='roof-angle-preview__grid'>
                   <svg class='roof-angle-preview__compass' viewBox='0 0 200 200' aria-hidden='true' focusable='false'>
                     <circle cx='100' cy='100' r='73'></circle><path d='M100 21V179M21 100H179'></path><text x='100' y='15'>N</text><text x='187' y='105'>E</text><text x='100' y='196'>S</text><text x='7' y='105'>W</text><g data-roof-preview-arrow transform='rotate(180 100 100)'><path d='M100 34 88 84h24z'></path><path d='M100 166 88 116h24z'></path></g>
                   </svg>
-                  <dl><div><dt>{{product.roof.angleGuideOrientation}}</dt><dd data-roof-preview-orientation>—</dd></div><div><dt>{{product.roof.angleGuideTilt}}</dt><dd data-roof-preview-tilt>—</dd></div></dl>
+                  <dl><div><dt>{{product.roof.benchmarkOrientation}}</dt><dd data-roof-benchmark-orientation>—</dd></div><div><dt>{{product.roof.benchmarkTilt}}</dt><dd data-roof-benchmark-tilt>—</dd></div><div><dt>{{product.roof.angleGuideOrientation}}</dt><dd data-roof-preview-orientation>—</dd></div><div><dt>{{product.roof.angleGuideTilt}}</dt><dd data-roof-preview-tilt>—</dd></div></dl>
                 </div>
                 <p>{{product.roof.angleGuideCopy}}</p>
               </figure>
@@ -340,6 +382,8 @@
               </fieldset>
               <p class='roof-editor__summary'><span data-roof-points>{{product.roof.pointsLabel}}</span><strong
                   data-roof-area
+                >—</strong></p><p class='roof-editor__summary roof-editor__summary--plane'><span>{{product.roof.planeAreaSummary}}</span><strong
+                  data-roof-effective-area
                 >—</strong></p>
               <div class='roof-nudge-controls' data-roof-nudge-controls hidden><label
                   for='roof-point-select'
@@ -506,7 +550,7 @@
                 </svg>
                 <dl><div><dt>{{product.potential.annualYieldLabel}}</dt><dd data-site-potential-yield>—</dd></div><div><dt>{{product.potential.orientationLabel}}</dt><dd data-site-potential-orientation>—</dd></div><div><dt>{{product.potential.tiltLabel}}</dt><dd data-site-potential-tilt>—</dd></div></dl>
               </div>
-              <p class='site-potential__source' data-site-potential-source>{{product.potential.source}}</p>
+              <p class='site-potential__source' data-site-potential-source>{{product.potential.source}}</p><p class='site-potential__source' data-site-potential-cache></p><p class='site-potential__contact' data-site-potential-contact hidden>{{product.potential.contactPrefix}} <a href='{{contact.phoneHref}}'>{{contact.phone}}</a></p>
               <p>{{product.potential.disclosure}}</p>
               <p>{{product.potential.roofDisclosure}}</p>
               <div class='flow-actions'><button class='button button--navy' type='button' data-site-potential-continue>{{product.potential.continue}}</button><button class='button button--outline' type='button' data-site-potential-retry hidden>{{product.potential.retry}}</button></div>

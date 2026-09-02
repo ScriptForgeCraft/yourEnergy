@@ -1,5 +1,11 @@
 # Local Pages Functions development only. Copy to functions/.dev.vars and set
 # non-production test endpoints/credentials; never commit the copy.
+# `PVGIS_CACHE` is a Cloudflare KV binding, not a text value. Bind it in the
+# Pages dashboard (and in local Wrangler configuration) under exactly that name.
+# The cache salt is a secret; use any non-production value only for local tests.
+PVGIS_CACHE_SALT=
+# The browser currently uses a manual point/coordinate flow. Keep geocoding
+# unset until an approved provider is connected; it is not a browser fallback.
 GEOCODING_ENDPOINT=
 GEOCODING_PROVIDER=
 GEOCODING_API_KEY=

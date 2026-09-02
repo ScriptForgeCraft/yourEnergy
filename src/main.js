@@ -1,4 +1,5 @@
 import {
+  calculateRoofPlaneArea,
   createUserTariffSelection,
   normalizeConsumption,
   SolarPassportRepository
@@ -19,6 +20,8 @@ import { initScrollers } from './ui/scrollers.js';
 
 const DEFAULT_PVGIS_REQUEST_KWP = 1;
 const DEFAULT_PVGIS_LOSS_PERCENT = 14;
+const POTENTIAL_COOLDOWN_MS = 10_000;
+const ANALYSIS_COOLDOWN_MS = 15_000;
 
 document.documentElement.classList.add('js');
 
@@ -48,8 +51,9 @@ const locationStage = document.querySelector('[data-location-stage]');
 const locationMessage = document.querySelector('[data-location-message]');
 const locationAddress = document.querySelector('[data-location-address]');
 const locationCoordinates = document.querySelector('[data-location-coordinates]');
-const locationCandidates = document.querySelector('[data-location-candidates]');
 const locationConfirm = document.querySelector('[data-location-confirm]');
+const locationLatitude = document.querySelector('[data-location-latitude]');
+const locationLongitude = document.querySelector('[data-location-longitude]');
 const roofStage = document.querySelector('[data-roof-stage]');
 const roofMessage = document.querySelector('[data-roof-message]');
 const roofPoints = document.querySelector('[data-roof-points]');
@@ -58,6 +62,11 @@ const roofOrientation = document.querySelector('[data-roof-orientation]');
 const roofOrientationCustom = document.querySelector('[data-roof-orientation-custom]');
 const roofOrientationCustomInput = document.querySelector('[data-roof-orientation-custom-input]');
 const roofTilt = document.querySelector('[data-roof-tilt]');
+const roofMountingMode = document.querySelector('[data-roof-mounting-mode]');
+const roofAreaMethods = [...document.querySelectorAll('[data-roof-area-method]')];
+const roofPlaneArea = document.querySelector('[data-roof-plane-area]');
+const roofPlaneAreaWrap = document.querySelector('[data-roof-plane-area-wrap]');
+const roofEffectiveArea = document.querySelector('[data-roof-effective-area]');
 const roofPointSelect = document.querySelector('[data-roof-point-select]');
 const roofNudgeControls = document.querySelector('[data-roof-nudge-controls]');
 const roofFinish = document.querySelector('[data-roof-finish]');
@@ -71,11 +80,15 @@ const sitePotentialYield = document.querySelector('[data-site-potential-yield]')
 const sitePotentialOrientation = document.querySelector('[data-site-potential-orientation]');
 const sitePotentialTilt = document.querySelector('[data-site-potential-tilt]');
 const sitePotentialArrow = document.querySelector('[data-site-potential-arrow]');
+const sitePotentialCache = document.querySelector('[data-site-potential-cache]');
+const sitePotentialContact = document.querySelector('[data-site-potential-contact]');
 const sitePotentialRetry = document.querySelector('[data-site-potential-retry]');
 const sitePotentialContinue = document.querySelector('[data-site-potential-continue]');
 const roofPreviewArrow = document.querySelector('[data-roof-preview-arrow]');
 const roofPreviewOrientation = document.querySelector('[data-roof-preview-orientation]');
 const roofPreviewTilt = document.querySelector('[data-roof-preview-tilt]');
+const roofBenchmarkOrientation = document.querySelector('[data-roof-benchmark-orientation]');
+const roofBenchmarkTilt = document.querySelector('[data-roof-benchmark-tilt]');
 const optionalUpload = document.querySelector('[data-optional-upload]');
 const ledgerRoot = document.querySelector('[data-analysis-ledger]');
 const passportPersistence = document.querySelector('[data-passport-persistence]');
@@ -90,6 +103,9 @@ let pendingLocation = null;
 let confirmedProperty = null;
 let currentRoof = null;
 let currentPassport = null;
+let currentSitePotential = null;
+let lastPotentialRequest = null;
+let lastAnalysisRequest = null;
 
 initNavigation();
 initPassportDialog();
@@ -104,7 +120,8 @@ const analysisView = createAnalysisView({
 const chart = initGenerationChart({ locale, status });
 const consumptionControl = initConsumptionInput({
   root: document.querySelector('[data-consumption-inputs]'),
-  strings: product.consumption ?? {}
+  strings: product.consumption ?? {},
+  onChange: () => invalidateDetailedAnalysis({ notify: true })
 });
 
 const tariffSelectionFor = (consumptionInput) =>
@@ -123,6 +140,13 @@ const writeStatus = (message, isError = false) => {
 
 const formatCoordinate = (value) =>
   new Intl.NumberFormat(locale, { maximumFractionDigits: 5 }).format(Number(value));
+
+const formatProviderDate = (value) => {
+  const date = new Date(value);
+  return Number.isFinite(date.getTime())
+    ? new Intl.DateTimeFormat(locale, { dateStyle: 'medium', timeStyle: 'short' }).format(date)
+    : '—';
+};
 
 const formatArea = (value) => {
   if (!Number.isFinite(Number(value)) || Number(value) <= 0) return '—';
@@ -172,6 +196,15 @@ const updateCalculatorFlow = (stage, state = 'active') => {
 const replaceToken = (value, token, replacement) =>
   String(value ?? '').replace(`{${token}}`, String(replacement));
 
+const requestFingerprint = (value) => JSON.stringify(value);
+
+const cooldownRemainingSeconds = (lastRequest, fingerprint, durationMs) => {
+  if (!lastRequest || lastRequest.fingerprint !== fingerprint) return 0;
+  return Math.max(0, Math.ceil((durationMs - (Date.now() - lastRequest.startedAt)) / 1000));
+};
+
+const hasRenderedAnalysis = () => Boolean(currentPassport || (resultPanel && !resultPanel.hidden));
+
 const locationSource = (kind, details = {}) => ({
   kind,
   status: 'provided',
@@ -182,6 +215,7 @@ const locationSource = (kind, details = {}) => ({
 
 const resetSitePotential = ({ abort = true } = {}) => {
   if (abort) stopPotentialRequest();
+  currentSitePotential = null;
   if (sitePotentialRoot) sitePotentialRoot.hidden = true;
   if (sitePotentialStatus) sitePotentialStatus.textContent = '';
   if (sitePotentialValues) sitePotentialValues.hidden = true;
@@ -189,26 +223,44 @@ const resetSitePotential = ({ abort = true } = {}) => {
   if (sitePotentialOrientation) sitePotentialOrientation.textContent = '—';
   if (sitePotentialTilt) sitePotentialTilt.textContent = '—';
   if (sitePotentialArrow) sitePotentialArrow.setAttribute('transform', 'rotate(0 100 100)');
+  if (sitePotentialCache) sitePotentialCache.textContent = '';
+  if (sitePotentialContact) sitePotentialContact.hidden = true;
+  if (roofBenchmarkOrientation) roofBenchmarkOrientation.textContent = '—';
+  if (roofBenchmarkTilt) roofBenchmarkTilt.textContent = '—';
   if (sitePotentialRetry) sitePotentialRetry.hidden = true;
   if (sitePotentialContinue) sitePotentialContinue.disabled = true;
 };
 
-const clearCalculatedState = () => {
+const clearAnalysisResult = () => {
   currentPassport = null;
   analysisView.reset();
+  chart.update({ monthlyGeneration: [] });
+  const chartDescription = document.querySelector('#generation-chart-description');
+  if (chartDescription) {
+    chartDescription.textContent = product.passport?.pendingChartDescription ?? '';
+  }
   if (resultPanel) resultPanel.hidden = true;
-  resetSitePotential();
   if (ledgerRoot) ledgerRoot.hidden = true;
   if (passportPersistence) passportPersistence.hidden = true;
   if (leadSection) leadSection.hidden = true;
   if (leadStatus) leadStatus.textContent = '';
 };
 
-const hidePropertyMap = () => {
-  mapShell?.classList.remove('has-property-map');
-  if (propertyMapContainer) propertyMapContainer.hidden = true;
-  if (propertyMapNote) propertyMapNote.hidden = true;
+const clearCalculatedState = () => {
+  stopActiveRequest();
+  clearAnalysisResult();
+  currentSitePotential = null;
+  resetSitePotential();
 };
+
+function invalidateDetailedAnalysis({ notify = false } = {}) {
+  const hadResult = hasRenderedAnalysis();
+  stopActiveRequest();
+  clearAnalysisResult();
+  if (hadResult && notify) {
+    writeStatus(product.status?.inputsChanged ?? 'Inputs changed. Calculate again.');
+  }
+}
 
 const setRequestBusy = (button, busy) => {
   if (!button) return;
@@ -232,6 +284,15 @@ const stopPotentialRequest = () => {
 const errorCopy = (error, fallback) => {
   if (error instanceof ProductApiError && error.code === 'ABORTED') {
     return product.status?.canceled ?? fallback;
+  }
+  if (error instanceof ProductApiError) {
+    const messages = {
+      OUTSIDE_SERVICE_AREA: product.status?.outsideServiceArea,
+      PVGIS_CACHE_NOT_CONFIGURED: product.status?.cacheNotConfigured,
+      PVGIS_CACHE_UNAVAILABLE: product.status?.cacheUnavailable,
+      ROOF_AREA_REQUIRES_MEASURED_PLANE: product.status?.roofAreaRequiresMeasured
+    };
+    if (messages[error.code]) return messages[error.code];
   }
   return fallback;
 };
@@ -277,6 +338,51 @@ const onMapLocationChange = (coordinates) => {
   trackProductEvent('property_point_selected', { source: 'manual' });
 };
 
+const selectedRoofAreaMethod = () =>
+  roofAreaMethods.find((input) => input.checked)?.value ?? 'map-projected';
+
+const selectedMountingMode = () =>
+  roofMountingMode?.value === 'elevated' ? 'elevated' : 'roof-parallel';
+
+const roofPlaneAreaValue = () =>
+  numericRoofInput(roofPlaneArea, { minimum: 0.01, maximum: 100_000 });
+
+const roofGeometry = (roof = currentRoof) => {
+  const areaMethod = selectedRoofAreaMethod();
+  const tiltDegrees = numericRoofInput(roofTilt, { minimum: 0, maximum: 90 });
+  const projectedAreaSqm = Number.isFinite(Number(roof?.areaSqm)) ? Number(roof.areaSqm) : null;
+  const planeAreaSqm = roofPlaneAreaValue();
+  const effectiveAreaSqm = calculateRoofPlaneArea({
+    areaMethod,
+    projectedAreaSqm,
+    planeAreaSqm,
+    tiltDegrees
+  });
+  return {
+    areaMethod,
+    mountingMode: selectedMountingMode(),
+    projectedAreaSqm,
+    planeAreaSqm,
+    effectiveAreaSqm,
+    polygonComplete: Boolean(roof?.complete)
+  };
+};
+
+const hasUsableRoofArea = (roof = currentRoof) => {
+  const geometry = roofGeometry(roof);
+  return geometry.areaMethod === 'measured-plane'
+    ? geometry.planeAreaSqm !== null
+    : geometry.polygonComplete && geometry.effectiveAreaSqm !== null;
+};
+
+const updateRoofAreaUi = (roof = currentRoof) => {
+  const geometry = roofGeometry(roof);
+  if (roofPlaneAreaWrap) roofPlaneAreaWrap.hidden = geometry.areaMethod !== 'measured-plane';
+  if (roofPlaneArea) roofPlaneArea.disabled = geometry.areaMethod !== 'measured-plane';
+  if (roofEffectiveArea) roofEffectiveArea.textContent = formatArea(geometry.effectiveAreaSqm);
+  if (roofFinish) roofFinish.disabled = !hasUsableRoofArea(roof);
+};
+
 const updateRoofControls = (roof) => {
   currentRoof = roof;
   if (roofPoints) {
@@ -294,7 +400,13 @@ const updateRoofControls = (roof) => {
     });
   }
   if (roofNudgeControls) roofNudgeControls.hidden = roof.points.length === 0;
-  if (roofFinish) roofFinish.disabled = !roof.complete;
+  updateRoofAreaUi(roof);
+};
+
+const onRoofChange = (roof) => {
+  const hadResult = hasRenderedAnalysis();
+  updateRoofControls(roof);
+  if (hadResult) invalidateDetailedAnalysis({ notify: true });
 };
 
 const ensurePropertyMap = async (mode = 'location') => {
@@ -314,9 +426,10 @@ const ensurePropertyMap = async (mode = 'location') => {
         container: propertyMapContainer,
         tileUrl: mapConfig.tileUrl,
         tileAttribution: mapConfig.tileAttribution,
+        locationPointLabel: product.location?.pointSelected,
         roofPointLabel: (index) => replaceToken(product.roof?.pointSelectLabel, 'index', index + 1),
         onLocationChange: onMapLocationChange,
-        onRoofChange: updateRoofControls
+        onRoofChange
       });
     } catch {
       propertyMapContainer.hidden = true;
@@ -332,44 +445,8 @@ const ensurePropertyMap = async (mode = 'location') => {
   }
 
   mapController.setMode(mode);
-  requestAnimationFrame(() => mapController?.resize());
+  mapController.resize();
   return mapController;
-};
-
-const renderCandidates = (candidates, source) => {
-  if (!locationCandidates) return;
-  locationCandidates.replaceChildren();
-  candidates.forEach((candidate) => {
-    const button = document.createElement('button');
-    button.className = 'location-candidate';
-    button.type = 'button';
-    button.textContent = candidate.label;
-    button.setAttribute('aria-pressed', 'false');
-    button.addEventListener('click', async () => {
-      locationCandidates.querySelectorAll('.location-candidate').forEach((candidateButton) => {
-        candidateButton.setAttribute('aria-pressed', String(candidateButton === button));
-      });
-      resetDetailedFlow();
-      pendingLocation = {
-        address: candidate.label,
-        coordinates: {
-          lat: candidate.coordinates.latitude,
-          lng: candidate.coordinates.longitude
-        },
-        source: locationSource('provider', {
-          provider: source?.provider,
-          verifiedAt: source?.fetchedAt
-        })
-      };
-      clearCalculatedState();
-      updateLocationStage();
-      const propertyMap = await ensurePropertyMap('location');
-      propertyMap?.setLocation(pendingLocation.coordinates, { notify: false });
-      requestAnimationFrame(() => locationConfirm?.focus({ preventScroll: true }));
-    });
-    locationCandidates.append(button);
-  });
-  locationCandidates.hidden = candidates.length === 0;
 };
 
 const selectManualLocation = async () => {
@@ -377,7 +454,6 @@ const selectManualLocation = async () => {
   resetDetailedFlow();
   pendingLocation = null;
   clearCalculatedState();
-  renderCandidates([], null);
   updateLocationStage({ message: product.location?.manualCopy, focus: true });
   const propertyMap = await ensurePropertyMap('location');
   propertyMap?.setMode('location');
@@ -403,6 +479,29 @@ const beginRoofFlow = async () => {
 const loadSitePotential = async () => {
   if (!confirmedProperty?.coordinates) return;
 
+  const fingerprint = requestFingerprint({
+    latitude: confirmedProperty.coordinates.lat.toFixed(5),
+    longitude: confirmedProperty.coordinates.lng.toFixed(5)
+  });
+  const cooldownSeconds = cooldownRemainingSeconds(
+    lastPotentialRequest,
+    fingerprint,
+    POTENTIAL_COOLDOWN_MS
+  );
+  if (cooldownSeconds > 0) {
+    if (sitePotentialRoot) sitePotentialRoot.hidden = false;
+    if (sitePotentialStatus) {
+      sitePotentialStatus.textContent = replaceToken(
+        product.status?.potentialCooldown,
+        'seconds',
+        cooldownSeconds
+      );
+    }
+    if (sitePotentialRetry) sitePotentialRetry.hidden = false;
+    updateCalculatorFlow('potential', 'attention');
+    return;
+  }
+
   stopPotentialRequest();
   resetSitePotential({ abort: false });
   if (sitePotentialRoot) sitePotentialRoot.hidden = false;
@@ -417,6 +516,7 @@ const loadSitePotential = async () => {
 
   const controller = new AbortController();
   activePotentialRequest = controller;
+  lastPotentialRequest = { fingerprint, startedAt: Date.now() };
   try {
     const response = await apiClient.potential(
       {
@@ -437,6 +537,7 @@ const loadSitePotential = async () => {
     const monthly = potential?.monthlyYieldKwhPerKwp;
     if (
       potential?.mode !== 'site-potential' ||
+      potential?.scope !== 'site-benchmark' ||
       !Number.isFinite(annualYield) ||
       !Number.isFinite(tilt) ||
       !Number.isFinite(azimuth) ||
@@ -458,6 +559,19 @@ const loadSitePotential = async () => {
     if (sitePotentialArrow) {
       sitePotentialArrow.setAttribute('transform', `rotate(${azimuth.toFixed(2)} 100 100)`);
     }
+    currentSitePotential = potential;
+    if (sitePotentialCache) {
+      const cache = potential.cache ?? {};
+      sitePotentialCache.textContent =
+        cache.state === 'hit'
+          ? replaceToken(
+              product.potential?.cacheHit,
+              'date',
+              formatProviderDate(cache.providerRetrievedAt)
+            )
+          : (product.potential?.cacheMiss ?? '');
+    }
+    updateRoofAnglePreview();
     if (sitePotentialStatus) sitePotentialStatus.textContent = '';
     if (sitePotentialValues) sitePotentialValues.hidden = false;
     if (sitePotentialContinue) sitePotentialContinue.disabled = false;
@@ -470,7 +584,8 @@ const loadSitePotential = async () => {
     }
     if (sitePotentialValues) sitePotentialValues.hidden = true;
     if (sitePotentialRetry) sitePotentialRetry.hidden = false;
-    if (sitePotentialContinue) sitePotentialContinue.disabled = false;
+    if (sitePotentialContact) sitePotentialContact.hidden = false;
+    if (sitePotentialContinue) sitePotentialContinue.disabled = true;
     updateCalculatorFlow('potential', 'attention');
     trackProductEvent('site_potential_unavailable', { code: error?.code ?? 'UNAVAILABLE' });
   } finally {
@@ -494,72 +609,34 @@ const confirmLocation = async () => {
   void loadSitePotential();
 };
 
-const validateAddress = (value) => typeof value === 'string' && value.trim().length >= 5;
-
-const startGeocoding = async () => {
-  const address = addressInput?.value.trim() ?? '';
-  if (!validateAddress(address)) {
-    addressInput?.setAttribute('aria-invalid', 'true');
-    addressInput?.focus();
-    writeStatus(status.minAddress, true);
+const selectCoordinateLocation = async () => {
+  const latitude = numericRoofInput(locationLatitude, { minimum: -90, maximum: 90 });
+  const longitude = numericRoofInput(locationLongitude, { minimum: -180, maximum: 180 });
+  if (latitude === null || longitude === null) {
+    if (latitude === null) locationLatitude?.setAttribute('aria-invalid', 'true');
+    if (longitude === null) locationLongitude?.setAttribute('aria-invalid', 'true');
+    writeStatus(product.location?.invalidCoordinates ?? status.minAddress, true);
     return;
   }
 
-  addressInput?.removeAttribute('aria-invalid');
+  locationLatitude?.removeAttribute('aria-invalid');
+  locationLongitude?.removeAttribute('aria-invalid');
   stopActiveRequest();
-  clearCalculatedState();
-  hidePropertyMap();
-  pendingLocation = null;
   resetDetailedFlow();
-  renderCandidates([], null);
-  const controller = new AbortController();
-  activeRequest = controller;
-  const submit = form?.querySelector('button[type="submit"]');
-  setRequestBusy(submit, true);
-  writeStatus(product.location?.searching ?? status.analyzing);
+  clearCalculatedState();
+  pendingLocation = {
+    address: addressInput?.value.trim() || null,
+    coordinates: { lat: latitude, lng: longitude },
+    source: locationSource('manual')
+  };
+  updateLocationStage({ message: product.location?.pointSelected, focus: true });
+  mapController?.setLocation(pendingLocation.coordinates, { notify: false });
+  trackProductEvent('property_point_selected', { source: 'manual-coordinates' });
+};
 
-  try {
-    const response = await apiClient.geocode(
-      { query: address, locale },
-      { signal: controller.signal }
-    );
-    if (controller.signal.aborted || activeRequest !== controller) return;
-    const location = response.location;
-    const candidates = Array.isArray(location?.candidates) ? location.candidates : [];
-    if (!candidates.length) {
-      updateLocationStage({ message: product.location?.noResult, focus: true });
-      await ensurePropertyMap('location');
-      writeStatus(product.location?.noResult, true);
-      return;
-    }
-    renderCandidates(candidates, location.source);
-    if (candidates.length === 1) {
-      locationCandidates?.querySelector('button')?.click();
-    } else {
-      updateLocationStage({ message: product.location?.copy, focus: true });
-      requestAnimationFrame(() =>
-        locationCandidates?.querySelector('button')?.focus({ preventScroll: true })
-      );
-    }
-    trackProductEvent('geocode_candidates_received', { count: candidates.length });
-  } catch (error) {
-    if (error instanceof ProductApiError && error.code === 'ABORTED') return;
-    updateLocationStage({
-      message: errorCopy(
-        error,
-        product.location?.unavailable ?? product.status?.geocodeUnavailable
-      ),
-      focus: true
-    });
-    await ensurePropertyMap('location');
-    writeStatus(errorCopy(error, product.status?.geocodeUnavailable), true);
-    trackProductEvent('geocode_unavailable', { code: error?.code ?? 'UNAVAILABLE' });
-  } finally {
-    if (activeRequest === controller) {
-      activeRequest = null;
-      setRequestBusy(submit, false);
-    }
-  }
+const startManualLocation = async () => {
+  addressInput?.removeAttribute('aria-invalid');
+  await selectManualLocation();
 };
 
 const numericRoofInput = (input, { minimum, maximum }) => {
@@ -601,6 +678,19 @@ const updateRoofAnglePreview = () => {
   }
   if (roofPreviewTilt)
     roofPreviewTilt.textContent = Number.isFinite(tilt) ? formatDegrees(tilt) : unknownValue;
+  const benchmarkAzimuth = Number(currentSitePotential?.orientation?.azimuthDegrees);
+  const benchmarkTilt = Number(currentSitePotential?.orientation?.tiltDegrees);
+  if (roofBenchmarkOrientation) {
+    roofBenchmarkOrientation.textContent = Number.isFinite(benchmarkAzimuth)
+      ? formatCompassDirection(benchmarkAzimuth)
+      : unknownValue;
+  }
+  if (roofBenchmarkTilt) {
+    roofBenchmarkTilt.textContent = Number.isFinite(benchmarkTilt)
+      ? formatDegrees(benchmarkTilt)
+      : unknownValue;
+  }
+  updateRoofAreaUi();
 };
 
 const publishAnalysis = (analysis, passport) => {
@@ -655,10 +745,13 @@ const publishAnalysis = (analysis, passport) => {
         commercialEstimate: analysis.commercialEstimate ?? null,
         priceBook: analysis.priceBook ?? null,
         tariffSource: analysis.financial?.tariff ?? null,
-        confidence: analysis.confidence ?? null,
-        scope: analysis.commercialEstimate?.scope ?? [],
+        dataCompleteness: analysis.dataCompleteness ?? null,
+        scope: analysis.scope ?? null,
         exclusions: analysis.commercialEstimate?.exclusions ?? [],
-        validUntil: analysis.commercialEstimate?.validUntil ?? null
+        validUntil: analysis.commercialEstimate?.validUntil ?? null,
+        limitations: analysis.limitations ?? [],
+        cache: analysis.cache ?? null,
+        providerRetrievedAt: analysis.providerRetrievedAt ?? null
       }
     })
   );
@@ -666,8 +759,20 @@ const publishAnalysis = (analysis, passport) => {
 
 const analyzeRoof = async () => {
   const roof = mapController?.getRoof() ?? currentRoof;
-  if (!confirmedProperty?.coordinates || !roof?.complete) {
+  if (!confirmedProperty?.coordinates) {
+    writeStatus(product.roof?.locationRequired ?? product.roof?.unavailable, true);
+    return;
+  }
+  const geometry = roofGeometry(roof);
+  if (!hasUsableRoofArea(roof)) {
+    const invalidInput =
+      geometry.areaMethod === 'measured-plane'
+        ? roofPlaneArea
+        : document.querySelector('[data-roof-start]');
+    if (geometry.areaMethod === 'measured-plane')
+      roofPlaneArea?.setAttribute('aria-invalid', 'true');
     writeStatus(product.roof?.minimumPoints ?? product.roof?.unavailable, true);
+    invalidInput?.focus({ preventScroll: true });
     return;
   }
   const tiltDegrees = numericRoofInput(roofTilt, { minimum: 0, maximum: 90 });
@@ -691,6 +796,7 @@ const analyzeRoof = async () => {
   roofOrientationCustomInput?.removeAttribute('aria-invalid');
   roofOrientation?.removeAttribute('aria-invalid');
   roofTilt?.removeAttribute('aria-invalid');
+  roofPlaneArea?.removeAttribute('aria-invalid');
 
   const consumptionInput = consumptionControl?.read();
   if (!consumptionInput?.valid) {
@@ -706,45 +812,61 @@ const analyzeRoof = async () => {
     return;
   }
 
+  const requestBody = {
+    property: {
+      address: confirmedProperty.address,
+      latitude: confirmedProperty.coordinates.lat,
+      longitude: confirmedProperty.coordinates.lng,
+      confirmed: true,
+      source: confirmedProperty.source.kind,
+      provider: confirmedProperty.source.provider,
+      verifiedAt: confirmedProperty.source.verifiedAt
+    },
+    consumption: consumptionInput.value,
+    ...(consumptionInput.tariff ? { tariff: consumptionInput.tariff } : {}),
+    roof: {
+      areaMethod: geometry.areaMethod,
+      mountingMode: geometry.mountingMode,
+      ...(geometry.areaMethod === 'map-projected'
+        ? { projectedAreaSqm: geometry.projectedAreaSqm }
+        : { planeAreaSqm: geometry.planeAreaSqm }),
+      polygonComplete: geometry.polygonComplete,
+      tiltDegrees,
+      azimuthDegrees
+    },
+    system: {
+      capacityKwp: DEFAULT_PVGIS_REQUEST_KWP,
+      lossPercent: DEFAULT_PVGIS_LOSS_PERCENT
+    }
+  };
+  const fingerprint = requestFingerprint(requestBody);
+  const cooldownSeconds = cooldownRemainingSeconds(
+    lastAnalysisRequest,
+    fingerprint,
+    ANALYSIS_COOLDOWN_MS
+  );
+  if (cooldownSeconds > 0) {
+    writeStatus(replaceToken(product.status?.analysisCooldown, 'seconds', cooldownSeconds), true);
+    return;
+  }
+
   stopActiveRequest();
   const controller = new AbortController();
   activeRequest = controller;
+  lastAnalysisRequest = { fingerprint, startedAt: Date.now() };
   setRequestBusy(roofFinish, true);
   updateCalculatorFlow('result');
   writeStatus(product.result?.preparing ?? status.analyzing);
 
   try {
-    const response = await apiClient.analyze(
-      {
-        property: {
-          address: confirmedProperty.address,
-          latitude: confirmedProperty.coordinates.lat,
-          longitude: confirmedProperty.coordinates.lng,
-          confirmed: true,
-          source: confirmedProperty.source.kind,
-          provider: confirmedProperty.source.provider,
-          verifiedAt: confirmedProperty.source.verifiedAt
-        },
-        consumption: consumptionInput.value,
-        ...(consumptionInput.tariff ? { tariff: consumptionInput.tariff } : {}),
-        roof: {
-          areaSqm: roof.areaSqm,
-          polygonComplete: true,
-          tiltDegrees,
-          azimuthDegrees
-        },
-        system: {
-          capacityKwp: DEFAULT_PVGIS_REQUEST_KWP,
-          lossPercent: DEFAULT_PVGIS_LOSS_PERCENT
-        }
-      },
-      { signal: controller.signal }
-    );
+    const response = await apiClient.analyze(requestBody, { signal: controller.signal });
     if (controller.signal.aborted || activeRequest !== controller) return;
     const analysis = response.analysis;
     const monthlyGeneration = analysis?.selectedScenario?.generation?.monthlyKwh;
     if (
       analysis?.mode !== 'real-analysis' ||
+      analysis?.scope !== 'manual-roof-plane' ||
+      analysis?.dataCompleteness?.level !== 'preliminary' ||
       !Array.isArray(monthlyGeneration) ||
       monthlyGeneration.length !== 12 ||
       monthlyGeneration.some((value) => !Number.isFinite(Number(value)))
@@ -783,13 +905,16 @@ const analyzeRoof = async () => {
 
 form?.addEventListener('submit', (event) => {
   event.preventDefault();
-  void startGeocoding();
+  void startManualLocation();
 });
 document.querySelector('[data-location-manual]')?.addEventListener('click', () => {
   void selectManualLocation();
 });
 document.querySelector('[data-location-manual-start]')?.addEventListener('click', () => {
   void selectManualLocation();
+});
+document.querySelector('[data-location-coordinates-submit]')?.addEventListener('click', () => {
+  void selectCoordinateLocation();
 });
 document.querySelector('[data-location-center]')?.addEventListener('click', () => {
   if (!mapController?.setLocationAtCenter()) {
@@ -834,14 +959,29 @@ document.querySelectorAll('[data-roof-nudge]').forEach((button) => {
 document
   .querySelector('[data-roof-remove]')
   ?.addEventListener('click', () => mapController?.removeSelected());
-roofOrientation?.addEventListener('change', () => updateCustomOrientationControl({ focus: true }));
+const invalidateForRoofInput = () => {
+  const hadResult = hasRenderedAnalysis();
+  updateRoofAnglePreview();
+  if (hadResult) invalidateDetailedAnalysis({ notify: true });
+};
+
+roofOrientation?.addEventListener('change', () => {
+  updateCustomOrientationControl({ focus: true });
+  invalidateForRoofInput();
+});
 roofOrientationCustomInput?.addEventListener('input', () => {
   roofOrientationCustomInput.removeAttribute('aria-invalid');
-  updateRoofAnglePreview();
+  invalidateForRoofInput();
 });
 roofTilt?.addEventListener('input', () => {
   roofTilt.removeAttribute('aria-invalid');
-  updateRoofAnglePreview();
+  invalidateForRoofInput();
+});
+roofMountingMode?.addEventListener('change', invalidateForRoofInput);
+roofAreaMethods.forEach((input) => input.addEventListener('change', invalidateForRoofInput));
+roofPlaneArea?.addEventListener('input', () => {
+  roofPlaneArea.removeAttribute('aria-invalid');
+  invalidateForRoofInput();
 });
 sitePotentialRetry?.addEventListener('click', () => void loadSitePotential());
 document.querySelector('[data-site-potential-continue]')?.addEventListener('click', () => {
