@@ -649,9 +649,61 @@ export default {
     imageNote: 'The person shown is not a confirmed YOURENERGY employee.'
   },
   equipment: {
-    title: 'Equipment a project may use',
-    note: 'Brand mentions do not confirm a partnership, availability or official status.',
-    brands: ['LONGi', 'JA Solar', 'Jinko Solar', 'Huawei', 'Growatt', 'Deye', 'Canadian Solar']
+    title: 'Equipment technical documentation',
+    note: 'This section contains manufacturer data sheets for models that may be discussed for a project. A brand mention does not confirm a partnership, availability or official status.',
+    brands: ['LONGi', 'SolaX'],
+    documentsTitle: 'Verifiable manufacturer data sheets',
+    documentsCopy:
+      'Open the original PDF to check the model, specifications and warranty wording before signing a contract.',
+    documentAction: 'Open manufacturer PDF',
+    documentsDisclosure:
+      'These are product data sheets supplied for the website. They are not a YOURENERGY licence, evidence of dealer or installer authorisation, evidence of stock, or proof that equipment suits a particular property. The exact model, scope and warranty terms must be recorded in the contract.',
+    documents: [
+      {
+        vendor: 'LONGi · data sheet',
+        title: 'LR7-72HVDF 640–665M',
+        href: '/documents/longi-lr7-72hvdf-640-665m.pdf',
+        facts: [
+          { label: 'Power range', value: '640–665 W' },
+          { label: 'Maximum module efficiency', value: 'up to 24.6%' },
+          { label: 'Standards listed', value: 'IEC 61215, IEC 61730' }
+        ],
+        note: 'The data sheet lists 15 years for materials and processing and 30 years of extra linear power output. Check the terms in the contract and with the supplier.'
+      },
+      {
+        vendor: 'LONGi · data sheet',
+        title: 'LR8-66HVD 640–665M',
+        href: '/documents/longi-lr8-66hvd-640-665m.pdf',
+        facts: [
+          { label: 'Power range', value: '640–665 W' },
+          { label: 'Maximum module efficiency', value: 'up to 24.62%' },
+          { label: 'Construction', value: 'bifacial module, IP68 junction box' }
+        ],
+        note: 'The sheet lists IEC 61215 and IEC 61730 plus the manufacturer’s 15/30-year warranty wording. It does not confirm stock or applicability to a particular project.'
+      },
+      {
+        vendor: 'SolaX · preliminary data sheet',
+        title: 'X1-Lite-LV · 8 / 10 / 12 kW',
+        href: '/documents/solax-x1-lite-lv-datasheet-v1-5.pdf',
+        facts: [
+          { label: 'Nominal AC power', value: '8 / 10 / 12 kW' },
+          { label: 'Enclosure protection', value: 'IP65' },
+          { label: 'Stated warranty', value: '5 years' }
+        ],
+        note: 'The manufacturer marks this sheet as preliminary and subject to change without notice. It lists EN IEC 62109-1/-2 and other standards; an engineer confirms final compatibility.'
+      },
+      {
+        vendor: 'SolaX · data sheet',
+        title: 'T-BAT-SYS-LV D53',
+        href: '/documents/solax-t-bat-sys-lv-d53-v1-2.pdf',
+        facts: [
+          { label: 'One module', value: '5.3 kWh nominal / 4.7 kWh usable at 90% DoD' },
+          { label: 'Expansion', value: 'up to 16 modules / 85.1 kWh nominal' },
+          { label: 'Chemistry and protection', value: 'LFP, IP65' }
+        ],
+        note: 'The sheet lists 10 years, >6,000 cycles under stated conditions and IEC62619 / IEC62040 / CE / UN38.3. These parameters do not replace a backup-power design calculation.'
+      }
+    ]
   },
   myEnergy: {
     eyebrow: 'MyEnergy · coming soon',
@@ -773,7 +825,7 @@ export default {
         links: [
           ['Warranty', '/en/soon/#warranty'],
           ['Service', '/en/soon/#service'],
-          ['Documents', '/en/soon/#documents'],
+          ['Equipment documents', '/en/#equipment-documents'],
           ['Contact', '#contacts']
         ]
       }

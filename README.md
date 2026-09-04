@@ -16,6 +16,7 @@ lives only on the localized calculator route.
 - `src/data/pricebooks/` — versioned, temporary commercial budget inputs, isolated from UI templates.
 - `src/services/` and `src/ui/` — small browser enhancements only.
 - `functions/` — Cloudflare Pages Functions for providers and lead delivery.
+- `public/documents/` — supplied manufacturer product data sheets, linked from the equipment section.
 - `test/` — Node unit and API-boundary tests.
 
 ## 2. Dependencies
@@ -66,7 +67,18 @@ aerial roof image are labelled illustrative/demo. There is no runtime demo
 analysis adapter: the calculator uses `ProductApiClient` + `src/domain/` and
 shows a provider failure or manual-contact state instead of inventing a result.
 
-## 5. Consumption and tariffs
+## 5. Equipment documentation
+
+The public equipment section links four supplied, local manufacturer data sheets:
+two LONGi 640–665 W module sheets, the SolaX X1-Lite-LV inverter sheet and the
+SolaX T-BAT-SYS-LV D53 battery sheet. The cards use only parameters, standards
+and warranty wording present in those PDFs, and link to the original file.
+They explicitly say that the files are product documentation, not a YOURENERGY
+licence, dealer/installer authorisation, stock confirmation or a suitability
+statement for a customer’s property. See [ASSETS.md](ASSETS.md) for file names
+and replacement rules.
+
+## 6. Consumption and tariffs
 
 Visitors can provide an average bill, average kWh, or twelve monthly kWh values,
 plus an optional AMD/kWh tariff copied from their bill. A bill is never converted
@@ -88,7 +100,7 @@ To publish financial values, add an approved record in
 `src/data/tariffs/armenia.js` with its effective dates, source reference and
 verification date; add matching tests before release.
 
-## 6. Cloudflare Functions
+## 7. Cloudflare Functions
 
 All endpoints are same-origin POST JSON and use the envelope
 `{ ok: true, data }` or `{ ok: false, error }`.
@@ -105,7 +117,7 @@ server-side bindings. Copy `functions/.dev.vars.example` to the ignored
 `functions/.dev.vars` only for local Functions testing. Do not place any of
 those values in `VITE_*` variables.
 
-## 7. Homepage, map and roof editor
+## 8. Homepage, map and roof editor
 
 The homepage preserves the visual Roof Scan and static, clearly labelled example
 without loading calculator state, Leaflet or a file input. Its every calculator
@@ -139,7 +151,7 @@ days, never addresses, consumption, tariffs, roof polygons or leads. Without
 both settings the browser receives an honest disabled-service message rather
 than an unbounded provider call.
 
-## 8. Passport and lead handling
+## 9. Passport and lead handling
 
 `SolarPassportRepository` is a process/page-memory P1 repository. It provides
 no URL and no PDF. The lead form sends no PII to analytics; it requires a name,
@@ -147,7 +159,7 @@ phone and consent, then shows an error until CRM configuration is present.
 Turnstile verification is prepared server-side and is not represented as active
 until both its widget/site key and secret have been configured.
 
-## 9. Security and privacy
+## 10. Security and privacy
 
 `public/_headers` supplies CSP, no-sniff, frame, referrer and permissions
 headers. The Vite build regenerates `dist/_headers` with the explicit public
@@ -156,7 +168,7 @@ credentials, CRM credentials and Turnstile secrets are server-side only.
 Functions do not log address,
 coordinates or lead payloads.
 
-## 10. SEO and accessibility
+## 11. SEO and accessibility
 
 Primary HTML exists before JavaScript, including canonical URLs, reciprocal
 HY/RU/EN hreflang, localized metadata and FAQ JSON-LD where applicable.
@@ -165,7 +177,7 @@ and Offer Checker routes only. The page has landmarks, a skip link, one H1,
 keyboard controls, `aria-live` status messages, native `details`/`dialog`, chart
 tables and reduced-motion styles.
 
-## 11. Local commands
+## 12. Local commands
 
 ```sh
 npm run dev
@@ -181,7 +193,7 @@ npm run check
 Pages-compatible local environment such as `wrangler pages dev` with ignored
 local bindings.
 
-## 12. Before launch
+## 13. Before launch
 
 1. Bind Cloudflare KV as `PVGIS_CACHE` and configure the `PVGIS_CACHE_SALT`
    secret before enabling real PVGIS on Pages. Obtain an approved geocoder only

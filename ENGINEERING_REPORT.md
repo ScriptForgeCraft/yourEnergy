@@ -101,6 +101,17 @@ provider-ответа.
 владелец пока не предоставил, поэтому сайт не придумывает адрес и не выводит
 ложную кнопку `mailto:`.
 
+04.09.2026 добавлен доступный без JavaScript раздел «Техническая документация
+оборудования» с четырьмя предоставленными PDF в `public/documents/`: двумя
+листами LONGi 640–665 W, листом инвертора SolaX X1-Lite-LV и батареи SolaX
+T-BAT-SYS-LV D53. Карточки показывают только параметры, стандарты и гарантийные
+формулировки, которые заявлены в соответствующем PDF, и всегда дают ссылку на
+первичный файл. Это product data sheets, а не лицензии YOUR ENERGY, не
+доказательство авторизации производителя, наличия на складе или применимости
+для конкретной крыши. Для настоящего trust-блока по компании нужны отдельно
+проверенные регистрационные, страховые, монтажные и гарантийные документы с
+разрешением на публикацию.
+
 ## 7. API, security и env
 
 Есть same-origin JSON endpoints:
@@ -157,71 +168,58 @@ reduced motion и текстовые chart/table alternatives.
 
 ## 10. QA
 
-Свежий `npm run check` проходит: 34 Node unit/API tests покрывают
-consumption/tariffs, finite values, Passport memory flow, API envelopes,
-PVGIS normalization and free-standing optimum calculation, unconfirmed property
-rejection, provider failure without demo fallback, aborts, polygon area and
-roof-capacity limit, P25/P50/P75 и округление, expiry PriceBook, ручной тариф,
-скрытие финансов без тарифа, server-selected pricebook/client-capex rejection
-и статусы Offer Checker, пустое числовое поле без ложного `0`, а также default
-и границы provider timeout. `npm run lint`, `npm run format:check`, `npm run build`
-и `npm run verify:build` входят в эту команду; verifier подтверждает 18 routes,
-canonical/hreflang, JSON-LD, anchors, template tokens и assets.
+Финальный локальный прогон от 04.09.2026 прошёл успешно:
 
-В локальном production preview вручную проверены HY/RU/EN language routes и один H1,
-responsive menu, no-overflow, отсутствие calculator form/map/file input на
-homepage, прямые CTA homepage → same-locale Calculator, ручная точка на карте,
-отдельный четырёхшаговый flow «точка → PVGIS → крыша → расчёт», скрытый до
-подтверждённого provider-ответа result panel, контур крыши с keyboard-кнопкой,
-выбором центра карты и фокусом на подтверждении, обязательными direction/tilt,
-custom azimuth, Escape для Passport dialog и provider-failure state без
-подстановки цифр. Найденный overlay статической roof-card, блокировавший клики
-по интерактивной карте, устранён; скрытые controls больше не отображаются из-за
-CSS. Leaflet markers не зависят от относительного `marker-icon-2x.png`: это
-локальные CSS/HTML markers, поэтому не появляется broken/undefined image. Map
-дополнительно invalidates размер после двух кадров раскладки и наблюдает размер
-контейнера; в fresh preview она проверена сразу на 1920 px, на 768 px и после
-возврата к 1920 px. Offer Checker проверен в сценариях
-P50 «в диапазоне» и неполной комплектации «несопоставимо»; в обоих случаях
-copy локализован. Leaflet/OSM загружается лениво с attribution; console errors
-не обнаружены.
-Полный PVGIS/geocoder/CRM E2E не выполнялся на Vite preview: Pages Functions
-там не запускаются, поэтому они покрыты изолированными Node API tests с
-provider mocks. MIME/size rules upload покрыты unit-тестом; Chrome extension
-заблокировал автоматический file chooser. Для повторения browser upload нужно
-включить **Allow access to file URLs** в Details расширения ChatGPT в
-`chrome://extensions`.
+- `npm test` — 43/43 Node unit/API tests;
+- `npm run lint` и `npm run format:check` — без замечаний;
+- `npm run build` — production build завершён;
+- `npm run verify:build` — 18 маршрутов прошли structural/SEO validation.
+
+Новые проверки покрывают area conversion и запрет слишком крутого контура,
+measured roof-face без polygon, границу Армении до PVGIS, обязательные KV/salt,
+TTL 7 дней и отсутствие private data в cache record, cache hit без повторного
+PVGIS-вызова, elevated benchmark и правило «только preliminary». Общий набор
+также покрывает consumption/tariffs, finite values, Passport memory flow,
+API envelopes, PVGIS normalization/failure без demo fallback, отмену запросов,
+PriceBook, ручной тариф, скрытие финансов без тарифа и Offer Checker.
+
+Post-build validator проверяет canonical/hreflang, JSON-LD, anchors, template
+tokens, localhost URLs, локальные assets и теперь PDF-links: каждый документ из
+equipment-section обязан существовать в `dist/documents/`. Local production
+preview вернул `200` для Calculator HY/RU/EN и статический HTML содержит
+coordinate fallback, mounting/area controls, cache-status и real-contact fallback.
+
+Automated interactive browser smoke, свежие screenshots и Lighthouse в этом
+окружении не засчитываются как пройденные: доступный browser runner не смог
+инициализироваться из-за локальной ошибки runtime. Это не маскируется как
+успешная проверка. После Pages deploy обязательно вручную пройти шаги карты,
+keyboard-only flow, upload/remove, Passport, Offer Checker и viewport 320–1440,
+затем снять Lighthouse на реальном origin.
 
 ## 11. Build и performance
 
 Fresh production build: homepage enhancement is 0.11 KB gzip (plus shared
-navigation/scroller chunks), full Calculator `main` is 12.51 KB gzip + shared
-domain chunk 3.98 KB gzip, CSS 11.44 KB gzip; Leaflet 43.38 KB gzip remains a
-lazy chunk and the separate Offer Checker enhancement is 1.54 KB gzip.
+navigation/scroller chunks), full Calculator `main` is 13.45 KB gzip + shared
+domain chunk 4.14 KB gzip, CSS 11.87 KB gzip; Leaflet 43.38 KB gzip remains a
+lazy chunk and the separate Offer Checker enhancement is 1.54 KB gzip. The four
+PDFs are only fetched after a visitor opens a documentation link.
 
 The 31.08 Lighthouse table in `reports/lighthouse/*-p1.json` belongs to the
 pre-separation layout and is intentionally not reused as a score for this
-revision. A fresh local browser smoke confirms the lighter homepage and the
-lazy calculator stack; a repeated CLI Lighthouse attempt stalled while launching
-Chrome, so the next trustworthy lab audit must run against the newly deployed
-staging revision. This is a lab measurement task, never a production CWV
-guarantee.
-
-Fresh production-preview captures from this revision are saved locally in
-`reports/screenshots/hy-375-p1-current.png`, `hy-1440-p1-current.png`,
-`ru-375-p1-current.png` and `ru-1440-p1-current.png`. They are test artefacts
-and intentionally ignored by Git.
+revision. The next trustworthy lab audit must run against a newly deployed
+staging revision. It is a lab measurement, never a production CWV guarantee.
 
 ## 12. Launch blockers и следующие три шага
 
-1. Owner must supply and configure an approved geocoder, dated verified tariff
-   source/revision, CRM and Turnstile credentials, plus a public e-mail if an
-   e-mail fallback is required. To determine roof geometry automatically, owner
-   must also approve an aerial/3D roof-data provider; address + OSM cannot do
-   it. PVGIS/OSM fallbacks are configured, but an approved commercial provider
-   can replace either without changing the browser flow.
-2. Replace every illustrative project/photo/review/price with approved evidence;
-   complete Armenian native proofreading and legal approval for Privacy/Terms.
-3. Deploy to staging (including the PVGIS timeout fix), repeat browser
-   upload/keyboard/mobile smoke and Lighthouse on the real origin, then record
-   actual production results.
+1. Bind `PVGIS_CACHE` and add a non-public `PVGIS_CACHE_SALT` secret in
+   Cloudflare Pages. Until then the live potential/analysis endpoints correctly
+   remain disabled. An approved geocoder, tariff source/revision, CRM and
+   Turnstile credentials remain optional future integrations.
+2. Keep the supplied manufacturer sheets current and separately provide
+   publishable company-registration, installer-authorisation, insurance and
+   warranty documents if those claims are to appear on the site. Replace every
+   illustrative project/photo/review/price with approved evidence; complete
+   Armenian native proofreading and legal approval for Privacy/Terms.
+3. Confirm the new Pages deployment separately from Git push, run the live
+   manual-point → PVGIS → roof → Passport smoke with configured KV, then repeat
+   browser/keyboard/mobile checks and Lighthouse on the real origin.

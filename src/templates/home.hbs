@@ -983,7 +983,29 @@
           >{{equipment.title}}</h2><div class='brand-row' role='list'>{{#each
               equipment.brands
             }}<span role='listitem'>{{this}}</span>{{/each}}</div><p
-          >{{equipment.note}}</p></div></section>
+          >{{equipment.note}}</p><div
+            class='equipment-documents'
+            id='equipment-documents'
+            aria-labelledby='equipment-documents-title'
+          ><div class='equipment-documents__heading'><h3
+                id='equipment-documents-title'
+              >{{equipment.documentsTitle}}</h3><p>{{equipment.documentsCopy}}</p></div><ul
+              class='equipment-documents__grid'
+              role='list'
+            >{{#each equipment.documents}}<li class='equipment-document'><p
+                  class='equipment-document__vendor'
+                >{{vendor}}</p><h4>{{title}}</h4><dl>{{#each facts}}<div><dt>{{label}}</dt><dd
+                      >{{value}}</dd></div>{{/each}}</dl><a
+                  class='text-link equipment-document__link'
+                  href='{{href}}'
+                  type='application/pdf'
+                  target='_blank'
+                  rel='noopener'
+                >{{../equipment.documentAction}} <svg class='inline-icon' aria-hidden='true'><use
+                      href='/icons.svg#arrow-right'
+                    ></use></svg></a><p class='equipment-document__note'>{{note}}</p></li>{{/each}}</ul><p
+              class='equipment-documents__disclosure'
+            >{{equipment.documentsDisclosure}}</p></div></div></section>
 
       <section
         class='myenergy section section--soft'

@@ -216,6 +216,10 @@ async function validateAnchors(html, page, pages) {
     if (!href || href === '#' || isIgnorableUrl(href)) continue;
     const url = sameOriginUrl(href, page);
     if (!url) continue;
+    if (extname(url.pathname)) {
+      await validateAsset(href, page);
+      continue;
+    }
     const targetPage = normalizeLocalPath(url.pathname);
     const targetHtml = pages.get(targetPage);
     if (!targetHtml) {
