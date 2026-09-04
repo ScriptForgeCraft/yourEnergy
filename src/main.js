@@ -97,6 +97,7 @@ const passportPersistence = document.querySelector('[data-passport-persistence]'
 const leadSection = document.querySelector('[data-lead-section]');
 const leadStatus = document.querySelector('[data-lead-status]');
 const passportDialogEyebrow = document.querySelector('[data-passport-dialog-eyebrow]');
+const analysisDependentSections = [...document.querySelectorAll('[data-analysis-dependent]')];
 
 let activeRequest = null;
 let activePotentialRequest = null;
@@ -188,7 +189,7 @@ const formatCompassDirection = (value) => {
 
 const flowIndex = Object.freeze({ location: 0, potential: 1, roof: 2, result: 3 });
 const workspaceStageForFlow = Object.freeze({
-  location: 'potential',
+  location: 'start',
   potential: 'potential',
   roof: 'roof',
   result: 'result'
@@ -299,6 +300,9 @@ const clearAnalysisResult = () => {
   if (passportPersistence) passportPersistence.hidden = true;
   if (leadSection) leadSection.hidden = true;
   if (leadStatus) leadStatus.textContent = '';
+  analysisDependentSections.forEach((section) => {
+    section.hidden = true;
+  });
 };
 
 const clearCalculatedState = () => {
@@ -357,7 +361,9 @@ const updateLocationStage = ({ message, focus = false } = {}) => {
   locationStage.hidden = false;
   if (locationMessage) locationMessage.textContent = message ?? product.location?.copy ?? '';
   const candidate = pendingLocation;
-  if (locationAddress) locationAddress.textContent = candidate?.address ?? '';
+  if (locationAddress) {
+    locationAddress.textContent = candidate?.address || product.location?.manualPoint || '';
+  }
   if (locationCoordinates) {
     locationCoordinates.textContent = candidate?.coordinates
       ? `${formatCoordinate(candidate.coordinates.lat)}, ${formatCoordinate(candidate.coordinates.lng)}`
@@ -764,6 +770,9 @@ const publishAnalysis = (analysis, passport) => {
   });
   if (passportPersistence) passportPersistence.hidden = false;
   if (leadSection) leadSection.hidden = false;
+  analysisDependentSections.forEach((section) => {
+    section.hidden = false;
+  });
   if (passportDialogEyebrow) passportDialogEyebrow.textContent = product.result?.title ?? '';
   document
     .querySelector('[data-passport-dialog-title]')

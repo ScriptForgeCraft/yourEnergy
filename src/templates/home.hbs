@@ -30,17 +30,15 @@
       <div class='container header-row'>
         <a class='wordmark' href='{{homeHref}}' aria-label='{{aria.logo}}'><span>YOUR</span><strong
           >ENERGY</strong></a>
-        {{#unless isCalculatorPage}}
-          <nav class='desktop-nav' aria-label='{{aria.primaryNav}}'>
-            <a href='{{calculatorHref}}'>{{nav.home}}</a>
-            <a href='{{supportBase}}/soon/#business'>{{nav.business}}</a>
-            <a href='#projects'>{{nav.projects}}</a>
-            <a href='#process'>{{nav.process}}</a>
-            <a href='#engineering'>{{nav.about}}</a>
-            <a href='{{supportBase}}/soon/#blog'>{{nav.blog}}</a>
-            <a href='#contacts'>{{nav.contacts}}</a>
-          </nav>
-        {{/unless}}
+        <nav class='desktop-nav' aria-label='{{aria.primaryNav}}'>
+          <a href='{{navLinks.home}}'>{{nav.home}}</a>
+          <a href='{{navLinks.business}}'>{{nav.business}}</a>
+          <a href='{{navLinks.projects}}'>{{nav.projects}}</a>
+          <a href='{{navLinks.process}}'>{{nav.process}}</a>
+          <a href='{{navLinks.about}}'>{{nav.about}}</a>
+          <a href='{{navLinks.blog}}'>{{nav.blog}}</a>
+          <a href='{{navLinks.contacts}}'>{{nav.contacts}}</a>
+        </nav>
         <div class='header-actions'>
           <a class='header-phone' href='{{contact.phoneHref}}'><strong>{{contact.phone}}</strong><small
             >{{contact.hours}}</small></a>
@@ -52,25 +50,18 @@
                 hreflang='{{hreflang}}'
                 aria-label='{{label}} — {{name}}'
               >{{label}}</a>{{/each}}</nav>
-          {{#unless isCalculatorPage}}
-            <a class='button button--small' href='{{calculatorHref}}'>{{common.cta}}</a>
-          {{/unless}}
+          <a class='button button--small' href='{{headerCtaHref}}'>{{common.cta}}</a>
         </div>
         <details class='mobile-menu' data-mobile-menu>
           <summary aria-label='{{aria.menu}}'><span></span><span></span><span></span></summary>
-          <nav aria-label='{{#if isCalculatorPage}}{{toolShared.mobileNav}}{{else}}{{aria.mobileNav}}{{/if}}'>
-            {{#if isCalculatorPage}}
-              <a href='{{homeHref}}'>{{toolShared.home}}</a>
-              <a href='{{contact.phoneHref}}'>{{toolShared.phone}}</a>
-            {{else}}
-              <a href='{{calculatorHref}}'>{{nav.home}}</a>
-              <a href='{{supportBase}}/soon/#business'>{{nav.business}}</a>
-              <a href='#projects'>{{nav.projects}}</a>
-              <a href='#process'>{{nav.process}}</a>
-              <a href='#engineering'>{{nav.about}}</a>
-              <a href='{{supportBase}}/soon/#blog'>{{nav.blog}}</a>
-              <a href='#contacts'>{{nav.contacts}}</a>
-            {{/if}}
+          <nav aria-label='{{aria.mobileNav}}'>
+            <a href='{{navLinks.home}}'>{{nav.home}}</a>
+            <a href='{{navLinks.business}}'>{{nav.business}}</a>
+            <a href='{{navLinks.projects}}'>{{nav.projects}}</a>
+            <a href='{{navLinks.process}}'>{{nav.process}}</a>
+            <a href='{{navLinks.about}}'>{{nav.about}}</a>
+            <a href='{{navLinks.blog}}'>{{nav.blog}}</a>
+            <a href='{{navLinks.contacts}}'>{{nav.contacts}}</a>
             <div class='mobile-language-switcher' role='group' aria-label='{{aria.languageNav}}'>{{#each
                 languageLinks
               }}<a
@@ -135,7 +126,8 @@
                   >{{number}}</span><span><strong>{{title}}</strong><small>{{copy}}</small></span></li>{{/each}}
               </ol>
             </section>
-            <form class='address-form' id='calculator-start' data-address-form action='#manual-consultation' novalidate tabindex='-1'>
+            <form class='address-form calculator-start' id='calculator-start' data-address-form action='#manual-consultation' novalidate tabindex='-1'>
+              <div class='calculator-start__heading'><span>{{product.workspace.items.[0].number}}</span><div><strong>{{product.workspace.items.[0].label}}</strong><small>{{product.workspace.items.[0].copy}}</small></div></div>
               <label for='address'>{{hero.addressLabel}}</label>
               <div class='address-control'>
                 <svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#pin'></use></svg>
@@ -150,9 +142,6 @@
                 <button class='button button--navy' type='submit'>{{hero.analyze}}</button>
               </div>
               <small id='address-help' class='field-help'>{{hero.addressHelp}}</small>
-              <button class='text-button address-manual-point' type='button' data-location-manual-start>
-                {{product.location.chooseOnMap}}
-              </button>
             </form>
             <section class='product-stage' data-location-stage hidden aria-labelledby='location-stage-title' tabindex='-1'>
               <p class='eyebrow'>{{product.location.title}}</p>
@@ -653,6 +642,7 @@
         id='passport'
         aria-labelledby='passport-title'
         tabindex='-1'
+        {{#if isCalculatorPage}}data-analysis-dependent hidden{{/if}}
       >
         <div class='container passport-grid'>
           <div class='passport-copy'>
@@ -830,7 +820,7 @@
       </aside>
       {{/unless}}
 
-      <section class='solutions section' id='solutions' aria-labelledby='solutions-title'>
+      <section class='solutions section' id='solutions' aria-labelledby='solutions-title' {{#if isCalculatorPage}}data-analysis-dependent hidden{{/if}}>
         <div class='container'>
           <div class='section-heading'><div><p class='eyebrow'>{{solutions.eyebrow}}</p><h2
                 id='solutions-title'
@@ -920,7 +910,7 @@
       </section>
       {{/unless}}
 
-      <section class='finance section' id='investment' aria-labelledby='finance-title'>
+      <section class='finance section' id='investment' aria-labelledby='finance-title' {{#if isCalculatorPage}}data-analysis-dependent hidden{{/if}}>
         <div class='container finance-grid'>
           <div class='finance-copy'><p class='eyebrow eyebrow--dark'>{{finance.eyebrow}}</p><h2
               id='finance-title'
@@ -1108,14 +1098,6 @@
       {{/unless}}
     </main>
 
-    {{#if isCalculatorPage}}
-      <footer class='tool-footer'>
-        <div class='container'>
-          <p>{{toolShared.footer}}</p>
-          <a href='{{contact.phoneHref}}'>{{contact.phone}}</a>
-        </div>
-      </footer>
-    {{else}}
     <footer class='site-footer' id='contacts'><div class='container footer-grid'><div><a
             class='wordmark'
             href='{{homeHref}}'
@@ -1141,7 +1123,6 @@
           >{{footer.privacy}}</a><a
             href='{{supportBase}}/terms/'
           >{{footer.terms}}</a></span></div></footer>
-    {{/if}}
 
     <dialog class='passport-dialog' data-passport-dialog aria-labelledby='dialog-title'><form
         method='dialog'

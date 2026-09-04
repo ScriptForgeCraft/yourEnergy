@@ -11,6 +11,8 @@ Vite MPA генерирует семантический HTML из Handlebars д
 сохраняются как noindex-переходы к разделу проверки КП внутри калькулятора.
 Главная страница — быстрый marketing entry; полный address/map/roof/PVGIS
 workflow живёт только на одноимённой локализованной странице Calculator.
+Header и footer теперь едины на home, calculator, support и legacy-документах;
+внутреннее меню Calculator управляет пятью разделами без перехода на другой URL.
 Privacy, Terms и Soon существуют для всех трёх локалей и имеют `noindex`.
 В `functions/` лежат Cloudflare Pages Functions, а расчётная логика отделена
 в `src/domain/`.

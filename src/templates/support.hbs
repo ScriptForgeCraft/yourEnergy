@@ -11,17 +11,33 @@
     <link rel='stylesheet' href='/src/styles/main.css' />
   </head>
   <body class='support-page'>
-    <main class='support-shell'>
-      <a class='wordmark' href='{{homeHref}}'><span>YOUR</span><strong>ENERGY</strong></a>
-      <p class='eyebrow'>{{label}}</p>
-      <h1>{{title}}</h1>
-      <p>{{copy}}</p>
-      <a class='button' href='{{homeHref}}'>{{back}}</a>
-      {{#if anchors}}
-        <div class='support-anchor-list' aria-label='Upcoming areas'>
-          {{#each anchors}}<span id='{{this}}'></span>{{/each}}
+    <a class='skip-link' href='#main'>{{aria.skip}}</a>
+    <header class='site-header' data-header>
+      <div class='container header-row'>
+        <a class='wordmark' href='{{homeHref}}' aria-label='{{aria.logo}}'><span>YOUR</span><strong>ENERGY</strong></a>
+        <nav class='desktop-nav' aria-label='{{aria.primaryNav}}'>
+          <a href='{{navLinks.home}}'>{{nav.home}}</a><a href='{{navLinks.business}}'>{{nav.business}}</a><a href='{{navLinks.projects}}'>{{nav.projects}}</a><a href='{{navLinks.process}}'>{{nav.process}}</a><a href='{{navLinks.about}}'>{{nav.about}}</a><a href='{{navLinks.blog}}'>{{nav.blog}}</a><a href='{{navLinks.contacts}}'>{{nav.contacts}}</a>
+        </nav>
+        <div class='header-actions'>
+          <a class='header-phone' href='{{contact.phoneHref}}'><strong>{{contact.phone}}</strong><small>{{contact.hours}}</small></a>
+          <nav class='language-switcher' aria-label='{{aria.languageNav}}'>{{#each languageLinks}}<a class='language-link' href='{{href}}' hreflang='{{hreflang}}' aria-label='{{label}} — {{name}}'>{{label}}</a>{{/each}}</nav>
+          <a class='button button--small' href='{{headerCtaHref}}'>{{common.cta}}</a>
         </div>
-      {{/if}}
+        <details class='mobile-menu' data-mobile-menu>
+          <summary aria-label='{{aria.menu}}'><span></span><span></span><span></span></summary>
+          <nav aria-label='{{aria.mobileNav}}'>
+            <a href='{{navLinks.home}}'>{{nav.home}}</a><a href='{{navLinks.business}}'>{{nav.business}}</a><a href='{{navLinks.projects}}'>{{nav.projects}}</a><a href='{{navLinks.process}}'>{{nav.process}}</a><a href='{{navLinks.about}}'>{{nav.about}}</a><a href='{{navLinks.blog}}'>{{nav.blog}}</a><a href='{{navLinks.contacts}}'>{{nav.contacts}}</a>
+            <div class='mobile-language-switcher' role='group' aria-label='{{aria.languageNav}}'>{{#each languageLinks}}<a class='language-link' href='{{href}}' hreflang='{{hreflang}}' aria-label='{{label}} — {{name}}'>{{label}}</a>{{/each}}</div>
+          </nav>
+        </details>
+      </div>
+    </header>
+    <main class='support-main' id='main'>
+      <section class='support-shell' aria-labelledby='support-title'>
+        <p class='eyebrow'>{{label}}</p><h1 id='support-title'>{{title}}</h1><p>{{copy}}</p><a class='button' href='{{homeHref}}'>{{back}}</a>
+        {{#if anchors}}<div class='support-anchor-list' aria-label='Upcoming areas'>{{#each anchors}}<span id='{{this}}'></span>{{/each}}</div>{{/if}}
+      </section>
     </main>
+    <footer class='site-footer' id='contacts'><div class='container footer-grid'><div><a class='wordmark' href='{{homeHref}}'><span>YOUR</span><strong>ENERGY</strong></a><p>{{footer.description}}</p><a class='footer-account' href='{{supportBase}}/soon/#account'>{{footer.account}}</a></div>{{#each footer.columns}}<div><h2>{{title}}</h2><ul role='list'>{{#each links}}<li><a href='{{this.[1]}}'>{{this.[0]}}</a></li>{{/each}}</ul></div>{{/each}}<div class='footer-contact'><h2>{{nav.contacts}}</h2><p><svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#phone'></use></svg><a href='{{contact.phoneHref}}'>{{contact.phone}}</a></p><p><svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#pin'></use></svg><address>{{contact.address}}</address></p><p><svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#sun'></use></svg><span>{{contact.hours}}</span></p><small>{{contact.note}}</small></div></div><div class='container footer-bottom'><span>{{footer.copyright}}</span><span><a href='{{supportBase}}/privacy/'>{{footer.privacy}}</a><a href='{{supportBase}}/terms/'>{{footer.terms}}</a></span></div></footer>
   </body>
 </html>

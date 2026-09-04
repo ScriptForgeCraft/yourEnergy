@@ -221,6 +221,7 @@ export default {
       noResult: 'The address was not found. Select a point on the map manually.',
       unavailable: 'Address search is currently unavailable. Select a point on the map manually.',
       manualTitle: 'Select a point manually',
+      manualPoint: 'Manual property point',
       manualCopy:
         'Click the map to mark the approximate property location. This is not address geocoding.',
       chooseOnMap: 'Choose a point on the map',

@@ -545,10 +545,14 @@ h1 mark {
 
 .support-page {
   min-height: 100vh;
+  background: linear-gradient(145deg, #f7f8f4, #fff);
+}
+
+.support-main {
+  min-height: min(620px, calc(100vh - 74px));
   display: grid;
   place-items: center;
-  padding: 24px;
-  background: linear-gradient(145deg, #f7f8f4, #fff);
+  padding: clamp(48px, 8vw, 96px) 24px;
 }
 
 .support-shell {

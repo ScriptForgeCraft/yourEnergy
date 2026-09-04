@@ -11,12 +11,33 @@
     <link rel='stylesheet' href='/src/styles/main.css' />
   </head>
   <body class='support-page'>
-    <main class='support-shell'>
-      <a class='wordmark' href='/'><span>YOUR</span><strong>ENERGY</strong></a>
-      <p class='eyebrow'>Իրավական նախագիծ</p>
-      <h1>Օգտագործման պայմաններ</h1>
-      <p>Կայքում ցուցադրված հաշվարկներն ու նախագծերը ցուցադրական օրինակներ են և չեն հանդիսանում առևտրային առաջարկ։</p>
-      <a class='button' href='/'>Վերադառնալ գլխավոր էջ</a>
+    <a class='skip-link' href='#main'>Անցնել հիմնական բովանդակությանը</a>
+    <header class='site-header' data-header>
+      <div class='container header-row'>
+        <a class='wordmark' href='/' aria-label='YOURENERGY — գլխավոր էջ'><span>YOUR</span><strong>ENERGY</strong></a>
+        <nav class='desktop-nav' aria-label='Հիմնական նավիգացիա'>
+          <a href='/calculator/'>Տան համար</a><a href='/soon/#business'>Բիզնեսի համար</a><a href='/#projects'>Նախագծեր</a><a href='/#process'>Ինչպես է աշխատում</a><a href='/#engineering'>Մեր մասին</a><a href='/soon/#blog'>Բլոգ</a><a href='#contacts'>Կապ</a>
+        </nav>
+        <div class='header-actions'>
+          <a class='header-phone' href='tel:+37491095950'><strong>+374 91 095 950</strong><small>Բաց է մինչև 21:00</small></a>
+          <nav class='language-switcher' aria-label='Լեզվի ընտրություն'><a class='language-link' href='/ru/' hreflang='ru' aria-label='RU — Ռուսերեն'>RU</a><a class='language-link' href='/en/' hreflang='en' aria-label='EN — Անգլերեն'>EN</a></nav>
+          <a class='button button--small' href='/calculator/'>Հաշվել իմ տունը</a>
+        </div>
+        <details class='mobile-menu' data-mobile-menu>
+          <summary aria-label='Բացել նավիգացիոն ցանկը'><span></span><span></span><span></span></summary>
+          <nav aria-label='Բջջային նավիգացիա'>
+            <a href='/calculator/'>Տան համար</a><a href='/soon/#business'>Բիզնեսի համար</a><a href='/#projects'>Նախագծեր</a><a href='/#process'>Ինչպես է աշխատում</a><a href='/#engineering'>Մեր մասին</a><a href='/soon/#blog'>Բլոգ</a><a href='#contacts'>Կապ</a>
+            <div class='mobile-language-switcher' role='group' aria-label='Լեզվի ընտրություն'><a class='language-link' href='/ru/' hreflang='ru' aria-label='RU — Ռուսերեն'>RU</a><a class='language-link' href='/en/' hreflang='en' aria-label='EN — Անգլերեն'>EN</a></div>
+          </nav>
+        </details>
+      </div>
+    </header>
+    <main class='support-main' id='main'>
+      <section class='support-shell' aria-labelledby='support-title'>
+        <p class='eyebrow'>Իրավական նախագիծ</p><h1 id='support-title'>Օգտագործման պայմաններ</h1><p>Կայքում ցուցադրված հաշվարկներն ու նախագծերը ցուցադրական օրինակներ են և չեն հանդիսանում առևտրային առաջարկ։</p><a class='button' href='/'>Վերադառնալ գլխավոր էջ</a>
+
+      </section>
     </main>
+    <footer class='site-footer' id='contacts'><div class='container footer-grid'><div><a class='wordmark' href='/'><span>YOUR</span><strong>ENERGY</strong></a><p>Արևային համակարգեր տան և բիզնեսի համար՝ աուդիտ, նախագծում, տեղադրում, սպասարկում և մոնիտորինգ։</p><a class='footer-account' href='/soon/#account'>Անձնական հաշիվ →</a></div><div><h2>Տան համար</h2><ul role='list'><li><a href='/#solutions'>Լուծումներ</a></li><li><a href='/calculator/'>Հաշվիչ</a></li><li><a href='/#solutions'>Արժեք</a></li><li><a href='/#faq'>ՀՏՀ</a></li></ul></div><div><h2>Բիզնեսի համար</h2><ul role='list'><li><a href='/soon/#business'>Լուծումներ</a></li><li><a href='/#projects'>Նախագծեր</a></li><li><a href='/#investment'>Առավելություններ</a></li><li><a href='/calculator/'>Հաշվիչ</a></li></ul></div><div><h2>Ընկերություն</h2><ul role='list'><li><a href='/#engineering'>Մեր մասին</a></li><li><a href='/soon/#team'>Մեր թիմը</a></li><li><a href='/soon/#certificates'>Սերտիֆիկատներ</a></li><li><a href='/soon/#career'>Կարիերա</a></li></ul></div><div><h2>Աջակցություն</h2><ul role='list'><li><a href='/soon/#warranty'>Երաշխիք</a></li><li><a href='/soon/#service'>Սպասարկում</a></li><li><a href='/#equipment-documents'>Սարքավորումների փաստաթղթեր</a></li><li><a href='/#contacts'>Կապ</a></li></ul></div><div class='footer-contact'><h2>Կապ</h2><p><svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#phone'></use></svg><a href='tel:+37491095950'>+374 91 095 950</a></p><p><svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#pin'></use></svg><address>Artashisyan 48 14 Kotayq, Zovuni, 26 33 str, Yerevan</address></p><p><svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#sun'></use></svg><span>Բաց է մինչև 21:00</span></p><small>Կոնտակտային տվյալները տրամադրվել են Your Energy LLC-ի կողմից։</small></div></div><div class='container footer-bottom'><span>© 2026 YOURENERGY։ Բոլոր իրավունքները պաշտպանված են։</span><span><a href='/privacy/'>Գաղտնիության քաղաքականության նախագիծ</a><a href='/terms/'>Օգտագործման պայմանների նախագիծ</a></span></div></footer>
   </body>
 </html>

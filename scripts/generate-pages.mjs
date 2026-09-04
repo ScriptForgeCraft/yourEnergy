@@ -163,57 +163,82 @@ const createPageConfig = (content, extra = {}) => ({
   ...extra
 });
 
-const createHomeContext = (content) => ({
-  ...content,
-  calculatorHref: toolPath(content.locale, 'calculator'),
-  solutionHref: toolPath(content.locale, 'calculator'),
-  offerCheckerHref: `${toolPath(content.locale, 'calculator')}#offer-checker`,
-  alternateLinks: publishedAlternateLinks,
-  languageLinks: createLanguageLinks(content.locale),
-  solutions: {
-    ...content.solutions,
-    items: content.solutions.items.map((item) => ({
-      ...item,
-      cardClass: item.popular ? 'solution-card--popular' : '',
-      buttonClass: item.popular ? '' : 'button--outline',
-      detailsLabel: content.common.details,
-      ctaLabel: content.common.cta
-    }))
-  },
-  footer: {
-    ...content.footer,
-    columns: content.footer.columns.map((column) => ({
-      ...column,
-      links: column.links.map(([label, href]) => [
-        label,
-        href === '#calculator' ? toolPath(content.locale, 'calculator') : href
-      ])
-    }))
-  },
-  projects: {
-    ...content.projects,
-    items: content.projects.items.map((item) => ({
-      ...item,
-      cardClass: item.featured ? 'project-card--featured' : '',
-      avifSrcset: `/images/${item.image}-480.avif 480w, /images/${item.image}-800.avif 800w${item.featured ? `, /images/${item.image}-1200.avif 1200w` : ''}`,
-      webpSrcset: `/images/${item.image}-480.webp 480w, /images/${item.image}-800.webp 800w${item.featured ? `, /images/${item.image}-1200.webp 1200w` : ''}`,
-      imageSizes: item.featured ? '(max-width: 720px) 82vw, 52vw' : '(max-width: 720px) 82vw, 24vw',
-      illustrativeLabel: content.common.illustrative,
-      badgeLabel: content.projects.badge,
-      beforeLabel: content.projects.before,
-      afterLabel: content.projects.after
-    }))
-  },
-  process: {
-    ...content.process,
-    steps: content.process.steps.map((step, index) => ({
-      ...step,
-      icon: index === 0 ? 'pin' : 'check'
-    }))
-  },
-  jsonLd: escapeJsonForHtml(createJsonLd(content)),
-  pageConfig: escapeJsonForHtml(createPageConfig(content))
-});
+const createHomeContext = (content, { pageKind = 'home' } = {}) => {
+  const calculatorHref = toolPath(content.locale, 'calculator');
+  const isCalculator = pageKind === 'calculator';
+  const isHome = pageKind === 'home';
+  const calculatorPageHref = isCalculator ? '#calculator-start' : calculatorHref;
+  const homeSectionHref = (href) =>
+    !isHome && href.startsWith('#') ? `${content.homeHref}${href}` : href;
+
+  return {
+    ...content,
+    calculatorHref,
+    headerCtaHref: calculatorPageHref,
+    navLinks: {
+      home: calculatorPageHref,
+      business: `${content.supportBase}/soon/#business`,
+      projects: homeSectionHref('#projects'),
+      process: homeSectionHref('#process'),
+      about: homeSectionHref('#engineering'),
+      blog: `${content.supportBase}/soon/#blog`,
+      contacts: '#contacts'
+    },
+    solutionHref: calculatorHref,
+    offerCheckerHref: `${calculatorHref}#offer-checker`,
+    alternateLinks: publishedAlternateLinks,
+    languageLinks: createLanguageLinks(content.locale),
+    solutions: {
+      ...content.solutions,
+      items: content.solutions.items.map((item) => ({
+        ...item,
+        cardClass: item.popular ? 'solution-card--popular' : '',
+        buttonClass: item.popular ? '' : 'button--outline',
+        detailsLabel: content.common.details,
+        ctaLabel: content.common.cta
+      }))
+    },
+    footer: {
+      ...content.footer,
+      columns: content.footer.columns.map((column) => ({
+        ...column,
+        links: column.links.map(([label, href]) => [
+          label,
+          href === '#calculator'
+            ? calculatorPageHref
+            : !isHome && href.startsWith('#')
+              ? `${content.homeHref}${href}`
+              : href
+        ])
+      }))
+    },
+    projects: {
+      ...content.projects,
+      items: content.projects.items.map((item) => ({
+        ...item,
+        cardClass: item.featured ? 'project-card--featured' : '',
+        avifSrcset: `/images/${item.image}-480.avif 480w, /images/${item.image}-800.avif 800w${item.featured ? `, /images/${item.image}-1200.avif 1200w` : ''}`,
+        webpSrcset: `/images/${item.image}-480.webp 480w, /images/${item.image}-800.webp 800w${item.featured ? `, /images/${item.image}-1200.webp 1200w` : ''}`,
+        imageSizes: item.featured
+          ? '(max-width: 720px) 82vw, 52vw'
+          : '(max-width: 720px) 82vw, 24vw',
+        illustrativeLabel: content.common.illustrative,
+        badgeLabel: content.projects.badge,
+        beforeLabel: content.projects.before,
+        afterLabel: content.projects.after
+      }))
+    },
+    process: {
+      ...content.process,
+      steps: content.process.steps.map((step, index) => ({
+        ...step,
+        icon: index === 0 ? 'pin' : 'check'
+      }))
+    },
+    jsonLd: escapeJsonForHtml(createJsonLd(content)),
+    pageConfig: escapeJsonForHtml(createPageConfig(content))
+  };
+};
 
 const createCalculatorContext = (content) => {
   const calculatorMeta = toolCopy[content.locale]?.calculatorMeta;
@@ -222,13 +247,13 @@ const createCalculatorContext = (content) => {
   if (!offerChecker) throw new Error(`Missing offer checker copy for ${content.locale}.`);
 
   const path = toolPath(content.locale, 'calculator');
-  const base = createHomeContext(content);
+  const base = createHomeContext(content, { pageKind: 'calculator' });
   const pendingPassport = content.product?.passport ?? {};
   return {
     ...base,
     isCalculatorPage: true,
     path,
-    solutionHref: '#calculator',
+    solutionHref: '#calculator-start',
     meta: calculatorMeta,
     metrics: content.metrics.map((metric) => ({ ...metric, value: '—' })),
     solutions: {
@@ -346,7 +371,7 @@ for (const { key } of GENERATED_CONTENT_LOCALES) {
   await writeGenerated(
     output,
     renderLegacyRedirect({
-      ...content,
+      ...createHomeContext(content, { pageKind: 'support' }),
       ...legacyOfferRedirects[key],
       path,
       targetHref,
@@ -484,5 +509,11 @@ const supportPages = [
 for (const [file, content] of supportPages) {
   const output = resolve(root, file);
   await mkdir(dirname(output), { recursive: true });
-  await writeGenerated(output, renderSupport(content));
+  await writeGenerated(
+    output,
+    renderSupport({
+      ...createHomeContext(homeContent[content.locale], { pageKind: 'support' }),
+      ...content
+    })
+  );
 }

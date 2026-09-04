@@ -8,6 +8,11 @@ is not a SPA and does not deploy anything itself. The homepage is deliberately
 a fast marketing entry point; the full address, map, roof and analysis workflow
 lives only on the localized calculator route.
 
+The same site header and footer are rendered on the home, calculator, support
+and legacy redirect documents. Calculator navigation preserves the full site
+context while the page's internal five-step menu keeps the entire analysis
+workflow in one place.
+
 ## 1. Structure
 
 - `src/content/` — localized, crawlable page dictionaries.

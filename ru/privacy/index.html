@@ -11,12 +11,33 @@
     <link rel='stylesheet' href='/src/styles/main.css' />
   </head>
   <body class='support-page'>
-    <main class='support-shell'>
-      <a class='wordmark' href='/ru/'><span>YOUR</span><strong>ENERGY</strong></a>
-      <p class='eyebrow'>Юридический черновик</p>
-      <h1>Политика конфиденциальности</h1>
-      <p>В этой демо-версии адрес и файл счёта не отправляются на сервер. Документ требует юридического согласования перед публикацией.</p>
-      <a class='button' href='/ru/'>Вернуться на главную</a>
+    <a class='skip-link' href='#main'>Перейти к основному содержанию</a>
+    <header class='site-header' data-header>
+      <div class='container header-row'>
+        <a class='wordmark' href='/ru/' aria-label='YOURENERGY — главная страница'><span>YOUR</span><strong>ENERGY</strong></a>
+        <nav class='desktop-nav' aria-label='Основная навигация'>
+          <a href='/ru/calculator/'>Для дома</a><a href='/ru/soon/#business'>Для бизнеса</a><a href='/ru/#projects'>Проекты</a><a href='/ru/#process'>Как это работает</a><a href='/ru/#engineering'>О нас</a><a href='/ru/soon/#blog'>Блог</a><a href='#contacts'>Контакты</a>
+        </nav>
+        <div class='header-actions'>
+          <a class='header-phone' href='tel:+37491095950'><strong>+374 91 095 950</strong><small>Открыто до 21:00</small></a>
+          <nav class='language-switcher' aria-label='Выбор языка'><a class='language-link' href='/' hreflang='hy' aria-label='AM — Армянский'>AM</a><a class='language-link' href='/en/' hreflang='en' aria-label='EN — Английский'>EN</a></nav>
+          <a class='button button--small' href='/ru/calculator/'>Рассчитать мой дом</a>
+        </div>
+        <details class='mobile-menu' data-mobile-menu>
+          <summary aria-label='Открыть навигационное меню'><span></span><span></span><span></span></summary>
+          <nav aria-label='Мобильная навигация'>
+            <a href='/ru/calculator/'>Для дома</a><a href='/ru/soon/#business'>Для бизнеса</a><a href='/ru/#projects'>Проекты</a><a href='/ru/#process'>Как это работает</a><a href='/ru/#engineering'>О нас</a><a href='/ru/soon/#blog'>Блог</a><a href='#contacts'>Контакты</a>
+            <div class='mobile-language-switcher' role='group' aria-label='Выбор языка'><a class='language-link' href='/' hreflang='hy' aria-label='AM — Армянский'>AM</a><a class='language-link' href='/en/' hreflang='en' aria-label='EN — Английский'>EN</a></div>
+          </nav>
+        </details>
+      </div>
+    </header>
+    <main class='support-main' id='main'>
+      <section class='support-shell' aria-labelledby='support-title'>
+        <p class='eyebrow'>Юридический черновик</p><h1 id='support-title'>Политика конфиденциальности</h1><p>В этой демо-версии адрес и файл счёта не отправляются на сервер. Документ требует юридического согласования перед публикацией.</p><a class='button' href='/ru/'>Вернуться на главную</a>
+
+      </section>
     </main>
+    <footer class='site-footer' id='contacts'><div class='container footer-grid'><div><a class='wordmark' href='/ru/'><span>YOUR</span><strong>ENERGY</strong></a><p>Солнечные системы для дома и бизнеса: аудит, проектирование, установка, сервис и мониторинг.</p><a class='footer-account' href='/ru/soon/#account'>Личный кабинет →</a></div><div><h2>Для дома</h2><ul role='list'><li><a href='/ru/#solutions'>Решения</a></li><li><a href='/ru/calculator/'>Калькулятор</a></li><li><a href='/ru/#solutions'>Стоимость</a></li><li><a href='/ru/#faq'>FAQ</a></li></ul></div><div><h2>Для бизнеса</h2><ul role='list'><li><a href='/ru/soon/#business'>Решения</a></li><li><a href='/ru/#projects'>Проекты</a></li><li><a href='/ru/#investment'>Преимущества</a></li><li><a href='/ru/calculator/'>Калькулятор</a></li></ul></div><div><h2>Компания</h2><ul role='list'><li><a href='/ru/#engineering'>О нас</a></li><li><a href='/ru/soon/#team'>Наша команда</a></li><li><a href='/ru/soon/#certificates'>Сертификаты</a></li><li><a href='/ru/soon/#career'>Карьера</a></li></ul></div><div><h2>Поддержка</h2><ul role='list'><li><a href='/ru/soon/#warranty'>Гарантия</a></li><li><a href='/ru/soon/#service'>Сервис</a></li><li><a href='/ru/#equipment-documents'>Документы на оборудование</a></li><li><a href='/ru/#contacts'>Контакты</a></li></ul></div><div class='footer-contact'><h2>Контакты</h2><p><svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#phone'></use></svg><a href='tel:+37491095950'>+374 91 095 950</a></p><p><svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#pin'></use></svg><address>Artashisyan 48 14 Kotayq, Zovuni, 26 33 str, Yerevan</address></p><p><svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#sun'></use></svg><span>Открыто до 21:00</span></p><small>Контактные данные предоставлены Your Energy LLC.</small></div></div><div class='container footer-bottom'><span>© 2026 YOURENERGY. Все права защищены.</span><span><a href='/ru/privacy/'>Проект политики конфиденциальности</a><a href='/ru/terms/'>Проект условий использования</a></span></div></footer>
   </body>
 </html>
