@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang='{{locale}}'>
+  <head>
+    <meta charset='UTF-8' />
+    <meta name='viewport' content='width=device-width, initial-scale=1.0' />
+    <meta name='robots' content='noindex,follow' />
+    <meta http-equiv='refresh' content='0; url={{targetHref}}' />
+    <title>{{title}} | YOURENERGY</title>
+    <link rel='canonical' href='{{canonical}}' />
+    <link rel='icon' href='/favicon.svg' type='image/svg+xml' />
+    <link rel='stylesheet' href='/src/styles/main.css' />
+  </head>
+  <body class='support-page'>
+    <main class='support-main'>
+      <section class='support-card' aria-labelledby='redirect-title'>
+        <p class='eyebrow'>{{label}}</p>
+        <h1 id='redirect-title'>{{title}}</h1>
+        <p>{{copy}}</p>
+        <a class='button' href='{{targetHref}}'>{{continueLabel}}</a>
+      </section>
+    </main>
+  </body>
+</html>

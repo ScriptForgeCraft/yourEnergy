@@ -50,7 +50,7 @@ const formatPriceBookDate = (value, locale) =>
     timeZone: 'UTC'
   }).format(new Date(`${value}T00:00:00.000Z`));
 
-const initPriceBookReference = (config) => {
+export const initPriceBookReference = (config) => {
   if (config?.toolType !== 'offer-checker') return;
 
   const reference = document.querySelector('[data-pricebook-reference]');
@@ -85,7 +85,7 @@ const populateList = (list, items) => {
   }
 };
 
-const initOfferChecker = (config) => {
+export const initOfferChecker = (config) => {
   const form = document.querySelector('[data-offer-checker]');
   const result = document.querySelector('[data-offer-result]');
   if (!form || !result) return;
@@ -196,6 +196,11 @@ const initOfferChecker = (config) => {
   });
 };
 
+export const initOfferCheckerWorkspace = (config) => {
+  if (config?.toolType !== 'offer-checker') return;
+  initPriceBookReference(config);
+  initOfferChecker(config);
+};
+
 const config = readConfig();
-initPriceBookReference(config);
-if (config?.toolType === 'offer-checker') initOfferChecker(config);
+initOfferCheckerWorkspace(config);

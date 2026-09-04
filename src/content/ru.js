@@ -81,6 +81,53 @@ export default {
       calculator: 'Открыть полный калькулятор',
       offerChecker: 'Проверить коммерческое предложение'
     },
+    workspace: {
+      title: 'Все расчёты — на одной странице',
+      copy: 'Выберите нужный раздел ниже. Основной путь идёт от точки к PVGIS, крыше и результату; проверка КП работает отдельно и не меняет расчёт дома.',
+      menuLabel: 'Разделы калькулятора',
+      items: [
+        {
+          key: 'start',
+          anchor: 'calculator-start',
+          number: '01',
+          label: 'Начать расчёт',
+          copy: 'Укажите адрес как подпись или сразу поставьте точку на карте.',
+          active: true
+        },
+        {
+          key: 'potential',
+          anchor: 'site-potential',
+          number: '02',
+          label: 'Точка и потенциал PVGIS',
+          copy: 'Подтвердите точку и получите ориентир солнечного ресурса.',
+          active: false
+        },
+        {
+          key: 'roof',
+          anchor: 'roof-analysis',
+          number: '03',
+          label: 'Дом, крыша и потребление',
+          copy: 'Обведите крышу и укажите её параметры и расход электроэнергии.',
+          active: false
+        },
+        {
+          key: 'result',
+          anchor: 'passport',
+          number: '04',
+          label: 'Результат и Solar Passport',
+          copy: 'Посмотрите предварительный результат, допущения и бюджет.',
+          active: false
+        },
+        {
+          key: 'offer',
+          anchor: 'offer-checker',
+          number: '05',
+          label: 'Проверка КП',
+          copy: 'Необязательно: сравните стороннее предложение по AMD/Wp.',
+          active: false
+        }
+      ]
+    },
     flow: {
       title: 'Как устроен расчёт',
       steps: [

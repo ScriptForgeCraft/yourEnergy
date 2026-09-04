@@ -81,6 +81,53 @@ export default {
       calculator: 'Open the full calculator',
       offerChecker: 'Check a commercial offer'
     },
+    workspace: {
+      title: 'Every calculation, on one page',
+      copy: 'Choose a section below. The main path moves from a point to PVGIS, roof inputs and a result; the proposal check is separate and never changes the home calculation.',
+      menuLabel: 'Calculator sections',
+      items: [
+        {
+          key: 'start',
+          anchor: 'calculator-start',
+          number: '01',
+          label: 'Start a calculation',
+          copy: 'Use an address only as a label or place a point on the map right away.',
+          active: true
+        },
+        {
+          key: 'potential',
+          anchor: 'site-potential',
+          number: '02',
+          label: 'Point and PVGIS potential',
+          copy: 'Confirm the point and receive a solar-resource benchmark.',
+          active: false
+        },
+        {
+          key: 'roof',
+          anchor: 'roof-analysis',
+          number: '03',
+          label: 'Home, roof and consumption',
+          copy: 'Outline the roof and enter its parameters and electricity use.',
+          active: false
+        },
+        {
+          key: 'result',
+          anchor: 'passport',
+          number: '04',
+          label: 'Result and Solar Passport',
+          copy: 'Review the preliminary result, assumptions and budget.',
+          active: false
+        },
+        {
+          key: 'offer',
+          anchor: 'offer-checker',
+          number: '05',
+          label: 'Proposal checker',
+          copy: 'Optional: compare a third-party proposal in AMD/Wp.',
+          active: false
+        }
+      ]
+    },
     flow: {
       title: 'How the estimate works',
       steps: [

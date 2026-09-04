@@ -18,11 +18,14 @@ const publicEnv = {
 };
 const template = await readFile(resolve(root, 'src/templates/home.hbs'), 'utf8');
 const supportTemplate = await readFile(resolve(root, 'src/templates/support.hbs'), 'utf8');
-const toolTemplate = await readFile(resolve(root, 'src/templates/tool.hbs'), 'utf8');
+const legacyRedirectTemplate = await readFile(
+  resolve(root, 'src/templates/legacy-redirect.hbs'),
+  'utf8'
+);
 
 const render = Handlebars.compile(template, { noEscape: false });
 const renderSupport = Handlebars.compile(supportTemplate, { noEscape: false });
-const renderTool = Handlebars.compile(toolTemplate, { noEscape: false });
+const renderLegacyRedirect = Handlebars.compile(legacyRedirectTemplate, { noEscape: false });
 const writeGenerated = (file, markup) => writeFile(file, markup.replace(/[ \t]+\n/g, '\n'), 'utf8');
 
 const runtimeLocales = Object.freeze(
@@ -59,7 +62,6 @@ const createLanguageLinks = (currentLocale) =>
     name: localizedLanguageNames[currentLocale][key]
   }));
 
-const TOOL_TYPES = Object.freeze(['calculator', 'offer-checker']);
 const toolPath = (locale, type) => (locale === 'hy' ? `/${type}/` : `/${locale}/${type}/`);
 const toolFile = (locale, type) =>
   locale === 'hy' ? `${type}/index.html` : `${locale}/${type}/index.html`;
@@ -144,11 +146,28 @@ const createJsonLd = (content, { includeFaq = true } = {}) => {
   };
 };
 
+const createPageConfig = (content, extra = {}) => ({
+  locale: runtimeLocales[content.locale],
+  status: content.status,
+  product: content.product,
+  map: {
+    image: '/images/roof-scan-768.webp',
+    tileUrl: publicEnv.VITE_MAP_TILE_URL?.trim() || DEFAULT_OSM_TILE_URL,
+    tileAttribution: publicEnv.VITE_MAP_ATTRIBUTION?.trim() || DEFAULT_OSM_TILE_ATTRIBUTION
+  },
+  endpoints: {
+    geocode: sameOriginPath(publicEnv.VITE_GEOCODING_ENDPOINT, '/api/geocode'),
+    potential: sameOriginPath(publicEnv.VITE_POTENTIAL_ENDPOINT, '/api/potential'),
+    analysis: sameOriginPath(publicEnv.VITE_ANALYSIS_ENDPOINT, '/api/analysis')
+  },
+  ...extra
+});
+
 const createHomeContext = (content) => ({
   ...content,
   calculatorHref: toolPath(content.locale, 'calculator'),
   solutionHref: toolPath(content.locale, 'calculator'),
-  offerCheckerHref: toolPath(content.locale, 'offer-checker'),
+  offerCheckerHref: `${toolPath(content.locale, 'calculator')}#offer-checker`,
   alternateLinks: publishedAlternateLinks,
   languageLinks: createLanguageLinks(content.locale),
   solutions: {
@@ -193,26 +212,14 @@ const createHomeContext = (content) => ({
     }))
   },
   jsonLd: escapeJsonForHtml(createJsonLd(content)),
-  pageConfig: escapeJsonForHtml({
-    locale: runtimeLocales[content.locale],
-    status: content.status,
-    product: content.product,
-    map: {
-      image: '/images/roof-scan-768.webp',
-      tileUrl: publicEnv.VITE_MAP_TILE_URL?.trim() || DEFAULT_OSM_TILE_URL,
-      tileAttribution: publicEnv.VITE_MAP_ATTRIBUTION?.trim() || DEFAULT_OSM_TILE_ATTRIBUTION
-    },
-    endpoints: {
-      geocode: sameOriginPath(publicEnv.VITE_GEOCODING_ENDPOINT, '/api/geocode'),
-      potential: sameOriginPath(publicEnv.VITE_POTENTIAL_ENDPOINT, '/api/potential'),
-      analysis: sameOriginPath(publicEnv.VITE_ANALYSIS_ENDPOINT, '/api/analysis')
-    }
-  })
+  pageConfig: escapeJsonForHtml(createPageConfig(content))
 });
 
 const createCalculatorContext = (content) => {
   const calculatorMeta = toolCopy[content.locale]?.calculatorMeta;
+  const offerChecker = toolCopy[content.locale]?.offerChecker;
   if (!calculatorMeta) throw new Error(`Missing calculator metadata for ${content.locale}.`);
+  if (!offerChecker) throw new Error(`Missing offer checker copy for ${content.locale}.`);
 
   const path = toolPath(content.locale, 'calculator');
   const base = createHomeContext(content);
@@ -247,6 +254,11 @@ const createCalculatorContext = (content) => {
     alternateLinks: createToolAlternateLinks('calculator'),
     languageLinks: createToolLanguageLinks(content.locale, 'calculator'),
     toolShared: toolCopy[content.locale].shared,
+    offerChecker,
+    offerCheckerScopeItems: scopeItems(offerChecker),
+    pageConfig: escapeJsonForHtml(
+      createPageConfig(content, { offerChecker: createOfferCheckerRuntime(content, offerChecker) })
+    ),
     jsonLd: escapeJsonForHtml(createJsonLd({ ...content, path }, { includeFaq: false }))
   };
 };
@@ -280,11 +292,11 @@ const scopeItems = (tool) => [
   { key: 'battery', name: 'scope-battery', label: tool.scope.battery }
 ];
 
-const createOfferCheckerContext = (content) => {
-  const tool = toolCopy[content.locale]?.offerChecker;
-  if (!tool) throw new Error(`Missing offer checker copy for ${content.locale}.`);
-
-  const offerStrings = {
+const createOfferCheckerRuntime = (content, tool) => ({
+  toolType: 'offer-checker',
+  locale: runtimeLocales[content.locale],
+  priceBook: TEMPORARY_YOURENERGY_PRICEBOOK,
+  strings: {
     invalid: tool.invalid,
     resultAwaiting: tool.resultAwaiting,
     notComparable: tool.notComparable,
@@ -294,43 +306,53 @@ const createOfferCheckerContext = (content) => {
     scopeIncomplete: tool.scopeIncomplete,
     reason: tool.reason,
     questions: tool.questions
-  };
-
-  return {
-    locale: content.locale,
-    localeCode: content.localeCode,
-    path: toolPath(content.locale, 'offer-checker'),
-    homeHref: content.homeHref,
-    contact: content.contact,
-    shared: toolCopy[content.locale].shared,
-    tool,
-    toolType: 'offer-checker',
-    calculatorHref: toolPath(content.locale, 'calculator'),
-    offerCheckerHref: toolPath(content.locale, 'offer-checker'),
-    alternateLinks: createToolAlternateLinks('offer-checker'),
-    languageLinks: createToolLanguageLinks(content.locale, 'offer-checker'),
-    scopeItems: scopeItems(tool),
-    pageConfig: escapeJsonForHtml({
-      toolType: 'offer-checker',
-      locale: runtimeLocales[content.locale],
-      homeHref: content.homeHref,
-      priceBook: TEMPORARY_YOURENERGY_PRICEBOOK,
-      strings: offerStrings
-    })
-  };
-};
+  }
+});
 
 for (const { key } of GENERATED_CONTENT_LOCALES) {
   const content = homeContent[key];
   const calculatorOutput = resolve(root, toolFile(key, 'calculator'));
   await mkdir(dirname(calculatorOutput), { recursive: true });
   await writeGenerated(calculatorOutput, render(createCalculatorContext(content)));
+}
 
-  for (const type of TOOL_TYPES.filter((entry) => entry !== 'calculator')) {
-    const output = resolve(root, toolFile(key, type));
-    await mkdir(dirname(output), { recursive: true });
-    await writeGenerated(output, renderTool(createOfferCheckerContext(content)));
+const legacyOfferRedirects = Object.freeze({
+  hy: {
+    label: 'Վերահղում',
+    title: 'Կոմերցիոն առաջարկի ստուգումը տեղափոխվել է հաշվիչ',
+    copy: 'Բացեք միասնական հաշվիչը՝ առաջարկի գինը և կազմը ստուգելու համար։',
+    continueLabel: 'Բացել առաջարկի ստուգումը'
+  },
+  ru: {
+    label: 'Перенаправление',
+    title: 'Проверка КП перенесена в калькулятор',
+    copy: 'Откройте единый калькулятор, чтобы проверить цену и состав предложения.',
+    continueLabel: 'Открыть проверку КП'
+  },
+  en: {
+    label: 'Redirect',
+    title: 'Proposal Checker has moved into the calculator',
+    copy: 'Open the unified calculator to check an offer price and scope.',
+    continueLabel: 'Open Proposal Checker'
   }
+});
+
+for (const { key } of GENERATED_CONTENT_LOCALES) {
+  const content = homeContent[key];
+  const targetHref = `${toolPath(key, 'calculator')}#offer-checker`;
+  const path = toolPath(key, 'offer-checker');
+  const output = resolve(root, toolFile(key, 'offer-checker'));
+  await mkdir(dirname(output), { recursive: true });
+  await writeGenerated(
+    output,
+    renderLegacyRedirect({
+      ...content,
+      ...legacyOfferRedirects[key],
+      path,
+      targetHref,
+      canonical: `${origin}${toolPath(key, 'calculator')}`
+    })
+  );
 }
 
 const commonSoonAnchors = [

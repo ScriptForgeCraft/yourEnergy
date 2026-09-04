@@ -17,6 +17,7 @@ import { initFileUpload } from './ui/file-upload.js';
 import { initLeadForm } from './ui/lead-form.js';
 import { initNavigation } from './ui/navigation.js';
 import { initScrollers } from './ui/scrollers.js';
+import { initOfferCheckerWorkspace } from './tools.js';
 
 const DEFAULT_PVGIS_REQUEST_KWP = 1;
 const DEFAULT_PVGIS_LOSS_PERCENT = 14;
@@ -47,6 +48,7 @@ const statusElement = document.querySelector('[data-analysis-status]');
 const resultPanel = document.querySelector('[data-result-panel]');
 const resultSummary = document.querySelector('[data-analysis-summary]');
 const calculatorFlowSteps = [...document.querySelectorAll('[data-calculator-flow-step]')];
+const calculatorMenuItems = [...document.querySelectorAll('[data-calculator-menu-item]')];
 const locationStage = document.querySelector('[data-location-stage]');
 const locationMessage = document.querySelector('[data-location-message]');
 const locationAddress = document.querySelector('[data-location-address]');
@@ -111,6 +113,7 @@ initNavigation();
 initPassportDialog();
 initFileUpload({ status });
 initScrollers();
+initOfferCheckerWorkspace(config.offerChecker);
 
 const analysisView = createAnalysisView({
   locale,
@@ -184,6 +187,32 @@ const formatCompassDirection = (value) => {
 };
 
 const flowIndex = Object.freeze({ location: 0, potential: 1, roof: 2, result: 3 });
+const workspaceStageForFlow = Object.freeze({
+  location: 'potential',
+  potential: 'potential',
+  roof: 'roof',
+  result: 'result'
+});
+const workspaceStageOrder = Object.freeze(['start', 'potential', 'roof', 'result']);
+
+const updateCalculatorMenu = (stage, state = 'active') => {
+  const activeStage = workspaceStageForFlow[stage] ?? stage ?? 'start';
+  const activeIndex = workspaceStageOrder.indexOf(activeStage);
+  calculatorMenuItems.forEach((item) => {
+    const itemStage = item.dataset.calculatorMenuItem;
+    if (itemStage === 'offer') {
+      item.dataset.state = activeStage === 'offer' ? state : 'optional';
+      if (activeStage === 'offer') item.setAttribute('aria-current', 'step');
+      else item.removeAttribute('aria-current');
+      return;
+    }
+    const itemIndex = workspaceStageOrder.indexOf(itemStage);
+    item.dataset.state =
+      itemIndex < activeIndex ? 'complete' : itemIndex === activeIndex ? state : 'pending';
+    if (itemIndex === activeIndex) item.setAttribute('aria-current', 'step');
+    else item.removeAttribute('aria-current');
+  });
+};
 
 const updateCalculatorFlow = (stage, state = 'active') => {
   const activeIndex = flowIndex[stage] ?? 0;
@@ -191,7 +220,33 @@ const updateCalculatorFlow = (stage, state = 'active') => {
     step.dataset.state =
       index < activeIndex ? 'complete' : index === activeIndex ? state : 'pending';
   });
+  updateCalculatorMenu(stage, state);
 };
+
+const updateCalculatorMenuFromHash = () => {
+  const stage =
+    {
+      '#calculator': 'start',
+      '#calculator-start': 'start',
+      '#site-potential': 'potential',
+      '#roof-analysis': 'roof',
+      '#passport': 'result',
+      '#offer-checker': 'offer'
+    }[window.location.hash] ?? null;
+  if (stage) updateCalculatorMenu(stage);
+};
+
+document.querySelector('[data-calculator-menu]')?.addEventListener('click', (event) => {
+  const link = event.target.closest('[data-calculator-menu-item]');
+  if (!link) return;
+  updateCalculatorMenu(link.dataset.calculatorMenuItem);
+  window.setTimeout(() => {
+    const target = document.getElementById(link.hash.slice(1));
+    if (target && !target.hidden) target.focus({ preventScroll: true });
+  });
+});
+window.addEventListener('hashchange', updateCalculatorMenuFromHash);
+updateCalculatorMenuFromHash();
 
 const replaceToken = (value, token, replacement) =>
   String(value ?? '').replace(`{${token}}`, String(replacement));

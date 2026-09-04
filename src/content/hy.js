@@ -81,6 +81,53 @@ export default {
       calculator: 'Բացել ամբողջական հաշվիչը',
       offerChecker: 'Ստուգել կոմերցիոն առաջարկը'
     },
+    workspace: {
+      title: 'Բոլոր հաշվարկները՝ մեկ էջում',
+      copy: 'Ստորև ընտրեք անհրաժեշտ բաժինը։ Հիմնական ուղին կետից անցնում է PVGIS, տանիքի տվյալներ և արդյունք, իսկ առաջարկի ստուգումը առանձին է և չի փոխում տան հաշվարկը։',
+      menuLabel: 'Հաշվիչի բաժիններ',
+      items: [
+        {
+          key: 'start',
+          anchor: 'calculator-start',
+          number: '01',
+          label: 'Սկսել հաշվարկը',
+          copy: 'Օգտագործեք հասցեն միայն որպես նշում կամ անմիջապես ընտրեք կետը քարտեզի վրա։',
+          active: true
+        },
+        {
+          key: 'potential',
+          anchor: 'site-potential',
+          number: '02',
+          label: 'Կետ և PVGIS պոտենցիալ',
+          copy: 'Հաստատեք կետը և ստացեք արևային ռեսուրսի կողմնորոշիչը։',
+          active: false
+        },
+        {
+          key: 'roof',
+          anchor: 'roof-analysis',
+          number: '03',
+          label: 'Տուն, տանիք և սպառում',
+          copy: 'Ուրվագծեք տանիքը և նշեք դրա պարամետրերն ու էլեկտրասպառումը։',
+          active: false
+        },
+        {
+          key: 'result',
+          anchor: 'passport',
+          number: '04',
+          label: 'Արդյունք և Solar Passport',
+          copy: 'Դիտեք նախնական արդյունքը, ենթադրությունները և բյուջեն։',
+          active: false
+        },
+        {
+          key: 'offer',
+          anchor: 'offer-checker',
+          number: '05',
+          label: 'Առաջարկի ստուգիչ',
+          copy: 'Ոչ պարտադիր․ համեմատեք այլ առաջարկը AMD/Wp-ով։',
+          active: false
+        }
+      ]
+    },
     flow: {
       title: 'Ինչպես է աշխատում հաշվարկը',
       steps: [

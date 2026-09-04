@@ -2,7 +2,8 @@
 
 Static, multilingual Vite site for `yourenergy.am` with an honest P1
 real-analysis flow. Homepages are Armenian (`/`), Russian (`/ru/`) and English
-(`/en/`); each locale also has `/calculator/` and `/offer-checker/` routes. It
+(`/en/`); each locale has one `/calculator/` workspace. Legacy `/offer-checker/`
+URLs are noindex redirects to the Proposal Checker section inside that calculator. It
 is not a SPA and does not deploy anything itself. The homepage is deliberately
 a fast marketing entry point; the full address, map, roof and analysis workflow
 lives only on the localized calculator route.
@@ -120,9 +121,10 @@ those values in `VITE_*` variables.
 ## 8. Homepage, map and roof editor
 
 The homepage preserves the visual Roof Scan and static, clearly labelled example
-without loading calculator state, Leaflet or a file input. Its every calculator
-CTA points to the same-locale `/calculator/` route. On Calculator, a visible
-four-step guide separates location potential from detailed roof analysis. After
+without loading calculator state, Leaflet or a file input. Its every calculation
+CTA points to the same-locale `/calculator/` route. On Calculator, an in-page
+five-part menu keeps start, PVGIS potential, roof data, result/Passport and the
+optional Proposal Checker in one working area. After
 a real/manual location action, Leaflet is lazy-loaded using geographic
 coordinates; `CRS.Simple` is not part of the production analysis flow. The
 polygon supports click-to-add, marker drag, point selection, keyboard-accessible
@@ -172,8 +174,8 @@ coordinates or lead payloads.
 
 Primary HTML exists before JavaScript, including canonical URLs, reciprocal
 HY/RU/EN hreflang, localized metadata and FAQ JSON-LD where applicable.
-Support pages are `noindex`; sitemap includes the localized home, calculator
-and Offer Checker routes only. The page has landmarks, a skip link, one H1,
+Support pages and legacy Offer Checker redirects are `noindex`; sitemap includes
+the localized home and calculator routes only. The page has landmarks, a skip link, one H1,
 keyboard controls, `aria-live` status messages, native `details`/`dialog`, chart
 tables and reduced-motion styles.
 

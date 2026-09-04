@@ -43,25 +43,4 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://yourenergy.am/en/calculator/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://yourenergy.am/calculator/" />
   </url>
-  <url>
-    <loc>https://yourenergy.am/offer-checker/</loc>
-    <xhtml:link rel="alternate" hreflang="hy" href="https://yourenergy.am/offer-checker/" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://yourenergy.am/ru/offer-checker/" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://yourenergy.am/en/offer-checker/" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://yourenergy.am/offer-checker/" />
-  </url>
-  <url>
-    <loc>https://yourenergy.am/ru/offer-checker/</loc>
-    <xhtml:link rel="alternate" hreflang="hy" href="https://yourenergy.am/offer-checker/" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://yourenergy.am/ru/offer-checker/" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://yourenergy.am/en/offer-checker/" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://yourenergy.am/offer-checker/" />
-  </url>
-  <url>
-    <loc>https://yourenergy.am/en/offer-checker/</loc>
-    <xhtml:link rel="alternate" hreflang="hy" href="https://yourenergy.am/offer-checker/" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://yourenergy.am/ru/offer-checker/" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://yourenergy.am/en/offer-checker/" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://yourenergy.am/offer-checker/" />
-  </url>
 </urlset>

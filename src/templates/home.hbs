@@ -24,19 +24,13 @@
     <link rel='stylesheet' href='/src/styles/main.css' />
     <script type='application/ld+json'>{{{jsonLd}}}</script>
   </head>
-  <body>
+  <body{{#if isCalculatorPage}} class='calculator-page'{{/if}}>
     <a class='skip-link' href='#main'>{{aria.skip}}</a>
     <header class='site-header' data-header>
       <div class='container header-row'>
         <a class='wordmark' href='{{homeHref}}' aria-label='{{aria.logo}}'><span>YOUR</span><strong
           >ENERGY</strong></a>
-        {{#if isCalculatorPage}}
-          <nav class='desktop-nav' aria-label='{{toolShared.primaryNav}}'>
-            <a href='{{homeHref}}'>{{toolShared.home}}</a>
-            <a href='{{calculatorHref}}'>{{toolShared.calculator}}</a>
-            <a href='{{offerCheckerHref}}'>{{toolShared.offerChecker}}</a>
-          </nav>
-        {{else}}
+        {{#unless isCalculatorPage}}
           <nav class='desktop-nav' aria-label='{{aria.primaryNav}}'>
             <a href='{{calculatorHref}}'>{{nav.home}}</a>
             <a href='{{supportBase}}/soon/#business'>{{nav.business}}</a>
@@ -46,7 +40,7 @@
             <a href='{{supportBase}}/soon/#blog'>{{nav.blog}}</a>
             <a href='#contacts'>{{nav.contacts}}</a>
           </nav>
-        {{/if}}
+        {{/unless}}
         <div class='header-actions'>
           <a class='header-phone' href='{{contact.phoneHref}}'><strong>{{contact.phone}}</strong><small
             >{{contact.hours}}</small></a>
@@ -58,19 +52,15 @@
                 hreflang='{{hreflang}}'
                 aria-label='{{label}} — {{name}}'
               >{{label}}</a>{{/each}}</nav>
-          {{#if isCalculatorPage}}
-            <a class='button button--small' href='{{offerCheckerHref}}'>{{toolShared.offerChecker}}</a>
-          {{else}}
+          {{#unless isCalculatorPage}}
             <a class='button button--small' href='{{calculatorHref}}'>{{common.cta}}</a>
-          {{/if}}
+          {{/unless}}
         </div>
         <details class='mobile-menu' data-mobile-menu>
           <summary aria-label='{{aria.menu}}'><span></span><span></span><span></span></summary>
           <nav aria-label='{{#if isCalculatorPage}}{{toolShared.mobileNav}}{{else}}{{aria.mobileNav}}{{/if}}'>
             {{#if isCalculatorPage}}
               <a href='{{homeHref}}'>{{toolShared.home}}</a>
-              <a href='{{calculatorHref}}'>{{toolShared.calculator}}</a>
-              <a href='{{offerCheckerHref}}'>{{toolShared.offerChecker}}</a>
               <a href='{{contact.phoneHref}}'>{{toolShared.phone}}</a>
             {{else}}
               <a href='{{calculatorHref}}'>{{nav.home}}</a>
@@ -116,6 +106,7 @@
                 .hero-tool-links,
                 .hero-benefits,
                 .hero-disclosure,
+                .calculator-workspace-menu,
                 #passport {
                   display: none !important;
                 }
@@ -127,9 +118,15 @@
                 <address>{{contact.address}}</address>
               </section>
             </noscript>
-            <p class='hero-tool-links'><a href='{{calculatorHref}}'>{{product.tools.calculator}}</a><a
-                href='{{offerCheckerHref}}'
-              >{{product.tools.offerChecker}}</a></p>
+            <nav class='calculator-workspace-menu' data-calculator-menu aria-label='{{product.workspace.menuLabel}}'>
+              <p class='calculator-workspace-menu__title'>{{product.workspace.title}}</p>
+              <p class='calculator-workspace-menu__copy'>{{product.workspace.copy}}</p>
+              <ol>{{#each product.workspace.items}}<li><a
+                    href='#{{anchor}}'
+                    data-calculator-menu-item='{{key}}'
+                    {{#if active}}aria-current='step'{{/if}}
+                  ><span>{{number}}</span><strong>{{label}}</strong><small>{{copy}}</small></a></li>{{/each}}</ol>
+            </nav>
             <section class='calculator-flow-region' aria-labelledby='calculator-flow-title'>
               <h2 id='calculator-flow-title'>{{product.flow.title}}</h2>
               <ol class='calculator-flow' data-calculator-flow>
@@ -138,7 +135,7 @@
                   >{{number}}</span><span><strong>{{title}}</strong><small>{{copy}}</small></span></li>{{/each}}
               </ol>
             </section>
-            <form class='address-form' data-address-form action='#manual-consultation' novalidate>
+            <form class='address-form' id='calculator-start' data-address-form action='#manual-consultation' novalidate tabindex='-1'>
               <label for='address'>{{hero.addressLabel}}</label>
               <div class='address-control'>
                 <svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#pin'></use></svg>
@@ -202,7 +199,7 @@
                   data-location-center
                 >{{product.location.useMapCenter}}</button></div>
             </section>
-            <section class='product-stage roof-editor' data-roof-stage hidden aria-labelledby='roof-stage-title'>
+            <section class='product-stage roof-editor' id='roof-analysis' data-roof-stage hidden aria-labelledby='roof-stage-title' tabindex='-1'>
               <p class='eyebrow'>{{product.roof.title}}</p>
               <h2 id='roof-stage-title'>{{product.roof.copy}}</h2>
               <p data-roof-message>{{product.roof.locationRequired}}</p>
@@ -540,7 +537,7 @@
                 </dl>
               </aside>
             </figure>
-            <section class='site-potential' data-site-potential hidden aria-live='polite' aria-labelledby='site-potential-title' tabindex='-1'>
+            <section class='site-potential' id='site-potential' data-site-potential hidden aria-live='polite' aria-labelledby='site-potential-title' tabindex='-1'>
               <p class='eyebrow'>{{product.potential.eyebrow}}</p>
               <h2 id='site-potential-title'>{{product.potential.title}}</h2>
               <p class='site-potential__status' data-site-potential-status></p>
@@ -579,12 +576,8 @@
             <h1 id='hero-title'>{{hero.titleLead}}<br />{{hero.titleMiddle}}<br /><mark
               >{{hero.titleAccent}}</mark></h1>
             <p class='hero-intro'>{{hero.homeCopy}}</p>
-            <p class='hero-tool-links'><a href='{{calculatorHref}}'>{{product.tools.calculator}}</a><a
-                href='{{offerCheckerHref}}'
-              >{{product.tools.offerChecker}}</a></p>
             <div class='hero-actions'>
               <a class='button button--navy' href='{{calculatorHref}}'>{{hero.openCalculator}}</a>
-              <a class='button button--outline' href='{{offerCheckerHref}}'>{{product.tools.offerChecker}}</a>
             </div>
             <p class='hero-route-note'>{{hero.disclosure}}</p>
             <ul class='hero-benefits' role='list'>
@@ -659,6 +652,7 @@
         class='passport section section--soft'
         id='passport'
         aria-labelledby='passport-title'
+        tabindex='-1'
       >
         <div class='container passport-grid'>
           <div class='passport-copy'>
@@ -672,7 +666,6 @@
             <a
               class='button button--outline'
               href='{{#if isCalculatorPage}}{{contact.phoneHref}}{{else}}{{calculatorHref}}{{/if}}'
-              {{#unless isCalculatorPage}}data-open-passport{{/unless}}
             >{{passport.cta}}</a>
             <p class='passport-persistence' data-passport-persistence hidden><strong
               >{{product.passport.persistenceTitle}}</strong><span>{{product.passport.persistenceCopy}}</span><span
@@ -785,6 +778,42 @@
               data-lead-status
               aria-live='polite'
             ></p></form></div>
+      </section>
+
+      <section class='calculator-offer section section--soft' id='offer-checker' aria-labelledby='offer-checker-title' tabindex='-1'>
+        <div class='container'>
+          <div class='calculator-offer__heading'>
+            <div><p class='eyebrow'>{{offerChecker.label}}</p><h2 id='offer-checker-title'>{{offerChecker.title}}</h2><p>{{offerChecker.intro}}</p></div>
+            <p class='tool-privacy'>{{offerChecker.privacy}}</p>
+          </div>
+          <div class='tool-workspace__grid'>
+            <form class='tool-form' data-offer-checker novalidate>
+              <h3>{{offerChecker.formTitle}}</h3>
+              <label for='offer-total'>{{offerChecker.totalLabel}}</label>
+              <div class='tool-input-unit'><input id='offer-total' name='totalAmd' type='number' min='1' max='1000000000' step='1' inputmode='decimal' required /><span>֏</span></div>
+              <label for='offer-capacity'>{{offerChecker.capacityLabel}}</label>
+              <div class='tool-input-unit'><input id='offer-capacity' name='capacityKwp' type='number' min='0.01' max='10000' step='0.01' inputmode='decimal' required /><span>kWp</span></div>
+              <label for='offer-region'>{{offerChecker.regionLabel}}</label>
+              <select id='offer-region' name='region'><option value='AM'>{{offerChecker.regionArmenia}}</option></select>
+              <label for='offer-system'>{{offerChecker.systemLabel}}</label>
+              <select id='offer-system' name='systemType'><option value='residential-grid-tied'>{{offerChecker.systemGrid}}</option><option value='battery'>{{offerChecker.systemBattery}}</option><option value='other'>{{offerChecker.systemOther}}</option></select>
+              <fieldset class='offer-scope'><legend>{{offerChecker.scopeLegend}}</legend><p>{{offerChecker.scopeHelp}}</p>{{#each offerCheckerScopeItems}}<label><input type='checkbox' name='{{name}}' value='true' /><span>{{label}}</span></label>{{/each}}</fieldset>
+              <p class='form-status' data-tool-status aria-live='polite' role='status'></p>
+              <div class='tool-form-actions'><button class='button button--navy' type='submit'>{{offerChecker.submit}}</button><button class='button button--outline' type='reset'>{{offerChecker.reset}}</button></div>
+              <noscript><div class='tool-no-js'><strong>{{offerChecker.noJsTitle}}</strong><p>{{offerChecker.noJsCopy}}</p><a class='button' href='{{contact.phoneHref}}'>{{toolShared.phone}}</a></div></noscript>
+            </form>
+            <div class='calculator-offer__side'>
+              <aside class='tool-reference' aria-label='{{offerChecker.referenceTitle}}'><p class='eyebrow'>{{offerChecker.referenceTitle}}</p><strong data-pricebook-reference>{{offerChecker.priceBookCheck}}</strong><small data-pricebook-version hidden></small><p>{{offerChecker.referenceCopy}}</p></aside>
+              <section class='tool-result' data-offer-result aria-labelledby='offer-result-title' aria-live='polite' tabindex='-1'>
+                <p class='eyebrow'>{{offerChecker.label}}</p><h3 id='offer-result-title'>{{offerChecker.resultTitle}}</h3><p data-offer-result-summary>{{offerChecker.resultAwaiting}}</p>
+                <dl data-offer-metrics hidden><div><dt>{{offerChecker.resultRate}}</dt><dd data-offer-rate>—</dd></div><div><dt>{{offerChecker.resultRange}}</dt><dd data-offer-range>—</dd></div></dl>
+                <div data-offer-why hidden><h4>{{offerChecker.resultWhy}}</h4><ul data-offer-reasons></ul></div>
+                <div data-offer-questions hidden><h4>{{offerChecker.resultQuestions}}</h4><ul data-offer-questions-list></ul></div>
+                <a class='button button--outline' href='{{contact.phoneHref}}' data-engineering-cta hidden>{{offerChecker.engineeringCta}}</a>
+              </section>
+            </div>
+          </div>
+        </div>
       </section>
       {{/if}}
 
@@ -1075,11 +1104,7 @@
             >{{finalCta.title}}</h2><p>{{finalCta.copy}}</p></div><div class='final-cta__actions'><a
               class='button'
               href='{{calculatorHref}}'
-            >{{finalCta.primary}}</a><a
-              class='button button--ghost'
-              href='#passport'
-              data-open-passport
-            >{{finalCta.secondary}}</a><small>{{finalCta.note}}</small></div></div></section>
+            >{{finalCta.primary}}</a><small>{{finalCta.note}}</small></div></div></section>
       {{/unless}}
     </main>
 

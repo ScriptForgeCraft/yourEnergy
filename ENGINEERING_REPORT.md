@@ -7,7 +7,8 @@
 
 Vite MPA генерирует семантический HTML из Handlebars до запуска браузера.
 Опубликованные homepage-маршруты: Armenian `/`, Russian `/ru/` и English
-`/en/`; для каждой локали добавлены `/calculator/` и `/offer-checker/`.
+`/en/`; для каждой локали добавлен единый `/calculator/`. Старые `/offer-checker/`
+сохраняются как noindex-переходы к разделу проверки КП внутри калькулятора.
 Главная страница — быстрый marketing entry; полный address/map/roof/PVGIS
 workflow живёт только на одноимённой локализованной странице Calculator.
 Privacy, Terms и Soon существуют для всех трёх локалей и имеют `noindex`.

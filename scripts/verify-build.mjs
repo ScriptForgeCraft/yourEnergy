@@ -8,10 +8,27 @@ const origin = 'https://yourenergy.am';
 const toolPages = [
   { page: 'calculator/index.html', locale: 'hy', type: 'calculator' },
   { page: 'ru/calculator/index.html', locale: 'ru', type: 'calculator' },
-  { page: 'en/calculator/index.html', locale: 'en', type: 'calculator' },
-  { page: 'offer-checker/index.html', locale: 'hy', type: 'offer-checker' },
-  { page: 'ru/offer-checker/index.html', locale: 'ru', type: 'offer-checker' },
-  { page: 'en/offer-checker/index.html', locale: 'en', type: 'offer-checker' }
+  { page: 'en/calculator/index.html', locale: 'en', type: 'calculator' }
+];
+const legacyOfferPages = [
+  {
+    page: 'offer-checker/index.html',
+    locale: 'hy',
+    target: '/calculator/#offer-checker',
+    canonical: `${origin}/calculator/`
+  },
+  {
+    page: 'ru/offer-checker/index.html',
+    locale: 'ru',
+    target: '/ru/calculator/#offer-checker',
+    canonical: `${origin}/ru/calculator/`
+  },
+  {
+    page: 'en/offer-checker/index.html',
+    locale: 'en',
+    target: '/en/calculator/#offer-checker',
+    canonical: `${origin}/en/calculator/`
+  }
 ];
 const expectedPages = [
   'index.html',
@@ -26,7 +43,8 @@ const expectedPages = [
   'en/privacy/index.html',
   'en/terms/index.html',
   'en/soon/index.html',
-  ...toolPages.map(({ page }) => page)
+  ...toolPages.map(({ page }) => page),
+  ...legacyOfferPages.map(({ page }) => page)
 ];
 
 const failures = [];
@@ -342,6 +360,28 @@ function validateOfferCheckerPriceBookFallback(html, page) {
   }
 }
 
+function validateLegacyOfferRedirect(html, page, { target, canonical }) {
+  validateSupportNoindex(html, page);
+  const canonicalLink = tagAttributes(html, 'link').find(
+    (attributes) => attributes.get('rel') === 'canonical'
+  );
+  if (canonicalLink?.get('href') !== canonical) {
+    fail(`${page}: legacy redirect canonical must be ${canonical}`);
+  }
+  const refresh = tagAttributes(html, 'meta').find(
+    (attributes) => attributes.get('http-equiv')?.toLowerCase() === 'refresh'
+  );
+  if (refresh?.get('content') !== `0; url=${target}`) {
+    fail(`${page}: legacy Offer Checker must immediately redirect to ${target}`);
+  }
+  if (!tagAttributes(html, 'a').some((attributes) => attributes.get('href') === target)) {
+    fail(`${page}: legacy Offer Checker is missing a fallback link to ${target}`);
+  }
+  if (html.includes('data-offer-checker') || html.includes('tool-page-config')) {
+    fail(`${page}: legacy Offer Checker must not duplicate the checker UI`);
+  }
+}
+
 function validateLanguageSwitcher(html, page, currentLocale) {
   const expected = new Map([
     ['hy', '/'],
@@ -460,13 +500,17 @@ async function validateHeaders() {
 
 function validateCalculatorMarkup(html, page) {
   for (const marker of [
+    'data-calculator-menu',
     'data-consumption-inputs',
     'data-location-stage',
     'data-property-map',
     'data-roof-stage',
     'data-analysis-ledger',
     'data-lead-form',
-    'data-analysis-scenario'
+    'data-analysis-scenario',
+    "id='offer-checker'",
+    'data-offer-checker',
+    'data-offer-result'
   ]) {
     if (!html.includes(marker)) fail(`${page}: missing P0 marker ${marker}`);
   }
@@ -476,6 +520,7 @@ function validateCalculatorMarkup(html, page) {
   ) {
     fail(`${page}: static map fallback lacks an explicit label`);
   }
+  validateOfferCheckerPriceBookFallback(html, page);
 }
 
 function validateHomeCalculatorSeparation(html, page, calculatorHref) {
@@ -496,6 +541,9 @@ function validateHomeCalculatorSeparation(html, page, calculatorHref) {
 
   if (!html.includes(`href='${calculatorHref}'`)) {
     fail(`${page}: homepage needs a direct link to ${calculatorHref}`);
+  }
+  if (html.includes('/offer-checker/')) {
+    fail(`${page}: homepage must not link to a separate Offer Checker route`);
   }
 }
 
@@ -543,12 +591,13 @@ for (const { page, locale, type } of toolPages) {
   const canonical = locale === 'hy' ? `${origin}/${type}/` : `${origin}/${locale}/${type}/`;
   await validateToolSeo(pages.get(page), page, canonical, type);
   validateToolLanguageSwitcher(pages.get(page), page, locale, type);
-  if (type === 'offer-checker') validateOfferCheckerPriceBookFallback(pages.get(page), page);
 }
-for (const { page, type } of toolPages) {
-  if (type === 'calculator' && pages.has(page)) {
-    validateCalculatorMarkup(pages.get(page), page);
-  }
+for (const { page } of toolPages) {
+  if (pages.has(page)) validateCalculatorMarkup(pages.get(page), page);
+}
+for (const redirect of legacyOfferPages) {
+  if (pages.has(redirect.page))
+    validateLegacyOfferRedirect(pages.get(redirect.page), redirect.page, redirect);
 }
 const publishedPages = new Set([
   'index.html',
@@ -556,7 +605,10 @@ const publishedPages = new Set([
   'en/index.html',
   ...toolPages.map(({ page }) => page)
 ]);
-for (const page of expectedPages.filter((page) => !publishedPages.has(page))) {
+for (const page of expectedPages.filter(
+  (page) =>
+    !publishedPages.has(page) && !legacyOfferPages.some((redirect) => redirect.page === page)
+)) {
   if (pages.has(page)) validateSupportNoindex(pages.get(page), page);
 }
 await validateSitemap();
