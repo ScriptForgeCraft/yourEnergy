@@ -73,6 +73,13 @@ aerial roof image are labelled illustrative/demo. There is no runtime demo
 analysis adapter: the calculator uses `ProductApiClient` + `src/domain/` and
 shows a provider failure or manual-contact state instead of inventing a result.
 
+The home page also has a compact legal-registration card based on supplied
+state-registry records: legal entity, registration date/number, taxpayer number,
+registered address and an official verification control code. It links to the
+state verification platform rather than publishing the supplied originals,
+because they contain personal identifiers. The card does not claim installer
+authorisation, insurance, stock, warranty or roof suitability.
+
 ## 5. Equipment documentation
 
 The public equipment section links four supplied, local manufacturer data sheets:

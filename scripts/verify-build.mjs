@@ -547,6 +547,21 @@ function validateHomeCalculatorSeparation(html, page, calculatorHref) {
   }
 }
 
+function validateCompanyRecord(html, page) {
+  for (const marker of [
+    "id='company-record'",
+    'RBE4-88FA-4C78-8ECF',
+    '999.110.1603227',
+    '02338724',
+    "href='https://verify.e-gov.am'"
+  ]) {
+    if (!html.includes(marker)) fail(`${page}: missing verified company-record marker ${marker}`);
+  }
+  if (/\/documents\/(?:charter_template|RBE4-88FA-4C78-8ECF)\.pdf/iu.test(html)) {
+    fail(`${page}: must not publish the supplied legal source PDF with personal data`);
+  }
+}
+
 if (!(await exists(distRoot))) {
   fail('dist/ is missing. Run npm run build before npm run verify:build.');
 }
@@ -584,7 +599,10 @@ for (const [page, calculatorHref] of [
   ['ru/index.html', '/ru/calculator/'],
   ['en/index.html', '/en/calculator/']
 ]) {
-  if (pages.has(page)) validateHomeCalculatorSeparation(pages.get(page), page, calculatorHref);
+  if (pages.has(page)) {
+    validateHomeCalculatorSeparation(pages.get(page), page, calculatorHref);
+    validateCompanyRecord(pages.get(page), page);
+  }
 }
 for (const { page, locale, type } of toolPages) {
   if (!pages.has(page)) continue;

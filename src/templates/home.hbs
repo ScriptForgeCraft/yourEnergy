@@ -109,23 +109,6 @@
                 <address>{{contact.address}}</address>
               </section>
             </noscript>
-            <nav class='calculator-workspace-menu' data-calculator-menu aria-label='{{product.workspace.menuLabel}}'>
-              <p class='calculator-workspace-menu__title'>{{product.workspace.title}}</p>
-              <p class='calculator-workspace-menu__copy'>{{product.workspace.copy}}</p>
-              <ol>{{#each product.workspace.items}}<li><a
-                    href='#{{anchor}}'
-                    data-calculator-menu-item='{{key}}'
-                    {{#if active}}aria-current='step'{{/if}}
-                  ><span>{{number}}</span><strong>{{label}}</strong><small>{{copy}}</small></a></li>{{/each}}</ol>
-            </nav>
-            <section class='calculator-flow-region' aria-labelledby='calculator-flow-title'>
-              <h2 id='calculator-flow-title'>{{product.flow.title}}</h2>
-              <ol class='calculator-flow' data-calculator-flow>
-                {{#each product.flow.steps}}<li data-calculator-flow-step='{{@index}}'><span
-                    class='calculator-flow__number'
-                  >{{number}}</span><span><strong>{{title}}</strong><small>{{copy}}</small></span></li>{{/each}}
-              </ol>
-            </section>
             <form class='address-form calculator-start' id='calculator-start' data-address-form action='#manual-consultation' novalidate tabindex='-1'>
               <div class='calculator-start__heading'><span>{{product.workspace.items.[0].number}}</span><div><strong>{{product.workspace.items.[0].label}}</strong><small>{{product.workspace.items.[0].copy}}</small></div></div>
               <label for='address'>{{hero.addressLabel}}</label>
@@ -143,6 +126,23 @@
               </div>
               <small id='address-help' class='field-help'>{{hero.addressHelp}}</small>
             </form>
+            <nav class='calculator-workspace-menu' data-calculator-menu aria-label='{{product.workspace.menuLabel}}'>
+              <p class='calculator-workspace-menu__title'>{{product.workspace.title}}</p>
+              <p class='calculator-workspace-menu__copy'>{{product.workspace.copy}}</p>
+              <ol>{{#each product.workspace.items}}<li><a
+                    href='#{{anchor}}'
+                    data-calculator-menu-item='{{key}}'
+                    {{#if active}}aria-current='step'{{/if}}
+                  ><span>{{number}}</span><strong>{{label}}</strong><small>{{copy}}</small></a></li>{{/each}}</ol>
+            </nav>
+            <section class='calculator-flow-region' aria-labelledby='calculator-flow-title'>
+              <h2 id='calculator-flow-title'>{{product.flow.title}}</h2>
+              <ol class='calculator-flow' data-calculator-flow>
+                {{#each product.flow.steps}}<li data-calculator-flow-step='{{@index}}'><span
+                    class='calculator-flow__number'
+                  >{{number}}</span><span><strong>{{title}}</strong><small>{{copy}}</small></span></li>{{/each}}
+              </ol>
+            </section>
             <section class='product-stage' data-location-stage hidden aria-labelledby='location-stage-title' tabindex='-1'>
               <p class='eyebrow'>{{product.location.title}}</p>
               <h2 id='location-stage-title'>{{product.location.confirmPrompt}}</h2>
@@ -996,6 +996,29 @@
               }}<li><svg class='inline-icon' aria-hidden='true'><use
                       href='/icons.svg#check'
                     ></use></svg>{{this}}</li>{{/each}}</ul></div></div></section>
+
+      <section class='company-record section section--soft' id='company-record' aria-labelledby='company-record-title'><div
+          class='container'
+        ><div class='company-record__heading'><div><p class='eyebrow'>{{companyRecord.eyebrow}}</p><h2
+                id='company-record-title'
+              >{{companyRecord.title}}</h2><p>{{companyRecord.copy}}</p></div><a
+              class='button button--outline company-record__verify'
+              href='https://verify.e-gov.am'
+              target='_blank'
+              rel='noopener'
+            >{{companyRecord.action}} <svg class='inline-icon' aria-hidden='true'><use
+                  href='/icons.svg#arrow-right'
+                ></use></svg></a></div><dl class='company-record__facts'>{{#each
+              companyRecord.facts
+            }}<div><dt>{{label}}</dt><dd>{{value}}</dd></div>{{/each}}</dl><div class='company-record__meta'><p><svg
+                class='inline-icon'
+                aria-hidden='true'
+              ><use href='/icons.svg#pin'></use></svg><span><strong>{{companyRecord.addressLabel}}</strong>{{companyRecord.address}}</span></p><p><svg
+                class='inline-icon'
+                aria-hidden='true'
+              ><use href='/icons.svg#check'></use></svg><span>{{companyRecord.source}}<small>{{companyRecord.verification}}</small></span></p></div><p
+            class='company-record__disclosure'
+          >{{companyRecord.disclosure}}</p></div></section>
 
       <section class='equipment' aria-labelledby='equipment-title'><div class='container'><h2
             id='equipment-title'

@@ -114,6 +114,23 @@
                 <address>Artashisyan 48 14 Kotayq, Zovuni, 26 33 str, Yerevan</address>
               </section>
             </noscript>
+            <form class='address-form calculator-start' id='calculator-start' data-address-form action='#manual-consultation' novalidate tabindex='-1'>
+              <div class='calculator-start__heading'><span>01</span><div><strong>Начать расчёт</strong><small>Укажите адрес как подпись или сразу поставьте точку на карте.</small></div></div>
+              <label for='address'>Адрес для инженера (необязательно)</label>
+              <div class='address-control'>
+                <svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#pin'></use></svg>
+                <input
+                  id='address'
+                  name='address'
+                  autocomplete='street-address'
+                  placeholder='Например, Ереван, Арабкир'
+                  maxlength='160'
+                  aria-describedby='address-help analysis-status'
+                />
+                <button class='button button--navy' type='submit'>Открыть выбор точки</button>
+              </div>
+              <small id='address-help' class='field-help'>Адрес не геокодируется. Откройте карту, выберите точку вручную или введите координаты ниже.</small>
+            </form>
             <nav class='calculator-workspace-menu' data-calculator-menu aria-label='Разделы калькулятора'>
               <p class='calculator-workspace-menu__title'>Все расчёты — на одной странице</p>
               <p class='calculator-workspace-menu__copy'>Выберите нужный раздел ниже. Основной путь идёт от точки к PVGIS, крыше и результату; проверка КП работает отдельно и не меняет расчёт дома.</p>
@@ -153,23 +170,6 @@
                   >04</span><span><strong>Получите предварительный расчёт</strong><small>Система, бюджет и экономия появятся только из подтверждённых входных данных.</small></span></li>
               </ol>
             </section>
-            <form class='address-form calculator-start' id='calculator-start' data-address-form action='#manual-consultation' novalidate tabindex='-1'>
-              <div class='calculator-start__heading'><span>01</span><div><strong>Начать расчёт</strong><small>Укажите адрес как подпись или сразу поставьте точку на карте.</small></div></div>
-              <label for='address'>Адрес для инженера (необязательно)</label>
-              <div class='address-control'>
-                <svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#pin'></use></svg>
-                <input
-                  id='address'
-                  name='address'
-                  autocomplete='street-address'
-                  placeholder='Например, Ереван, Арабкир'
-                  maxlength='160'
-                  aria-describedby='address-help analysis-status'
-                />
-                <button class='button button--navy' type='submit'>Открыть выбор точки</button>
-              </div>
-              <small id='address-help' class='field-help'>Адрес не геокодируется. Откройте карту, выберите точку вручную или введите координаты ниже.</small>
-            </form>
             <section class='product-stage' data-location-stage hidden aria-labelledby='location-stage-title' tabindex='-1'>
               <p class='eyebrow'>Местоположение объекта</p>
               <h2 id='location-stage-title'>Подтвердите выбранную точку</h2>

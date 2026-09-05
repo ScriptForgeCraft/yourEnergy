@@ -114,6 +114,23 @@
                 <address>Artashisyan 48 14 Kotayq, Zovuni, 26 33 str, Yerevan</address>
               </section>
             </noscript>
+            <form class='address-form calculator-start' id='calculator-start' data-address-form action='#manual-consultation' novalidate tabindex='-1'>
+              <div class='calculator-start__heading'><span>01</span><div><strong>Սկսել հաշվարկը</strong><small>Օգտագործեք հասցեն միայն որպես նշում կամ անմիջապես ընտրեք կետը քարտեզի վրա։</small></div></div>
+              <label for='address'>Հասցե ինժեների համար (ընտրովի)</label>
+              <div class='address-control'>
+                <svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#pin'></use></svg>
+                <input
+                  id='address'
+                  name='address'
+                  autocomplete='street-address'
+                  placeholder='Օրինակ՝ Երևան, Արաբկիր'
+                  maxlength='160'
+                  aria-describedby='address-help analysis-status'
+                />
+                <button class='button button--navy' type='submit'>Բացել կետի ընտրությունը</button>
+              </div>
+              <small id='address-help' class='field-help'>Հասցեն չի գեոկոդավորվում։ Բացեք քարտեզը, ձեռքով ընտրեք կետ կամ մուտքագրեք ներքևի կոորդինատները։</small>
+            </form>
             <nav class='calculator-workspace-menu' data-calculator-menu aria-label='Հաշվիչի բաժիններ'>
               <p class='calculator-workspace-menu__title'>Բոլոր հաշվարկները՝ մեկ էջում</p>
               <p class='calculator-workspace-menu__copy'>Ստորև ընտրեք անհրաժեշտ բաժինը։ Հիմնական ուղին կետից անցնում է PVGIS, տանիքի տվյալներ և արդյունք, իսկ առաջարկի ստուգումը առանձին է և չի փոխում տան հաշվարկը։</p>
@@ -153,23 +170,6 @@
                   >04</span><span><strong>Ստացեք նախնական հաշվարկ</strong><small>Համակարգը, բյուջեն և խնայողությունը երևում են միայն հաստատված մուտքային տվյալներից։</small></span></li>
               </ol>
             </section>
-            <form class='address-form calculator-start' id='calculator-start' data-address-form action='#manual-consultation' novalidate tabindex='-1'>
-              <div class='calculator-start__heading'><span>01</span><div><strong>Սկսել հաշվարկը</strong><small>Օգտագործեք հասցեն միայն որպես նշում կամ անմիջապես ընտրեք կետը քարտեզի վրա։</small></div></div>
-              <label for='address'>Հասցե ինժեների համար (ընտրովի)</label>
-              <div class='address-control'>
-                <svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#pin'></use></svg>
-                <input
-                  id='address'
-                  name='address'
-                  autocomplete='street-address'
-                  placeholder='Օրինակ՝ Երևան, Արաբկիր'
-                  maxlength='160'
-                  aria-describedby='address-help analysis-status'
-                />
-                <button class='button button--navy' type='submit'>Բացել կետի ընտրությունը</button>
-              </div>
-              <small id='address-help' class='field-help'>Հասցեն չի գեոկոդավորվում։ Բացեք քարտեզը, ձեռքով ընտրեք կետ կամ մուտքագրեք ներքևի կոորդինատները։</small>
-            </form>
             <section class='product-stage' data-location-stage hidden aria-labelledby='location-stage-title' tabindex='-1'>
               <p class='eyebrow'>Օբյեկտի տեղադրությունը</p>
               <h2 id='location-stage-title'>Հաստատեք ընտրված կետը</h2>

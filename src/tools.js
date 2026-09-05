@@ -16,18 +16,6 @@ const positiveNumber = (value) => {
   return Number.isFinite(number) && number > 0 ? number : null;
 };
 
-const readConfig = () => {
-  const element = document.getElementById('tool-page-config');
-  if (!element) return null;
-
-  try {
-    const config = JSON.parse(element.textContent ?? '');
-    return config && typeof config === 'object' ? config : null;
-  } catch {
-    return null;
-  }
-};
-
 const setStatus = (element, message, isError = false) => {
   if (!element) return;
   element.textContent = message;
@@ -201,6 +189,3 @@ export const initOfferCheckerWorkspace = (config) => {
   initPriceBookReference(config);
   initOfferChecker(config);
 };
-
-const config = readConfig();
-initOfferCheckerWorkspace(config);

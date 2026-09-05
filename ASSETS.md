@@ -27,3 +27,17 @@ authorisation, stock availability, or suitability for a particular roof.
 Before launch, replace or supplement these with the current manufacturer-hosted
 versions and separately publish only verified company registration, installer
 authorisation, warranty and insurance documents with written permission.
+
+## Company registration records
+
+Two state-registration records supplied on 2026-09-05 were reviewed:
+`charter_template.pdf` and `RBE4-88FA-4C78-8ECF.pdf`. They confirm the legal
+entity, registration date and numbers used in the public `company-record`
+section. The originals are deliberately not copied into `public/documents/`:
+they contain personal identifiers that are unnecessary for a customer to verify
+the company. The site gives the state verification URL and control code instead.
+
+This confirms legal registration only. Do not present it as installer
+authorisation, insurance, a product warranty or evidence that a solar system is
+suitable for a particular property. Publish any such documents only after a
+separate review, redaction where needed and written permission.

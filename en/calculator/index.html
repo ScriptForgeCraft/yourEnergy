@@ -114,6 +114,23 @@
                 <address>Artashisyan 48 14 Kotayq, Zovuni, 26 33 str, Yerevan</address>
               </section>
             </noscript>
+            <form class='address-form calculator-start' id='calculator-start' data-address-form action='#manual-consultation' novalidate tabindex='-1'>
+              <div class='calculator-start__heading'><span>01</span><div><strong>Start a calculation</strong><small>Use an address only as a label or place a point on the map right away.</small></div></div>
+              <label for='address'>Address for the engineer (optional)</label>
+              <div class='address-control'>
+                <svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#pin'></use></svg>
+                <input
+                  id='address'
+                  name='address'
+                  autocomplete='street-address'
+                  placeholder='For example: Yerevan, Arabkir'
+                  maxlength='160'
+                  aria-describedby='address-help analysis-status'
+                />
+                <button class='button button--navy' type='submit'>Open point selection</button>
+              </div>
+              <small id='address-help' class='field-help'>The address is not geocoded. Open the map, choose a point manually or enter coordinates below.</small>
+            </form>
             <nav class='calculator-workspace-menu' data-calculator-menu aria-label='Calculator sections'>
               <p class='calculator-workspace-menu__title'>Every calculation, on one page</p>
               <p class='calculator-workspace-menu__copy'>Choose a section below. The main path moves from a point to PVGIS, roof inputs and a result; the proposal check is separate and never changes the home calculation.</p>
@@ -153,23 +170,6 @@
                   >04</span><span><strong>Get a preliminary estimate</strong><small>System size, budget and savings appear only from confirmed inputs.</small></span></li>
               </ol>
             </section>
-            <form class='address-form calculator-start' id='calculator-start' data-address-form action='#manual-consultation' novalidate tabindex='-1'>
-              <div class='calculator-start__heading'><span>01</span><div><strong>Start a calculation</strong><small>Use an address only as a label or place a point on the map right away.</small></div></div>
-              <label for='address'>Address for the engineer (optional)</label>
-              <div class='address-control'>
-                <svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#pin'></use></svg>
-                <input
-                  id='address'
-                  name='address'
-                  autocomplete='street-address'
-                  placeholder='For example: Yerevan, Arabkir'
-                  maxlength='160'
-                  aria-describedby='address-help analysis-status'
-                />
-                <button class='button button--navy' type='submit'>Open point selection</button>
-              </div>
-              <small id='address-help' class='field-help'>The address is not geocoded. Open the map, choose a point manually or enter coordinates below.</small>
-            </form>
             <section class='product-stage' data-location-stage hidden aria-labelledby='location-stage-title' tabindex='-1'>
               <p class='eyebrow'>Property location</p>
               <h2 id='location-stage-title'>Confirm the selected point</h2>

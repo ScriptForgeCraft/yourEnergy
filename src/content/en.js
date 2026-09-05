@@ -696,6 +696,24 @@ export default {
     imageAlt: 'Illustrative image of an engineer inspecting a solar system',
     imageNote: 'The person shown is not a confirmed YOURENERGY employee.'
   },
+  companyRecord: {
+    eyebrow: 'Legal information',
+    title: 'A verifiable legal entity',
+    copy: 'Before entering into a contract, you can independently verify the state-registration details of the legal entity you are working with.',
+    facts: [
+      { label: 'Legal name', value: 'YOUR ENERGY LLC' },
+      { label: 'State registration', value: '17 August 2026' },
+      { label: 'Registration number', value: '999.110.1603227' },
+      { label: 'Taxpayer number', value: '02338724' }
+    ],
+    addressLabel: 'Registered address',
+    address: '48 Artashisyan St., building 14, Shengavit, Yerevan 0039',
+    source: 'Source: State Unified Registry extract dated 17 August 2026',
+    verification: 'Verification code: RBE4-88FA-4C78-8ECF',
+    action: 'Verify on the state platform',
+    disclosure:
+      'This block verifies company state-registration details only. It is not evidence of installer qualification, insurance, equipment availability, warranty coverage or suitability for a specific property.'
+  },
   equipment: {
     title: 'Equipment technical documentation',
     note: 'This section contains manufacturer data sheets for models that may be discussed for a project. A brand mention does not confirm a partnership, availability or official status.',
