@@ -248,7 +248,7 @@ export default {
       addPoint: 'Add point',
       undo: 'Undo last point',
       reset: 'Clear outline',
-      finish: 'Calculate from outline',
+      finish: 'Finish outline',
       finishHelp:
         'Enter the roof-face parameters and consumption, then request a preliminary PVGIS calculation.',
       edit: 'Edit outline',
@@ -661,7 +661,7 @@ export default {
   finance: {
     eyebrow: 'Financial model',
     title: 'An investment that works every day',
-    copy: 'The financial chart appears only after PVGIS analysis, an entered or confirmed tariff, and an active price book.',
+    copy: 'The financial chart appears only after PVGIS analysis, a tariff entered by you, and an active price book.',
     benefits: [
       'Lower grid consumption',
       'Panels designed for more than 25 years of service',
@@ -824,7 +824,7 @@ export default {
       ],
       [
         'What is the payback period?',
-        'Payback is shown only after PVGIS analysis and an entered or confirmed tariff. The model excludes tariff growth, degradation, maintenance, financing, discounting, taxes and export rules.'
+        'Payback is shown only after PVGIS analysis and a tariff entered by you. The model excludes tariff growth, degradation, maintenance, financing, discounting, taxes and export rules.'
       ],
       [
         'Do solar panels need maintenance?',

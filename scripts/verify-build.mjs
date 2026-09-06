@@ -8,27 +8,10 @@ const origin = 'https://yourenergy.am';
 const toolPages = [
   { page: 'calculator/index.html', locale: 'hy', type: 'calculator' },
   { page: 'ru/calculator/index.html', locale: 'ru', type: 'calculator' },
-  { page: 'en/calculator/index.html', locale: 'en', type: 'calculator' }
-];
-const legacyOfferPages = [
-  {
-    page: 'offer-checker/index.html',
-    locale: 'hy',
-    target: '/calculator/#offer-checker',
-    canonical: `${origin}/calculator/`
-  },
-  {
-    page: 'ru/offer-checker/index.html',
-    locale: 'ru',
-    target: '/ru/calculator/#offer-checker',
-    canonical: `${origin}/ru/calculator/`
-  },
-  {
-    page: 'en/offer-checker/index.html',
-    locale: 'en',
-    target: '/en/calculator/#offer-checker',
-    canonical: `${origin}/en/calculator/`
-  }
+  { page: 'en/calculator/index.html', locale: 'en', type: 'calculator' },
+  { page: 'offer-checker/index.html', locale: 'hy', type: 'offer-checker' },
+  { page: 'ru/offer-checker/index.html', locale: 'ru', type: 'offer-checker' },
+  { page: 'en/offer-checker/index.html', locale: 'en', type: 'offer-checker' }
 ];
 const expectedPages = [
   'index.html',
@@ -43,8 +26,7 @@ const expectedPages = [
   'en/privacy/index.html',
   'en/terms/index.html',
   'en/soon/index.html',
-  ...toolPages.map(({ page }) => page),
-  ...legacyOfferPages.map(({ page }) => page)
+  ...toolPages.map(({ page }) => page)
 ];
 
 const failures = [];
@@ -261,6 +243,9 @@ function validateBaseDocument(html, page, locale) {
   if (/\{\{\{?[^}]+\}\}\}?|<%=?/u.test(html)) fail(`${page}: unrendered template token found`);
   if (/href\s*=\s*(["'])#\1/iu.test(html)) fail(`${page}: forbidden href="#" found`);
   if (/localhost|127\.0\.0\.1/iu.test(html)) fail(`${page}: localhost URL found`);
+  if (/aria-(?:label|labelledby|describedby)\s*=\s*(["'])\1/iu.test(html)) {
+    fail(`${page}: empty accessible name/reference found`);
+  }
 }
 
 async function validateHomeSeo(html, page, canonical) {
@@ -357,28 +342,6 @@ function validateOfferCheckerPriceBookFallback(html, page) {
   }
   if (/\b(?:232|247|264)\b/u.test(reference[1])) {
     fail(`${page}: Offer Checker must not show an unchecked static price range`);
-  }
-}
-
-function validateLegacyOfferRedirect(html, page, { target, canonical }) {
-  validateSupportNoindex(html, page);
-  const canonicalLink = tagAttributes(html, 'link').find(
-    (attributes) => attributes.get('rel') === 'canonical'
-  );
-  if (canonicalLink?.get('href') !== canonical) {
-    fail(`${page}: legacy redirect canonical must be ${canonical}`);
-  }
-  const refresh = tagAttributes(html, 'meta').find(
-    (attributes) => attributes.get('http-equiv')?.toLowerCase() === 'refresh'
-  );
-  if (refresh?.get('content') !== `0; url=${target}`) {
-    fail(`${page}: legacy Offer Checker must immediately redirect to ${target}`);
-  }
-  if (!tagAttributes(html, 'a').some((attributes) => attributes.get('href') === target)) {
-    fail(`${page}: legacy Offer Checker is missing a fallback link to ${target}`);
-  }
-  if (html.includes('data-offer-checker') || html.includes('tool-page-config')) {
-    fail(`${page}: legacy Offer Checker must not duplicate the checker UI`);
   }
 }
 
@@ -500,25 +463,24 @@ async function validateHeaders() {
 
 function validateCalculatorMarkup(html, page) {
   for (const marker of [
-    'data-calculator-menu',
+    'data-calculator-wizard',
+    "data-wizard-step='0'",
     'data-consumption-inputs',
-    'data-location-stage',
     'data-property-map',
-    'data-roof-stage',
-    'data-analysis-ledger',
-    'data-lead-form',
-    'data-analysis-scenario',
-    "id='offer-checker'",
-    'data-offer-checker',
-    'data-offer-result'
+    'data-roof-map-host',
+    'data-roof-finish',
+    'data-result-dashboard',
+    'data-passport-dialog'
   ]) {
-    if (!html.includes(marker)) fail(`${page}: missing P0 marker ${marker}`);
+    if (!html.includes(marker)) fail(`${page}: missing calculator wizard marker ${marker}`);
   }
-  if (
-    html.includes('data-map-shell') &&
-    (!html.includes('map-caption') || !html.includes('demo-badge'))
-  ) {
-    fail(`${page}: static map fallback lacks an explicit label`);
+  if (html.includes('data-offer-checker'))
+    fail(`${page}: Offer Checker must not be embedded in calculator`);
+}
+
+function validateOfferCheckerMarkup(html, page) {
+  for (const marker of ['data-offer-checker', 'data-offer-result', 'data-pricebook-reference']) {
+    if (!html.includes(marker)) fail(`${page}: missing Offer Checker marker ${marker}`);
   }
   validateOfferCheckerPriceBookFallback(html, page);
 }
@@ -610,12 +572,10 @@ for (const { page, locale, type } of toolPages) {
   await validateToolSeo(pages.get(page), page, canonical, type);
   validateToolLanguageSwitcher(pages.get(page), page, locale, type);
 }
-for (const { page } of toolPages) {
-  if (pages.has(page)) validateCalculatorMarkup(pages.get(page), page);
-}
-for (const redirect of legacyOfferPages) {
-  if (pages.has(redirect.page))
-    validateLegacyOfferRedirect(pages.get(redirect.page), redirect.page, redirect);
+for (const { page, type } of toolPages) {
+  if (!pages.has(page)) continue;
+  if (type === 'calculator') validateCalculatorMarkup(pages.get(page), page);
+  if (type === 'offer-checker') validateOfferCheckerMarkup(pages.get(page), page);
 }
 const publishedPages = new Set([
   'index.html',
@@ -623,10 +583,7 @@ const publishedPages = new Set([
   'en/index.html',
   ...toolPages.map(({ page }) => page)
 ]);
-for (const page of expectedPages.filter(
-  (page) =>
-    !publishedPages.has(page) && !legacyOfferPages.some((redirect) => redirect.page === page)
-)) {
+for (const page of expectedPages.filter((page) => !publishedPages.has(page))) {
   if (pages.has(page)) validateSupportNoindex(pages.get(page), page);
 }
 await validateSitemap();

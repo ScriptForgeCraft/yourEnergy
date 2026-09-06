@@ -2,15 +2,14 @@
 
 Static, multilingual Vite site for `yourenergy.am` with an honest P1
 real-analysis flow. Homepages are Armenian (`/`), Russian (`/ru/`) and English
-(`/en/`); each locale has one `/calculator/` workspace. Legacy `/offer-checker/`
-URLs are noindex redirects to the Proposal Checker section inside that calculator. It
-is not a SPA and does not deploy anything itself. The homepage is deliberately
-a fast marketing entry point; the full address, map, roof and analysis workflow
-lives only on the localized calculator route.
+(`/en/`); each locale has one five-step `/calculator/` wizard and one standalone,
+indexable `/offer-checker/` tool. It is not a SPA and does not deploy anything
+itself. The homepage is deliberately a fast marketing entry point; the full
+point, map, roof and analysis workflow lives only on the localized calculator route.
 
-The same site header and footer are rendered on the home, calculator, support
-and legacy redirect documents. Calculator navigation preserves the full site
-context while the page's internal five-step menu keeps the entire analysis
+The same site header and footer are rendered from shared Handlebars partials on
+home, calculator, offer-checker and support documents. Calculator navigation
+preserves the full site context while the wizard keeps the primary analysis
 workflow in one place.
 
 ## 1. Structure
@@ -135,8 +134,8 @@ those values in `VITE_*` variables.
 The homepage preserves the visual Roof Scan and static, clearly labelled example
 without loading calculator state, Leaflet or a file input. Its every calculation
 CTA points to the same-locale `/calculator/` route. On Calculator, an in-page
-five-part menu keeps start, PVGIS potential, roof data, result/Passport and the
-optional Proposal Checker in one working area. After
+five-step wizard keeps property, PVGIS potential, roof, consumption and result
+in one working area. Proposal Checker is a separate tool reached from Result. After
 a real/manual location action, Leaflet is lazy-loaded using geographic
 coordinates; `CRS.Simple` is not part of the production analysis flow. The
 polygon supports click-to-add, marker drag, point selection, keyboard-accessible
@@ -186,8 +185,8 @@ coordinates or lead payloads.
 
 Primary HTML exists before JavaScript, including canonical URLs, reciprocal
 HY/RU/EN hreflang, localized metadata and FAQ JSON-LD where applicable.
-Support pages and legacy Offer Checker redirects are `noindex`; sitemap includes
-the localized home and calculator routes only. The page has landmarks, a skip link, one H1,
+Support pages are `noindex`; sitemap includes the localized home, calculator and
+Offer Checker routes. The page has landmarks, a skip link, one H1,
 keyboard controls, `aria-live` status messages, native `details`/`dialog`, chart
 tables and reduced-motion styles.
 

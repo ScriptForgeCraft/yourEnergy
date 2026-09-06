@@ -114,7 +114,7 @@ input {
 }
 
 .wordmark strong {
-  color: var(--color-yellow-strong);
+  color: #f5bd18;
 }
 
 .desktop-nav {

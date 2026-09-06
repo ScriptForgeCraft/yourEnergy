@@ -6,6 +6,7 @@ import hy from '../src/content/hy.js';
 import ru from '../src/content/ru.js';
 import en from '../src/content/en.js';
 import toolCopy from '../src/content/tools.js';
+import wizardCopy from '../src/content/calculator-wizard.js';
 import { TEMPORARY_YOURENERGY_PRICEBOOK } from '../src/data/pricebooks/armenia.js';
 import { GENERATED_CONTENT_LOCALES } from '../src/content/schema.js';
 
@@ -17,15 +18,27 @@ const publicEnv = {
   ...Object.fromEntries(Object.entries(process.env).filter(([key]) => key.startsWith('VITE_')))
 };
 const template = await readFile(resolve(root, 'src/templates/home.hbs'), 'utf8');
-const supportTemplate = await readFile(resolve(root, 'src/templates/support.hbs'), 'utf8');
-const legacyRedirectTemplate = await readFile(
-  resolve(root, 'src/templates/legacy-redirect.hbs'),
+const calculatorTemplate = await readFile(resolve(root, 'src/templates/calculator.hbs'), 'utf8');
+const offerCheckerTemplate = await readFile(
+  resolve(root, 'src/templates/offer-checker.hbs'),
   'utf8'
 );
+const supportTemplate = await readFile(resolve(root, 'src/templates/support.hbs'), 'utf8');
+
+Handlebars.registerPartial(
+  'site-header',
+  await readFile(resolve(root, 'src/templates/partials/site-header.hbs'), 'utf8')
+);
+Handlebars.registerPartial(
+  'site-footer',
+  await readFile(resolve(root, 'src/templates/partials/site-footer.hbs'), 'utf8')
+);
+Handlebars.registerHelper('add', (left, right) => Number(left) + Number(right));
 
 const render = Handlebars.compile(template, { noEscape: false });
+const renderCalculator = Handlebars.compile(calculatorTemplate, { noEscape: false });
+const renderOfferChecker = Handlebars.compile(offerCheckerTemplate, { noEscape: false });
 const renderSupport = Handlebars.compile(supportTemplate, { noEscape: false });
-const renderLegacyRedirect = Handlebars.compile(legacyRedirectTemplate, { noEscape: false });
 const writeGenerated = (file, markup) => writeFile(file, markup.replace(/[ \t]+\n/g, '\n'), 'utf8');
 
 const runtimeLocales = Object.freeze(
@@ -165,18 +178,16 @@ const createPageConfig = (content, extra = {}) => ({
 
 const createHomeContext = (content, { pageKind = 'home' } = {}) => {
   const calculatorHref = toolPath(content.locale, 'calculator');
-  const isCalculator = pageKind === 'calculator';
   const isHome = pageKind === 'home';
-  const calculatorPageHref = isCalculator ? '#calculator-start' : calculatorHref;
   const homeSectionHref = (href) =>
     !isHome && href.startsWith('#') ? `${content.homeHref}${href}` : href;
 
   return {
     ...content,
     calculatorHref,
-    headerCtaHref: calculatorPageHref,
+    headerCtaHref: calculatorHref,
     navLinks: {
-      home: calculatorPageHref,
+      home: content.homeHref,
       business: `${content.supportBase}/soon/#business`,
       projects: homeSectionHref('#projects'),
       process: homeSectionHref('#process'),
@@ -205,7 +216,7 @@ const createHomeContext = (content, { pageKind = 'home' } = {}) => {
         links: column.links.map(([label, href]) => [
           label,
           href === '#calculator'
-            ? calculatorPageHref
+            ? calculatorHref
             : !isHome && href.startsWith('#')
               ? `${content.homeHref}${href}`
               : href
@@ -242,49 +253,44 @@ const createHomeContext = (content, { pageKind = 'home' } = {}) => {
 
 const createCalculatorContext = (content) => {
   const calculatorMeta = toolCopy[content.locale]?.calculatorMeta;
-  const offerChecker = toolCopy[content.locale]?.offerChecker;
+  const wizard = wizardCopy[content.locale];
   if (!calculatorMeta) throw new Error(`Missing calculator metadata for ${content.locale}.`);
-  if (!offerChecker) throw new Error(`Missing offer checker copy for ${content.locale}.`);
+  if (!wizard) throw new Error(`Missing calculator wizard copy for ${content.locale}.`);
 
   const path = toolPath(content.locale, 'calculator');
-  const base = createHomeContext(content, { pageKind: 'calculator' });
-  const pendingPassport = content.product?.passport ?? {};
+  const base = createHomeContext(content);
   return {
     ...base,
-    isCalculatorPage: true,
     path,
-    solutionHref: '#calculator-start',
     meta: calculatorMeta,
-    metrics: content.metrics.map((metric) => ({ ...metric, value: '—' })),
-    solutions: {
-      ...base.solutions,
-      items: base.solutions.items.map((item) => ({
-        ...item,
-        capacity: '—',
-        generation: '—'
-      }))
-    },
-    passport: {
-      ...base.passport,
-      badge: pendingPassport.pendingBadge,
-      dialogTitle: pendingPassport.pendingTitle,
-      reportAddress: pendingPassport.pendingAddress,
-      reportDate: pendingPassport.pendingDate,
-      capacity: '—',
-      panels: '—',
-      source: pendingPassport.pendingSource,
-      chartDescription: pendingPassport.pendingChartDescription,
-      months: base.passport.months.map((month) => ({ ...month, percent: 0, value: '—' }))
-    },
+    wizard,
+    offerCheckerHref: toolPath(content.locale, 'offer-checker'),
     alternateLinks: createToolAlternateLinks('calculator'),
     languageLinks: createToolLanguageLinks(content.locale, 'calculator'),
     toolShared: toolCopy[content.locale].shared,
+    pageConfig: escapeJsonForHtml(createPageConfig(content, { wizard })),
+    jsonLd: escapeJsonForHtml(createJsonLd({ ...content, path }, { includeFaq: false }))
+  };
+};
+
+const createOfferCheckerContext = (content) => {
+  const offerChecker = toolCopy[content.locale]?.offerChecker;
+  if (!offerChecker) throw new Error(`Missing offer checker copy for ${content.locale}.`);
+  const path = toolPath(content.locale, 'offer-checker');
+  const base = createHomeContext(content, { pageKind: 'offer-checker' });
+  return {
+    ...base,
+    path,
+    meta: offerChecker.meta,
     offerChecker,
     offerCheckerScopeItems: scopeItems(offerChecker),
+    alternateLinks: createToolAlternateLinks('offer-checker'),
+    languageLinks: createToolLanguageLinks(content.locale, 'offer-checker'),
+    headerCtaHref: toolPath(content.locale, 'calculator'),
+    toolShared: toolCopy[content.locale].shared,
     pageConfig: escapeJsonForHtml(
       createPageConfig(content, { offerChecker: createOfferCheckerRuntime(content, offerChecker) })
-    ),
-    jsonLd: escapeJsonForHtml(createJsonLd({ ...content, path }, { includeFaq: false }))
+    )
   };
 };
 
@@ -338,46 +344,14 @@ for (const { key } of GENERATED_CONTENT_LOCALES) {
   const content = homeContent[key];
   const calculatorOutput = resolve(root, toolFile(key, 'calculator'));
   await mkdir(dirname(calculatorOutput), { recursive: true });
-  await writeGenerated(calculatorOutput, render(createCalculatorContext(content)));
+  await writeGenerated(calculatorOutput, renderCalculator(createCalculatorContext(content)));
 }
-
-const legacyOfferRedirects = Object.freeze({
-  hy: {
-    label: 'Վերահղում',
-    title: 'Կոմերցիոն առաջարկի ստուգումը տեղափոխվել է հաշվիչ',
-    copy: 'Բացեք միասնական հաշվիչը՝ առաջարկի գինը և կազմը ստուգելու համար։',
-    continueLabel: 'Բացել առաջարկի ստուգումը'
-  },
-  ru: {
-    label: 'Перенаправление',
-    title: 'Проверка КП перенесена в калькулятор',
-    copy: 'Откройте единый калькулятор, чтобы проверить цену и состав предложения.',
-    continueLabel: 'Открыть проверку КП'
-  },
-  en: {
-    label: 'Redirect',
-    title: 'Proposal Checker has moved into the calculator',
-    copy: 'Open the unified calculator to check an offer price and scope.',
-    continueLabel: 'Open Proposal Checker'
-  }
-});
 
 for (const { key } of GENERATED_CONTENT_LOCALES) {
   const content = homeContent[key];
-  const targetHref = `${toolPath(key, 'calculator')}#offer-checker`;
-  const path = toolPath(key, 'offer-checker');
   const output = resolve(root, toolFile(key, 'offer-checker'));
   await mkdir(dirname(output), { recursive: true });
-  await writeGenerated(
-    output,
-    renderLegacyRedirect({
-      ...createHomeContext(content, { pageKind: 'support' }),
-      ...legacyOfferRedirects[key],
-      path,
-      targetHref,
-      canonical: `${origin}${toolPath(key, 'calculator')}`
-    })
-  );
+  await writeGenerated(output, renderOfferChecker(createOfferCheckerContext(content)));
 }
 
 const commonSoonAnchors = [

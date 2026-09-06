@@ -1,5 +1,4 @@
 import {
-  ARMENIA_TARIFF_DATASET,
   PriceBookRepository,
   buildSolarAnalysis,
   createUserTariffSelection,
@@ -67,7 +66,10 @@ const selectTariffForP1 = (body) => {
   if (rawRate !== undefined && rawRate !== null && rawRate !== '') {
     return createUserTariffSelection({ rateAmdPerKwh: rawRate });
   }
-  return null;
+  // Pass an explicit unavailable selection to the generic domain layer.
+  // `undefined` would activate its registry default parameter and make a
+  // public P0 analysis appear to have a tariff the visitor never entered.
+  return createUserTariffSelection({});
 };
 
 const confirmedProperty = (body, validatedInput) => ({
@@ -170,8 +172,12 @@ export const buildP0SolarAnalysis = ({
         verifiedAt: providerAnalysis.sourceLedger?.[0]?.retrievedAt ?? new Date().toISOString()
       }
     },
-    tariffSelection: tariffSelection ?? undefined,
-    tariffDataset: tariffSelection ? undefined : ARMENIA_TARIFF_DATASET,
+    // A public P0 result never silently resolves a registry tariff. The only
+    // financial input accepted here is the visitor's explicit rate from their
+    // bill. Keeping tariffDataset out of this call makes an unavailable tariff
+    // the safe default while leaving the generic domain layer available for a
+    // future, explicitly configured registry adapter.
+    tariffSelection,
     system: {
       panelWatts: PRELIMINARY_PANEL_WATTS,
       panelAreaSqm: PRELIMINARY_PANEL_AREA_SQM

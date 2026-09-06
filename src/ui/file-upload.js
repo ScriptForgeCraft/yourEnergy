@@ -11,29 +11,38 @@ export const validateUploadFile = (file) => {
   return null;
 };
 
-export const initFileUpload = ({ status }) => {
-  const dropZone = document.querySelector('[data-file-drop]');
-  const input = document.querySelector('#bill-file');
-  const meta = document.querySelector('[data-file-meta]');
-  const name = document.querySelector('[data-file-name]');
-  const statusElement = document.querySelector('[data-file-status]');
-  const remove = document.querySelector('[data-file-remove]');
+export const initFileUpload = ({ root = document, status = {}, onChange = () => {} } = {}) => {
+  const dropZone = root.querySelector('[data-file-drop]');
+  const input = root.querySelector('#bill-file');
+  const meta = root.querySelector('[data-file-meta]');
+  const name = root.querySelector('[data-file-name]');
+  const statusElement = root.querySelector('[data-file-status]');
+  const remove = root.querySelector('[data-file-remove]');
 
   if (!dropZone || !input || !meta || !name || !statusElement || !remove) {
-    return { clear() {} };
+    return {
+      clear() {},
+      getFile() {
+        return null;
+      }
+    };
   }
+
+  let selectedFile = null;
 
   const setStatus = (message, isError = false) => {
     statusElement.textContent = message;
     statusElement.classList.toggle('is-error', isError);
   };
 
-  const clear = () => {
+  const clear = ({ message = status.fileRemoved, isError = false } = {}) => {
+    selectedFile = null;
     input.value = '';
     meta.hidden = true;
     name.textContent = '';
     dropZone.classList.remove('has-file');
-    setStatus(status.fileRemoved);
+    setStatus(message, isError);
+    onChange(null);
   };
 
   const applyFile = (file) => {
@@ -42,18 +51,20 @@ export const initFileUpload = ({ status }) => {
     }
     const validationError = validateUploadFile(file);
     if (validationError === 'INVALID_FILE') {
-      setStatus(status.invalidFile, true);
+      clear({ message: status.invalidFile, isError: true });
       return;
     }
     if (validationError === 'FILE_TOO_LARGE') {
-      setStatus(status.largeFile, true);
+      clear({ message: status.largeFile, isError: true });
       return;
     }
 
+    selectedFile = file;
     name.textContent = `${file.name} · ${Math.ceil(file.size / 1024)} KB`;
     meta.hidden = false;
     dropZone.classList.add('has-file');
     setStatus(status.fileSelected);
+    onChange(selectedFile);
   };
 
   input.addEventListener('change', () => applyFile(input.files?.[0]));
@@ -73,5 +84,5 @@ export const initFileUpload = ({ status }) => {
   }
   dropZone.addEventListener('drop', (event) => applyFile(event.dataTransfer?.files?.[0]));
 
-  return { clear, applyFile };
+  return { clear, applyFile, getFile: () => selectedFile };
 };

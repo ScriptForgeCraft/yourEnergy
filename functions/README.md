@@ -163,6 +163,26 @@ name, phone, email, message, coordinates or provider URL is echoed back.
 
 ## Cloudflare configuration
 
+### Required PVGIS preflight in Cloudflare Dashboard
+
+Before enabling the public calculator, open the Pages project that serves the
+production branch and complete these exact checks for both Preview and
+Production environments:
+
+1. Create or select a Cloudflare KV namespace, then bind it to the Pages
+   project with the variable name **`PVGIS_CACHE`** (type: KV namespace).
+2. Add a non-empty encrypted Pages secret named **`PVGIS_CACHE_SALT`**. Use a
+   newly generated random value; do not reuse a public `VITE_*` value.
+3. Redeploy the project, then request `/api/potential` with a confirmed point
+   in Armenia. A missing binding or secret intentionally returns
+   `PVGIS_CACHE_NOT_CONFIGURED`; it must be fixed in Dashboard, never by a
+   browser-to-PVGIS request.
+
+The repository cannot safely declare a Pages KV namespace ID because that ID
+belongs to the owner account. The runtime validates the binding shape before a
+provider request, and the browser translates its internal code into a normal
+service-availability message.
+
 Set these in the Cloudflare dashboard / `wrangler secret put`, never in
 `VITE_*` variables or committed files:
 

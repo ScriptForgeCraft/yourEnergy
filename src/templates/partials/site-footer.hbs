@@ -1,0 +1,24 @@
+<footer class='site-footer' id='contacts'><div class='container footer-grid'><div><a
+        class='wordmark'
+        href='{{homeHref}}'
+      ><span>YOUR</span><strong>ENERGY</strong></a><p>{{footer.description}}</p><a
+        class='footer-account'
+        href='{{supportBase}}/soon/#account'
+      >{{footer.account}}</a></div>{{#each footer.columns}}<div><h2>{{title}}</h2><ul
+          role='list'
+        >{{#each links}}<li><a
+                href='{{this.[1]}}'
+              >{{this.[0]}}</a></li>{{/each}}</ul></div>{{/each}}<div class='footer-contact'><h2
+      >{{nav.contacts}}</h2><p><svg class='inline-icon' aria-hidden='true'><use
+            href='/icons.svg#phone'
+          ></use></svg><a href='{{contact.phoneHref}}'>{{contact.phone}}</a></p><p><svg
+          class='inline-icon'
+          aria-hidden='true'
+        ><use href='/icons.svg#pin'></use></svg><address>{{contact.address}}</address></p><p><svg
+          class='inline-icon'
+          aria-hidden='true'
+        ><use href='/icons.svg#sun'></use></svg><span>{{contact.hours}}</span></p><small
+      >{{contact.note}}</small></div></div><div class='container footer-bottom'><span
+    >{{footer.copyright}}</span><span><a href='{{supportBase}}/privacy/'>{{footer.privacy}}</a><a
+        href='{{supportBase}}/terms/'
+      >{{footer.terms}}</a></span></div></footer>

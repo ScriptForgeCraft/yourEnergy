@@ -1,0 +1,46 @@
+<header class='site-header' data-header>
+  <div class='container header-row'>
+    <a class='wordmark' href='{{homeHref}}' aria-label='{{aria.logo}}'><span>YOUR</span><strong
+      >ENERGY</strong></a>
+    <nav class='desktop-nav' aria-label='{{aria.primaryNav}}'>
+      <a href='{{navLinks.home}}'>{{nav.home}}</a>
+      <a href='{{navLinks.business}}'>{{nav.business}}</a>
+      <a href='{{navLinks.projects}}'>{{nav.projects}}</a>
+      <a href='{{navLinks.process}}'>{{nav.process}}</a>
+      <a href='{{navLinks.about}}'>{{nav.about}}</a>
+      <a href='{{navLinks.blog}}'>{{nav.blog}}</a>
+      <a href='{{navLinks.contacts}}'>{{nav.contacts}}</a>
+    </nav>
+    <div class='header-actions'>
+      <a class='header-phone' href='{{contact.phoneHref}}'><strong>{{contact.phone}}</strong><small
+        >{{contact.hours}}</small></a>
+      <nav class='language-switcher' aria-label='{{aria.languageNav}}'>{{#each languageLinks}}<a
+            class='language-link'
+            href='{{href}}'
+            hreflang='{{hreflang}}'
+            aria-label='{{label}} — {{name}}'
+          >{{label}}</a>{{/each}}</nav>
+      <a class='button button--small' href='{{headerCtaHref}}'>{{common.cta}}</a>
+    </div>
+    <details class='mobile-menu' data-mobile-menu>
+      <summary aria-label='{{aria.menu}}'><span></span><span></span><span></span></summary>
+      <nav aria-label='{{aria.mobileNav}}'>
+        <a href='{{navLinks.home}}'>{{nav.home}}</a><a
+          href='{{navLinks.business}}'
+        >{{nav.business}}</a><a href='{{navLinks.projects}}'>{{nav.projects}}</a><a
+          href='{{navLinks.process}}'
+        >{{nav.process}}</a><a href='{{navLinks.about}}'>{{nav.about}}</a><a
+          href='{{navLinks.blog}}'
+        >{{nav.blog}}</a><a href='{{navLinks.contacts}}'>{{nav.contacts}}</a>
+        <div class='mobile-language-switcher' role='group' aria-label='{{aria.languageNav}}'>{{#each
+            languageLinks
+          }}<a
+              class='language-link'
+              href='{{href}}'
+              hreflang='{{hreflang}}'
+              aria-label='{{label}} — {{name}}'
+            >{{label}}</a>{{/each}}</div>
+      </nav>
+    </details>
+  </div>
+</header>

@@ -18,8 +18,9 @@ const togglePanel = (panel, active) => {
 
 /**
  * Accessible consumption-mode control. The result is raw user-provided data;
- * tariff conversion is intentionally performed server-side with a dated
- * tariff record rather than through a browser constant.
+ * any tariff is an explicit rate copied by the visitor. The browser never
+ * assumes a registry/default tariff, and the server owns the later finance
+ * calculation.
  */
 export const initConsumptionInput = ({ root, strings, onChange = () => {} } = {}) => {
   if (!root) return null;

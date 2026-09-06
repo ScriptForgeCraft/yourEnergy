@@ -69,10 +69,12 @@ export const createPropertyMap = async ({
 
   const L = await importLeaflet();
   const map = L.map(container, mapOptions).setView(YEREVAN_OVERVIEW, 11);
+  let currentContainer = container;
   let locationMarker = null;
   let roofPolygon = null;
   let roofMarkers = [];
   let roofPoints = [];
+  let roofFinished = false;
   let selectedPointIndex = -1;
   let mode = 'location';
   let resizeFrame = null;
@@ -116,7 +118,7 @@ export const createPropertyMap = async ({
         invalidateSizeAfterLayout();
       }
     });
-    resizeObserver.observe(container);
+    resizeObserver.observe(currentContainer);
   }
   map.whenReady(invalidateSizeAfterLayout);
 
@@ -134,7 +136,7 @@ export const createPropertyMap = async ({
       points,
       areaSqm: calculatePreliminaryPolygonArea(points),
       selectedPointIndex,
-      complete: points.length >= 3
+      complete: roofFinished && points.length >= 3
     });
   };
 
@@ -166,6 +168,11 @@ export const createPropertyMap = async ({
         selectedPointIndex = index;
         emitRoof();
       });
+      marker.on('dragstart', () => {
+        // Moving a vertex reopens the outline: it must be finished again
+        // before the browser can send the polygon as a completed roof input.
+        roofFinished = false;
+      });
       marker.on('dragend', () => {
         roofPoints[index] = normalizePoint(marker.getLatLng());
         selectedPointIndex = index;
@@ -178,6 +185,7 @@ export const createPropertyMap = async ({
 
   const addRoofPoint = (point) => {
     if (!isFinitePoint(point)) return false;
+    roofFinished = false;
     roofPoints.push(normalizePoint(point));
     selectedPointIndex = roofPoints.length - 1;
     drawRoof();
@@ -202,6 +210,7 @@ export const createPropertyMap = async ({
 
   const setRoofPoints = (points, { fit = false } = {}) => {
     roofPoints = points.filter(isFinitePoint).map(normalizePoint);
+    roofFinished = false;
     selectedPointIndex = roofPoints.length ? roofPoints.length - 1 : -1;
     drawRoof();
     if (fit && roofPoints.length >= 2)
@@ -211,6 +220,7 @@ export const createPropertyMap = async ({
 
   map.on('click', (event) => {
     if (mode === 'roof') {
+      if (roofFinished) return;
       addRoofPoint(event.latlng);
       return;
     }
@@ -220,6 +230,23 @@ export const createPropertyMap = async ({
   return {
     map,
     hasTiles: Boolean(tileUrl),
+    /**
+     * The wizard has a location map and a roof map in different steps. Moving
+     * the same Leaflet element keeps the selected point and lazy-loaded tiles
+     * intact while making the active map an ordinary in-flow element.
+     */
+    mount(nextContainer) {
+      if (!nextContainer || nextContainer === currentContainer) {
+        invalidateSizeAfterLayout();
+        return false;
+      }
+      resizeObserver?.unobserve(currentContainer);
+      nextContainer.append(container);
+      currentContainer = nextContainer;
+      resizeObserver?.observe(currentContainer);
+      invalidateSizeAfterLayout();
+      return true;
+    },
     setLocation,
     setMode(nextMode) {
       mode = nextMode === 'roof' ? 'roof' : 'location';
@@ -259,7 +286,7 @@ export const createPropertyMap = async ({
         points: roofPoints.map(normalizePoint),
         areaSqm: calculatePreliminaryPolygonArea(roofPoints),
         selectedPointIndex,
-        complete: roofPoints.length >= 3
+        complete: roofFinished && roofPoints.length >= 3
       };
     },
     selectPoint(index) {
@@ -284,6 +311,7 @@ export const createPropertyMap = async ({
     },
     undo() {
       if (!roofPoints.length) return false;
+      roofFinished = false;
       roofPoints.pop();
       selectedPointIndex = roofPoints.length - 1;
       drawRoof();
@@ -292,6 +320,7 @@ export const createPropertyMap = async ({
     },
     removeSelected() {
       if (!roofPoints[selectedPointIndex]) return false;
+      roofFinished = false;
       roofPoints.splice(selectedPointIndex, 1);
       selectedPointIndex = Math.min(selectedPointIndex, roofPoints.length - 1);
       drawRoof();
@@ -300,6 +329,12 @@ export const createPropertyMap = async ({
     },
     resetRoof() {
       setRoofPoints([]);
+    },
+    finishRoof() {
+      if (roofPoints.length < 3) return false;
+      roofFinished = true;
+      emitRoof();
+      return true;
     },
     resize() {
       invalidateSizeAfterLayout();

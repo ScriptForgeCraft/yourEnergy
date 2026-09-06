@@ -304,7 +304,12 @@ test('analysis joins real PVGIS yield with confirmed inputs and suppresses unver
   assert.equal(analysis.selectedScenario.system.panelCount, 13);
   assert.equal(analysis.selectedScenario.generation.annualKwh, 11_310);
   assert.equal(analysis.selectedScenario.financial.annualSavingsAmd, null);
+  assert.equal(analysis.selectedScenario.financial.grossSavings25YearsAmd, null);
   assert.equal(analysis.selectedScenario.financial.paybackYears, null);
+  assert.deepEqual(analysis.selectedScenario.financial.timeline, []);
+  assert.equal(analysis.financial.tariff.kind, 'unavailable');
+  assert.equal(analysis.financial.tariff.rateAmdPerKwh, null);
+  assert.equal(analysis.commercialEstimate.available, true);
   assert.equal(
     analysis.sourceLedger.find((entry) => entry.key === 'production').source.provider,
     'PVGIS'

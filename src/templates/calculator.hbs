@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang='{{locale}}'>
+  <head>
+    <meta charset='UTF-8' />
+    <meta name='viewport' content='width=device-width, initial-scale=1.0' />
+    <meta name='theme-color' content='#071a2d' />
+    <title>{{meta.title}}</title>
+    <meta name='description' content='{{meta.description}}' />
+    <meta property='og:type' content='website' /><meta property='og:site_name' content='YOURENERGY' />
+    <meta property='og:title' content='{{meta.ogTitle}}' /><meta property='og:description' content='{{meta.ogDescription}}' />
+    <meta property='og:url' content='https://yourenergy.am{{path}}' /><meta property='og:image' content='https://yourenergy.am/og.png' />
+    <meta name='twitter:card' content='summary_large_image' /><link rel='canonical' href='https://yourenergy.am{{path}}' />
+    {{#each alternateLinks}}<link rel='alternate' hreflang='{{hreflang}}' href='{{href}}' />{{/each}}
+    <link rel='icon' href='/favicon.svg' type='image/svg+xml' /><link rel='stylesheet' href='/src/styles/main.css' />
+    <script type='application/ld+json'>{{{jsonLd}}}</script>
+  </head>
+  <body class='calculator-page calculator-page--wizard'>
+    <a class='skip-link' href='#main'>{{aria.skip}}</a>
+    {{> site-header}}
+    <main id='main'>
+      <noscript><style>[data-wizard-step][hidden]{display:block!important}.wizard-progress,.wizard-mobile-progress{display:none!important}</style><section class='section section--soft'><div class='container'><h2>{{toolShared.calculator}}</h2><p>{{product.common.noJsCalculator}}</p><a class='button' href='{{contact.phoneHref}}'>{{contact.phone}}</a></div></section></noscript>
+      <section class='tool-hero section' id='calculator-start'><div class='container tool-hero__inner'><p class='eyebrow'>{{wizard.eyebrow}}</p><h1 id='calculator-title'>{{wizard.title}}</h1><p>{{wizard.intro}}</p><p class='section-disclosure'>{{hero.disclosure}}</p></div></section>
+      <section class='wizard section' data-calculator-wizard aria-labelledby='calculator-title'>
+        <div class='container wizard__container'>
+          <nav class='wizard-progress' aria-label='{{toolShared.calculator}}'>{{#each wizard.steps}}<button type='button' data-wizard-nav='{{@index}}' aria-label='{{this}}'><span>{{add @index 1}}</span><strong>{{this}}</strong></button>{{/each}}</nav>
+          <p class='wizard-mobile-progress' data-wizard-mobile-progress aria-live='polite'></p>
+          <p class='wizard-status form-status' data-wizard-status aria-live='polite'></p>
+
+          <section class='wizard-step' data-wizard-step='0' aria-labelledby='wizard-object-title' tabindex='-1'>
+            <div class='wizard-step__heading'><span>01</span><div><p class='eyebrow'>{{wizard.steps.[0]}}</p><h2 id='wizard-object-title'>{{product.location.title}}</h2><p>{{product.location.copy}}</p></div></div>
+            <label for='wizard-address'>{{wizard.addressLabel}} <span>{{product.common.optional}}</span><input id='wizard-address' data-wizard-address maxlength='220' autocomplete='street-address' placeholder='{{hero.addressPlaceholder}}' /></label>
+            <p class='input-help'>{{wizard.addressHelp}}</p>
+            <button class='button' type='button' data-open-location-map>{{wizard.mapOpen}}</button>
+            <div class='wizard-map-wrap' data-location-map-wrap hidden><div class='property-map wizard-map' data-property-map data-mode='location'></div></div>
+            <div class='point-confirmation' data-point-confirmation hidden><strong>{{wizard.selectedPoint}}</strong><output data-pending-coordinates>—</output><div><button type='button' class='button' data-confirm-location>{{wizard.confirmPoint}}</button><button type='button' class='button button--outline' data-change-location>{{wizard.changePoint}}</button></div></div>
+            <details class='wizard-details'><summary>{{wizard.coordinateAlternative}}</summary><div class='wizard-coordinates'><label>{{product.location.latitudeLabel}}<input type='number' step='any' inputmode='decimal' data-location-latitude /></label><label>{{product.location.longitudeLabel}}<input type='number' step='any' inputmode='decimal' data-location-longitude /></label><button class='button button--outline' type='button' data-location-coordinates-submit>{{product.location.useCoordinates}}</button></div><p class='input-help'>{{product.location.coordinatesHelp}}</p></details>
+          </section>
+
+          <section class='wizard-step' data-wizard-step='1' aria-labelledby='wizard-potential-title' hidden tabindex='-1'>
+            <div class='wizard-step__heading'><span>02</span><div><p class='eyebrow'>{{wizard.steps.[1]}}</p><h2 id='wizard-potential-title'>{{product.potential.title}}</h2><p>{{wizard.potentialReady}}</p></div></div>
+            <div class='async-card' data-potential-loading aria-live='polite'></div>
+            <div data-potential-result hidden>
+              <dl class='wizard-kpis'><div><dt>{{product.potential.annualYieldLabel}}</dt><dd data-potential-yield>—</dd></div><div><dt>{{product.potential.orientationLabel}}</dt><dd data-potential-azimuth>—</dd></div><div><dt>{{product.potential.tiltLabel}}</dt><dd data-potential-tilt>—</dd></div></dl>
+              <figure class='wizard-chart'><figcaption>{{product.potential.annualYieldLabel}} · kWh/kWp</figcaption><div class='chart-bars' data-potential-chart></div><details><summary>{{passport.tableTitle}}</summary><table><thead><tr><th>{{passport.monthLabel}}</th><th>kWh/kWp</th></tr></thead><tbody data-potential-table></tbody></table></details></figure>
+              <p class='input-help' data-potential-source></p><p class='section-disclosure'>{{product.potential.disclosure}}</p>
+              <div class='flow-actions'><button class='button' type='button' data-potential-continue>{{wizard.potentialContinue}}</button><button class='button button--outline' type='button' data-potential-retry hidden>{{product.potential.retry}}</button></div>
+            </div>
+          </section>
+
+          <section class='wizard-step' data-wizard-step='2' aria-labelledby='wizard-roof-title' hidden tabindex='-1'>
+            <div class='wizard-step__heading'><span>03</span><div><p class='eyebrow'>{{wizard.steps.[2]}}</p><h2 id='wizard-roof-title'>{{product.roof.title}}</h2><p>{{wizard.roofIntro}}</p></div></div>
+            <div class='wizard-map-wrap'><div data-roof-map-host></div></div><p class='input-help'>{{wizard.mapApproximate}}</p><p class='input-help'>{{wizard.drawRoof}}</p>
+            <div class='roof-controls'><button class='button button--outline' type='button' data-roof-add-center>{{product.roof.addPointAtCenter}}</button><button class='button button--outline' type='button' data-roof-undo>{{product.roof.undo}}</button><button class='button button--outline' type='button' data-roof-reset>{{product.roof.reset}}</button><button class='button button--outline' type='button' data-roof-remove>{{product.roof.removePoint}}</button><button class='button' type='button' data-roof-finish>{{product.roof.finish}}</button></div>
+            <p class='roof-area-readout'><span data-roof-points>{{product.roof.pointsLabel}}</span><strong data-roof-area>—</strong></p>
+            <fieldset><legend>{{product.roof.areaMethodTitle}}</legend><label><input type='radio' name='roof-area-method' value='map-projected' checked data-roof-area-method /> {{product.roof.areaMethods.mapProjected}}</label><label><input type='radio' name='roof-area-method' value='measured-plane' data-roof-area-method /> {{product.roof.areaMethods.measuredPlane}}</label></fieldset>
+            <label data-roof-plane-area-wrap hidden>{{product.roof.planeAreaLabel}}<div class='input-with-unit'><input type='number' min='0.01' step='0.1' inputmode='decimal' data-roof-plane-area /><span>m²</span></div></label>
+            <div class='wizard-form-grid'><label>{{product.roof.orientationLabel}}<select data-roof-orientation><option value='180'>{{product.roof.orientationOptions.south}}</option><option value='135'>{{product.roof.orientationOptions.southEast}}</option><option value='225'>{{product.roof.orientationOptions.southWest}}</option><option value='90'>{{product.roof.orientationOptions.east}}</option><option value='270'>{{product.roof.orientationOptions.west}}</option><option value='0'>{{product.roof.orientationOptions.north}}</option><option value='custom'>{{product.roof.orientationOptions.custom}}</option></select></label><label>{{product.roof.tiltLabel}}<div class='input-with-unit'><input type='number' min='0' max='90' step='1' inputmode='decimal' value='30' data-roof-tilt /><span>°</span></div></label></div>
+            <label data-roof-orientation-custom hidden>{{product.roof.customOrientationLabel}}<input type='number' min='0' max='359' step='1' inputmode='decimal' data-roof-orientation-custom-input /></label>
+            <fieldset class='mounting-cards'><legend>{{product.roof.mountingModeLabel}}</legend><label><input type='radio' name='mounting-mode' value='roof-parallel' checked data-roof-mounting-mode /><span><strong>{{wizard.parallel}}</strong><small>{{product.roof.mountingModeHelp}}</small></span></label><label><input type='radio' name='mounting-mode' value='elevated' data-roof-mounting-mode /><span><strong>{{wizard.elevated}}</strong><small>{{product.potential.disclosure}}</small></span></label></fieldset>
+            <div class='flow-actions'><button class='button button--outline' type='button' data-wizard-back='1'>{{wizard.back}}</button><button class='button' type='button' data-roof-continue>{{wizard.continueConsumption}}</button></div>
+          </section>
+
+          <section class='wizard-step' data-wizard-step='3' aria-labelledby='wizard-consumption-title' hidden tabindex='-1'>
+            <div class='wizard-step__heading'><span>04</span><div><p class='eyebrow'>{{wizard.steps.[3]}}</p><h2 id='wizard-consumption-title'>{{product.consumption.title}}</h2><p>{{product.consumption.copy}}</p></div></div>
+            <div data-consumption-inputs class='consumption-inputs'><fieldset><legend>{{product.consumption.title}}</legend><label><input type='radio' name='consumption-mode' value='bill' checked /> {{product.consumption.modes.bill}}</label><label><input type='radio' name='consumption-mode' value='usage' /> {{product.consumption.modes.usage}}</label><label><input type='radio' name='consumption-mode' value='monthly' /> {{product.consumption.modes.monthly}}</label></fieldset><div class='consumption-panel' data-consumption-panel='bill'><label>{{product.consumption.billLabel}}<div class='input-with-unit'><input type='number' min='0.01' step='1' inputmode='decimal' data-consumption-bill /><span>AMD</span></div></label></div><div class='consumption-panel' data-consumption-panel='usage' hidden><label>{{product.consumption.usageLabel}}<div class='input-with-unit'><input type='number' min='0.01' step='1' inputmode='decimal' data-consumption-usage /><span>kWh</span></div></label></div><div class='consumption-panel consumption-panel--months' data-consumption-panel='monthly' hidden><div class='month-inputs'>{{#each passport.months}}<label>{{short}}<input type='number' min='0' step='1' inputmode='decimal' data-consumption-month /></label>{{/each}}</div></div><label>{{product.consumption.tariffLabel}} <span>{{product.common.optional}}</span><div class='input-with-unit'><input type='number' min='0.01' step='0.01' inputmode='decimal' data-consumption-tariff /><span>AMD/kWh</span></div></label><p class='input-help'>{{product.consumption.tariffHelp}}</p><p>{{product.consumption.annualLabel}}: <output data-consumption-annual>—</output> kWh</p></div>
+            <section class='file-upload' data-optional-upload><h3>{{hero.uploadTitle}}</h3><p>{{hero.uploadHelp}}</p><label class='file-drop' data-file-drop for='bill-file'><input id='bill-file' type='file' accept='.pdf,.jpg,.jpeg,.png,application/pdf,image/jpeg,image/png' /><span>{{hero.uploadPrompt}}</span></label><p class='form-status' data-file-status aria-live='polite'></p><div data-file-meta hidden><strong data-file-name></strong><button type='button' class='button button--outline' data-file-remove>{{product.common.cancel}}</button></div></section>
+            <div class='flow-actions'><button class='button button--outline' type='button' data-wizard-back='2'>{{wizard.back}}</button><button class='button' type='button' data-run-analysis>{{wizard.calculate}}</button></div>
+          </section>
+
+          <section class='wizard-step' data-wizard-step='4' aria-labelledby='wizard-result-title' hidden tabindex='-1'>
+            <div class='wizard-step__heading'><span>05</span><div><p class='eyebrow'>{{wizard.steps.[4]}}</p><h2 id='wizard-result-title'>{{product.result.title}}</h2><p data-result-summary></p></div></div>
+            <div class='result-dashboard' data-result-dashboard aria-live='polite'></div>
+            <section class='finance-empty' data-finance-empty hidden><p>{{wizard.tariffNeeded}}</p><button class='button' type='button' data-add-tariff>{{wizard.addTariff}}</button></section>
+            <section data-finance-result hidden><h3>{{finance.title}}</h3><dl data-finance-values></dl><p class='section-disclosure'>{{finance.disclaimer}}</p></section>
+            <div class='flow-actions'><button class='button button--outline' type='button' data-wizard-back='3'>{{wizard.back}}</button><button class='button' type='button' data-open-passport>{{wizard.openPassport}}</button><a class='button button--outline' href='{{offerCheckerHref}}'>{{wizard.checkOffer}}</a></div>
+          </section>
+        </div>
+      </section>
+    </main>
+    {{> site-footer}}
+    <dialog class='passport-dialog' data-passport-dialog aria-labelledby='passport-dialog-title'><form method='dialog' class='dialog-close'><button class='round-button' aria-label='{{passport.close}}'>×</button></form><div class='dialog-content'><p class='eyebrow'>{{wizard.passportTitle}}</p><h2 id='passport-dialog-title'>{{wizard.passportTitle}}</h2><p>{{wizard.passportCopy}}</p><div data-passport-dialog-content></div></div></dialog>
+    <script id='page-config' type='application/json'>{{{pageConfig}}}</script><script type='module' src='/src/main.js'></script>
+  </body>
+</html>

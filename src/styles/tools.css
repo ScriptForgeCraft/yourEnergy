@@ -265,6 +265,401 @@
   box-shadow: var(--shadow-sm);
 }
 
+/* Calculator wizard: functional UI stays in normal document flow so a map or
+   result cannot appear on top of an unrelated hero card. */
+.tool-hero {
+  padding-block: clamp(2.75rem, 7vw, 5.5rem) 2rem;
+  background: linear-gradient(120deg, #071a2d 0%, #0d2c48 64%, #123650 100%);
+  color: #fff;
+}
+
+.tool-hero__inner {
+  max-width: 54rem;
+}
+.tool-hero h1 {
+  max-width: 20ch;
+}
+.tool-hero .section-disclosure {
+  color: #dbe8f1;
+  max-width: 62ch;
+}
+
+.wizard {
+  padding-top: 2rem;
+}
+.wizard__container {
+  max-width: 70rem;
+}
+.wizard-progress {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 0.45rem;
+  margin-bottom: 1.25rem;
+  padding: 0.6rem;
+  border: 1px solid var(--color-border);
+  border-radius: 1rem;
+  background: #fff;
+}
+.wizard-progress button {
+  min-height: 48px;
+  border: 0;
+  border-radius: 0.65rem;
+  background: transparent;
+  color: var(--color-muted);
+  cursor: pointer;
+  font: inherit;
+  text-align: left;
+}
+.wizard-progress button span {
+  display: inline-grid;
+  place-items: center;
+  width: 1.65rem;
+  height: 1.65rem;
+  margin-right: 0.38rem;
+  border-radius: 50%;
+  background: #edf1f4;
+  color: var(--color-navy);
+  font-size: 0.78rem;
+}
+.wizard-progress button strong {
+  font-size: 0.84rem;
+}
+.wizard-progress button[data-state='current'] {
+  background: #eef5f8;
+  color: var(--color-navy);
+}
+.wizard-progress button[data-state='current'] span {
+  background: var(--color-yellow-strong);
+}
+.wizard-progress button[data-state='complete'] {
+  color: var(--color-navy);
+}
+.wizard-progress button[data-state='complete'] span {
+  background: #bee6cf;
+}
+.wizard-progress button:disabled {
+  cursor: not-allowed;
+  opacity: 0.56;
+}
+.wizard-mobile-progress {
+  display: none;
+  font-weight: 700;
+  color: var(--color-navy);
+}
+.wizard-status {
+  min-height: 1.4rem;
+  margin: 0 0 0.75rem;
+}
+.wizard-step {
+  padding: clamp(1.1rem, 3vw, 2.2rem);
+  border: 1px solid var(--color-border);
+  border-radius: 1.2rem;
+  background: #fff;
+  box-shadow: 0 12px 35px rgb(7 26 45 / 7%);
+}
+.wizard-step__heading {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.9rem;
+  align-items: start;
+  margin-bottom: 1.4rem;
+}
+.wizard-step__heading > span {
+  display: grid;
+  place-items: center;
+  width: 2.55rem;
+  height: 2.55rem;
+  border-radius: 0.75rem;
+  background: var(--color-navy);
+  color: var(--color-yellow-strong);
+  font-weight: 800;
+}
+.wizard-step__heading h2 {
+  margin: 0.1rem 0 0.45rem;
+  color: var(--color-navy);
+}
+.wizard-step label {
+  display: block;
+  margin: 1rem 0;
+  color: var(--color-navy);
+  font-weight: 650;
+}
+.wizard-step label span {
+  color: var(--color-muted);
+  font-weight: 400;
+}
+.wizard-step input,
+.wizard-step select {
+  width: 100%;
+  min-height: 48px;
+  margin-top: 0.35rem;
+}
+.input-help {
+  max-width: 70ch;
+  color: var(--color-muted);
+  font-size: 0.92rem;
+}
+.wizard-map-wrap {
+  width: 100%;
+  min-height: 380px;
+  margin-top: 1rem;
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+  border-radius: 1rem;
+  background: #e7eef1;
+}
+.wizard-map {
+  width: 100%;
+  height: clamp(320px, 42vw, 500px);
+  min-height: 320px;
+}
+.point-confirmation,
+.async-card,
+.finance-empty,
+.result-budget,
+.result-notice {
+  margin-top: 1rem;
+  padding: 1rem;
+  border-radius: 0.85rem;
+  background: #f2f7f8;
+}
+.point-confirmation {
+  display: grid;
+  gap: 0.6rem;
+  border: 1px solid #b6d9df;
+}
+.point-confirmation output {
+  font-variant-numeric: tabular-nums;
+}
+.point-confirmation > div,
+.flow-actions,
+.roof-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+}
+.wizard-details {
+  margin-top: 1rem;
+  padding: 0 0.9rem 0.9rem;
+  border: 1px solid var(--color-border);
+  border-radius: 0.75rem;
+}
+.wizard-details summary {
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  font-weight: 700;
+  color: var(--color-navy);
+}
+.wizard-coordinates,
+.wizard-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.9rem;
+  align-items: end;
+}
+.wizard-coordinates .button {
+  margin: 1rem 0;
+}
+.wizard-kpis {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.7rem;
+}
+.wizard-kpis > div,
+.result-metric {
+  padding: 0.9rem;
+  border-radius: 0.75rem;
+  background: #f7f9fa;
+}
+.wizard-kpis dt,
+.result-metric dt {
+  color: var(--color-muted);
+  font-size: 0.78rem;
+}
+.wizard-kpis dd,
+.result-metric dd {
+  margin: 0.35rem 0 0;
+  color: var(--color-navy);
+  font-size: 1.1rem;
+  font-weight: 800;
+}
+.wizard-chart {
+  margin: 1.2rem 0 0;
+  padding: 1rem;
+  border: 1px solid var(--color-border);
+  border-radius: 0.85rem;
+}
+.wizard-chart figcaption {
+  margin-bottom: 0.8rem;
+  color: var(--color-navy);
+  font-weight: 750;
+}
+.chart-bars {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(2rem, 1fr));
+  align-items: end;
+  gap: 0.35rem;
+  min-height: 180px;
+  overflow-x: auto;
+  padding-top: 1.5rem;
+}
+.chart-bar {
+  display: grid;
+  grid-template-rows: minmax(1.5rem, auto) minmax(24px, var(--bar-height)) 1.3rem;
+  align-items: end;
+  min-width: 2rem;
+  min-height: 44px;
+  padding: 0;
+  border: 0;
+  background: linear-gradient(
+    to top,
+    var(--color-yellow-strong) 0 var(--bar-height),
+    transparent var(--bar-height)
+  );
+  color: var(--color-navy);
+  cursor: help;
+  font: inherit;
+}
+.chart-bar__value {
+  align-self: start;
+  font-size: 0.7rem;
+  white-space: nowrap;
+  transform: rotate(-45deg);
+  transform-origin: left bottom;
+}
+.chart-bar__label {
+  align-self: end;
+  text-align: center;
+  font-size: 0.72rem;
+}
+.roof-controls {
+  margin: 1rem 0;
+}
+.roof-area-readout {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  padding: 0.8rem;
+  border-radius: 0.7rem;
+  background: #f7f9fa;
+}
+.mounting-cards {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.8rem;
+  border: 0;
+  padding: 0;
+}
+.mounting-cards > label {
+  margin: 0;
+}
+.mounting-cards input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+.mounting-cards span {
+  display: grid;
+  gap: 0.4rem;
+  min-height: 112px;
+  padding: 1rem;
+  border: 2px solid var(--color-border);
+  border-radius: 0.8rem;
+}
+.mounting-cards input:checked + span {
+  border-color: var(--color-yellow-strong);
+  box-shadow: 0 0 0 3px rgb(245 189 24 / 22%);
+}
+.mounting-cards small {
+  color: var(--color-muted);
+  font-weight: 400;
+}
+.month-inputs {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.65rem;
+}
+.file-upload {
+  margin-top: 1.2rem;
+  padding: 1rem;
+  border-radius: 0.85rem;
+  background: #f7f9fa;
+}
+.file-drop {
+  display: grid !important;
+  place-items: center;
+  min-height: 90px;
+  border: 1px dashed #88a0ae;
+  border-radius: 0.7rem;
+  cursor: pointer;
+}
+.file-drop input {
+  position: absolute;
+  width: 1px !important;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+}
+.result-kpis {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+.result-budget {
+  background: var(--color-navy);
+  color: #fff;
+}
+.result-budget h3 {
+  margin-top: 0;
+  color: var(--color-yellow-strong);
+}
+.result-budget small {
+  color: #cfdee7;
+}
+.result-notice--warning {
+  border-left: 4px solid var(--color-yellow-strong);
+}
+.passport-ledger {
+  display: grid;
+  gap: 0.65rem;
+}
+
+@media (max-width: 780px) {
+  .wizard-progress {
+    display: none;
+  }
+  .wizard-mobile-progress {
+    display: block;
+  }
+  .wizard-step {
+    padding: 1rem;
+    border-radius: 0.9rem;
+  }
+  .wizard-map-wrap {
+    min-height: 320px;
+  }
+  .wizard-map {
+    height: 340px;
+  }
+  .wizard-kpis,
+  .result-kpis,
+  .wizard-form-grid,
+  .wizard-coordinates,
+  .mounting-cards {
+    grid-template-columns: 1fr;
+  }
+  .month-inputs {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .chart-bars {
+    min-width: 0;
+    gap: 0.2rem;
+  }
+  .chart-bar {
+    min-width: 1.75rem;
+  }
+}
+
 .tool-reference .eyebrow,
 .tool-result .eyebrow {
   margin-bottom: 10px;

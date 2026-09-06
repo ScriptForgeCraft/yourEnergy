@@ -7,12 +7,12 @@
 
 Vite MPA генерирует семантический HTML из Handlebars до запуска браузера.
 Опубликованные homepage-маршруты: Armenian `/`, Russian `/ru/` и English
-`/en/`; для каждой локали добавлен единый `/calculator/`. Старые `/offer-checker/`
-сохраняются как noindex-переходы к разделу проверки КП внутри калькулятора.
+`/en/`; для каждой локали добавлен единый пятишаговый `/calculator/` и отдельный,
+индексируемый `/offer-checker/`.
 Главная страница — быстрый marketing entry; полный address/map/roof/PVGIS
 workflow живёт только на одноимённой локализованной странице Calculator.
-Header и footer теперь едины на home, calculator, support и legacy-документах;
-внутреннее меню Calculator управляет пятью разделами без перехода на другой URL.
+Header и footer теперь едины на home, calculator, Offer Checker и support-документах;
+wizard Calculator управляет пятью последовательными шагами без перехода на другой URL.
 Privacy, Terms и Soon существуют для всех трёх локалей и имеют `noindex`.
 В `functions/` лежат Cloudflare Pages Functions, а расчётная логика отделена
 в `src/domain/`.
