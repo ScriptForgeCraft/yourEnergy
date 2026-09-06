@@ -32,7 +32,7 @@
             <p class='input-help'>{{wizard.addressHelp}}</p>
             <button class='button' type='button' data-open-location-map>{{wizard.mapOpen}}</button>
             <div class='wizard-map-wrap' data-location-map-wrap hidden><div class='property-map wizard-map' data-property-map data-mode='location'></div></div>
-            <div class='point-confirmation' data-point-confirmation hidden><strong>{{wizard.selectedPoint}}</strong><output data-pending-coordinates>—</output><div><button type='button' class='button' data-confirm-location>{{wizard.confirmPoint}}</button><button type='button' class='button button--outline' data-change-location>{{wizard.changePoint}}</button></div></div>
+            <div class='point-confirmation' data-point-confirmation hidden><strong>{{wizard.selectedPoint}}</strong><output data-pending-coordinates>—</output><div><button type='button' class='button' data-confirm-location>{{wizard.confirmPoint}}</button></div></div>
             <details class='wizard-details'><summary>{{wizard.coordinateAlternative}}</summary><div class='wizard-coordinates'><label>{{product.location.latitudeLabel}}<input type='number' step='any' inputmode='decimal' data-location-latitude /></label><label>{{product.location.longitudeLabel}}<input type='number' step='any' inputmode='decimal' data-location-longitude /></label><button class='button button--outline' type='button' data-location-coordinates-submit>{{product.location.useCoordinates}}</button></div><p class='input-help'>{{product.location.coordinatesHelp}}</p></details>
           </section>
 

@@ -45,7 +45,13 @@ export class ProductApiClient {
   async request(endpoint, payload, { signal } = {}) {
     let response;
     try {
-      response = await this.fetchImpl(endpoint, {
+      // `window.fetch` is Web-API method rather than an ordinary callback in
+      // some browsers. Calling a saved reference as `this.fetchImpl(...)`
+      // can therefore use ProductApiClient as its receiver and fail with an
+      // "Illegal invocation", even though the same-origin endpoint is live.
+      // Supply the global receiver explicitly while still allowing tests and
+      // future adapters to inject their own implementation.
+      response = await this.fetchImpl.call(globalThis, endpoint, {
         method: 'POST',
         headers: { 'content-type': 'application/json', accept: 'application/json' },
         body: JSON.stringify(payload),

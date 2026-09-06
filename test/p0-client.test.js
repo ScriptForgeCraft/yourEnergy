@@ -53,6 +53,23 @@ test('ProductApiClient preserves a server error code rather than inventing a res
   );
 });
 
+test('ProductApiClient calls a browser fetch implementation with the global receiver', async () => {
+  let receiver = null;
+  const client = new ProductApiClient({
+    fetchImpl: function fetchImpl() {
+      receiver = this;
+      return Promise.resolve(
+        new Response(JSON.stringify({ ok: true, data: { potential: { id: 'test' } } }), {
+          headers: { 'content-type': 'application/json' }
+        })
+      );
+    }
+  });
+
+  await client.potential({ property: { confirmed: true } });
+  assert.equal(receiver, globalThis);
+});
+
 test('preliminary polygon area is finite and only available after three geographic points', () => {
   assert.equal(calculatePreliminaryPolygonArea([]), 0);
   const area = calculatePreliminaryPolygonArea([

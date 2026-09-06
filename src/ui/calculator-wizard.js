@@ -714,11 +714,6 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
   root
     .querySelector('[data-confirm-location]')
     ?.addEventListener('click', () => void confirmLocation());
-  root.querySelector('[data-change-location]')?.addEventListener('click', () => {
-    state.pendingLocation = null;
-    pointConfirmation.hidden = true;
-    void mountMap('location');
-  });
   root.querySelector('[data-location-coordinates-submit]')?.addEventListener('click', () => {
     const lat = number(root.querySelector('[data-location-latitude]')?.value, -90, 90);
     const lng = number(root.querySelector('[data-location-longitude]')?.value, -180, 180);
