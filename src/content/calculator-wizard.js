@@ -15,6 +15,7 @@ const copy = {
     coordinateAlternative: 'Գիտեմ կոորդինատները / քարտեզը հասանելի չէ',
     potentialReady: 'PVGIS-ը ցույց է տալիս կետի արևային ռեսուրսը, ոչ թե ավտոմատ չափված տանիքը։',
     potentialContinue: 'Շարունակել դեպի տանիք',
+    potentialSkip: 'Շարունակել դեպի տանիք՝ առանց ներուժի',
     roofIntro:
       'Նշեք տանիքի իրական հարթությունը։ Այն կարող է տարբերվել PVGIS-ի ազատ կանգնող համակարգի օպտիմումից։',
     parallel: 'Տանիքին զուգահեռ',
@@ -64,6 +65,7 @@ const copy = {
     coordinateAlternative: 'Я знаю координаты / карта недоступна',
     potentialReady: 'PVGIS показывает солнечный ресурс точки, а не автоматически измеренную крышу.',
     potentialContinue: 'Перейти к крыше',
+    potentialSkip: 'Перейти к крыше без потенциала',
     roofIntro:
       'Опишите реальную плоскость крыши. Она может отличаться от оптимума PVGIS для отдельно стоящей системы.',
     parallel: 'Параллельно крыше',
@@ -112,6 +114,7 @@ const copy = {
     coordinateAlternative: 'I know the coordinates / the map is unavailable',
     potentialReady: 'PVGIS shows the point’s solar resource, not an automatically measured roof.',
     potentialContinue: 'Continue to roof',
+    potentialSkip: 'Continue to roof without potential',
     roofIntro:
       'Describe the actual roof plane. It may differ from the PVGIS optimum for a free-standing system.',
     parallel: 'Parallel to roof',

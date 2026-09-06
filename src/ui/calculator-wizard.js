@@ -2,6 +2,14 @@ import { calculateRoofPlaneArea, SolarPassportRepository } from '../domain/index
 import { toFiniteNumberOrNull } from '../domain/numbers.js';
 import { ProductApiClient, ProductApiError } from '../services/api-client.js';
 import { createPropertyMap } from '../services/property-map.js';
+import {
+  applyPotentialOutcome,
+  createCalculatorWizardState,
+  deriveWizardStepStates,
+  isWizardStepAccessible,
+  WIZARD_STEP_KEYS,
+  WIZARD_STEP_STATUSES
+} from './calculator-wizard-state.js';
 import { initConsumptionInput } from './consumption-input.js';
 import { initFileUpload } from './file-upload.js';
 
@@ -96,10 +104,13 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
   const pendingCoordinates = root.querySelector('[data-pending-coordinates]');
   const potentialLoading = root.querySelector('[data-potential-loading]');
   const potentialResult = root.querySelector('[data-potential-result]');
+  const potentialContinue = root.querySelector('[data-potential-continue]');
   const potentialRetry = root.querySelector('[data-potential-retry]');
+  const potentialSkip = root.querySelector('[data-potential-skip]');
   const potentialChart = root.querySelector('[data-potential-chart]');
   const potentialTable = root.querySelector('[data-potential-table]');
   const roofArea = root.querySelector('[data-roof-area]');
+  const roofAreaLabel = root.querySelector('[data-roof-area-label]');
   const roofPoints = root.querySelector('[data-roof-points]');
   const roofPlaneWrap = root.querySelector('[data-roof-plane-area-wrap]');
   const roofPlaneArea = root.querySelector('[data-roof-plane-area]');
@@ -115,19 +126,7 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
   const passportDialog = document.querySelector('[data-passport-dialog]');
   const passportContent = document.querySelector('[data-passport-dialog-content]');
 
-  const state = {
-    currentStep: 0,
-    addressNote: '',
-    pendingLocation: null,
-    confirmedProperty: null,
-    sitePotential: null,
-    roof: null,
-    consumption: null,
-    userTariff: null,
-    selectedBillFile: null,
-    analysis: null,
-    solarPassport: null
-  };
+  const state = createCalculatorWizardState();
   let mapController = null;
   let potentialRequest = null;
   let analysisRequest = null;
@@ -141,20 +140,31 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
     status.classList.toggle('is-error', Boolean(error));
   };
 
-  const unlockedStep = () => {
-    if (!state.confirmedProperty) return 0;
-    if (!state.sitePotential) return 1;
-    if (!hasRoof()) return 2;
-    if (!state.analysis) return 3;
-    return 4;
-  };
+  const stepStates = () =>
+    deriveWizardStepStates({
+      confirmedProperty: state.confirmedProperty,
+      potentialStatus: state.potentialStatus,
+      roofComplete: hasRoof(),
+      consumptionComplete: Boolean(state.consumption),
+      analysisStatus: state.analysisStatus
+    });
+
+  const setPotentialOutcome = (outcome) =>
+    Object.assign(state, applyPotentialOutcome(state, outcome));
+
+  const isStepAccessible = (index) =>
+    isWizardStepAccessible(stepStates()[WIZARD_STEP_KEYS[index]], {
+      // Result has no meaningful UI before a successful analysis. It can be
+      // loading for progress feedback, but cannot be opened until complete.
+      allowLoading: index !== 4
+    });
 
   const updateProgress = () => {
-    const unlocked = unlockedStep();
     progress.forEach((button, index) => {
+      const stepStatus = stepStates()[WIZARD_STEP_KEYS[index]];
       const current = index === state.currentStep;
-      button.dataset.state = index < unlocked ? 'complete' : current ? 'current' : 'future';
-      button.disabled = index > unlocked;
+      button.dataset.stepState = stepStatus;
+      button.disabled = !isStepAccessible(index);
       if (current) button.setAttribute('aria-current', 'step');
       else button.removeAttribute('aria-current');
     });
@@ -167,16 +177,31 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
   };
 
   const setStep = (nextStep, { focus = true } = {}) => {
-    const target = Math.max(0, Math.min(Number(nextStep), unlockedStep()));
+    const target = Math.max(0, Math.min(Number(nextStep), steps.length - 1));
+    if (!isStepAccessible(target)) return false;
     state.currentStep = target;
     steps.forEach((step, index) => {
       step.hidden = index !== target;
     });
     updateProgress();
-    if (target === 2) void mountMap('roof');
-    if (focus) {
+    if (target === 2) {
+      // The map is moved from the Object step into this ordinary in-flow
+      // container. Focus the active map only after the move and position it
+      // in the viewport; otherwise a long wizard page can appear to jump to
+      // the top while leaving the roof map outside the visible area.
+      void mountMap('roof').then((controller) => {
+        if (!controller || state.currentStep !== 2) return;
+        requestAnimationFrame(() => {
+          roofMapHost?.scrollIntoView({ block: 'start', behavior: 'auto' });
+          controller.resize();
+          mapElement?.focus({ preventScroll: true });
+        });
+      });
+    }
+    if (focus && target !== 2) {
       requestAnimationFrame(() => steps[target]?.focus({ preventScroll: false }));
     }
+    return true;
   };
 
   const stopPotential = () => {
@@ -190,6 +215,7 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
   const clearAnalysis = () => {
     stopAnalysis();
     state.analysis = null;
+    state.analysisStatus = WIZARD_STEP_STATUSES.LOCKED;
     state.solarPassport = null;
     resultDashboard?.replaceChildren();
     if (resultSummary) resultSummary.textContent = '';
@@ -198,9 +224,11 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
   };
   const clearPotentialAndBelow = () => {
     stopPotential();
-    state.sitePotential = null;
+    setPotentialOutcome({ status: WIZARD_STEP_STATUSES.LOCKED });
     if (potentialResult) potentialResult.hidden = true;
+    if (potentialContinue) potentialContinue.hidden = true;
     if (potentialRetry) potentialRetry.hidden = true;
+    if (potentialSkip) potentialSkip.hidden = true;
     if (potentialLoading) potentialLoading.textContent = '';
     state.roof = null;
     mapController?.resetRoof();
@@ -225,10 +253,25 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
     state.roof = roof;
     if (roofPoints)
       roofPoints.textContent = text(product.roof?.pointsLabel, { count: roof.points.length });
-    if (roofArea)
-      roofArea.textContent = `${format(roof.areaSqm, locale, { maximumFractionDigits: 1 })} m²`;
+    updateRoofAreaSummary();
     clearAnalysis();
     updateProgress();
+  };
+
+  const updateRoofAreaSummary = () => {
+    const roof = roofGeometry();
+    if (roofAreaLabel) {
+      roofAreaLabel.textContent =
+        roof.areaMethod === 'measured-plane'
+          ? (product.roof?.measuredAreaLabel ?? product.roof?.planeAreaLabel ?? '')
+          : (product.roof?.areaLabel ?? '');
+    }
+    if (roofArea) {
+      roofArea.textContent =
+        roof.effectiveAreaSqm === null
+          ? '—'
+          : `${format(roof.effectiveAreaSqm, locale, { maximumFractionDigits: 1 })} m²`;
+    }
   };
 
   const mountMap = async (mode) => {
@@ -312,6 +355,9 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
       .filter(Boolean)
       .join(' ');
     if (potentialResult) potentialResult.hidden = false;
+    if (potentialContinue) potentialContinue.hidden = false;
+    if (potentialRetry) potentialRetry.hidden = true;
+    if (potentialSkip) potentialSkip.hidden = true;
   };
 
   const requestPotential = async ({ force = false } = {}) => {
@@ -330,14 +376,17 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
       return;
     }
     stopPotential();
-    clearAnalysis();
     const controller = new AbortController();
     potentialRequest = controller;
     lastPotential = { fingerprint, startedAt: Date.now() };
+    setPotentialOutcome({ status: WIZARD_STEP_STATUSES.LOADING });
     if (potentialLoading) potentialLoading.textContent = product.potential?.loading ?? '';
     if (potentialResult) potentialResult.hidden = true;
+    if (potentialContinue) potentialContinue.hidden = true;
     if (potentialRetry) potentialRetry.hidden = true;
+    if (potentialSkip) potentialSkip.hidden = true;
     writeStatus('');
+    updateProgress();
     try {
       const response = await api.potential(
         {
@@ -356,14 +405,17 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
         potential.monthlyYieldKwhPerKwp.length !== 12
       )
         throw new ProductApiError('MALFORMED_RESPONSE');
-      state.sitePotential = potential;
+      setPotentialOutcome({ status: WIZARD_STEP_STATUSES.COMPLETE, potential });
       renderPotential(potential);
       if (potentialLoading) potentialLoading.textContent = '';
       updateProgress();
     } catch (error) {
       if (error instanceof ProductApiError && error.code === 'ABORTED') return;
+      setPotentialOutcome({ status: WIZARD_STEP_STATUSES.UNAVAILABLE });
       if (potentialLoading) potentialLoading.textContent = describeError(error, product);
       if (potentialRetry) potentialRetry.hidden = false;
+      if (potentialSkip) potentialSkip.hidden = false;
+      updateProgress();
     } finally {
       if (potentialRequest === controller) potentialRequest = null;
     }
@@ -373,6 +425,7 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
     if (!state.pendingLocation) return;
     state.addressNote = address?.value.trim() ?? '';
     state.confirmedProperty = { ...state.pendingLocation };
+    setPotentialOutcome({ status: WIZARD_STEP_STATUSES.AVAILABLE });
     pointConfirmation.hidden = true;
     await mountMap('location');
     mapController?.setLocation(state.confirmedProperty, { notify: false });
@@ -422,6 +475,7 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
     if (roofPlaneWrap) roofPlaneWrap.hidden = !measured;
     if (roofPlaneArea) roofPlaneArea.disabled = !measured;
     if (roofOrientationCustom) roofOrientationCustom.hidden = roofOrientation?.value !== 'custom';
+    updateRoofAreaSummary();
     clearAnalysis();
     updateProgress();
   };
@@ -562,24 +616,29 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
     stopAnalysis();
     const controller = new AbortController();
     analysisRequest = controller;
+    state.analysisStatus = WIZARD_STEP_STATUSES.LOADING;
     lastAnalysis = { fingerprint, startedAt: Date.now() };
     const button = root.querySelector('[data-run-analysis]');
     button?.setAttribute('aria-busy', 'true');
     button?.setAttribute('disabled', '');
     writeStatus(product.result?.preparing ?? '');
+    updateProgress();
     try {
       // selectedBillFile is deliberately not part of this payload.
       const response = await api.analyze(buildPayload(), { signal: controller.signal });
       if (controller.signal.aborted || analysisRequest !== controller) return;
       state.analysis = response?.analysis ?? null;
       if (!state.analysis) throw new ProductApiError('MALFORMED_RESPONSE');
+      state.analysisStatus = WIZARD_STEP_STATUSES.COMPLETE;
       state.solarPassport = passportRepository.create(state.analysis, { locale });
       renderResult(state.analysis);
       writeStatus('');
       setStep(4);
     } catch (error) {
       if (error instanceof ProductApiError && error.code === 'ABORTED') return;
+      state.analysisStatus = WIZARD_STEP_STATUSES.LOCKED;
       writeStatus(describeError(error, product), true);
+      updateProgress();
     } finally {
       if (analysisRequest === controller) analysisRequest = null;
       button?.removeAttribute('aria-busy');
@@ -634,8 +693,9 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
     root: root.querySelector('[data-consumption-inputs]'),
     strings: product.consumption ?? {},
     onChange: () => {
-      state.consumption = null;
-      state.userTariff = null;
+      const draft = consumptionInput?.inspect();
+      state.consumption = draft?.valid ? draft.value : null;
+      state.userTariff = draft?.valid ? draft.tariff : null;
       clearAnalysis();
       updateProgress();
     }
@@ -670,6 +730,7 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
     void mountMap('location').then((map) => map?.setLocation({ lat, lng }, { notify: false }));
   });
   root.querySelector('[data-potential-continue]')?.addEventListener('click', () => setStep(2));
+  potentialSkip?.addEventListener('click', () => setStep(2));
   potentialRetry?.addEventListener('click', () => void requestPotential({ force: true }));
   root.querySelector('[data-roof-continue]')?.addEventListener('click', () => {
     if (!hasRoof()) {

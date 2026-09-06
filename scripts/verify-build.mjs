@@ -469,6 +469,10 @@ function validateCalculatorMarkup(html, page) {
     'data-property-map',
     'data-roof-map-host',
     'data-roof-finish',
+    "data-step-state='available'",
+    "data-step-state='locked'",
+    'data-potential-skip',
+    'data-consumption-tariff-label',
     'data-result-dashboard',
     'data-passport-dialog'
   ]) {
@@ -476,6 +480,13 @@ function validateCalculatorMarkup(html, page) {
   }
   if (html.includes('data-offer-checker'))
     fail(`${page}: Offer Checker must not be embedded in calculator`);
+}
+
+async function validateNoLegacyCalculatorStyles() {
+  const stylesheet = await readFile(resolve(projectRoot, 'src/styles/tools.css'), 'utf8');
+  for (const selector of ['.calculator-workspace-menu', '.calculator-start', '.calculator-offer']) {
+    if (stylesheet.includes(selector)) fail(`tools.css: unreachable legacy selector ${selector}`);
+  }
 }
 
 function validateOfferCheckerMarkup(html, page) {
@@ -588,6 +599,7 @@ for (const page of expectedPages.filter((page) => !publishedPages.has(page))) {
 }
 await validateSitemap();
 await validateHeaders();
+await validateNoLegacyCalculatorStyles();
 
 if (failures.length > 0) {
   console.error('Build validation failed:\n');

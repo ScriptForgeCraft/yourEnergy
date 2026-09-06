@@ -1,208 +1,3 @@
-.calculator-workspace-menu {
-  margin: 28px 0;
-  border: 1px solid #d8e2e8;
-  border-radius: 16px;
-  padding: 16px;
-  background: #fff;
-  box-shadow: var(--shadow-sm);
-}
-
-.calculator-start {
-  display: grid;
-  gap: 9px;
-  margin-top: 22px;
-  border: 1px solid #d8e4e8;
-  border-radius: 16px;
-  padding: 16px;
-  background: linear-gradient(135deg, rgb(245 189 24 / 14%), transparent 58%), #fff;
-  box-shadow: var(--shadow-sm);
-}
-
-.calculator-start__heading {
-  display: grid;
-  grid-template-columns: 32px minmax(0, 1fr);
-  gap: 10px;
-  align-items: center;
-}
-
-.calculator-start__heading > span {
-  display: grid;
-  width: 30px;
-  height: 30px;
-  place-items: center;
-  border-radius: 50%;
-  color: #503800;
-  background: var(--color-yellow);
-  font-size: 0.68rem;
-  font-weight: 900;
-}
-
-.calculator-start__heading strong,
-.calculator-start__heading small {
-  display: block;
-}
-
-.calculator-start__heading strong {
-  color: var(--color-navy);
-  font-size: 0.86rem;
-}
-
-.calculator-start__heading small {
-  margin-top: 2px;
-  color: var(--color-muted);
-  font-size: 0.68rem;
-  line-height: 1.35;
-}
-
-.calculator-start > label {
-  margin-top: 5px;
-}
-
-.calculator-workspace-menu__title,
-.calculator-workspace-menu__copy {
-  margin: 0;
-}
-
-.calculator-workspace-menu__title {
-  color: var(--color-navy);
-  font-size: 0.86rem;
-  font-weight: 850;
-}
-
-.calculator-workspace-menu__copy {
-  margin-top: 5px;
-  color: var(--color-muted);
-  font-size: 0.72rem;
-  line-height: 1.35;
-}
-
-.calculator-workspace-menu ol {
-  display: grid;
-  gap: 7px;
-  margin: 15px 0 0;
-  padding: 0;
-  list-style: none;
-}
-
-.calculator-workspace-menu a {
-  min-height: 56px;
-  display: grid;
-  grid-template-columns: 26px minmax(0, 1fr);
-  column-gap: 9px;
-  align-items: center;
-  border: 1px solid transparent;
-  border-radius: 10px;
-  padding: 8px 10px;
-  color: #344b5e;
-  text-decoration: none;
-}
-
-.calculator-workspace-menu a:hover {
-  border-color: #d5e0e5;
-  background: #f6f9fa;
-}
-
-.calculator-workspace-menu a > span {
-  grid-row: span 2;
-  display: grid;
-  width: 24px;
-  height: 24px;
-  place-items: center;
-  border-radius: 50%;
-  color: #566b7a;
-  background: #e9eef1;
-  font-size: 0.63rem;
-  font-weight: 850;
-}
-
-.calculator-workspace-menu strong,
-.calculator-workspace-menu small {
-  min-width: 0;
-}
-
-.calculator-workspace-menu strong {
-  color: inherit;
-  font-size: 0.74rem;
-  line-height: 1.2;
-}
-
-.calculator-workspace-menu small {
-  margin-top: 2px;
-  color: #71808d;
-  font-size: 0.63rem;
-  line-height: 1.25;
-}
-
-.calculator-workspace-menu a[data-state='active'],
-.calculator-workspace-menu a[aria-current='step'] {
-  border-color: #e7c761;
-  color: var(--color-navy);
-  background: #fff8dc;
-}
-
-.calculator-workspace-menu a[data-state='active'] > span,
-.calculator-workspace-menu a[aria-current='step'] > span {
-  color: #513b00;
-  background: var(--color-yellow);
-}
-
-.calculator-workspace-menu a[data-state='complete'] > span {
-  color: #fff;
-  background: var(--color-success);
-}
-
-.calculator-workspace-menu a[data-state='optional'] {
-  border-style: dashed;
-  border-color: #d8e2e8;
-}
-
-.calculator-offer__heading {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  gap: 20px 42px;
-  align-items: end;
-  margin-bottom: 28px;
-}
-
-.calculator-offer__heading > div {
-  max-width: 66ch;
-}
-
-.calculator-offer__heading h2 {
-  margin: 0;
-  color: var(--color-navy);
-  font-size: clamp(1.8rem, 3vw, 3rem);
-}
-
-.calculator-offer__heading p:not(.eyebrow) {
-  margin: 13px 0 0;
-  color: var(--color-muted);
-}
-
-.calculator-offer__heading .tool-privacy {
-  margin: 0;
-}
-
-.calculator-offer__side {
-  display: grid;
-  gap: 14px;
-}
-
-.calculator-offer .tool-form > h3,
-.calculator-offer .tool-result > h3 {
-  margin: 0 0 12px;
-  color: var(--color-navy);
-  font-size: clamp(1.45rem, 2vw, 2rem);
-  line-height: 1.1;
-}
-
-.calculator-offer .tool-result h4 {
-  margin: 22px 0 8px;
-  color: #354d60;
-  font-size: 0.9rem;
-}
-
 .tool-hero {
   padding-block: clamp(48px, 9vw, 114px) clamp(34px, 6vw, 72px);
   background:
@@ -324,18 +119,25 @@
 .wizard-progress button strong {
   font-size: 0.84rem;
 }
-.wizard-progress button[data-state='current'] {
+.wizard-progress button[aria-current='step'] {
   background: #eef5f8;
   color: var(--color-navy);
 }
-.wizard-progress button[data-state='current'] span {
+.wizard-progress button[aria-current='step'] span {
   background: var(--color-yellow-strong);
 }
-.wizard-progress button[data-state='complete'] {
+.wizard-progress button[data-step-state='complete'] {
   color: var(--color-navy);
 }
-.wizard-progress button[data-state='complete'] span {
+.wizard-progress button[data-step-state='complete'] span {
   background: #bee6cf;
+}
+.wizard-progress button[data-step-state='unavailable'] span {
+  background: #fff0df;
+  color: #87420c;
+}
+.wizard-progress button[data-step-state='loading'] span {
+  background: #dcecf5;
 }
 .wizard-progress button:disabled {
   cursor: not-allowed;
@@ -388,7 +190,7 @@
   color: var(--color-muted);
   font-weight: 400;
 }
-.wizard-step input,
+.wizard-step input:not([type='radio']):not([type='checkbox']),
 .wizard-step select {
   width: 100%;
   min-height: 48px;
@@ -408,10 +210,23 @@
   border-radius: 1rem;
   background: #e7eef1;
 }
-.wizard-map {
+.wizard-map.property-map {
+  /*
+   * .property-map was originally an absolute hero overlay. The calculator
+   * moves the same Leaflet node between two normal-flow step containers, so
+   * it must contribute its height instead of being positioned against the
+   * document. Without this override the Roof map can render above the step.
+   */
+  position: relative;
+  z-index: auto;
+  inset: auto;
   width: 100%;
   height: clamp(320px, 42vw, 500px);
   min-height: 320px;
+}
+[data-roof-map-host] {
+  min-height: clamp(320px, 42vw, 500px);
+  scroll-margin-top: 5.5rem;
 }
 .point-confirmation,
 .async-card,
@@ -557,6 +372,10 @@
 }
 .mounting-cards input {
   position: absolute;
+  width: 1px;
+  min-height: 1px;
+  height: 1px;
+  margin: 0;
   opacity: 0;
   pointer-events: none;
 }
@@ -894,10 +713,6 @@
   .tool-reference {
     max-width: 680px;
   }
-
-  .calculator-workspace-menu ol {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
 }
 
 @media (max-width: 560px) {
@@ -913,10 +728,6 @@
 
   .tool-result dl {
     grid-template-columns: 1fr;
-  }
-
-  .calculator-workspace-menu ol {
-    grid-template-columns: minmax(0, 1fr);
   }
 }
 

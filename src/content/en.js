@@ -196,6 +196,11 @@ export default {
       tariffLabel: 'Tariff from your bill',
       tariffHelp:
         'Optional for kWh. A bill in AMD needs it to convert the amount to kWh; the Passport will mark it as user-provided.',
+      tariffBillLabel: 'Tariff AMD/kWh — required to calculate consumption',
+      tariffBillHelp: 'Enter the rate from your bill to convert AMD to kWh.',
+      tariffOptionalLabel: 'Tariff AMD/kWh — optional',
+      tariffOptionalHelp:
+        'Only needed for savings and payback; system sizing and generation work without it.',
       usageLabel: 'Average monthly consumption',
       usageHelp: 'Enter the average monthly consumption in kWh.',
       monthlyTitle: 'Consumption over 12 months',
@@ -254,7 +259,7 @@ export default {
       edit: 'Edit outline',
       pointsLabel: 'Points in outline: {count}',
       minimumPoints: 'Add at least 3 points to finish the outline.',
-      areaLabel: 'Preliminary roof area',
+      areaLabel: 'Preliminary area from the outline',
       mountingModeLabel: 'Mounting approach',
       mountingModeHelp:
         'For roof-parallel mounting, the entered plane is calculated. For an elevated system, the PVGIS benchmark is compared with the planned plane.',
