@@ -55,6 +55,12 @@ export default defineConfig(({ mode }) => {
           'calculator-hy': resolve(root, 'calculator/index.html'),
           'calculator-ru': resolve(root, 'ru/calculator/index.html'),
           'calculator-en': resolve(root, 'en/calculator/index.html'),
+          'calculator-refine-hy': resolve(root, 'calculator/refine/index.html'),
+          'calculator-refine-ru': resolve(root, 'ru/calculator/refine/index.html'),
+          'calculator-refine-en': resolve(root, 'en/calculator/refine/index.html'),
+          'calculator-pro-hy': resolve(root, 'calculator/pro/index.html'),
+          'calculator-pro-ru': resolve(root, 'ru/calculator/pro/index.html'),
+          'calculator-pro-en': resolve(root, 'en/calculator/pro/index.html'),
           'offer-checker-hy': resolve(root, 'offer-checker/index.html'),
           'offer-checker-ru': resolve(root, 'ru/offer-checker/index.html'),
           'offer-checker-en': resolve(root, 'en/offer-checker/index.html')

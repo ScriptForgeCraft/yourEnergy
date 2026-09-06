@@ -1,196 +1,189 @@
-# YOURENERGY — consumer-first refactor engineering report
+# YOURENERGY — Quick / Refine / Pro calculator engineering report
 
-Date of verification: 7 September 2026
+Verification date: 7 September 2026
 
-## 1. Structure and routes
+## 1. Scope
 
-The site remains a Vite MPA. Handlebars generates static semantic HTML before
-the browser starts. Published, indexable routes are Home, Calculator and Offer
-Checker in Armenian (`/`), Russian (`/ru/`) and English (`/en/`). Privacy and
-Terms are available in all three languages and remain `noindex` legal drafts.
+This iteration restructures calculator entry and progression only. It does not
+change domain formulas, PVGIS normalisation, tariff rules, roof geometry,
+PriceBook maths, Offer Checker maths or homepage calculation claims.
 
-The generated production build contains 15 routes. `/soon/` and its locale
-variants are no longer generated, linked, included in the sitemap or retained
-as redirects. Common header and footer partials are used by marketing, tool and
-legal pages; `ENERGY` keeps the required `#F5BD18` wordmark colour.
+## 2. Public calculator routes
 
-## 2. Homepage
+- `/calculator/`, `/ru/calculator/`, `/en/calculator/` — indexable Quick Calculator.
+- `/calculator/refine/`, `/ru/calculator/refine/`, `/en/calculator/refine/` — consumer roof refinement, `noindex,follow`.
+- `/calculator/pro/`, `/ru/calculator/pro/`, `/en/calculator/pro/` — detailed professional calculator, `noindex,follow`.
+- `/offer-checker/` and its locale variants remain separate, indexable tools.
 
-The homepage is now consumer-first: hero, what the calculation provides,
-example Solar Passport/result, typical configurations, process, company and
-engineer trust, equipment documentation, FAQ, final CTA and footer.
+Only Quick Calculator and Offer Checker are sitemap entries. Refinement and Pro
+have self-canonical URLs and reciprocal hreflang but are intentionally not in
+the sitemap.
 
-The hero has one primary calculation CTA. PVGIS is explained as methodology,
-not a marketing promise. Static figures are explicitly marked as example data
-or an example result; none is presented as a visitor's personalised output.
-The former static finance panel was removed because it implied a calculation
-before the visitor supplied inputs.
+## 3. Quick Calculator UX
 
-## 3. Calculator wizard
+The first screen contains only a region, a consumption mode and one value. Bill
+mode opens an explicit tariff field because bill-to-kWh conversion cannot be
+honest without it. kWh mode leaves tariff optional and shows it only as an
+economics input. There is no map, coordinate, roof polygon, azimuth, tilt,
+PVGIS diagnostic panel or Leaflet request in initial Quick HTML.
 
-There is one `CalculatorWizardController`-style controller and one browser
-session state source. Its visible consumer path is:
+## 4. Regional PVGIS model
 
-1. Property — choose and confirm a point; address is only an optional note.
-2. Consumption — average bill with an explicit tariff, average kWh, or the
-   twelve-month engineering input.
-3. Roof — outline the available roof or enter a measured roof-plane area.
-4. Result — available only after a successful same-origin `/api/analysis`.
+`src/data/regions/armenia.js` defines 11 versioned regional benchmark points:
+Yerevan, Aragatsotn, Ararat, Armavir, Gegharkunik, Kotayk, Lori, Shirak, Syunik,
+Tavush and Vayots Dzor. Every point is marked as a configured regional reference,
+never a geocoded property location. HY/RU/EN labels live in
+`src/content/calculator-modes.js`.
 
-Coordinates, PVGIS diagnostics and retry, monthly profile, bill upload,
-orientation, tilt, mounting mode and other detailed inputs are retained inside
-native `details` disclosures labelled “Engineering parameters”. Opening or
-closing them does not reset the shared state.
+## 5. Quick server endpoint
 
-## 4. PVGIS, roof and map behaviour
+`functions/api/quick-analysis.js` adds `POST /api/quick-analysis`. It validates
+region and consumption, calls the same server-side PVGIS adapter with 1 kWp and
+14% system loss, selects the same server-owned PriceBook, then delegates sizing
+to `buildRegionalQuickAnalysis` → existing `buildSolarAnalysis`. Provider/cache
+failure has the existing JSON error envelope; it never returns demo values.
 
-PVGIS stays server-side: browser → same-origin Cloudflare Pages Function →
-PVGIS. A confirmed point starts `/api/potential` in the background. Its status
-is independent (`locked`, `available`, `loading`, `complete`, `unavailable`)
-from Object, Consumption, Roof and Result.
+## 6. Regional-result honesty
 
-Therefore a PVGIS failure exposes an honest retry/continue state but does not
-clear the point, roof, consumption, tariff or in-memory bill file, and does not
-block Roof or Consumption. It never yields demo PVGIS values. A later retry
-updates only potential state.
+Quick results use `scope: regional-preliminary`, state that PVGIS represents a
+regional reference point rather than the visitor's property, and do not apply a
+roof-area constraint. Capacity, panels, annual generation and P25/P50/P75
+budget appear when source data is available; savings/payback appear only with an
+explicit usable tariff.
 
-The lazy Leaflet map uses OSM with attribution and zoom 19. It has no satellite
-or auto-roof-detection claim. The same in-flow map supports point selection,
-add vertex, click a vertex to delete it, drag a vertex, undo, reset and finish.
-The map outline is labelled “Preliminary area from outline”; it is not called a
-survey. Measured roof-plane area remains an alternative. Keyboard centre-point
-controls now avoid reusing a deleted starter vertex, so they cannot create a
-zero-area duplicate after an edit.
+## 7. Roof refinement UX
 
-## 5. Financial semantics and calculation parity
+Refinement receives the same temporary browser session and asks for a manual
+point plus one of two truthful roof inputs: a completed OSM outline labelled
+“Preliminary area from outline”, or user-entered measured roof-plane area. Tilt
+and azimuth stay inside a native Engineering parameters disclosure and the page
+sends the same `/api/analysis` request as professional mode.
 
-No calculation formula, unit, rounding rule, PVGIS normalisation, roof-area
-conversion, PriceBook rule, finance calculation or Offer Checker rule was
-changed by this refactor.
+## 8. Map behaviour
 
-- Average bill in AMD requires an explicit user tariff before consumption can be
-  derived. Its label, help text, `required` and `aria-required` switch together.
-- Average kWh and a twelve-month profile work without a tariff.
-- Without an explicit usable tariff, savings, payback and the finance timeline
-  remain absent. There is no registry, demo, hidden or fallback tariff.
-- PriceBook P25/P50/P75 remains available while valid; it is a preliminary
-  budget, not an offer.
+Leaflet remains lazy. It loads only after a visitor opens a point map or reaches
+a roof editing surface. OSM is still the sole base map. Current zoom,
+click-to-add, marker click-to-delete, marker drag, undo, reset, finish and
+keyboard centre-point controls are preserved. Refinement now scrolls the moved
+Leaflet container into view after switching from point selection to roof editing,
+so the sticky header does not hide the editing surface.
 
-`test/calculation-parity.test.js` fixes a deterministic pre-refactor domain
-fixture and asserts identical results: 1,500 kWh/kWp, a normalised monthly
-profile, 7.54 kWp, 13 panels, 100 m² roof area, 1.75m / 1.86m / 1.99m AMD
-P25/P50/P75, 11,310 kWh annual generation, 588,120 AMD annual savings,
-3.162619873495205-year payback, 12.843m AMD timeline endpoint, Passport
-values and a 247 AMD/Wp Offer Checker verdict. No engine exception was needed.
+## 9. Professional Calculator
 
-## 6. Result and Solar Passport
+The existing independent-status wizard is retained at `/calculator/pro/`:
+Object, Consumption, Roof and Result; PVGIS potential remains independent of
+roof/consumption completion. It retains coordinates, map selection, polygon,
+PVGIS retry/diagnostics, roof direction, tilt, mounting type, monthly profile,
+tariff and in-memory bill upload. Public Quick routes no longer embed those
+controls.
 
-The result begins with capacity, panel count, annual generation, coverage and
-P25/P50/P75 preliminary budget. Savings and payback appear only if their tariff
-precondition is met. Monthly chart, assumptions, sources, limitations and the
-Passport follow rather than competing with core homeowner outcomes.
+## 10. Shared temporary state
 
-Solar Passport opens only from a successful result in a native dialog. It is a
-snapshot of current browser-session analysis and clearly does not promise PDF,
-a permanent URL, a cloud history or an account history.
+`src/ui/calculator-session.js` is the single `sessionStorage` handoff model for
+Quick, refinement and Pro. It persists region, consumption, tariff, point, roof,
+potential, analysis and Passport snapshots for the current browser tab. Files are
+excluded: the electricity bill remains an in-memory `File` and is never sent or
+serialised.
 
-## 7. Demo content and removed legacy code
+Changing consumption in the same regional context preserves an existing
+refinement. Changing the Quick region clears old point/roof/potential data so a
+roof from another regional starting context cannot be carried forward.
 
-Typical project cards remain because they explain system configurations, but no
-longer claim client names, actual addresses, installation dates, savings or
-completed installations. Each has a compact example marker.
+## 11. PVGIS retry and stale-data safety
 
-The following obsolete functionality was deleted rather than hidden:
+Refinement starts a background `/api/potential` request after point confirmation.
+A failure is silent at that consumer layer and cannot erase point, roof,
+consumption, tariff or file state. Pro exposes diagnostics/retry. Both detailed
+flows require successful `/api/analysis` before a property-level result; neither
+creates a demo substitute.
 
-- testimonials markup, data, scroller branch, styling and related content;
-- MyEnergy teaser/content/references;
-- `/soon/` templates and generated Armenian/Russian/English routes;
-- old homepage finance/dashboard markup and its unused dialog/ledger modules;
-- unused `src/home.js`, `src/ui/dialogs.js`, `src/ui/analysis-ledger.js` and
-  the unused browser analytics event module;
-- old calculator workspace/offer UI, selectors and media-query leftovers;
-- stale tool CSS for removed card/layout variants.
+## 12. Tariff and finance invariants
 
-`test/removed-features.test.js` and post-build validation reject the removed
-route, old selectors and future/navigation labels. Repository searches were
-also run for testimonials, MyEnergy, `/soon/`, legacy calculator selectors and
-the removed CSS classes.
+- Average AMD bill requires an explicit user tariff.
+- Average kWh and monthly profile work without tariff.
+- No tariff produces no savings, payback or timeline.
+- There is no hidden registry, demo or default tariff in P0 public flow.
+- Temporary PriceBook P25/P50/P75 remains server-selected and is not an offer.
 
-## 8. SEO, content and accessibility
+## 13. Calculation parity
 
-Canonical URLs, reciprocal HY/RU/EN hreflang, one H1 per page, semantic
-landmarks, static content, FAQ JSON-LD and the sitemap remain intact. The
-sitemap contains Home, Calculator and standalone Offer Checker only. There is
-no Product/Offer structured data for the temporary PriceBook.
+No calculation-engine code was changed. `test/calculation-parity.test.js` still
+asserts PVGIS yield/profile, 7.54 kWp, 13 panels, roof area/constraints,
+P25/P50/P75, annual generation, annual savings, payback, timeline, Passport
+values and Offer Checker output. New Quick coverage compares its selected
+scenario directly to `buildSolarAnalysis` with identical inputs, proving it is a
+scope/presentation wrapper rather than duplicate formula code.
 
-The tools retain skip links, visible focus, labels, live status/error regions,
-keyboard-accessible native details/dialog controls, 44 px map/action controls,
-text alternatives for charts and no-JS semantic content. The calculator uses
-one `aria-current` marker for the opened step while status is stored separately
-for each step and PVGIS enrichment.
+## 14. Solar Passport
 
-## 9. Dependencies and performance
+Solar Passport remains a result-only current-session snapshot. Refinement creates
+it after successful `/api/analysis`; Pro displays it through its native dialog.
+No PDF, permanent URL, account history or cloud storage is claimed.
 
-Leaflet is the only runtime dependency and stays in a lazy chunk. The final
-production build reports 14.38 kB gzip for initial main JavaScript, 10.26 kB
-gzip for main CSS and 43.38 kB gzip for the separately loaded Leaflet chunk.
-All other dependencies are build/development tooling.
+## 15. Offer Checker
 
-Knip was used for an unused-code audit. It found and led to removal of the
-unused analytics module and two unnecessary public exports in `src/tools.js`.
-Remaining reported exports belong to Cloudflare file-based entrypoints or the
-deliberately public domain barrel; their consumers are dynamic/runtime paths
-that Knip cannot infer. There are no remaining unused source files reported.
+Offer Checker remains standalone and retains its safety rules: AMD/Wp comparison
+only for complete standard grid-tied scope; battery, incomplete scope, another
+system type or expired PriceBook return “not comparable”. Its calculation code
+was not changed.
 
-## 10. Automated verification
+## 16. Homepage, demo content and shared chrome
 
-The final local commands all pass:
+The existing consumer-first homepage was left intact: all calculation CTAs still
+point to same-locale Quick Calculator routes, and the homepage has no calculator
+runtime/map state. It continues to label static examples as examples instead of
+visitor-specific results. Shared Handlebars header/footer partials serve home,
+Quick, refinement, Pro, Offer Checker, Privacy and Terms.
 
-- `npm test` — 50/50 tests passed.
+## 17. Removed/dead functionality
+
+No removed feature was restored. Existing removal guarantees remain:
+testimonials, MyEnergy, `/soon/`, old calculator workspace selectors and their
+dead data/styles/routes are absent. The public old wizard template at
+`/calculator/` was replaced by `calculator-quick.hbs`; full controls exist only
+in the separately generated professional template. No hidden old calculator is
+emitted on Quick routes.
+
+## 18. Files changed and added
+
+Added: regional data, Quick domain wrapper, Quick Function, shared session
+module, Quick/refinement controllers, localized mode content, Quick/refinement
+templates and Quick tests.
+
+Updated: page generator, Vite MPA inputs, API client, professional wizard
+hydration, property-map restoration API, tools CSS, build validator, README and
+Functions README. Generated `calculator/`, `ru/calculator/` and
+`en/calculator/` HTML now represents Quick mode; generated Pro/refinement HTML
+is new.
+
+## 19. Automated verification
+
+Completed locally after implementation:
+
+- `npm test` — 55 tests passed.
 - `npm run lint` — passed.
 - `npm run format:check` — passed.
-- `npm run build` — passed.
-- `npm run verify:build` — passed for 15 generated routes.
+- `npm run build` — passed; 21 generated HTML routes.
+- `npm run verify:build` — passed for all 21 routes.
 
-Regression coverage includes consumption/tariff modes, no finance without a
-tariff, PriceBook expiry/ranges, PVGIS failure without fallback, server input
-validation, Armenia guard, salted seven-day cache privacy/TTL, roof conversion,
-manual measured area, independent wizard states, retry preservation, Passport,
-Offer Checker safety, calculation parity and deleted-feature assertions.
+Leaflet remains a separate lazy 43.38 kB gzip chunk; Quick Calculator has no map
+selector and does not request it until a visitor enters a map workflow.
 
-## 11. Browser and responsive smoke
+## 20. Browser smoke and remaining blockers
 
-A local production preview was checked in the browser. The map opened lazily
-with a non-zero 1046×500 desktop container and no console error. A local
-unavailable-PVGIS flow confirmed that Consumption and Roof remained available;
-the roof outline was finished with three points and produced 20.7 m². Clicking
-a roof marker removed its vertex as designed. The standalone Offer Checker
-returned “within range” for a complete 6 kWp / 1,482,000 AMD example (247
-AMD/Wp) and returned “not comparable” when a battery was included.
+Local production-preview checks covered Quick, refinement and Pro at 375 px.
+Quick had no Leaflet/map DOM, switched tariff `required` and `aria-required`
+correctly between bill/kWh modes, rendered honest PVGIS unavailable state without
+fallback numbers, and had no horizontal overflow or console error. Refinement
+opened Leaflet only after explicit map action, confirmed a point, finished a
+three-vertex outline with finite 18 m² preliminary area, and had no overflow.
+Same-tab Quick → refinement → Pro preserved consumption; Pro rendered the
+professional workspace without initially loading Leaflet. The mobile hero
+overflow found in QA was corrected.
 
-105 production-route viewport checks covered Home, Calculator, Offer Checker,
-Privacy and Terms in HY/RU/EN at 360, 375, 390, 430, 768, 1024 and 1440 px.
-They found one H1, no horizontal overflow and no captured console errors. The
-support-page and company-card mobile overflow found during the audit were
-fixed.
-
-The local Vite preview does not mount Cloudflare Pages Functions or the
-required KV binding, so a real successful `/api/potential` → `/api/analysis`
-browser transaction cannot be claimed from this machine. Controlled Function
-tests cover success, failure, retry and cache paths; the live successful smoke
-remains an explicit launch check after Cloudflare configuration.
-
-## 12. Remaining launch blockers and next steps
-
-1. Configure Cloudflare `PVGIS_CACHE` binding and non-public
-   `PVGIS_CACHE_SALT`; without them live Functions intentionally return a
-   clear unavailable state. Run a live Pages smoke after configuration to
-   verify successful potential and analysis responses.
-2. Obtain a confirmed tariff source/revision, CRM and Turnstile credentials
-   only when those integrations are approved. Do not add secrets to browser
-   configuration.
-3. Complete Armenian native proofreading and legal review of Privacy/Terms;
-   replace example projects with verified evidence only when available.
-
-No commit, push, deployment or production migration was performed as part of
-this refactor.
+Local Vite preview does not execute Pages Functions/KV, so successful live PVGIS
+browser response is not claimed. Controlled Function tests cover success,
+failure, tariff conditions and cache setup. Before release configure
+`PVGIS_CACHE` plus `PVGIS_CACHE_SALT` in Cloudflare Pages and run a live Quick
+and refinement flow on Pages. Native Armenian copy and legal content still need
+owner approval. No commit, push, deployment or migration was performed.

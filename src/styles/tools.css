@@ -5,6 +5,41 @@
   align-items: start;
 }
 
+/* Consumer entry point. The quick estimate deliberately has no map, vertex
+   editor or hidden technical panel; refinement and professional modes load
+   those controls only after the visitor chooses them. */
+.quick-calculator {
+  background: #fbfcfa;
+}
+.quick-calculator__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+  gap: clamp(1.25rem, 4vw, 4rem);
+  align-items: start;
+}
+.quick-calculator__form {
+  position: sticky;
+  top: 5.5rem;
+}
+.quick-calculator__form fieldset label {
+  margin: 0;
+}
+.quick-result {
+  min-height: 0;
+}
+.quick-result__metrics {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+.quick-result__metrics > p {
+  grid-column: 1 / -1;
+  margin: 0;
+}
+.quick-result__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+}
+
 /* Calculator wizard: functional UI stays in normal document flow so a map or
    result cannot appear on top of an unrelated hero card. */
 .tool-hero {
@@ -19,6 +54,7 @@
 .tool-hero h1 {
   max-width: 20ch;
   font-size: clamp(2.35rem, 4vw, 4.2rem);
+  overflow-wrap: anywhere;
 }
 .tool-hero .section-disclosure {
   color: #dbe8f1;
@@ -610,6 +646,12 @@
   .tool-workspace__grid {
     grid-template-columns: 1fr;
   }
+  .quick-calculator__grid {
+    grid-template-columns: 1fr;
+  }
+  .quick-calculator__form {
+    position: static;
+  }
 }
 
 @media (max-width: 560px) {
@@ -623,6 +665,10 @@
   }
 
   .tool-result dl {
+    grid-template-columns: 1fr;
+  }
+
+  .quick-result__metrics {
     grid-template-columns: 1fr;
   }
 }

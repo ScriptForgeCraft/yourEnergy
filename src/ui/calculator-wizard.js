@@ -12,6 +12,7 @@ import {
 } from './calculator-wizard-state.js';
 import { initConsumptionInput } from './consumption-input.js';
 import { initFileUpload } from './file-upload.js';
+import { createCalculatorSession } from './calculator-session.js';
 
 const PVGIS_KWP = 1;
 const PVGIS_LOSS = 14;
@@ -126,13 +127,48 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
   const passportDialog = document.querySelector('[data-passport-dialog]');
   const passportContent = document.querySelector('[data-passport-dialog-content]');
 
-  const state = createCalculatorWizardState();
+  const session = createCalculatorSession();
+  const savedSession = session.read();
+  const state = createCalculatorWizardState({
+    addressNote: savedSession.addressNote ?? '',
+    confirmedProperty: savedSession.property?.coordinates ?? null,
+    sitePotential: savedSession.sitePotential ?? null,
+    potentialStatus: savedSession.sitePotential
+      ? WIZARD_STEP_STATUSES.COMPLETE
+      : WIZARD_STEP_STATUSES.LOCKED,
+    roof: savedSession.roof ?? null,
+    consumption: savedSession.consumption ?? null,
+    userTariff: savedSession.userTariff ?? null,
+    analysis: savedSession.analysis ?? null,
+    solarPassport: savedSession.solarPassport ?? null,
+    analysisStatus: savedSession.analysis
+      ? WIZARD_STEP_STATUSES.COMPLETE
+      : WIZARD_STEP_STATUSES.LOCKED
+  });
   let mapController = null;
   let potentialRequest = null;
   let analysisRequest = null;
   let lastPotential = null;
   let lastAnalysis = null;
   let passportOpener = null;
+
+  const persistSession = () =>
+    session.write({
+      addressNote: state.addressNote,
+      property: state.confirmedProperty
+        ? {
+            coordinates: { ...state.confirmedProperty },
+            confirmed: true,
+            source: { kind: 'manual', status: 'confirmed' }
+          }
+        : null,
+      sitePotential: state.sitePotential,
+      roof: state.roof,
+      consumption: state.consumption,
+      userTariff: state.userTariff,
+      analysis: state.analysis,
+      solarPassport: state.solarPassport
+    });
 
   const writeStatus = (message, error = false) => {
     if (!status) return;
@@ -162,6 +198,7 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
   };
 
   const updateProgress = () => {
+    persistSession();
     const allStepStates = stepStates();
     progress.forEach((button, index) => {
       const stepStatus = allStepStates[WIZARD_STEP_KEYS[index]];
@@ -297,6 +334,9 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
       mapController?.setMode(mode);
       if (state.confirmedProperty)
         mapController?.setLocation(state.confirmedProperty, { notify: false });
+      if (mode === 'roof' && state.roof?.points?.length) {
+        mapController?.setRoofPoints(state.roof.points, { complete: state.roof.complete });
+      }
       mapController?.resize();
       return mapController;
     } catch {
@@ -689,6 +729,53 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
     );
     passportContent.append(limitations);
   };
+
+  // The professional route is a view over the same temporary session used by
+  // Quick and roof refinement. Populate fields before attaching the input
+  // controller so no navigation silently discards an explicit tariff or kWh.
+  const savedMode = state.consumption?.mode;
+  if (savedMode === 'usage') {
+    const radio = root.querySelector('input[name="consumption-mode"][value="usage"]');
+    if (radio) radio.checked = true;
+    const input = root.querySelector('[data-consumption-usage]');
+    if (input) input.value = state.consumption.averageMonthlyKwh ?? '';
+  } else if (savedMode === 'monthly') {
+    const radio = root.querySelector('input[name="consumption-mode"][value="monthly"]');
+    if (radio) radio.checked = true;
+    root.querySelectorAll('[data-consumption-month]').forEach((input, index) => {
+      input.value = state.consumption.monthlyKwh?.[index] ?? '';
+    });
+  } else if (savedMode === 'bill') {
+    const input = root.querySelector('[data-consumption-bill]');
+    if (input) input.value = state.consumption.averageMonthlyBillAmd ?? '';
+  }
+  const savedTariff = root.querySelector('[data-consumption-tariff]');
+  if (savedTariff && state.userTariff?.rateAmdPerKwh) {
+    savedTariff.value = state.userTariff.rateAmdPerKwh;
+  }
+  if (state.addressNote && address) address.value = state.addressNote;
+  if (state.roof) {
+    const areaMethod = root.querySelector(
+      `[data-roof-area-method][value="${state.roof.areaMethod}"]`
+    );
+    if (areaMethod) areaMethod.checked = true;
+    if (roofPlaneArea && state.roof.planeAreaSqm) roofPlaneArea.value = state.roof.planeAreaSqm;
+    if (roofTilt && Number.isFinite(Number(state.roof.tiltDegrees))) {
+      roofTilt.value = state.roof.tiltDegrees;
+    }
+    if (roofOrientation && Number.isFinite(Number(state.roof.orientationDegrees))) {
+      const known = [...roofOrientation.options].some(
+        (option) => Number(option.value) === Number(state.roof.orientationDegrees)
+      );
+      roofOrientation.value = known ? String(state.roof.orientationDegrees) : 'custom';
+      if (roofOrientationCustomInput && !known)
+        roofOrientationCustomInput.value = state.roof.orientationDegrees;
+    }
+    const mount = root.querySelector(
+      `[data-roof-mounting-mode][value="${state.roof.mountingMode}"]`
+    );
+    if (mount) mount.checked = true;
+  }
 
   const consumptionInput = initConsumptionInput({
     root: root.querySelector('[data-consumption-inputs]'),

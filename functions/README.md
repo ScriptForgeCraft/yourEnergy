@@ -76,6 +76,32 @@ When either cache prerequisite is missing, the endpoint returns
 `PVGIS_CACHE_NOT_CONFIGURED` rather than calling a free provider without a
 protective limit.
 
+### `POST /api/quick-analysis`
+
+Request:
+
+```json
+{
+  "regionId": "yerevan",
+  "consumption": { "averageMonthlyKwh": 1000 },
+  "tariff": { "rateAmdPerKwh": 45 }
+}
+```
+
+This endpoint powers the consumer Quick Calculator. `regionId` must be one of
+the eleven versioned Armenian regional benchmarks in
+`src/data/regions/armenia.js`. Its coordinate is a product-configured regional
+reference for PVGIS only: it is never returned as a visitor's address or
+confirmed property point. The endpoint uses the same server-side PVGIS adapter,
+cache, 1 kWp/14% normalisation, PriceBook and pure `buildSolarAnalysis` engine
+as the detailed endpoint, returning `scope: "regional-preliminary"`.
+
+An average AMD bill requires an explicit `tariff.rateAmdPerKwh`; average kWh
+does not. Without a tariff, technical output and a valid temporary PriceBook
+budget can appear, while savings, payback and the timeline remain `null`/empty.
+There is no registry, demo or hidden tariff fallback. Provider or cache failure
+returns the normal error envelope and never substitutes values.
+
 ### `POST /api/analysis`
 
 Request (PVGIS numeric inputs are deliberately required; the rest becomes the
@@ -186,22 +212,22 @@ service-availability message.
 Set these in the Cloudflare dashboard / `wrangler secret put`, never in
 `VITE_*` variables or committed files:
 
-| Binding                                                                    | Required for                      | Notes                                                                                                                                               |
-| -------------------------------------------------------------------------- | --------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `GEOCODING_ENDPOINT`                                                       | `/api/geocode`                    | HTTPS provider endpoint. It receives `q`, `language`, and `limit` by default; `{query}` and `{locale}` placeholders are supported.                  |
-| `GEOCODING_PROVIDER`                                                       | Optional                          | A human-readable source name returned to the browser.                                                                                               |
-| `GEOCODING_API_KEY`                                                        | Optional                          | Sent in a header, never as a browser value.                                                                                                         |
-| `GEOCODING_API_KEY_HEADER` / `GEOCODING_API_KEY_PREFIX`                    | Optional                          | Header defaults to `authorization`; use prefix such as `Bearer `.                                                                                   |
-| `GEOCODING_QUERY_PARAM`, `GEOCODING_LOCALE_PARAM`, `GEOCODING_LIMIT_PARAM` | Optional                          | Use only for a provider with matching query parameter names.                                                                                        |
-| `PVGIS_CACHE`                                                              | `/api/potential`, `/api/analysis` | Cloudflare KV namespace binding. It is mandatory; use exactly this binding name.                                                                    |
-| `PVGIS_CACHE_SALT`                                                         | `/api/potential`, `/api/analysis` | Secret used only to salt cache keys. Never expose it in `VITE_*`, logs or source control.                                                           |
-| `PVGIS_ENDPOINT`                                                           | Optional override                 | HTTPS PVGIS `PVcalc` endpoint. If absent, the Function uses the documented public PVGIS endpoint server-side; no URL or key is sent by the browser. |
-| `CRM_ENDPOINT`                                                             | `/api/lead`                       | HTTPS CRM/webhook endpoint. A missing value produces `CRM_NOT_CONFIGURED`, never a false success.                                                   |
-| `CRM_API_KEY`                                                              | Optional                          | Sent server-to-server using `CRM_API_KEY_HEADER` / `CRM_API_KEY_PREFIX`.                                                                            |
-| `TURNSTILE_SECRET_KEY`                                                     | Optional                          | Enables server verification. When set, a token is required for each lead.                                                                           |
-| `LEAD_REQUIRE_TURNSTILE`                                                   | Optional                          | Set to `true` to reject leads until Turnstile is configured. Default is `false`.                                                                    |
-| `API_FETCH_TIMEOUT_MS`                                                     | Optional                          | Server fetch timeout, clamped to 5–20 seconds; default 12 seconds. Values below 5 seconds are raised because a valid PVGIS request can take longer. |
-| `ALLOW_INSECURE_PROVIDER_URLS`                                             | Local dev only                    | Set `true` only for `http://localhost`, `127.0.0.1` or `[::1]` test adapters.                                                                       |
+| Binding                                                                    | Required for                                             | Notes                                                                                                                                               |
+| -------------------------------------------------------------------------- | -------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `GEOCODING_ENDPOINT`                                                       | `/api/geocode`                                           | HTTPS provider endpoint. It receives `q`, `language`, and `limit` by default; `{query}` and `{locale}` placeholders are supported.                  |
+| `GEOCODING_PROVIDER`                                                       | Optional                                                 | A human-readable source name returned to the browser.                                                                                               |
+| `GEOCODING_API_KEY`                                                        | Optional                                                 | Sent in a header, never as a browser value.                                                                                                         |
+| `GEOCODING_API_KEY_HEADER` / `GEOCODING_API_KEY_PREFIX`                    | Optional                                                 | Header defaults to `authorization`; use prefix such as `Bearer `.                                                                                   |
+| `GEOCODING_QUERY_PARAM`, `GEOCODING_LOCALE_PARAM`, `GEOCODING_LIMIT_PARAM` | Optional                                                 | Use only for a provider with matching query parameter names.                                                                                        |
+| `PVGIS_CACHE`                                                              | `/api/quick-analysis`, `/api/potential`, `/api/analysis` | Cloudflare KV namespace binding. It is mandatory; use exactly this binding name.                                                                    |
+| `PVGIS_CACHE_SALT`                                                         | `/api/quick-analysis`, `/api/potential`, `/api/analysis` | Secret used only to salt cache keys. Never expose it in `VITE_*`, logs or source control.                                                           |
+| `PVGIS_ENDPOINT`                                                           | Optional override                                        | HTTPS PVGIS `PVcalc` endpoint. If absent, the Function uses the documented public PVGIS endpoint server-side; no URL or key is sent by the browser. |
+| `CRM_ENDPOINT`                                                             | `/api/lead`                                              | HTTPS CRM/webhook endpoint. A missing value produces `CRM_NOT_CONFIGURED`, never a false success.                                                   |
+| `CRM_API_KEY`                                                              | Optional                                                 | Sent server-to-server using `CRM_API_KEY_HEADER` / `CRM_API_KEY_PREFIX`.                                                                            |
+| `TURNSTILE_SECRET_KEY`                                                     | Optional                                                 | Enables server verification. When set, a token is required for each lead.                                                                           |
+| `LEAD_REQUIRE_TURNSTILE`                                                   | Optional                                                 | Set to `true` to reject leads until Turnstile is configured. Default is `false`.                                                                    |
+| `API_FETCH_TIMEOUT_MS`                                                     | Optional                                                 | Server fetch timeout, clamped to 5–20 seconds; default 12 seconds. Values below 5 seconds are raised because a valid PVGIS request can take longer. |
+| `ALLOW_INSECURE_PROVIDER_URLS`                                             | Local dev only                                           | Set `true` only for `http://localhost`, `127.0.0.1` or `[::1]` test adapters.                                                                       |
 
 The generic geocoder normalizes GeoJSON `features`, Nominatim-style arrays, and
 objects with `results` or `data` arrays. A provider with another wire format

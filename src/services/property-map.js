@@ -221,9 +221,9 @@ export const createPropertyMap = async ({
     return true;
   };
 
-  const setRoofPoints = (points, { fit = false } = {}) => {
+  const setRoofPoints = (points, { fit = false, complete = false } = {}) => {
     roofPoints = points.filter(isFinitePoint).map(normalizePoint);
-    roofFinished = false;
+    roofFinished = Boolean(complete) && roofPoints.length >= 3;
     drawRoof();
     if (fit && roofPoints.length >= 2)
       map.fitBounds(L.latLngBounds(roofPoints), { padding: [28, 28] });

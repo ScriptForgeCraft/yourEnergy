@@ -7,6 +7,8 @@ import ru from '../src/content/ru.js';
 import en from '../src/content/en.js';
 import toolCopy from '../src/content/tools.js';
 import wizardCopy from '../src/content/calculator-wizard.js';
+import { calculatorModes, regionLabels } from '../src/content/calculator-modes.js';
+import { ARMENIA_REGIONAL_BENCHMARKS } from '../src/data/regions/armenia.js';
 import { TEMPORARY_YOURENERGY_PRICEBOOK } from '../src/data/pricebooks/armenia.js';
 import { GENERATED_CONTENT_LOCALES } from '../src/content/schema.js';
 
@@ -19,6 +21,14 @@ const publicEnv = {
 };
 const template = await readFile(resolve(root, 'src/templates/home.hbs'), 'utf8');
 const calculatorTemplate = await readFile(resolve(root, 'src/templates/calculator.hbs'), 'utf8');
+const quickCalculatorTemplate = await readFile(
+  resolve(root, 'src/templates/calculator-quick.hbs'),
+  'utf8'
+);
+const refineCalculatorTemplate = await readFile(
+  resolve(root, 'src/templates/calculator-refine.hbs'),
+  'utf8'
+);
 const offerCheckerTemplate = await readFile(
   resolve(root, 'src/templates/offer-checker.hbs'),
   'utf8'
@@ -37,6 +47,8 @@ Handlebars.registerHelper('add', (left, right) => Number(left) + Number(right));
 
 const render = Handlebars.compile(template, { noEscape: false });
 const renderCalculator = Handlebars.compile(calculatorTemplate, { noEscape: false });
+const renderQuickCalculator = Handlebars.compile(quickCalculatorTemplate, { noEscape: false });
+const renderRefineCalculator = Handlebars.compile(refineCalculatorTemplate, { noEscape: false });
 const renderOfferChecker = Handlebars.compile(offerCheckerTemplate, { noEscape: false });
 const renderSupport = Handlebars.compile(supportTemplate, { noEscape: false });
 const writeGenerated = (file, markup) => writeFile(file, markup.replace(/[ \t]+\n/g, '\n'), 'utf8');
@@ -174,7 +186,8 @@ const createPageConfig = (content, extra = {}) => ({
   endpoints: {
     geocode: sameOriginPath(publicEnv.VITE_GEOCODING_ENDPOINT, '/api/geocode'),
     potential: sameOriginPath(publicEnv.VITE_POTENTIAL_ENDPOINT, '/api/potential'),
-    analysis: sameOriginPath(publicEnv.VITE_ANALYSIS_ENDPOINT, '/api/analysis')
+    analysis: sameOriginPath(publicEnv.VITE_ANALYSIS_ENDPOINT, '/api/analysis'),
+    quickAnalysis: sameOriginPath(publicEnv.VITE_QUICK_ANALYSIS_ENDPOINT, '/api/quick-analysis')
   },
   ...extra
 });
@@ -250,24 +263,74 @@ const createHomeContext = (content, { pageKind = 'home' } = {}) => {
   };
 };
 
-const createCalculatorContext = (content) => {
+const createProfessionalCalculatorContext = (content) => {
   const calculatorMeta = toolCopy[content.locale]?.calculatorMeta;
   const wizard = wizardCopy[content.locale];
+  const modeCopy = calculatorModes[content.locale];
   if (!calculatorMeta) throw new Error(`Missing calculator metadata for ${content.locale}.`);
   if (!wizard) throw new Error(`Missing calculator wizard copy for ${content.locale}.`);
 
+  const path = toolPath(content.locale, 'calculator/pro');
+  const base = createHomeContext(content, { pageKind: 'calculator' });
+  return {
+    ...base,
+    path,
+    meta: modeCopy.proMeta ?? calculatorMeta,
+    wizard: { ...wizard, ...modeCopy.pro },
+    offerCheckerHref: toolPath(content.locale, 'offer-checker'),
+    alternateLinks: createToolAlternateLinks('calculator/pro'),
+    languageLinks: createToolLanguageLinks(content.locale, 'calculator/pro'),
+    toolShared: toolCopy[content.locale].shared,
+    calculatorHref: toolPath(content.locale, 'calculator'),
+    pageConfig: escapeJsonForHtml(
+      createPageConfig(content, { wizard: { ...wizard, ...modeCopy.pro } })
+    ),
+    jsonLd: escapeJsonForHtml(createJsonLd({ ...content, path }, { includeFaq: false }))
+  };
+};
+
+const createQuickCalculatorContext = (content) => {
+  const modeCopy = calculatorModes[content.locale];
   const path = toolPath(content.locale, 'calculator');
   const base = createHomeContext(content, { pageKind: 'calculator' });
   return {
     ...base,
     path,
-    meta: calculatorMeta,
-    wizard,
+    meta: modeCopy.quickMeta,
+    quick: modeCopy.quick,
+    regions: ARMENIA_REGIONAL_BENCHMARKS.map((region) => ({
+      id: region.id,
+      label: regionLabels[content.locale][region.id]
+    })),
+    refineHref: toolPath(content.locale, 'calculator/refine'),
+    proHref: toolPath(content.locale, 'calculator/pro'),
     offerCheckerHref: toolPath(content.locale, 'offer-checker'),
     alternateLinks: createToolAlternateLinks('calculator'),
     languageLinks: createToolLanguageLinks(content.locale, 'calculator'),
     toolShared: toolCopy[content.locale].shared,
-    pageConfig: escapeJsonForHtml(createPageConfig(content, { wizard })),
+    pageConfig: escapeJsonForHtml(createPageConfig(content, { quick: modeCopy.quick })),
+    jsonLd: escapeJsonForHtml(createJsonLd({ ...content, path }, { includeFaq: false }))
+  };
+};
+
+const createRefineCalculatorContext = (content) => {
+  const modeCopy = calculatorModes[content.locale];
+  const path = toolPath(content.locale, 'calculator/refine');
+  const base = createHomeContext(content, { pageKind: 'calculator' });
+  return {
+    ...base,
+    path,
+    meta: modeCopy.refineMeta,
+    quick: modeCopy.quick,
+    refine: modeCopy.refine,
+    calculatorHref: toolPath(content.locale, 'calculator'),
+    proHref: toolPath(content.locale, 'calculator/pro'),
+    alternateLinks: createToolAlternateLinks('calculator/refine'),
+    languageLinks: createToolLanguageLinks(content.locale, 'calculator/refine'),
+    toolShared: toolCopy[content.locale].shared,
+    pageConfig: escapeJsonForHtml(
+      createPageConfig(content, { quick: modeCopy.quick, refine: modeCopy.refine })
+    ),
     jsonLd: escapeJsonForHtml(createJsonLd({ ...content, path }, { includeFaq: false }))
   };
 };
@@ -341,9 +404,21 @@ const createOfferCheckerRuntime = (content, tool) => ({
 
 for (const { key } of GENERATED_CONTENT_LOCALES) {
   const content = homeContent[key];
-  const calculatorOutput = resolve(root, toolFile(key, 'calculator'));
-  await mkdir(dirname(calculatorOutput), { recursive: true });
-  await writeGenerated(calculatorOutput, renderCalculator(createCalculatorContext(content)));
+  const quickOutput = resolve(root, toolFile(key, 'calculator'));
+  await mkdir(dirname(quickOutput), { recursive: true });
+  await writeGenerated(quickOutput, renderQuickCalculator(createQuickCalculatorContext(content)));
+  const professionalOutput = resolve(root, toolFile(key, 'calculator/pro'));
+  await mkdir(dirname(professionalOutput), { recursive: true });
+  await writeGenerated(
+    professionalOutput,
+    renderCalculator(createProfessionalCalculatorContext(content))
+  );
+  const refineOutput = resolve(root, toolFile(key, 'calculator/refine'));
+  await mkdir(dirname(refineOutput), { recursive: true });
+  await writeGenerated(
+    refineOutput,
+    renderRefineCalculator(createRefineCalculatorContext(content))
+  );
 }
 
 for (const { key } of GENERATED_CONTENT_LOCALES) {

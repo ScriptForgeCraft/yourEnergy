@@ -13,6 +13,14 @@ const toolPages = [
   { page: 'ru/offer-checker/index.html', locale: 'ru', type: 'offer-checker' },
   { page: 'en/offer-checker/index.html', locale: 'en', type: 'offer-checker' }
 ];
+const privateCalculatorPages = [
+  { page: 'calculator/refine/index.html', locale: 'hy', type: 'calculator/refine' },
+  { page: 'ru/calculator/refine/index.html', locale: 'ru', type: 'calculator/refine' },
+  { page: 'en/calculator/refine/index.html', locale: 'en', type: 'calculator/refine' },
+  { page: 'calculator/pro/index.html', locale: 'hy', type: 'calculator/pro' },
+  { page: 'ru/calculator/pro/index.html', locale: 'ru', type: 'calculator/pro' },
+  { page: 'en/calculator/pro/index.html', locale: 'en', type: 'calculator/pro' }
+];
 const expectedPages = [
   'index.html',
   'ru/index.html',
@@ -23,7 +31,8 @@ const expectedPages = [
   'en/index.html',
   'en/privacy/index.html',
   'en/terms/index.html',
-  ...toolPages.map(({ page }) => page)
+  ...toolPages.map(({ page }) => page),
+  ...privateCalculatorPages.map(({ page }) => page)
 ];
 
 const failures = [];
@@ -458,31 +467,23 @@ async function validateHeaders() {
   if (/\*\s*;|\*$/u.test(csp)) fail('_headers CSP must not use a wildcard source');
 }
 
-function validateCalculatorMarkup(html, page) {
-  for (const marker of [
-    'data-calculator-wizard',
-    "data-wizard-step='0'",
-    'data-consumption-inputs',
-    'data-potential-status',
-    'data-property-map',
-    'data-roof-map-host',
-    'data-roof-finish',
-    "data-step-state='available'",
-    "data-step-state='locked'",
-    'data-potential-skip',
-    'data-consumption-tariff-label',
-    'data-result-dashboard',
-    'data-passport-dialog'
-  ]) {
-    if (!html.includes(marker)) fail(`${page}: missing calculator wizard marker ${marker}`);
+function validateQuickCalculatorMarkup(html, page) {
+  for (const marker of ['data-quick-calculator', 'data-quick-region', 'data-quick-submit']) {
+    if (!html.includes(marker)) fail(`${page}: missing quick calculator marker ${marker}`);
   }
-  if (html.includes('data-offer-checker'))
-    fail(`${page}: Offer Checker must not be embedded in calculator`);
-  if (html.includes('data-potential-continue')) {
-    fail(`${page}: obsolete linear PVGIS continuation control is present`);
+  for (const forbidden of ['data-property-map', 'data-roof-map-host', 'data-calculator-wizard']) {
+    if (html.includes(forbidden)) fail(`${page}: quick calculator must not include ${forbidden}`);
   }
-  if (html.includes('calculator-workspace-menu') || html.includes('calculator-offer')) {
-    fail(`${page}: obsolete calculator workspace markup is present`);
+}
+
+function validatePrivateCalculatorMarkup(html, page, type) {
+  const robots = findMeta(html, 'name', 'robots')?.get('content')?.toLowerCase() ?? '';
+  if (!robots.includes('noindex')) fail(`${page}: private calculator route must be noindex`);
+  if (type === 'calculator/pro' && !html.includes('data-professional-calculator')) {
+    fail(`${page}: professional calculator marker is missing`);
+  }
+  if (type === 'calculator/refine' && !html.includes('data-roof-refinement')) {
+    fail(`${page}: roof refinement marker is missing`);
   }
 }
 
@@ -614,8 +615,11 @@ for (const { page, locale, type } of toolPages) {
 }
 for (const { page, type } of toolPages) {
   if (!pages.has(page)) continue;
-  if (type === 'calculator') validateCalculatorMarkup(pages.get(page), page);
+  if (type === 'calculator') validateQuickCalculatorMarkup(pages.get(page), page);
   if (type === 'offer-checker') validateOfferCheckerMarkup(pages.get(page), page);
+}
+for (const { page, type } of privateCalculatorPages) {
+  if (pages.has(page)) validatePrivateCalculatorMarkup(pages.get(page), page, type);
 }
 const publishedPages = new Set([
   'index.html',

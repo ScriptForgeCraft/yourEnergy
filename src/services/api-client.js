@@ -2,6 +2,7 @@ const defaultEndpoints = Object.freeze({
   geocode: '/api/geocode',
   potential: '/api/potential',
   analysis: '/api/analysis',
+  quickAnalysis: '/api/quick-analysis',
   lead: '/api/lead'
 });
 
@@ -84,6 +85,10 @@ export class ProductApiClient {
 
   analyze(input, options) {
     return this.request(this.endpoints.analysis, input, options);
+  }
+
+  quickAnalyze(input, options) {
+    return this.request(this.endpoints.quickAnalysis, input, options);
   }
 
   submitLead(lead, options) {

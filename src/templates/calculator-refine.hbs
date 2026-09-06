@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang='{{locale}}'>
+  <head>
+    <meta charset='UTF-8' /><meta name='viewport' content='width=device-width, initial-scale=1.0' /><meta name='robots' content='noindex,follow' />
+    <meta name='theme-color' content='#071a2d' /><title>{{meta.title}}</title><meta name='description' content='{{meta.description}}' />
+    <link rel='canonical' href='https://yourenergy.am{{path}}' />{{#each alternateLinks}}<link rel='alternate' hreflang='{{hreflang}}' href='{{href}}' />{{/each}}
+    <link rel='icon' href='/favicon.svg' type='image/svg+xml' /><link rel='stylesheet' href='/src/styles/main.css' />
+  </head>
+  <body class='calculator-page calculator-page--refine'>
+    <a class='skip-link' href='#main'>{{aria.skip}}</a>{{> site-header}}
+    <main id='main'><section class='tool-hero section'><div class='container tool-hero__inner'><p class='eyebrow'>{{refine.eyebrow}}</p><h1>{{refine.title}}</h1><p>{{refine.intro}}</p><a class='text-link' href='{{calculatorHref}}'>{{refine.back}}</a></div></section>
+      <section class='wizard section' data-roof-refinement><div class='container wizard__container'><p class='wizard-status form-status' data-refine-status aria-live='polite'></p>
+        <section class='wizard-step' data-refine-object><div class='wizard-step__heading'><span>01</span><div><p class='eyebrow'>{{refine.roof}}</p><h2>{{refine.title}}</h2><p>{{refine.intro}}</p></div></div>
+          <button class='button' type='button' data-refine-open-map>{{refine.openMap}}</button><div class='wizard-map-wrap' data-refine-map-wrap hidden><div class='property-map wizard-map' data-refine-map data-mode='location'></div></div>
+          <div class='point-confirmation' data-refine-point-confirmation hidden><strong>{{refine.selected}}</strong><output data-refine-pending-coordinates>—</output><button type='button' class='button' data-refine-confirm-point>{{refine.confirm}}</button></div>
+          <details class='wizard-details'><summary>{{refine.coordinates}}</summary><div class='wizard-coordinates'><label>{{refine.latitude}}<input type='number' step='any' inputmode='decimal' data-refine-latitude /></label><label>{{refine.longitude}}<input type='number' step='any' inputmode='decimal' data-refine-longitude /></label><button class='button button--outline' type='button' data-refine-use-coordinates>{{refine.setCoordinates}}</button></div></details>
+        </section>
+        <section class='wizard-step' data-refine-roof hidden tabindex='-1'><div class='wizard-step__heading'><span>02</span><div><p class='eyebrow'>{{refine.roof}}</p><h2>{{refine.roof}}</h2><p>{{refine.mapNotice}}</p></div></div>
+          <fieldset><legend>{{refine.roof}}</legend><label><input type='radio' name='refine-area-mode' value='outline' checked /> {{refine.outline}}</label><label><input type='radio' name='refine-area-mode' value='measured' /> {{refine.measured}}</label></fieldset>
+          <div data-refine-outline><div class='wizard-map-wrap'><div data-refine-roof-map-host></div></div><div class='roof-controls'><button class='button button--outline' type='button' data-refine-add>{{refine.add}}</button><button class='button button--outline' type='button' data-refine-undo>{{refine.undo}}</button><button class='button button--outline' type='button' data-refine-reset>{{refine.reset}}</button><button class='button' type='button' data-refine-finish>{{refine.finish}}</button></div><p class='roof-area-readout'><span>{{refine.preliminary}}</span><strong data-refine-area>—</strong></p></div>
+          <label data-refine-measured hidden>{{refine.area}}<div class='input-with-unit'><input type='number' min='0.01' step='0.1' inputmode='decimal' data-refine-measured-area /><span>m²</span></div></label>
+          <details class='wizard-details'><summary>{{refine.engineering}}</summary><div class='wizard-form-grid'><label>{{refine.azimuth}}<input type='number' min='0' max='359' step='1' value='180' data-refine-azimuth /></label><label>{{refine.tilt}}<input type='number' min='0' max='74' step='1' value='30' data-refine-tilt /></label></div></details>
+          <button class='button' type='button' data-refine-analyze>{{refine.calculate}}</button><p><a class='text-link' href='{{proHref}}'>{{refine.pro}}</a></p>
+        </section>
+        <section class='wizard-step' data-refine-result hidden tabindex='-1'><div class='wizard-step__heading'><span>03</span><div><p class='eyebrow'>{{refine.roof}}</p><h2>{{refine.resultTitle}}</h2><p>{{quick.disclaimer}}</p></div></div><div class='result-dashboard' data-refine-result-dashboard></div><p><a class='button button--outline' href='{{proHref}}'>{{refine.pro}}</a></p></section>
+      </div></section></main>{{> site-footer}}
+    <script id='page-config' type='application/json'>{{{pageConfig}}}</script><script type='module' src='/src/main.js'></script>
+  </body>
+</html>

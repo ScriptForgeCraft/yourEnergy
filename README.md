@@ -2,10 +2,9 @@
 
 Static, multilingual Vite site for `yourenergy.am` with an honest P1
 real-analysis flow. Homepages are Armenian (`/`), Russian (`/ru/`) and English
-(`/en/`); each locale has one five-step `/calculator/` wizard and one standalone,
-indexable `/offer-checker/` tool. It is not a SPA and does not deploy anything
-itself. The homepage is deliberately a fast marketing entry point; the full
-point, map, roof and analysis workflow lives only on the localized calculator route.
+(`/en/`). Each locale has an indexable consumer `/calculator/` Quick Calculator,
+a standalone indexable `/offer-checker/`, plus noindex `/calculator/refine/` and
+`/calculator/pro/` routes. It is not a SPA and does not deploy anything itself.
 
 The same site header and footer are rendered from shared Handlebars partials on
 home, calculator, offer-checker and support documents. Calculator navigation
@@ -30,29 +29,44 @@ workflow in one place.
 the visitor begins the map workflow. Vite, Handlebars, Sharp, ESLint and
 Prettier are development dependencies. There are no browser API keys.
 
-## 3. Real-analysis flow
+## 3. Calculator modes and real-analysis flow
 
-1. On `/calculator/`, a visitor deliberately places and confirms a manual map
-   point or enters coordinates. An address is only an optional label for an
-   engineer; it is not geocoded. Consumption is not required at this stage.
-2. `/api/geocode` is kept as a disabled future adapter. It is not a production
+`/calculator/` is the consumer entry point: region plus either average bill
+with an explicit tariff, or average kWh. It has no map, coordinate or roof
+editor in its initial HTML. `POST /api/quick-analysis` uses a versioned,
+representative regional PVGIS point and returns only a `regional-preliminary`
+estimate, never a result for the visitor's home.
+
+`/calculator/refine/` preserves that temporary browser session, then asks for a
+manual point and an outline or measured roof-plane area. `/calculator/pro/`
+retains the full professional workspace: coordinates, map/polygon controls,
+PVGIS diagnostic/retry, orientation, tilt, mounting, monthly consumption,
+tariff and in-memory bill upload.
+
+1. Quick Calculator gets its regional PVGIS result only after a visitor
+   deliberately submits consumption. A regional point is never shown as their
+   property address or roof location.
+2. In refinement/professional modes a visitor deliberately places and confirms
+   a manual map point or enters coordinates. An address is only an optional
+   label for an engineer; it is not geocoded.
+3. `/api/geocode` is kept as a disabled future adapter. It is not a production
    browser fallback until an approved geocoding provider is connected.
-3. `/api/potential` immediately returns a PVGIS **site-potential benchmark**:
+4. `/api/potential` returns a PVGIS **site-potential benchmark**:
    annual and monthly yield for **1 kWp** and PVGIS’s optimum orientation/tilt
    for a fixed free-standing system. The UI says explicitly that this is not a
    survey of the actual roof.
-4. Only after that, the visitor proceeds to the detailed step: they outline a
+5. A detailed visitor can outline a
    usable roof face or enter a measured roof-face area, select roof-parallel or
    elevated mounting, provide the actual direction and approximate tilt, and
    enter average or monthly electricity consumption. A map outline is a
    top-view area; it is converted to preliminary roof-face area only below 75°.
-5. `/api/analysis` asks the server-side PVGIS adapter for a **1 kWp** yield.
+6. `/api/analysis` asks the server-side PVGIS adapter for a **1 kWp** yield.
    Roof-parallel mounting uses the entered roof plane; elevated mounting uses
    the PVGIS fixed/free-standing benchmark. The pure domain layer scales that
    provider yield transparently from the entered consumption; the 14% PVGIS
    system-loss assumption appears in the ledger. A PVGIS failure shows
    retry/manual-contact, never demo data.
-6. A memory-only Solar Passport snapshots the result, its sources and its
+7. A memory-only Solar Passport snapshots the result, its sources and its
    assumptions. A permanent link/PDF is intentionally unavailable in P1.
 
 The dashboard, map, Passport, chart, ledger and all three system scenarios use
@@ -118,6 +132,8 @@ All endpoints are same-origin POST JSON and use the envelope
 `{ ok: true, data }` or `{ ok: false, error }`.
 
 - `/api/geocode` — disabled-by-default future provider adapter; never a confirmation.
+- `/api/quick-analysis` — regional PVGIS estimate from an explicit region and
+  consumption; never a property coordinate, roof survey or fallback result.
 - `/api/potential` — location-level PVGIS benchmark for a confirmed point;
   never a roof survey, layout, price or savings claim.
 - `/api/analysis` — PVGIS yield plus server-selected temporary price-book data;
@@ -129,14 +145,15 @@ server-side bindings. Copy `functions/.dev.vars.example` to the ignored
 `functions/.dev.vars` only for local Functions testing. Do not place any of
 those values in `VITE_*` variables.
 
-## 8. Homepage, map and roof editor
+## 8. Homepage, Quick Calculator, map and roof editor
 
 The homepage preserves the visual Roof Scan and static, clearly labelled example
 without loading calculator state, Leaflet or a file input. Its every calculation
-CTA points to the same-locale `/calculator/` route. On Calculator, an in-page
-five-step wizard keeps property, PVGIS potential, roof, consumption and result
-in one working area. Proposal Checker is a separate tool reached from Result. After
-a real/manual location action, Leaflet is lazy-loaded using geographic
+CTA points to the same-locale `/calculator/` Quick Calculator. Quick Calculator
+has a consumer-first regional estimate and hands the same temporary session to
+the roof-refinement or professional route; it has no hidden map controls or
+technical terms in its first view. Proposal Checker stays a separate tool.
+After a real/manual location action in refinement or professional mode, Leaflet is lazy-loaded using geographic
 coordinates; `CRS.Simple` is not part of the production analysis flow. The
 polygon supports click-to-add, marker drag, point selection, keyboard-accessible
 nudge, undo, reset and finish. A map outline is top-view area, not measured roof
@@ -157,8 +174,8 @@ capacity. Automatic roof detection requires an approved aerial/3D roof-data
 provider; until then, users enter/outline preliminary roof data and an engineer
 confirms it.
 
-`PVGIS_CACHE` is a mandatory Cloudflare KV binding for `/api/potential` and
-`/api/analysis`; `PVGIS_CACHE_SALT` is the corresponding server secret. The
+`PVGIS_CACHE` is a mandatory Cloudflare KV binding for `/api/quick-analysis`,
+`/api/potential` and `/api/analysis`; `PVGIS_CACHE_SALT` is the corresponding server secret. The
 cache retains a salted-hash key plus normalized provider response for seven
 days, never addresses, consumption, tariffs, roof polygons or leads. Without
 both settings the browser receives an honest disabled-service message rather
