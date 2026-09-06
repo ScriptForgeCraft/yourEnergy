@@ -31,7 +31,7 @@ test('PVGIS unavailable leaves Roof available and a retry preserves roof and con
   assert.equal(statuses.object, WIZARD_STEP_STATUSES.COMPLETE);
   assert.equal(statuses.potential, WIZARD_STEP_STATUSES.UNAVAILABLE);
   assert.equal(statuses.roof, WIZARD_STEP_STATUSES.AVAILABLE);
-  assert.equal(statuses.consumption, WIZARD_STEP_STATUSES.LOCKED);
+  assert.equal(statuses.consumption, WIZARD_STEP_STATUSES.AVAILABLE);
   assert.equal(statuses.result, WIZARD_STEP_STATUSES.LOCKED);
 
   const points = [

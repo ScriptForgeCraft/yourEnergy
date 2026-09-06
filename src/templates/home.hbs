@@ -126,19 +126,15 @@
               class='button button--outline'
               href='{{calculatorHref}}'
             >{{passport.cta}}</a>
-            <p class='passport-persistence' data-passport-persistence hidden><strong
-              >{{product.passport.persistenceTitle}}</strong><span>{{product.passport.persistenceCopy}}</span><span
-                >{{product.passport.permanentLink}}</span></p>
           </div>
-          <article class='passport-card' aria-label='{{passport.dialogTitle}}'>
+          <article class='passport-card' aria-label='{{passport.title}}'>
             <div class='passport-card__top'><span class='wordmark wordmark--small'><span
               >YOUR</span><strong>ENERGY</strong></span><span
                 class='pill'
-                data-passport-badge
               >{{passport.badge}}</span></div>
             <p class='passport-label'>{{passport.reportLabel}}</p>
-            <h3 data-analysis-location>{{passport.reportAddress}}</h3>
-            <p class='passport-date' data-passport-date>{{passport.reportDate}}</p>
+            <h3>{{passport.reportAddress}}</h3>
+            <p class='passport-date'>{{passport.reportDate}}</p>
             <div class='passport-card__visual'>
               <picture>
                 <source
@@ -165,15 +161,11 @@
               <span class='mini-panels' aria-hidden='true'></span><span class='demo-badge'>{{map.demo}}</span>
             </div>
             <dl class='passport-specs'>
-              <div><dt>{{passport.system}}</dt><dd
-                  data-analysis='capacity'
-                >{{passport.capacity}}</dd></div>
-              <div><dt data-passport-source-label>{{passport.source}}</dt><dd
-                  data-analysis='panels'
-                >{{passport.panels}}</dd></div>
+              <div><dt>{{passport.system}}</dt><dd>{{passport.capacity}}</dd></div>
+              <div><dt>{{passport.source}}</dt><dd>{{passport.panels}}</dd></div>
             </dl>
           </article>
-          <div class='generation-card' data-chart-card>
+          <div class='generation-card'>
             <h3>{{passport.chartTitle}}</h3>
             <p id='generation-chart-description'>{{passport.chartDescription}}</p>
             <div class='bar-chart' aria-describedby='generation-chart-description'>
@@ -184,18 +176,13 @@
                   style='--bar-height: {{percent}}%;'
                   title='{{short}} · {{name}}: {{value}} kWh'
                   aria-label='{{short}} · {{name}}: {{value}} kWh'
-                  data-chart-bar
-                  data-short='{{short}}'
-                  data-month='{{name}}'
-                  data-value='{{value}}'
                 ><span class='chart-bar__fill'></span><span>{{short}}</span></button>
               {{/each}}
             </div>
             <details class='chart-data'><summary>{{passport.tableTitle}}</summary><table><caption
                   class='visually-hidden'
                 >{{passport.tableTitle}}</caption><thead><tr><th scope='col'>{{passport.monthLabel}}</th><th scope='col'>kWh</th></tr></thead><tbody
-                >{{#each passport.months}}<tr><td>{{name}}</td><td
-                      data-chart-value>{{value}}</td></tr>{{/each}}</tbody></table></details>
+                >{{#each passport.months}}<tr><td>{{name}}</td><td>{{value}}</td></tr>{{/each}}</tbody></table></details>
           </div>
         </div>
       </section>
@@ -219,20 +206,18 @@
               >{{solutions.title}}</h2></div><p>{{solutions.copy}}</p></div>
           <div class='solution-grid'>
             {{#each solutions.items}}
-              <article class='solution-card {{cardClass}}' data-analysis-scenario='{{@index}}'>
-                {{#if badge}}<span class='solution-badge' data-analysis-solution-badge>{{badge}}</span>{{/if}}
-                <span class='solution-badge' data-analysis-scenario-live hidden>{{../product.solutions.liveBadge}}</span>
+              <article class='solution-card {{cardClass}}'>
+                {{#if badge}}<span class='solution-badge'>{{badge}}</span>{{/if}}
                 <p class='solution-index'>0{{@index}}</p><h3>{{name}}</h3><p>{{subtitle}}</p>
-                <dl><div><dt>kWp</dt><dd data-analysis-scenario-capacity data-static-value='{{capacity}}'>{{capacity}}</dd></div><div><dt>kWh</dt><dd
-                    data-analysis-scenario-generation data-static-value='{{generation}}'>{{generation}}</dd></div></dl>
-                <strong class='solution-price' data-analysis-scenario-price data-static-value='{{price}}'>{{price}}</strong>
+                <dl><div><dt>kWp</dt><dd>{{capacity}}</dd></div><div><dt>kWh</dt><dd>{{generation}}</dd></div></dl>
+                <strong class='solution-price'>{{price}}</strong>
                 <details><summary>{{detailsLabel}}</summary><ul>{{#each details}}<li
                       >{{this}}</li>{{/each}}</ul></details>
                 <a class='button {{buttonClass}}' href='{{../solutionHref}}'>{{ctaLabel}}</a>
               </article>
             {{/each}}
           </div>
-          <p class='section-disclosure' data-analysis-scenario-disclosure data-static-value='{{solutions.disclaimer}}'>{{solutions.disclaimer}}</p>
+          <p class='section-disclosure'>{{solutions.disclaimer}}</p>
         </div>
       </section>
 
@@ -276,11 +261,8 @@
                       loading='lazy'
                       decoding='async'
                     /></picture><span class='demo-badge'>{{badgeLabel}}</span></div>
-                <div class='project-card__body'><h3>{{city}}</h3>{{#if featured}}<dl
-                      class='project-before-after'
-                    ><div><dt>{{beforeLabel}}</dt><dd>{{before}}</dd></div><div><dt
-                        >{{afterLabel}}</dt><dd>{{after}}</dd></div></dl>{{/if}}<ul role='list'><li
-                    >{{capacity}}</li><li>{{generation}}</li><li>{{payback}}</li></ul></div>
+                <div class='project-card__body'><h3>{{city}}</h3><ul role='list'><li
+                    >{{capacity}}</li><li>{{generation}}</li></ul></div>
               </article>
             {{/each}}
           </div>
@@ -297,65 +279,6 @@
                   aria-hidden='true'
                 ><use href='/icons.svg#{{icon}}'></use></svg><h3>{{title}}</h3><p
                 >{{copy}}</p></li>{{/each}}</ol>
-        </div>
-      </section>
-
-      <section class='finance section' id='investment' aria-labelledby='finance-title' >
-        <div class='container finance-grid'>
-          <div class='finance-copy'><p class='eyebrow eyebrow--dark'>{{finance.eyebrow}}</p><h2
-              id='finance-title'
-            >{{finance.title}}</h2><p>{{finance.copy}}</p><ul
-              class='check-list check-list--dark'
-              role='list'
-            >{{#each finance.benefits}}<li><svg class='inline-icon' aria-hidden='true'><use
-                      href='/icons.svg#check'
-                    ></use></svg>{{this}}</li>{{/each}}</ul></div>
-          <div class='finance-chart'><h3>{{finance.timelineTitle}}</h3><svg
-              class='finance-line'
-              viewBox='0 0 650 250'
-              role='img'
-              aria-label='{{finance.timelineTitle}}'
-              data-finance-chart
-              data-finance-title='{{finance.timelineTitle}}'
-            ><path
-                data-finance-line-path
-                d=''
-                fill='none'
-                stroke='#f5bd18'
-                stroke-width='4'
-                stroke-linecap='round'
-              ></path><path
-                data-finance-baseline
-                d=''
-                fill='none'
-                stroke='rgba(255,255,255,.22)'
-                stroke-width='1'
-              ></path><circle data-finance-point cx='30' cy='192' r='6' fill='#f5bd18' visibility='hidden'></circle><circle
-                data-finance-point
-                cx='178'
-                cy='177'
-                r='6'
-                fill='#f5bd18'
-                visibility='hidden'
-              ></circle><circle data-finance-point cx='250' cy='143' r='6' fill='#f5bd18' visibility='hidden'></circle><circle
-                data-finance-point
-                cx='410'
-                cy='86'
-                r='6'
-                fill='#f5bd18'
-                visibility='hidden'
-              ></circle><circle data-finance-point cx='623' cy='26' r='6' fill='#f5bd18' visibility='hidden'></circle></svg><ol
-                class='finance-timeline'
-                role='list'
-            >{{#each finance.timeline}}<li><span data-analysis-timeline-year>{{year}}</span><strong
-                  data-analysis-timeline='{{@index}}'
-                  >{{../finance.awaiting}}</strong></li>{{/each}}</ol></div>
-          <div class='finance-included'><h3>{{finance.includedTitle}}</h3><ul role='list'>{{#each
-                finance.included
-              }}<li><svg class='inline-icon' aria-hidden='true'><use
-                      href='/icons.svg#check'
-                    ></use></svg>{{this}}</li>{{/each}}</ul></div>
-          <p class='finance-disclaimer' data-analysis-finance-disclaimer>{{finance.disclaimer}}</p>
         </div>
       </section>
 
@@ -438,59 +361,6 @@
               class='equipment-documents__disclosure'
             >{{equipment.documentsDisclosure}}</p></div></div></section>
 
-      <section
-        class='myenergy section section--soft'
-        id='myenergy'
-        aria-labelledby='myenergy-title'
-      ><div class='container myenergy-grid'><div><p class='eyebrow'>{{myEnergy.eyebrow}}</p><h2
-              id='myenergy-title'
-            >{{myEnergy.title}}</h2><p>{{myEnergy.copy}}</p><a
-              class='button'
-              href='{{supportBase}}/soon/#account'
-            >{{myEnergy.cta}}</a><p class='section-disclosure'>{{myEnergy.note}}</p></div><div
-            class='myenergy-dashboard'
-            aria-label='MyEnergy {{common.demo}}'
-          ><div class='dashboard-top'><span class='pulse'></span><span>YOURENERGY · MyEnergy</span><span
-                class='pill'
-              >{{common.soon}}</span></div><div class='dashboard-grid'>{{#each
-                myEnergy.metrics
-              }}<div><span>{{label}}</span><strong>{{value}}</strong></div>{{/each}}</div><div
-              class='dashboard-wave'
-              aria-hidden='true'
-            ><span></span><span></span><span></span><span></span><span></span><span></span><span
-              ></span></div></div></div></section>
-
-      <section
-        class='testimonials section'
-        id='testimonials'
-        aria-labelledby='testimonials-title'
-      ><div class='container'><div class='section-heading section-heading--actions'><div><p
-                class='eyebrow'
-              >{{testimonials.eyebrow}}</p><h2
-                id='testimonials-title'
-              >{{testimonials.title}}</h2></div><p>{{testimonials.disclosure}}</p></div><div
-            class='testimonials-toolbar'
-          ><span class='demo-badge'>{{common.demo}}</span><div><button
-                class='round-button'
-                type='button'
-                data-testimonial-direction='-1'
-                aria-label='{{aria.previousTestimonial}}'
-              >←</button><button
-                class='round-button'
-                type='button'
-                data-testimonial-direction='1'
-                aria-label='{{aria.nextTestimonial}}'
-              >→</button></div></div><div
-            class='testimonials-track'
-            data-testimonials-track
-            tabindex='0'
-          >{{#each testimonials.items}}<blockquote class='testimonial'><svg
-                  class='quote-mark'
-                  aria-hidden='true'
-                ><use href='/icons.svg#quote'></use></svg><p>«{{quote}}»</p><footer><strong
-                  >{{name}}</strong><span
-                  >{{city}}</span></footer></blockquote>{{/each}}</div></div></section>
-
       <section class='faq section section--soft' id='faq' aria-labelledby='faq-title'><div
           class='container faq-layout'
         ><div><p class='eyebrow'>{{faq.eyebrow}}</p><h2 id='faq-title'>{{faq.title}}</h2></div><div
@@ -511,35 +381,6 @@
 
     {{> site-footer}}
 
-    <dialog class='passport-dialog' data-passport-dialog aria-labelledby='dialog-title'><form
-        method='dialog'
-        class='dialog-close'
-      ><button class='round-button' aria-label='{{passport.close}}'><span
-            aria-hidden='true'
-          >×</span></button></form><div class='dialog-content'><p
-          class='eyebrow'
-        data-passport-dialog-eyebrow
-        >{{passport.reportLabel}} · {{common.demo}}</p><h2
-          id='dialog-title'
-          data-passport-dialog-title
-        >{{passport.dialogTitle}}</h2><div class='dialog-report'><article class='passport-card'><div
-              class='passport-card__top'
-            ><span class='wordmark wordmark--small'><span>YOUR</span><strong
-                >ENERGY</strong></span><span class='pill' data-passport-badge>{{passport.badge}}</span></div><p
-              class='passport-label'
-            >{{passport.reportLabel}}</p><h3
-              data-analysis-location
-            >{{passport.reportAddress}}</h3><dl class='passport-specs'><div><dt
-                >{{passport.system}}</dt><dd
-                  data-analysis='capacity'
-                >{{passport.capacity}}</dd></div><div><dt data-passport-source-label>{{passport.source}}</dt><dd
-                  data-analysis='panels'
-                >{{passport.panels}}</dd></div></dl></article><div class='dialog-numbers'><h3
-            >{{passport.chartTitle}}</h3><dl>{{#each metrics}}<div><dt>{{label}}</dt><dd
-                    data-analysis='{{key}}'
-                  >{{value}} {{unit}}</dd></div>{{/each}}</dl><p
-            >{{finance.disclaimer}}</p></div></div></div></dialog>
-
-    <script type='module' src='/src/home.js'></script>
+    <script type='module' src='/src/main.js'></script>
   </body>
 </html>

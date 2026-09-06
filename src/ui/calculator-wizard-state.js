@@ -1,10 +1,4 @@
-export const WIZARD_STEP_KEYS = Object.freeze([
-  'object',
-  'potential',
-  'roof',
-  'consumption',
-  'result'
-]);
+export const WIZARD_STEP_KEYS = Object.freeze(['object', 'consumption', 'roof', 'result']);
 
 export const WIZARD_STEP_STATUSES = Object.freeze({
   LOCKED: 'locked',
@@ -56,8 +50,9 @@ export const applyPotentialOutcome = (state, { status, potential = null } = {}) 
 });
 
 /**
- * Availability is not a linear pipeline. Roof and consumption can be prepared
- * while PVGIS is retryable; the result remains closed until analysis succeeds.
+ * Availability is not a linear pipeline. The consumer path is Object →
+ * Consumption → Roof → Result. PVGIS is an independent enrichment of Object,
+ * so it never blocks either user-input step.
  */
 export const deriveWizardStepStates = ({
   confirmedProperty,
@@ -75,12 +70,11 @@ export const deriveWizardStepStates = ({
     object: propertyConfirmed ? status.COMPLETE : status.AVAILABLE,
     potential: propertyConfirmed ? potentialStatus(currentPotentialStatus) : status.LOCKED,
     roof: propertyConfirmed ? (roofReady ? status.COMPLETE : status.AVAILABLE) : status.LOCKED,
-    consumption:
-      propertyConfirmed && roofReady
-        ? consumptionReady
-          ? status.COMPLETE
-          : status.AVAILABLE
-        : status.LOCKED,
+    consumption: propertyConfirmed
+      ? consumptionReady
+        ? status.COMPLETE
+        : status.AVAILABLE
+      : status.LOCKED,
     result:
       analysisStatus === status.COMPLETE
         ? status.COMPLETE

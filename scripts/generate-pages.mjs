@@ -162,7 +162,10 @@ const createJsonLd = (content, { includeFaq = true } = {}) => {
 const createPageConfig = (content, extra = {}) => ({
   locale: runtimeLocales[content.locale],
   status: content.status,
-  product: content.product,
+  product: {
+    ...content.product,
+    passport: { months: content.passport.months }
+  },
   map: {
     image: '/images/roof-scan-768.webp',
     tileUrl: publicEnv.VITE_MAP_TILE_URL?.trim() || DEFAULT_OSM_TILE_URL,
@@ -188,15 +191,13 @@ const createHomeContext = (content, { pageKind = 'home' } = {}) => {
     headerCtaHref: calculatorHref,
     navLinks: {
       home: content.homeHref,
-      business: `${content.supportBase}/soon/#business`,
       projects: homeSectionHref('#projects'),
       process: homeSectionHref('#process'),
       about: homeSectionHref('#engineering'),
-      blog: `${content.supportBase}/soon/#blog`,
       contacts: '#contacts'
     },
     solutionHref: calculatorHref,
-    offerCheckerHref: `${calculatorHref}#offer-checker`,
+    offerCheckerHref: toolPath(content.locale, 'offer-checker'),
     alternateLinks: publishedAlternateLinks,
     languageLinks: createLanguageLinks(content.locale),
     solutions: {
@@ -234,9 +235,7 @@ const createHomeContext = (content, { pageKind = 'home' } = {}) => {
           ? '(max-width: 720px) 82vw, 52vw'
           : '(max-width: 720px) 82vw, 24vw',
         illustrativeLabel: content.common.illustrative,
-        badgeLabel: content.projects.badge,
-        beforeLabel: content.projects.before,
-        afterLabel: content.projects.after
+        badgeLabel: content.projects.badge
       }))
     },
     process: {
@@ -258,7 +257,7 @@ const createCalculatorContext = (content) => {
   if (!wizard) throw new Error(`Missing calculator wizard copy for ${content.locale}.`);
 
   const path = toolPath(content.locale, 'calculator');
-  const base = createHomeContext(content);
+  const base = createHomeContext(content, { pageKind: 'calculator' });
   return {
     ...base,
     path,
@@ -354,18 +353,6 @@ for (const { key } of GENERATED_CONTENT_LOCALES) {
   await writeGenerated(output, renderOfferChecker(createOfferCheckerContext(content)));
 }
 
-const commonSoonAnchors = [
-  'business',
-  'blog',
-  'team',
-  'certificates',
-  'career',
-  'warranty',
-  'service',
-  'documents',
-  'account'
-];
-
 const supportPages = [
   [
     'privacy/index.html',
@@ -389,19 +376,6 @@ const supportPages = [
       title: 'Օգտագործման պայմաններ',
       copy: 'Կայքում ցուցադրված հաշվարկներն ու նախագծերը ցուցադրական օրինակներ են և չեն հանդիսանում առևտրային առաջարկ։',
       back: 'Վերադառնալ գլխավոր էջ'
-    }
-  ],
-  [
-    'soon/index.html',
-    {
-      locale: 'hy',
-      path: '/soon/',
-      homeHref: '/',
-      label: 'Շուտով',
-      title: 'Այս բաժինը պատրաստվում է',
-      copy: 'Մենք կառուցում ենք բիզնես լուծումների, բլոգի, փաստաթղթերի և MyEnergy անձնական հաշվի ամբողջական բաժինները։',
-      back: 'Վերադառնալ գլխավոր էջ',
-      anchors: commonSoonAnchors
     }
   ],
   [
@@ -429,19 +403,6 @@ const supportPages = [
     }
   ],
   [
-    'ru/soon/index.html',
-    {
-      locale: 'ru',
-      path: '/ru/soon/',
-      homeHref: '/ru/',
-      label: 'Скоро',
-      title: 'Этот раздел готовится',
-      copy: 'Мы готовим полноценные разделы для бизнеса, блога, документов и личного кабинета MyEnergy.',
-      back: 'Вернуться на главную',
-      anchors: commonSoonAnchors
-    }
-  ],
-  [
     'en/privacy/index.html',
     {
       locale: 'en',
@@ -463,19 +424,6 @@ const supportPages = [
       title: 'Terms of use',
       copy: 'The estimates and projects shown on this site are demonstration examples and do not constitute a commercial offer.',
       back: 'Back to homepage'
-    }
-  ],
-  [
-    'en/soon/index.html',
-    {
-      locale: 'en',
-      path: '/en/soon/',
-      homeHref: '/en/',
-      label: 'Coming soon',
-      title: 'This section is being prepared',
-      copy: 'We are preparing detailed pages for business solutions, the blog, documents and the MyEnergy account.',
-      back: 'Back to homepage',
-      anchors: commonSoonAnchors
     }
   ]
 ];

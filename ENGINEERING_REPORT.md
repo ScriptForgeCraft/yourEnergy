@@ -1,235 +1,196 @@
-# YOURENERGY — P1 honest PVGIS Roof Flow handoff
+# YOURENERGY — consumer-first refactor engineering report
 
-Дата проверки: 1 сентября 2026. Тестовый Cloudflare Pages URL предоставлен
-владельцем, но текущая переработка ещё не деплоится автоматически.
+Date of verification: 7 September 2026
 
-## 1. Структура
+## 1. Structure and routes
 
-Vite MPA генерирует семантический HTML из Handlebars до запуска браузера.
-Опубликованные homepage-маршруты: Armenian `/`, Russian `/ru/` и English
-`/en/`; для каждой локали добавлен единый пятишаговый `/calculator/` и отдельный,
-индексируемый `/offer-checker/`.
-Главная страница — быстрый marketing entry; полный address/map/roof/PVGIS
-workflow живёт только на одноимённой локализованной странице Calculator.
-Header и footer теперь едины на home, calculator, Offer Checker и support-документах;
-wizard Calculator управляет пятью последовательными шагами без перехода на другой URL.
-Privacy, Terms и Soon существуют для всех трёх локалей и имеют `noindex`.
-В `functions/` лежат Cloudflare Pages Functions, а расчётная логика отделена
-в `src/domain/`.
+The site remains a Vite MPA. Handlebars generates static semantic HTML before
+the browser starts. Published, indexable routes are Home, Calculator and Offer
+Checker in Armenian (`/`), Russian (`/ru/`) and English (`/en/`). Privacy and
+Terms are available in all three languages and remain `noindex` legal drafts.
 
-## 2. Визуальное соответствие референсу
+The generated production build contains 15 routes. `/soon/` and its locale
+variants are no longer generated, linked, included in the sitemap or retained
+as redirects. Common header and footer partials are used by marketing, tool and
+legal pages; `ENERGY` keeps the required `#F5BD18` wordmark colour.
 
-Сохранены asymmetric hero, Roof Scan, Solar Passport, тёмная trust-полоса,
-карты решений, editorial projects, шестишаговый процесс, navy investment
-section и плотный footer. Homepage больше не раскрывает сложную форму и карту:
-её CTA ведут на Calculator, поэтому первый экран остаётся понятным и быстрым.
-Адаптивная проверка на 320, 375, 430, 768, 1024, 1280 и 1440 px не нашла
-горизонтального overflow. Неподтверждённые статические карточки имеют
-видимые маркировки illustrative/demo; они не выдаются за результат введённого
-адреса.
+## 2. Homepage
 
-## 3. Зависимости
+The homepage is now consumer-first: hero, what the calculation provides,
+example Solar Passport/result, typical configurations, process, company and
+engineer trust, equipment documentation, FAQ, final CTA and footer.
 
-Единственная runtime dependency — `leaflet`; она загружается отдельным
-chunk только после начала map workflow. Dev dependencies: Vite, Handlebars,
-Sharp, ESLint, `@eslint/js`, globals и Prettier. `npm ls --depth=0` подтверждён;
-свежий `npx --yes knip --dependencies` не нашёл неиспользуемых declared
-dependencies. Устаревший модуль `CRS.Simple` удалён.
+The hero has one primary calculation CTA. PVGIS is explained as methodology,
+not a marketing promise. Static figures are explicitly marked as example data
+or an example result; none is presented as a visitor's personalised output.
+The former static finance panel was removed because it implied a calculation
+before the visitor supplied inputs.
 
-## 4. Честный PVGIS Roof Flow
+## 3. Calculator wizard
 
-1. На отдельной странице Calculator посетитель сначала вручную выбирает и
-   подтверждает точку на карте либо вводит координаты; адрес — только
-   необязательная подпись для инженера и не геокодируется. Потребление на этом
-   шаге не требуется.
-2. `/api/geocode` остаётся выключенным future-adapter до подключения
-   утверждённого provider; он не является browser fallback.
-3. После подтверждения `/api/potential` запрашивает PVGIS для этой точки и
-   показывает годовую/месячную генерацию на 1 kWp, а также ориентир optimum
-   orientation/tilt для свободно стоящей фиксированной системы. Это отдельный
-   статус «Потенциал участка», а не заявление об угле реальной крыши.
-4. Только затем посетитель продолжает в detailed flow: на geographic Leaflet
-   map строит контур доступного ската **либо** вводит измеренную площадь
-   плоскости, указывает монтаж, направление и примерный наклон. Контур — это
-   площадь сверху; до 75° она предварительно переводится в площадь ската, а
-   для более крутого ската требуется измеренная площадь. Клавиатурный fallback
-   позволяет выбрать центр карты, затем подтвердить точку. Можно выбрать точку
-   контура, сдвинуть её, отменить или сбросить контур.
-5. `/api/analysis` запрашивает server-side PVGIS yield для 1 kWp и прозрачно
-   масштабирует его от введённого потребления. Для `roof-parallel` используется
-   введённая плоскость ската; для `elevated` — PVGIS-ориентир свободно стоящей
-   конструкции. Любой запрос требует KV-кэш и salt; ошибка даёт
-   retry/manual-contact, а не demo-цифры.
-6. Dashboard, карта, Passport, chart, ledger и три варианта системы получают
-   один `SolarAnalysis`; финансовые поля скрываются, если их источники не
-   подтверждены. `dataCompleteness` никогда не выше `preliminary`.
-7. Если provider/configuration недоступны, UI показывает ошибку и очищенные
-   значения, а не demo-результат.
+There is one `CalculatorWizardController`-style controller and one browser
+session state source. Its visible consumer path is:
 
-## 5. Consumption, tariffs и расчёт
+1. Property — choose and confirm a point; address is only an optional note.
+2. Consumption — average bill with an explicit tariff, average kWh, or the
+   twelve-month engineering input.
+3. Roof — outline the available roof or enter a measured roof-plane area.
+4. Result — available only after a successful same-origin `/api/analysis`.
 
-Pure domain-модули содержат JSDoc-модели Property, Consumption, Roof, Tariff,
-SolarAnalysis, SolarPassport и DataCompleteness. `ARMENIA_TARIFF_DATASET` versioned,
-но намеренно не содержит неподтверждённой ставки. Пользователь может ввести
-AMD/kWh из собственного счёта: ledger и Passport прямо показывают источник
-`user`, а без usable tariff savings и payback скрыты.
+Coordinates, PVGIS diagnostics and retry, monthly profile, bill upload,
+orientation, tilt, mounting mode and other detailed inputs are retained inside
+native `details` disclosures labelled “Engineering parameters”. Opening or
+closing them does not reset the shared state.
 
-Контур крыши теперь влияет на предварительную мощность: server-side сначала
-получает предварительную площадь плоскости ската, затем применяет
-консервативные 70% этой площади и модуль 580 W / 2 м². Оба допущения
-видны в ledger. Это ограничение вместимости, а не раскладка панелей и не
-инженерное измерение.
+## 4. PVGIS, roof and map behaviour
 
-Для предварительного бюджета server-side выбирает единственный versioned
-`PriceBook`: `yourenergy-am-residential-grid-v0-1`, проверен 29.08.2026,
-действует 30 дней до 28.09.2026. Диапазон 232 / 247 / 264 AMD/Wp округляется
-до 10 000 AMD; P50 — основной ориентир. Это «Предварительная цена YOUR ENERGY
-· v0.1 · не является офертой», а не рыночное доказательство. Включены панели,
-инвертор, крепёж, стандартный монтаж и базовое подключение; исключены батарея,
-ремонт крыши, нестандартные электрические работы и финансирование. НДС и
-разрешения требуют подтверждения. После expiry цена скрывается и предлагается
-обследование. Статический Offer Checker не выводит числовой диапазон без
-JavaScript; браузер проверяет срок `validUntil` перед его показом.
+PVGIS stays server-side: browser → same-origin Cloudflare Pages Function →
+PVGIS. A confirmed point starts `/api/potential` in the background. Its status
+is independent (`locked`, `available`, `loading`, `complete`, `unavailable`)
+from Object, Consumption, Roof and Result.
 
-## 6. Real versus demo content
+Therefore a PVGIS failure exposes an honest retry/continue state but does not
+clear the point, roof, consumption, tariff or in-memory bill file, and does not
+block Roof or Consumption. It never yields demo PVGIS values. A later retry
+updates only potential state.
 
-Контакты предоставлены владельцем и показаны как реальные: `+374 91 095 950`,
-Artashisyan 48 14 Kotayq, Zovuni, 26 33 str, Yerevan. Проекты, отзывы, люди,
-изображения, статические варианты систем и фиксированные финансовые цифры
-остаются clearly labelled illustrative/demo. Runtime demo-анализатор удалён:
-`ProductApiClient` никогда не подставляет демонстрационный ответ вместо
-provider-ответа.
+The lazy Leaflet map uses OSM with attribution and zoom 19. It has no satellite
+or auto-roof-detection claim. The same in-flow map supports point selection,
+add vertex, click a vertex to delete it, drag a vertex, undo, reset and finish.
+The map outline is labelled “Preliminary area from outline”; it is not called a
+survey. Measured roof-plane area remains an alternative. Keyboard centre-point
+controls now avoid reusing a deleted starter vertex, so they cannot create a
+zero-area duplicate after an edit.
 
-На home добавлен компактный блок проверяемой юридической информации. Он
-использует только безопасные сведения из предоставленных выписки и устава:
-юридическое лицо, дату и номера регистрации, ИНН, юридический адрес и
-контрольный номер для `verify.e-gov.am`. Исходные PDF не публикуются, поскольку
-содержат персональные идентификаторы. Блок не выдаётся за лицензию монтажника,
-страховку, гарантию или подтверждение применимости оборудования.
+## 5. Financial semantics and calculation parity
 
-Прямая кнопка звонка использует этот подтверждённый номер. Публичный e-mail
-владелец пока не предоставил, поэтому сайт не придумывает адрес и не выводит
-ложную кнопку `mailto:`.
+No calculation formula, unit, rounding rule, PVGIS normalisation, roof-area
+conversion, PriceBook rule, finance calculation or Offer Checker rule was
+changed by this refactor.
 
-04.09.2026 добавлен доступный без JavaScript раздел «Техническая документация
-оборудования» с четырьмя предоставленными PDF в `public/documents/`: двумя
-листами LONGi 640–665 W, листом инвертора SolaX X1-Lite-LV и батареи SolaX
-T-BAT-SYS-LV D53. Карточки показывают только параметры, стандарты и гарантийные
-формулировки, которые заявлены в соответствующем PDF, и всегда дают ссылку на
-первичный файл. Это product data sheets, а не лицензии YOUR ENERGY, не
-доказательство авторизации производителя, наличия на складе или применимости
-для конкретной крыши. Для настоящего trust-блока по компании нужны отдельно
-проверенные регистрационные, страховые, монтажные и гарантийные документы с
-разрешением на публикацию.
+- Average bill in AMD requires an explicit user tariff before consumption can be
+  derived. Its label, help text, `required` and `aria-required` switch together.
+- Average kWh and a twelve-month profile work without a tariff.
+- Without an explicit usable tariff, savings, payback and the finance timeline
+  remain absent. There is no registry, demo, hidden or fallback tariff.
+- PriceBook P25/P50/P75 remains available while valid; it is a preliminary
+  budget, not an offer.
 
-## 7. API, security и env
+`test/calculation-parity.test.js` fixes a deterministic pre-refactor domain
+fixture and asserts identical results: 1,500 kWh/kWp, a normalised monthly
+profile, 7.54 kWp, 13 panels, 100 m² roof area, 1.75m / 1.86m / 1.99m AMD
+P25/P50/P75, 11,310 kWh annual generation, 588,120 AMD annual savings,
+3.162619873495205-year payback, 12.843m AMD timeline endpoint, Passport
+values and a 247 AMD/Wp Offer Checker verdict. No engine exception was needed.
 
-Есть same-origin JSON endpoints:
+## 6. Result and Solar Passport
 
-- `POST /api/geocode` — выключенный по умолчанию future provider-adapter;
-- `POST /api/potential` — PVGIS site-benchmark для подтверждённой точки;
-- `POST /api/analysis` — ручная плоскость крыши + PVGIS + ledger;
-- `POST /api/lead` — валидированный lead после результата.
+The result begins with capacity, panel count, annual generation, coverage and
+P25/P50/P75 preliminary budget. Savings and payback appear only if their tariff
+precondition is met. Monthly chart, assumptions, sources, limitations and the
+Passport follow rather than competing with core homeowner outcomes.
 
-Все provider, CRM и Turnstile secrets читаются только server-side из
-`functions/.dev.vars`; `.env.example` содержит лишь публичные endpoint/map
-поля. `PVGIS_CACHE` — обязательный Cloudflare KV binding, а
-`PVGIS_CACHE_SALT` — обязательный secret. Ключ кэша — salted hash
-нормализованного PVGIS-запроса; в KV остаётся только normalized PVGIS answer с
-timestamp на 7 дней, без адреса, расхода, тарифа или точек контура. API до
-вызова PVGIS отвергает неподтверждённый объект, координаты вне Армении,
-незавершённую/некорректную крышу и игнорирует client capex: активный PriceBook
-выбирается на сервере.
-OpenStreetMap — явный публичный fallback tile provider с attribution;
-`VITE_MAP_TILE_URL` можно заменить только на утверждённый HTTPS origin, который
-Vite добавит в `img-src` CSP. Functions не логируют адрес, координаты или lead
-PII.
+Solar Passport opens only from a successful result in a native dialog. It is a
+snapshot of current browser-session analysis and clearly does not promise PDF,
+a permanent URL, a cloud history or an account history.
 
-До установки KV binding и `PVGIS_CACHE_SALT` на Pages `/api/potential` и
-`/api/analysis` намеренно отвечают `PVGIS_CACHE_NOT_CONFIGURED`. Это
-безопасное состояние: публичный сайт не выполняет безлимитные запросы к
-бесплатному PVGIS и не подставляет демонстрационные цифры. После настройки
-нужен отдельный живой smoke: ручная точка в Армении → potential → контур →
-analysis → Passport.
+## 7. Demo content and removed legacy code
 
-OSM не является спутниковой/3D моделью. Поэтому адрес и карта не могут честно
-определить фактический наклон, полезную площадь, затенение или несущую
-способность крыши. Для автоматического roof-scan нужен отдельный approved
-aerial/3D roof provider; до его подключения используются ручной контур,
-введённые параметры и обязательная инженерная проверка.
+Typical project cards remain because they explain system configurations, but no
+longer claim client names, actual addresses, installation dates, savings or
+completed installations. Each has a compact example marker.
 
-## 8. Passport, lead и analytics
+The following obsolete functionality was deleted rather than hidden:
 
-`SolarPassportRepository` — memory-only реализация P1: permanent URL и PDF
-честно недоступны. Lead form требует имя, телефон и consent; без CRM не
-показывает успех. Turnstile adapter подготовлен, но не заявляется работающим
-без настроенного site key/secret. Browser analytics публикует только
-локальные события без PII.
+- testimonials markup, data, scroller branch, styling and related content;
+- MyEnergy teaser/content/references;
+- `/soon/` templates and generated Armenian/Russian/English routes;
+- old homepage finance/dashboard markup and its unused dialog/ledger modules;
+- unused `src/home.js`, `src/ui/dialogs.js`, `src/ui/analysis-ledger.js` and
+  the unused browser analytics event module;
+- old calculator workspace/offer UI, selectors and media-query leftovers;
+- stale tool CSS for removed card/layout variants.
 
-## 9. SEO, i18n и accessibility
+`test/removed-features.test.js` and post-build validation reject the removed
+route, old selectors and future/navigation labels. Repository searches were
+also run for testimonials, MyEnergy, `/soon/`, legacy calculator selectors and
+the removed CSS classes.
 
-Основной HTML crawlable без JavaScript. Есть localized title/description/OG,
-canonical и reciprocal `hy`/`ru`/`en`/`x-default` hreflang, FAQ JSON-LD,
-а sitemap включает home, calculator и Offer Checker для трёх локалей.
-Маршруты Privacy/Terms/Soon — noindex.
-Проверены один H1, landmarks, skip-link, visible labels/errors, `aria-live`,
-native dialog с Escape/focus return, native details, keyboard map controls,
-reduced motion и текстовые chart/table alternatives.
+## 8. SEO, content and accessibility
 
-## 10. QA
+Canonical URLs, reciprocal HY/RU/EN hreflang, one H1 per page, semantic
+landmarks, static content, FAQ JSON-LD and the sitemap remain intact. The
+sitemap contains Home, Calculator and standalone Offer Checker only. There is
+no Product/Offer structured data for the temporary PriceBook.
 
-Финальный локальный прогон от 04.09.2026 прошёл успешно:
+The tools retain skip links, visible focus, labels, live status/error regions,
+keyboard-accessible native details/dialog controls, 44 px map/action controls,
+text alternatives for charts and no-JS semantic content. The calculator uses
+one `aria-current` marker for the opened step while status is stored separately
+for each step and PVGIS enrichment.
 
-- `npm test` — 43/43 Node unit/API tests;
-- `npm run lint` и `npm run format:check` — без замечаний;
-- `npm run build` — production build завершён;
-- `npm run verify:build` — 18 маршрутов прошли structural/SEO validation.
+## 9. Dependencies and performance
 
-Новые проверки покрывают area conversion и запрет слишком крутого контура,
-measured roof-face без polygon, границу Армении до PVGIS, обязательные KV/salt,
-TTL 7 дней и отсутствие private data в cache record, cache hit без повторного
-PVGIS-вызова, elevated benchmark и правило «только preliminary». Общий набор
-также покрывает consumption/tariffs, finite values, Passport memory flow,
-API envelopes, PVGIS normalization/failure без demo fallback, отмену запросов,
-PriceBook, ручной тариф, скрытие финансов без тарифа и Offer Checker.
+Leaflet is the only runtime dependency and stays in a lazy chunk. The final
+production build reports 14.38 kB gzip for initial main JavaScript, 10.26 kB
+gzip for main CSS and 43.38 kB gzip for the separately loaded Leaflet chunk.
+All other dependencies are build/development tooling.
 
-Post-build validator проверяет canonical/hreflang, JSON-LD, anchors, template
-tokens, localhost URLs, локальные assets и теперь PDF-links: каждый документ из
-equipment-section обязан существовать в `dist/documents/`. Local production
-preview вернул `200` для Calculator HY/RU/EN и статический HTML содержит
-coordinate fallback, mounting/area controls, cache-status и real-contact fallback.
+Knip was used for an unused-code audit. It found and led to removal of the
+unused analytics module and two unnecessary public exports in `src/tools.js`.
+Remaining reported exports belong to Cloudflare file-based entrypoints or the
+deliberately public domain barrel; their consumers are dynamic/runtime paths
+that Knip cannot infer. There are no remaining unused source files reported.
 
-Automated interactive browser smoke, свежие screenshots и Lighthouse в этом
-окружении не засчитываются как пройденные: доступный browser runner не смог
-инициализироваться из-за локальной ошибки runtime. Это не маскируется как
-успешная проверка. После Pages deploy обязательно вручную пройти шаги карты,
-keyboard-only flow, upload/remove, Passport, Offer Checker и viewport 320–1440,
-затем снять Lighthouse на реальном origin.
+## 10. Automated verification
 
-## 11. Build и performance
+The final local commands all pass:
 
-Fresh production build: homepage enhancement is 0.11 KB gzip (plus shared
-navigation/scroller chunks), full Calculator `main` is 13.45 KB gzip + shared
-domain chunk 4.14 KB gzip, CSS 11.87 KB gzip; Leaflet 43.38 KB gzip remains a
-lazy chunk and the separate Offer Checker enhancement is 1.54 KB gzip. The four
-PDFs are only fetched after a visitor opens a documentation link.
+- `npm test` — 50/50 tests passed.
+- `npm run lint` — passed.
+- `npm run format:check` — passed.
+- `npm run build` — passed.
+- `npm run verify:build` — passed for 15 generated routes.
 
-The 31.08 Lighthouse table in `reports/lighthouse/*-p1.json` belongs to the
-pre-separation layout and is intentionally not reused as a score for this
-revision. The next trustworthy lab audit must run against a newly deployed
-staging revision. It is a lab measurement, never a production CWV guarantee.
+Regression coverage includes consumption/tariff modes, no finance without a
+tariff, PriceBook expiry/ranges, PVGIS failure without fallback, server input
+validation, Armenia guard, salted seven-day cache privacy/TTL, roof conversion,
+manual measured area, independent wizard states, retry preservation, Passport,
+Offer Checker safety, calculation parity and deleted-feature assertions.
 
-## 12. Launch blockers и следующие три шага
+## 11. Browser and responsive smoke
 
-1. Bind `PVGIS_CACHE` and add a non-public `PVGIS_CACHE_SALT` secret in
-   Cloudflare Pages. Until then the live potential/analysis endpoints correctly
-   remain disabled. An approved geocoder, tariff source/revision, CRM and
-   Turnstile credentials remain optional future integrations.
-2. Keep the supplied manufacturer sheets current and separately provide
-   publishable company-registration, installer-authorisation, insurance and
-   warranty documents if those claims are to appear on the site. Replace every
-   illustrative project/photo/review/price with approved evidence; complete
-   Armenian native proofreading and legal approval for Privacy/Terms.
-3. Confirm the new Pages deployment separately from Git push, run the live
-   manual-point → PVGIS → roof → Passport smoke with configured KV, then repeat
-   browser/keyboard/mobile checks and Lighthouse on the real origin.
+A local production preview was checked in the browser. The map opened lazily
+with a non-zero 1046×500 desktop container and no console error. A local
+unavailable-PVGIS flow confirmed that Consumption and Roof remained available;
+the roof outline was finished with three points and produced 20.7 m². Clicking
+a roof marker removed its vertex as designed. The standalone Offer Checker
+returned “within range” for a complete 6 kWp / 1,482,000 AMD example (247
+AMD/Wp) and returned “not comparable” when a battery was included.
+
+105 production-route viewport checks covered Home, Calculator, Offer Checker,
+Privacy and Terms in HY/RU/EN at 360, 375, 390, 430, 768, 1024 and 1440 px.
+They found one H1, no horizontal overflow and no captured console errors. The
+support-page and company-card mobile overflow found during the audit were
+fixed.
+
+The local Vite preview does not mount Cloudflare Pages Functions or the
+required KV binding, so a real successful `/api/potential` → `/api/analysis`
+browser transaction cannot be claimed from this machine. Controlled Function
+tests cover success, failure, retry and cache paths; the live successful smoke
+remains an explicit launch check after Cloudflare configuration.
+
+## 12. Remaining launch blockers and next steps
+
+1. Configure Cloudflare `PVGIS_CACHE` binding and non-public
+   `PVGIS_CACHE_SALT`; without them live Functions intentionally return a
+   clear unavailable state. Run a live Pages smoke after configuration to
+   verify successful potential and analysis responses.
+2. Obtain a confirmed tariff source/revision, CRM and Turnstile credentials
+   only when those integrations are approved. Do not add secrets to browser
+   configuration.
+3. Complete Armenian native proofreading and legal review of Privacy/Terms;
+   replace example projects with verified evidence only when available.
+
+No commit, push, deployment or production migration was performed as part of
+this refactor.

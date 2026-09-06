@@ -18,14 +18,11 @@ const expectedPages = [
   'ru/index.html',
   'privacy/index.html',
   'terms/index.html',
-  'soon/index.html',
   'ru/privacy/index.html',
   'ru/terms/index.html',
-  'ru/soon/index.html',
   'en/index.html',
   'en/privacy/index.html',
   'en/terms/index.html',
-  'en/soon/index.html',
   ...toolPages.map(({ page }) => page)
 ];
 
@@ -466,6 +463,7 @@ function validateCalculatorMarkup(html, page) {
     'data-calculator-wizard',
     "data-wizard-step='0'",
     'data-consumption-inputs',
+    'data-potential-status',
     'data-property-map',
     'data-roof-map-host',
     'data-roof-finish',
@@ -480,12 +478,43 @@ function validateCalculatorMarkup(html, page) {
   }
   if (html.includes('data-offer-checker'))
     fail(`${page}: Offer Checker must not be embedded in calculator`);
+  if (html.includes('data-potential-continue')) {
+    fail(`${page}: obsolete linear PVGIS continuation control is present`);
+  }
+  if (html.includes('calculator-workspace-menu') || html.includes('calculator-offer')) {
+    fail(`${page}: obsolete calculator workspace markup is present`);
+  }
 }
 
 async function validateNoLegacyCalculatorStyles() {
   const stylesheet = await readFile(resolve(projectRoot, 'src/styles/tools.css'), 'utf8');
   for (const selector of ['.calculator-workspace-menu', '.calculator-start', '.calculator-offer']) {
     if (stylesheet.includes(selector)) fail(`tools.css: unreachable legacy selector ${selector}`);
+  }
+}
+
+async function validateRemovedFeatures(pages) {
+  const forbiddenOutput = [
+    '/soon/',
+    'data-testimonials',
+    'testimonials-track',
+    'testimonial-card',
+    'myenergy',
+    'data-myenergy',
+    'calculator-workspace-menu',
+    'calculator-offer',
+    'project-before-after'
+  ];
+  for (const [page, html] of pages) {
+    for (const token of forbiddenOutput) {
+      if (html.toLowerCase().includes(token.toLowerCase())) {
+        fail(`${page}: removed feature token ${token} is present`);
+      }
+    }
+  }
+
+  for (const route of ['soon/index.html', 'ru/soon/index.html', 'en/soon/index.html']) {
+    if (await exists(resolve(distRoot, route))) fail(`${route}: deleted /soon/ route was emitted`);
   }
 }
 
@@ -600,6 +629,7 @@ for (const page of expectedPages.filter((page) => !publishedPages.has(page))) {
 await validateSitemap();
 await validateHeaders();
 await validateNoLegacyCalculatorStyles();
+await validateRemovedFeatures(pages);
 
 if (failures.length > 0) {
   console.error('Build validation failed:\n');

@@ -38,7 +38,7 @@ const formatPriceBookDate = (value, locale) =>
     timeZone: 'UTC'
   }).format(new Date(`${value}T00:00:00.000Z`));
 
-export const initPriceBookReference = (config) => {
+const initPriceBookReference = (config) => {
   if (config?.toolType !== 'offer-checker') return;
 
   const reference = document.querySelector('[data-pricebook-reference]');
@@ -73,7 +73,7 @@ const populateList = (list, items) => {
   }
 };
 
-export const initOfferChecker = (config) => {
+const initOfferChecker = (config) => {
   const form = document.querySelector('[data-offer-checker]');
   const result = document.querySelector('[data-offer-result]');
   if (!form || !result) return;

@@ -285,13 +285,27 @@ export const createPropertyMap = async ({
         { north: -3, east: 3 },
         { north: 3, east: 3 }
       ];
-      const offset = offsets[roofPoints.length % offsets.length];
-      const latitudeDelta = offset.north / 111_320;
-      const longitudeDelta = offset.east / (111_320 * Math.cos((centre.lat * Math.PI) / 180));
-      return addRoofPoint({
-        lat: centre.lat + latitudeDelta,
-        lng: centre.lng + longitudeDelta
+      const pointForOffset = (offset) => ({
+        lat: centre.lat + offset.north / 111_320,
+        lng: centre.lng + offset.east / (111_320 * Math.cos((centre.lat * Math.PI) / 180))
       });
+      const candidate = offsets
+        .map(pointForOffset)
+        .find(
+          (point) =>
+            !roofPoints.some(
+              (existing) =>
+                Math.abs(existing.lat - point.lat) < 0.00000001 &&
+                Math.abs(existing.lng - point.lng) < 0.00000001
+            )
+        );
+
+      if (candidate) return addRoofPoint(candidate);
+
+      // Once all four keyboard starter points exist, grow a new square around
+      // them instead of cycling back to an existing vertex after undo/delete.
+      const ring = Math.floor(roofPoints.length / offsets.length) + 1;
+      return addRoofPoint(pointForOffset({ north: 3 * ring, east: 3 * ring }));
     },
     getRoof() {
       return {

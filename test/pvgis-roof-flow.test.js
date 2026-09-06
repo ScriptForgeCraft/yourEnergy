@@ -6,7 +6,6 @@ import { onRequest as potentialOnRequest } from '../functions/api/potential.js';
 import { PVGIS_CACHE_TTL_SECONDS, createPvgisCache } from '../functions/_lib/pvgis-cache.js';
 import { isWithinArmeniaServiceArea } from '../functions/_lib/service-area.js';
 import { calculateRoofPlaneArea } from '../src/domain/index.js';
-import { collectAnalysisNotes } from '../src/ui/analysis-ledger.js';
 
 const endpoint = 'https://site.example/api';
 
@@ -90,16 +89,6 @@ test('a map outline is converted to preliminary roof-plane area, while steep roo
       tiltDegrees: 75
     }),
     null
-  );
-});
-
-test('the visible analysis ledger carries manual-roof limitations alongside assumptions', () => {
-  assert.deepEqual(
-    collectAnalysisNotes({
-      assumptions: ['PVGIS_SYSTEM_LOSS_14_PERCENT', 'MANUAL_ROOF_PLANE'],
-      limitations: ['MANUAL_PROPERTY_POINT', 'MANUAL_ROOF_PLANE']
-    }),
-    ['PVGIS_SYSTEM_LOSS_14_PERCENT', 'MANUAL_ROOF_PLANE', 'MANUAL_PROPERTY_POINT']
   );
 });
 

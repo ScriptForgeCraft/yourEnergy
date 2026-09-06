@@ -103,8 +103,8 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
   const pointConfirmation = root.querySelector('[data-point-confirmation]');
   const pendingCoordinates = root.querySelector('[data-pending-coordinates]');
   const potentialLoading = root.querySelector('[data-potential-loading]');
+  const potentialStatus = root.querySelector('[data-potential-status]');
   const potentialResult = root.querySelector('[data-potential-result]');
-  const potentialContinue = root.querySelector('[data-potential-continue]');
   const potentialRetry = root.querySelector('[data-potential-retry]');
   const potentialSkip = root.querySelector('[data-potential-skip]');
   const potentialChart = root.querySelector('[data-potential-chart]');
@@ -152,22 +152,26 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
   const setPotentialOutcome = (outcome) =>
     Object.assign(state, applyPotentialOutcome(state, outcome));
 
-  const isStepAccessible = (index) =>
-    isWizardStepAccessible(stepStates()[WIZARD_STEP_KEYS[index]], {
+  const isStepAccessible = (index) => {
+    const stepKey = WIZARD_STEP_KEYS[index];
+    return isWizardStepAccessible(stepStates()[stepKey], {
       // Result has no meaningful UI before a successful analysis. It can be
       // loading for progress feedback, but cannot be opened until complete.
-      allowLoading: index !== 4
+      allowLoading: stepKey !== 'result'
     });
+  };
 
   const updateProgress = () => {
+    const allStepStates = stepStates();
     progress.forEach((button, index) => {
-      const stepStatus = stepStates()[WIZARD_STEP_KEYS[index]];
+      const stepStatus = allStepStates[WIZARD_STEP_KEYS[index]];
       const current = index === state.currentStep;
       button.dataset.stepState = stepStatus;
       button.disabled = !isStepAccessible(index);
       if (current) button.setAttribute('aria-current', 'step');
       else button.removeAttribute('aria-current');
     });
+    if (potentialStatus) potentialStatus.dataset.stepState = allStepStates.potential;
     if (mobileProgress) {
       mobileProgress.textContent = text(wizard.stepMobile, {
         step: state.currentStep + 1,
@@ -226,7 +230,6 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
     stopPotential();
     setPotentialOutcome({ status: WIZARD_STEP_STATUSES.LOCKED });
     if (potentialResult) potentialResult.hidden = true;
-    if (potentialContinue) potentialContinue.hidden = true;
     if (potentialRetry) potentialRetry.hidden = true;
     if (potentialSkip) potentialSkip.hidden = true;
     if (potentialLoading) potentialLoading.textContent = '';
@@ -355,7 +358,6 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
       .filter(Boolean)
       .join(' ');
     if (potentialResult) potentialResult.hidden = false;
-    if (potentialContinue) potentialContinue.hidden = false;
     if (potentialRetry) potentialRetry.hidden = true;
     if (potentialSkip) potentialSkip.hidden = true;
   };
@@ -382,7 +384,6 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
     setPotentialOutcome({ status: WIZARD_STEP_STATUSES.LOADING });
     if (potentialLoading) potentialLoading.textContent = product.potential?.loading ?? '';
     if (potentialResult) potentialResult.hidden = true;
-    if (potentialContinue) potentialContinue.hidden = true;
     if (potentialRetry) potentialRetry.hidden = true;
     if (potentialSkip) potentialSkip.hidden = true;
     writeStatus('');
@@ -633,7 +634,7 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
       state.solarPassport = passportRepository.create(state.analysis, { locale });
       renderResult(state.analysis);
       writeStatus('');
-      setStep(4);
+      setStep(3);
     } catch (error) {
       if (error instanceof ProductApiError && error.code === 'ABORTED') return;
       state.analysisStatus = WIZARD_STEP_STATUSES.LOCKED;
@@ -724,15 +725,17 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
     setPendingLocation({ lat, lng });
     void mountMap('location').then((map) => map?.setLocation({ lat, lng }, { notify: false }));
   });
-  root.querySelector('[data-potential-continue]')?.addEventListener('click', () => setStep(2));
-  potentialSkip?.addEventListener('click', () => setStep(2));
+  potentialSkip?.addEventListener('click', () => setStep(1));
   potentialRetry?.addEventListener('click', () => void requestPotential({ force: true }));
-  root.querySelector('[data-roof-continue]')?.addEventListener('click', () => {
-    if (!hasRoof()) {
-      writeStatus(product.roof?.parametersRequired, true);
+  root.querySelector('[data-consumption-continue]')?.addEventListener('click', () => {
+    const consumption = consumptionInput?.read();
+    if (!consumption?.valid) {
+      writeStatus(consumption?.message ?? product.consumption?.noConsumption, true);
       return;
     }
-    setStep(3);
+    state.consumption = consumption.value;
+    state.userTariff = consumption.tariff;
+    setStep(2);
   });
   root
     .querySelector('[data-roof-add-center]')
@@ -758,7 +761,7 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
     .forEach((input) => input.addEventListener('change', syncRoofControls));
   root.querySelector('[data-run-analysis]')?.addEventListener('click', () => void runAnalysis());
   root.querySelector('[data-add-tariff]')?.addEventListener('click', () => {
-    setStep(3);
+    setStep(1);
     requestAnimationFrame(() => root.querySelector('[data-consumption-tariff]')?.focus());
   });
   root.querySelector('[data-open-passport]')?.addEventListener('click', (event) => {

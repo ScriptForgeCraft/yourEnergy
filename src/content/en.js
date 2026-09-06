@@ -37,17 +37,13 @@ export default {
     logo: 'YOURENERGY — home page',
     previousProject: 'Previous project',
     nextProject: 'Next project',
-    previousTestimonial: 'Previous testimonial',
-    nextTestimonial: 'Next testimonial',
     close: 'Close'
   },
   nav: {
     home: 'For homes',
-    business: 'For business',
     projects: 'Projects',
     process: 'How it works',
     about: 'About us',
-    blog: 'Blog',
     contacts: 'Contact'
   },
   contact: {
@@ -61,9 +57,7 @@ export default {
     cta: 'Calculate my home',
     demo: 'Demonstration example',
     illustrative: 'Illustrative image',
-    soon: 'Coming soon',
-    details: 'View details',
-    free: 'Free'
+    details: 'View details'
   },
   product: {
     common: {
@@ -76,82 +70,6 @@ export default {
       cancel: 'Cancel',
       noJsCalculator:
         'The calculator requires JavaScript. For a manual consultation, call an engineer:'
-    },
-    tools: {
-      calculator: 'Open the full calculator',
-      offerChecker: 'Check a commercial offer'
-    },
-    workspace: {
-      title: 'Every calculation, on one page',
-      copy: 'Choose a section below. The main path moves from a point to PVGIS, roof inputs and a result; the proposal check is separate and never changes the home calculation.',
-      menuLabel: 'Calculator sections',
-      items: [
-        {
-          key: 'start',
-          anchor: 'calculator-start',
-          number: '01',
-          label: 'Start a calculation',
-          copy: 'Use an address only as a label or place a point on the map right away.',
-          active: true
-        },
-        {
-          key: 'potential',
-          anchor: 'site-potential',
-          number: '02',
-          label: 'Point and PVGIS potential',
-          copy: 'Confirm the point and receive a solar-resource benchmark.',
-          active: false
-        },
-        {
-          key: 'roof',
-          anchor: 'roof-analysis',
-          number: '03',
-          label: 'Home, roof and consumption',
-          copy: 'Outline the roof and enter its parameters and electricity use.',
-          active: false
-        },
-        {
-          key: 'result',
-          anchor: 'passport',
-          number: '04',
-          label: 'Result and Solar Passport',
-          copy: 'Review the preliminary result, assumptions and budget.',
-          active: false
-        },
-        {
-          key: 'offer',
-          anchor: 'offer-checker',
-          number: '05',
-          label: 'Proposal checker',
-          copy: 'Optional: compare a third-party proposal in AMD/Wp.',
-          active: false
-        }
-      ]
-    },
-    flow: {
-      title: 'How the estimate works',
-      steps: [
-        {
-          number: '01',
-          title: 'Choose the property point',
-          copy: 'Place and confirm a point manually. An address is only an optional label for an engineer.'
-        },
-        {
-          number: '02',
-          title: 'See the location potential',
-          copy: 'PVGIS shows a benchmark for the chosen point before your roof is calculated.'
-        },
-        {
-          number: '03',
-          title: 'Describe the roof and consumption',
-          copy: 'Outline the usable area and enter the real roof direction, tilt and energy use.'
-        },
-        {
-          number: '04',
-          title: 'Get a preliminary estimate',
-          copy: 'System size, budget and savings appear only from confirmed inputs.'
-        }
-      ]
     },
     potential: {
       eyebrow: 'Step 2 · Site potential',
@@ -342,15 +260,6 @@ export default {
       commercialEstimate:
         'Preliminary YOUR ENERGY price · {version} · not an offer: {p25}–{p75}; P50 {p50}. Valid until {validUntil}.'
     },
-    solutions: {
-      liveBadge: 'From your confirmed data',
-      liveCopy:
-        'These three preliminary technical scenarios are calculated from the confirmed property data.',
-      financialUnavailable:
-        'A preliminary price appears from the active PriceBook; savings and payback require a tariff.',
-      priceUnavailable:
-        'The temporary price book is unavailable or has expired. Request an engineer survey.'
-    },
     ledger: {
       title: 'How this was calculated',
       copy: 'The sources, versions, assumptions and limits behind this preliminary result.',
@@ -398,40 +307,6 @@ export default {
           'For a roof-parallel system, an engineer confirms the final parameters.'
       }
     },
-    passport: {
-      persistenceTitle: 'Solar Passport is stored in this browser',
-      persistenceCopy: 'This preliminary Passport exists only in the current session memory.',
-      memoryOnly: 'The data may be lost when this page is closed.',
-      permanentLink: 'A permanent link and PDF will be available after storage is connected.',
-      sourceLedger: 'Sources and assumptions',
-      shareUnavailable: 'Sharing a link is not available yet.',
-      pendingBadge: 'After calculation',
-      pendingAddress: 'Appears after the property is confirmed',
-      pendingDate: 'Created in this session',
-      pendingSource: 'Source: awaiting a PVGIS response',
-      pendingChartDescription: 'Monthly generation appears after the PVGIS calculation.',
-      pendingTitle: 'Your Solar Passport appears after calculation',
-      realTitle: 'Your preliminary Solar Passport',
-      sessionBadge: 'This session'
-    },
-    lead: {
-      title: 'Send this estimate to an engineer',
-      copy: 'Leave your contact details so an engineer can clarify the property data.',
-      nameLabel: 'Your name',
-      phoneLabel: 'Phone',
-      emailLabel: 'Email',
-      messageLabel: 'Property note',
-      consent: 'I agree to the processing of my data to answer this request.',
-      submit: 'Send request',
-      required: 'Complete the required fields and confirm consent.',
-      invalidEmail: 'Enter a valid email address.',
-      sending: 'Sending request…',
-      sent: 'The request was sent. We will contact you after the data are reviewed.',
-      unavailable: 'Sending is temporarily unavailable. Please try later.',
-      retry: 'Try sending again',
-      directCall: 'Or call an engineer:',
-      privacy: 'Data are not sent to analytics.'
-    },
     status: {
       geocodeUnavailable: 'The geocoding service is not connected or is temporarily unavailable.',
       analysisUnavailable:
@@ -447,19 +322,18 @@ export default {
       analysisCooldown: 'A repeat calculation with the same data will be available in {seconds} s.',
       inputsChanged:
         'Inputs changed. The previous preliminary result is hidden until you calculate again.',
-      leadUnavailable: 'The lead service is not connected or is temporarily unavailable.',
       retry: 'Try again',
       canceled: 'The previous request was cancelled.'
     },
     months: months.map(({ short, name }) => ({ short, name }))
   },
   hero: {
-    eyebrow: 'A personal solar-system estimate for your home',
+    eyebrow: 'A solar system for your home',
     titleLead: 'Discover your home’s',
     titleMiddle: 'solar potential',
     titleAccent: 'in 60 seconds',
     homeCopy:
-      'Open the full calculator: enter consumption, confirm the property point and roof outline, then receive a preliminary PVGIS estimate.',
+      'See what you receive after a calculation: capacity, panels, generation, a preliminary budget and economics when you enter a tariff.',
     calculatorCopy:
       'First choose and confirm a point manually, then see its PVGIS potential. Roof and consumption data are only needed for the detailed estimate.',
     disclosure:
@@ -483,9 +357,9 @@ export default {
     ]
   },
   map: {
-    title: 'Preliminary roof assessment',
-    demo: 'Static demonstration fallback',
-    location: 'Illustrative location',
+    title: 'Example result after calculation',
+    demo: 'Example data',
+    location: 'Illustrative home',
     imageAlt: 'Illustrative aerial roof image before a property is confirmed',
     disclosure:
       'This static image and panel layout are used only as a labelled fallback before a property is confirmed.',
@@ -498,8 +372,8 @@ export default {
     tiltValue: 'Example: 32°',
     score: 'Solar Score',
     scoreValue: 'Example only',
-    result: 'Preliminary result — confirmation required',
-    full: 'View the full estimate'
+    result: 'Example result — not calculated for your home',
+    full: 'Start a calculation'
   },
   metrics: [
     { key: 'generation', label: 'Annual generation', value: '14,600', unit: 'kWh' },
@@ -508,10 +382,10 @@ export default {
     { key: 'coverage', label: 'Consumption covered', value: '92', unit: '%' }
   ],
   passport: {
-    eyebrow: 'A digital report for your property',
-    title: 'Your personal Solar Passport',
-    badge: 'free example',
-    copy: 'A roof map, system parameters, monthly generation and a clear financial model in one report.',
+    eyebrow: 'What you receive after calculation',
+    title: 'Example Solar Passport',
+    badge: 'example',
+    copy: 'This is what a preliminary report looks like after a successful calculation: roof map, system parameters, generation and financial values when a tariff is supplied.',
     features: [
       'Roof map and example panel layout',
       'Monthly generation',
@@ -520,15 +394,14 @@ export default {
       'Estimate assumptions and limitations'
     ],
     cta: 'View report example',
-    dialogTitle: 'Demonstration Solar Passport',
     close: 'Close report',
     reportLabel: 'SOLAR PASSPORT',
-    reportAddress: 'Yerevan, Arabkir',
-    reportDate: 'Example dated 28 August 2026',
+    reportAddress: 'Illustrative home',
+    reportDate: 'Example report structure',
     system: 'Recommended system',
     capacity: '9.86 kWp',
     panels: '17 × 580 W',
-    source: 'Source: demonstration model',
+    source: 'Source: example data',
     chartTitle: 'Monthly generation, kWh',
     chartDescription: 'A bar chart showing demonstration generation from January to December.',
     tableTitle: 'Monthly generation data table',
@@ -604,48 +477,40 @@ export default {
     ]
   },
   projects: {
-    eyebrow: 'Projects',
-    title: 'What YOURENERGY projects could look like',
-    copy: 'Illustrative scenarios, not real clients, addresses or completed installations.',
-    badge: 'Demo project',
-    before: 'Before installation',
-    after: 'After installation',
-    imageNote: 'The image and data were created to demonstrate the interface.',
+    eyebrow: 'Typical solutions',
+    title: 'Examples of solar configurations',
+    copy: 'These are example calculations for typical homes, not real clients, addresses or completed installations.',
+    badge: 'Calculation example',
+    imageNote: 'Images and parameters illustrate configurations.',
     items: [
       {
         id: 'arabkir',
-        city: 'Yerevan, Arabkir',
+        city: 'Single-storey home',
         image: 'project-arabkir',
-        before: '68,000 ֏ / month',
-        after: '≈ 8,000 ֏ / month',
         capacity: '9.86 kWp',
         generation: '14,600 kWh/year',
-        payback: '≈ 6.0 years',
         featured: true
       },
       {
         id: 'abovyan',
-        city: 'Abovyan',
+        city: 'Home with a shallow roof',
         image: 'project-abovyan',
         capacity: '7.2 kWp',
-        generation: '10,150 kWh/year',
-        payback: '5.9 years'
+        generation: '10,150 kWh/year'
       },
       {
         id: 'vagharshapat',
-        city: 'Vagharshapat',
+        city: 'Home with multiple roof planes',
         image: 'project-vagharshapat',
         capacity: '10.8 kWp',
-        generation: '15,700 kWh/year',
-        payback: '6.1 years'
+        generation: '15,700 kWh/year'
       },
       {
         id: 'ararat',
-        city: 'Ararat',
+        city: 'Compact home',
         image: 'project-ararat',
         capacity: '5.6 kWp',
-        generation: '7,800 kWh/year',
-        payback: '6.4 years'
+        generation: '7,800 kWh/year'
       }
     ]
   },
@@ -663,27 +528,7 @@ export default {
     ].map(([title, copy], index) => ({ number: String(index + 1).padStart(2, '0'), title, copy }))
   },
   finance: {
-    eyebrow: 'Financial model',
-    title: 'An investment that works every day',
-    copy: 'The financial chart appears only after PVGIS analysis, a tariff entered by you, and an active price book.',
-    benefits: [
-      'Lower grid consumption',
-      'Panels designed for more than 25 years of service',
-      'Greater energy independence',
-      'A transparent formula with no hidden assumptions'
-    ],
-    timelineTitle: 'How the net result grows',
-    timeline: [{ year: 'Today' }, { year: 'Year 5' }, { year: 'Year 10' }, { year: 'Year 25' }],
-    awaiting: 'After analysis',
-    includedTitle: 'What the temporary preliminary price includes',
-    included: [
-      'Solar panels',
-      'Inverter',
-      'Mounting and standard installation',
-      'Basic grid connection',
-      'VAT and permits require confirmation',
-      'Battery, roof repair and non-standard electrical work are excluded'
-    ],
+    title: 'Financial details',
     disclaimer:
       'Financial values are not shown before analysis. The model excludes tariff growth, degradation, maintenance, financing, discounting, taxes and export rules.'
   },
@@ -775,45 +620,6 @@ export default {
       }
     ]
   },
-  myEnergy: {
-    eyebrow: 'MyEnergy · coming soon',
-    title: 'Your generation, always in view',
-    copy: 'A demonstration teaser for a future post-installation customer portal.',
-    metrics: [
-      ['Today', '42.8 kWh'],
-      ['This month', '1.17 MWh'],
-      ['Estimated savings', '61,420 ֏'],
-      ['System status', 'Everything is working normally']
-    ].map(([label, value]) => ({ label, value })),
-    cta: 'Customer portal',
-    note: 'Live monitoring is not connected in this version.'
-  },
-  testimonials: {
-    eyebrow: 'The human context',
-    title: 'What a testimonials section could look like',
-    disclosure:
-      'All names and quotations below are fictional and are used only to demonstrate the design.',
-    items: [
-      {
-        name: 'Homeowner · demo persona',
-        city: 'Yerevan',
-        quote:
-          'The sample estimate made it easy to compare system sizes and understand which details need confirmation.'
-      },
-      {
-        name: 'Small-business representative · demo persona',
-        city: 'Abovyan',
-        quote:
-          'Generation and the financial model are collected in one clear scenario without unnecessary promises.'
-      },
-      {
-        name: 'Homeowner · demo persona',
-        city: 'Ararat',
-        quote:
-          'The Solar Passport shows which questions are worth asking an engineer during a site visit.'
-      }
-    ]
-  },
   faq: {
     eyebrow: 'Answers without the fine print',
     title: 'Frequently asked questions',
@@ -868,39 +674,25 @@ export default {
         links: [
           ['Solutions', '#solutions'],
           ['Calculator', '#calculator'],
-          ['Cost', '#solutions'],
           ['FAQ', '#faq']
-        ]
-      },
-      {
-        title: 'For business',
-        links: [
-          ['Solutions', '/en/soon/#business'],
-          ['Projects', '#projects'],
-          ['Benefits', '#investment'],
-          ['Calculator', '#calculator']
         ]
       },
       {
         title: 'Company',
         links: [
           ['About us', '#engineering'],
-          ['Our team', '/en/soon/#team'],
-          ['Certificates', '/en/soon/#certificates'],
-          ['Careers', '/en/soon/#career']
+          ['Registration', '#company-record'],
+          ['How it works', '#process']
         ]
       },
       {
-        title: 'Support',
+        title: 'Information',
         links: [
-          ['Warranty', '/en/soon/#warranty'],
-          ['Service', '/en/soon/#service'],
           ['Equipment documents', '/en/#equipment-documents'],
           ['Contact', '#contacts']
         ]
       }
     ],
-    account: 'Customer portal →',
     privacy: 'Draft privacy policy',
     terms: 'Draft terms of use',
     copyright: '© 2026 YOURENERGY. All rights reserved.'

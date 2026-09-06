@@ -1,4 +1,4 @@
-const bindScroller = (trackSelector, buttonSelector, distance) => {
+const bindProjectScroller = (trackSelector, buttonSelector, distance) => {
   const track = document.querySelector(trackSelector);
   if (!track) {
     return;
@@ -6,12 +6,7 @@ const bindScroller = (trackSelector, buttonSelector, distance) => {
   document.querySelectorAll(buttonSelector).forEach((button) => {
     button.addEventListener('click', () => {
       track.scrollBy({
-        left:
-          Number(
-            button.dataset[
-              buttonSelector.includes('project') ? 'projectDirection' : 'testimonialDirection'
-            ]
-          ) * distance,
+        left: Number(button.dataset.projectDirection) * distance,
         behavior: 'smooth'
       });
     });
@@ -19,6 +14,5 @@ const bindScroller = (trackSelector, buttonSelector, distance) => {
 };
 
 export const initScrollers = () => {
-  bindScroller('[data-projects-track]', '[data-project-direction]', 420);
-  bindScroller('[data-testimonials-track]', '[data-testimonial-direction]', 380);
+  bindProjectScroller('[data-projects-track]', '[data-project-direction]', 420);
 };

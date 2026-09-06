@@ -1,27 +1,27 @@
 const copy = {
   hy: {
-    eyebrow: 'PVGIS-ի նախնական հաշվիչ',
-    title: 'Ձեր տան արևային ներուժը՝ հինգ պարզ քայլով',
+    eyebrow: 'Անվճար նախնական հաշվարկ',
+    title: 'Պարզ հաշվարկ ձեր տան արևային համակարգի համար',
     intro:
-      'Սկզբում ընտրեք կետը, ապա PVGIS-ը կցուցադրի դրա արևային ռեսուրսը։ Տանիքն ու սպառումը կավելացնեք միայն նախնական տան հաշվարկի համար։',
-    steps: ['Օբյեկտ', 'PVGIS ներուժ', 'Տանիք', 'Սպառում', 'Արդյունք'],
+      'Ընտրեք տունը, նշեք սպառումն ու հասանելի տանիքը։ Մնացած տեխնիկական տվյալները հասանելի են ըստ անհրաժեշտության։',
+    steps: ['Օբյեկտ', 'Սպառում', 'Տանիք', 'Արդյունք'],
+    engineering: 'Ինժեներական պարամետրեր',
     addressLabel: 'Նշում ինժեների համար',
     addressHelp:
-      'Հասցեն չի օգտագործվում արևային հաշվարկի համար։ Ընտրեք ճշգրիտ կետ քարտեզի վրա կամ մուտքագրեք կոորդինատներ։',
+      'Հասցեն չի օգտագործվում հաշվարկի համար։ Ընտրեք ճշգրիտ կետ քարտեզի վրա կամ մուտքագրեք կոորդինատներ։',
     mapOpen: 'Ընտրել տունը քարտեզի վրա',
     selectedPoint: 'Ընտրված կետ',
     confirmPoint: 'Հաստատել այս կետը',
     coordinateAlternative: 'Գիտեմ կոորդինատները / քարտեզը հասանելի չէ',
-    potentialReady: 'PVGIS-ը ցույց է տալիս կետի արևային ռեսուրսը, ոչ թե ավտոմատ չափված տանիքը։',
-    potentialContinue: 'Շարունակել դեպի տանիք',
-    potentialSkip: 'Շարունակել դեպի տանիք՝ առանց ներուժի',
-    roofIntro:
-      'Նշեք տանիքի իրական հարթությունը։ Այն կարող է տարբերվել PVGIS-ի ազատ կանգնող համակարգի օպտիմումից։',
+    potentialReady:
+      'PVGIS-ը ֆոնային ստուգում է ընտրված կետի արևային ռեսուրսը։ Այն տանիքը ավտոմատ չի չափում։',
+    potentialSkip: 'Շարունակել առանց PVGIS-ի',
+    roofIntro: 'Նշեք արևային վահանակների համար հասանելի տանիքի մասը։',
     parallel: 'Տանիքին զուգահեռ',
     elevated: 'Բարձրացված կառուցվածք',
     drawRoof:
-      'Քարտեզը մոտեցված է ընտրված կետին։ Կտտացրեք տանիքի անկյունները, քաշեք մարկերը՝ դիրքը փոխելու համար, կամ կտտացրեք մարկերին՝ այդ անկյունը հեռացնելու համար։',
-    continueConsumption: 'Շարունակել դեպի սպառում',
+      'Քարտեզը մոտեցված է ընտրված կետին։ Կտտացրեք տանիքի անկյունները, քաշեք մարկերը՝ դիրքը փոխելու համար, կամ կտտացրեք մարկերին՝ անկյունը հեռացնելու համար։',
+    continueConsumption: 'Շարունակել դեպի արդյունք',
     calculate: 'Ստանալ նախնական հաշվարկ',
     back: 'Վերադառնալ',
     next: 'Շարունակել',
@@ -39,22 +39,23 @@ const copy = {
     budget: 'YOUR ENERGY-ի նախնական բյուջե',
     roofLimit: 'Հզորությունը սահմանափակված է հասանելի տանիքի մակերեսով',
     tariffNeeded:
-      'Ցանկանո՞ւմ եք տեսնել խնայողությունն ու հետգնման ժամկետը։ Մուտքագրեք ձեր հաշվի սակագինը։',
+      'Խնայողությունն ու հետգնման ժամկետը տեսնելու համար մուտքագրեք ձեր հաշվի սակագինը։',
     addTariff: 'Ավելացնել սակագին',
     openPassport: 'Բացել Solar Passport-ը',
     checkOffer: 'Ստուգել այլ կոմերցիոն առաջարկ',
     passportTitle: 'Solar Passport',
     passportCopy: 'Այս session-ի նախնական տվյալները, աղբյուրները և սահմանափակումները։',
-    stepMobile: 'Քայլ {step} 5-ից · {title}',
+    stepMobile: 'Քայլ {step} 4-ից · {title}',
     mapApproximate:
       'Քարտեզի ուրվագիծը մոտավոր է։ Տեղային ստվերը և կոնստրուկցիան հաստատում է ինժեները։'
   },
   ru: {
-    eyebrow: 'Предварительный расчёт PVGIS',
-    title: 'Солнечный потенциал дома — в пяти понятных шагах',
+    eyebrow: 'Бесплатный предварительный расчёт',
+    title: 'Простой расчёт солнечной системы для вашего дома',
     intro:
-      'Сначала выберите точку, затем PVGIS покажет солнечный ресурс. Параметры крыши и потребление понадобятся только для предварительного расчёта дома.',
-    steps: ['Объект', 'Потенциал PVGIS', 'Крыша', 'Потребление', 'Результат'],
+      'Выберите дом, укажите потребление и доступную крышу. Технические параметры откроются только при необходимости.',
+    steps: ['Объект', 'Потребление', 'Крыша', 'Результат'],
+    engineering: 'Инженерные параметры',
     addressLabel: 'Заметка для инженера',
     addressHelp:
       'Адрес не используется для солнечного расчёта. Выберите точную точку на карте или введите координаты.',
@@ -62,16 +63,15 @@ const copy = {
     selectedPoint: 'Выбранная точка',
     confirmPoint: 'Подтвердить эту точку',
     coordinateAlternative: 'Я знаю координаты / карта недоступна',
-    potentialReady: 'PVGIS показывает солнечный ресурс точки, а не автоматически измеренную крышу.',
-    potentialContinue: 'Перейти к крыше',
-    potentialSkip: 'Перейти к крыше без потенциала',
-    roofIntro:
-      'Опишите реальную плоскость крыши. Она может отличаться от оптимума PVGIS для отдельно стоящей системы.',
+    potentialReady:
+      'PVGIS в фоне проверяет солнечный ресурс выбранной точки. Он не измеряет крышу автоматически.',
+    potentialSkip: 'Продолжить без PVGIS',
+    roofIntro: 'Укажите часть крыши, доступную для солнечных панелей.',
     parallel: 'Параллельно крыше',
     elevated: 'Приподнятая конструкция',
     drawRoof:
       'Карта открывается на максимальном масштабе выбранной точки. Нажимайте на углы крыши, перетаскивайте маркер для исправления позиции или кликните по маркеру, чтобы удалить этот угол.',
-    continueConsumption: 'Перейти к потреблению',
+    continueConsumption: 'Перейти к результату',
     calculate: 'Получить предварительный расчёт',
     back: 'Назад',
     next: 'Продолжить',
@@ -94,16 +94,17 @@ const copy = {
     checkOffer: 'Проверить другое коммерческое предложение',
     passportTitle: 'Solar Passport',
     passportCopy: 'Предварительные данные этой сессии, источники и ограничения.',
-    stepMobile: 'Шаг {step} из 5 · {title}',
+    stepMobile: 'Шаг {step} из 4 · {title}',
     mapApproximate:
       'Контур на карте приблизительный. Локальное затенение и конструкцию подтвердит инженер.'
   },
   en: {
-    eyebrow: 'PVGIS preliminary calculator',
-    title: 'Your home’s solar potential in five clear steps',
+    eyebrow: 'Free preliminary calculation',
+    title: 'A simple solar-system calculation for your home',
     intro:
-      'Choose a point first, then PVGIS shows its solar resource. Add roof and consumption details only for a preliminary home calculation.',
-    steps: ['Property', 'PVGIS potential', 'Roof', 'Consumption', 'Result'],
+      'Choose the home, enter consumption and outline the usable roof. Technical inputs appear only when you need them.',
+    steps: ['Property', 'Consumption', 'Roof', 'Result'],
+    engineering: 'Engineering parameters',
     addressLabel: 'Note for the engineer',
     addressHelp:
       'The address is not used for the solar calculation. Choose the exact point on the map or enter coordinates.',
@@ -111,16 +112,15 @@ const copy = {
     selectedPoint: 'Selected point',
     confirmPoint: 'Confirm this point',
     coordinateAlternative: 'I know the coordinates / the map is unavailable',
-    potentialReady: 'PVGIS shows the point’s solar resource, not an automatically measured roof.',
-    potentialContinue: 'Continue to roof',
-    potentialSkip: 'Continue to roof without potential',
-    roofIntro:
-      'Describe the actual roof plane. It may differ from the PVGIS optimum for a free-standing system.',
+    potentialReady:
+      'PVGIS checks the selected point’s solar resource in the background. It does not measure a roof automatically.',
+    potentialSkip: 'Continue without PVGIS',
+    roofIntro: 'Describe the part of the roof available for solar panels.',
     parallel: 'Parallel to roof',
     elevated: 'Elevated structure',
     drawRoof:
-      'The map opens at the selected point’s maximum zoom. Click roof corners, drag a marker to adjust its position, or click a marker to remove that corner.',
-    continueConsumption: 'Continue to consumption',
+      'The map opens at the selected point’s maximum zoom. Click roof corners, drag a marker to adjust it, or click a marker to remove that corner.',
+    continueConsumption: 'Continue to result',
     calculate: 'Get preliminary calculation',
     back: 'Back',
     next: 'Continue',
@@ -143,7 +143,7 @@ const copy = {
     checkOffer: 'Check another commercial proposal',
     passportTitle: 'Solar Passport',
     passportCopy: 'This session’s preliminary inputs, sources and limitations.',
-    stepMobile: 'Step {step} of 5 · {title}',
+    stepMobile: 'Step {step} of 4 · {title}',
     mapApproximate:
       'The map outline is approximate. An engineer confirms local shading and structure.'
   }
