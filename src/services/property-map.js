@@ -1,5 +1,9 @@
 const YEREVAN_OVERVIEW = Object.freeze([40.1792, 44.4991]);
 const EARTH_RADIUS_METERS = 6_371_008.8;
+// Standard OSM raster tiles are reliably available through zoom 19. This is
+// the most detailed practical starting view without requesting unavailable
+// tiles or pretending that OSM is an aerial roof survey.
+const ROOF_EDIT_ZOOM = 19;
 
 const clampLatitude = (latitude) => Math.max(-85, Math.min(85, Number(latitude)));
 
@@ -49,7 +53,7 @@ const mapOptions = {
   doubleClickZoom: false,
   keyboard: true,
   minZoom: 3,
-  maxZoom: 21
+  maxZoom: ROOF_EDIT_ZOOM
 };
 
 /**
@@ -75,7 +79,6 @@ export const createPropertyMap = async ({
   let roofMarkers = [];
   let roofPoints = [];
   let roofFinished = false;
-  let selectedPointIndex = -1;
   let mode = 'location';
   let resizeFrame = null;
   let resizeObserver = null;
@@ -125,7 +128,7 @@ export const createPropertyMap = async ({
   if (tileUrl) {
     L.tileLayer(tileUrl, {
       attribution: tileAttribution,
-      maxZoom: 21,
+      maxZoom: ROOF_EDIT_ZOOM,
       crossOrigin: true
     }).addTo(map);
   }
@@ -135,9 +138,19 @@ export const createPropertyMap = async ({
     onRoofChange({
       points,
       areaSqm: calculatePreliminaryPolygonArea(points),
-      selectedPointIndex,
       complete: roofFinished && points.length >= 3
     });
+  };
+
+  const removeRoofPoint = (index) => {
+    if (!Number.isInteger(index) || !roofPoints[index]) return false;
+    // Removing or moving a point makes a previously finished outline editable
+    // again. The visitor must explicitly finish the corrected outline.
+    roofFinished = false;
+    roofPoints.splice(index, 1);
+    drawRoof();
+    emitRoof();
+    return true;
   };
 
   const drawRoof = () => {
@@ -164,9 +177,11 @@ export const createPropertyMap = async ({
         title: roofPointLabel(index),
         alt: roofPointLabel(index)
       }).addTo(map);
-      marker.on('click', () => {
-        selectedPointIndex = index;
-        emitRoof();
+      marker.on('click', (event) => {
+        // A marker represents one existing vertex. Clicking it removes that
+        // vertex instead of creating a duplicate point underneath it.
+        L.DomEvent.stop(event);
+        removeRoofPoint(index);
       });
       marker.on('dragstart', () => {
         // Moving a vertex reopens the outline: it must be finished again
@@ -175,7 +190,6 @@ export const createPropertyMap = async ({
       });
       marker.on('dragend', () => {
         roofPoints[index] = normalizePoint(marker.getLatLng());
-        selectedPointIndex = index;
         drawRoof();
         emitRoof();
       });
@@ -187,7 +201,6 @@ export const createPropertyMap = async ({
     if (!isFinitePoint(point)) return false;
     roofFinished = false;
     roofPoints.push(normalizePoint(point));
-    selectedPointIndex = roofPoints.length - 1;
     drawRoof();
     emitRoof();
     return true;
@@ -203,7 +216,7 @@ export const createPropertyMap = async ({
       title: locationPointLabel,
       alt: locationPointLabel
     }).addTo(map);
-    if (fit) map.setView(location, Math.max(map.getZoom(), 18), { animate: false });
+    if (fit) map.setView(location, ROOF_EDIT_ZOOM, { animate: false });
     if (notify) onLocationChange(location);
     return true;
   };
@@ -211,7 +224,6 @@ export const createPropertyMap = async ({
   const setRoofPoints = (points, { fit = false } = {}) => {
     roofPoints = points.filter(isFinitePoint).map(normalizePoint);
     roofFinished = false;
-    selectedPointIndex = roofPoints.length ? roofPoints.length - 1 : -1;
     drawRoof();
     if (fit && roofPoints.length >= 2)
       map.fitBounds(L.latLngBounds(roofPoints), { padding: [28, 28] });
@@ -285,44 +297,13 @@ export const createPropertyMap = async ({
       return {
         points: roofPoints.map(normalizePoint),
         areaSqm: calculatePreliminaryPolygonArea(roofPoints),
-        selectedPointIndex,
         complete: roofFinished && roofPoints.length >= 3
       };
-    },
-    selectPoint(index) {
-      if (!Number.isInteger(index) || !roofPoints[index]) return false;
-      selectedPointIndex = index;
-      roofMarkers[index]?.openPopup?.();
-      emitRoof();
-      return true;
-    },
-    nudgeSelected({ north = 0, east = 0 } = {}) {
-      if (!roofPoints[selectedPointIndex]) return false;
-      const latitude = roofPoints[selectedPointIndex].lat;
-      const latitudeDelta = Number(north) / 111_320;
-      const longitudeDelta = Number(east) / (111_320 * Math.cos((latitude * Math.PI) / 180));
-      roofPoints[selectedPointIndex] = {
-        lat: latitude + latitudeDelta,
-        lng: roofPoints[selectedPointIndex].lng + longitudeDelta
-      };
-      drawRoof();
-      emitRoof();
-      return true;
     },
     undo() {
       if (!roofPoints.length) return false;
       roofFinished = false;
       roofPoints.pop();
-      selectedPointIndex = roofPoints.length - 1;
-      drawRoof();
-      emitRoof();
-      return true;
-    },
-    removeSelected() {
-      if (!roofPoints[selectedPointIndex]) return false;
-      roofFinished = false;
-      roofPoints.splice(selectedPointIndex, 1);
-      selectedPointIndex = Math.min(selectedPointIndex, roofPoints.length - 1);
       drawRoof();
       emitRoof();
       return true;

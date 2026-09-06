@@ -741,9 +741,6 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
   root
     .querySelector('[data-roof-reset]')
     ?.addEventListener('click', () => mapController?.resetRoof());
-  root
-    .querySelector('[data-roof-remove]')
-    ?.addEventListener('click', () => mapController?.removeSelected());
   root.querySelector('[data-roof-finish]')?.addEventListener('click', () => {
     if (!mapController?.finishRoof()) {
       writeStatus(product.roof?.minimumPoints, true);

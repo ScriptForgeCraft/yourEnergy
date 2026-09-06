@@ -2524,6 +2524,12 @@ h3 {
   font-size: 0.72rem;
   font-weight: 850;
   line-height: 1;
+  cursor: grab;
+  touch-action: none;
+}
+
+.property-map__marker--roof > span:active {
+  cursor: grabbing;
 }
 
 .property-map .leaflet-control-zoom a {

@@ -19,7 +19,8 @@ const copy = {
       'Նշեք տանիքի իրական հարթությունը։ Այն կարող է տարբերվել PVGIS-ի ազատ կանգնող համակարգի օպտիմումից։',
     parallel: 'Տանիքին զուգահեռ',
     elevated: 'Բարձրացված կառուցվածք',
-    drawRoof: 'Քարտեզի վրա կտտացրեք տանիքի անկյունները',
+    drawRoof:
+      'Քարտեզը մոտեցված է ընտրված կետին։ Կտտացրեք տանիքի անկյունները, քաշեք մարկերը՝ դիրքը փոխելու համար, կամ կտտացրեք մարկերին՝ այդ անկյունը հեռացնելու համար։',
     continueConsumption: 'Շարունակել դեպի սպառում',
     calculate: 'Ստանալ նախնական հաշվարկ',
     back: 'Վերադառնալ',
@@ -68,7 +69,8 @@ const copy = {
       'Опишите реальную плоскость крыши. Она может отличаться от оптимума PVGIS для отдельно стоящей системы.',
     parallel: 'Параллельно крыше',
     elevated: 'Приподнятая конструкция',
-    drawRoof: 'Нажимайте на углы крыши на карте',
+    drawRoof:
+      'Карта открывается на максимальном масштабе выбранной точки. Нажимайте на углы крыши, перетаскивайте маркер для исправления позиции или кликните по маркеру, чтобы удалить этот угол.',
     continueConsumption: 'Перейти к потреблению',
     calculate: 'Получить предварительный расчёт',
     back: 'Назад',
@@ -116,7 +118,8 @@ const copy = {
       'Describe the actual roof plane. It may differ from the PVGIS optimum for a free-standing system.',
     parallel: 'Parallel to roof',
     elevated: 'Elevated structure',
-    drawRoof: 'Click the roof corners on the map',
+    drawRoof:
+      'The map opens at the selected point’s maximum zoom. Click roof corners, drag a marker to adjust its position, or click a marker to remove that corner.',
     continueConsumption: 'Continue to consumption',
     calculate: 'Get preliminary calculation',
     back: 'Back',
