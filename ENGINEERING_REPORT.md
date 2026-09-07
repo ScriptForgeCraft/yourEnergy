@@ -87,8 +87,8 @@ disclosures. Public Quick routes no longer embed those controls.
 
 `src/ui/calculator-session.js` is the single `sessionStorage` handoff model for
 Quick, refinement and Pro. It persists region, consumption, tariff, point, roof,
-potential, the regional Quick analysis, detailed analysis and Passport snapshots
-for the current browser tab. Files are excluded: the electricity bill remains an
+potential, analysis request status, the regional Quick analysis, detailed analysis
+and Passport snapshots for the current browser tab. Files are excluded: the electricity bill remains an
 in-memory `File` and is never sent or serialised.
 
 Changing consumption in the same regional context preserves an existing
@@ -135,11 +135,37 @@ was not changed.
 
 ## 16. Homepage, demo content and shared chrome
 
-The existing consumer-first homepage was left intact: all calculation CTAs still
-point to same-locale Quick Calculator routes, and the homepage has no calculator
-runtime/map state. It continues to label static examples as examples instead of
-visitor-specific results. Shared Handlebars header/footer partials serve home,
-Quick, refinement, Pro, Offer Checker, Privacy and Terms.
+The homepage now has an original cinematic presentation while keeping its
+consumer-first information architecture. The full-bleed Armenian solar-home
+visual is explicitly illustrative and contains no text, logo or embedded
+figures. It has responsive AVIF/WebP/JPEG variants; the 1600 px AVIF used for
+LCP is 56 KB. The Hero exposes one calculator CTA per locale. Its glass card
+ships an explicitly labelled **example result** in static HTML, then reads the
+current-session `SolarAnalysis` snapshot when one exists. The fixed visual
+example is 8,420 kWh/year, 3.5 t/year CO₂ and 59 trees; it is never presented
+as the visitor’s outcome. A homes-equivalent indicator is deliberately absent
+until an approved Armenia household-consumption benchmark is supplied. While
+the current session is awaiting a fresh response, the card renders the
+localized “Calculating…” state rather than prior values.
+
+`src/ui/home-motion.js` is a homepage-only progressive enhancement: a single
+entrance sequence, one sun-path drawing and a scroll bridge into the example
+Solar Passport. Pointer depth was removed rather than retained behind a flag.
+It has no animation dependency,
+canvas, WebGL, Three.js or video, and it is disabled for reduced-motion
+preferences. The home header is fixed and genuinely transparent over the Hero,
+then becomes high-contrast after scrolling; calculator and support-page chrome
+remains unchanged. The Hero itself fills the initial viewport: the rail is
+visible without a first scroll, the copy and dashboard follow the supplied
+reference's left/right composition, and an original mountain/home photograph
+preserves readable copy and dashboard zones. The replaced Hero-only disclaimer
+and benefit-list markup/styles were removed rather than hidden; the full
+methodology remains on the page. All calculation CTAs still point to same-locale
+Quick Calculator routes. The homepage does not initialize calculator or map
+tools; it only reads the session snapshot and listens for an in-page analysis
+update event.
+Shared Handlebars header/footer partials serve home, Quick, refinement, Pro,
+Offer Checker, Privacy and Terms.
 
 ## 17. Removed/dead functionality
 
@@ -156,21 +182,29 @@ Added: regional data, Quick domain wrapper, Quick Function, shared session
 module, Quick/refinement controllers, localized mode content, Quick/refinement
 templates and Quick tests.
 
-Updated: page generator, Vite MPA inputs, API client, professional wizard
-hydration, property-map restoration API, tools CSS, build validator, README and
-Functions README. Generated `calculator/`, `ru/calculator/` and
-`en/calculator/` HTML now represents Quick mode; generated Pro/refinement HTML
-is new.
+Updated: page generator, shared header partial, Vite MPA inputs, API client,
+professional wizard hydration, property-map restoration API, tools CSS, build
+validator, README and Functions README. The cinematic homepage pass added
+`assets/source/hero-times/`, responsive public derivatives,
+`src/styles/home-cinematic.css`, `src/ui/home-motion.js` and
+`test/home-cinematic.test.js`; it removed the replaced white-Hero roof-scan CSS
+selectors rather than keeping parallel styling. Generated homepage HTML is only
+written through `scripts/generate-pages.mjs`. Generated `calculator/`,
+`ru/calculator/` and `en/calculator/` HTML now represents Quick mode; generated
+Pro/refinement HTML is new.
 
 ## 19. Automated verification
 
 Completed locally after implementation:
 
-- `npm test` — 59 tests passed.
+- `npm run assets:build` — generated responsive AVIF/WebP/JPEG variants of all
+  six local-time Hero frames.
+- `npm test` — 71 tests passed.
 - `npm run lint` — passed.
 - `npm run format:check` — passed.
 - `npm run build` — passed; 21 generated HTML routes.
 - `npm run verify:build` — passed for all 21 routes.
+- `npm run check` — passed end to end.
 
 Leaflet remains a separate lazy 43.38 kB gzip chunk; Quick Calculator has no map
 selector and does not request it until a visitor enters a map workflow.
@@ -186,13 +220,46 @@ Refinement had no visible tilt/azimuth fields and opened Leaflet only after an
 explicit map action. Pro exposed all professional controls without a collapsed
 Engineering parameters wrapper. There were no browser console errors.
 
-Local Vite preview does not execute Pages Functions/KV, so successful live PVGIS
-browser response is not claimed. Controlled Function tests cover success,
-failure, tariff conditions and cache setup. Before release configure
-`PVGIS_CACHE` plus `PVGIS_CACHE_SALT` in Cloudflare Pages and run a live Quick
-and refinement flow on Pages. Native Armenian copy and legal content still need
-owner approval. This UX pass performs no additional commit, push, deployment or
-migration.
+Local production-preview checks cover the new home Hero across HY/RU/EN at 360,
+375, 390, 430, 768, 1024 and 1440 px: each route has one H1 and one calculator
+CTA, the responsive AVIF is selected, the labelled example Hero state and Passport
+bridge are present, scroll header and bridge state work, no horizontal overflow
+occurs, and the browser console reports no errors. Unit tests cover motion gating
+for reduced-motion and coarse-pointer visitors. Local Vite preview does not execute Pages Functions/KV,
+so successful live PVGIS browser response is not claimed. Controlled Function
+tests cover success, failure, tariff conditions and cache setup. Before release
+configure `PVGIS_CACHE` plus `PVGIS_CACHE_SALT` in Cloudflare Pages and run a
+live Quick and refinement flow on Pages. Native Armenian copy and legal content
+still need owner approval. This UX pass performs no additional commit, push,
+deployment or migration.
+
+### Local-time Hero update
+
+The former single Hero source and derivatives were deleted after the six
+supplied `08:00`–`20:00` frames replaced them. The homepage chooses a frame
+from the local browser clock only; it does not request a location or calculate
+the astronomical position of the sun. Because every supplied frame already
+contains the gold trajectory, the previous SVG path was removed to prevent a
+double line. The decorative sun marker follows the selected frame on desktop;
+it is intentionally hidden on narrow cropped images where it could not align
+truthfully with the embedded path. A current production-preview check selected
+the expected `18:00` AVIF at local 17:xx, with no console errors or horizontal
+overflow at desktop and 375 px.
+
+The Hero result card now follows the supplied glass-card direction: location,
+generation and outcome indicators use the local icon sprite, while a compact
+monthly bar chart and lightning callout form one readable visual unit. It
+reads the same `SolarAnalysis` that Quick, Roof Refinement and Professional
+Calculator save in the browser session; a refinement therefore replaces an
+earlier Quick snapshot rather than leaving stale Hero values. Without an
+analysis it displays a visibly labelled visual example: 8,420 kWh/year,
+3.5 t/year CO₂ and an equivalent 59 trees. The homes-equivalent metric is not
+present. While an analysis request is active, it shows the localized calculating
+state rather than stale numbers. Mouse/pointer parallax was deleted rather than retained behind a flag.
+The example and real result figures count up once; reduced-motion visitors
+retain the formatted static values. A versioned Armenian grid-CO₂ factor exists
+but has no verified coefficient/source yet, so CO₂ remains hidden in real user
+results until the owner configures it.
 
 ## Owner-controlled content
 

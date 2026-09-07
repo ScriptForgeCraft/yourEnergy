@@ -24,43 +24,53 @@
     <link rel='stylesheet' href='/src/styles/main.css' />
     <script type='application/ld+json'>{"@context":"https://schema.org","@graph":[{"@type":"WebSite","@id":"https://yourenergy.am/#website","name":"YOURENERGY","url":"https://yourenergy.am/"},{"@type":"Organization","@id":"https://yourenergy.am/#organization","name":"Your Energy LLC","alternateName":"YOURENERGY","url":"https://yourenergy.am/","telephone":"+374 91 095 950","address":{"@type":"PostalAddress","streetAddress":"Artashisyan 48 14 Kotayq, Zovuni, 26 33 str, Yerevan","addressCountry":"AM"}},{"@type":"Service","@id":"https://yourenergy.am/#service","name":"Արևային համակարգի նախնական վերլուծություն","serviceType":"Արևային համակարգի նախնական վերլուծություն","url":"https://yourenergy.am/","provider":{"@id":"https://yourenergy.am/#organization"},"areaServed":{"@type":"Country","name":"Armenia"}},{"@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Որքա՞ն արժե արևային համակարգը։","acceptedAnswer":{"@type":"Answer","text":"Օբյեկտի վերլուծությունից հետո կարող է ցուցադրվել գործող PriceBook-ից YOUR ENERGY-ի ժամանակավոր նախնական միջակայք։ Այն առաջարկ չէ․ վերջնական գինը կախված է հզորությունից, տանիքից, սարքավորումներից և միացման պայմաններից ու հաստատվում է տեղազննումից հետո։"}},{"@type":"Question","name":"Ինչպե՞ս է հաշվարկվում հզորությունը։","acceptedAnswer":{"@type":"Answer","text":"Նախնական հոսքը օգտագործում է մուտքագրված սպառումը, հաստատված կետը, ձեռքով ուրվագծված տանիքը և մատակարարի արևային ռեսուրսի տվյալները, երբ այն միացված է։ Ստվերումն ու ցանցի սահմանափակումները ստուգում է ինժեները։"}},{"@type":"Question","name":"Որքա՞ն է վերադարձի ժամկետը։","acceptedAnswer":{"@type":"Answer","text":"Վերադարձի ժամկետը ցուցադրվում է միայն PVGIS-ի վերլուծությունից և ձեր մուտքագրած սակագնից հետո։ Մոդելը չի ներառում սակագնի աճ, դեգրադացիա, սպասարկում, վարկ, դիսկոնտավորում, հարկեր և ցանց արտահանման կանոններ։"}},{"@type":"Question","name":"Արդյո՞ք վահանակները պետք է սպասարկել։","acceptedAnswer":{"@type":"Answer","text":"Պարբերական զննումը, մոնիտորինգը և անհրաժեշտության դեպքում մաքրումը օգնում են պահպանել համակարգը։ Կարգը կախված է սարքավորումներից և օբյեկտից։"}},{"@type":"Question","name":"Ի՞նչ է տեղի ունենում ամպամած եղանակին։","acceptedAnswer":{"@type":"Answer","text":"Արտադրությունը նվազում է, իսկ գիշերը դադարում։ Տունը օգտվում է ցանցից կամ կուտակիչից, եթե այն ներառված է հաստատված նախագծում։"}},{"@type":"Question","name":"Կարելի՞ է տեղադրել կուտակիչ։","acceptedAnswer":{"@type":"Answer","text":"Այո, 10 kWh կուտակիչը ցուցադրված է «Էներգետիկ անկախություն» դեմո տարբերակում։ Իրական տարողությունը ընտրվում է ըստ սպառման և պահուստի պահանջի։"}},{"@type":"Question","name":"Կարելի՞ է համակարգը տեղադրել վարկով։","acceptedAnswer":{"@type":"Answer","text":"Այս տարբերակում վարկային ծրագիր չի հայտարարվում։ Ֆինանսավորման պայմանները կարող են հրապարակվել միայն հաստատված գործընկերոջ և պայմանագրի առկայությամբ։"}},{"@type":"Question","name":"Ի՞նչ է Solar Passport-ը։","acceptedAnswer":{"@type":"Answer","text":"Նախնական Passport-ը միավորում է ընթացիկ սեսիայի տվյալները, աղբյուրներն ու ենթադրությունները։ Այն տեխնիկական նախագիծ, բանկային փաստաթուղթ կամ օֆերտա չէ, իսկ P0-ում մշտական հղումն ու PDF-ը միացված չեն։"}}]}]}</script>
   </head>
-  <body>
+  <body class='page-home'>
     <a class='skip-link' href='#main'>Անցնել հիմնական բովանդակությանը</a>
-    <header class='site-header' data-header>
+    <header class='site-header site-header--overlay' data-header>
       <div class='container header-row'>
-        <a class='wordmark' href='/' aria-label='YOURENERGY — գլխավոր էջ'><span>YOUR</span><strong
-          >ENERGY</strong></a>
+        <a class='wordmark' href='/' aria-label='YOURENERGY — գլխավոր էջ'><svg
+              class='wordmark__sun'
+              aria-hidden='true'
+            ><use href='/icons.svg#sun'></use></svg><span>YOUR</span><strong>ENERGY</strong></a>
         <nav class='desktop-nav' aria-label='Հիմնական նավիգացիա'>
-          <a href='/'>Տան համար</a>
-          <a href='#projects'>Նախագծեր</a>
-          <a href='#process'>Ինչպես է աշխատում</a>
+          <a href='/'>Գլխավոր</a>
+          <a href='/calculator/'>Հաշվիչ</a>
+          <a href='#solutions'>Լուծումներ</a>
+          <a href='#process'>Ընթացք</a>
           <a href='#engineering'>Մեր մասին</a>
           <a href='#contacts'>Կապ</a>
         </nav>
         <div class='header-actions'>
           <a class='header-phone' href='tel:+37491095950'><strong>+374 91 095 950</strong><small
             >Բաց է մինչև 21:00</small></a>
-          <nav class='language-switcher' aria-label='Լեզվի ընտրություն'><a
-                class='language-link'
-                href='/ru/'
-                hreflang='ru'
-                aria-label='RU — Ռուսերեն'
-              >RU</a><a
-                class='language-link'
-                href='/en/'
-                hreflang='en'
-                aria-label='EN — Անգլերեն'
-              >EN</a></nav>
-          <a class='button button--small' href='/calculator/'>Հաշվել իմ տունը</a>
+            <details class='language-menu'>
+              <summary aria-label='Լեզվի ընտրություն'>AM<span
+                  aria-hidden='true'
+                >⌄</span></summary>
+              <nav aria-label='Լեզվի ընտրություն'><a
+                    class='language-link'
+                    href='/ru/'
+                    hreflang='ru'
+                    aria-label='RU — Ռուսերեն'
+                  >RU</a><a
+                    class='language-link'
+                    href='/en/'
+                    hreflang='en'
+                    aria-label='EN — Անգլերեն'
+                  >EN</a></nav>
+            </details>
+          <a class='button button--small' href='/calculator/'>Ստանալ հաշվարկ</a>
         </div>
         <details class='mobile-menu' data-mobile-menu>
           <summary aria-label='Բացել նավիգացիոն ցանկը'><span></span><span></span><span></span></summary>
           <nav aria-label='Բջջային նավիգացիա'>
-            <a href='/'>Տան համար</a><a
-              href='#projects'
-            >Նախագծեր</a><a href='#process'>Ինչպես է աշխատում</a><a
-              href='#engineering'
-            >Մեր մասին</a><a href='#contacts'>Կապ</a>
+            <a href='/'>Գլխավոր</a><a
+              href='/calculator/'
+            >Հաշվիչ</a><a href='#solutions'>Լուծումներ</a><a
+              href='#process'
+            >Ընթացք</a><a href='#engineering'>Մեր մասին</a><a
+              href='#contacts'
+            >Կապ</a>
             <div class='mobile-language-switcher' role='group' aria-label='Լեզվի ընտրություն'><a
                   class='language-link'
                   href='/ru/'
@@ -76,89 +86,98 @@
         </details>
       </div>
     </header>
-    <main id='main'>
-      <section class='hero section home-hero' id='top' aria-labelledby='hero-title'>
-        <div class='container hero-grid'>
-          <div class='hero-copy'>
-            <p class='eyebrow'>Արևային համակարգ ձեր տան համար</p>
-            <h1 id='hero-title'>Բացահայտեք ձեր տան<br />արևային ներուժը<br /><mark
-              >60 վայրկյանում</mark></h1>
-            <p class='hero-intro'>Իմացեք, թե ինչ կստանաք հաշվարկից հետո՝ հզորություն, վահանակներ, արտադրություն, նախնական բյուջե և տնտեսում՝ եթե մուտքագրեք սակագինը։</p>
+    <main id='main' data-home-story>
+      <section class='hero section home-hero' id='top' aria-labelledby='hero-title' data-home-hero>
+        <picture class='hero-backdrop' aria-hidden='true' data-hero-time-backdrop>
+          <source
+            type='image/avif'
+            srcset='/images/hero-time-20-640.avif 640w, /images/hero-time-20-1024.avif 1024w, /images/hero-time-20-1600.avif 1600w'
+            sizes='100vw'
+            data-hero-time-source='avif'
+          />
+          <source
+            type='image/webp'
+            srcset='/images/hero-time-20-640.webp 640w, /images/hero-time-20-1024.webp 1024w, /images/hero-time-20-1600.webp 1600w'
+            sizes='100vw'
+            data-hero-time-source='webp'
+          />
+          <img
+            src='/images/hero-time-20-1600.jpg'
+            srcset='/images/hero-time-20-640.jpg 640w, /images/hero-time-20-1024.jpg 1024w, /images/hero-time-20-1600.jpg 1600w'
+            sizes='100vw'
+            width='1600'
+            height='900'
+            alt=''
+            fetchpriority='high'
+            decoding='async'
+            data-hero-time-image
+          />
+        </picture>
+        <div class='hero-scrim' aria-hidden='true'></div>
+        <span class='hero-time-sun' data-hero-time-sun aria-hidden='true'></span>
+        <p class='hero-sun-note' aria-hidden='true'><span>Ավելի շատ արև</span><span>Ավելի պայծառ ապագա</span></p>
+        <p class='hero-outlook-note' aria-hidden='true'><span>Մաքուր տներ</span><span>Ավելի հզոր Հայաստան</span></p>
+        <div class='hero-frame'>
+          <div class='container hero-grid'>
+            <div class='hero-copy' data-hero-copy>
+            <p class='eyebrow'>ԱՐԵՎԱՅԻՆ ԷՆԵՐԳԻԱ ՁԵՐ ՏԱՆ ՀԱՄԱՐ</p>
+            <h1 id='hero-title'>Ձեր տանիքն ավելի<br />մեծ ներուժ ունի,<br /><mark
+              >քան կարծում եք։</mark></h1>
+            <p class='hero-intro'>Մի քանի քայլով բացահայտեք ձեր տան արևային ներուժը, նախնական հզորությունն ու բյուջեն, իսկ սակագինը նշելու դեպքում՝ նաև տնտեսումը։</p>
             <div class='hero-actions'>
-              <a class='button button--navy' href='/calculator/'>Բացել հաշվիչը</a>
+              <a class='button button--navy' href='/calculator/'>Հաշվել իմ տան համար</a>
             </div>
-            <p class='hero-route-note'>Նախնական արդյունքը պահանջում է օբյեկտի հաստատում և չի փոխարինում տեղազննմանը, ինժեներական նախագծին կամ առևտրային առաջարկին։</p>
-            <ul class='hero-benefits' role='list'>
-              <li><svg class='inline-icon' aria-hidden='true'><use
-                      href='/icons.svg#check'
-                    ></use></svg>Առանց զանգի և պարտավորության</li><li><svg class='inline-icon' aria-hidden='true'><use
-                      href='/icons.svg#check'
-                    ></use></svg>Հաստատեք օբյեկտը քարտեզի վրա</li><li><svg class='inline-icon' aria-hidden='true'><use
-                      href='/icons.svg#check'
-                    ></use></svg>Նշեք սպառման տվյալները</li><li><svg class='inline-icon' aria-hidden='true'><use
-                      href='/icons.svg#check'
-                    ></use></svg>Տեսեք աղբյուրներն ու ենթադրությունները</li>
-            </ul>
-          </div>
+            </div>
 
-          <div class='roof-product' aria-label='Հաշվարկից հետո արդյունքի օրինակ'>
-            <figure class='roof-visual'>
-              <picture>
-                <source
-                  type='image/avif'
-                  srcset='/images/roof-scan-480.avif 480w, /images/roof-scan-768.avif 768w, /images/roof-scan-1200.avif 1200w, /images/roof-scan-1600.avif 1600w'
-                  sizes='(max-width: 760px) 100vw, 50vw'
-                />
-                <source
-                  type='image/webp'
-                  srcset='/images/roof-scan-480.webp 480w, /images/roof-scan-768.webp 768w, /images/roof-scan-1200.webp 1200w, /images/roof-scan-1600.webp 1600w'
-                  sizes='(max-width: 760px) 100vw, 50vw'
-                />
-                <img
-                  src='/images/roof-scan-1200.jpg'
-                  srcset='/images/roof-scan-480.jpg 480w, /images/roof-scan-768.jpg 768w, /images/roof-scan-1200.jpg 1200w, /images/roof-scan-1600.jpg 1600w'
-                  sizes='(max-width: 760px) 100vw, 50vw'
-                  width='1600'
-                  height='1067'
-                  alt='Տանիքի պատկերազարդող օդային պատկեր՝ մինչև օբյեկտի հաստատումը'
-                  fetchpriority='high'
-                  decoding='async'
-                />
-              </picture>
-              <div class='roof-shade' aria-hidden='true'></div>
-              <svg class='roof-overlay' viewBox='0 0 1000 660' aria-hidden='true' focusable='false'>
-                <polygon points='295,125 670,214 616,499 239,410' class='roof-boundary'></polygon>
-                <g class='panel-grid'>
-                  <rect x='330' y='195' width='66' height='49'></rect><rect x='400' y='212' width='66' height='49'></rect><rect x='470' y='229' width='66' height='49'></rect><rect x='540' y='246' width='66' height='49'></rect>
-                  <rect x='314' y='261' width='66' height='49'></rect><rect x='384' y='278' width='66' height='49'></rect><rect x='454' y='295' width='66' height='49'></rect><rect x='524' y='312' width='66' height='49'></rect>
-                  <rect x='298' y='327' width='66' height='49'></rect><rect x='368' y='344' width='66' height='49'></rect><rect x='438' y='361' width='66' height='49'></rect><rect x='508' y='378' width='66' height='49'></rect>
-                  <rect x='282' y='393' width='66' height='49'></rect><rect x='352' y='410' width='66' height='49'></rect><rect x='422' y='427' width='66' height='49'></rect><rect x='492' y='444' width='66' height='49'></rect>
-                </g>
-              </svg>
-              <figcaption class='map-caption'><span class='demo-badge'>Տվյալների օրինակ</span><span
-                >Այս ստատիկ պատկերը և վահանակների դասավորությունը կիրառվում են միայն որպես նշված պահուստային տարբերակ՝ մինչև օբյեկտի հաստատումը։</span></figcaption>
-              <aside class='roof-info'>
-                <strong>Պատկերազարդող տուն</strong>
-                <dl>
-                  <div><dt>Տանիքի մակերես</dt><dd>Օրինակ՝ 124 մ²</dd></div>
-                  <div><dt>Կողմնորոշում</dt><dd>Օրինակ՝ հարավ-արևմուտք (236°)</dd></div>
-                  <div><dt>Թեքություն</dt><dd>Օրինակ՝ 32°</dd></div>
-                  <div class='success'><dt>Solar Score</dt><dd>Միայն օրինակ</dd></div>
-                </dl>
-              </aside>
-            </figure>
-            <div class='result-panel'>
-              <span class='demo-badge demo-badge--inline'>Ցուցադրական օրինակ</span>
-              <p>Արդյունքի օրինակ՝ ոչ ձեր տան հաշվարկ</p>
-              <dl>
-                  <div><dt>Տարեկան արտադրություն</dt><dd>14 600 <small>kWh</small></dd></div>
-                  <div><dt>Տարեկան խնայողություն</dt><dd>720 000 <small>֏</small></dd></div>
-                  <div><dt>Պարզ վերադարձի ժամկետ</dt><dd>≈ 6,0 <small>տարի</small></dd></div>
-                  <div><dt>Սպառման ծածկում</dt><dd>92 <small>%</small></dd></div>
+            <aside
+              class='hero-dashboard'
+              data-hero-dashboard
+              data-dashboard-mode='example'
+              aria-label='Արևային հաշվարկի ամփոփում'
+            >
+              <div class='hero-dashboard__top'>
+                <span class='hero-dashboard__location'><svg class='inline-icon' aria-hidden='true'><use
+                      href='/icons.svg#map-pin'
+                    ></use></svg><span data-hero-analysis-location>Երևան, Հայաստան</span></span>
+                <span class='hero-dashboard__status' data-hero-analysis-status>ԱՐԴՅՈՒՆՔԻ ՕՐԻՆԱԿ</span>
+              </div>
+              <p class='hero-dashboard__label' data-hero-analysis-label aria-live='polite'>Տարեկան արտադրություն</p>
+              <div class='hero-dashboard__production'>
+                <svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#sun'></use></svg>
+                <span>Տարեկան արտադրություն</span>
+              </div>
+              <div class='hero-dashboard__yield'>
+                <div class='hero-dashboard__metric'><strong data-hero-analysis-generation data-hero-countup data-hero-countup-value='8420'>8 420</strong><span data-hero-analysis-generation-unit>kWh / տարի</span></div>
+                <div class='hero-dashboard__bars' data-hero-analysis-bars role='img' aria-label='Տարեկան արտադրություն'><i style='--hero-bar-height: 33%;'></i><i style='--hero-bar-height: 40%;'></i><i style='--hero-bar-height: 58%;'></i><i style='--hero-bar-height: 76%;'></i><i style='--hero-bar-height: 84%;'></i><i style='--hero-bar-height: 92%;'></i><i style='--hero-bar-height: 100%;'></i><i style='--hero-bar-height: 96%;'></i><i style='--hero-bar-height: 81%;'></i><i style='--hero-bar-height: 64%;'></i><i style='--hero-bar-height: 48%;'></i><i style='--hero-bar-height: 36%;'></i></div>
+              </div>
+              <dl class='hero-dashboard__facts'>
+                <div data-hero-example-co2><svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#leaf'></use></svg><dt>CO₂-ի կրճատում</dt><dd><strong data-hero-example-co2-value data-hero-countup data-hero-countup-value='3.5' data-hero-countup-decimals='1'>3,5</strong> <small>տ / տարի</small></dd></div>
+                <div data-hero-analysis-coverage hidden><svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#shield-check'></use></svg><dt>Սպառման ծածկում</dt><dd><strong data-hero-analysis-coverage-value>Ավելացրեք սպառումը</strong> <small data-hero-analysis-coverage-unit hidden>%</small></dd></div>
+                <div data-hero-analysis-savings hidden><svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#zap'></use></svg><dt>Տարեկան խնայողություն</dt><dd><strong data-hero-analysis-savings-value>Ավելացրեք սակագինը</strong> <small data-hero-analysis-savings-unit hidden>֏ / տարի</small></dd></div>
+                <div data-hero-analysis-co2 hidden><svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#leaf'></use></svg><dt>CO₂ արտանետումների կրճատում</dt><dd><strong data-hero-analysis-co2-value>—</strong> <small data-hero-analysis-co2-unit>տ / տարի</small></dd></div>
+                <div data-hero-example-trees><svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#tree'></use></svg><dt>CO₂-ի տարեկան կլանման համարժեք</dt><dd><strong data-hero-example-trees-value data-hero-countup data-hero-countup-value='59'>59</strong> <small>ծառ</small></dd></div>
               </dl>
-              <a href='/calculator/'>Սկսել հաշվարկը <span aria-hidden='true'>→</span></a>
-            </div>
+              <p class='hero-dashboard__note'><svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#zap'></use></svg><span data-hero-analysis-note>Արդյունքի օրինակ․ հաշվարկեք ձեր տունը՝ ձեր տվյալները տեսնելու համար։</span></p>
+            </aside>
           </div>
+          <p class='hero-signature' aria-hidden='true'><span>Մաքուր էներգիա</span><span>Ավելի պայծառ կյանք</span><svg class='hero-signature__flourish' viewBox='0 0 126 18' focusable='false'><path d='M2 14c25-7 50-9 72-6 19 2 34 1 50-5'></path></svg></p>
+          <aside class='trust-strip hero-trust-strip' aria-label='Յուրաքանչյուր նախնական արդյունքում երևում են միացված, բացակայող և ձեռքով մուտքագրված աղբյուրները։ Ստատիկ քարտերը մնում են ցուցադրական։'>
+            <div class='container trust-strip__inner'>
+                <div class='trust-item'><svg class='inline-icon' aria-hidden='true'><use
+                      href='/icons.svg#satellite'
+                    ></use></svg><p><strong>PVGIS տվյալներ</strong><span>մատակարարի պատասխանի դեպքում</span></p></div>
+                <div class='trust-item'><svg class='inline-icon' aria-hidden='true'><use
+                      href='/icons.svg#calculator'
+                    ></use></svg><p><strong>Տան համար համակարգ</strong><span>հաստատված տվյալներից</span></p></div>
+                <div class='trust-item'><svg class='inline-icon' aria-hidden='true'><use
+                      href='/icons.svg#support'
+                    ></use></svg><p><strong>Տեղային ինժեներներ</strong><span>Հայաստանի տների համար</span></p></div>
+                <div class='trust-item'><svg class='inline-icon' aria-hidden='true'><use
+                      href='/icons.svg#shield'
+                    ></use></svg><p><strong>Հստակ պայմաններ</strong><span>կազմը հաստատվում է նախապես</span></p></div>
+              <a class='hero-scroll-cue' href='#passport' aria-label='Շարունակեք ներքև'><svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#arrow-right'></use></svg><span>Շարունակեք ներքև</span></a>
+            </div>
+          </aside>
         </div>
       </section>
 
@@ -167,7 +186,9 @@
         id='passport'
         aria-labelledby='passport-title'
         tabindex='-1'
+        data-passport-bridge
       >
+        <svg class='passport-energy-bridge' viewBox='0 0 1600 440' preserveAspectRatio='none' aria-hidden='true' focusable='false'><path pathLength='1' d='M1220 0 C 1120 104, 980 156, 890 420'></path></svg>
         <div class='container passport-grid'>
           <div class='passport-copy'>
             <p class='eyebrow'>Ինչ կստանաք հաշվարկից հետո</p>
@@ -328,29 +349,6 @@
           </div>
         </div>
       </section>
-
-
-      <aside class='trust-strip' aria-label='Յուրաքանչյուր նախնական արդյունքում երևում են միացված, բացակայող և ձեռքով մուտքագրված աղբյուրները։ Ստատիկ քարտերը մնում են ցուցադրական։'>
-        <div class='container trust-strip__inner'>
-            <div class='trust-item'><svg class='inline-icon' aria-hidden='true'><use
-                  href='/icons.svg#satellite'
-                ></use></svg><p><strong>PVGIS արևային ռեսուրս</strong><span>ցուցադրվում է միայն մատակարարի պատասխանի դեպքում</span></p></div>
-            <div class='trust-item'><svg class='inline-icon' aria-hidden='true'><use
-                  href='/icons.svg#calculator'
-                ></use></svg><p><strong>Տան թափանցիկ սցենար</strong><span>հաստատված տվյալներից</span></p></div>
-            <div class='trust-item'><svg class='inline-icon' aria-hidden='true'><use
-                  href='/icons.svg#shield'
-                ></use></svg><p><strong>Սարքավորումների ընտրություն</strong><span>ըստ օբյեկտի պարամետրերի</span></p></div>
-            <div class='trust-item'><svg class='inline-icon' aria-hidden='true'><use
-                  href='/icons.svg#cycle'
-                ></use></svg><p><strong>Ամբողջական ցիկլ</strong><span>հաշվարկից մինչև սպասարկում</span></p></div>
-            <div class='trust-item'><svg class='inline-icon' aria-hidden='true'><use
-                  href='/icons.svg#support'
-                ></use></svg><p><strong>Աջակցություն տեղադրումից հետո</strong><span>պայմանները ամրագրվում են պայմանագրով</span></p></div>
-        </div>
-        <p class='trust-disclosure'>Յուրաքանչյուր նախնական արդյունքում երևում են միացված, բացակայող և ձեռքով մուտքագրված աղբյուրները։ Ստատիկ քարտերը մնում են ցուցադրական։</p>
-      </aside>
-
       <section class='solutions section' id='solutions' aria-labelledby='solutions-title' >
         <div class='container'>
           <div class='section-heading'><div><p class='eyebrow'>Լուծումներ</p><h2
@@ -719,6 +717,7 @@
         >© 2026 YOURENERGY։ Բոլոր իրավունքները պաշտպանված են։</span><span><a href='/privacy/'>Գաղտնիության քաղաքականության նախագիծ</a><a
             href='/terms/'
           >Օգտագործման պայմանների նախագիծ</a></span></div></footer>
+    <script id='home-page-config' type='application/json'>{"locale":"hy-AM","hero":{"eyebrow":"ԱՐԵՎԱՅԻՆ ԷՆԵՐԳԻԱ ՁԵՐ ՏԱՆ ՀԱՄԱՐ","titleLead":"Ձեր տանիքն ավելի","titleMiddle":"մեծ ներուժ ունի,","titleAccent":"քան կարծում եք։","homeCopy":"Մի քանի քայլով բացահայտեք ձեր տան արևային ներուժը, նախնական հզորությունն ու բյուջեն, իսկ սակագինը նշելու դեպքում՝ նաև տնտեսումը։","calculatorCopy":"Սկզբում քարտեզի վրա ձեռքով ընտրեք և հաստատեք կետը, ապա տեսեք դրա PVGIS ներուժը։ Տանիքի և սպառման տվյալները պետք են միայն մանրամասն հաշվարկի համար։","disclosure":"Նախնական արդյունքը պահանջում է օբյեկտի հաստատում և չի փոխարինում տեղազննմանը, ինժեներական նախագծին կամ առևտրային առաջարկին։","addressLabel":"Հասցե ինժեների համար (ընտրովի)","addressPlaceholder":"Օրինակ՝ Երևան, Արաբկիր","addressHelp":"Հասցեն չի գեոկոդավորվում։ Բացեք քարտեզը, ձեռքով ընտրեք կետ կամ մուտքագրեք ներքևի կոորդինատները։","analyze":"Բացել կետի ընտրությունը","openCalculator":"Հաշվել իմ տան համար","uploadTitle":"Կցեք էլեկտրաէներգիայի հաշիվը (ընտրովի)","uploadPrompt":"Ընտրեք կամ քաշեք ֆայլը այստեղ","uploadHelp":"PDF, JPG կամ PNG՝ մինչև 10 ՄԲ։ Ֆայլը չի ուղարկվում սերվեր և ավտոմատ չի կարդացվում․ արժեքները մուտքագրեք ձեռքով։","removeFile":"Հեռացնել ֆայլը","signatureLead":"Մաքուր էներգիա","signatureTail":"Ավելի պայծառ կյանք","sunNoteLead":"Ավելի շատ արև","sunNoteTail":"Ավելի պայծառ ապագա","outlookLead":"Մաքուր տներ","outlookTail":"Ավելի հզոր Հայաստան","dashboardAriaLabel":"Արևային հաշվարկի ամփոփում","dashboardLocationSelected":"Ընտրված կետ","dashboardLocationRegional":"Տարածաշրջանային գնահատում","dashboardStatusPreliminary":"ՆԱԽՆԱԿԱՆ","dashboardReady":"Ընթացիկ սեսիայի արդյունք","dashboardGeneration":"Տարեկան արտադրություն","dashboardGenerationUnit":"kWh / տարի","dashboardCoverage":"Սպառման ծածկում","dashboardCoverageUnit":"%","dashboardSavings":"Տարեկան խնայողություն","dashboardSavingsUnit":"֏ / տարի","dashboardCo2":"CO₂ արտանետումների կրճատում","dashboardCo2Unit":"տ / տարի","dashboardNeedConsumption":"Ավելացրեք սպառումը","dashboardNeedTariff":"Ավելացրեք սակագինը","dashboardLoading":"Հաշվարկ…","dashboardNotePreliminary":"Հաշվարկը նախնական է։ Վերջնական պարամետրերն ու գինը հաստատում է ինժեները։","dashboardExample":{"location":"Երևան, Հայաստան","status":"ԱՐԴՅՈՒՆՔԻ ՕՐԻՆԱԿ","label":"Տարեկան արտադրություն","annualGenerationKwh":8420,"annualGenerationDisplay":"8 420","monthlyGenerationKwh":[320,390,570,740,820,900,980,940,790,630,470,350],"monthlyBarPercent":[33,40,58,76,84,92,100,96,81,64,48,36],"co2Tons":3.5,"co2Display":"3,5","trees":59,"co2Label":"CO₂-ի կրճատում","treesLabel":"CO₂-ի տարեկան կլանման համարժեք","treesUnit":"ծառ","note":"Արդյունքի օրինակ․ հաշվարկեք ձեր տունը՝ ձեր տվյալները տեսնելու համար։"}}}</script>
     <script type='module' src='/src/main.js'></script>
   </body>
 </html>

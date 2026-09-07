@@ -12,6 +12,7 @@ export const buildRegionalQuickAnalysis = ({
   tariffSelection,
   production,
   priceBook,
+  gridEmissionFactor,
   effectiveDate = new Date()
 } = {}) => {
   const analysis = buildSolarAnalysis({
@@ -36,6 +37,7 @@ export const buildRegionalQuickAnalysis = ({
     system: { panelWatts: 580, panelAreaSqm: 2 },
     investment: {},
     priceBook,
+    gridEmissionFactor,
     effectiveDate,
     scope: 'regional-preliminary',
     limitations: [

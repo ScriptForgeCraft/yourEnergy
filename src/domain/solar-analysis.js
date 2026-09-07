@@ -1,4 +1,5 @@
 import { normalizeConsumption, isNormalizedConsumption } from './consumption.js';
+import { buildEnvironmentalImpact } from './environment.js';
 import { ANALYSIS_STATUS, DATA_COMPLETENESS_LEVEL, SOURCE_KIND, SOURCE_STATUS } from './models.js';
 import {
   cleanString,
@@ -560,6 +561,11 @@ export const buildSolarAnalysis = (input = {}) => {
     priceBook,
     effectiveDate: input.effectiveDate
   });
+  const environmental = buildEnvironmentalImpact({
+    annualGenerationKwh: selectedScenario?.generation?.annualKwh,
+    gridEmissionFactor: input.gridEmissionFactor,
+    at: input.effectiveDate
+  });
   const limitations = Array.isArray(input.limitations)
     ? input.limitations.filter((limitation) => typeof limitation === 'string' && limitation)
     : [];
@@ -590,6 +596,7 @@ export const buildSolarAnalysis = (input = {}) => {
             basis: cleanString(input.mountingRecommendation.basis)
           }
         : null,
+    environmental,
     limitations,
     financial: {
       tariff: {

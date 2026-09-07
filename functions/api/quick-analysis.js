@@ -1,4 +1,5 @@
 import {
+  ARMENIA_GRID_CO2_FACTOR,
   PriceBookRepository,
   buildRegionalQuickAnalysis,
   createUserTariffSelection,
@@ -75,6 +76,7 @@ export const quickAnalyze = async ({ request, env, fetchImpl }) => {
         }
       },
       priceBook,
+      gridEmissionFactor: ARMENIA_GRID_CO2_FACTOR,
       effectiveDate: new Date()
     })
   };

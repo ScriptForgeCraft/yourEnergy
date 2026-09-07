@@ -201,11 +201,15 @@ const createHomeContext = (content, { pageKind = 'home' } = {}) => {
 
   return {
     ...content,
+    headerOverlay: isHome,
+    headerClass: isHome ? ' site-header--overlay' : '',
+    currentLanguageLabel: content.locale === 'hy' ? 'AM' : content.locale.toUpperCase(),
     calculatorHref,
     headerCtaHref: calculatorHref,
     navLinks: {
       home: content.homeHref,
-      projects: homeSectionHref('#projects'),
+      calculator: calculatorHref,
+      projects: homeSectionHref('#solutions'),
       process: homeSectionHref('#process'),
       about: homeSectionHref('#engineering'),
       contacts: '#contacts'
@@ -260,7 +264,10 @@ const createHomeContext = (content, { pageKind = 'home' } = {}) => {
       }))
     },
     jsonLd: escapeJsonForHtml(createJsonLd(content)),
-    pageConfig: escapeJsonForHtml(createPageConfig(content))
+    homePageConfig: escapeJsonForHtml({
+      locale: runtimeLocales[content.locale],
+      hero: content.hero
+    })
   };
 };
 

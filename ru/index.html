@@ -24,43 +24,53 @@
     <link rel='stylesheet' href='/src/styles/main.css' />
     <script type='application/ld+json'>{"@context":"https://schema.org","@graph":[{"@type":"WebSite","@id":"https://yourenergy.am/#website","name":"YOURENERGY","url":"https://yourenergy.am/"},{"@type":"Organization","@id":"https://yourenergy.am/#organization","name":"Your Energy LLC","alternateName":"YOURENERGY","url":"https://yourenergy.am/","telephone":"+374 91 095 950","address":{"@type":"PostalAddress","streetAddress":"Artashisyan 48 14 Kotayq, Zovuni, 26 33 str, Yerevan","addressCountry":"AM"}},{"@type":"Service","@id":"https://yourenergy.am/ru/#service","name":"Предварительный анализ солнечной системы","serviceType":"Предварительный анализ солнечной системы","url":"https://yourenergy.am/ru/","provider":{"@id":"https://yourenergy.am/#organization"},"areaServed":{"@type":"Country","name":"Armenia"}},{"@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Сколько стоит солнечная система?","acceptedAnswer":{"@type":"Answer","text":"После анализа объекта может появиться временный предварительный диапазон YOUR ENERGY из действующего PriceBook. Это не оферта: точная цена зависит от мощности, крыши, оборудования, подключения и подтверждается после осмотра."}},{"@type":"Question","name":"Как рассчитывается мощность?","acceptedAnswer":{"@type":"Answer","text":"Предварительный сценарий использует введённое потребление, подтверждённую точку, вручную очерченную крышу и данные солнечного ресурса провайдера при его подключении. Затенение и сеть проверяет инженер."}},{"@type":"Question","name":"Какой срок окупаемости?","acceptedAnswer":{"@type":"Answer","text":"Срок окупаемости показывается только после PVGIS-анализа и указанного вами тарифа. Модель не учитывает рост тарифа, деградацию, обслуживание, кредит, дисконтирование, налоги и правила отпуска энергии."}},{"@type":"Question","name":"Нужно ли обслуживать панели?","acceptedAnswer":{"@type":"Answer","text":"Периодический осмотр, контроль мониторинга и очистка при необходимости помогают поддерживать систему. Точный регламент зависит от оборудования и условий объекта."}},{"@type":"Question","name":"Что происходит в пасмурную погоду?","acceptedAnswer":{"@type":"Answer","text":"Генерация снижается, а ночью прекращается. Дом использует сеть либо аккумулятор, если он предусмотрен подтверждённым проектом."}},{"@type":"Question","name":"Можно ли установить аккумулятор?","acceptedAnswer":{"@type":"Answer","text":"Да, аккумулятор показан в демо-варианте «Энергонезависимость». Реальная ёмкость выбирается по профилю потребления и требуемому резерву."}},{"@type":"Question","name":"Можно ли установить систему в кредит?","acceptedAnswer":{"@type":"Answer","text":"В этой версии кредитная программа не заявлена. Условия финансирования можно публиковать только после подтверждения конкретного партнёра и договора."}},{"@type":"Question","name":"Что такое Solar Passport?","acceptedAnswer":{"@type":"Answer","text":"Предварительный Passport объединяет данные текущего сеанса, источники и допущения. Это не технический проект, банковский документ или оферта; постоянная ссылка и PDF в P0 не подключены."}}]}]}</script>
   </head>
-  <body>
+  <body class='page-home'>
     <a class='skip-link' href='#main'>Перейти к основному содержанию</a>
-    <header class='site-header' data-header>
+    <header class='site-header site-header--overlay' data-header>
       <div class='container header-row'>
-        <a class='wordmark' href='/ru/' aria-label='YOURENERGY — главная страница'><span>YOUR</span><strong
-          >ENERGY</strong></a>
+        <a class='wordmark' href='/ru/' aria-label='YOURENERGY — главная страница'><svg
+              class='wordmark__sun'
+              aria-hidden='true'
+            ><use href='/icons.svg#sun'></use></svg><span>YOUR</span><strong>ENERGY</strong></a>
         <nav class='desktop-nav' aria-label='Основная навигация'>
-          <a href='/ru/'>Для дома</a>
-          <a href='#projects'>Проекты</a>
-          <a href='#process'>Как это работает</a>
-          <a href='#engineering'>О нас</a>
+          <a href='/ru/'>Главная</a>
+          <a href='/ru/calculator/'>Калькулятор</a>
+          <a href='#solutions'>Решения</a>
+          <a href='#process'>Процесс</a>
+          <a href='#engineering'>О компании</a>
           <a href='#contacts'>Контакты</a>
         </nav>
         <div class='header-actions'>
           <a class='header-phone' href='tel:+37491095950'><strong>+374 91 095 950</strong><small
             >Открыто до 21:00</small></a>
-          <nav class='language-switcher' aria-label='Выбор языка'><a
-                class='language-link'
-                href='/'
-                hreflang='hy'
-                aria-label='AM — Армянский'
-              >AM</a><a
-                class='language-link'
-                href='/en/'
-                hreflang='en'
-                aria-label='EN — Английский'
-              >EN</a></nav>
-          <a class='button button--small' href='/ru/calculator/'>Рассчитать мой дом</a>
+            <details class='language-menu'>
+              <summary aria-label='Выбор языка'>RU<span
+                  aria-hidden='true'
+                >⌄</span></summary>
+              <nav aria-label='Выбор языка'><a
+                    class='language-link'
+                    href='/'
+                    hreflang='hy'
+                    aria-label='AM — Армянский'
+                  >AM</a><a
+                    class='language-link'
+                    href='/en/'
+                    hreflang='en'
+                    aria-label='EN — Английский'
+                  >EN</a></nav>
+            </details>
+          <a class='button button--small' href='/ru/calculator/'>Получить расчёт</a>
         </div>
         <details class='mobile-menu' data-mobile-menu>
           <summary aria-label='Открыть навигационное меню'><span></span><span></span><span></span></summary>
           <nav aria-label='Мобильная навигация'>
-            <a href='/ru/'>Для дома</a><a
-              href='#projects'
-            >Проекты</a><a href='#process'>Как это работает</a><a
-              href='#engineering'
-            >О нас</a><a href='#contacts'>Контакты</a>
+            <a href='/ru/'>Главная</a><a
+              href='/ru/calculator/'
+            >Калькулятор</a><a href='#solutions'>Решения</a><a
+              href='#process'
+            >Процесс</a><a href='#engineering'>О компании</a><a
+              href='#contacts'
+            >Контакты</a>
             <div class='mobile-language-switcher' role='group' aria-label='Выбор языка'><a
                   class='language-link'
                   href='/'
@@ -76,89 +86,98 @@
         </details>
       </div>
     </header>
-    <main id='main'>
-      <section class='hero section home-hero' id='top' aria-labelledby='hero-title'>
-        <div class='container hero-grid'>
-          <div class='hero-copy'>
-            <p class='eyebrow'>Солнечная система для вашего дома</p>
-            <h1 id='hero-title'>Узнайте потенциал<br />вашего дома<br /><mark
-              >за 60 секунд</mark></h1>
-            <p class='hero-intro'>Узнайте, что вы получите после расчёта: мощность, панели, генерацию, предварительный бюджет и экономику — если укажете тариф.</p>
+    <main id='main' data-home-story>
+      <section class='hero section home-hero' id='top' aria-labelledby='hero-title' data-home-hero>
+        <picture class='hero-backdrop' aria-hidden='true' data-hero-time-backdrop>
+          <source
+            type='image/avif'
+            srcset='/images/hero-time-20-640.avif 640w, /images/hero-time-20-1024.avif 1024w, /images/hero-time-20-1600.avif 1600w'
+            sizes='100vw'
+            data-hero-time-source='avif'
+          />
+          <source
+            type='image/webp'
+            srcset='/images/hero-time-20-640.webp 640w, /images/hero-time-20-1024.webp 1024w, /images/hero-time-20-1600.webp 1600w'
+            sizes='100vw'
+            data-hero-time-source='webp'
+          />
+          <img
+            src='/images/hero-time-20-1600.jpg'
+            srcset='/images/hero-time-20-640.jpg 640w, /images/hero-time-20-1024.jpg 1024w, /images/hero-time-20-1600.jpg 1600w'
+            sizes='100vw'
+            width='1600'
+            height='900'
+            alt=''
+            fetchpriority='high'
+            decoding='async'
+            data-hero-time-image
+          />
+        </picture>
+        <div class='hero-scrim' aria-hidden='true'></div>
+        <span class='hero-time-sun' data-hero-time-sun aria-hidden='true'></span>
+        <p class='hero-sun-note' aria-hidden='true'><span>Больше солнца</span><span>Светлое будущее</span></p>
+        <p class='hero-outlook-note' aria-hidden='true'><span>Чистые дома</span><span>Сильная Армения</span></p>
+        <div class='hero-frame'>
+          <div class='container hero-grid'>
+            <div class='hero-copy' data-hero-copy>
+            <p class='eyebrow'>СОЛНЕЧНАЯ ЭНЕРГИЯ ДЛЯ ВАШЕГО ДОМА</p>
+            <h1 id='hero-title'>У вашей крыши<br />больше потенциала,<br /><mark
+              >чем вы думаете.</mark></h1>
+            <p class='hero-intro'>За несколько шагов узнайте солнечный потенциал дома, предварительную мощность и бюджет, а с указанным тарифом — и экономику.</p>
             <div class='hero-actions'>
-              <a class='button button--navy' href='/ru/calculator/'>Открыть калькулятор</a>
+              <a class='button button--navy' href='/ru/calculator/'>Рассчитать для дома</a>
             </div>
-            <p class='hero-route-note'>Предварительный результат требует подтверждения объекта и не заменяет осмотр, инженерный проект или коммерческое предложение.</p>
-            <ul class='hero-benefits' role='list'>
-              <li><svg class='inline-icon' aria-hidden='true'><use
-                      href='/icons.svg#check'
-                    ></use></svg>Без звонка и обязательств</li><li><svg class='inline-icon' aria-hidden='true'><use
-                      href='/icons.svg#check'
-                    ></use></svg>Подтвердите объект на карте</li><li><svg class='inline-icon' aria-hidden='true'><use
-                      href='/icons.svg#check'
-                    ></use></svg>Укажите данные о потреблении</li><li><svg class='inline-icon' aria-hidden='true'><use
-                      href='/icons.svg#check'
-                    ></use></svg>Источники и допущения видимы</li>
-            </ul>
-          </div>
+            </div>
 
-          <div class='roof-product' aria-label='Пример результата после расчёта'>
-            <figure class='roof-visual'>
-              <picture>
-                <source
-                  type='image/avif'
-                  srcset='/images/roof-scan-480.avif 480w, /images/roof-scan-768.avif 768w, /images/roof-scan-1200.avif 1200w, /images/roof-scan-1600.avif 1600w'
-                  sizes='(max-width: 760px) 100vw, 50vw'
-                />
-                <source
-                  type='image/webp'
-                  srcset='/images/roof-scan-480.webp 480w, /images/roof-scan-768.webp 768w, /images/roof-scan-1200.webp 1200w, /images/roof-scan-1600.webp 1600w'
-                  sizes='(max-width: 760px) 100vw, 50vw'
-                />
-                <img
-                  src='/images/roof-scan-1200.jpg'
-                  srcset='/images/roof-scan-480.jpg 480w, /images/roof-scan-768.jpg 768w, /images/roof-scan-1200.jpg 1200w, /images/roof-scan-1600.jpg 1600w'
-                  sizes='(max-width: 760px) 100vw, 50vw'
-                  width='1600'
-                  height='1067'
-                  alt='Иллюстративный аэрофотоснимок крыши до подтверждения объекта'
-                  fetchpriority='high'
-                  decoding='async'
-                />
-              </picture>
-              <div class='roof-shade' aria-hidden='true'></div>
-              <svg class='roof-overlay' viewBox='0 0 1000 660' aria-hidden='true' focusable='false'>
-                <polygon points='295,125 670,214 616,499 239,410' class='roof-boundary'></polygon>
-                <g class='panel-grid'>
-                  <rect x='330' y='195' width='66' height='49'></rect><rect x='400' y='212' width='66' height='49'></rect><rect x='470' y='229' width='66' height='49'></rect><rect x='540' y='246' width='66' height='49'></rect>
-                  <rect x='314' y='261' width='66' height='49'></rect><rect x='384' y='278' width='66' height='49'></rect><rect x='454' y='295' width='66' height='49'></rect><rect x='524' y='312' width='66' height='49'></rect>
-                  <rect x='298' y='327' width='66' height='49'></rect><rect x='368' y='344' width='66' height='49'></rect><rect x='438' y='361' width='66' height='49'></rect><rect x='508' y='378' width='66' height='49'></rect>
-                  <rect x='282' y='393' width='66' height='49'></rect><rect x='352' y='410' width='66' height='49'></rect><rect x='422' y='427' width='66' height='49'></rect><rect x='492' y='444' width='66' height='49'></rect>
-                </g>
-              </svg>
-              <figcaption class='map-caption'><span class='demo-badge'>Пример данных</span><span
-                >Статическое изображение и размещение панелей используются только как помеченный резервный вариант до подтверждения объекта.</span></figcaption>
-              <aside class='roof-info'>
-                <strong>Иллюстративный дом</strong>
-                <dl>
-                  <div><dt>Площадь крыши</dt><dd>Пример: 124 м²</dd></div>
-                  <div><dt>Ориентация</dt><dd>Пример: юго-запад (236°)</dd></div>
-                  <div><dt>Наклон</dt><dd>Пример: 32°</dd></div>
-                  <div class='success'><dt>Solar Score</dt><dd>Только пример</dd></div>
-                </dl>
-              </aside>
-            </figure>
-            <div class='result-panel'>
-              <span class='demo-badge demo-badge--inline'>Демонстрационный пример</span>
-              <p>Пример результата — не расчёт для вашего дома</p>
-              <dl>
-                  <div><dt>Годовая генерация</dt><dd>14 600 <small>kWh</small></dd></div>
-                  <div><dt>Экономия в год</dt><dd>720 000 <small>֏</small></dd></div>
-                  <div><dt>Простая окупаемость</dt><dd>≈ 6,0 <small>лет</small></dd></div>
-                  <div><dt>Покрытие потребления</dt><dd>92 <small>%</small></dd></div>
+            <aside
+              class='hero-dashboard'
+              data-hero-dashboard
+              data-dashboard-mode='example'
+              aria-label='Сводка солнечного расчёта'
+            >
+              <div class='hero-dashboard__top'>
+                <span class='hero-dashboard__location'><svg class='inline-icon' aria-hidden='true'><use
+                      href='/icons.svg#map-pin'
+                    ></use></svg><span data-hero-analysis-location>Ереван, Армения</span></span>
+                <span class='hero-dashboard__status' data-hero-analysis-status>ПРИМЕР РЕЗУЛЬТАТА</span>
+              </div>
+              <p class='hero-dashboard__label' data-hero-analysis-label aria-live='polite'>Годовая генерация</p>
+              <div class='hero-dashboard__production'>
+                <svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#sun'></use></svg>
+                <span>Годовая генерация</span>
+              </div>
+              <div class='hero-dashboard__yield'>
+                <div class='hero-dashboard__metric'><strong data-hero-analysis-generation data-hero-countup data-hero-countup-value='8420'>8 420</strong><span data-hero-analysis-generation-unit>kWh / год</span></div>
+                <div class='hero-dashboard__bars' data-hero-analysis-bars role='img' aria-label='Годовая генерация'><i style='--hero-bar-height: 33%;'></i><i style='--hero-bar-height: 40%;'></i><i style='--hero-bar-height: 58%;'></i><i style='--hero-bar-height: 76%;'></i><i style='--hero-bar-height: 84%;'></i><i style='--hero-bar-height: 92%;'></i><i style='--hero-bar-height: 100%;'></i><i style='--hero-bar-height: 96%;'></i><i style='--hero-bar-height: 81%;'></i><i style='--hero-bar-height: 64%;'></i><i style='--hero-bar-height: 48%;'></i><i style='--hero-bar-height: 36%;'></i></div>
+              </div>
+              <dl class='hero-dashboard__facts'>
+                <div data-hero-example-co2><svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#leaf'></use></svg><dt>Сокращение CO₂</dt><dd><strong data-hero-example-co2-value data-hero-countup data-hero-countup-value='3.5' data-hero-countup-decimals='1'>3,5</strong> <small>т / год</small></dd></div>
+                <div data-hero-analysis-coverage hidden><svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#shield-check'></use></svg><dt>Покрытие потребления</dt><dd><strong data-hero-analysis-coverage-value>Добавьте потребление</strong> <small data-hero-analysis-coverage-unit hidden>%</small></dd></div>
+                <div data-hero-analysis-savings hidden><svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#zap'></use></svg><dt>Экономия в год</dt><dd><strong data-hero-analysis-savings-value>Добавьте тариф</strong> <small data-hero-analysis-savings-unit hidden>֏ / год</small></dd></div>
+                <div data-hero-analysis-co2 hidden><svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#leaf'></use></svg><dt>Сокращение выбросов CO₂</dt><dd><strong data-hero-analysis-co2-value>—</strong> <small data-hero-analysis-co2-unit>т / год</small></dd></div>
+                <div data-hero-example-trees><svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#tree'></use></svg><dt>Эквивалент годового поглощения CO₂</dt><dd><strong data-hero-example-trees-value data-hero-countup data-hero-countup-value='59'>59</strong> <small>деревьев</small></dd></div>
               </dl>
-              <a href='/ru/calculator/'>Начать расчёт <span aria-hidden='true'>→</span></a>
-            </div>
+              <p class='hero-dashboard__note'><svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#zap'></use></svg><span data-hero-analysis-note>Пример результата — рассчитайте дом, чтобы увидеть свои данные.</span></p>
+            </aside>
           </div>
+          <p class='hero-signature' aria-hidden='true'><span>Чистая энергия</span><span>Светлее жизнь</span><svg class='hero-signature__flourish' viewBox='0 0 126 18' focusable='false'><path d='M2 14c25-7 50-9 72-6 19 2 34 1 50-5'></path></svg></p>
+          <aside class='trust-strip hero-trust-strip' aria-label='В каждом предварительном результате показаны подключённые, отсутствующие и введённые вручную источники. Статические карточки остаются демо.'>
+            <div class='container trust-strip__inner'>
+                <div class='trust-item'><svg class='inline-icon' aria-hidden='true'><use
+                      href='/icons.svg#satellite'
+                    ></use></svg><p><strong>Данные PVGIS</strong><span>при ответе провайдера</span></p></div>
+                <div class='trust-item'><svg class='inline-icon' aria-hidden='true'><use
+                      href='/icons.svg#calculator'
+                    ></use></svg><p><strong>Система для дома</strong><span>из подтверждённых данных</span></p></div>
+                <div class='trust-item'><svg class='inline-icon' aria-hidden='true'><use
+                      href='/icons.svg#support'
+                    ></use></svg><p><strong>Местные инженеры</strong><span>для домов Армении</span></p></div>
+                <div class='trust-item'><svg class='inline-icon' aria-hidden='true'><use
+                      href='/icons.svg#shield'
+                    ></use></svg><p><strong>Понятные условия</strong><span>состав подтверждается заранее</span></p></div>
+              <a class='hero-scroll-cue' href='#passport' aria-label='Листайте дальше'><svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#arrow-right'></use></svg><span>Листайте дальше</span></a>
+            </div>
+          </aside>
         </div>
       </section>
 
@@ -167,7 +186,9 @@
         id='passport'
         aria-labelledby='passport-title'
         tabindex='-1'
+        data-passport-bridge
       >
+        <svg class='passport-energy-bridge' viewBox='0 0 1600 440' preserveAspectRatio='none' aria-hidden='true' focusable='false'><path pathLength='1' d='M1220 0 C 1120 104, 980 156, 890 420'></path></svg>
         <div class='container passport-grid'>
           <div class='passport-copy'>
             <p class='eyebrow'>Что вы получите после расчёта</p>
@@ -328,29 +349,6 @@
           </div>
         </div>
       </section>
-
-
-      <aside class='trust-strip' aria-label='В каждом предварительном результате показаны подключённые, отсутствующие и введённые вручную источники. Статические карточки остаются демо.'>
-        <div class='container trust-strip__inner'>
-            <div class='trust-item'><svg class='inline-icon' aria-hidden='true'><use
-                  href='/icons.svg#satellite'
-                ></use></svg><p><strong>Солнечный ресурс PVGIS</strong><span>показывается только при ответе провайдера</span></p></div>
-            <div class='trust-item'><svg class='inline-icon' aria-hidden='true'><use
-                  href='/icons.svg#calculator'
-                ></use></svg><p><strong>Прозрачный сценарий дома</strong><span>из подтверждённых данных</span></p></div>
-            <div class='trust-item'><svg class='inline-icon' aria-hidden='true'><use
-                  href='/icons.svg#shield'
-                ></use></svg><p><strong>Подбор оборудования</strong><span>под параметры объекта</span></p></div>
-            <div class='trust-item'><svg class='inline-icon' aria-hidden='true'><use
-                  href='/icons.svg#cycle'
-                ></use></svg><p><strong>Полный цикл</strong><span>от расчёта до сервиса</span></p></div>
-            <div class='trust-item'><svg class='inline-icon' aria-hidden='true'><use
-                  href='/icons.svg#support'
-                ></use></svg><p><strong>Поддержка после установки</strong><span>условия фиксируются договором</span></p></div>
-        </div>
-        <p class='trust-disclosure'>В каждом предварительном результате показаны подключённые, отсутствующие и введённые вручную источники. Статические карточки остаются демо.</p>
-      </aside>
-
       <section class='solutions section' id='solutions' aria-labelledby='solutions-title' >
         <div class='container'>
           <div class='section-heading'><div><p class='eyebrow'>Решения</p><h2
@@ -719,6 +717,7 @@
         >© 2026 YOURENERGY. Все права защищены.</span><span><a href='/ru/privacy/'>Проект политики конфиденциальности</a><a
             href='/ru/terms/'
           >Проект условий использования</a></span></div></footer>
+    <script id='home-page-config' type='application/json'>{"locale":"ru-RU","hero":{"eyebrow":"СОЛНЕЧНАЯ ЭНЕРГИЯ ДЛЯ ВАШЕГО ДОМА","titleLead":"У вашей крыши","titleMiddle":"больше потенциала,","titleAccent":"чем вы думаете.","homeCopy":"За несколько шагов узнайте солнечный потенциал дома, предварительную мощность и бюджет, а с указанным тарифом — и экономику.","calculatorCopy":"Сначала вручную выберите и подтвердите точку, затем увидите её потенциал PVGIS. Данные крыши и потребления нужны только для подробного расчёта.","disclosure":"Предварительный результат требует подтверждения объекта и не заменяет осмотр, инженерный проект или коммерческое предложение.","addressLabel":"Адрес для инженера (необязательно)","addressPlaceholder":"Например, Ереван, Арабкир","addressHelp":"Адрес не геокодируется. Откройте карту, выберите точку вручную или введите координаты ниже.","analyze":"Открыть выбор точки","openCalculator":"Рассчитать для дома","uploadTitle":"Прикрепите счёт за электричество (необязательно)","uploadPrompt":"Выберите или перетащите файл","uploadHelp":"PDF, JPG или PNG до 10 МБ. Файл не отправляется на сервер и не считывается автоматически; внесите значения вручную.","removeFile":"Удалить файл","signatureLead":"Чистая энергия","signatureTail":"Светлее жизнь","sunNoteLead":"Больше солнца","sunNoteTail":"Светлое будущее","outlookLead":"Чистые дома","outlookTail":"Сильная Армения","dashboardAriaLabel":"Сводка солнечного расчёта","dashboardLocationSelected":"Выбранная точка","dashboardLocationRegional":"Региональная оценка","dashboardStatusPreliminary":"ПРЕДВАРИТЕЛЬНО","dashboardReady":"Результат текущей сессии","dashboardGeneration":"Годовая генерация","dashboardGenerationUnit":"kWh / год","dashboardCoverage":"Покрытие потребления","dashboardCoverageUnit":"%","dashboardSavings":"Экономия в год","dashboardSavingsUnit":"֏ / год","dashboardCo2":"Сокращение выбросов CO₂","dashboardCo2Unit":"т / год","dashboardNeedConsumption":"Добавьте потребление","dashboardNeedTariff":"Добавьте тариф","dashboardLoading":"Расчёт…","dashboardNotePreliminary":"Расчёт предварительный. Финальные параметры и стоимость подтверждает инженер.","dashboardExample":{"location":"Ереван, Армения","status":"ПРИМЕР РЕЗУЛЬТАТА","label":"Годовая генерация","annualGenerationKwh":8420,"annualGenerationDisplay":"8 420","monthlyGenerationKwh":[320,390,570,740,820,900,980,940,790,630,470,350],"monthlyBarPercent":[33,40,58,76,84,92,100,96,81,64,48,36],"co2Tons":3.5,"co2Display":"3,5","trees":59,"co2Label":"Сокращение CO₂","treesLabel":"Эквивалент годового поглощения CO₂","treesUnit":"деревьев","note":"Пример результата — рассчитайте дом, чтобы увидеть свои данные."}}}</script>
     <script type='module' src='/src/main.js'></script>
   </body>
 </html>

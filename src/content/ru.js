@@ -40,10 +40,11 @@ export default {
     close: 'Закрыть'
   },
   nav: {
-    home: 'Для дома',
-    projects: 'Проекты',
-    process: 'Как это работает',
-    about: 'О нас',
+    home: 'Главная',
+    calculator: 'Калькулятор',
+    projects: 'Решения',
+    process: 'Процесс',
+    about: 'О компании',
     contacts: 'Контакты'
   },
   contact: {
@@ -55,6 +56,7 @@ export default {
   },
   common: {
     cta: 'Рассчитать мой дом',
+    headerCta: 'Получить расчёт',
     demo: 'Демонстрационный пример',
     illustrative: 'Иллюстративное изображение',
     details: 'Подробнее'
@@ -325,12 +327,12 @@ export default {
     months: months.map(({ short, name }) => ({ short, name }))
   },
   hero: {
-    eyebrow: 'Солнечная система для вашего дома',
-    titleLead: 'Узнайте потенциал',
-    titleMiddle: 'вашего дома',
-    titleAccent: 'за 60 секунд',
+    eyebrow: 'СОЛНЕЧНАЯ ЭНЕРГИЯ ДЛЯ ВАШЕГО ДОМА',
+    titleLead: 'У вашей крыши',
+    titleMiddle: 'больше потенциала,',
+    titleAccent: 'чем вы думаете.',
     homeCopy:
-      'Узнайте, что вы получите после расчёта: мощность, панели, генерацию, предварительный бюджет и экономику — если укажете тариф.',
+      'За несколько шагов узнайте солнечный потенциал дома, предварительную мощность и бюджет, а с указанным тарифом — и экономику.',
     calculatorCopy:
       'Сначала вручную выберите и подтвердите точку, затем увидите её потенциал PVGIS. Данные крыши и потребления нужны только для подробного расчёта.',
     disclosure:
@@ -340,44 +342,57 @@ export default {
     addressHelp:
       'Адрес не геокодируется. Откройте карту, выберите точку вручную или введите координаты ниже.',
     analyze: 'Открыть выбор точки',
-    openCalculator: 'Открыть калькулятор',
+    openCalculator: 'Рассчитать для дома',
     uploadTitle: 'Прикрепите счёт за электричество (необязательно)',
     uploadPrompt: 'Выберите или перетащите файл',
     uploadHelp:
       'PDF, JPG или PNG до 10 МБ. Файл не отправляется на сервер и не считывается автоматически; внесите значения вручную.',
     removeFile: 'Удалить файл',
-    benefits: [
-      'Без звонка и обязательств',
-      'Подтвердите объект на карте',
-      'Укажите данные о потреблении',
-      'Источники и допущения видимы'
-    ]
+    signatureLead: 'Чистая энергия',
+    signatureTail: 'Светлее жизнь',
+    sunNoteLead: 'Больше солнца',
+    sunNoteTail: 'Светлое будущее',
+    outlookLead: 'Чистые дома',
+    outlookTail: 'Сильная Армения',
+    dashboardAriaLabel: 'Сводка солнечного расчёта',
+    dashboardLocationSelected: 'Выбранная точка',
+    dashboardLocationRegional: 'Региональная оценка',
+    dashboardStatusPreliminary: 'ПРЕДВАРИТЕЛЬНО',
+    dashboardReady: 'Результат текущей сессии',
+    dashboardGeneration: 'Годовая генерация',
+    dashboardGenerationUnit: 'kWh / год',
+    dashboardCoverage: 'Покрытие потребления',
+    dashboardCoverageUnit: '%',
+    dashboardSavings: 'Экономия в год',
+    dashboardSavingsUnit: '֏ / год',
+    dashboardCo2: 'Сокращение выбросов CO₂',
+    dashboardCo2Unit: 'т / год',
+    dashboardNeedConsumption: 'Добавьте потребление',
+    dashboardNeedTariff: 'Добавьте тариф',
+    dashboardLoading: 'Расчёт…',
+    dashboardNotePreliminary:
+      'Расчёт предварительный. Финальные параметры и стоимость подтверждает инженер.',
+    dashboardExample: {
+      location: 'Ереван, Армения',
+      status: 'ПРИМЕР РЕЗУЛЬТАТА',
+      label: 'Годовая генерация',
+      annualGenerationKwh: 8420,
+      annualGenerationDisplay: '8 420',
+      monthlyGenerationKwh: [320, 390, 570, 740, 820, 900, 980, 940, 790, 630, 470, 350],
+      monthlyBarPercent: [33, 40, 58, 76, 84, 92, 100, 96, 81, 64, 48, 36],
+      co2Tons: 3.5,
+      co2Display: '3,5',
+      trees: 59,
+      co2Label: 'Сокращение CO₂',
+      treesLabel: 'Эквивалент годового поглощения CO₂',
+      treesUnit: 'деревьев',
+      note: 'Пример результата — рассчитайте дом, чтобы увидеть свои данные.'
+    }
   },
   map: {
-    title: 'Пример результата после расчёта',
     demo: 'Пример данных',
-    location: 'Иллюстративный дом',
-    imageAlt: 'Иллюстративный аэрофотоснимок крыши до подтверждения объекта',
-    disclosure:
-      'Статическое изображение и размещение панелей используются только как помеченный резервный вариант до подтверждения объекта.',
-    interactive: 'Интерактивная карта объекта',
-    roofArea: 'Площадь крыши',
-    roofAreaValue: 'Пример: 124 м²',
-    orientation: 'Ориентация',
-    orientationValue: 'Пример: юго-запад (236°)',
-    tilt: 'Наклон',
-    tiltValue: 'Пример: 32°',
-    score: 'Solar Score',
-    scoreValue: 'Только пример',
-    result: 'Пример результата — не расчёт для вашего дома',
-    full: 'Начать расчёт'
+    imageAlt: 'Иллюстративный аэрофотоснимок крыши до подтверждения объекта'
   },
-  metrics: [
-    { key: 'generation', label: 'Годовая генерация', value: '14 600', unit: 'kWh' },
-    { key: 'savings', label: 'Экономия в год', value: '720 000', unit: '֏' },
-    { key: 'payback', label: 'Простая окупаемость', value: '≈ 6,0', unit: 'лет' },
-    { key: 'coverage', label: 'Покрытие потребления', value: '92', unit: '%' }
-  ],
   passport: {
     eyebrow: 'Что вы получите после расчёта',
     title: 'Пример Solar Passport',
@@ -411,14 +426,14 @@ export default {
     items: [
       {
         icon: 'satellite',
-        title: 'Солнечный ресурс PVGIS',
-        note: 'показывается только при ответе провайдера'
+        title: 'Данные PVGIS',
+        note: 'при ответе провайдера'
       },
-      { icon: 'calculator', title: 'Прозрачный сценарий дома', note: 'из подтверждённых данных' },
-      { icon: 'shield', title: 'Подбор оборудования', note: 'под параметры объекта' },
-      { icon: 'cycle', title: 'Полный цикл', note: 'от расчёта до сервиса' },
-      { icon: 'support', title: 'Поддержка после установки', note: 'условия фиксируются договором' }
-    ]
+      { icon: 'calculator', title: 'Система для дома', note: 'из подтверждённых данных' },
+      { icon: 'support', title: 'Местные инженеры', note: 'для домов Армении' },
+      { icon: 'shield', title: 'Понятные условия', note: 'состав подтверждается заранее' }
+    ],
+    explore: 'Листайте дальше'
   },
   solutions: {
     eyebrow: 'Решения',

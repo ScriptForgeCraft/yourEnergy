@@ -16,6 +16,8 @@
     <symbol id="menu" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></symbol>
     <symbol id="shield-check" viewBox="0 0 24 24"><path d="M20 13c0 5-3.5 7.5-8 9-4.5-1.5-8-4-8-9V5l8-3 8 3zM9 12l2 2 4-4"/></symbol>
     <symbol id="sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></symbol>
+    <symbol id="leaf" viewBox="0 0 24 24"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 4.5 19 5 21 5c0 7-3.5 13-10 15Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6.4C10.3 13.56 13 12 16 9"/></symbol>
+    <symbol id="tree" viewBox="0 0 24 24"><path d="M10 10v.2A3.4 3.4 0 0 1 8.5 17H7a3 3 0 0 1-2.2-5A4 4 0 0 1 8 5a5 5 0 0 1 8.6 3.5A4 4 0 0 1 18 16h-1.5a3.5 3.5 0 0 1-2.5-6"/><path d="M12 14v7M8 21h8"/></symbol>
     <symbol id="upload" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/></symbol>
     <symbol id="zap" viewBox="0 0 24 24"><path d="m13 2-9 12h8l-1 8 9-12h-8z"/></symbol>
     <symbol id="pin" viewBox="0 0 24 24"><path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2"/></symbol>

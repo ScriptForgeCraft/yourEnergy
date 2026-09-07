@@ -587,6 +587,74 @@ function validateHomeCalculatorSeparation(html, page, calculatorHref) {
   }
 }
 
+function validateCinematicHomeHero(html, page, calculatorHref) {
+  const hero = html.match(/<section\b[^>]*\bdata-home-hero\b[^>]*>([\s\S]*?)<\/section>/iu)?.[1];
+  if (!hero) {
+    fail(`${page}: cinematic homepage hero is missing`);
+    return;
+  }
+  for (const marker of [
+    'data-hero-time-backdrop',
+    'hero-time-20-640.avif',
+    'hero-time-20-1024.avif',
+    'hero-time-20-1600.avif',
+    'data-hero-time-image',
+    'data-hero-time-sun',
+    'data-hero-dashboard',
+    'data-hero-analysis-generation',
+    'data-hero-analysis-coverage',
+    'data-hero-analysis-savings',
+    'data-hero-analysis-co2',
+    'data-hero-example-co2',
+    'data-hero-example-trees',
+    'data-hero-analysis-bars',
+    'hero-dashboard__facts',
+    'hero-dashboard__note',
+    'hero-dashboard__status',
+    'hero-signature',
+    'hero-scroll-cue',
+    'hero-sun-note',
+    'hero-outlook-note'
+  ]) {
+    if (!hero.includes(marker)) fail(`${page}: cinematic hero is missing ${marker}`);
+  }
+  if ((hero.match(new RegExp(`href='${escapeRegExp(calculatorHref)}'`, 'gu')) ?? []).length !== 1) {
+    fail(`${page}: hero must have exactly one calculator CTA`);
+  }
+  if (/<(?:video|canvas)\b|three(?:\.js)?|webgl/iu.test(hero)) {
+    fail(`${page}: hero must not ship video, canvas, WebGL or Three.js`);
+  }
+  if (hero.includes('hero-energy-arc')) {
+    fail(
+      `${page}: supplied time artwork already contains the energy path; no duplicate SVG arc is allowed`
+    );
+  }
+  if (!/data-dashboard-mode='example'|data-dashboard-mode="example"/u.test(hero)) {
+    fail(`${page}: Hero's fixed values must be visibly marked as an example`);
+  }
+  if (!/8[ ,]420/u.test(hero) || !/3[,.]5/u.test(hero) || !/59/u.test(hero)) {
+    fail(`${page}: Hero is missing the approved static example metrics`);
+  }
+  if (/equivalent to\s*~?\s*\d+\s*homes|эквивалент\s*~?\s*\d+\s*дом|տան\s*համարժեք/iu.test(hero)) {
+    fail(`${page}: Hero must not claim a homes-equivalent benchmark`);
+  }
+  if (!html.includes('data-passport-bridge')) {
+    fail(`${page}: homepage is missing the Solar Passport bridge`);
+  }
+}
+
+async function validateHeroTimeAssets() {
+  for (const hour of [8, 12, 14, 16, 18, 20]) {
+    for (const width of [640, 1024, 1600]) {
+      for (const extension of ['avif', 'webp', 'jpg']) {
+        const asset = resolve(distRoot, 'images', `hero-time-${hour}-${width}.${extension}`);
+        if (!(await exists(asset)))
+          fail(`missing local-time Hero asset: ${relative(distRoot, asset)}`);
+      }
+    }
+  }
+}
+
 function validateCompanyRecord(html, page) {
   for (const marker of [
     "id='company-record'",
@@ -641,6 +709,7 @@ for (const [page, calculatorHref] of [
 ]) {
   if (pages.has(page)) {
     validateHomeCalculatorSeparation(pages.get(page), page, calculatorHref);
+    validateCinematicHomeHero(pages.get(page), page, calculatorHref);
     validateCompanyRecord(pages.get(page), page);
   }
 }
@@ -686,6 +755,7 @@ await validateSitemap();
 await validateHeaders();
 await validateNoLegacyCalculatorStyles();
 await validateRemovedFeatures(pages);
+await validateHeroTimeAssets();
 
 if (failures.length > 0) {
   console.error('Build validation failed:\n');

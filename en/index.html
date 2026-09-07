@@ -24,43 +24,53 @@
     <link rel='stylesheet' href='/src/styles/main.css' />
     <script type='application/ld+json'>{"@context":"https://schema.org","@graph":[{"@type":"WebSite","@id":"https://yourenergy.am/#website","name":"YOURENERGY","url":"https://yourenergy.am/"},{"@type":"Organization","@id":"https://yourenergy.am/#organization","name":"Your Energy LLC","alternateName":"YOURENERGY","url":"https://yourenergy.am/","telephone":"+374 91 095 950","address":{"@type":"PostalAddress","streetAddress":"Artashisyan 48 14 Kotayq, Zovuni, 26 33 str, Yerevan","addressCountry":"AM"}},{"@type":"Service","@id":"https://yourenergy.am/en/#service","name":"Preliminary solar-system analysis","serviceType":"Preliminary solar-system analysis","url":"https://yourenergy.am/en/","provider":{"@id":"https://yourenergy.am/#organization"},"areaServed":{"@type":"Country","name":"Armenia"}},{"@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How much does a solar system cost?","acceptedAnswer":{"@type":"Answer","text":"After property analysis, a temporary preliminary YOUR ENERGY range may appear from an active PriceBook. It is not an offer: final pricing depends on capacity, roof, equipment and connection and is confirmed after a site visit."}},{"@type":"Question","name":"How is system capacity calculated?","acceptedAnswer":{"@type":"Answer","text":"The preliminary flow uses entered consumption, a confirmed property point, a manually outlined roof and provider solar-resource data when configured. An engineer still checks shading and grid limits."}},{"@type":"Question","name":"What is the payback period?","acceptedAnswer":{"@type":"Answer","text":"Payback is shown only after PVGIS analysis and a tariff entered by you. The model excludes tariff growth, degradation, maintenance, financing, discounting, taxes and export rules."}},{"@type":"Question","name":"Do solar panels need maintenance?","acceptedAnswer":{"@type":"Answer","text":"Periodic inspection, monitoring checks and cleaning when needed help maintain the system. The exact schedule depends on the equipment and site conditions."}},{"@type":"Question","name":"What happens in cloudy weather?","acceptedAnswer":{"@type":"Answer","text":"Generation is lower and stops at night. The home uses the grid or a battery if one is included in the confirmed project."}},{"@type":"Question","name":"Can I install a battery?","acceptedAnswer":{"@type":"Answer","text":"Yes. A battery appears in the Energy independence demo option. Actual capacity is selected from the consumption profile and required backup time."}},{"@type":"Question","name":"Can I finance a system?","acceptedAnswer":{"@type":"Answer","text":"This version does not advertise a financing programme. Financing terms can be published only after a specific partner and agreement are confirmed."}},{"@type":"Question","name":"What is a Solar Passport?","acceptedAnswer":{"@type":"Answer","text":"A preliminary Passport keeps the current session’s inputs, sources and assumptions together. It is not an engineering design, bank document or offer; permanent links and PDFs are not connected in P0."}}]}]}</script>
   </head>
-  <body>
+  <body class='page-home'>
     <a class='skip-link' href='#main'>Skip to main content</a>
-    <header class='site-header' data-header>
+    <header class='site-header site-header--overlay' data-header>
       <div class='container header-row'>
-        <a class='wordmark' href='/en/' aria-label='YOURENERGY — home page'><span>YOUR</span><strong
-          >ENERGY</strong></a>
+        <a class='wordmark' href='/en/' aria-label='YOURENERGY — home page'><svg
+              class='wordmark__sun'
+              aria-hidden='true'
+            ><use href='/icons.svg#sun'></use></svg><span>YOUR</span><strong>ENERGY</strong></a>
         <nav class='desktop-nav' aria-label='Primary navigation'>
-          <a href='/en/'>For homes</a>
-          <a href='#projects'>Projects</a>
-          <a href='#process'>How it works</a>
-          <a href='#engineering'>About us</a>
+          <a href='/en/'>Home</a>
+          <a href='/en/calculator/'>Calculator</a>
+          <a href='#solutions'>Solutions</a>
+          <a href='#process'>Process</a>
+          <a href='#engineering'>About</a>
           <a href='#contacts'>Contact</a>
         </nav>
         <div class='header-actions'>
           <a class='header-phone' href='tel:+37491095950'><strong>+374 91 095 950</strong><small
             >Open until 21:00</small></a>
-          <nav class='language-switcher' aria-label='Language selection'><a
-                class='language-link'
-                href='/'
-                hreflang='hy'
-                aria-label='AM — Armenian'
-              >AM</a><a
-                class='language-link'
-                href='/ru/'
-                hreflang='ru'
-                aria-label='RU — Russian'
-              >RU</a></nav>
-          <a class='button button--small' href='/en/calculator/'>Calculate my home</a>
+            <details class='language-menu'>
+              <summary aria-label='Language selection'>EN<span
+                  aria-hidden='true'
+                >⌄</span></summary>
+              <nav aria-label='Language selection'><a
+                    class='language-link'
+                    href='/'
+                    hreflang='hy'
+                    aria-label='AM — Armenian'
+                  >AM</a><a
+                    class='language-link'
+                    href='/ru/'
+                    hreflang='ru'
+                    aria-label='RU — Russian'
+                  >RU</a></nav>
+            </details>
+          <a class='button button--small' href='/en/calculator/'>Get a quote</a>
         </div>
         <details class='mobile-menu' data-mobile-menu>
           <summary aria-label='Open navigation menu'><span></span><span></span><span></span></summary>
           <nav aria-label='Mobile navigation'>
-            <a href='/en/'>For homes</a><a
-              href='#projects'
-            >Projects</a><a href='#process'>How it works</a><a
-              href='#engineering'
-            >About us</a><a href='#contacts'>Contact</a>
+            <a href='/en/'>Home</a><a
+              href='/en/calculator/'
+            >Calculator</a><a href='#solutions'>Solutions</a><a
+              href='#process'
+            >Process</a><a href='#engineering'>About</a><a
+              href='#contacts'
+            >Contact</a>
             <div class='mobile-language-switcher' role='group' aria-label='Language selection'><a
                   class='language-link'
                   href='/'
@@ -76,89 +86,98 @@
         </details>
       </div>
     </header>
-    <main id='main'>
-      <section class='hero section home-hero' id='top' aria-labelledby='hero-title'>
-        <div class='container hero-grid'>
-          <div class='hero-copy'>
-            <p class='eyebrow'>A solar system for your home</p>
-            <h1 id='hero-title'>Discover your home’s<br />solar potential<br /><mark
-              >in 60 seconds</mark></h1>
-            <p class='hero-intro'>See what you receive after a calculation: capacity, panels, generation, a preliminary budget and economics when you enter a tariff.</p>
+    <main id='main' data-home-story>
+      <section class='hero section home-hero' id='top' aria-labelledby='hero-title' data-home-hero>
+        <picture class='hero-backdrop' aria-hidden='true' data-hero-time-backdrop>
+          <source
+            type='image/avif'
+            srcset='/images/hero-time-20-640.avif 640w, /images/hero-time-20-1024.avif 1024w, /images/hero-time-20-1600.avif 1600w'
+            sizes='100vw'
+            data-hero-time-source='avif'
+          />
+          <source
+            type='image/webp'
+            srcset='/images/hero-time-20-640.webp 640w, /images/hero-time-20-1024.webp 1024w, /images/hero-time-20-1600.webp 1600w'
+            sizes='100vw'
+            data-hero-time-source='webp'
+          />
+          <img
+            src='/images/hero-time-20-1600.jpg'
+            srcset='/images/hero-time-20-640.jpg 640w, /images/hero-time-20-1024.jpg 1024w, /images/hero-time-20-1600.jpg 1600w'
+            sizes='100vw'
+            width='1600'
+            height='900'
+            alt=''
+            fetchpriority='high'
+            decoding='async'
+            data-hero-time-image
+          />
+        </picture>
+        <div class='hero-scrim' aria-hidden='true'></div>
+        <span class='hero-time-sun' data-hero-time-sun aria-hidden='true'></span>
+        <p class='hero-sun-note' aria-hidden='true'><span>More sun</span><span>A brighter tomorrow</span></p>
+        <p class='hero-outlook-note' aria-hidden='true'><span>Cleaner homes</span><span>Stronger Armenia</span></p>
+        <div class='hero-frame'>
+          <div class='container hero-grid'>
+            <div class='hero-copy' data-hero-copy>
+            <p class='eyebrow'>SOLAR ENERGY FOR YOUR HOME</p>
+            <h1 id='hero-title'>Your roof<br />has more potential<br /><mark
+              >than you think.</mark></h1>
+            <p class='hero-intro'>In a few steps, see your home’s solar potential, a preliminary system size and budget — plus savings when you enter your tariff.</p>
             <div class='hero-actions'>
-              <a class='button button--navy' href='/en/calculator/'>Open calculator</a>
+              <a class='button button--navy' href='/en/calculator/'>Calculate my home</a>
             </div>
-            <p class='hero-route-note'>A preliminary result requires property confirmation and does not replace a site visit, engineering design or commercial proposal.</p>
-            <ul class='hero-benefits' role='list'>
-              <li><svg class='inline-icon' aria-hidden='true'><use
-                      href='/icons.svg#check'
-                    ></use></svg>No call or obligation</li><li><svg class='inline-icon' aria-hidden='true'><use
-                      href='/icons.svg#check'
-                    ></use></svg>Confirm the property on a map</li><li><svg class='inline-icon' aria-hidden='true'><use
-                      href='/icons.svg#check'
-                    ></use></svg>Provide consumption data</li><li><svg class='inline-icon' aria-hidden='true'><use
-                      href='/icons.svg#check'
-                    ></use></svg>See sources and assumptions</li>
-            </ul>
-          </div>
+            </div>
 
-          <div class='roof-product' aria-label='Example result after calculation'>
-            <figure class='roof-visual'>
-              <picture>
-                <source
-                  type='image/avif'
-                  srcset='/images/roof-scan-480.avif 480w, /images/roof-scan-768.avif 768w, /images/roof-scan-1200.avif 1200w, /images/roof-scan-1600.avif 1600w'
-                  sizes='(max-width: 760px) 100vw, 50vw'
-                />
-                <source
-                  type='image/webp'
-                  srcset='/images/roof-scan-480.webp 480w, /images/roof-scan-768.webp 768w, /images/roof-scan-1200.webp 1200w, /images/roof-scan-1600.webp 1600w'
-                  sizes='(max-width: 760px) 100vw, 50vw'
-                />
-                <img
-                  src='/images/roof-scan-1200.jpg'
-                  srcset='/images/roof-scan-480.jpg 480w, /images/roof-scan-768.jpg 768w, /images/roof-scan-1200.jpg 1200w, /images/roof-scan-1600.jpg 1600w'
-                  sizes='(max-width: 760px) 100vw, 50vw'
-                  width='1600'
-                  height='1067'
-                  alt='Illustrative aerial roof image before a property is confirmed'
-                  fetchpriority='high'
-                  decoding='async'
-                />
-              </picture>
-              <div class='roof-shade' aria-hidden='true'></div>
-              <svg class='roof-overlay' viewBox='0 0 1000 660' aria-hidden='true' focusable='false'>
-                <polygon points='295,125 670,214 616,499 239,410' class='roof-boundary'></polygon>
-                <g class='panel-grid'>
-                  <rect x='330' y='195' width='66' height='49'></rect><rect x='400' y='212' width='66' height='49'></rect><rect x='470' y='229' width='66' height='49'></rect><rect x='540' y='246' width='66' height='49'></rect>
-                  <rect x='314' y='261' width='66' height='49'></rect><rect x='384' y='278' width='66' height='49'></rect><rect x='454' y='295' width='66' height='49'></rect><rect x='524' y='312' width='66' height='49'></rect>
-                  <rect x='298' y='327' width='66' height='49'></rect><rect x='368' y='344' width='66' height='49'></rect><rect x='438' y='361' width='66' height='49'></rect><rect x='508' y='378' width='66' height='49'></rect>
-                  <rect x='282' y='393' width='66' height='49'></rect><rect x='352' y='410' width='66' height='49'></rect><rect x='422' y='427' width='66' height='49'></rect><rect x='492' y='444' width='66' height='49'></rect>
-                </g>
-              </svg>
-              <figcaption class='map-caption'><span class='demo-badge'>Example data</span><span
-                >This static image and panel layout are used only as a labelled fallback before a property is confirmed.</span></figcaption>
-              <aside class='roof-info'>
-                <strong>Illustrative home</strong>
-                <dl>
-                  <div><dt>Roof area</dt><dd>Example: 124 m²</dd></div>
-                  <div><dt>Orientation</dt><dd>Example: south-west (236°)</dd></div>
-                  <div><dt>Tilt</dt><dd>Example: 32°</dd></div>
-                  <div class='success'><dt>Solar Score</dt><dd>Example only</dd></div>
-                </dl>
-              </aside>
-            </figure>
-            <div class='result-panel'>
-              <span class='demo-badge demo-badge--inline'>Demonstration example</span>
-              <p>Example result — not calculated for your home</p>
-              <dl>
-                  <div><dt>Annual generation</dt><dd>14,600 <small>kWh</small></dd></div>
-                  <div><dt>Annual savings</dt><dd>720,000 <small>֏</small></dd></div>
-                  <div><dt>Simple payback</dt><dd>≈ 6.0 <small>years</small></dd></div>
-                  <div><dt>Consumption covered</dt><dd>92 <small>%</small></dd></div>
+            <aside
+              class='hero-dashboard'
+              data-hero-dashboard
+              data-dashboard-mode='example'
+              aria-label='Solar calculation summary'
+            >
+              <div class='hero-dashboard__top'>
+                <span class='hero-dashboard__location'><svg class='inline-icon' aria-hidden='true'><use
+                      href='/icons.svg#map-pin'
+                    ></use></svg><span data-hero-analysis-location>Yerevan, Armenia</span></span>
+                <span class='hero-dashboard__status' data-hero-analysis-status>EXAMPLE RESULT</span>
+              </div>
+              <p class='hero-dashboard__label' data-hero-analysis-label aria-live='polite'>Annual production</p>
+              <div class='hero-dashboard__production'>
+                <svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#sun'></use></svg>
+                <span>Annual generation</span>
+              </div>
+              <div class='hero-dashboard__yield'>
+                <div class='hero-dashboard__metric'><strong data-hero-analysis-generation data-hero-countup data-hero-countup-value='8420'>8,420</strong><span data-hero-analysis-generation-unit>kWh / year</span></div>
+                <div class='hero-dashboard__bars' data-hero-analysis-bars role='img' aria-label='Annual generation'><i style='--hero-bar-height: 33%;'></i><i style='--hero-bar-height: 40%;'></i><i style='--hero-bar-height: 58%;'></i><i style='--hero-bar-height: 76%;'></i><i style='--hero-bar-height: 84%;'></i><i style='--hero-bar-height: 92%;'></i><i style='--hero-bar-height: 100%;'></i><i style='--hero-bar-height: 96%;'></i><i style='--hero-bar-height: 81%;'></i><i style='--hero-bar-height: 64%;'></i><i style='--hero-bar-height: 48%;'></i><i style='--hero-bar-height: 36%;'></i></div>
+              </div>
+              <dl class='hero-dashboard__facts'>
+                <div data-hero-example-co2><svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#leaf'></use></svg><dt>CO₂ savings</dt><dd><strong data-hero-example-co2-value data-hero-countup data-hero-countup-value='3.5' data-hero-countup-decimals='1'>3.5</strong> <small>t / year</small></dd></div>
+                <div data-hero-analysis-coverage hidden><svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#shield-check'></use></svg><dt>Consumption coverage</dt><dd><strong data-hero-analysis-coverage-value>Add consumption</strong> <small data-hero-analysis-coverage-unit hidden>%</small></dd></div>
+                <div data-hero-analysis-savings hidden><svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#zap'></use></svg><dt>Annual savings</dt><dd><strong data-hero-analysis-savings-value>Add tariff</strong> <small data-hero-analysis-savings-unit hidden>֏ / year</small></dd></div>
+                <div data-hero-analysis-co2 hidden><svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#leaf'></use></svg><dt>CO₂ reduction</dt><dd><strong data-hero-analysis-co2-value>—</strong> <small data-hero-analysis-co2-unit>t / year</small></dd></div>
+                <div data-hero-example-trees><svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#tree'></use></svg><dt>Equivalent annual CO₂ absorption</dt><dd><strong data-hero-example-trees-value data-hero-countup data-hero-countup-value='59'>59</strong> <small>trees</small></dd></div>
               </dl>
-              <a href='/en/calculator/'>Start a calculation <span aria-hidden='true'>→</span></a>
-            </div>
+              <p class='hero-dashboard__note'><svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#zap'></use></svg><span data-hero-analysis-note>Example result — calculate your home to see your figures.</span></p>
+            </aside>
           </div>
+          <p class='hero-signature' aria-hidden='true'><span>Clean energy</span><span>Brighter lives</span><svg class='hero-signature__flourish' viewBox='0 0 126 18' focusable='false'><path d='M2 14c25-7 50-9 72-6 19 2 34 1 50-5'></path></svg></p>
+          <aside class='trust-strip hero-trust-strip' aria-label='Each preliminary result shows its connected, missing and manually supplied sources. Static cards remain demonstrations.'>
+            <div class='container trust-strip__inner'>
+                <div class='trust-item'><svg class='inline-icon' aria-hidden='true'><use
+                      href='/icons.svg#satellite'
+                    ></use></svg><p><strong>PVGIS data</strong><span>when the provider responds</span></p></div>
+                <div class='trust-item'><svg class='inline-icon' aria-hidden='true'><use
+                      href='/icons.svg#calculator'
+                    ></use></svg><p><strong>Tailored system</strong><span>from confirmed inputs</span></p></div>
+                <div class='trust-item'><svg class='inline-icon' aria-hidden='true'><use
+                      href='/icons.svg#support'
+                    ></use></svg><p><strong>Local engineering</strong><span>for Armenia homes</span></p></div>
+                <div class='trust-item'><svg class='inline-icon' aria-hidden='true'><use
+                      href='/icons.svg#shield'
+                    ></use></svg><p><strong>Clear conditions</strong><span>scope confirmed before work</span></p></div>
+              <a class='hero-scroll-cue' href='#passport' aria-label='Scroll to explore'><svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#arrow-right'></use></svg><span>Scroll to explore</span></a>
+            </div>
+          </aside>
         </div>
       </section>
 
@@ -167,7 +186,9 @@
         id='passport'
         aria-labelledby='passport-title'
         tabindex='-1'
+        data-passport-bridge
       >
+        <svg class='passport-energy-bridge' viewBox='0 0 1600 440' preserveAspectRatio='none' aria-hidden='true' focusable='false'><path pathLength='1' d='M1220 0 C 1120 104, 980 156, 890 420'></path></svg>
         <div class='container passport-grid'>
           <div class='passport-copy'>
             <p class='eyebrow'>What you receive after calculation</p>
@@ -328,29 +349,6 @@
           </div>
         </div>
       </section>
-
-
-      <aside class='trust-strip' aria-label='Each preliminary result shows its connected, missing and manually supplied sources. Static cards remain demonstrations.'>
-        <div class='container trust-strip__inner'>
-            <div class='trust-item'><svg class='inline-icon' aria-hidden='true'><use
-                  href='/icons.svg#satellite'
-                ></use></svg><p><strong>PVGIS solar resource</strong><span>shown only when the provider responds</span></p></div>
-            <div class='trust-item'><svg class='inline-icon' aria-hidden='true'><use
-                  href='/icons.svg#calculator'
-                ></use></svg><p><strong>A transparent home scenario</strong><span>from confirmed inputs</span></p></div>
-            <div class='trust-item'><svg class='inline-icon' aria-hidden='true'><use
-                  href='/icons.svg#shield'
-                ></use></svg><p><strong>Equipment selection</strong><span>based on site parameters</span></p></div>
-            <div class='trust-item'><svg class='inline-icon' aria-hidden='true'><use
-                  href='/icons.svg#cycle'
-                ></use></svg><p><strong>End-to-end service</strong><span>from estimate to support</span></p></div>
-            <div class='trust-item'><svg class='inline-icon' aria-hidden='true'><use
-                  href='/icons.svg#support'
-                ></use></svg><p><strong>Support after installation</strong><span>terms are set in the contract</span></p></div>
-        </div>
-        <p class='trust-disclosure'>Each preliminary result shows its connected, missing and manually supplied sources. Static cards remain demonstrations.</p>
-      </aside>
-
       <section class='solutions section' id='solutions' aria-labelledby='solutions-title' >
         <div class='container'>
           <div class='section-heading'><div><p class='eyebrow'>Solutions</p><h2
@@ -719,6 +717,7 @@
         >© 2026 YOURENERGY. All rights reserved.</span><span><a href='/en/privacy/'>Draft privacy policy</a><a
             href='/en/terms/'
           >Draft terms of use</a></span></div></footer>
+    <script id='home-page-config' type='application/json'>{"locale":"en-US","hero":{"eyebrow":"SOLAR ENERGY FOR YOUR HOME","titleLead":"Your roof","titleMiddle":"has more potential","titleAccent":"than you think.","homeCopy":"In a few steps, see your home’s solar potential, a preliminary system size and budget — plus savings when you enter your tariff.","calculatorCopy":"First choose and confirm a point manually, then see its PVGIS potential. Roof and consumption data are only needed for the detailed estimate.","disclosure":"A preliminary result requires property confirmation and does not replace a site visit, engineering design or commercial proposal.","addressLabel":"Address for the engineer (optional)","addressPlaceholder":"For example: Yerevan, Arabkir","addressHelp":"The address is not geocoded. Open the map, choose a point manually or enter coordinates below.","analyze":"Open point selection","openCalculator":"Calculate my home","uploadTitle":"Attach an electricity bill (optional)","uploadPrompt":"Choose a file or drag it here","uploadHelp":"PDF, JPG or PNG up to 10 MB. The file stays out of the server and is not read automatically; enter values manually.","removeFile":"Remove file","signatureLead":"Clean energy","signatureTail":"Brighter lives","sunNoteLead":"More sun","sunNoteTail":"A brighter tomorrow","outlookLead":"Cleaner homes","outlookTail":"Stronger Armenia","dashboardAriaLabel":"Solar calculation summary","dashboardLocationSelected":"Selected point","dashboardLocationRegional":"Regional estimate","dashboardStatusPreliminary":"PRELIMINARY","dashboardReady":"Current session result","dashboardGeneration":"Annual generation","dashboardGenerationUnit":"kWh / year","dashboardCoverage":"Consumption coverage","dashboardCoverageUnit":"%","dashboardSavings":"Annual savings","dashboardSavingsUnit":"֏ / year","dashboardCo2":"CO₂ reduction","dashboardCo2Unit":"t / year","dashboardNeedConsumption":"Add consumption","dashboardNeedTariff":"Add tariff","dashboardLoading":"Calculating…","dashboardNotePreliminary":"Preliminary calculation. Final parameters and price require an engineering review.","dashboardExample":{"location":"Yerevan, Armenia","status":"EXAMPLE RESULT","label":"Annual production","annualGenerationKwh":8420,"annualGenerationDisplay":"8,420","monthlyGenerationKwh":[320,390,570,740,820,900,980,940,790,630,470,350],"monthlyBarPercent":[33,40,58,76,84,92,100,96,81,64,48,36],"co2Tons":3.5,"co2Display":"3.5","trees":59,"co2Label":"CO₂ savings","treesLabel":"Equivalent annual CO₂ absorption","treesUnit":"trees","note":"Example result — calculate your home to see your figures."}}}</script>
     <script type='module' src='/src/main.js'></script>
   </body>
 </html>

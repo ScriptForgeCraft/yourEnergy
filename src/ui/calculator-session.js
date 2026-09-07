@@ -20,6 +20,7 @@ const emptyState = () => ({
   sitePotential: null,
   quickAnalysis: null,
   analysis: null,
+  analysisStatus: 'idle',
   solarPassport: null
 });
 
@@ -36,6 +37,23 @@ const resolveSessionStorage = () => {
     return window.sessionStorage;
   } catch {
     return null;
+  }
+};
+
+const publishAnalysisUpdate = (state) => {
+  if (typeof window === 'undefined' || typeof window.dispatchEvent !== 'function') return;
+  try {
+    window.dispatchEvent(
+      new CustomEvent('solar:analysis-updated', {
+        detail: {
+          analysis: state.analysis ?? state.quickAnalysis ?? null,
+          status: state.analysisStatus ?? 'idle'
+        }
+      })
+    );
+  } catch {
+    // Session storage remains the durable same-tab handoff when CustomEvent is
+    // unavailable in a constrained browser environment.
   }
 };
 
@@ -60,10 +78,13 @@ export const createCalculatorSession = ({ storage } = {}) => {
       // A restricted browser mode may deny session storage. The active view
       // still works; only cross-route convenience is unavailable.
     }
+    if ('analysis' in changes || 'quickAnalysis' in changes || 'analysisStatus' in changes)
+      publishAnalysisUpdate(next);
     return next;
   };
 
-  const clearAnalysis = () => write({ analysis: null, solarPassport: null });
+  const clearAnalysis = () =>
+    write({ analysis: null, analysisStatus: 'idle', solarPassport: null });
 
   return Object.freeze({ key: SESSION_KEY, read, write, clearAnalysis });
 };

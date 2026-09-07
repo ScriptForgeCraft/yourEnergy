@@ -178,83 +178,6 @@ h3 {
   gap: 12px;
 }
 
-.hero-route-note {
-  max-width: 58ch;
-  margin: 16px 0 0;
-  color: var(--color-muted);
-  font-size: 0.78rem;
-}
-
-.roof-product .roof-visual {
-  position: relative;
-  min-height: 0;
-  aspect-ratio: 1.47;
-  overflow: hidden;
-  background: #10263b;
-}
-
-.roof-product .roof-visual::before {
-  display: none;
-}
-
-.roof-visual picture,
-.roof-visual picture img {
-  width: 100%;
-  height: 100%;
-}
-
-.roof-visual picture img {
-  object-fit: cover;
-}
-
-.roof-shade {
-  position: absolute;
-  z-index: 1;
-  inset: 0;
-  background: linear-gradient(135deg, rgb(4 21 35 / 12%), rgb(4 21 35 / 55%));
-  pointer-events: none;
-}
-
-.roof-overlay {
-  position: absolute;
-  z-index: 2;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-}
-
-.roof-boundary {
-  fill: rgb(245 189 24 / 11%);
-  stroke: #f8d871;
-  stroke-width: 3;
-  stroke-dasharray: 10 7;
-}
-
-.panel-grid rect {
-  fill: rgb(8 45 78 / 78%);
-  stroke: rgb(227 244 255 / 86%);
-  stroke-width: 2;
-}
-
-.map-caption {
-  position: absolute;
-  z-index: 6;
-  top: 18px;
-  left: 18px;
-  display: grid;
-  gap: 8px;
-  max-width: min(52%, 330px);
-  color: #e5edf3;
-  font-size: 0.66rem;
-  line-height: 1.35;
-}
-
-.map-caption .demo-badge {
-  position: static;
-  width: fit-content;
-}
-
 .leaflet-container {
   font: inherit;
   background: #10263b;
@@ -265,25 +188,6 @@ h3 {
   min-height: 34px;
   color: #0b2b45 !important;
   line-height: 34px !important;
-}
-
-.roof-product .roof-info {
-  z-index: 7;
-}
-
-.result-panel dd small {
-  display: block;
-  margin-top: 2px;
-  color: #9eb0be;
-  font-size: 0.62em;
-  font-weight: 700;
-}
-
-.result-panel .demo-badge--inline {
-  position: static;
-  display: inline-flex;
-  width: fit-content;
-  margin: 0 0 10px;
 }
 
 .passport-grid {
@@ -572,17 +476,8 @@ h3 {
   display: block;
 }
 
-.trust-item span,
-.trust-disclosure {
+.trust-item span {
   color: #b5c4cf;
-}
-
-.trust-disclosure {
-  max-width: var(--content-width);
-  margin: -4px auto 12px;
-  padding-inline: 24px;
-  font-size: 0.62rem;
-  text-align: center;
 }
 
 .section-heading {
@@ -1453,18 +1348,6 @@ h3 {
     margin-top: 12px;
   }
 
-  .roof-product .roof-visual {
-    aspect-ratio: 0.96;
-  }
-
-  .map-caption {
-    max-width: calc(100% - 36px);
-  }
-
-  .roof-product .roof-info {
-    z-index: 7;
-  }
-
   .passport-grid {
     grid-template-columns: minmax(0, 1fr);
   }
@@ -1491,10 +1374,6 @@ h3 {
 
   .trust-item:last-child {
     grid-column: span 2;
-  }
-
-  .trust-disclosure {
-    padding-inline: 16px;
   }
 
   .projects-track {
@@ -1551,10 +1430,6 @@ h3 {
 }
 
 @media (max-width: 390px) {
-  .hero-benefits {
-    grid-template-columns: 1fr;
-  }
-
   .file-selection,
   .projects-toolbar {
     align-items: flex-start;

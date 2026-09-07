@@ -75,7 +75,12 @@ export const initRoofRefinement = ({ config = {} } = {}) => {
   const onRoofChange = (nextRoof) => {
     roof = nextRoof;
     renderRoof();
-    store({ roof: { ...roof, areaMethod: 'map-projected' }, analysis: null, solarPassport: null });
+    store({
+      roof: { ...roof, areaMethod: 'map-projected' },
+      analysis: null,
+      analysisStatus: 'idle',
+      solarPassport: null
+    });
   };
   const mountMap = async (mode) => {
     if (!mapController) {
@@ -153,7 +158,13 @@ export const initRoofRefinement = ({ config = {} } = {}) => {
       confirmed: true,
       source: { kind: 'manual', status: 'confirmed' }
     };
-    store({ property: saved.property, roof: null, analysis: null, solarPassport: null });
+    store({
+      property: saved.property,
+      roof: null,
+      analysis: null,
+      analysisStatus: 'idle',
+      solarPassport: null
+    });
     roof = { points: [], areaSqm: 0, complete: false };
     confirmation.hidden = true;
     void requestPotential(pendingLocation);
@@ -263,6 +274,7 @@ export const initRoofRefinement = ({ config = {} } = {}) => {
     };
     analysisRequest?.abort();
     analysisRequest = new AbortController();
+    store({ analysis: null, analysisStatus: 'loading', solarPassport: null });
     setStatus('');
     try {
       const response = await api.analyze(payload, { signal: analysisRequest.signal });
@@ -272,11 +284,13 @@ export const initRoofRefinement = ({ config = {} } = {}) => {
         property: saved.property,
         roof: { ...roof, ...roofInput },
         analysis: response.analysis,
+        analysisStatus: 'complete',
         solarPassport
       });
       renderResult(response.analysis, current.quickAnalysis ?? current.analysis);
     } catch (error) {
       if (error instanceof ProductApiError && error.code === 'ABORTED') return;
+      store({ analysis: null, analysisStatus: 'unavailable', solarPassport: null });
       setStatus(copy.unavailable, true);
     } finally {
       analysisRequest = null;

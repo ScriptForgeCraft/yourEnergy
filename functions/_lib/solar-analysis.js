@@ -1,4 +1,5 @@
 import {
+  ARMENIA_GRID_CO2_FACTOR,
   PriceBookRepository,
   buildSolarAnalysis,
   createUserTariffSelection,
@@ -186,6 +187,7 @@ export const buildP0SolarAnalysis = ({
     // only provisional commercial source used in this P1 route.
     investment: {},
     priceBook,
+    gridEmissionFactor: ARMENIA_GRID_CO2_FACTOR,
     effectiveDate,
     scope: 'manual-roof-plane',
     dataCompleteness: 'preliminary',

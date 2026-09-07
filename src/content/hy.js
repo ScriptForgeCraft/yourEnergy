@@ -40,9 +40,10 @@ export default {
     close: 'Փակել'
   },
   nav: {
-    home: 'Տան համար',
-    projects: 'Նախագծեր',
-    process: 'Ինչպես է աշխատում',
+    home: 'Գլխավոր',
+    calculator: 'Հաշվիչ',
+    projects: 'Լուծումներ',
+    process: 'Ընթացք',
     about: 'Մեր մասին',
     contacts: 'Կապ'
   },
@@ -55,6 +56,7 @@ export default {
   },
   common: {
     cta: 'Հաշվել իմ տունը',
+    headerCta: 'Ստանալ հաշվարկ',
     demo: 'Ցուցադրական օրինակ',
     illustrative: 'Պատկերազարդող լուսանկար',
     details: 'Մանրամասներ'
@@ -327,12 +329,12 @@ export default {
     months: months.map(({ short, name }) => ({ short, name }))
   },
   hero: {
-    eyebrow: 'Արևային համակարգ ձեր տան համար',
-    titleLead: 'Բացահայտեք ձեր տան',
-    titleMiddle: 'արևային ներուժը',
-    titleAccent: '60 վայրկյանում',
+    eyebrow: 'ԱՐԵՎԱՅԻՆ ԷՆԵՐԳԻԱ ՁԵՐ ՏԱՆ ՀԱՄԱՐ',
+    titleLead: 'Ձեր տանիքն ավելի',
+    titleMiddle: 'մեծ ներուժ ունի,',
+    titleAccent: 'քան կարծում եք։',
     homeCopy:
-      'Իմացեք, թե ինչ կստանաք հաշվարկից հետո՝ հզորություն, վահանակներ, արտադրություն, նախնական բյուջե և տնտեսում՝ եթե մուտքագրեք սակագինը։',
+      'Մի քանի քայլով բացահայտեք ձեր տան արևային ներուժը, նախնական հզորությունն ու բյուջեն, իսկ սակագինը նշելու դեպքում՝ նաև տնտեսումը։',
     calculatorCopy:
       'Սկզբում քարտեզի վրա ձեռքով ընտրեք և հաստատեք կետը, ապա տեսեք դրա PVGIS ներուժը։ Տանիքի և սպառման տվյալները պետք են միայն մանրամասն հաշվարկի համար։',
     disclosure:
@@ -342,44 +344,57 @@ export default {
     addressHelp:
       'Հասցեն չի գեոկոդավորվում։ Բացեք քարտեզը, ձեռքով ընտրեք կետ կամ մուտքագրեք ներքևի կոորդինատները։',
     analyze: 'Բացել կետի ընտրությունը',
-    openCalculator: 'Բացել հաշվիչը',
+    openCalculator: 'Հաշվել իմ տան համար',
     uploadTitle: 'Կցեք էլեկտրաէներգիայի հաշիվը (ընտրովի)',
     uploadPrompt: 'Ընտրեք կամ քաշեք ֆայլը այստեղ',
     uploadHelp:
       'PDF, JPG կամ PNG՝ մինչև 10 ՄԲ։ Ֆայլը չի ուղարկվում սերվեր և ավտոմատ չի կարդացվում․ արժեքները մուտքագրեք ձեռքով։',
     removeFile: 'Հեռացնել ֆայլը',
-    benefits: [
-      'Առանց զանգի և պարտավորության',
-      'Հաստատեք օբյեկտը քարտեզի վրա',
-      'Նշեք սպառման տվյալները',
-      'Տեսեք աղբյուրներն ու ենթադրությունները'
-    ]
+    signatureLead: 'Մաքուր էներգիա',
+    signatureTail: 'Ավելի պայծառ կյանք',
+    sunNoteLead: 'Ավելի շատ արև',
+    sunNoteTail: 'Ավելի պայծառ ապագա',
+    outlookLead: 'Մաքուր տներ',
+    outlookTail: 'Ավելի հզոր Հայաստան',
+    dashboardAriaLabel: 'Արևային հաշվարկի ամփոփում',
+    dashboardLocationSelected: 'Ընտրված կետ',
+    dashboardLocationRegional: 'Տարածաշրջանային գնահատում',
+    dashboardStatusPreliminary: 'ՆԱԽՆԱԿԱՆ',
+    dashboardReady: 'Ընթացիկ սեսիայի արդյունք',
+    dashboardGeneration: 'Տարեկան արտադրություն',
+    dashboardGenerationUnit: 'kWh / տարի',
+    dashboardCoverage: 'Սպառման ծածկում',
+    dashboardCoverageUnit: '%',
+    dashboardSavings: 'Տարեկան խնայողություն',
+    dashboardSavingsUnit: '֏ / տարի',
+    dashboardCo2: 'CO₂ արտանետումների կրճատում',
+    dashboardCo2Unit: 'տ / տարի',
+    dashboardNeedConsumption: 'Ավելացրեք սպառումը',
+    dashboardNeedTariff: 'Ավելացրեք սակագինը',
+    dashboardLoading: 'Հաշվարկ…',
+    dashboardNotePreliminary:
+      'Հաշվարկը նախնական է։ Վերջնական պարամետրերն ու գինը հաստատում է ինժեները։',
+    dashboardExample: {
+      location: 'Երևան, Հայաստան',
+      status: 'ԱՐԴՅՈՒՆՔԻ ՕՐԻՆԱԿ',
+      label: 'Տարեկան արտադրություն',
+      annualGenerationKwh: 8420,
+      annualGenerationDisplay: '8 420',
+      monthlyGenerationKwh: [320, 390, 570, 740, 820, 900, 980, 940, 790, 630, 470, 350],
+      monthlyBarPercent: [33, 40, 58, 76, 84, 92, 100, 96, 81, 64, 48, 36],
+      co2Tons: 3.5,
+      co2Display: '3,5',
+      trees: 59,
+      co2Label: 'CO₂-ի կրճատում',
+      treesLabel: 'CO₂-ի տարեկան կլանման համարժեք',
+      treesUnit: 'ծառ',
+      note: 'Արդյունքի օրինակ․ հաշվարկեք ձեր տունը՝ ձեր տվյալները տեսնելու համար։'
+    }
   },
   map: {
-    title: 'Հաշվարկից հետո արդյունքի օրինակ',
     demo: 'Տվյալների օրինակ',
-    location: 'Պատկերազարդող տուն',
-    imageAlt: 'Տանիքի պատկերազարդող օդային պատկեր՝ մինչև օբյեկտի հաստատումը',
-    disclosure:
-      'Այս ստատիկ պատկերը և վահանակների դասավորությունը կիրառվում են միայն որպես նշված պահուստային տարբերակ՝ մինչև օբյեկտի հաստատումը։',
-    interactive: 'Օբյեկտի ինտերակտիվ քարտեզ',
-    roofArea: 'Տանիքի մակերես',
-    roofAreaValue: 'Օրինակ՝ 124 մ²',
-    orientation: 'Կողմնորոշում',
-    orientationValue: 'Օրինակ՝ հարավ-արևմուտք (236°)',
-    tilt: 'Թեքություն',
-    tiltValue: 'Օրինակ՝ 32°',
-    score: 'Solar Score',
-    scoreValue: 'Միայն օրինակ',
-    result: 'Արդյունքի օրինակ՝ ոչ ձեր տան հաշվարկ',
-    full: 'Սկսել հաշվարկը'
+    imageAlt: 'Տանիքի պատկերազարդող օդային պատկեր՝ մինչև օբյեկտի հաստատումը'
   },
-  metrics: [
-    { key: 'generation', label: 'Տարեկան արտադրություն', value: '14 600', unit: 'kWh' },
-    { key: 'savings', label: 'Տարեկան խնայողություն', value: '720 000', unit: '֏' },
-    { key: 'payback', label: 'Պարզ վերադարձի ժամկետ', value: '≈ 6,0', unit: 'տարի' },
-    { key: 'coverage', label: 'Սպառման ծածկում', value: '92', unit: '%' }
-  ],
   passport: {
     eyebrow: 'Ինչ կստանաք հաշվարկից հետո',
     title: 'Solar Passport-ի օրինակ',
@@ -413,18 +428,22 @@ export default {
     items: [
       {
         icon: 'satellite',
-        title: 'PVGIS արևային ռեսուրս',
-        note: 'ցուցադրվում է միայն մատակարարի պատասխանի դեպքում'
+        title: 'PVGIS տվյալներ',
+        note: 'մատակարարի պատասխանի դեպքում'
       },
-      { icon: 'calculator', title: 'Տան թափանցիկ սցենար', note: 'հաստատված տվյալներից' },
-      { icon: 'shield', title: 'Սարքավորումների ընտրություն', note: 'ըստ օբյեկտի պարամետրերի' },
-      { icon: 'cycle', title: 'Ամբողջական ցիկլ', note: 'հաշվարկից մինչև սպասարկում' },
       {
-        icon: 'support',
-        title: 'Աջակցություն տեղադրումից հետո',
-        note: 'պայմանները ամրագրվում են պայմանագրով'
+        icon: 'calculator',
+        title: 'Տան համար համակարգ',
+        note: 'հաստատված տվյալներից'
+      },
+      { icon: 'support', title: 'Տեղային ինժեներներ', note: 'Հայաստանի տների համար' },
+      {
+        icon: 'shield',
+        title: 'Հստակ պայմաններ',
+        note: 'կազմը հաստատվում է նախապես'
       }
-    ]
+    ],
+    explore: 'Շարունակեք ներքև'
   },
   solutions: {
     eyebrow: 'Լուծումներ',

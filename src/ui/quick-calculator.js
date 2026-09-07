@@ -95,7 +95,12 @@ export const initQuickCalculator = ({ config = {} } = {}) => {
     tariffHelp.textContent = copy.tariffHelp;
   };
   const clearAnalysis = () => {
-    session.write({ quickAnalysis: null, analysis: null, solarPassport: null });
+    session.write({
+      quickAnalysis: null,
+      analysis: null,
+      analysisStatus: 'idle',
+      solarPassport: null
+    });
     resultValues.hidden = true;
     resultActions.hidden = true;
     resultLinks.hidden = true;
@@ -217,6 +222,7 @@ export const initQuickCalculator = ({ config = {} } = {}) => {
       ...(changedRegion ? { property: null, roof: null, sitePotential: null } : {}),
       quickAnalysis: null,
       analysis: null,
+      analysisStatus: 'loading',
       solarPassport: null
     });
     submit.disabled = true;
@@ -227,7 +233,13 @@ export const initQuickCalculator = ({ config = {} } = {}) => {
       if (request.signal.aborted) return;
       const analysis = response?.analysis;
       if (!analysis) throw new ProductApiError('MALFORMED_RESPONSE');
-      session.write({ ...current.state, quickAnalysis: analysis, analysis, solarPassport: null });
+      session.write({
+        ...current.state,
+        quickAnalysis: analysis,
+        analysis,
+        analysisStatus: 'complete',
+        solarPassport: null
+      });
       render(analysis);
       setStatus('');
     } catch (error) {
@@ -237,6 +249,7 @@ export const initQuickCalculator = ({ config = {} } = {}) => {
       resultValues.hidden = true;
       resultActions.hidden = true;
       resultLinks.hidden = true;
+      session.write({ analysis: null, quickAnalysis: null, analysisStatus: 'unavailable' });
       setStatus(errorMessage(error, copy), true);
       const retry = document.createElement('button');
       retry.type = 'button';

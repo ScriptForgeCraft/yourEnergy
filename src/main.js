@@ -6,7 +6,9 @@ document.documentElement.classList.add('js');
 
 const readConfig = () => {
   try {
-    return JSON.parse(document.querySelector('#page-config')?.textContent ?? '{}');
+    return JSON.parse(
+      document.querySelector('#page-config, #home-page-config')?.textContent ?? '{}'
+    );
   } catch {
     return {};
   }
@@ -16,6 +18,10 @@ const config = readConfig();
 
 initNavigation();
 initScrollers();
+
+if (document.querySelector('[data-home-hero]')) {
+  void import('./ui/home-motion.js').then(({ initHomeMotion }) => initHomeMotion({ config }));
+}
 
 if (document.querySelector('[data-quick-calculator]')) {
   void import('./ui/quick-calculator.js').then(({ initQuickCalculator }) =>

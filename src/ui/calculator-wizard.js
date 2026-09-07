@@ -167,6 +167,7 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
       consumption: state.consumption,
       userTariff: state.userTariff,
       analysis: state.analysis,
+      analysisStatus: state.analysisStatus,
       solarPassport: state.solarPassport
     });
 
@@ -677,7 +678,7 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
       setStep(3);
     } catch (error) {
       if (error instanceof ProductApiError && error.code === 'ABORTED') return;
-      state.analysisStatus = WIZARD_STEP_STATUSES.LOCKED;
+      state.analysisStatus = WIZARD_STEP_STATUSES.UNAVAILABLE;
       writeStatus(describeError(error, product), true);
       updateProgress();
     } finally {

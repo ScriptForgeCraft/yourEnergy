@@ -24,14 +24,44 @@
     <link rel='stylesheet' href='/src/styles/main.css' />
     <script type='application/ld+json'>{{{jsonLd}}}</script>
   </head>
-  <body>
+  <body class='page-home'>
     <a class='skip-link' href='#main'>{{aria.skip}}</a>
     {{> site-header}}
 
-    <main id='main'>
-      <section class='hero section home-hero' id='top' aria-labelledby='hero-title'>
-        <div class='container hero-grid'>
-          <div class='hero-copy'>
+    <main id='main' data-home-story>
+      <section class='hero section home-hero' id='top' aria-labelledby='hero-title' data-home-hero>
+        <picture class='hero-backdrop' aria-hidden='true' data-hero-time-backdrop>
+          <source
+            type='image/avif'
+            srcset='/images/hero-time-20-640.avif 640w, /images/hero-time-20-1024.avif 1024w, /images/hero-time-20-1600.avif 1600w'
+            sizes='100vw'
+            data-hero-time-source='avif'
+          />
+          <source
+            type='image/webp'
+            srcset='/images/hero-time-20-640.webp 640w, /images/hero-time-20-1024.webp 1024w, /images/hero-time-20-1600.webp 1600w'
+            sizes='100vw'
+            data-hero-time-source='webp'
+          />
+          <img
+            src='/images/hero-time-20-1600.jpg'
+            srcset='/images/hero-time-20-640.jpg 640w, /images/hero-time-20-1024.jpg 1024w, /images/hero-time-20-1600.jpg 1600w'
+            sizes='100vw'
+            width='1600'
+            height='900'
+            alt=''
+            fetchpriority='high'
+            decoding='async'
+            data-hero-time-image
+          />
+        </picture>
+        <div class='hero-scrim' aria-hidden='true'></div>
+        <span class='hero-time-sun' data-hero-time-sun aria-hidden='true'></span>
+        <p class='hero-sun-note' aria-hidden='true'><span>{{hero.sunNoteLead}}</span><span>{{hero.sunNoteTail}}</span></p>
+        <p class='hero-outlook-note' aria-hidden='true'><span>{{hero.outlookLead}}</span><span>{{hero.outlookTail}}</span></p>
+        <div class='hero-frame'>
+          <div class='container hero-grid'>
+            <div class='hero-copy' data-hero-copy>
             <p class='eyebrow'>{{hero.eyebrow}}</p>
             <h1 id='hero-title'>{{hero.titleLead}}<br />{{hero.titleMiddle}}<br /><mark
               >{{hero.titleAccent}}</mark></h1>
@@ -39,71 +69,50 @@
             <div class='hero-actions'>
               <a class='button button--navy' href='{{calculatorHref}}'>{{hero.openCalculator}}</a>
             </div>
-            <p class='hero-route-note'>{{hero.disclosure}}</p>
-            <ul class='hero-benefits' role='list'>
-              {{#each hero.benefits}}<li><svg class='inline-icon' aria-hidden='true'><use
-                      href='/icons.svg#check'
-                    ></use></svg>{{this}}</li>{{/each}}
-            </ul>
-          </div>
-
-          <div class='roof-product' aria-label='{{map.title}}'>
-            <figure class='roof-visual'>
-              <picture>
-                <source
-                  type='image/avif'
-                  srcset='/images/roof-scan-480.avif 480w, /images/roof-scan-768.avif 768w, /images/roof-scan-1200.avif 1200w, /images/roof-scan-1600.avif 1600w'
-                  sizes='(max-width: 760px) 100vw, 50vw'
-                />
-                <source
-                  type='image/webp'
-                  srcset='/images/roof-scan-480.webp 480w, /images/roof-scan-768.webp 768w, /images/roof-scan-1200.webp 1200w, /images/roof-scan-1600.webp 1600w'
-                  sizes='(max-width: 760px) 100vw, 50vw'
-                />
-                <img
-                  src='/images/roof-scan-1200.jpg'
-                  srcset='/images/roof-scan-480.jpg 480w, /images/roof-scan-768.jpg 768w, /images/roof-scan-1200.jpg 1200w, /images/roof-scan-1600.jpg 1600w'
-                  sizes='(max-width: 760px) 100vw, 50vw'
-                  width='1600'
-                  height='1067'
-                  alt='{{map.imageAlt}}'
-                  fetchpriority='high'
-                  decoding='async'
-                />
-              </picture>
-              <div class='roof-shade' aria-hidden='true'></div>
-              <svg class='roof-overlay' viewBox='0 0 1000 660' aria-hidden='true' focusable='false'>
-                <polygon points='295,125 670,214 616,499 239,410' class='roof-boundary'></polygon>
-                <g class='panel-grid'>
-                  <rect x='330' y='195' width='66' height='49'></rect><rect x='400' y='212' width='66' height='49'></rect><rect x='470' y='229' width='66' height='49'></rect><rect x='540' y='246' width='66' height='49'></rect>
-                  <rect x='314' y='261' width='66' height='49'></rect><rect x='384' y='278' width='66' height='49'></rect><rect x='454' y='295' width='66' height='49'></rect><rect x='524' y='312' width='66' height='49'></rect>
-                  <rect x='298' y='327' width='66' height='49'></rect><rect x='368' y='344' width='66' height='49'></rect><rect x='438' y='361' width='66' height='49'></rect><rect x='508' y='378' width='66' height='49'></rect>
-                  <rect x='282' y='393' width='66' height='49'></rect><rect x='352' y='410' width='66' height='49'></rect><rect x='422' y='427' width='66' height='49'></rect><rect x='492' y='444' width='66' height='49'></rect>
-                </g>
-              </svg>
-              <figcaption class='map-caption'><span class='demo-badge'>{{map.demo}}</span><span
-                >{{map.disclosure}}</span></figcaption>
-              <aside class='roof-info'>
-                <strong>{{map.location}}</strong>
-                <dl>
-                  <div><dt>{{map.roofArea}}</dt><dd>{{map.roofAreaValue}}</dd></div>
-                  <div><dt>{{map.orientation}}</dt><dd>{{map.orientationValue}}</dd></div>
-                  <div><dt>{{map.tilt}}</dt><dd>{{map.tiltValue}}</dd></div>
-                  <div class='success'><dt>{{map.score}}</dt><dd>{{map.scoreValue}}</dd></div>
-                </dl>
-              </aside>
-            </figure>
-            <div class='result-panel'>
-              <span class='demo-badge demo-badge--inline'>{{common.demo}}</span>
-              <p>{{map.result}}</p>
-              <dl>
-                {{#each metrics}}
-                  <div><dt>{{label}}</dt><dd>{{value}} <small>{{unit}}</small></dd></div>
-                {{/each}}
-              </dl>
-              <a href='{{calculatorHref}}'>{{map.full}} <span aria-hidden='true'>→</span></a>
             </div>
+
+            <aside
+              class='hero-dashboard'
+              data-hero-dashboard
+              data-dashboard-mode='example'
+              aria-label='{{hero.dashboardAriaLabel}}'
+            >
+              <div class='hero-dashboard__top'>
+                <span class='hero-dashboard__location'><svg class='inline-icon' aria-hidden='true'><use
+                      href='/icons.svg#map-pin'
+                    ></use></svg><span data-hero-analysis-location>{{hero.dashboardExample.location}}</span></span>
+                <span class='hero-dashboard__status' data-hero-analysis-status>{{hero.dashboardExample.status}}</span>
+              </div>
+              <p class='hero-dashboard__label' data-hero-analysis-label aria-live='polite'>{{hero.dashboardExample.label}}</p>
+              <div class='hero-dashboard__production'>
+                <svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#sun'></use></svg>
+                <span>{{hero.dashboardGeneration}}</span>
+              </div>
+              <div class='hero-dashboard__yield'>
+                <div class='hero-dashboard__metric'><strong data-hero-analysis-generation data-hero-countup data-hero-countup-value='{{hero.dashboardExample.annualGenerationKwh}}'>{{hero.dashboardExample.annualGenerationDisplay}}</strong><span data-hero-analysis-generation-unit>{{hero.dashboardGenerationUnit}}</span></div>
+                <div class='hero-dashboard__bars' data-hero-analysis-bars role='img' aria-label='{{hero.dashboardGeneration}}'>{{#each hero.dashboardExample.monthlyBarPercent}}<i style='--hero-bar-height: {{this}}%;'></i>{{/each}}</div>
+              </div>
+              <dl class='hero-dashboard__facts'>
+                <div data-hero-example-co2><svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#leaf'></use></svg><dt>{{hero.dashboardExample.co2Label}}</dt><dd><strong data-hero-example-co2-value data-hero-countup data-hero-countup-value='{{hero.dashboardExample.co2Tons}}' data-hero-countup-decimals='1'>{{hero.dashboardExample.co2Display}}</strong> <small>{{hero.dashboardCo2Unit}}</small></dd></div>
+                <div data-hero-analysis-coverage hidden><svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#shield-check'></use></svg><dt>{{hero.dashboardCoverage}}</dt><dd><strong data-hero-analysis-coverage-value>{{hero.dashboardNeedConsumption}}</strong> <small data-hero-analysis-coverage-unit hidden>{{hero.dashboardCoverageUnit}}</small></dd></div>
+                <div data-hero-analysis-savings hidden><svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#zap'></use></svg><dt>{{hero.dashboardSavings}}</dt><dd><strong data-hero-analysis-savings-value>{{hero.dashboardNeedTariff}}</strong> <small data-hero-analysis-savings-unit hidden>{{hero.dashboardSavingsUnit}}</small></dd></div>
+                <div data-hero-analysis-co2 hidden><svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#leaf'></use></svg><dt>{{hero.dashboardCo2}}</dt><dd><strong data-hero-analysis-co2-value>—</strong> <small data-hero-analysis-co2-unit>{{hero.dashboardCo2Unit}}</small></dd></div>
+                <div data-hero-example-trees><svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#tree'></use></svg><dt>{{hero.dashboardExample.treesLabel}}</dt><dd><strong data-hero-example-trees-value data-hero-countup data-hero-countup-value='{{hero.dashboardExample.trees}}'>{{hero.dashboardExample.trees}}</strong> <small>{{hero.dashboardExample.treesUnit}}</small></dd></div>
+              </dl>
+              <p class='hero-dashboard__note'><svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#zap'></use></svg><span data-hero-analysis-note>{{hero.dashboardExample.note}}</span></p>
+            </aside>
           </div>
+          <p class='hero-signature' aria-hidden='true'><span>{{hero.signatureLead}}</span><span>{{hero.signatureTail}}</span><svg class='hero-signature__flourish' viewBox='0 0 126 18' focusable='false'><path d='M2 14c25-7 50-9 72-6 19 2 34 1 50-5'></path></svg></p>
+          <aside class='trust-strip hero-trust-strip' aria-label='{{trust.disclosure}}'>
+            <div class='container trust-strip__inner'>
+              {{#each trust.items}}
+                <div class='trust-item'><svg class='inline-icon' aria-hidden='true'><use
+                      href='/icons.svg#{{icon}}'
+                    ></use></svg><p><strong>{{title}}</strong><span>{{note}}</span></p></div>
+              {{/each}}
+              <a class='hero-scroll-cue' href='#passport' aria-label='{{trust.explore}}'><svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#arrow-right'></use></svg><span>{{trust.explore}}</span></a>
+            </div>
+          </aside>
         </div>
       </section>
 
@@ -112,7 +121,9 @@
         id='passport'
         aria-labelledby='passport-title'
         tabindex='-1'
+        data-passport-bridge
       >
+        <svg class='passport-energy-bridge' viewBox='0 0 1600 440' preserveAspectRatio='none' aria-hidden='true' focusable='false'><path pathLength='1' d='M1220 0 C 1120 104, 980 156, 890 420'></path></svg>
         <div class='container passport-grid'>
           <div class='passport-copy'>
             <p class='eyebrow'>{{passport.eyebrow}}</p>
@@ -186,19 +197,6 @@
           </div>
         </div>
       </section>
-
-
-      <aside class='trust-strip' aria-label='{{trust.disclosure}}'>
-        <div class='container trust-strip__inner'>
-          {{#each trust.items}}
-            <div class='trust-item'><svg class='inline-icon' aria-hidden='true'><use
-                  href='/icons.svg#{{icon}}'
-                ></use></svg><p><strong>{{title}}</strong><span>{{note}}</span></p></div>
-          {{/each}}
-        </div>
-        <p class='trust-disclosure'>{{trust.disclosure}}</p>
-      </aside>
-
       <section class='solutions section' id='solutions' aria-labelledby='solutions-title' >
         <div class='container'>
           <div class='section-heading'><div><p class='eyebrow'>{{solutions.eyebrow}}</p><h2
@@ -381,6 +379,7 @@
 
     {{> site-footer}}
 
+    <script id='home-page-config' type='application/json'>{{{homePageConfig}}}</script>
     <script type='module' src='/src/main.js'></script>
   </body>
 </html>

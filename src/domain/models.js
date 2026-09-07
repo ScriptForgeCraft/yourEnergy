@@ -89,6 +89,7 @@
  * @property {Object|null} cache
  * @property {string|null} providerRetrievedAt
  * @property {Object|null} mountingRecommendation
+ * @property {{factor: Object, avoidedCo2Tons: number|null}} environmental
  * @property {string[]} limitations
  * @property {Object[]} sourceLedger
  * @property {string[]} assumptions

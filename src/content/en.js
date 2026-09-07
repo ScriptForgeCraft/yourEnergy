@@ -40,10 +40,11 @@ export default {
     close: 'Close'
   },
   nav: {
-    home: 'For homes',
-    projects: 'Projects',
-    process: 'How it works',
-    about: 'About us',
+    home: 'Home',
+    calculator: 'Calculator',
+    projects: 'Solutions',
+    process: 'Process',
+    about: 'About',
     contacts: 'Contact'
   },
   contact: {
@@ -55,6 +56,7 @@ export default {
   },
   common: {
     cta: 'Calculate my home',
+    headerCta: 'Get a quote',
     demo: 'Demonstration example',
     illustrative: 'Illustrative image',
     details: 'View details'
@@ -328,12 +330,12 @@ export default {
     months: months.map(({ short, name }) => ({ short, name }))
   },
   hero: {
-    eyebrow: 'A solar system for your home',
-    titleLead: 'Discover your home’s',
-    titleMiddle: 'solar potential',
-    titleAccent: 'in 60 seconds',
+    eyebrow: 'SOLAR ENERGY FOR YOUR HOME',
+    titleLead: 'Your roof',
+    titleMiddle: 'has more potential',
+    titleAccent: 'than you think.',
     homeCopy:
-      'See what you receive after a calculation: capacity, panels, generation, a preliminary budget and economics when you enter a tariff.',
+      'In a few steps, see your home’s solar potential, a preliminary system size and budget — plus savings when you enter your tariff.',
     calculatorCopy:
       'First choose and confirm a point manually, then see its PVGIS potential. Roof and consumption data are only needed for the detailed estimate.',
     disclosure:
@@ -343,44 +345,57 @@ export default {
     addressHelp:
       'The address is not geocoded. Open the map, choose a point manually or enter coordinates below.',
     analyze: 'Open point selection',
-    openCalculator: 'Open calculator',
+    openCalculator: 'Calculate my home',
     uploadTitle: 'Attach an electricity bill (optional)',
     uploadPrompt: 'Choose a file or drag it here',
     uploadHelp:
       'PDF, JPG or PNG up to 10 MB. The file stays out of the server and is not read automatically; enter values manually.',
     removeFile: 'Remove file',
-    benefits: [
-      'No call or obligation',
-      'Confirm the property on a map',
-      'Provide consumption data',
-      'See sources and assumptions'
-    ]
+    signatureLead: 'Clean energy',
+    signatureTail: 'Brighter lives',
+    sunNoteLead: 'More sun',
+    sunNoteTail: 'A brighter tomorrow',
+    outlookLead: 'Cleaner homes',
+    outlookTail: 'Stronger Armenia',
+    dashboardAriaLabel: 'Solar calculation summary',
+    dashboardLocationSelected: 'Selected point',
+    dashboardLocationRegional: 'Regional estimate',
+    dashboardStatusPreliminary: 'PRELIMINARY',
+    dashboardReady: 'Current session result',
+    dashboardGeneration: 'Annual generation',
+    dashboardGenerationUnit: 'kWh / year',
+    dashboardCoverage: 'Consumption coverage',
+    dashboardCoverageUnit: '%',
+    dashboardSavings: 'Annual savings',
+    dashboardSavingsUnit: '֏ / year',
+    dashboardCo2: 'CO₂ reduction',
+    dashboardCo2Unit: 't / year',
+    dashboardNeedConsumption: 'Add consumption',
+    dashboardNeedTariff: 'Add tariff',
+    dashboardLoading: 'Calculating…',
+    dashboardNotePreliminary:
+      'Preliminary calculation. Final parameters and price require an engineering review.',
+    dashboardExample: {
+      location: 'Yerevan, Armenia',
+      status: 'EXAMPLE RESULT',
+      label: 'Annual production',
+      annualGenerationKwh: 8420,
+      annualGenerationDisplay: '8,420',
+      monthlyGenerationKwh: [320, 390, 570, 740, 820, 900, 980, 940, 790, 630, 470, 350],
+      monthlyBarPercent: [33, 40, 58, 76, 84, 92, 100, 96, 81, 64, 48, 36],
+      co2Tons: 3.5,
+      co2Display: '3.5',
+      trees: 59,
+      co2Label: 'CO₂ savings',
+      treesLabel: 'Equivalent annual CO₂ absorption',
+      treesUnit: 'trees',
+      note: 'Example result — calculate your home to see your figures.'
+    }
   },
   map: {
-    title: 'Example result after calculation',
     demo: 'Example data',
-    location: 'Illustrative home',
-    imageAlt: 'Illustrative aerial roof image before a property is confirmed',
-    disclosure:
-      'This static image and panel layout are used only as a labelled fallback before a property is confirmed.',
-    interactive: 'Interactive property map',
-    roofArea: 'Roof area',
-    roofAreaValue: 'Example: 124 m²',
-    orientation: 'Orientation',
-    orientationValue: 'Example: south-west (236°)',
-    tilt: 'Tilt',
-    tiltValue: 'Example: 32°',
-    score: 'Solar Score',
-    scoreValue: 'Example only',
-    result: 'Example result — not calculated for your home',
-    full: 'Start a calculation'
+    imageAlt: 'Illustrative aerial roof image before a property is confirmed'
   },
-  metrics: [
-    { key: 'generation', label: 'Annual generation', value: '14,600', unit: 'kWh' },
-    { key: 'savings', label: 'Annual savings', value: '720,000', unit: '֏' },
-    { key: 'payback', label: 'Simple payback', value: '≈ 6.0', unit: 'years' },
-    { key: 'coverage', label: 'Consumption covered', value: '92', unit: '%' }
-  ],
   passport: {
     eyebrow: 'What you receive after calculation',
     title: 'Example Solar Passport',
@@ -414,18 +429,22 @@ export default {
     items: [
       {
         icon: 'satellite',
-        title: 'PVGIS solar resource',
-        note: 'shown only when the provider responds'
+        title: 'PVGIS data',
+        note: 'when the provider responds'
       },
-      { icon: 'calculator', title: 'A transparent home scenario', note: 'from confirmed inputs' },
-      { icon: 'shield', title: 'Equipment selection', note: 'based on site parameters' },
-      { icon: 'cycle', title: 'End-to-end service', note: 'from estimate to support' },
       {
-        icon: 'support',
-        title: 'Support after installation',
-        note: 'terms are set in the contract'
+        icon: 'calculator',
+        title: 'Tailored system',
+        note: 'from confirmed inputs'
+      },
+      { icon: 'support', title: 'Local engineering', note: 'for Armenia homes' },
+      {
+        icon: 'shield',
+        title: 'Clear conditions',
+        note: 'scope confirmed before work'
       }
-    ]
+    ],
+    explore: 'Scroll to explore'
   },
   solutions: {
     eyebrow: 'Solutions',

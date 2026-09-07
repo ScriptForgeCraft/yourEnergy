@@ -34,6 +34,7 @@ export {
   roundAnalysisValue
 } from './solar-analysis.js';
 export { buildRegionalQuickAnalysis } from './quick-analysis.js';
+export { buildEnvironmentalImpact, normalizeGridEmissionFactor } from './environment.js';
 export {
   SOLAR_PASSPORT_SCHEMA_VERSION,
   SolarPassportRepository,
@@ -41,6 +42,7 @@ export {
   createSolarPassportId
 } from './solar-passport.js';
 export { ARMENIA_TARIFF_DATASET } from '../data/tariffs/armenia.js';
+export { ARMENIA_GRID_CO2_FACTOR } from '../data/environment/armenia-grid-co2.js';
 export { ARMENIA_PRICEBOOKS, TEMPORARY_YOURENERGY_PRICEBOOK } from '../data/pricebooks/armenia.js';
 export {
   ARMENIA_REGIONAL_BENCHMARKS,

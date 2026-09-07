@@ -9,17 +9,23 @@ const outputDir = resolve(root, 'public/images');
 await mkdir(outputDir, { recursive: true });
 
 const assets = [
-  ['roof-scan', [480, 768, 1200, 1600]],
-  ['project-arabkir', [480, 800, 1200]],
-  ['project-abovyan', [480, 800]],
-  ['project-vagharshapat', [480, 800]],
-  ['project-ararat', [480, 800]],
-  ['engineer-onsite', [480, 800, 1200]]
+  { name: 'hero-time-8', source: 'hero-times/hero-time-8', widths: [640, 1024, 1600] },
+  { name: 'hero-time-12', source: 'hero-times/hero-time-12', widths: [640, 1024, 1600] },
+  { name: 'hero-time-14', source: 'hero-times/hero-time-14', widths: [640, 1024, 1600] },
+  { name: 'hero-time-16', source: 'hero-times/hero-time-16', widths: [640, 1024, 1600] },
+  { name: 'hero-time-18', source: 'hero-times/hero-time-18', widths: [640, 1024, 1600] },
+  { name: 'hero-time-20', source: 'hero-times/hero-time-20', widths: [640, 1024, 1600] },
+  { name: 'roof-scan', widths: [480, 768, 1200, 1600] },
+  { name: 'project-arabkir', widths: [480, 800, 1200] },
+  { name: 'project-abovyan', widths: [480, 800] },
+  { name: 'project-vagharshapat', widths: [480, 800] },
+  { name: 'project-ararat', widths: [480, 800] },
+  { name: 'engineer-onsite', widths: [480, 800, 1200] }
 ];
 
-for (const [name, widths] of assets) {
+for (const { name, source = name, widths } of assets) {
   for (const width of widths) {
-    const image = sharp(resolve(sourceDir, `${name}.png`)).resize({
+    const image = sharp(resolve(sourceDir, `${source}.png`)).resize({
       width,
       withoutEnlargement: true
     });
