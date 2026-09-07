@@ -386,8 +386,8 @@ export default {
       co2Display: '3,5',
       trees: 59,
       co2Label: 'CO₂-ի կրճատում',
-      treesLabel: 'CO₂-ի տարեկան կլանման համարժեք',
-      treesUnit: 'ծառ',
+      treesLabel: 'Տնկված ծառեր',
+      treesUnit: '/ տարի',
       note: 'Արդյունքի օրինակ․ հաշվարկեք ձեր տունը՝ ձեր տվյալները տեսնելու համար։'
     }
   },

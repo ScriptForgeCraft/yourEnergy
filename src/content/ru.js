@@ -384,8 +384,8 @@ export default {
       co2Display: '3,5',
       trees: 59,
       co2Label: 'Сокращение CO₂',
-      treesLabel: 'Эквивалент годового поглощения CO₂',
-      treesUnit: 'деревьев',
+      treesLabel: 'Высаженные деревья',
+      treesUnit: '/ год',
       note: 'Пример результата — рассчитайте дом, чтобы увидеть свои данные.'
     }
   },

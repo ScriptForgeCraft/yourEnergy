@@ -387,8 +387,8 @@ export default {
       co2Display: '3.5',
       trees: 59,
       co2Label: 'CO₂ savings',
-      treesLabel: 'Equivalent annual CO₂ absorption',
-      treesUnit: 'trees',
+      treesLabel: 'Trees planted',
+      treesUnit: '/ year',
       note: 'Example result — calculate your home to see your figures.'
     }
   },
