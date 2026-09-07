@@ -13,19 +13,18 @@
   <body class='calculator-page calculator-page--quick'>
     <a class='skip-link' href='#main'>{{aria.skip}}</a>{{> site-header}}
     <main id='main'>
-      <section class='tool-hero section'><div class='container tool-hero__inner'><p class='eyebrow'>{{quick.eyebrow}}</p><h1>{{quick.title}}</h1><p>{{quick.intro}}</p><a class='text-link' href='{{proHref}}'>{{quick.pro}}</a></div></section>
-      <section class='quick-calculator section' data-quick-calculator><div class='container quick-calculator__grid'>
+      <section class='tool-hero section'><div class='container tool-hero__inner'><p class='eyebrow'>{{quick.eyebrow}}</p><h1>{{quick.title}}</h1><p>{{quick.intro}}</p></div></section>
+      <section class='quick-calculator section' id='quick-calculator' data-quick-calculator><div class='container quick-calculator__grid'>
         <form class='tool-form quick-calculator__form' data-quick-form novalidate aria-describedby='quick-status'>
           <h2>{{toolShared.calculator}}</h2>
           <label for='quick-region'>{{quick.region}}<select id='quick-region' data-quick-region required><option value=''>—</option>{{#each regions}}<option value='{{id}}'>{{label}}</option>{{/each}}</select></label>
           <fieldset><legend>{{quick.mode}}</legend><label><input type='radio' name='quick-consumption-mode' value='bill' checked /> {{quick.bill}}</label><label><input type='radio' name='quick-consumption-mode' value='usage' /> {{quick.usage}}</label></fieldset>
           <label data-quick-bill-wrap for='quick-bill'>{{quick.billLabel}}<div class='input-with-unit'><input id='quick-bill' type='number' min='0.01' step='1' inputmode='decimal' data-quick-bill /><span>AMD</span></div></label>
           <label data-quick-usage-wrap for='quick-usage' hidden>{{quick.usageLabel}}<div class='input-with-unit'><input id='quick-usage' type='number' min='0.01' step='1' inputmode='decimal' data-quick-usage /><span>kWh</span></div></label>
-          <label for='quick-tariff'><span data-quick-tariff-label>{{quick.tariffLabel}}</span><div class='input-with-unit'><input id='quick-tariff' type='number' min='0.01' step='0.01' inputmode='decimal' data-quick-tariff required aria-required='true' aria-describedby='quick-tariff-help' /><span>AMD/kWh</span></div></label>
-          <p class='input-help' id='quick-tariff-help' data-quick-tariff-help>{{quick.tariffHelp}}</p>
+          <div data-quick-tariff-wrap hidden><label for='quick-tariff'><span data-quick-tariff-label>{{quick.tariffLabel}}</span><div class='input-with-unit'><input id='quick-tariff' type='number' min='0.01' step='0.01' inputmode='decimal' data-quick-tariff required aria-required='true' aria-describedby='quick-tariff-help' /><span>AMD/kWh</span></div></label><p class='input-help' id='quick-tariff-help' data-quick-tariff-help>{{quick.tariffHelp}}</p></div>
           <button class='button' type='submit' data-quick-submit>{{quick.submit}}</button><p class='form-status' id='quick-status' data-quick-status aria-live='polite'></p>
         </form>
-        <section class='tool-result quick-result' data-quick-result aria-live='polite' aria-labelledby='quick-result-title'><p class='eyebrow'>{{quick.regional}}</p><h2 id='quick-result-title'>{{quick.waiting}}</h2><p data-quick-result-copy>{{quick.regionalCopy}}</p><div data-quick-result-values hidden></div><div class='quick-result__actions' data-quick-result-actions hidden><a class='button' href='{{refineHref}}'>{{quick.refine}}</a><a class='button button--outline' href='{{offerCheckerHref}}'>{{quick.offer}}</a></div><p class='section-disclosure'>{{quick.disclaimer}}</p></section>
+        <section class='tool-result quick-result' data-quick-result aria-live='polite' aria-labelledby='quick-result-title'><p class='eyebrow'>{{quick.regional}}</p><h2 id='quick-result-title'>{{quick.waiting}}</h2><p data-quick-result-copy>{{quick.regionalCopy}}</p><div data-quick-result-values hidden></div><div class='quick-result__actions' data-quick-result-actions hidden><a class='button' href='{{refineHref}}'>{{quick.refine}}</a><a class='button button--outline' href='{{contact.phoneHref}}'>{{quick.contact}}</a></div><p class='quick-result__links' data-quick-result-links hidden><a class='text-link' href='{{offerCheckerHref}}'>{{quick.offer}}</a><a class='text-link' href='{{proHref}}'>{{quick.pro}}</a></p><p class='section-disclosure'>{{quick.disclaimer}}</p></section>
       </div></section>
       <noscript><section class='section section--soft'><div class='container'><h2>{{toolShared.calculator}}</h2><p>{{quick.noJs}}</p><a class='button' href='{{contact.phoneHref}}'>{{contact.phone}}</a></div></section></noscript>
     </main>

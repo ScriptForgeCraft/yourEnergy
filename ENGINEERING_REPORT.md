@@ -21,11 +21,12 @@ the sitemap.
 
 ## 3. Quick Calculator UX
 
-The first screen contains only a region, a consumption mode and one value. Bill
-mode opens an explicit tariff field because bill-to-kWh conversion cannot be
-honest without it. kWh mode leaves tariff optional and shows it only as an
-economics input. There is no map, coordinate, roof polygon, azimuth, tilt,
-PVGIS diagnostic panel or Leaflet request in initial Quick HTML.
+The first screen contains only a region, a consumption mode and one value. In
+bill mode, the tariff is progressively revealed only after a bill amount is
+entered because bill-to-kWh conversion cannot be honest without it. In kWh
+mode, the tariff remains out of Quick entirely. There is no map, coordinate,
+roof polygon, azimuth, tilt, mounting type, monthly profile, PVGIS diagnostic
+panel or Leaflet request in initial Quick HTML.
 
 ## 4. Regional PVGIS model
 
@@ -47,17 +48,20 @@ failure has the existing JSON error envelope; it never returns demo values.
 
 Quick results use `scope: regional-preliminary`, state that PVGIS represents a
 regional reference point rather than the visitor's property, and do not apply a
-roof-area constraint. Capacity, panels, annual generation and P25/P50/P75
-budget appear when source data is available; savings/payback appear only with an
-explicit usable tariff.
+roof-area constraint. Capacity, panels, annual generation and one human-readable
+preliminary budget range appear when source data is available; P25/P50/P75 stay
+in the shared PriceBook and professional view. Savings/payback appear only with
+an explicit usable tariff.
 
 ## 7. Roof refinement UX
 
 Refinement receives the same temporary browser session and asks for a manual
 point plus one of two truthful roof inputs: a completed OSM outline labelled
-“Preliminary area from outline”, or user-entered measured roof-plane area. Tilt
-and azimuth stay inside a native Engineering parameters disclosure and the page
-sends the same `/api/analysis` request as professional mode.
+“Preliminary area from outline”, or user-entered measured roof-plane area. It
+uses the existing preliminary 30° / 180° model defaults internally rather than
+asking a homeowner for engineering numbers, and sends the same `/api/analysis`
+request as professional mode. When a compatible Quick result exists, Refine
+also shows a compact first-estimate versus refined-capacity comparison.
 
 ## 8. Map behaviour
 
@@ -74,16 +78,18 @@ The existing independent-status wizard is retained at `/calculator/pro/`:
 Object, Consumption, Roof and Result; PVGIS potential remains independent of
 roof/consumption completion. It retains coordinates, map selection, polygon,
 PVGIS retry/diagnostics, roof direction, tilt, mounting type, monthly profile,
-tariff and in-memory bill upload. Public Quick routes no longer embed those
-controls.
+tariff and in-memory bill upload. Coordinates, PVGIS diagnostics, monthly
+consumption, bill upload, orientation, tilt and mounting controls are now
+visible professional groups instead of being hidden in Engineering parameters
+disclosures. Public Quick routes no longer embed those controls.
 
 ## 10. Shared temporary state
 
 `src/ui/calculator-session.js` is the single `sessionStorage` handoff model for
 Quick, refinement and Pro. It persists region, consumption, tariff, point, roof,
-potential, analysis and Passport snapshots for the current browser tab. Files are
-excluded: the electricity bill remains an in-memory `File` and is never sent or
-serialised.
+potential, the regional Quick analysis, detailed analysis and Passport snapshots
+for the current browser tab. Files are excluded: the electricity bill remains an
+in-memory `File` and is never sent or serialised.
 
 Changing consumption in the same regional context preserves an existing
 refinement. Changing the Quick region clears old point/roof/potential data so a
@@ -160,7 +166,7 @@ is new.
 
 Completed locally after implementation:
 
-- `npm test` — 55 tests passed.
+- `npm test` — 59 tests passed.
 - `npm run lint` — passed.
 - `npm run format:check` — passed.
 - `npm run build` — passed; 21 generated HTML routes.
@@ -171,19 +177,25 @@ selector and does not request it until a visitor enters a map workflow.
 
 ## 20. Browser smoke and remaining blockers
 
-Local production-preview checks covered Quick, refinement and Pro at 375 px.
-Quick had no Leaflet/map DOM, switched tariff `required` and `aria-required`
-correctly between bill/kWh modes, rendered honest PVGIS unavailable state without
-fallback numbers, and had no horizontal overflow or console error. Refinement
-opened Leaflet only after explicit map action, confirmed a point, finished a
-three-vertex outline with finite 18 m² preliminary area, and had no overflow.
-Same-tab Quick → refinement → Pro preserved consumption; Pro rendered the
-professional workspace without initially loading Leaflet. The mobile hero
-overflow found in QA was corrected.
+Local production-preview checks covered Quick, refinement and Pro across HY/RU/EN
+at 320, 360, 375, 390, 430, 768, 1024, 1280 and 1440 px: 81 route/viewport
+checks reported one H1 and no horizontal overflow. Quick had no Leaflet/map DOM,
+kept tariff hidden/disabled in kWh mode, revealed it as required after bill
+entry, and rendered the honest PVGIS-unavailable state without fallback numbers.
+Refinement had no visible tilt/azimuth fields and opened Leaflet only after an
+explicit map action. Pro exposed all professional controls without a collapsed
+Engineering parameters wrapper. There were no browser console errors.
 
 Local Vite preview does not execute Pages Functions/KV, so successful live PVGIS
 browser response is not claimed. Controlled Function tests cover success,
 failure, tariff conditions and cache setup. Before release configure
 `PVGIS_CACHE` plus `PVGIS_CACHE_SALT` in Cloudflare Pages and run a live Quick
 and refinement flow on Pages. Native Armenian copy and legal content still need
-owner approval. No commit, push, deployment or migration was performed.
+owner approval. This UX pass performs no additional commit, push, deployment or
+migration.
+
+## Owner-controlled content
+
+Marketing copy, project data, contacts, pricing statements, equipment claims,
+legal wording and other business content were not audited or rewritten in this
+UX/product refactor at the owner’s request.

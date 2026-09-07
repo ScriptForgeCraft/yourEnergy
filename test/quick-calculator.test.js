@@ -11,6 +11,7 @@ import {
   getArmeniaRegionalBenchmark
 } from '../src/domain/index.js';
 import { createCalculatorSession } from '../src/ui/calculator-session.js';
+import { formatConsumerCommercialRange } from '../src/ui/commercial-range.js';
 import { shouldClearRefinementForRegion } from '../src/ui/quick-calculator.js';
 
 const endpoint = 'https://site.example/api/quick-analysis';
@@ -159,8 +160,34 @@ test('one temporary session carries quick values to refinement and professional 
   assert.equal('selectedBillFile' in restored, false);
 });
 
+test('a detailed roof result preserves its compatible quick result for a simple comparison', () => {
+  const values = new Map();
+  const session = createCalculatorSession({
+    storage: {
+      getItem: (key) => values.get(key) ?? null,
+      setItem: (key, value) => values.set(key, value)
+    }
+  });
+  session.write({
+    quickAnalysis: { scope: 'regional-preliminary', selectedScenario: { id: 'quick' } }
+  });
+  session.write({ analysis: { scope: 'manual-roof-plane', selectedScenario: { id: 'refined' } } });
+  const restored = session.read();
+  assert.equal(restored.quickAnalysis.selectedScenario.id, 'quick');
+  assert.equal(restored.analysis.selectedScenario.id, 'refined');
+});
+
 test('changing the regional starting point never carries an old roof into the new estimate', () => {
   assert.equal(shouldClearRefinementForRegion('yerevan', 'yerevan'), false);
   assert.equal(shouldClearRefinementForRegion('yerevan', 'syunik'), true);
   assert.equal(shouldClearRefinementForRegion(null, 'yerevan'), false);
+});
+
+test('consumer budget presentation uses only a preliminary range while the price book keeps percentiles', () => {
+  const range = formatConsumerCommercialRange(
+    { rangeAmd: { p25: 3_900_000, p50: 4_100_000, p75: 4_400_000 } },
+    'en-US'
+  );
+  assert.equal(range, '3,900,000 ֏ – 4,400,000 ֏');
+  assert.doesNotMatch(range, /P(?:25|50|75)/u);
 });

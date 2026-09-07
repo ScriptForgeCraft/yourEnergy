@@ -395,9 +395,32 @@ function validateToolLanguageSwitcher(html, page, currentLocale, type) {
   }
 }
 
-function validateSupportNoindex(html, page) {
+function validateNoindexLocalizedPage(html, page, locale, type) {
   const robots = findMeta(html, 'name', 'robots')?.get('content')?.toLowerCase() ?? '';
-  if (!robots.includes('noindex')) fail(`${page}: support page must be noindex`);
+  if (!robots.includes('noindex')) fail(`${page}: noindex route must declare noindex`);
+  const canonical = locale === 'hy' ? `${origin}/${type}/` : `${origin}/${locale}/${type}/`;
+  const canonicalLink = tagAttributes(html, 'link').find(
+    (attributes) => attributes.get('rel') === 'canonical'
+  );
+  if (canonicalLink?.get('href') !== canonical) fail(`${page}: canonical must be ${canonical}`);
+  const alternates = tagAttributes(html, 'link')
+    .filter((attributes) => attributes.get('rel') === 'alternate')
+    .map((attributes) => [attributes.get('hreflang'), attributes.get('href')]);
+  for (const [language, href] of new Map([
+    ['hy', `${origin}/${type}/`],
+    ['ru', `${origin}/ru/${type}/`],
+    ['en', `${origin}/en/${type}/`],
+    ['x-default', `${origin}/${type}/`]
+  ])) {
+    if (
+      !alternates.some(
+        ([actualLanguage, actualHref]) => actualLanguage === language && actualHref === href
+      )
+    ) {
+      fail(`${page}: missing hreflang ${language} => ${href}`);
+    }
+  }
+  validateToolLanguageSwitcher(html, page, locale, type);
 }
 
 async function validateSitemap() {
@@ -468,11 +491,25 @@ async function validateHeaders() {
 }
 
 function validateQuickCalculatorMarkup(html, page) {
+  const visibleHtml = html.replace(/<script\b[^>]*>[\s\S]*?<\/script>/giu, '');
   for (const marker of ['data-quick-calculator', 'data-quick-region', 'data-quick-submit']) {
     if (!html.includes(marker)) fail(`${page}: missing quick calculator marker ${marker}`);
   }
-  for (const forbidden of ['data-property-map', 'data-roof-map-host', 'data-calculator-wizard']) {
-    if (html.includes(forbidden)) fail(`${page}: quick calculator must not include ${forbidden}`);
+  for (const forbidden of [
+    'data-property-map',
+    'data-roof-map-host',
+    'data-calculator-wizard',
+    'data-consumption-month',
+    'data-roof-tilt',
+    'data-roof-orientation',
+    'data-roof-mounting-mode',
+    'P25',
+    'P50',
+    'P75'
+  ]) {
+    if (visibleHtml.includes(forbidden)) {
+      fail(`${page}: quick calculator must not include ${forbidden}`);
+    }
   }
 }
 
@@ -618,8 +655,10 @@ for (const { page, type } of toolPages) {
   if (type === 'calculator') validateQuickCalculatorMarkup(pages.get(page), page);
   if (type === 'offer-checker') validateOfferCheckerMarkup(pages.get(page), page);
 }
-for (const { page, type } of privateCalculatorPages) {
-  if (pages.has(page)) validatePrivateCalculatorMarkup(pages.get(page), page, type);
+for (const { page, locale, type } of privateCalculatorPages) {
+  if (!pages.has(page)) continue;
+  validatePrivateCalculatorMarkup(pages.get(page), page, type);
+  validateNoindexLocalizedPage(pages.get(page), page, locale, type);
 }
 const publishedPages = new Set([
   'index.html',
@@ -627,8 +666,21 @@ const publishedPages = new Set([
   'en/index.html',
   ...toolPages.map(({ page }) => page)
 ]);
-for (const page of expectedPages.filter((page) => !publishedPages.has(page))) {
-  if (pages.has(page)) validateSupportNoindex(pages.get(page), page);
+const supportPageSet = new Set([
+  'privacy/index.html',
+  'terms/index.html',
+  'ru/privacy/index.html',
+  'ru/terms/index.html',
+  'en/privacy/index.html',
+  'en/terms/index.html'
+]);
+for (const page of expectedPages.filter(
+  (page) => !publishedPages.has(page) && supportPageSet.has(page)
+)) {
+  if (!pages.has(page)) continue;
+  const locale = page.startsWith('ru/') ? 'ru' : page.startsWith('en/') ? 'en' : 'hy';
+  const type = page.includes('/privacy/') || page === 'privacy/index.html' ? 'privacy' : 'terms';
+  validateNoindexLocalizedPage(pages.get(page), page, locale, type);
 }
 await validateSitemap();
 await validateHeaders();

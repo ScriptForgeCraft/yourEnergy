@@ -105,6 +105,7 @@ const createToolLanguageLinks = (currentLocale, type) =>
     label: languageLabels[key],
     name: localizedLanguageNames[currentLocale][key]
   }));
+const supportTypeForPath = (path) => (path.endsWith('/privacy/') ? 'privacy' : 'terms');
 
 const escapeJsonForHtml = (value) =>
   JSON.stringify(value)
@@ -298,6 +299,7 @@ const createQuickCalculatorContext = (content) => {
     path,
     meta: modeCopy.quickMeta,
     quick: modeCopy.quick,
+    headerCtaHref: `${path}#quick-calculator`,
     regions: ARMENIA_REGIONAL_BENCHMARKS.map((region) => ({
       id: region.id,
       label: regionLabels[content.locale][region.id]
@@ -505,12 +507,15 @@ const supportPages = [
 
 for (const [file, content] of supportPages) {
   const output = resolve(root, file);
+  const supportType = supportTypeForPath(content.path);
   await mkdir(dirname(output), { recursive: true });
   await writeGenerated(
     output,
     renderSupport({
       ...createHomeContext(homeContent[content.locale], { pageKind: 'support' }),
-      ...content
+      ...content,
+      alternateLinks: createToolAlternateLinks(supportType),
+      languageLinks: createToolLanguageLinks(content.locale, supportType)
     })
   );
 }

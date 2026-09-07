@@ -1,7 +1,11 @@
 import { SolarPassportRepository } from '../domain/index.js';
 import { ProductApiClient, ProductApiError } from '../services/api-client.js';
 import { createPropertyMap } from '../services/property-map.js';
+import { formatConsumerCommercialRange } from './commercial-range.js';
 import { createCalculatorSession } from './calculator-session.js';
+
+const CONSUMER_DEFAULT_TILT_DEGREES = 30;
+const CONSUMER_DEFAULT_AZIMUTH_DEGREES = 180;
 
 const finite = (value, min, max) => {
   const number = Number(value);
@@ -49,6 +53,7 @@ export const initRoofRefinement = ({ config = {} } = {}) => {
   const measuredWrap = root.querySelector('[data-refine-measured]');
   const outline = root.querySelector('[data-refine-outline]');
   const dashboard = root.querySelector('[data-refine-result-dashboard]');
+  const comparison = root.querySelector('[data-refine-comparison]');
   let mapController = null;
   let pendingLocation = null;
   let roof = saved.roof ?? { points: [], areaSqm: 0, complete: false };
@@ -182,7 +187,7 @@ export const initRoofRefinement = ({ config = {} } = {}) => {
       polygonComplete: true
     };
   };
-  const renderResult = (analysis) => {
+  const renderResult = (analysis, quickAnalysis = null) => {
     const scenario = analysis.selectedScenario;
     const estimates = analysis.commercialEstimate;
     const values = document.createElement('dl');
@@ -199,13 +204,8 @@ export const initRoofRefinement = ({ config = {} } = {}) => {
         `${format(analysis.roof?.areaSqm, locale, { maximumFractionDigits: 1 })} m²`
       )
     );
-    if (estimates?.available)
-      values.append(
-        metric(
-          quick.budget,
-          `P25 ${format(estimates.rangeAmd?.p25, locale)} ֏ · P50 ${format(estimates.primaryAmd, locale)} ֏ · P75 ${format(estimates.rangeAmd?.p75, locale)} ֏`
-        )
-      );
+    const budgetRange = formatConsumerCommercialRange(estimates, locale);
+    if (budgetRange) values.append(metric(quick.budget, budgetRange));
     if (scenario.financial?.annualSavingsAmd !== null)
       values.append(
         metric(quick.savings, `${format(scenario.financial.annualSavingsAmd, locale)} ֏`),
@@ -215,6 +215,21 @@ export const initRoofRefinement = ({ config = {} } = {}) => {
         )
       );
     dashboard.replaceChildren(values);
+    const quickScenario =
+      quickAnalysis?.scope === 'regional-preliminary' ? quickAnalysis.selectedScenario : null;
+    if (comparison && quickScenario?.system?.capacityKwp !== undefined) {
+      comparison.hidden = false;
+      comparison.replaceChildren(
+        metric(
+          copy.quickCapacity,
+          `${format(quickScenario.system.capacityKwp, locale, { maximumFractionDigits: 2 })} kWp`
+        ),
+        metric(
+          copy.refinedCapacity,
+          `${format(scenario.system?.capacityKwp, locale, { maximumFractionDigits: 2 })} kWp`
+        )
+      );
+    }
     resultStep.hidden = false;
     requestAnimationFrame(() => resultStep.focus());
   };
@@ -226,9 +241,6 @@ export const initRoofRefinement = ({ config = {} } = {}) => {
       setStatus(copy.invalid, true);
       return;
     }
-    const tiltDegrees = finite(root.querySelector('[data-refine-tilt]')?.value, 0, 74) ?? 30;
-    const azimuthDegrees =
-      finite(root.querySelector('[data-refine-azimuth]')?.value, 0, 359) ?? 180;
     const payload = {
       property: {
         latitude: property.lat,
@@ -241,7 +253,12 @@ export const initRoofRefinement = ({ config = {} } = {}) => {
           ? { averageMonthlyBillAmd: current.consumption.averageMonthlyBillAmd }
           : { averageMonthlyKwh: current.consumption.averageMonthlyKwh },
       ...(current.userTariff ? { tariff: current.userTariff } : {}),
-      roof: { ...roofInput, mountingMode: 'roof-parallel', tiltDegrees, azimuthDegrees },
+      roof: {
+        ...roofInput,
+        mountingMode: 'roof-parallel',
+        tiltDegrees: CONSUMER_DEFAULT_TILT_DEGREES,
+        azimuthDegrees: CONSUMER_DEFAULT_AZIMUTH_DEGREES
+      },
       system: { capacityKwp: 1, lossPercent: 14 }
     };
     analysisRequest?.abort();
@@ -257,7 +274,7 @@ export const initRoofRefinement = ({ config = {} } = {}) => {
         analysis: response.analysis,
         solarPassport
       });
-      renderResult(response.analysis);
+      renderResult(response.analysis, current.quickAnalysis ?? current.analysis);
     } catch (error) {
       if (error instanceof ProductApiError && error.code === 'ABORTED') return;
       setStatus(copy.unavailable, true);

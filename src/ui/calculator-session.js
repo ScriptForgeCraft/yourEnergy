@@ -18,6 +18,7 @@ const emptyState = () => ({
   property: null,
   roof: null,
   sitePotential: null,
+  quickAnalysis: null,
   analysis: null,
   solarPassport: null
 });

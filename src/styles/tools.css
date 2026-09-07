@@ -39,6 +39,12 @@
   flex-wrap: wrap;
   gap: 0.65rem;
 }
+.quick-result__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem 1rem;
+  margin: 1rem 0 0;
+}
 
 /* Calculator wizard: functional UI stays in normal document flow so a map or
    result cannot appear on top of an unrelated hero card. */
@@ -249,6 +255,21 @@
   font-weight: 700;
   color: var(--color-navy);
 }
+.professional-panel {
+  margin-top: 1.25rem;
+  padding: 1rem;
+  border: 1px solid var(--color-border);
+  border-radius: 0.85rem;
+  background: #f7f9fa;
+}
+.professional-panel > h3 {
+  margin: 0 0 0.6rem;
+  color: var(--color-navy);
+  font-size: 1rem;
+}
+.professional-panel .async-card {
+  background: #fff;
+}
 .wizard-coordinates,
 .wizard-form-grid {
   display: grid;
@@ -406,6 +427,10 @@
 .result-kpis {
   grid-template-columns: repeat(5, minmax(0, 1fr));
 }
+.refine-comparison {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin-top: 1rem;
+}
 .result-budget {
   background: var(--color-navy);
   color: #fff;
@@ -444,6 +469,7 @@
   }
   .wizard-kpis,
   .result-kpis,
+  .refine-comparison,
   .wizard-form-grid,
   .wizard-coordinates,
   .mounting-cards {

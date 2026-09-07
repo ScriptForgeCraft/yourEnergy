@@ -1,4 +1,5 @@
 import { ProductApiClient, ProductApiError } from '../services/api-client.js';
+import { formatConsumerCommercialRange } from './commercial-range.js';
 import { createCalculatorSession } from './calculator-session.js';
 
 const positive = (value) => {
@@ -50,6 +51,7 @@ export const initQuickCalculator = ({ config = {} } = {}) => {
   const tariff = root.querySelector('[data-quick-tariff]');
   const billWrap = root.querySelector('[data-quick-bill-wrap]');
   const usageWrap = root.querySelector('[data-quick-usage-wrap]');
+  const tariffWrap = root.querySelector('[data-quick-tariff-wrap]');
   const tariffLabel = root.querySelector('[data-quick-tariff-label]');
   const tariffHelp = root.querySelector('[data-quick-tariff-help]');
   const submit = root.querySelector('[data-quick-submit]');
@@ -58,6 +60,7 @@ export const initQuickCalculator = ({ config = {} } = {}) => {
   const resultCopy = root.querySelector('[data-quick-result-copy]');
   const resultValues = root.querySelector('[data-quick-result-values]');
   const resultActions = root.querySelector('[data-quick-result-actions]');
+  const resultLinks = root.querySelector('[data-quick-result-links]');
   let request = null;
 
   const saved = session.read();
@@ -83,23 +86,27 @@ export const initQuickCalculator = ({ config = {} } = {}) => {
     usageWrap.hidden = billMode;
     bill.disabled = !billMode;
     usage.disabled = billMode;
-    tariff.required = billMode;
-    tariff.setAttribute('aria-required', String(billMode));
-    tariffLabel.textContent = billMode ? copy.tariffLabel : copy.tariffOptional;
-    tariffHelp.textContent = billMode ? copy.tariffHelp : copy.tariffOptionalHelp;
+    const needsVisibleTariff = billMode && positive(bill.value) !== null;
+    tariffWrap.hidden = !needsVisibleTariff;
+    tariff.disabled = !needsVisibleTariff;
+    tariff.required = needsVisibleTariff;
+    tariff.setAttribute('aria-required', String(needsVisibleTariff));
+    tariffLabel.textContent = copy.tariffLabel;
+    tariffHelp.textContent = copy.tariffHelp;
   };
   const clearAnalysis = () => {
-    session.clearAnalysis();
+    session.write({ quickAnalysis: null, analysis: null, solarPassport: null });
     resultValues.hidden = true;
     resultActions.hidden = true;
+    resultLinks.hidden = true;
     resultValues.replaceChildren();
     resultTitle.textContent = copy.waiting;
     resultCopy.textContent = copy.regionalCopy;
   };
   const input = () => {
     const selectedRegion = region.value;
-    const tariffRate = positive(tariff.value);
     const currentMode = mode();
+    const tariffRate = currentMode === 'bill' ? positive(tariff.value) : null;
     if (!selectedRegion) return { valid: false, field: region };
     if (currentMode === 'bill') {
       const value = positive(bill.value);
@@ -148,13 +155,9 @@ export const initQuickCalculator = ({ config = {} } = {}) => {
       metric(copy.panels, format(scenario.system?.panelCount, locale)),
       metric(copy.generation, `${format(scenario.generation?.annualKwh, locale)} kWh`)
     );
-    if (estimate?.available) {
-      values.append(
-        metric(
-          copy.budget,
-          `P25 ${format(estimate.rangeAmd?.p25, locale)} ֏ · P50 ${format(estimate.primaryAmd, locale)} ֏ · P75 ${format(estimate.rangeAmd?.p75, locale)} ֏`
-        )
-      );
+    const budgetRange = formatConsumerCommercialRange(estimate, locale);
+    if (budgetRange) {
+      values.append(metric(copy.budget, budgetRange));
     }
     if (scenario.financial?.annualSavingsAmd !== null) {
       values.append(
@@ -175,6 +178,7 @@ export const initQuickCalculator = ({ config = {} } = {}) => {
     resultValues.replaceChildren(values);
     resultValues.hidden = false;
     resultActions.hidden = false;
+    resultLinks.hidden = false;
   };
 
   root.querySelectorAll('input[name="quick-consumption-mode"]').forEach((control) =>
@@ -189,6 +193,7 @@ export const initQuickCalculator = ({ config = {} } = {}) => {
       clearAnalysis();
     })
   );
+  bill.addEventListener('input', updateMode);
   region.addEventListener('change', clearAnalysis);
   form.addEventListener('submit', async (event) => {
     event.preventDefault();
@@ -210,6 +215,7 @@ export const initQuickCalculator = ({ config = {} } = {}) => {
     session.write({
       ...current.state,
       ...(changedRegion ? { property: null, roof: null, sitePotential: null } : {}),
+      quickAnalysis: null,
       analysis: null,
       solarPassport: null
     });
@@ -221,7 +227,7 @@ export const initQuickCalculator = ({ config = {} } = {}) => {
       if (request.signal.aborted) return;
       const analysis = response?.analysis;
       if (!analysis) throw new ProductApiError('MALFORMED_RESPONSE');
-      session.write({ ...current.state, analysis, solarPassport: null });
+      session.write({ ...current.state, quickAnalysis: analysis, analysis, solarPassport: null });
       render(analysis);
       setStatus('');
     } catch (error) {
@@ -230,6 +236,7 @@ export const initQuickCalculator = ({ config = {} } = {}) => {
       resultCopy.textContent = errorMessage(error, copy);
       resultValues.hidden = true;
       resultActions.hidden = true;
+      resultLinks.hidden = true;
       setStatus(errorMessage(error, copy), true);
       const retry = document.createElement('button');
       retry.type = 'button';
@@ -246,6 +253,7 @@ export const initQuickCalculator = ({ config = {} } = {}) => {
   });
 
   updateMode();
-  if (saved.analysis?.scope === 'regional-preliminary') render(saved.analysis);
+  const savedQuickAnalysis = saved.quickAnalysis ?? saved.analysis;
+  if (savedQuickAnalysis?.scope === 'regional-preliminary') render(savedQuickAnalysis);
   return { session, clearAnalysis };
 };

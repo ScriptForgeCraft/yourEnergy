@@ -32,14 +32,16 @@ Prettier are development dependencies. There are no browser API keys.
 ## 3. Calculator modes and real-analysis flow
 
 `/calculator/` is the consumer entry point: region plus either average bill
-with an explicit tariff, or average kWh. It has no map, coordinate or roof
-editor in its initial HTML. `POST /api/quick-analysis` uses a versioned,
+(which progressively reveals the explicit tariff required for conversion), or
+average kWh. It has no map, coordinate, roof editor or tariff field in its kWh
+initial flow. `POST /api/quick-analysis` uses a versioned,
 representative regional PVGIS point and returns only a `regional-preliminary`
 estimate, never a result for the visitor's home.
 
 `/calculator/refine/` preserves that temporary browser session, then asks for a
-manual point and an outline or measured roof-plane area. `/calculator/pro/`
-retains the full professional workspace: coordinates, map/polygon controls,
+manual point and an outline or measured roof-plane area while applying
+preliminary roof defaults internally. `/calculator/pro/` retains the full
+professional workspace: coordinates, map/polygon controls,
 PVGIS diagnostic/retry, orientation, tilt, mounting, monthly consumption,
 tariff and in-memory bill upload.
 
