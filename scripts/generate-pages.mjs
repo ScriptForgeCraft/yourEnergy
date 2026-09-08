@@ -137,23 +137,24 @@ const createJsonLd = (content, { includeFaq = true } = {}) => {
       name: 'Your Energy LLC',
       alternateName: 'YOURENERGY',
       url: 'https://yourenergy.am/',
-      telephone: content.contact.phone,
-      address: {
-        '@type': 'PostalAddress',
-        streetAddress: content.contact.address,
-        addressCountry: 'AM'
-      }
+      telephone: content.contact.phone
     },
     {
       '@type': 'Service',
       '@id': `${canonical}#service`,
       name: serviceName,
       serviceType: serviceName,
+      description: content.meta.serviceDescription ?? content.meta.description,
       url: canonical,
       provider: { '@id': 'https://yourenergy.am/#organization' },
       areaServed: { '@type': 'Country', name: 'Armenia' }
     }
   ];
+
+  // TODO(owner): provide one confirmed, structured street/locality/region
+  // address before adding a PostalAddress to Organization JSON-LD. The supplied
+  // free-form contact text contains multiple place labels, so splitting it here
+  // would create unverified structured business data.
 
   if (includeFaq) {
     graph.push({

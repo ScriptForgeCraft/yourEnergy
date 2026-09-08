@@ -202,16 +202,20 @@ function validateJsonLd(html, page) {
     !organization ||
     organization.name !== 'Your Energy LLC' ||
     organization.telephone !== '+374 91 095 950' ||
-    organization.address?.streetAddress !== 'Artashisyan 48 14 Kotayq, Zovuni, 26 33 str, Yerevan'
+    'address' in organization
   ) {
-    fail(`${page}: Organization JSON-LD must contain the supplied contact details`);
+    fail(`${page}: Organization JSON-LD must use only confirmed structured fields`);
   }
+
+  const service = nodes.find((node) => includesType(node, 'Service'));
+  if (!service?.description) fail(`${page}: Service JSON-LD must have a user-facing description`);
 
   const serialized = JSON.stringify(documents);
   if (/\+374\s*10\s*123\s*456|info@yourenergy\.am/iu.test(serialized)) {
     fail(`${page}: demo contact data leaked into JSON-LD`);
   }
-  if (/LocalBusiness|Review|AggregateRating|Rating/iu.test(serialized)) {
+  const prohibitedSchemaTypes = ['LocalBusiness', 'Review', 'AggregateRating', 'Rating'];
+  if (nodes.some((node) => prohibitedSchemaTypes.some((type) => includesType(node, type)))) {
     fail(`${page}: prohibited demo business/review schema is present`);
   }
 }
@@ -495,7 +499,14 @@ async function validateHeaders() {
 
 function validateQuickCalculatorMarkup(html, page) {
   const visibleHtml = html.replace(/<script\b[^>]*>[\s\S]*?<\/script>/giu, '');
-  for (const marker of ['data-quick-calculator', 'data-quick-region', 'data-quick-submit']) {
+  for (const marker of [
+    'data-quick-calculator',
+    'data-quick-region',
+    'data-quick-submit',
+    'data-quick-lead-open',
+    'data-quick-lead-dialog',
+    'data-quick-lead-form'
+  ]) {
     if (!html.includes(marker)) fail(`${page}: missing quick calculator marker ${marker}`);
   }
   for (const forbidden of [
@@ -512,6 +523,15 @@ function validateQuickCalculatorMarkup(html, page) {
   ]) {
     if (visibleHtml.includes(forbidden)) {
       fail(`${page}: quick calculator must not include ${forbidden}`);
+    }
+  }
+}
+
+function validateHomePublicSeoCopy(html, page) {
+  const visibleHtml = html.replace(/<script\b[^>]*>[\s\S]*?<\/script>/giu, '');
+  for (const internalTerm of ['PriceBook', 'P0']) {
+    if (visibleHtml.includes(internalTerm)) {
+      fail(`${page}: public homepage copy must not expose internal term ${internalTerm}`);
     }
   }
 }
@@ -598,9 +618,9 @@ function validateCinematicHomeHero(html, page, calculatorHref) {
   }
   for (const marker of [
     'data-hero-time-backdrop',
-    'hero-time-20-640.avif',
-    'hero-time-20-1024.avif',
-    'hero-time-20-1600.avif',
+    'hero-time-8-640.avif',
+    'hero-time-8-1024.avif',
+    'hero-time-8-1600.avif',
     'data-hero-time-image',
     'data-hero-time-sun',
     'data-hero-dashboard',
@@ -712,6 +732,7 @@ for (const [page, calculatorHref] of [
 ]) {
   if (pages.has(page)) {
     validateHomeCalculatorSeparation(pages.get(page), page, calculatorHref);
+    validateHomePublicSeoCopy(pages.get(page), page);
     validateCinematicHomeHero(pages.get(page), page, calculatorHref);
     validateCompanyRecord(pages.get(page), page);
   }

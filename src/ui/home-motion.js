@@ -2,32 +2,94 @@ import { initHeroAnalysisCard } from './hero-analysis-card.js';
 
 const clamp = (value, min = 0, max = 1) => Math.min(max, Math.max(min, value));
 
+export const HERO_TIME_ZONE = 'Asia/Yerevan';
+
 const heroTimeProfiles = Object.freeze([
-  { hour: 8, sunX: '39%', sunY: '57%' },
-  { hour: 12, sunX: '54%', sunY: '34%' },
-  { hour: 14, sunX: '65%', sunY: '19%' },
-  { hour: 16, sunX: '75%', sunY: '13%' },
-  { hour: 18, sunX: '87%', sunY: '17%' },
-  { hour: 20, sunX: '96%', sunY: '29%' }
+  { hour: 8, assetHour: 8, kind: 'day', sunX: '39%', sunY: '57%' },
+  { hour: 12, assetHour: 12, kind: 'day', sunX: '54%', sunY: '34%' },
+  { hour: 14, assetHour: 14, kind: 'day', sunX: '65%', sunY: '19%' },
+  { hour: 16, assetHour: 16, kind: 'day', sunX: '75%', sunY: '13%' },
+  { hour: 18, assetHour: 18, kind: 'day', sunX: '87%', sunY: '17%' },
+  { hour: 20, assetHour: 20, kind: 'evening', sunX: '96%', sunY: '29%' }
 ]);
+
+// No night scene was supplied. The 08:00 image is the neutral fallback asset,
+// but it is never presented as a current 08:00 solar position: the decorative
+// sun marker is hidden and the Hero records a neutral state instead.
+const neutralHeroTimeProfile = Object.freeze({
+  hour: null,
+  assetHour: 8,
+  kind: 'neutral',
+  sunX: '39%',
+  sunY: '57%'
+});
+
+const yerevanTimeFormatter = new Intl.DateTimeFormat('en-US', {
+  timeZone: HERO_TIME_ZONE,
+  hour: '2-digit',
+  minute: '2-digit',
+  second: '2-digit',
+  hourCycle: 'h23'
+});
 
 const heroImageWidths = [640, 1024, 1600];
 
+const yerevanTimeParts = (date) => {
+  if (!(date instanceof Date) || !Number.isFinite(date.getTime())) return null;
+  try {
+    return Object.fromEntries(
+      yerevanTimeFormatter
+        .formatToParts(date)
+        .filter(({ type }) => ['hour', 'minute', 'second'].includes(type))
+        .map(({ type, value }) => [type, Number(value)])
+    );
+  } catch {
+    return null;
+  }
+};
+
+export const getYerevanHour = (date = new Date()) => {
+  const hour = yerevanTimeParts(date)?.hour;
+  return Number.isInteger(hour) && hour >= 0 && hour <= 23 ? hour : null;
+};
+
 /**
- * Chooses from the supplied illustrative day-cycle frames using only the
- * visitor's local browser clock. This is visual storytelling, not an
+ * Chooses from supplied illustrative day-cycle frames using Asia/Yerevan,
+ * not the visitor's browser timezone. This is visual storytelling, not an
  * astronomical calculation or a claim about sunlight at a specific property.
  */
 export const getHeroTimeProfile = (date = new Date()) => {
-  const hour = date?.getHours?.();
-  if (!Number.isInteger(hour) || hour < 0 || hour > 23) return heroTimeProfiles.at(-1);
-  if (hour < 8) return heroTimeProfiles[5];
+  const hour = getYerevanHour(date);
+  if (hour === null || hour < 8 || hour >= 22) return neutralHeroTimeProfile;
   if (hour >= 8 && hour < 10) return heroTimeProfiles[0];
   if (hour < 13) return heroTimeProfiles[1];
   if (hour < 15) return heroTimeProfiles[2];
   if (hour < 17) return heroTimeProfiles[3];
   if (hour < 19) return heroTimeProfiles[4];
   return heroTimeProfiles[5];
+};
+
+/**
+ * A failed candidate must never replace a working Hero image with an evening
+ * frame. Prefer the last distinct successful frame; otherwise use neutral.
+ */
+export const resolveHeroFrameFailure = (lastSuccessfulProfile, failedProfile) => {
+  if (
+    lastSuccessfulProfile?.assetHour &&
+    lastSuccessfulProfile.assetHour !== failedProfile?.assetHour
+  ) {
+    return lastSuccessfulProfile;
+  }
+  return neutralHeroTimeProfile;
+};
+
+export const millisecondsUntilNextYerevanHour = (date = new Date()) => {
+  const time = yerevanTimeParts(date);
+  if (!time || !Number.isInteger(time.minute) || !Number.isInteger(time.second)) return 60_000;
+  return Math.max(
+    1_000,
+    (60 - time.minute) * 60_000 - time.second * 1_000 - date.getMilliseconds() + 100
+  );
 };
 
 export const getHeroTimeSrcset = (hour, extension) =>
@@ -58,12 +120,31 @@ const initHeroTime = (hero) => {
   let timer = 0;
   let disposed = false;
   let isUpdating = false;
+  let lastSuccessfulProfile = null;
+  let appliedProfile = neutralHeroTimeProfile;
+  let restoringFrame = false;
 
-  const restoreStaticFallback = () => {
-    hero.dataset.heroImageState = 'fallback';
-    for (const source of sources) source.removeAttribute('srcset');
-    image.srcset = getHeroTimeSrcset(20, 'jpg');
-    image.src = getHeroFrameUrl(20, 'jpg');
+  const sunMarker = hero.querySelector('[data-hero-time-sun]');
+
+  const applyFrame = (profile, { jpegOnly = false } = {}) => {
+    const frameHour = profile.assetHour;
+    appliedProfile = profile;
+    hero.dataset.heroTime = profile.hour === null ? 'neutral' : String(profile.hour);
+    hero.dataset.heroTimeKind = profile.kind;
+    setProperty(hero, '--hero-sun-x', profile.sunX);
+    setProperty(hero, '--hero-sun-y', profile.sunY);
+    if (sunMarker) sunMarker.hidden = profile.kind === 'neutral';
+
+    for (const source of sources) {
+      if (jpegOnly) {
+        source.removeAttribute('srcset');
+      } else {
+        const sourceExtension = source.dataset.heroTimeSource;
+        source.srcset = getHeroTimeSrcset(frameHour, sourceExtension);
+      }
+    }
+    image.srcset = getHeroTimeSrcset(frameHour, 'jpg');
+    image.src = getHeroFrameUrl(frameHour, 'jpg');
   };
 
   const preload = (source) =>
@@ -81,20 +162,17 @@ const initHeroTime = (hero) => {
       const profile = getHeroTimeProfile();
       const extension =
         getHeroImageExtension(image.currentSrc) ?? sources[0]?.dataset.heroTimeSource ?? 'jpg';
-      const isReady = await preload(getHeroFrameUrl(profile.hour, extension));
+      const isReady = await preload(getHeroFrameUrl(profile.assetHour, extension));
 
-      if (disposed || hero.dataset.heroImageState === 'fallback') return;
+      if (disposed) return;
       if (isReady) {
-        hero.dataset.heroTime = String(profile.hour);
+        lastSuccessfulProfile = profile;
         hero.dataset.heroImageState = 'ready';
-        setProperty(hero, '--hero-sun-x', profile.sunX);
-        setProperty(hero, '--hero-sun-y', profile.sunY);
-        for (const source of sources) {
-          const sourceExtension = source.dataset.heroTimeSource;
-          source.srcset = getHeroTimeSrcset(profile.hour, sourceExtension);
-        }
-        image.srcset = getHeroTimeSrcset(profile.hour, 'jpg');
-        image.src = getHeroFrameUrl(profile.hour, 'jpg');
+        applyFrame(profile);
+      } else {
+        // Keep the visible, already-loaded frame in place. A request failure
+        // must not manufacture a different time of day or blank the Hero.
+        hero.dataset.heroImageState = lastSuccessfulProfile ? 'retained' : 'neutral';
       }
     } finally {
       isUpdating = false;
@@ -104,22 +182,35 @@ const initHeroTime = (hero) => {
   const scheduleUpdate = () => {
     window.clearTimeout(timer);
     const now = new Date();
-    const nextHour = new Date(now);
-    nextHour.setHours(now.getHours() + 1, 0, 1, 0);
-    timer = window.setTimeout(
-      () => {
-        void update();
-        scheduleUpdate();
-      },
-      Math.max(nextHour.getTime() - now.getTime(), 1000)
-    );
+    timer = window.setTimeout(() => {
+      void update();
+      scheduleUpdate();
+    }, millisecondsUntilNextYerevanHour(now));
   };
 
-  const handleError = () => {
-    if (hero.dataset.heroImageState !== 'fallback') restoreStaticFallback();
+  const handleError = async () => {
+    if (disposed || restoringFrame) return;
+    restoringFrame = true;
+    try {
+      const fallback = resolveHeroFrameFailure(lastSuccessfulProfile, appliedProfile);
+      const isReady = await preload(getHeroFrameUrl(fallback.assetHour, 'jpg'));
+      if (disposed) return;
+      if (isReady) {
+        lastSuccessfulProfile = fallback;
+        hero.dataset.heroImageState = fallback.kind === 'neutral' ? 'neutral' : 'retained';
+        // The selected AVIF/WebP resource just failed. Keep the recovery on a
+        // JPEG we have preloaded instead of selecting that failing source again.
+        applyFrame(fallback, { jpegOnly: true });
+      } else {
+        hero.dataset.heroImageState = 'unavailable';
+      }
+    } finally {
+      restoringFrame = false;
+    }
   };
 
-  image.addEventListener('error', handleError, { once: true });
+  applyFrame(neutralHeroTimeProfile);
+  image.addEventListener('error', handleError);
   void update();
   scheduleUpdate();
 

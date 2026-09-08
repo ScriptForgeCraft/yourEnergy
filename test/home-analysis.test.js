@@ -5,6 +5,7 @@ import en from '../src/content/en.js';
 import hy from '../src/content/hy.js';
 import ru from '../src/content/ru.js';
 import { CONTENT_LOCALE_SCHEMA, GENERATED_CONTENT_LOCALES } from '../src/content/schema.js';
+import { calculatorModes } from '../src/content/calculator-modes.js';
 import {
   formatCurrency,
   formatDecimal,
@@ -44,6 +45,8 @@ test('English has a full published route in the content schema', () => {
 test('all locale dictionaries have the same template data shape', () => {
   assert.deepEqual(contentShape(en), contentShape(hy));
   assert.deepEqual(contentShape(en), contentShape(ru));
+  assert.deepEqual(contentShape(calculatorModes.en.quick), contentShape(calculatorModes.hy.quick));
+  assert.deepEqual(contentShape(calculatorModes.en.quick), contentShape(calculatorModes.ru.quick));
 });
 
 test('bill upload validation permits supported files through 10 MiB only', () => {

@@ -1,4 +1,6 @@
 import assert from 'node:assert/strict';
+import { readFile } from 'node:fs/promises';
+import { resolve } from 'node:path';
 import test from 'node:test';
 
 import { onRequest as quickOnRequest } from '../functions/api/quick-analysis.js';
@@ -12,9 +14,14 @@ import {
 } from '../src/domain/index.js';
 import { createCalculatorSession } from '../src/ui/calculator-session.js';
 import { formatConsumerCommercialRange } from '../src/ui/commercial-range.js';
-import { shouldClearRefinementForRegion } from '../src/ui/quick-calculator.js';
+import {
+  buildQuickLeadContext,
+  shouldClearRefinementForRegion,
+  validateQuickLeadForm
+} from '../src/ui/quick-calculator.js';
 
 const endpoint = 'https://site.example/api/quick-analysis';
+const root = resolve(import.meta.dirname, '..');
 const post = (body) =>
   new Request(endpoint, {
     method: 'POST',
@@ -138,6 +145,30 @@ test('quick endpoint uses server-side PVGIS, requires tariff only for bill mode 
   assert.equal(unavailableBody.data, undefined);
 });
 
+test('quick endpoint reports missing cache and unsafe provider configuration without a fallback result', async () => {
+  const cacheMissing = await quickOnRequest({
+    request: post({ regionId: 'yerevan', consumption: { averageMonthlyKwh: 850 } }),
+    env: {}
+  });
+  const cacheMissingBody = await cacheMissing.json();
+  assert.equal(cacheMissing.status, 503);
+  assert.equal(cacheMissingBody.error.code, 'PVGIS_CACHE_NOT_CONFIGURED');
+  assert.equal(cacheMissingBody.data, undefined);
+
+  const providerInvalid = await quickOnRequest({
+    request: post({ regionId: 'yerevan', consumption: { averageMonthlyKwh: 850 } }),
+    env: {
+      PVGIS_CACHE: memoryKv(),
+      PVGIS_CACHE_SALT: 'provider-config-test',
+      PVGIS_ENDPOINT: 'http://unsafe.example/pvgis'
+    }
+  });
+  const providerInvalidBody = await providerInvalid.json();
+  assert.equal(providerInvalid.status, 503);
+  assert.equal(providerInvalidBody.error.code, 'PVGIS_NOT_CONFIGURED');
+  assert.equal(providerInvalidBody.data, undefined);
+});
+
 test('one temporary session carries quick values to refinement and professional routes without a File object', () => {
   const values = new Map();
   const storage = {
@@ -183,11 +214,106 @@ test('changing the regional starting point never carries an old roof into the ne
   assert.equal(shouldClearRefinementForRegion(null, 'yerevan'), false);
 });
 
+test('Quick lead validation and context include only the permitted result summary', () => {
+  assert.equal(validateQuickLeadForm({ name: 'A', phone: '+374 91 095950' }).valid, false);
+  assert.equal(validateQuickLeadForm({ name: 'Arman', phone: 'not-a-phone' }).field, 'phone');
+  assert.deepEqual(
+    validateQuickLeadForm({
+      name: ' Arman  Petrosyan ',
+      phone: '+374 91 095950',
+      message: ' Please call '
+    }),
+    {
+      valid: true,
+      field: null,
+      values: { name: 'Arman Petrosyan', phone: '+374 91 095950', message: 'Please call' }
+    }
+  );
+
+  const context = buildQuickLeadContext({
+    locale: 'ru-RU',
+    state: {
+      regionId: 'yerevan',
+      consumption: { mode: 'usage', averageMonthlyKwh: 850 },
+      property: { address: 'Must not leave the browser', coordinates: { lat: 40.18, lng: 44.51 } },
+      roof: { points: [{ lat: 40.18, lng: 44.51 }] },
+      userTariff: { rateAmdPerKwh: 45 }
+    },
+    analysis: {
+      scope: 'regional-preliminary',
+      regionalBenchmark: { id: 'yerevan' },
+      consumption: { annualKwh: 10_200 },
+      production: { source: { provider: 'PVGIS' } },
+      commercialEstimate: {
+        available: true,
+        rangeAmd: { p25: 2_000_000, p50: 2_100_000, p75: 2_200_000 }
+      },
+      selectedScenario: {
+        id: 'balanced',
+        system: { capacityKwp: 6.96 },
+        generation: { annualKwh: 10_440 }
+      }
+    }
+  });
+
+  assert.deepEqual(context, {
+    locale: 'ru-RU',
+    region: 'yerevan',
+    consumption: {
+      mode: 'usage',
+      averageMonthlyBillAmd: null,
+      averageMonthlyKwh: 850,
+      annualKwh: 10_200
+    },
+    selectedScenario: 'balanced',
+    capacityKwp: 6.96,
+    annualGenerationKwh: 10_440,
+    budgetRangeAmd: { p25: 2_000_000, p50: 2_100_000, p75: 2_200_000 },
+    source: 'PVGIS',
+    scope: 'regional-preliminary'
+  });
+  assert.equal('property' in context, false);
+  assert.equal('roof' in context, false);
+  assert.equal('userTariff' in context, false);
+});
+
+test('Quick lead form has accessible loading, success, error and double-submit safeguards', async () => {
+  const [template, controller] = await Promise.all([
+    readFile(resolve(root, 'src/templates/calculator-quick.hbs'), 'utf8'),
+    readFile(resolve(root, 'src/ui/quick-calculator.js'), 'utf8')
+  ]);
+  for (const marker of [
+    'data-quick-lead-open',
+    'data-quick-lead-dialog',
+    'data-quick-lead-form',
+    'data-quick-lead-status',
+    'data-quick-lead-success',
+    "aria-live='polite'"
+  ]) {
+    assert.ok(template.includes(marker), `missing lead form marker: ${marker}`);
+  }
+  assert.match(controller, /if \(leadRequest \|\| leadComplete\) return;/u);
+  assert.match(controller, /leadForm\.setAttribute\('aria-busy', 'true'\)/u);
+  assert.match(controller, /leadSuccess\.hidden = false/u);
+  assert.match(controller, /setLeadStatus\(copy\.lead\?\.unavailable, true\)/u);
+});
+
 test('consumer budget presentation uses only a preliminary range while the price book keeps percentiles', () => {
   const range = formatConsumerCommercialRange(
-    { rangeAmd: { p25: 3_900_000, p50: 4_100_000, p75: 4_400_000 } },
+    { available: true, rangeAmd: { p25: 3_900_000, p50: 4_100_000, p75: 4_400_000 } },
     'en-US'
   );
   assert.equal(range, '3,900,000 ֏ – 4,400,000 ֏');
   assert.doesNotMatch(range, /P(?:25|50|75)/u);
+  assert.equal(
+    formatConsumerCommercialRange(
+      {
+        available: false,
+        reason: 'PRICEBOOK_EXPIRED',
+        rangeAmd: { p25: 3_900_000, p50: 4_100_000, p75: 4_400_000 }
+      },
+      'en-US'
+    ),
+    null
+  );
 });

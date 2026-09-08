@@ -5,19 +5,22 @@ YOURENERGY customers, completed projects, employees, or verified installations.
 Most were generated for this prototype with the built-in OpenAI image generation
 tool; the six `hero-time-*` source frames were supplied by the project owner.
 
-## Cinematic homepage Hero: local-time sequence
+## Cinematic homepage Hero: Yerevan-time sequence
 
 `assets/source/hero-times/` contains six supplied illustrative variants of the
 same scene: `08:00`, `12:00`, `14:00`, `16:00`, `18:00`, and `20:00`. The
-homepage chooses one using only the visitor's local browser clock. It does not
-use their location, transmit a time value, calculate astronomical sun position,
+homepage chooses one using the `Asia/Yerevan` timezone. It does not use the
+visitor's location, transmit a time value, calculate astronomical sun position,
 or make a solar-yield claim for a property. The thin gold trajectory is already
 part of each supplied image, so no second SVG path is layered over it. A small
 decorative sun marker follows the matching point on that visible trajectory.
 
-There is no supplied `02:00` frame: late evening and night use the `20:00`
-visual until the `08:00` frame begins. Replace all six source files together if
-the day-cycle art is updated, then run `npm run assets:build`.
+There is no supplied night frame. Before `08:00` and from `22:00`, the site uses
+the `08:00` asset only as a neutral illustrative fallback: it does not claim an
+08:00 sun position and hides the decorative sun marker. If a new frame fails to
+load, the last successfully loaded frame remains visible; otherwise the same
+neutral fallback is used. Replace all six source files together if the day-cycle
+art is updated, then run `npm run assets:build`.
 
 ## Replacement checklist
 

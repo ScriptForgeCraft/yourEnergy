@@ -7,11 +7,14 @@ import en from '../src/content/en.js';
 import hy from '../src/content/hy.js';
 import ru from '../src/content/ru.js';
 import {
+  HERO_TIME_ZONE,
   getHeroFrameUrl,
   getHeroImageExtension,
   getHeroCounterTarget,
   getHeroTimeProfile,
   getHeroTimeSrcset,
+  getYerevanHour,
+  resolveHeroFrameFailure,
   resolveHomeMotionCapabilities
 } from '../src/ui/home-motion.js';
 
@@ -24,9 +27,9 @@ test('cinematic homepage Hero has a clearly labelled static example and one prim
   assert.ok(hero);
   for (const marker of [
     'data-hero-time-backdrop',
-    'hero-time-20-640.avif',
-    'hero-time-20-1024.avif',
-    'hero-time-20-1600.avif',
+    'hero-time-8-640.avif',
+    'hero-time-8-1024.avif',
+    'hero-time-8-1600.avif',
     'data-hero-time-image',
     'data-hero-time-sun',
     'data-hero-dashboard',
@@ -55,21 +58,27 @@ test('cinematic homepage Hero has a clearly labelled static example and one prim
   assert.match(hero, /hero-scroll-cue/u);
 });
 
-test('time-based hero visual uses only the local clock and every supplied responsive frame', () => {
-  const expectedHours = [
-    [2, 20],
-    [8, 8],
-    [9, 8],
-    [10, 12],
-    [12, 12],
-    [13, 14],
-    [15, 16],
-    [17, 18],
-    [19, 20],
-    [23, 20]
+test('time-based hero visual uses Asia/Yerevan and a neutral fallback outside supplied day frames', () => {
+  assert.equal(HERO_TIME_ZONE, 'Asia/Yerevan');
+  const expectedFrames = [
+    ['2026-09-07T02:30:00.000Z', 6, null, 8, 'neutral'],
+    ['2026-09-07T04:00:00.000Z', 8, 8, 8, 'day'],
+    ['2026-09-07T05:00:00.000Z', 9, 8, 8, 'day'],
+    ['2026-09-07T06:00:00.000Z', 10, 12, 12, 'day'],
+    ['2026-09-07T08:00:00.000Z', 12, 12, 12, 'day'],
+    ['2026-09-07T09:00:00.000Z', 13, 14, 14, 'day'],
+    ['2026-09-07T11:00:00.000Z', 15, 16, 16, 'day'],
+    ['2026-09-07T13:00:00.000Z', 17, 18, 18, 'day'],
+    ['2026-09-07T15:00:00.000Z', 19, 20, 20, 'evening'],
+    ['2026-09-07T18:00:00.000Z', 22, null, 8, 'neutral']
   ];
-  for (const [localHour, assetHour] of expectedHours) {
-    assert.equal(getHeroTimeProfile(new Date(2026, 8, 7, localHour)).hour, assetHour);
+  for (const [iso, yerevanHour, profileHour, assetHour, kind] of expectedFrames) {
+    const date = new Date(iso);
+    const profile = getHeroTimeProfile(date);
+    assert.equal(getYerevanHour(date), yerevanHour);
+    assert.equal(profile.hour, profileHour);
+    assert.equal(profile.assetHour, assetHour);
+    assert.equal(profile.kind, kind);
   }
   assert.equal(
     getHeroTimeSrcset(16, 'avif'),
@@ -84,12 +93,18 @@ test('time-based hero visual uses only the local clock and every supplied respon
   assert.equal(getHeroImageExtension(''), null);
 });
 
-test('time-based Hero visual preloads a frame and keeps a static JPEG fallback for load failures', async () => {
+test('time-based Hero visual preloads a frame and retains the last successful frame before neutral recovery', async () => {
   const motion = await source('src/ui/home-motion.js');
+  const daytime = getHeroTimeProfile(new Date('2026-09-07T10:00:00.000Z'));
+  const evening = getHeroTimeProfile(new Date('2026-09-07T16:00:00.000Z'));
+  assert.equal(resolveHeroFrameFailure(daytime, evening), daytime);
+  assert.equal(resolveHeroFrameFailure(daytime, daytime).kind, 'neutral');
   assert.match(motion, /const isReady = await preload\(/u);
-  assert.match(motion, /hero\.dataset\.heroImageState === 'fallback'/u);
+  assert.match(motion, /lastSuccessfulProfile/u);
+  assert.match(motion, /resolveHeroFrameFailure\(lastSuccessfulProfile, appliedProfile\)/u);
   assert.match(motion, /source\.removeAttribute\('srcset'\)/u);
-  assert.match(motion, /image\.srcset = getHeroTimeSrcset\(20, 'jpg'\)/u);
+  assert.match(motion, /applyFrame\(fallback, \{ jpegOnly: true \}\)/u);
+  assert.doesNotMatch(motion, /date\?\.getHours/u);
 });
 
 test('Hero count-up uses explicit numeric values, including decimal CO₂ figures', () => {
@@ -127,6 +142,7 @@ test('hero copy is localized and keeps example data visibly separate from a visi
     assert.equal(content.hero.dashboardExample.annualGenerationKwh, 8420);
     assert.equal(content.hero.dashboardExample.co2Tons, 3.5);
     assert.equal(content.hero.dashboardExample.trees, 59);
+    assert.doesNotMatch(content.hero.dashboardExample.treesLabel, /planted|высаженн|տնկված/iu);
     assert.equal(content.hero.dashboardExample.monthlyBarPercent.length, 12);
     assert.ok(content.hero.dashboardExample.status);
     assert.ok(content.hero.dashboardNotePreliminary);

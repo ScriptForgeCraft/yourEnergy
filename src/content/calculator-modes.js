@@ -43,8 +43,9 @@ const regions = {
 const common = {
   hy: {
     quickMeta: {
-      title: 'Արևային արագ հաշվիչ | YOURENERGY',
-      description: 'Տարածաշրջանի և սպառման հիման վրա ստացեք ազնիվ նախնական արևային գնահատում։',
+      title: 'Արևային նախնական հաշվիչ՝ տարածաշրջան և սպառում | YOURENERGY',
+      description:
+        'Ընտրեք տարածաշրջանն ու մուտքագրեք սպառումը՝ նախնական գնահատման համար, ապա ցանկության դեպքում ճշգրտեք այն տանիքով։',
       ogTitle: 'Արագ արևային հաշվիչ | YOURENERGY',
       ogDescription: 'Սկսեք երկու հասկանալի դաշտից։'
     },
@@ -72,13 +73,18 @@ const common = {
       billLabel: 'Միջին ամսական հաշիվ',
       usageLabel: 'Միջին ամսական սպառում',
       tariffLabel: 'Սակագին AMD/kWh',
-      tariffHelp: 'Պարտադիր է, որպեսզի հաշիվը վերածվի kWh-ի։ Պատճենեք այն ձեր հաշիվից։',
+      tariffHelp:
+        'Մենք սակագին չենք ենթադրում․ հաշիվը kWh-ի փոխարկելու համար մուտքագրեք ձեր հաշվում նշված AMD/kWh արժեքը։',
       submit: 'Ստանալ նախնական գնահատում',
       pro: 'Բացել պրոֆեսիոնալ հաշվիչը',
       waiting: 'Լրացրեք տարածաշրջանն ու սպառումը։',
       loading: 'PVGIS-ից ստանում ենք տարածաշրջանային արևային տվյալները…',
       unavailable:
         'PVGIS-ի տվյալն այս պահին հասանելի չէ։ Թվեր չենք փոխարինել օրինակով։ Փորձեք կրկին։',
+      cacheNotConfigured:
+        'Արևային հաշվարկը դեռ միացված չէ, քանի որ պաշտպանված ծառայության քեշը կարգավորված չէ։ Կապվեք ինժեների հետ։',
+      providerNotConfigured:
+        'Արևային հաշվարկի ծառայությունը դեռ կարգավորված չէ։ Կապվեք ինժեների հետ։',
       retry: 'Կրկնել PVGIS հարցումը',
       regional: 'Տարածաշրջանային նախնական արդյունք',
       regionalCopy:
@@ -91,11 +97,28 @@ const common = {
       payback: 'Հետգնման ժամկետ',
       refine: 'Ճշգրտել իմ տանիքով',
       contact: 'Ստանալ առաջարկ',
+      phone: 'Զանգել ինժեներին',
       offer: 'Ստուգել այլ առաջարկ',
+      lead: {
+        eyebrow: 'Ձեր նախնական արդյունքը',
+        title: 'Ստացեք առաջարկ',
+        copy: 'Թողեք կոնտակտը, և ինժեները կստանա այս նախնական հաշվարկի ամփոփումը։',
+        name: 'Անուն',
+        phone: 'Հեռախոս',
+        comment: 'Մեկնաբանություն',
+        submit: 'Ուղարկել հարցումը',
+        loading: 'Ուղարկում ենք հարցումը…',
+        success: 'Հարցումն ընդունվել է։ Ինժեները կկապվի ձեզ հետ։',
+        unavailable: 'Հարցումը հիմա չի ուղարկվում։ Զանգահարեք ինժեներին՝ ստանալու համար առաջարկ։',
+        invalid: 'Մուտքագրեք անուն և ճիշտ հեռախոսահամար։',
+        close: 'Փակել'
+      },
       disclaimer:
         'Հաշվարկը նախնական է։ Վերջնական պարամետրերն ու արժեքը հաստատվում են օբյեկտի ինժեներական ստուգումից հետո։',
       noTariff:
         'Խնայողության և հետգնման համար ավելացրեք սակագինը կամ օգտագործեք ձեր հաշվի տվյալները։',
+      priceUnavailable:
+        'Նախնական գների միջակայքն այժմ հասանելի չէ։ Հարցրեք ինժեներական զննում՝ ընթացիկ արժեքը հաստատելու համար։',
       noJs: 'JavaScript-ի բացակայության դեպքում զանգահարեք ինժեներին՝ նախնական խորհրդատվության համար։'
     },
     refine: {
@@ -142,8 +165,9 @@ const common = {
   },
   ru: {
     quickMeta: {
-      title: 'Быстрый калькулятор солнечной системы | YOURENERGY',
-      description: 'Честная предварительная оценка по региону и потреблению.',
+      title: 'Предварительный калькулятор: регион и потребление | YOURENERGY',
+      description:
+        'Выберите регион и укажите потребление для предварительной оценки, затем при необходимости уточните её по крыше.',
       ogTitle: 'Быстрый солнечный калькулятор | YOURENERGY',
       ogDescription: 'Начните с двух понятных полей.'
     },
@@ -172,12 +196,16 @@ const common = {
       billLabel: 'Средний счёт в месяц',
       usageLabel: 'Среднее потребление в месяц',
       tariffLabel: 'Тариф AMD/kWh',
-      tariffHelp: 'Обязателен, чтобы перевести счёт в kWh. Скопируйте его из своего счёта.',
+      tariffHelp:
+        'Мы не подставляем тариф: укажите AMD/kWh из своего счёта, чтобы перевести сумму в kWh.',
       submit: 'Получить предварительную оценку',
       pro: 'Открыть профессиональный калькулятор',
       waiting: 'Выберите регион и введите потребление.',
       loading: 'Получаем региональные солнечные данные из PVGIS…',
       unavailable: 'PVGIS сейчас недоступен. Мы не подставили примерные цифры. Попробуйте снова.',
+      cacheNotConfigured:
+        'Солнечный расчёт ещё не включён: защищённый кэш сервиса не настроен. Свяжитесь с инженером.',
+      providerNotConfigured: 'Сервис солнечного расчёта ещё не настроен. Свяжитесь с инженером.',
       retry: 'Повторить запрос PVGIS',
       regional: 'Региональный предварительный результат',
       regionalCopy:
@@ -190,11 +218,29 @@ const common = {
       payback: 'Окупаемость',
       refine: 'Уточнить по моей крыше',
       contact: 'Получить предложение',
+      phone: 'Позвонить инженеру',
       offer: 'Проверить другое предложение',
+      lead: {
+        eyebrow: 'Ваш предварительный результат',
+        title: 'Получить предложение',
+        copy: 'Оставьте контакт — инженер получит краткое резюме этого предварительного расчёта.',
+        name: 'Имя',
+        phone: 'Телефон',
+        comment: 'Комментарий',
+        submit: 'Отправить запрос',
+        loading: 'Отправляем запрос…',
+        success: 'Запрос принят. Инженер свяжется с вами.',
+        unavailable:
+          'Сейчас запрос не отправляется. Позвоните инженеру, чтобы получить предложение.',
+        invalid: 'Введите имя и корректный номер телефона.',
+        close: 'Закрыть'
+      },
       disclaimer:
         'Расчёт предварительный. Финальные параметры и стоимость подтверждаются после инженерной проверки объекта.',
       noTariff:
         'Добавьте тариф, чтобы увидеть экономию и окупаемость, или используйте данные из счёта.',
+      priceUnavailable:
+        'Предварительный ценовой диапазон сейчас недоступен. Запросите инженерное обследование для актуальной стоимости.',
       noJs: 'Если JavaScript отключён, позвоните инженеру для предварительной консультации.'
     },
     refine: {
@@ -243,8 +289,9 @@ const common = {
   },
   en: {
     quickMeta: {
-      title: 'Quick solar calculator | YOURENERGY',
-      description: 'An honest preliminary estimate from region and consumption.',
+      title: 'Preliminary solar calculator: region and consumption | YOURENERGY',
+      description:
+        'Choose a region and enter consumption for a preliminary estimate, then refine it with your roof when needed.',
       ogTitle: 'Quick solar calculator | YOURENERGY',
       ogDescription: 'Start with two understandable fields.'
     },
@@ -272,13 +319,18 @@ const common = {
       billLabel: 'Average monthly bill',
       usageLabel: 'Average monthly consumption',
       tariffLabel: 'Tariff AMD/kWh',
-      tariffHelp: 'Required to convert a bill to kWh. Copy it from your bill.',
+      tariffHelp:
+        'We do not insert a tariff. Enter the AMD/kWh rate shown on your bill to convert the amount to kWh.',
       submit: 'Get preliminary estimate',
       pro: 'Open professional calculator',
       waiting: 'Choose a region and enter consumption.',
       loading: 'Getting regional solar data from PVGIS…',
       unavailable:
         'PVGIS is unavailable right now. We did not substitute example figures. Try again.',
+      cacheNotConfigured:
+        'Solar calculation is not enabled yet because the protected service cache is not configured. Contact an engineer.',
+      providerNotConfigured:
+        'The solar calculation service is not configured yet. Contact an engineer.',
       retry: 'Retry PVGIS request',
       regional: 'Regional preliminary result',
       regionalCopy:
@@ -291,10 +343,27 @@ const common = {
       payback: 'Payback',
       refine: 'Refine with my roof',
       contact: 'Get a proposal',
+      phone: 'Call an engineer',
       offer: 'Check another proposal',
+      lead: {
+        eyebrow: 'Your preliminary result',
+        title: 'Get a proposal',
+        copy: 'Leave your contact details and an engineer will receive a short summary of this preliminary calculation.',
+        name: 'Name',
+        phone: 'Phone',
+        comment: 'Comment',
+        submit: 'Send request',
+        loading: 'Sending your request…',
+        success: 'Your request was accepted. An engineer will contact you.',
+        unavailable: 'Your request cannot be sent right now. Call an engineer to get a proposal.',
+        invalid: 'Enter your name and a valid phone number.',
+        close: 'Close'
+      },
       disclaimer:
         'The calculation is preliminary. Final parameters and price are confirmed after an engineering site review.',
       noTariff: 'Add your tariff to see savings and payback, or use bill details.',
+      priceUnavailable:
+        'The preliminary price range is temporarily unavailable. Request an engineering survey for current pricing.',
       noJs: 'With JavaScript disabled, call an engineer for a preliminary consultation.'
     },
     refine: {

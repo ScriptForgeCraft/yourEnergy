@@ -19,6 +19,64 @@ const normalizeLocale = (value) => normalizeText(value).toLowerCase().split('-')
 
 const validPhone = (value) => /^[+()\d\s-]{6,32}$/.test(value) && /\d/.test(value);
 const validEmail = (value) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+const positiveNumber = (value, maximum) => {
+  const number = Number(value);
+  return Number.isFinite(number) && number > 0 && number <= maximum ? number : null;
+};
+const oneOf = (value, values) => (values.includes(value) ? value : null);
+
+/**
+ * Quick Calculator leads carry only the small, explicit calculation summary an
+ * engineer needs. Addresses, coordinates, roof geometry, tariffs, files and
+ * arbitrary client fields are deliberately excluded from the CRM payload.
+ */
+const normalizeCalculatorContext = (value, locale) => {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return null;
+  const region = normalizeText(value.region);
+  const mode = oneOf(normalizeText(value?.consumption?.mode), ['bill', 'usage', 'monthly']);
+  const averageMonthlyBillAmd = positiveNumber(
+    value?.consumption?.averageMonthlyBillAmd,
+    100_000_000
+  );
+  const averageMonthlyKwh = positiveNumber(value?.consumption?.averageMonthlyKwh, 10_000_000);
+  const annualKwh = positiveNumber(value?.consumption?.annualKwh, 100_000_000);
+  const selectedScenario = normalizeText(value.selectedScenario);
+  const capacityKwp = positiveNumber(value.capacityKwp, 100);
+  const annualGenerationKwh = positiveNumber(value.annualGenerationKwh, 10_000_000);
+  const source = normalizeText(value.source);
+  const scope = normalizeText(value.scope);
+  const range = value.budgetRangeAmd;
+  const p25 = positiveNumber(range?.p25, 10_000_000_000);
+  const p50 = positiveNumber(range?.p50, 10_000_000_000);
+  const p75 = positiveNumber(range?.p75, 10_000_000_000);
+  const budgetRangeAmd =
+    p25 !== null && p50 !== null && p75 !== null && p25 <= p50 && p50 <= p75
+      ? { p25, p50, p75 }
+      : null;
+
+  const context = {
+    locale,
+    ...(region && region.length <= 64 ? { region } : {}),
+    ...(mode
+      ? {
+          consumption: {
+            mode,
+            ...(averageMonthlyBillAmd !== null ? { averageMonthlyBillAmd } : {}),
+            ...(averageMonthlyKwh !== null ? { averageMonthlyKwh } : {}),
+            ...(annualKwh !== null ? { annualKwh } : {})
+          }
+        }
+      : {}),
+    ...(selectedScenario && selectedScenario.length <= 96 ? { selectedScenario } : {}),
+    ...(capacityKwp !== null ? { capacityKwp } : {}),
+    ...(annualGenerationKwh !== null ? { annualGenerationKwh } : {}),
+    ...(budgetRangeAmd ? { budgetRangeAmd } : {}),
+    ...(source && source.length <= 96 ? { source } : {}),
+    ...(scope && scope.length <= 96 ? { scope } : {})
+  };
+
+  return Object.keys(context).length > 1 ? context : null;
+};
 
 export const validateLeadInput = (body) => {
   const name = normalizeText(body?.name);
@@ -42,6 +100,8 @@ export const validateLeadInput = (body) => {
     throw new ApiError('INVALID_INPUT');
   }
 
+  const calculatorContext = normalizeCalculatorContext(body?.calculatorContext, locale);
+
   return {
     name,
     phone,
@@ -49,6 +109,7 @@ export const validateLeadInput = (body) => {
     ...(message ? { message } : {}),
     locale,
     ...(analysisId ? { analysisId } : {}),
+    ...(calculatorContext ? { calculatorContext } : {}),
     ...(turnstileToken ? { turnstileToken } : {})
   };
 };
@@ -140,7 +201,8 @@ export const createCrmAdapter = (env, { fetchImpl = fetch } = {}) => {
         request: {
           locale: lead.locale,
           ...(lead.message ? { message: lead.message } : {}),
-          ...(lead.analysisId ? { analysisId: lead.analysisId } : {})
+          ...(lead.analysisId ? { analysisId: lead.analysisId } : {}),
+          ...(lead.calculatorContext ? { calculatorContext: lead.calculatorContext } : {})
         }
       };
 
@@ -206,3 +268,5 @@ export const submitLead = async (body, env, { fetchImpl = fetch, signal, remoteI
     turnstile: turnstile ? 'verified' : 'not-configured'
   };
 };
+
+export const __private__ = Object.freeze({ normalizeCalculatorContext });

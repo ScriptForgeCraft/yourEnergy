@@ -7,6 +7,68 @@ const positive = (value) => {
   return Number.isFinite(number) && number > 0 ? number : null;
 };
 
+const leadText = (value) => (typeof value === 'string' ? value.replace(/\s+/gu, ' ').trim() : '');
+const validLeadPhone = (value) => /^[+()\d\s-]{6,32}$/u.test(value) && /\d/u.test(value);
+
+export const validateQuickLeadForm = ({ name, phone, message } = {}) => {
+  const normalized = {
+    name: leadText(name),
+    phone: leadText(phone),
+    message: leadText(message)
+  };
+  if (normalized.name.length < 2 || normalized.name.length > 100) {
+    return { valid: false, field: 'name', values: normalized };
+  }
+  if (!validLeadPhone(normalized.phone)) {
+    return { valid: false, field: 'phone', values: normalized };
+  }
+  if (normalized.message.length > 2_000) {
+    return { valid: false, field: 'message', values: normalized };
+  }
+  return { valid: true, field: null, values: normalized };
+};
+
+const finite = (value) => {
+  if (value === null || value === undefined || value === '') return null;
+  return Number.isFinite(Number(value)) ? Number(value) : null;
+};
+
+/**
+ * The lead handoff is intentionally a small summary, not a copy of the whole
+ * calculator session. In particular, it excludes address, coordinates, roof
+ * geometry, tariff and uploaded-file data.
+ */
+export const buildQuickLeadContext = ({ analysis, state, locale } = {}) => {
+  const scenario = analysis?.selectedScenario;
+  const estimate = analysis?.commercialEstimate;
+  const consumption = state?.consumption ?? {};
+  const p25 = finite(estimate?.available ? estimate.rangeAmd?.p25 : null);
+  const p50 = finite(estimate?.available ? estimate.rangeAmd?.p50 : null);
+  const p75 = finite(estimate?.available ? estimate.rangeAmd?.p75 : null);
+  const budgetRangeAmd =
+    p25 !== null && p50 !== null && p75 !== null && p25 <= p50 && p50 <= p75
+      ? { p25, p50, p75 }
+      : null;
+  const source = analysis?.production?.source?.provider ?? analysis?.production?.source?.kind;
+
+  return {
+    locale,
+    region: analysis?.regionalBenchmark?.id ?? state?.regionId ?? null,
+    consumption: {
+      mode: consumption.mode ?? null,
+      averageMonthlyBillAmd: finite(consumption.averageMonthlyBillAmd),
+      averageMonthlyKwh: finite(consumption.averageMonthlyKwh),
+      annualKwh: finite(analysis?.consumption?.annualKwh)
+    },
+    selectedScenario: scenario?.id ?? null,
+    capacityKwp: finite(scenario?.system?.capacityKwp),
+    annualGenerationKwh: finite(scenario?.generation?.annualKwh),
+    budgetRangeAmd,
+    source: typeof source === 'string' ? source : null,
+    scope: typeof analysis?.scope === 'string' ? analysis.scope : null
+  };
+};
+
 const format = (value, locale, options = {}) =>
   Number.isFinite(Number(value))
     ? new Intl.NumberFormat(locale, options).format(Number(value))
@@ -24,7 +86,8 @@ const metric = (label, value) => {
 
 const errorMessage = (error, copy) => {
   if (error instanceof ProductApiError) {
-    if (error.code === 'PVGIS_CACHE_NOT_CONFIGURED') return copy.unavailable;
+    if (error.code === 'PVGIS_CACHE_NOT_CONFIGURED') return copy.cacheNotConfigured;
+    if (error.code === 'PVGIS_NOT_CONFIGURED') return copy.providerNotConfigured;
     if (error.code === 'PVGIS_UNAVAILABLE' || error.code === 'PVGIS_TIMEOUT')
       return copy.unavailable;
   }
@@ -61,7 +124,19 @@ export const initQuickCalculator = ({ config = {} } = {}) => {
   const resultValues = root.querySelector('[data-quick-result-values]');
   const resultActions = root.querySelector('[data-quick-result-actions]');
   const resultLinks = root.querySelector('[data-quick-result-links]');
+  const leadOpen = root.querySelector('[data-quick-lead-open]');
+  const leadDialog = root.querySelector('[data-quick-lead-dialog]');
+  const leadForm = root.querySelector('[data-quick-lead-form]');
+  const leadName = root.querySelector('[data-quick-lead-name]');
+  const leadPhone = root.querySelector('[data-quick-lead-phone]');
+  const leadMessage = root.querySelector('[data-quick-lead-message]');
+  const leadSubmit = root.querySelector('[data-quick-lead-submit]');
+  const leadStatus = root.querySelector('[data-quick-lead-status]');
+  const leadSuccess = root.querySelector('[data-quick-lead-success]');
   let request = null;
+  let leadRequest = null;
+  let leadTrigger = null;
+  let leadComplete = false;
 
   const saved = session.read();
   if (saved.regionId) region.value = saved.regionId;
@@ -79,6 +154,11 @@ export const initQuickCalculator = ({ config = {} } = {}) => {
   const setStatus = (message, invalid = false) => {
     status.textContent = message ?? '';
     status.classList.toggle('is-error', invalid);
+  };
+  const setLeadStatus = (message, invalid = false) => {
+    if (!leadStatus) return;
+    leadStatus.textContent = message ?? '';
+    leadStatus.classList.toggle('is-error', invalid);
   };
   const updateMode = () => {
     const billMode = mode() === 'bill';
@@ -107,6 +187,7 @@ export const initQuickCalculator = ({ config = {} } = {}) => {
     resultValues.replaceChildren();
     resultTitle.textContent = copy.waiting;
     resultCopy.textContent = copy.regionalCopy;
+    if (leadDialog?.open) leadDialog.close();
   };
   const input = () => {
     const selectedRegion = region.value;
@@ -163,15 +244,24 @@ export const initQuickCalculator = ({ config = {} } = {}) => {
     const budgetRange = formatConsumerCommercialRange(estimate, locale);
     if (budgetRange) {
       values.append(metric(copy.budget, budgetRange));
+    } else if (
+      estimate?.reason === 'PRICEBOOK_EXPIRED' ||
+      estimate?.reason === 'PRICEBOOK_UNAVAILABLE'
+    ) {
+      const note = document.createElement('p');
+      note.className = 'input-help';
+      note.textContent = copy.priceUnavailable;
+      values.append(note);
     }
-    if (scenario.financial?.annualSavingsAmd !== null) {
-      values.append(
-        metric(copy.savings, `${format(scenario.financial.annualSavingsAmd, locale)} ֏`),
-        metric(
-          copy.payback,
-          `≈ ${format(scenario.financial.paybackYears, locale, { maximumFractionDigits: 1 })}`
-        )
-      );
+    const annualSavingsAmd = finite(scenario.financial?.annualSavingsAmd);
+    const paybackYears = finite(scenario.financial?.paybackYears);
+    if (annualSavingsAmd !== null) {
+      values.append(metric(copy.savings, `${format(annualSavingsAmd, locale)} ֏`));
+      if (paybackYears !== null) {
+        values.append(
+          metric(copy.payback, `≈ ${format(paybackYears, locale, { maximumFractionDigits: 1 })}`)
+        );
+      }
     } else {
       const note = document.createElement('p');
       note.className = 'input-help';
@@ -262,6 +352,99 @@ export const initQuickCalculator = ({ config = {} } = {}) => {
       submit.disabled = false;
       submit.removeAttribute('aria-busy');
       request = null;
+    }
+  });
+
+  const resetLeadDialog = () => {
+    leadRequest?.abort();
+    leadRequest = null;
+    leadComplete = false;
+    leadForm?.reset();
+    leadForm?.removeAttribute('aria-busy');
+    if (leadSubmit) leadSubmit.disabled = false;
+    if (leadSuccess) leadSuccess.hidden = true;
+    if (leadForm) leadForm.hidden = false;
+    setLeadStatus('');
+    [leadName, leadPhone, leadMessage].forEach((field) => field?.removeAttribute('aria-invalid'));
+  };
+
+  const closeLeadDialog = () => {
+    if (leadDialog?.open) leadDialog.close();
+  };
+
+  leadOpen?.addEventListener('click', () => {
+    const snapshot = session.read();
+    const analysis = snapshot.quickAnalysis ?? snapshot.analysis;
+    if (!analysis || typeof leadDialog?.showModal !== 'function') return;
+    leadTrigger = leadOpen;
+    resetLeadDialog();
+    leadDialog.showModal();
+    leadName?.focus();
+  });
+
+  leadDialog
+    ?.querySelectorAll('[data-quick-lead-close]')
+    .forEach((control) => control.addEventListener('click', closeLeadDialog));
+
+  leadDialog?.addEventListener('close', () => {
+    const trigger = leadTrigger;
+    resetLeadDialog();
+    leadTrigger = null;
+    trigger?.focus?.();
+  });
+
+  leadForm?.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    if (leadRequest || leadComplete) return;
+    const validated = validateQuickLeadForm({
+      name: leadName?.value,
+      phone: leadPhone?.value,
+      message: leadMessage?.value
+    });
+    if (!validated.valid) {
+      const field = { name: leadName, phone: leadPhone, message: leadMessage }[validated.field];
+      field?.setAttribute('aria-invalid', 'true');
+      field?.focus();
+      setLeadStatus(copy.lead?.invalid, true);
+      return;
+    }
+
+    const snapshot = session.read();
+    const analysis = snapshot.quickAnalysis ?? snapshot.analysis;
+    if (!analysis) {
+      setLeadStatus(copy.lead?.unavailable, true);
+      return;
+    }
+
+    leadRequest = new AbortController();
+    leadSubmit.disabled = true;
+    leadForm.setAttribute('aria-busy', 'true');
+    setLeadStatus(copy.lead?.loading);
+    try {
+      await api.submitLead(
+        {
+          ...validated.values,
+          locale: config.locale,
+          calculatorContext: buildQuickLeadContext({
+            analysis,
+            state: snapshot,
+            locale: config.locale
+          })
+        },
+        { signal: leadRequest.signal }
+      );
+      if (leadRequest.signal.aborted) return;
+      leadComplete = true;
+      leadForm.hidden = true;
+      leadSuccess.hidden = false;
+      setLeadStatus(copy.lead?.success);
+    } catch (error) {
+      if (error instanceof ProductApiError && error.code === 'ABORTED') return;
+      setLeadStatus(copy.lead?.unavailable, true);
+    } finally {
+      if (!leadComplete) leadSubmit.disabled = false;
+      leadForm.removeAttribute('aria-busy');
+      leadRequest = null;
     }
   });
 

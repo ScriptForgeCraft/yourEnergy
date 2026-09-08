@@ -6,6 +6,7 @@ const number = (value) => (Number.isFinite(Number(value)) ? Number(value) : null
  * the professional calculator and source ledger.
  */
 export const formatConsumerCommercialRange = (estimate, locale) => {
+  if (estimate?.available !== true) return null;
   const lower = number(estimate?.rangeAmd?.p25);
   const upper = number(estimate?.rangeAmd?.p75);
   if (lower === null || upper === null) return null;

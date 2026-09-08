@@ -509,3 +509,55 @@ test('lead endpoint never reports delivery success without CRM configuration', a
   });
   assert.equal(body.data, undefined);
 });
+
+test('lead endpoint forwards a strictly limited Quick Calculator summary after CRM acceptance', async () => {
+  let received = null;
+  const response = await leadOnRequest({
+    request: postJson('/lead', {
+      name: 'Arman Petrosyan',
+      phone: '+374 91 095950',
+      message: 'Please call after 18:00',
+      locale: 'ru-RU',
+      calculatorContext: {
+        region: 'yerevan',
+        consumption: { mode: 'usage', averageMonthlyKwh: 850, annualKwh: 10_200 },
+        selectedScenario: 'balanced',
+        capacityKwp: 6.96,
+        annualGenerationKwh: 10_440,
+        budgetRangeAmd: { p25: 2_000_000, p50: 2_100_000, p75: 2_200_000 },
+        source: 'PVGIS',
+        scope: 'regional-preliminary',
+        coordinates: { lat: 40.18, lng: 44.51 },
+        roof: { points: [{ lat: 40.18, lng: 44.51 }] },
+        tariff: 45
+      }
+    }),
+    env: { CRM_ENDPOINT: 'https://crm.example/leads' },
+    fetch: async (_url, init) => {
+      received = JSON.parse(init.body);
+      return new Response(JSON.stringify({ id: 'crm-42' }), {
+        headers: { 'content-type': 'application/json' }
+      });
+    }
+  });
+  const body = await readJson(response);
+
+  assert.equal(response.status, 200);
+  assert.equal(body.data.accepted, true);
+  assert.equal(body.data.leadId, 'crm-42');
+  assert.deepEqual(received.contact, { name: 'Arman Petrosyan', phone: '+374 91 095950' });
+  assert.deepEqual(received.request.calculatorContext, {
+    locale: 'ru',
+    region: 'yerevan',
+    consumption: { mode: 'usage', averageMonthlyKwh: 850, annualKwh: 10_200 },
+    selectedScenario: 'balanced',
+    capacityKwp: 6.96,
+    annualGenerationKwh: 10_440,
+    budgetRangeAmd: { p25: 2_000_000, p50: 2_100_000, p75: 2_200_000 },
+    source: 'PVGIS',
+    scope: 'regional-preliminary'
+  });
+  assert.equal('coordinates' in received.request.calculatorContext, false);
+  assert.equal('roof' in received.request.calculatorContext, false);
+  assert.equal('tariff' in received.request.calculatorContext, false);
+});

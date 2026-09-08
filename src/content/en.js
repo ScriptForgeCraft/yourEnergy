@@ -21,12 +21,14 @@ export default {
   homeHref: '/en/',
   supportBase: '/en',
   meta: {
-    title: 'Solar systems and a personal estimate in Armenia | YOURENERGY',
+    title: 'Solar calculator for homes in Armenia | YOURENERGY',
     description:
-      'Start a preliminary solar analysis with confirmed location, consumption input, roof outline and clear source status for Armenia.',
-    ogTitle: 'Your home’s solar potential in 60 seconds | YOURENERGY',
+      'Choose a region and enter consumption for a preliminary solar estimate, then refine it with your roof and professional inputs when needed.',
+    ogTitle: 'Start a clear solar estimate for your home | YOURENERGY',
     ogDescription:
-      'A transparent preliminary solar analysis with source status and manual fallback.'
+      'Region and consumption first; optional roof refinement and professional calculation follow.',
+    serviceDescription:
+      'A preliminary residential solar calculation for Armenia: start with region and consumption, optionally refine the roof, then continue to a professional calculation.'
   },
   aria: {
     skip: 'Skip to main content',
@@ -387,8 +389,8 @@ export default {
       co2Display: '3.5',
       trees: 59,
       co2Label: 'CO₂ savings',
-      treesLabel: 'Trees planted',
-      treesUnit: '/ year',
+      treesLabel: 'Tree CO₂ absorption equivalent',
+      treesUnit: 'trees / year',
       note: 'Example result — calculate your home to see your figures.'
     }
   },
@@ -645,11 +647,11 @@ export default {
     items: [
       [
         'How much does a solar system cost?',
-        'After property analysis, a temporary preliminary YOUR ENERGY range may appear from an active PriceBook. It is not an offer: final pricing depends on capacity, roof, equipment and connection and is confirmed after a site visit.'
+        'Start with your region and average bill or consumption. The first result is preliminary; an optional roof refinement and engineering review confirm the final system and price.'
       ],
       [
         'How is system capacity calculated?',
-        'The preliminary flow uses entered consumption, a confirmed property point, a manually outlined roof and provider solar-resource data when configured. An engineer still checks shading and grid limits.'
+        'The first calculation uses the selected region and your consumption. You can then refine it with your roof area; detailed roof, shading and grid checks remain an engineering task.'
       ],
       [
         'What is the payback period?',
@@ -673,7 +675,7 @@ export default {
       ],
       [
         'What is a Solar Passport?',
-        'A preliminary Passport keeps the current session’s inputs, sources and assumptions together. It is not an engineering design, bank document or offer; permanent links and PDFs are not connected in P0.'
+        'A preliminary Passport keeps the current session’s inputs, sources and assumptions together. It is not an engineering design, bank document or offer, and it is not stored as a permanent link or PDF.'
       ]
     ].map(([question, answer]) => ({ question, answer }))
   },
