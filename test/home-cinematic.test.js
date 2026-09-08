@@ -14,6 +14,7 @@ import {
   getHeroTimeProfile,
   getHeroTimeSrcset,
   getYerevanHour,
+  projectHeroArcPoint,
   resolveHeroFrameFailure,
   resolveHomeMotionCapabilities
 } from '../src/ui/home-motion.js';
@@ -55,7 +56,7 @@ test('cinematic homepage Hero has a clearly labelled static example and one prim
   assert.doesNotMatch(hero, /hero-energy-arc/u);
   assert.doesNotMatch(hero, /hero-route-note|hero-benefits/u);
   assert.match(hero, /hero-signature/u);
-  assert.match(hero, /hero-scroll-cue/u);
+  assert.doesNotMatch(hero, /hero-scroll-cue|hero-sun-note|hero-outlook-note/u);
 });
 
 test('time-based hero visual uses Asia/Yerevan and a neutral fallback outside supplied day frames', () => {
@@ -105,6 +106,33 @@ test('time-based Hero visual preloads a frame and retains the last successful fr
   assert.match(motion, /source\.removeAttribute\('srcset'\)/u);
   assert.match(motion, /applyFrame\(fallback, \{ jpegOnly: true \}\)/u);
   assert.doesNotMatch(motion, /date\?\.getHours/u);
+});
+
+test('Hero sun maps each source-frame arc point through object-fit cover', () => {
+  const evening = getHeroTimeProfile(new Date('2026-09-07T16:00:00.000Z'));
+  const point = projectHeroArcPoint(evening, {
+    sourceWidth: 1672,
+    sourceHeight: 941,
+    frameWidth: 1520.8,
+    frameHeight: 791.2
+  });
+  assert.equal(Math.round(point.x), 1460);
+  assert.equal(Math.round(point.y), 150);
+  assert.equal(projectHeroArcPoint(evening, { frameWidth: 100, frameHeight: 100 }), null);
+});
+
+test('each supplied day-cycle frame carries a source-verified point on its solar arc', () => {
+  const expectedArcPoints = [
+    ['2026-09-07T04:00:00.000Z', { x: 0.39, y: 0.456 }],
+    ['2026-09-07T06:00:00.000Z', { x: 0.54, y: 0.231 }],
+    ['2026-09-07T09:00:00.000Z', { x: 0.65, y: 0.148 }],
+    ['2026-09-07T11:00:00.000Z', { x: 0.75, y: 0.117 }],
+    ['2026-09-07T13:00:00.000Z', { x: 0.87, y: 0.137 }],
+    ['2026-09-07T15:00:00.000Z', { x: 0.96, y: 0.213 }]
+  ];
+  for (const [iso, expected] of expectedArcPoints) {
+    assert.deepEqual(getHeroTimeProfile(new Date(iso)).arcPoint, expected);
+  }
 });
 
 test('Hero count-up uses explicit numeric values, including decimal CO₂ figures', () => {

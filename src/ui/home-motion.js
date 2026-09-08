@@ -5,12 +5,12 @@ const clamp = (value, min = 0, max = 1) => Math.min(max, Math.max(min, value));
 export const HERO_TIME_ZONE = 'Asia/Yerevan';
 
 const heroTimeProfiles = Object.freeze([
-  { hour: 8, assetHour: 8, kind: 'day', sunX: '39%', sunY: '57%' },
-  { hour: 12, assetHour: 12, kind: 'day', sunX: '54%', sunY: '34%' },
-  { hour: 14, assetHour: 14, kind: 'day', sunX: '65%', sunY: '19%' },
-  { hour: 16, assetHour: 16, kind: 'day', sunX: '75%', sunY: '13%' },
-  { hour: 18, assetHour: 18, kind: 'day', sunX: '87%', sunY: '17%' },
-  { hour: 20, assetHour: 20, kind: 'evening', sunX: '96%', sunY: '29%' }
+  { hour: 8, assetHour: 8, kind: 'day', arcPoint: { x: 0.39, y: 0.456 } },
+  { hour: 12, assetHour: 12, kind: 'day', arcPoint: { x: 0.54, y: 0.231 } },
+  { hour: 14, assetHour: 14, kind: 'day', arcPoint: { x: 0.65, y: 0.148 } },
+  { hour: 16, assetHour: 16, kind: 'day', arcPoint: { x: 0.75, y: 0.117 } },
+  { hour: 18, assetHour: 18, kind: 'day', arcPoint: { x: 0.87, y: 0.137 } },
+  { hour: 20, assetHour: 20, kind: 'evening', arcPoint: { x: 0.96, y: 0.213 } }
 ]);
 
 // No night scene was supplied. The 08:00 image is the neutral fallback asset,
@@ -20,8 +20,7 @@ const neutralHeroTimeProfile = Object.freeze({
   hour: null,
   assetHour: 8,
   kind: 'neutral',
-  sunX: '39%',
-  sunY: '57%'
+  arcPoint: { x: 0.39, y: 0.456 }
 });
 
 const yerevanTimeFormatter = new Intl.DateTimeFormat('en-US', {
@@ -112,6 +111,41 @@ export const getHeroCounterTarget = (value) => {
   return Number.isFinite(target) ? target : null;
 };
 
+/**
+ * The solar arc is embedded in each supplied time frame. Project its verified
+ * source-image point through `object-fit: cover` so the decorative sun stays
+ * on that arc when the hero aspect ratio changes.
+ */
+export const projectHeroArcPoint = (
+  profile,
+  { sourceWidth, sourceHeight, frameWidth, frameHeight } = {}
+) => {
+  const point = profile?.arcPoint;
+  if (
+    !point ||
+    !Number.isFinite(point.x) ||
+    !Number.isFinite(point.y) ||
+    !Number.isFinite(sourceWidth) ||
+    !Number.isFinite(sourceHeight) ||
+    !Number.isFinite(frameWidth) ||
+    !Number.isFinite(frameHeight) ||
+    sourceWidth <= 0 ||
+    sourceHeight <= 0 ||
+    frameWidth <= 0 ||
+    frameHeight <= 0
+  ) {
+    return null;
+  }
+
+  const scale = Math.max(frameWidth / sourceWidth, frameHeight / sourceHeight);
+  const renderedWidth = sourceWidth * scale;
+  const renderedHeight = sourceHeight * scale;
+  return {
+    x: (frameWidth - renderedWidth) / 2 + point.x * renderedWidth,
+    y: (frameHeight - renderedHeight) / 2 + point.y * renderedHeight
+  };
+};
+
 const initHeroTime = (hero) => {
   const image = hero.querySelector('[data-hero-time-image]');
   const sources = [...hero.querySelectorAll('[data-hero-time-source]')];
@@ -126,13 +160,31 @@ const initHeroTime = (hero) => {
 
   const sunMarker = hero.querySelector('[data-hero-time-sun]');
 
+  const syncSunMarker = () => {
+    if (!sunMarker || appliedProfile.kind === 'neutral') return;
+    const frame = hero.getBoundingClientRect();
+    const projected = projectHeroArcPoint(appliedProfile, {
+      sourceWidth: image.naturalWidth,
+      sourceHeight: image.naturalHeight,
+      frameWidth: frame.width,
+      frameHeight: frame.height
+    });
+    if (!projected) return;
+    setProperty(hero, '--hero-sun-x', `${projected.x}px`);
+    setProperty(hero, '--hero-sun-y', `${projected.y}px`);
+  };
+
+  const queueSunMarkerSync = () => window.requestAnimationFrame(syncSunMarker);
+  const heroResizeObserver =
+    typeof ResizeObserver === 'undefined' ? null : new ResizeObserver(queueSunMarkerSync);
+
   const applyFrame = (profile, { jpegOnly = false } = {}) => {
     const frameHour = profile.assetHour;
     appliedProfile = profile;
     hero.dataset.heroTime = profile.hour === null ? 'neutral' : String(profile.hour);
     hero.dataset.heroTimeKind = profile.kind;
-    setProperty(hero, '--hero-sun-x', profile.sunX);
-    setProperty(hero, '--hero-sun-y', profile.sunY);
+    setProperty(hero, '--hero-sun-x', `${profile.arcPoint.x * 100}%`);
+    setProperty(hero, '--hero-sun-y', `${profile.arcPoint.y * 100}%`);
     if (sunMarker) sunMarker.hidden = profile.kind === 'neutral';
 
     for (const source of sources) {
@@ -145,6 +197,7 @@ const initHeroTime = (hero) => {
     }
     image.srcset = getHeroTimeSrcset(frameHour, 'jpg');
     image.src = getHeroFrameUrl(frameHour, 'jpg');
+    queueSunMarkerSync();
   };
 
   const preload = (source) =>
@@ -211,6 +264,9 @@ const initHeroTime = (hero) => {
 
   applyFrame(neutralHeroTimeProfile);
   image.addEventListener('error', handleError);
+  image.addEventListener('load', queueSunMarkerSync);
+  window.addEventListener('resize', queueSunMarkerSync, { passive: true });
+  heroResizeObserver?.observe(hero);
   void update();
   scheduleUpdate();
 
@@ -218,6 +274,9 @@ const initHeroTime = (hero) => {
     disposed = true;
     window.clearTimeout(timer);
     image.removeEventListener('error', handleError);
+    image.removeEventListener('load', queueSunMarkerSync);
+    window.removeEventListener('resize', queueSunMarkerSync);
+    heroResizeObserver?.disconnect();
   };
 };
 

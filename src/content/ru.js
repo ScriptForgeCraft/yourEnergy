@@ -352,10 +352,6 @@ export default {
     removeFile: 'Удалить файл',
     signatureLead: 'Чистая энергия',
     signatureTail: 'Светлее жизнь',
-    sunNoteLead: 'Больше солнца',
-    sunNoteTail: 'Светлое будущее',
-    outlookLead: 'Чистые дома',
-    outlookTail: 'Сильная Армения',
     dashboardAriaLabel: 'Сводка солнечного расчёта',
     dashboardLocationSelected: 'Выбранная точка',
     dashboardLocationRegional: 'Региональная оценка',
@@ -431,8 +427,7 @@ export default {
       { icon: 'calculator', title: 'Система для дома', note: 'из подтверждённых данных' },
       { icon: 'support', title: 'Местные инженеры', note: 'для домов Армении' },
       { icon: 'shield', title: 'Понятные условия', note: 'состав подтверждается заранее' }
-    ],
-    explore: 'Листайте дальше'
+    ]
   },
   solutions: {
     eyebrow: 'Решения',

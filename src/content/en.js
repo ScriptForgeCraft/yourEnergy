@@ -355,10 +355,6 @@ export default {
     removeFile: 'Remove file',
     signatureLead: 'Clean energy',
     signatureTail: 'Brighter lives',
-    sunNoteLead: 'More sun',
-    sunNoteTail: 'A brighter tomorrow',
-    outlookLead: 'Cleaner homes',
-    outlookTail: 'Stronger Armenia',
     dashboardAriaLabel: 'Solar calculation summary',
     dashboardLocationSelected: 'Selected point',
     dashboardLocationRegional: 'Regional estimate',
@@ -442,8 +438,7 @@ export default {
         title: 'Clear conditions',
         note: 'scope confirmed before work'
       }
-    ],
-    explore: 'Scroll to explore'
+    ]
   },
   solutions: {
     eyebrow: 'Solutions',

@@ -354,10 +354,6 @@ export default {
     removeFile: 'Հեռացնել ֆայլը',
     signatureLead: 'Մաքուր էներգիա',
     signatureTail: 'Ավելի պայծառ կյանք',
-    sunNoteLead: 'Ավելի շատ արև',
-    sunNoteTail: 'Ավելի պայծառ ապագա',
-    outlookLead: 'Մաքուր տներ',
-    outlookTail: 'Ավելի հզոր Հայաստան',
     dashboardAriaLabel: 'Արևային հաշվարկի ամփոփում',
     dashboardLocationSelected: 'Ընտրված կետ',
     dashboardLocationRegional: 'Տարածաշրջանային գնահատում',
@@ -441,8 +437,7 @@ export default {
         title: 'Հստակ պայմաններ',
         note: 'կազմը հաստատվում է նախապես'
       }
-    ],
-    explore: 'Շարունակեք ներքև'
+    ]
   },
   solutions: {
     eyebrow: 'Լուծումներ',

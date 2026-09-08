@@ -622,17 +622,35 @@ h3 {
   background: #fff6d8;
 }
 
+.round-button:disabled {
+  border-color: #d5dee3;
+  color: #9aabb7;
+  background: transparent;
+  cursor: default;
+  opacity: 0.48;
+}
+
 .projects-track {
   display: grid;
   grid-auto-flow: column;
-  grid-auto-columns: minmax(230px, 0.75fr);
-  grid-template-columns: minmax(420px, 1.55fr);
+  grid-auto-columns: minmax(230px, 0.95fr);
+  grid-template-columns: minmax(0, 1.3fr) repeat(3, minmax(0, 1fr));
   gap: 14px;
   overflow-x: auto;
   scroll-snap-type: x mandatory;
-  scrollbar-width: thin;
+  scrollbar-width: none;
   scroll-behavior: smooth;
-  padding-bottom: 8px;
+  overscroll-behavior-inline: contain;
+  padding-bottom: 0;
+}
+
+.projects-track::-webkit-scrollbar {
+  display: none;
+}
+
+.projects-track:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 4px;
 }
 
 .project-card {
@@ -644,16 +662,16 @@ h3 {
 }
 
 .project-card--featured {
-  grid-column: span 2;
+  grid-column: auto;
 }
 
 .project-image {
   position: relative;
-  height: 196px;
+  height: clamp(176px, 14vw, 232px);
 }
 
 .project-card--featured .project-image {
-  height: 278px;
+  height: clamp(176px, 14vw, 232px);
 }
 
 .project-image picture,
@@ -680,7 +698,7 @@ h3 {
 }
 
 .project-card__body {
-  min-height: 143px;
+  min-height: 118px;
   padding: 17px;
 }
 
@@ -1145,9 +1163,12 @@ h3 {
 
 .footer-grid {
   display: grid;
-  grid-template-columns: 1.5fr repeat(4, 0.8fr) 1.2fr;
-  gap: 25px;
-  padding-block: 56px 42px;
+  grid-template-columns: minmax(220px, 1.55fr) repeat(3, minmax(108px, 0.78fr)) minmax(
+      215px,
+      1.15fr
+    );
+  gap: clamp(24px, 2.8vw, 48px);
+  padding-block: 50px 32px;
 }
 
 .footer-grid .wordmark {
@@ -1195,6 +1216,10 @@ h3 {
   display: flex;
   gap: 8px;
   margin: 8px 0;
+}
+
+.footer-contact {
+  padding-left: clamp(0px, 0.8vw, 12px);
 }
 
 .footer-contact address {
@@ -1337,6 +1362,12 @@ h3 {
   .footer-contact {
     grid-column: auto;
   }
+
+  .projects-track {
+    grid-auto-flow: row;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    overflow: visible;
+  }
 }
 
 @media (max-width: 680px) {
@@ -1379,6 +1410,8 @@ h3 {
   .projects-track {
     grid-auto-columns: 82vw;
     grid-template-columns: none;
+    grid-auto-flow: column;
+    overflow-x: auto;
   }
 
   .project-card--featured {

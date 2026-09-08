@@ -635,10 +635,7 @@ function validateCinematicHomeHero(html, page, calculatorHref) {
     'hero-dashboard__facts',
     'hero-dashboard__note',
     'hero-dashboard__status',
-    'hero-signature',
-    'hero-scroll-cue',
-    'hero-sun-note',
-    'hero-outlook-note'
+    'hero-signature'
   ]) {
     if (!hero.includes(marker)) fail(`${page}: cinematic hero is missing ${marker}`);
   }
