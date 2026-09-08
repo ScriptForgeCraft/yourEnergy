@@ -10,3 +10,7 @@ reports/
 tmp/
 .tmp/
 *.log
+
+# Local Codex workspace state
+.codex/
+.codex-*/

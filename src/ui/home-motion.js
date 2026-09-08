@@ -35,6 +35,14 @@ export const getHeroTimeSrcset = (hour, extension) =>
     .map((width) => `/images/hero-time-${hour}-${width}.${extension} ${width}w`)
     .join(', ');
 
+export const getHeroFrameUrl = (hour, extension = 'jpg', width = 1600) =>
+  `/images/hero-time-${hour}-${width}.${extension}`;
+
+export const getHeroImageExtension = (source = '') => {
+  const match = String(source).match(/\.([a-z0-9]+)(?:[?#].*)?$/i);
+  return match?.[1]?.toLowerCase() || null;
+};
+
 export const getHeroCounterTarget = (value) => {
   const source = typeof value === 'number' ? value : String(value ?? '').trim();
   if (source === '') return null;
@@ -48,19 +56,49 @@ const initHeroTime = (hero) => {
   if (!image || sources.length === 0) return () => {};
 
   let timer = 0;
+  let disposed = false;
+  let isUpdating = false;
 
-  const update = () => {
-    const profile = getHeroTimeProfile();
-    hero.dataset.heroTime = String(profile.hour);
-    setProperty(hero, '--hero-sun-x', profile.sunX);
-    setProperty(hero, '--hero-sun-y', profile.sunY);
+  const restoreStaticFallback = () => {
+    hero.dataset.heroImageState = 'fallback';
+    for (const source of sources) source.removeAttribute('srcset');
+    image.srcset = getHeroTimeSrcset(20, 'jpg');
+    image.src = getHeroFrameUrl(20, 'jpg');
+  };
 
-    for (const source of sources) {
-      const extension = source.dataset.heroTimeSource;
-      source.srcset = getHeroTimeSrcset(profile.hour, extension);
+  const preload = (source) =>
+    new Promise((resolve) => {
+      const frame = new Image();
+      frame.onload = () => resolve(true);
+      frame.onerror = () => resolve(false);
+      frame.src = source;
+    });
+
+  const update = async () => {
+    if (disposed || isUpdating || hero.dataset.heroImageState === 'fallback') return;
+    isUpdating = true;
+    try {
+      const profile = getHeroTimeProfile();
+      const extension =
+        getHeroImageExtension(image.currentSrc) ?? sources[0]?.dataset.heroTimeSource ?? 'jpg';
+      const isReady = await preload(getHeroFrameUrl(profile.hour, extension));
+
+      if (disposed || hero.dataset.heroImageState === 'fallback') return;
+      if (isReady) {
+        hero.dataset.heroTime = String(profile.hour);
+        hero.dataset.heroImageState = 'ready';
+        setProperty(hero, '--hero-sun-x', profile.sunX);
+        setProperty(hero, '--hero-sun-y', profile.sunY);
+        for (const source of sources) {
+          const sourceExtension = source.dataset.heroTimeSource;
+          source.srcset = getHeroTimeSrcset(profile.hour, sourceExtension);
+        }
+        image.srcset = getHeroTimeSrcset(profile.hour, 'jpg');
+        image.src = getHeroFrameUrl(profile.hour, 'jpg');
+      }
+    } finally {
+      isUpdating = false;
     }
-    image.srcset = getHeroTimeSrcset(profile.hour, 'jpg');
-    image.src = `/images/hero-time-${profile.hour}-1600.jpg`;
   };
 
   const scheduleUpdate = () => {
@@ -70,17 +108,26 @@ const initHeroTime = (hero) => {
     nextHour.setHours(now.getHours() + 1, 0, 1, 0);
     timer = window.setTimeout(
       () => {
-        update();
+        void update();
         scheduleUpdate();
       },
       Math.max(nextHour.getTime() - now.getTime(), 1000)
     );
   };
 
-  update();
+  const handleError = () => {
+    if (hero.dataset.heroImageState !== 'fallback') restoreStaticFallback();
+  };
+
+  image.addEventListener('error', handleError, { once: true });
+  void update();
   scheduleUpdate();
 
-  return () => window.clearTimeout(timer);
+  return () => {
+    disposed = true;
+    window.clearTimeout(timer);
+    image.removeEventListener('error', handleError);
+  };
 };
 
 /**

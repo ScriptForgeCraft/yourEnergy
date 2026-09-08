@@ -4,6 +4,7 @@ import { defineConfig, loadEnv } from 'vite';
 
 const root = process.cwd();
 const DEFAULT_OSM_TILE_URL = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
+const CLOUDFLARE_INSIGHTS_SCRIPT_ORIGIN = 'https://static.cloudflareinsights.com';
 
 const trustedMapOrigin = (tileUrl) => {
   if (!tileUrl) return '';
@@ -16,7 +17,7 @@ const trustedMapOrigin = (tileUrl) => {
 };
 
 const createHeaders = (mapOrigin) => `/*
-  Content-Security-Policy: default-src 'self'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; object-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:${mapOrigin ? ` ${mapOrigin}` : ''}; font-src 'self' data:; connect-src 'self'; manifest-src 'self'; worker-src 'self'
+  Content-Security-Policy: default-src 'self'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; object-src 'none'; script-src 'self' ${CLOUDFLARE_INSIGHTS_SCRIPT_ORIGIN}; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:${mapOrigin ? ` ${mapOrigin}` : ''}; font-src 'self' data:; connect-src 'self'; manifest-src 'self'; worker-src 'self'
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: accelerometer=(), camera=(), geolocation=(), gyroscope=(), microphone=(), payment=(), usb=()
   X-Content-Type-Options: nosniff

@@ -486,6 +486,9 @@ async function validateHeaders() {
   const headers = await readFile(headersPath, 'utf8');
   const csp = headers.match(/Content-Security-Policy:\s*([^\r\n]+)/iu)?.[1] ?? '';
   if (!csp.includes("default-src 'self'")) fail('_headers must set default-src self');
+  if (!csp.includes("script-src 'self' https://static.cloudflareinsights.com")) {
+    fail('_headers must allow the Cloudflare Web Analytics beacon script');
+  }
   if (!csp.includes("connect-src 'self'")) fail('_headers must keep API connections same-origin');
   if (/\*\s*;|\*$/u.test(csp)) fail('_headers CSP must not use a wildcard source');
 }

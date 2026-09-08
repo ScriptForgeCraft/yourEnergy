@@ -7,6 +7,8 @@ import en from '../src/content/en.js';
 import hy from '../src/content/hy.js';
 import ru from '../src/content/ru.js';
 import {
+  getHeroFrameUrl,
+  getHeroImageExtension,
   getHeroCounterTarget,
   getHeroTimeProfile,
   getHeroTimeSrcset,
@@ -73,6 +75,21 @@ test('time-based hero visual uses only the local clock and every supplied respon
     getHeroTimeSrcset(16, 'avif'),
     '/images/hero-time-16-640.avif 640w, /images/hero-time-16-1024.avif 1024w, /images/hero-time-16-1600.avif 1600w'
   );
+  assert.equal(getHeroFrameUrl(14, 'avif'), '/images/hero-time-14-1600.avif');
+  assert.equal(
+    getHeroImageExtension('https://yourenergy.am/images/hero-time-14-1600.avif'),
+    'avif'
+  );
+  assert.equal(getHeroImageExtension('/images/hero-time-20-1600.webp?version=1'), 'webp');
+  assert.equal(getHeroImageExtension(''), null);
+});
+
+test('time-based Hero visual preloads a frame and keeps a static JPEG fallback for load failures', async () => {
+  const motion = await source('src/ui/home-motion.js');
+  assert.match(motion, /const isReady = await preload\(/u);
+  assert.match(motion, /hero\.dataset\.heroImageState === 'fallback'/u);
+  assert.match(motion, /source\.removeAttribute\('srcset'\)/u);
+  assert.match(motion, /image\.srcset = getHeroTimeSrcset\(20, 'jpg'\)/u);
 });
 
 test('Hero count-up uses explicit numeric values, including decimal CO₂ figures', () => {
