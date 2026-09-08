@@ -4,9 +4,13 @@ export {
   getConfirmedTariffRate,
   getUsableTariffRate,
   isConfirmedTariff,
+  listRegistryTariffOptions,
   selectEffectiveTariff,
+  suggestStandardTariff,
   toIsoDate,
-  createUserTariffSelection
+  createRegistryTariffSelection,
+  createUserTariffSelection,
+  TARIFF_PERIOD
 } from './tariffs.js';
 export {
   PRICEBOOK_STATUS,
@@ -34,7 +38,12 @@ export {
   roundAnalysisValue
 } from './solar-analysis.js';
 export { buildRegionalQuickAnalysis } from './quick-analysis.js';
-export { buildEnvironmentalImpact, normalizeGridEmissionFactor } from './environment.js';
+export {
+  buildEnvironmentalImpact,
+  buildTreeEquivalence,
+  normalizeGridEmissionFactor,
+  normalizeTreeEquivalency
+} from './environment.js';
 export {
   SOLAR_PASSPORT_SCHEMA_VERSION,
   SolarPassportRepository,
@@ -43,6 +52,7 @@ export {
 } from './solar-passport.js';
 export { ARMENIA_TARIFF_DATASET } from '../data/tariffs/armenia.js';
 export { ARMENIA_GRID_CO2_FACTOR } from '../data/environment/armenia-grid-co2.js';
+export { EPA_URBAN_TREE_CO2_EQUIVALENCY } from '../data/environment/epa-tree-co2-equivalence.js';
 export { ARMENIA_PRICEBOOKS, TEMPORARY_YOURENERGY_PRICEBOOK } from '../data/pricebooks/armenia.js';
 export {
   ARMENIA_REGIONAL_BENCHMARKS,

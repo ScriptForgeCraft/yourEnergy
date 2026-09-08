@@ -37,6 +37,13 @@ the repository or a `VITE_*` variable.
       calculation summary; it must not receive an address, coordinates, roof
       polygon, tariff or uploaded bill file.
 
+## Commercial data renewal
+
+- [ ] Before the current temporary PriceBook expires, provide an owner-approved
+      replacement in `src/data/pricebooks/armenia.js` with its source,
+      revision and validity period. Until then, the calculator and Offer
+      Checker intentionally hide commercial pricing after expiry.
+
 ## Final browser check
 
 - [ ] Confirm `https://yourenergy.am/` responds with the generated `_headers`.

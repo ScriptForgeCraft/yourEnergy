@@ -75,7 +75,7 @@ test('blank numeric fields do not become a false zero, while an explicit zero re
   assert.equal(toFiniteNumberOrNull(0), 0);
 });
 
-test('selectEffectiveTariff selects dated, verified records and keeps the P0 registry unavailable', () => {
+test('selectEffectiveTariff selects legacy dated records and requires an explicit period for Armenia registry records', () => {
   const historic = selectEffectiveTariff(TEST_TARIFF_DATASET, '2025-06-01');
   const current = selectEffectiveTariff(TEST_TARIFF_DATASET, '2026-08-28');
   const localP0 = selectEffectiveTariff(ARMENIA_TARIFF_DATASET, '2026-08-28');
@@ -86,7 +86,7 @@ test('selectEffectiveTariff selects dated, verified records and keeps the P0 reg
   assert.equal(current.tariff.id, 'test-rate-2026');
   assert.equal(getConfirmedTariffRate(current), 50);
   assert.equal(localP0.available, false);
-  assert.equal(localP0.reason, 'NO_EFFECTIVE_TARIFF');
+  assert.equal(localP0.reason, 'TARIFF_SELECTION_REQUIRED');
   assert.equal(getConfirmedTariffRate(localP0), null);
 });
 

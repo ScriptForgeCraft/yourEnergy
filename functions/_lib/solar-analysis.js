@@ -1,7 +1,10 @@
 import {
   ARMENIA_GRID_CO2_FACTOR,
+  ARMENIA_TARIFF_DATASET,
+  EPA_URBAN_TREE_CO2_EQUIVALENCY,
   PriceBookRepository,
   buildSolarAnalysis,
+  createRegistryTariffSelection,
   createUserTariffSelection,
   normalizeConsumption
 } from '../../src/domain/index.js';
@@ -63,7 +66,16 @@ const roofAreaFromBody = (body, validatedInput) => {
 };
 
 const selectTariffForP1 = (body) => {
-  const rawRate = body?.tariff?.rateAmdPerKwh;
+  const tariff = body?.tariff;
+  if (tariff?.tariffId || tariff?.period) {
+    // The client cannot supply an official rate. Resolve the chosen ID and
+    // day/night period from the server-owned Armenian registry instead.
+    return createRegistryTariffSelection(
+      { tariffId: tariff.tariffId, period: tariff.period },
+      ARMENIA_TARIFF_DATASET
+    );
+  }
+  const rawRate = tariff?.rateAmdPerKwh;
   if (rawRate !== undefined && rawRate !== null && rawRate !== '') {
     return createUserTariffSelection({ rateAmdPerKwh: rawRate });
   }
@@ -173,11 +185,9 @@ export const buildP0SolarAnalysis = ({
         verifiedAt: providerAnalysis.sourceLedger?.[0]?.retrievedAt ?? new Date().toISOString()
       }
     },
-    // A public P0 result never silently resolves a registry tariff. The only
-    // financial input accepted here is the visitor's explicit rate from their
-    // bill. Keeping tariffDataset out of this call makes an unavailable tariff
-    // the safe default while leaving the generic domain layer available for a
-    // future, explicitly configured registry adapter.
+    // A public result never silently chooses a registry tariff. It accepts
+    // either an explicit official tariff ID + day/night choice or a rate the
+    // visitor entered from a bill; missing selection remains unavailable.
     tariffSelection,
     system: {
       panelWatts: PRELIMINARY_PANEL_WATTS,
@@ -188,6 +198,7 @@ export const buildP0SolarAnalysis = ({
     investment: {},
     priceBook,
     gridEmissionFactor: ARMENIA_GRID_CO2_FACTOR,
+    treeEquivalency: EPA_URBAN_TREE_CO2_EQUIVALENCY,
     effectiveDate,
     scope: 'manual-roof-plane',
     dataCompleteness: 'preliminary',

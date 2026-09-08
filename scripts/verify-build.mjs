@@ -502,6 +502,7 @@ function validateQuickCalculatorMarkup(html, page) {
   for (const marker of [
     'data-quick-calculator',
     'data-quick-region',
+    'data-quick-tariff-select',
     'data-quick-submit',
     'data-quick-lead-open',
     'data-quick-lead-dialog',
@@ -655,8 +656,11 @@ function validateCinematicHomeHero(html, page, calculatorHref) {
   if (!/data-dashboard-mode='example'|data-dashboard-mode="example"/u.test(hero)) {
     fail(`${page}: Hero's fixed values must be visibly marked as an example`);
   }
-  if (!/8[ ,]420/u.test(hero) || !/3[,.]5/u.test(hero) || !/59/u.test(hero)) {
-    fail(`${page}: Hero is missing the approved static example metrics`);
+  if (!/8[ ,]420/u.test(hero)) {
+    fail(`${page}: Hero is missing the annual-generation example metric`);
+  }
+  if (/trees?\s+planted|посаженн\S*\s+дерев|տնկված\S*\s+ծառ/iu.test(hero)) {
+    fail(`${page}: Hero must describe tree CO₂ absorption equivalence, not planted trees`);
   }
   if (/equivalent to\s*~?\s*\d+\s*homes|эквивалент\s*~?\s*\d+\s*дом|տան\s*համարժեք/iu.test(hero)) {
     fail(`${page}: Hero must not claim a homes-equivalent benchmark`);

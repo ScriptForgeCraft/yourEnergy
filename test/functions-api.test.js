@@ -279,7 +279,7 @@ test('analysis uses the documented server-side PVGIS default when no override is
   assert.equal(body.data.analysis.mode, 'real-analysis');
 });
 
-test('analysis joins real PVGIS yield with confirmed inputs and suppresses unverified finance', async () => {
+test('analysis joins real PVGIS yield with confirmed inputs, suppresses unselected finance and publishes verified historical CO₂ metadata', async () => {
   const response = await analysisOnRequest({
     request: postJson('/analysis', p0AnalysisPayload),
     env: pvgisEnv({ PVGIS_ENDPOINT: 'https://pvgis.example/api' }),
@@ -307,7 +307,11 @@ test('analysis joins real PVGIS yield with confirmed inputs and suppresses unver
   assert.equal(analysis.selectedScenario.financial.grossSavings25YearsAmd, null);
   assert.equal(analysis.selectedScenario.financial.paybackYears, null);
   assert.deepEqual(analysis.selectedScenario.financial.timeline, []);
-  assert.equal(analysis.environmental.avoidedCo2Tons, null);
+  assert.equal(analysis.environmental.factor.status, 'verified-historical');
+  assert.equal(analysis.environmental.factor.dataYear, 2022);
+  assert.equal(analysis.environmental.avoidedCo2Tons, 2.07);
+  assert.equal(analysis.environmental.treeEquivalency.metricTonsCo2PerTreePerYear, 0.06);
+  assert.equal(analysis.environmental.treeEquivalent, 34.5);
   assert.equal(analysis.financial.tariff.kind, 'unavailable');
   assert.equal(analysis.financial.tariff.rateAmdPerKwh, null);
   assert.equal(analysis.commercialEstimate.available, true);

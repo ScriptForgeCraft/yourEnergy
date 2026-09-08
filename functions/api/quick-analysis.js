@@ -1,7 +1,10 @@
 import {
   ARMENIA_GRID_CO2_FACTOR,
+  ARMENIA_TARIFF_DATASET,
+  EPA_URBAN_TREE_CO2_EQUIVALENCY,
   PriceBookRepository,
   buildRegionalQuickAnalysis,
+  createRegistryTariffSelection,
   createUserTariffSelection,
   getArmeniaRegionalBenchmark,
   normalizeConsumption
@@ -12,12 +15,22 @@ import { createPvgisAdapter } from '../_lib/pvgis.js';
 const priceBookRepository = new PriceBookRepository();
 const P0_PVGIS_QUERY = Object.freeze({ capacityKwp: 1, lossPercent: 14 });
 
-const inputTariff = (body) =>
-  body?.tariff?.rateAmdPerKwh === undefined ||
-  body?.tariff?.rateAmdPerKwh === null ||
-  body?.tariff?.rateAmdPerKwh === ''
+const inputTariff = (body) => {
+  const tariff = body?.tariff;
+  if (tariff?.tariffId || tariff?.period) {
+    // The browser sends only an official tariff ID and time period. The rate,
+    // category and revision are resolved again from the server-side registry.
+    return createRegistryTariffSelection(
+      { tariffId: tariff.tariffId, period: tariff.period },
+      ARMENIA_TARIFF_DATASET
+    );
+  }
+  return tariff?.rateAmdPerKwh === undefined ||
+    tariff?.rateAmdPerKwh === null ||
+    tariff?.rateAmdPerKwh === ''
     ? createUserTariffSelection({})
-    : createUserTariffSelection({ rateAmdPerKwh: body.tariff.rateAmdPerKwh });
+    : createUserTariffSelection({ rateAmdPerKwh: tariff.rateAmdPerKwh });
+};
 
 const validateQuickInput = (body) => {
   const regionId = typeof body?.regionId === 'string' ? body.regionId.trim() : '';
@@ -77,6 +90,7 @@ export const quickAnalyze = async ({ request, env, fetchImpl }) => {
       },
       priceBook,
       gridEmissionFactor: ARMENIA_GRID_CO2_FACTOR,
+      treeEquivalency: EPA_URBAN_TREE_CO2_EQUIVALENCY,
       effectiveDate: new Date()
     })
   };

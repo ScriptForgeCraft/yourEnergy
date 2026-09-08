@@ -62,7 +62,11 @@
 
 /**
  * @typedef {Object} Tariff
- * @property {string} id
+ * @property {string|null} id
+ * @property {string|null} tariffId
+ * @property {string|null} datasetRevision
+ * @property {'standard'|'social-vulnerable'|'user-provided'|null} customerType
+ * @property {'day'|'night'|'custom'|null} period
  * @property {string} effectiveFrom
  * @property {string|null} effectiveTo
  * @property {'confirmed'|'provided'|'unavailable'} status
@@ -89,7 +93,7 @@
  * @property {Object|null} cache
  * @property {string|null} providerRetrievedAt
  * @property {Object|null} mountingRecommendation
- * @property {{factor: Object, avoidedCo2Tons: number|null}} environmental
+ * @property {{factor: Object, avoidedCo2Tons: number|null, treeEquivalency: Object, treeEquivalent: number|null}} environmental
  * @property {string[]} limitations
  * @property {Object[]} sourceLedger
  * @property {string[]} assumptions

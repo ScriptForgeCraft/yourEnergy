@@ -6,6 +6,7 @@ import test from 'node:test';
 import { onRequest as quickOnRequest } from '../functions/api/quick-analysis.js';
 import {
   ARMENIA_REGIONAL_BENCHMARKS,
+  ARMENIA_TARIFF_DATASET,
   TEMPORARY_YOURENERGY_PRICEBOOK,
   buildRegionalQuickAnalysis,
   buildSolarAnalysis,
@@ -15,7 +16,9 @@ import {
 import { createCalculatorSession } from '../src/ui/calculator-session.js';
 import { formatConsumerCommercialRange } from '../src/ui/commercial-range.js';
 import {
+  buildQuickTariffOptions,
   buildQuickLeadContext,
+  readQuickTariffSelection,
   shouldClearRefinementForRegion,
   validateQuickLeadForm
 } from '../src/ui/quick-calculator.js';
@@ -143,6 +146,57 @@ test('quick endpoint uses server-side PVGIS, requires tariff only for bill mode 
   assert.equal(unavailable.status, 503);
   assert.equal(unavailableBody.error.code, 'PVGIS_UNAVAILABLE');
   assert.equal(unavailableBody.data, undefined);
+});
+
+test('Quick tariff choices suggest a standard bracket but require an explicit official day or night selection', () => {
+  const { options, suggested } = buildQuickTariffOptions({
+    records: ARMENIA_TARIFF_DATASET.records,
+    monthlyKwh: 201,
+    copy: {
+      tariffOfficial: 'Official tariff',
+      tariffDay: 'Daytime',
+      tariffNight: 'Nighttime',
+      tariffCategories: { 'standard-201-to-400': 'Standard: 201–400 kWh/month' }
+    },
+    locale: 'en-US'
+  });
+
+  assert.equal(suggested.id, 'standard-201-to-400');
+  assert.deepEqual(
+    options.filter((option) => option.suggested).map((option) => option.value),
+    ['standard-201-to-400:day', 'standard-201-to-400:night']
+  );
+  assert.equal(readQuickTariffSelection({ value: '', options }), null);
+  assert.deepEqual(readQuickTariffSelection({ value: 'standard-201-to-400:night', options }), {
+    tariffId: 'standard-201-to-400',
+    period: 'night'
+  });
+  assert.deepEqual(readQuickTariffSelection({ value: 'custom', manualRate: '47.12', options }), {
+    rateAmdPerKwh: 47.12
+  });
+});
+
+test('Quick server resolves the official tariff selection itself and retains registry metadata', async () => {
+  const response = await quickOnRequest({
+    request: post({
+      regionId: 'yerevan',
+      consumption: { averageMonthlyBillAmd: 30_000 },
+      tariff: { tariffId: 'standard-201-to-400', period: 'night', rateAmdPerKwh: 1 }
+    }),
+    env: { ...pvgisEnv, PVGIS_CACHE: memoryKv() },
+    fetch: async () => pvgisResponse()
+  });
+  const body = await response.json();
+  const tariff = body.data.analysis.financial.tariff;
+
+  assert.equal(response.status, 200);
+  assert.equal(tariff.kind, 'registry');
+  assert.equal(tariff.tariffId, 'standard-201-to-400');
+  assert.equal(tariff.period, 'night');
+  assert.equal(tariff.customerType, 'standard');
+  assert.equal(tariff.revision, ARMENIA_TARIFF_DATASET.revision);
+  assert.equal(tariff.rateAmdPerKwh, 38.48);
+  assert.equal(body.data.analysis.consumption.averageMonthlyKwh, 30_000 / 38.48);
 });
 
 test('quick endpoint reports missing cache and unsafe provider configuration without a fallback result', async () => {

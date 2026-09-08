@@ -84,7 +84,7 @@ Request:
 {
   "regionId": "yerevan",
   "consumption": { "averageMonthlyKwh": 1000 },
-  "tariff": { "rateAmdPerKwh": 45 }
+  "tariff": { "tariffId": "standard-201-to-400", "period": "day" }
 }
 ```
 
@@ -96,11 +96,17 @@ confirmed property point. The endpoint uses the same server-side PVGIS adapter,
 cache, 1 kWp/14% normalisation, PriceBook and pure `buildSolarAnalysis` engine
 as the detailed endpoint, returning `scope: "regional-preliminary"`.
 
-An average AMD bill requires an explicit `tariff.rateAmdPerKwh`; average kWh
-does not. Without a tariff, technical output and a valid temporary PriceBook
-budget can appear, while savings, payback and the timeline remain `null`/empty.
-There is no registry, demo or hidden tariff fallback. Provider or cache failure
-returns the normal error envelope and never substitutes values.
+An average AMD bill requires an explicit tariff; average kWh does not. The
+browser may submit a registry selection as `{ "tariffId", "period" }`, where
+`period` is `"day"` or `"night"`; the Function resolves its rate, category and
+revision from `src/data/tariffs/armenia.js` rather than trusting a client rate.
+For a rate copied from a bill, submit `{ "rateAmdPerKwh": 45 }`, which remains
+labelled user-provided in the result. A bill total never implies a tariff
+bracket, social status or day/night period. Without an explicit usable tariff,
+technical output and a valid temporary PriceBook budget can appear, while
+savings, payback and the timeline remain `null`/empty. There is no demo or
+hidden tariff fallback. Provider or cache failure returns the normal error
+envelope and never substitutes values.
 
 ### `POST /api/analysis`
 
@@ -130,13 +136,15 @@ transparent source ledger):
 }
 ```
 
-`address` is optional and remains a label only. `tariff` is optional. Its rate
-is treated as user-provided and is recorded as
-such in the source ledger; without it (or a future approved tariff registry),
-savings, payback and the financial timeline remain unavailable. `azimuthDegrees`
-is compass bearing (0 north, 180 south). The function converts it to PVGIS
-aspect and returns `data.analysis` with `scope: "manual-roof-plane"` and a
-maximum `dataCompleteness.level` of `"preliminary"`. It is never an exact roof,
+`address` is optional and remains a label only. `tariff` is optional. Submit
+either a confirmed Armenian registry choice (`tariffId` plus `day`/`night`
+`period`) or a user-provided `rateAmdPerKwh`; the server resolves official
+rates from its versioned registry and records the tariff ID, revision, category
+and period in the source ledger. Without an explicit usable tariff, savings,
+payback and the financial timeline remain unavailable. `azimuthDegrees` is
+compass bearing (0 north, 180 south). The function converts it to PVGIS aspect
+and returns `data.analysis` with `scope: "manual-roof-plane"` and a maximum
+`dataCompleteness.level` of `"preliminary"`. It is never an exact roof,
 shading, construction or tariff claim.
 
 For `areaMethod: "map-projected"`, the manual outline is a top-view area and is

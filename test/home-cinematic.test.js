@@ -109,8 +109,8 @@ test('time-based Hero visual preloads a frame and retains the last successful fr
 
 test('Hero count-up uses explicit numeric values, including decimal CO₂ figures', () => {
   assert.equal(getHeroCounterTarget('8420'), 8420);
-  assert.equal(getHeroCounterTarget('3.5'), 3.5);
-  assert.equal(getHeroCounterTarget(59), 59);
+  assert.equal(getHeroCounterTarget('1.541'), 1.541);
+  assert.equal(getHeroCounterTarget(26), 26);
   assert.equal(getHeroCounterTarget(''), null);
 });
 
@@ -122,10 +122,10 @@ test('the cinematic header uses one compact language control and retains normal 
   assert.match(header, /href='\{\{navLinks\.calculator\}\}'/u);
   assert.match(header, /hreflang='\{\{hreflang\}\}'/u);
   assert.match(generator, /currentLanguageLabel/u);
-  assert.match(
-    generator,
-    /homePageConfig:\s*escapeJsonForHtml\(\{\s*locale:\s*runtimeLocales\[content\.locale\],\s*hero:\s*content\.hero\s*\}\)/u
-  );
+  assert.match(generator, /const createHeroContent = \(content\)/u);
+  assert.match(generator, /buildEnvironmentalImpact\(/u);
+  assert.match(generator, /treeEquivalency: EPA_URBAN_TREE_CO2_EQUIVALENCY/u);
+  assert.match(generator, /hero\s*\}\)/u);
   assert.match(template, /id='home-page-config'/u);
 });
 
@@ -140,8 +140,8 @@ test('hero copy is localized and keeps example data visibly separate from a visi
     assert.equal(content.hero.titleAccent, accent);
     assert.equal(content.hero.openCalculator, cta);
     assert.equal(content.hero.dashboardExample.annualGenerationKwh, 8420);
-    assert.equal(content.hero.dashboardExample.co2Tons, 3.5);
-    assert.equal(content.hero.dashboardExample.trees, 59);
+    assert.equal(content.hero.dashboardExample.co2Tons, undefined);
+    assert.equal(content.hero.dashboardExample.trees, undefined);
     assert.doesNotMatch(content.hero.dashboardExample.treesLabel, /planted|высаженн|տնկված/iu);
     assert.equal(content.hero.dashboardExample.monthlyBarPercent.length, 12);
     assert.ok(content.hero.dashboardExample.status);

@@ -723,6 +723,23 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
         ? `${format(analysis.financial.tariff.rateAmdPerKwh, locale)} AMD/kWh`
         : (product.result?.noTariff ?? '—')
     );
+    const environmental = analysis.environmental;
+    if (Number.isFinite(Number(environmental?.avoidedCo2Tons))) {
+      const factor = environmental.factor ?? {};
+      const historicalFactor = `${wizard.environmental?.historical ?? 'Verified historical factor'}${
+        factor.dataYear ? ` (${factor.dataYear})` : ''
+      }`;
+      add(
+        wizard.environmental?.co2 ?? 'Avoided CO₂ emissions',
+        `${format(environmental.avoidedCo2Tons, locale, { maximumFractionDigits: 3 })} t CO₂ · ${historicalFactor} · ${format(factor.valueKgCo2PerKwh, locale, { maximumFractionDigits: 3 })} kgCO₂/kWh`
+      );
+      if (Number.isFinite(Number(environmental?.treeEquivalent))) {
+        add(
+          wizard.environmental?.trees ?? 'Tree CO₂ absorption equivalent',
+          `≈ ${format(environmental.treeEquivalent, locale, { maximumFractionDigits: 0 })}`
+        );
+      }
+    }
     passportContent.append(list);
     const limitations = element('ul', 'check-list');
     [...(analysis.assumptions ?? []), ...(analysis.limitations ?? [])].forEach((note) =>

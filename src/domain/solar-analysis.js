@@ -462,10 +462,10 @@ export const calculateDataCompleteness = ({
 };
 
 /**
- * Creates a deterministic, provider-agnostic P0 analysis from manual and/or
- * confirmed provider inputs. The default tariff registry is intentionally
- * unconfigured, so a default call can produce technical output but never a
- * fabricated savings or payback figure.
+ * Creates a deterministic, provider-agnostic analysis from manual and/or
+ * confirmed provider inputs. The tariff registry is never selected implicitly:
+ * callers must supply an explicit official day/night selection or a rate the
+ * visitor entered. A default call therefore produces technical output only.
  *
  * @param {Object} [input]
  * @returns {import('./models.js').SolarAnalysis}
@@ -506,6 +506,22 @@ export const buildSolarAnalysis = (input = {}) => {
   const priceKind = commercialEstimate?.available
     ? commercialEstimate.kind
     : (selectedScenario?.financial?.price?.kind ?? 'unavailable');
+  const environmental = buildEnvironmentalImpact({
+    annualGenerationKwh: selectedScenario?.generation?.annualKwh,
+    gridEmissionFactor: input.gridEmissionFactor,
+    treeEquivalency: input.treeEquivalency,
+    at: input.effectiveDate
+  });
+  const environmentalSource =
+    environmental.factor.valueKgCo2PerKwh !== null
+      ? {
+          kind: SOURCE_KIND.REGISTRY,
+          status: SOURCE_STATUS.CONFIRMED,
+          provider: environmental.factor.provider,
+          reference: environmental.factor.sourceUrl,
+          verifiedAt: environmental.factor.verifiedAt
+        }
+      : unavailableSource;
   const sourceLedger = [
     sourceEntry(
       'property',
@@ -548,6 +564,14 @@ export const buildSolarAnalysis = (input = {}) => {
       commercialEstimate?.priceBook?.source,
       Boolean(commercialEstimate?.available),
       commercialEstimate?.available ? null : (commercialEstimate?.reason ?? 'PRICEBOOK_UNAVAILABLE')
+    ),
+    sourceEntry(
+      'environment',
+      environmentalSource,
+      environmental.avoidedCo2Tons !== null,
+      environmental.avoidedCo2Tons !== null
+        ? `VERIFIED_HISTORICAL_GRID_FACTOR_${environmental.factor.dataYear ?? 'UNKNOWN'}`
+        : 'GRID_FACTOR_UNAVAILABLE'
     )
   ];
 
@@ -560,11 +584,6 @@ export const buildSolarAnalysis = (input = {}) => {
     investment,
     priceBook,
     effectiveDate: input.effectiveDate
-  });
-  const environmental = buildEnvironmentalImpact({
-    annualGenerationKwh: selectedScenario?.generation?.annualKwh,
-    gridEmissionFactor: input.gridEmissionFactor,
-    at: input.effectiveDate
   });
   const limitations = Array.isArray(input.limitations)
     ? input.limitations.filter((limitation) => typeof limitation === 'string' && limitation)
@@ -601,6 +620,11 @@ export const buildSolarAnalysis = (input = {}) => {
     financial: {
       tariff: {
         kind: tariffKind,
+        id: tariff?.tariff?.id ?? null,
+        tariffId: tariff?.tariff?.tariffId ?? null,
+        revision: tariff?.dataset?.revision ?? tariff?.tariff?.datasetRevision ?? null,
+        customerType: tariff?.tariff?.customerType ?? null,
+        period: tariff?.tariff?.period ?? null,
         rateAmdPerKwh: getUsableTariffRate(tariff),
         source: tariff?.source ?? unavailableSource
       },
@@ -616,6 +640,10 @@ export const buildSolarAnalysis = (input = {}) => {
     assumptions: [
       ...ANALYSIS_ASSUMPTIONS,
       ...(tariffKind === 'user' ? ['USER_PROVIDED_TARIFF'] : []),
+      ...(tariffKind === 'registry' ? ['CONFIRMED_REGISTRY_TARIFF'] : []),
+      ...(environmental.factor.status === 'verified-historical'
+        ? [`VERIFIED_HISTORICAL_GRID_FACTOR_${environmental.factor.dataYear ?? 'UNKNOWN'}`]
+        : []),
       ...(commercialEstimate?.kind === 'temporary' ? ['TEMPORARY_PRICEBOOK_NOT_OFFER'] : []),
       ...(Array.isArray(input.assumptions)
         ? input.assumptions.filter((assumption) => typeof assumption === 'string' && assumption)

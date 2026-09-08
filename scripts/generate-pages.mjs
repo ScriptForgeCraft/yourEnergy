@@ -8,8 +8,14 @@ import en from '../src/content/en.js';
 import toolCopy from '../src/content/tools.js';
 import wizardCopy from '../src/content/calculator-wizard.js';
 import { calculatorModes, regionLabels } from '../src/content/calculator-modes.js';
+import {
+  ARMENIA_GRID_CO2_FACTOR,
+  EPA_URBAN_TREE_CO2_EQUIVALENCY,
+  buildEnvironmentalImpact
+} from '../src/domain/index.js';
 import { ARMENIA_REGIONAL_BENCHMARKS } from '../src/data/regions/armenia.js';
 import { TEMPORARY_YOURENERGY_PRICEBOOK } from '../src/data/pricebooks/armenia.js';
+import { ARMENIA_TARIFF_DATASET } from '../src/data/tariffs/armenia.js';
 import { GENERATED_CONTENT_LOCALES } from '../src/content/schema.js';
 
 const root = resolve(import.meta.dirname, '..');
@@ -78,6 +84,37 @@ const localizedLanguageNames = Object.freeze({
   ru: Object.freeze({ hy: 'Армянский', ru: 'Русский', en: 'Английский' }),
   en: Object.freeze({ hy: 'Armenian', ru: 'Russian', en: 'English' })
 });
+
+// Hero values use the same environment domain helper as SolarAnalysis. They
+// are an explicitly labelled illustration, not hand-tuned marketing numbers.
+const createHeroContent = (content) => {
+  const example = content.hero?.dashboardExample;
+  const environmental = buildEnvironmentalImpact({
+    annualGenerationKwh: example?.annualGenerationKwh,
+    gridEmissionFactor: ARMENIA_GRID_CO2_FACTOR,
+    treeEquivalency: EPA_URBAN_TREE_CO2_EQUIVALENCY,
+    at: new Date('2026-09-08T00:00:00.000Z')
+  });
+  const co2Tons = environmental.avoidedCo2Tons;
+  const treeEquivalent = environmental.treeEquivalent;
+  const locale = runtimeLocales[content.locale];
+  return {
+    ...content.hero,
+    dashboardExample: {
+      ...example,
+      co2Tons,
+      co2Display:
+        co2Tons === null
+          ? '—'
+          : new Intl.NumberFormat(locale, {
+              minimumFractionDigits: 1,
+              maximumFractionDigits: 1
+            }).format(co2Tons),
+      treeEquivalent,
+      trees: treeEquivalent === null ? null : Math.round(treeEquivalent)
+    }
+  };
+};
 
 const createLanguageLinks = (currentLocale) =>
   GENERATED_CONTENT_LOCALES.filter(({ key }) => key !== currentLocale).map(({ key, path }) => ({
@@ -195,6 +232,7 @@ const createPageConfig = (content, extra = {}) => ({
 });
 
 const createHomeContext = (content, { pageKind = 'home' } = {}) => {
+  const hero = createHeroContent(content);
   const calculatorHref = toolPath(content.locale, 'calculator');
   const isHome = pageKind === 'home';
   const homeSectionHref = (href) =>
@@ -202,6 +240,7 @@ const createHomeContext = (content, { pageKind = 'home' } = {}) => {
 
   return {
     ...content,
+    hero,
     headerOverlay: isHome,
     headerClass: isHome ? ' site-header--overlay' : '',
     currentLanguageLabel: content.locale === 'hy' ? 'AM' : content.locale.toUpperCase(),
@@ -267,7 +306,7 @@ const createHomeContext = (content, { pageKind = 'home' } = {}) => {
     jsonLd: escapeJsonForHtml(createJsonLd(content)),
     homePageConfig: escapeJsonForHtml({
       locale: runtimeLocales[content.locale],
-      hero: content.hero
+      hero
     })
   };
 };
@@ -318,7 +357,24 @@ const createQuickCalculatorContext = (content) => {
     alternateLinks: createToolAlternateLinks('calculator'),
     languageLinks: createToolLanguageLinks(content.locale, 'calculator'),
     toolShared: toolCopy[content.locale].shared,
-    pageConfig: escapeJsonForHtml(createPageConfig(content, { quick: modeCopy.quick })),
+    pageConfig: escapeJsonForHtml(
+      createPageConfig(content, {
+        quick: modeCopy.quick,
+        tariffRegistry: {
+          revision: ARMENIA_TARIFF_DATASET.revision,
+          records: ARMENIA_TARIFF_DATASET.records.map(
+            ({ id, customerType, minMonthlyKwh, maxMonthlyKwh, dayRate, nightRate }) => ({
+              id,
+              customerType,
+              minMonthlyKwh,
+              maxMonthlyKwh,
+              dayRate,
+              nightRate
+            })
+          )
+        }
+      })
+    ),
     jsonLd: escapeJsonForHtml(createJsonLd({ ...content, path }, { includeFaq: false }))
   };
 };

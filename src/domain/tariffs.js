@@ -4,6 +4,12 @@ import { SOURCE_KIND, SOURCE_STATUS } from './models.js';
 
 const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/u;
 
+export const TARIFF_PERIOD = Object.freeze({
+  DAY: 'day',
+  NIGHT: 'night',
+  CUSTOM: 'custom'
+});
+
 const unavailableSource = Object.freeze({
   kind: SOURCE_KIND.UNAVAILABLE,
   status: SOURCE_STATUS.UNAVAILABLE,
@@ -34,8 +40,26 @@ const normalizeSource = (source = {}) => ({
   verifiedAt: toIsoDate(source.verifiedAt)
 });
 
+const nonNegativeNumberOrNull = (value) => {
+  if (value === null || value === undefined || value === '') return null;
+  const number = Number(value);
+  return Number.isFinite(number) && number >= 0 ? number : null;
+};
+
+const normalizeCustomerType = (value) =>
+  value === 'standard' || value === 'social-vulnerable' ? value : null;
+
 const normalizeRecord = (record, currency) => ({
   id: cleanString(record?.id),
+  tariffId: cleanString(record?.tariffId),
+  datasetRevision: cleanString(record?.datasetRevision),
+  customerType: normalizeCustomerType(record?.customerType),
+  period:
+    record?.period === TARIFF_PERIOD.DAY || record?.period === TARIFF_PERIOD.NIGHT
+      ? record.period
+      : null,
+  minMonthlyKwh: nonNegativeNumberOrNull(record?.minMonthlyKwh),
+  maxMonthlyKwh: nonNegativeNumberOrNull(record?.maxMonthlyKwh),
   effectiveFrom: toIsoDate(record?.effectiveFrom),
   effectiveTo: toIsoDate(record?.effectiveTo),
   status:
@@ -45,6 +69,8 @@ const normalizeRecord = (record, currency) => ({
         ? 'provided'
         : 'unavailable',
   rateAmdPerKwh: toPositiveNumberOrNull(record?.rateAmdPerKwh),
+  dayRate: toPositiveNumberOrNull(record?.dayRate),
+  nightRate: toPositiveNumberOrNull(record?.nightRate),
   currency: cleanString(record?.currency) ?? currency ?? 'AMD',
   source: normalizeSource(record?.source)
 });
@@ -54,12 +80,36 @@ const isEffectiveOn = (record, requestedDate) =>
   record.effectiveFrom <= requestedDate &&
   (!record.effectiveTo || record.effectiveTo >= requestedDate);
 
-const canUseRecord = (record) =>
+const hasConfirmedSource = (record) =>
   record.status === 'confirmed' &&
-  record.rateAmdPerKwh !== null &&
   record.currency === 'AMD' &&
   record.source.status === SOURCE_STATUS.CONFIRMED &&
   Boolean(record.source.verifiedAt);
+
+const canUseRecord = (record) => hasConfirmedSource(record) && record.rateAmdPerKwh !== null;
+
+const canUseTimeOfUseRecord = (record) =>
+  hasConfirmedSource(record) &&
+  record.customerType !== null &&
+  record.dayRate !== null &&
+  record.nightRate !== null;
+
+const datasetMetadata = (dataset) => ({
+  id: cleanString(dataset?.id),
+  schemaVersion: cleanString(dataset?.schemaVersion),
+  revision: cleanString(dataset?.revision),
+  countryCode: cleanString(dataset?.countryCode),
+  currency: cleanString(dataset?.currency) ?? 'AMD',
+  reviewedAt: toIsoDate(dataset?.reviewedAt)
+});
+
+const normalizedRecords = (dataset, requestedDate) => {
+  const metadata = datasetMetadata(dataset);
+  const records = Array.isArray(dataset?.records)
+    ? dataset.records.map((record) => normalizeRecord(record, metadata.currency))
+    : [];
+  return { metadata, records: records.filter((record) => isEffectiveOn(record, requestedDate)) };
+};
 
 /**
  * Selects the most recently effective tariff record for a date. It returns an
@@ -75,14 +125,7 @@ export const selectEffectiveTariff = (
   effectiveDate = new Date()
 ) => {
   const requestedDate = toIsoDate(effectiveDate);
-  const metadata = {
-    id: cleanString(dataset?.id),
-    schemaVersion: cleanString(dataset?.schemaVersion),
-    revision: cleanString(dataset?.revision),
-    countryCode: cleanString(dataset?.countryCode),
-    currency: cleanString(dataset?.currency) ?? 'AMD',
-    reviewedAt: toIsoDate(dataset?.reviewedAt)
-  };
+  const metadata = datasetMetadata(dataset);
 
   if (!requestedDate) {
     return {
@@ -96,12 +139,10 @@ export const selectEffectiveTariff = (
     };
   }
 
-  const records = Array.isArray(dataset?.records)
-    ? dataset.records.map((record) => normalizeRecord(record, metadata.currency))
-    : [];
-  const candidate = records
-    .filter((record) => isEffectiveOn(record, requestedDate))
-    .sort((left, right) => right.effectiveFrom.localeCompare(left.effectiveFrom))[0];
+  const { records } = normalizedRecords(dataset, requestedDate);
+  const candidate = records.sort((left, right) =>
+    right.effectiveFrom.localeCompare(left.effectiveFrom)
+  )[0];
 
   if (!candidate) {
     return {
@@ -112,6 +153,18 @@ export const selectEffectiveTariff = (
       tariff: null,
       reason: 'NO_EFFECTIVE_TARIFF',
       source: normalizeSource(dataset?.source)
+    };
+  }
+
+  if (canUseTimeOfUseRecord(candidate)) {
+    return {
+      kind: 'registry',
+      available: false,
+      requestedDate,
+      dataset: metadata,
+      tariff: null,
+      reason: 'TARIFF_SELECTION_REQUIRED',
+      source: candidate.source
     };
   }
 
@@ -135,6 +188,125 @@ export const selectEffectiveTariff = (
     tariff: candidate,
     reason: 'CONFIRMED_TARIFF',
     source: candidate.source
+  };
+};
+
+/**
+ * Returns only dated, verified time-of-use records. The browser may use this
+ * public data to present choices, but the API repeats the same selection by
+ * ID and period so a client cannot supply its own registry rate.
+ */
+export const listRegistryTariffOptions = (
+  dataset = ARMENIA_TARIFF_DATASET,
+  effectiveDate = new Date()
+) => {
+  const requestedDate = toIsoDate(effectiveDate);
+  const metadata = datasetMetadata(dataset);
+  if (!requestedDate)
+    return { available: false, requestedDate: null, dataset: metadata, records: [] };
+  const { records } = normalizedRecords(dataset, requestedDate);
+  return {
+    available: true,
+    requestedDate,
+    dataset: metadata,
+    records: records.filter(canUseTimeOfUseRecord)
+  };
+};
+
+/** Suggests the applicable standard bracket without choosing day/night. */
+export const suggestStandardTariff = (
+  monthlyKwh,
+  dataset = ARMENIA_TARIFF_DATASET,
+  effectiveDate = new Date()
+) => {
+  const consumption = toPositiveNumberOrNull(monthlyKwh);
+  if (consumption === null) return null;
+  const options = listRegistryTariffOptions(dataset, effectiveDate);
+  if (!options.available) return null;
+  return (
+    options.records.find(
+      (record) =>
+        record.customerType === 'standard' &&
+        record.minMonthlyKwh !== null &&
+        consumption >= record.minMonthlyKwh &&
+        (record.maxMonthlyKwh === null || consumption <= record.maxMonthlyKwh)
+    ) ?? null
+  );
+};
+
+/**
+ * Resolves an explicit, official day/night tariff choice. No default period,
+ * social status, or bracket is inferred by this helper.
+ */
+export const createRegistryTariffSelection = (
+  { tariffId, period } = {},
+  dataset = ARMENIA_TARIFF_DATASET,
+  effectiveDate = new Date()
+) => {
+  const requestedDate = toIsoDate(effectiveDate);
+  const metadata = datasetMetadata(dataset);
+  const normalizedPeriod =
+    period === TARIFF_PERIOD.DAY || period === TARIFF_PERIOD.NIGHT ? period : null;
+  if (!requestedDate || !normalizedPeriod) {
+    return {
+      kind: 'unavailable',
+      available: false,
+      requestedDate,
+      dataset: metadata,
+      tariff: null,
+      reason: 'TARIFF_SELECTION_REQUIRED',
+      source: normalizeSource(dataset?.source)
+    };
+  }
+
+  const { records } = normalizedRecords(dataset, requestedDate);
+  const record = records.find((candidate) => candidate.id === cleanString(tariffId));
+  if (!record) {
+    return {
+      kind: 'unavailable',
+      available: false,
+      requestedDate,
+      dataset: metadata,
+      tariff: null,
+      reason: 'TARIFF_NOT_FOUND',
+      source: normalizeSource(dataset?.source)
+    };
+  }
+  if (!canUseTimeOfUseRecord(record)) {
+    return {
+      kind: 'registry',
+      available: false,
+      requestedDate,
+      dataset: metadata,
+      tariff: record,
+      reason: 'UNVERIFIED_TARIFF',
+      source: record.source
+    };
+  }
+
+  const rateAmdPerKwh = normalizedPeriod === TARIFF_PERIOD.DAY ? record.dayRate : record.nightRate;
+  return {
+    kind: 'registry',
+    available: true,
+    requestedDate,
+    dataset: metadata,
+    tariff: {
+      id: `${record.id}-${normalizedPeriod}`,
+      tariffId: record.id,
+      datasetRevision: metadata.revision,
+      customerType: record.customerType,
+      period: normalizedPeriod,
+      minMonthlyKwh: record.minMonthlyKwh,
+      maxMonthlyKwh: record.maxMonthlyKwh,
+      effectiveFrom: record.effectiveFrom,
+      effectiveTo: record.effectiveTo,
+      status: 'confirmed',
+      rateAmdPerKwh,
+      currency: record.currency,
+      source: record.source
+    },
+    reason: 'CONFIRMED_TARIFF',
+    source: record.source
   };
 };
 
@@ -175,6 +347,10 @@ export const createUserTariffSelection = (input = {}, effectiveDate = new Date()
     dataset: null,
     tariff: {
       id: 'user-entered-amd-per-kwh',
+      tariffId: null,
+      datasetRevision: null,
+      customerType: 'user-provided',
+      period: TARIFF_PERIOD.CUSTOM,
       effectiveFrom: requestedDate,
       effectiveTo: null,
       status: 'provided',

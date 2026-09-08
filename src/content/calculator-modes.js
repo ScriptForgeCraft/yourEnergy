@@ -72,9 +72,24 @@ const common = {
       usage: 'Միջին ամսական սպառում',
       billLabel: 'Միջին ամսական հաշիվ',
       usageLabel: 'Միջին ամսական սպառում',
-      tariffLabel: 'Սակագին AMD/kWh',
-      tariffHelp:
-        'Մենք սակագին չենք ենթադրում․ հաշիվը kWh-ի փոխարկելու համար մուտքագրեք ձեր հաշվում նշված AMD/kWh արժեքը։',
+      tariffLabel: 'Ընտրեք էլեկտրաէներգիայի սակագինը',
+      tariffHelpBill:
+        'Հաշիվը kWh-ի փոխարկելու համար ընտրեք ձեր կիրառվող պաշտոնական սակագինը կամ մուտքագրեք այն ձեր հաշվից։',
+      tariffHelpUsage:
+        'Սակագինը ընտրովի է․ այն պետք է միայն խնայողությունն ու հետգնման ժամկետը ցուցադրելու համար։',
+      tariffChoose: 'Ընտրեք սակագինը',
+      tariffSuggested: 'Սպառման համար առաջարկվող սովորական միջակայք',
+      tariffOfficial: 'Պաշտոնական սակագին',
+      tariffCustom: 'Մուտքագրել սակագինը իմ հաշվից',
+      customTariffLabel: 'Սակագին իմ հաշվից AMD/kWh',
+      tariffDay: 'Ցերեկային',
+      tariffNight: 'Գիշերային',
+      tariffCategories: {
+        'social-vulnerable': 'Սոցիալապես անապահով ընտանիք',
+        'standard-up-to-200': 'Սովորական՝ մինչև 200 kWh/ամիս',
+        'standard-201-to-400': 'Սովորական՝ 201–400 kWh/ամիս',
+        'standard-over-400': 'Սովորական՝ 400 kWh-ից ավելի/ամիս'
+      },
       submit: 'Ստանալ նախնական գնահատում',
       pro: 'Բացել պրոֆեսիոնալ հաշվիչը',
       waiting: 'Լրացրեք տարածաշրջանն ու սպառումը։',
@@ -160,6 +175,11 @@ const common = {
       eyebrow: 'Պրոֆեսիոնալ ռեժիմ',
       title: 'Մանրամասն նախնական հաշվարկ',
       intro: 'Օգտագործեք քարտեզը, տանիքի ուղղությունը, թեքությունը և մանրամասն սպառման տվյալները։',
+      environmental: {
+        co2: 'CO₂-ի կանխված արտանետումներ',
+        trees: 'Ծառերի CO₂ կլանման համարժեք',
+        historical: 'Վերջին միացված ստուգված պատմական գործոն'
+      },
       quick: 'Վերադառնալ արագ հաշվիչ'
     }
   },
@@ -195,9 +215,24 @@ const common = {
       usage: 'Среднее потребление в месяц',
       billLabel: 'Средний счёт в месяц',
       usageLabel: 'Среднее потребление в месяц',
-      tariffLabel: 'Тариф AMD/kWh',
-      tariffHelp:
-        'Мы не подставляем тариф: укажите AMD/kWh из своего счёта, чтобы перевести сумму в kWh.',
+      tariffLabel: 'Выберите тариф на электроэнергию',
+      tariffHelpBill:
+        'Чтобы перевести счёт в kWh, выберите действующий официальный тариф или укажите ставку из своего счёта.',
+      tariffHelpUsage:
+        'Тариф необязателен: он нужен только для отображения экономии и окупаемости.',
+      tariffChoose: 'Выберите тариф',
+      tariffSuggested: 'Рекомендуемый стандартный диапазон для этого потребления',
+      tariffOfficial: 'Официальный тариф',
+      tariffCustom: 'Ввести тариф из своего счёта',
+      customTariffLabel: 'Тариф из моего счёта, AMD/kWh',
+      tariffDay: 'Дневной',
+      tariffNight: 'Ночной',
+      tariffCategories: {
+        'social-vulnerable': 'Социально уязвимая семья',
+        'standard-up-to-200': 'Стандартный: до 200 kWh/мес.',
+        'standard-201-to-400': 'Стандартный: 201–400 kWh/мес.',
+        'standard-over-400': 'Стандартный: свыше 400 kWh/мес.'
+      },
       submit: 'Получить предварительную оценку',
       pro: 'Открыть профессиональный калькулятор',
       waiting: 'Выберите регион и введите потребление.',
@@ -284,6 +319,11 @@ const common = {
       title: 'Детальный предварительный расчёт',
       intro:
         'Используйте карту, направление и наклон крыши, а также детальные данные о потреблении.',
+      environmental: {
+        co2: 'Предотвращённые выбросы CO₂',
+        trees: 'Эквивалент поглощения CO₂ деревьями',
+        historical: 'Последний подключённый подтверждённый исторический коэффициент'
+      },
       quick: 'Вернуться к быстрому калькулятору'
     }
   },
@@ -318,9 +358,23 @@ const common = {
       usage: 'Average monthly consumption',
       billLabel: 'Average monthly bill',
       usageLabel: 'Average monthly consumption',
-      tariffLabel: 'Tariff AMD/kWh',
-      tariffHelp:
-        'We do not insert a tariff. Enter the AMD/kWh rate shown on your bill to convert the amount to kWh.',
+      tariffLabel: 'Choose your electricity tariff',
+      tariffHelpBill:
+        'To convert your bill into kWh, choose the official rate that applies to you or enter the rate from your bill.',
+      tariffHelpUsage: 'A tariff is optional. It is needed only to show savings and payback.',
+      tariffChoose: 'Choose a tariff',
+      tariffSuggested: 'Suggested standard bracket for this consumption',
+      tariffOfficial: 'Official tariff',
+      tariffCustom: 'Enter the rate from my bill',
+      customTariffLabel: 'Rate from my bill, AMD/kWh',
+      tariffDay: 'Daytime',
+      tariffNight: 'Nighttime',
+      tariffCategories: {
+        'social-vulnerable': 'Socially vulnerable household',
+        'standard-up-to-200': 'Standard: up to 200 kWh/month',
+        'standard-201-to-400': 'Standard: 201–400 kWh/month',
+        'standard-over-400': 'Standard: over 400 kWh/month'
+      },
       submit: 'Get preliminary estimate',
       pro: 'Open professional calculator',
       waiting: 'Choose a region and enter consumption.',
@@ -405,6 +459,11 @@ const common = {
       eyebrow: 'Professional mode',
       title: 'Detailed preliminary calculation',
       intro: 'Use the map, roof direction and tilt, plus detailed consumption data.',
+      environmental: {
+        co2: 'Avoided CO₂ emissions',
+        trees: 'Tree CO₂ absorption equivalent',
+        historical: 'Latest connected verified historical factor'
+      },
       quick: 'Back to quick calculator'
     }
   }
