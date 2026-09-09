@@ -901,7 +901,6 @@ export default {
       {
         title: 'Տեղեկություն',
         links: [
-          ['Սարքավորումների փաստաթղթեր', '/#equipment-documents'],
           ['Կապ', '#contacts']
         ]
       }

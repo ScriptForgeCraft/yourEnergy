@@ -880,7 +880,6 @@ export default {
       {
         title: 'Information',
         links: [
-          ['Equipment documents', '/en/#equipment-documents'],
           ['Contact', '#contacts']
         ]
       }

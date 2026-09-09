@@ -883,7 +883,6 @@ export default {
       {
         title: 'Информация',
         links: [
-          ['Документы на оборудование', '/ru/#equipment-documents'],
           ['Контакты', '#contacts']
         ]
       }
