@@ -870,7 +870,6 @@ export default {
       {
         title: 'Для дома',
         links: [
-          ['Решения', '#solutions'],
           ['Калькулятор', '#calculator'],
           ['FAQ', '#faq']
         ]
@@ -878,8 +877,6 @@ export default {
       {
         title: 'Компания',
         links: [
-          ['О нас', '#engineering'],
-          ['Регистрация', '#company-record'],
           ['Как это работает', '#process']
         ]
       },

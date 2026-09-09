@@ -35,9 +35,8 @@
         <nav class='desktop-nav' aria-label='Primary navigation'>
           <a href='/en/'>Home</a>
           <a href='/en/calculator/'>Calculator</a>
-          <a href='#solutions'>Solutions</a>
+          <a href='#projects'>Solutions</a>
           <a href='#process'>Process</a>
-          <a href='#engineering'>About</a>
           <a href='#contacts'>Contact</a>
         </nav>
         <div class='header-actions'>
@@ -66,9 +65,9 @@
           <nav aria-label='Mobile navigation'>
             <a href='/en/'>Home</a><a
               href='/en/calculator/'
-            >Calculator</a><a href='#solutions'>Solutions</a><a
+            >Calculator</a><a href='#projects'>Solutions</a><a
               href='#process'
-            >Process</a><a href='#engineering'>About</a><a
+            >Process</a><a
               href='#contacts'
             >Contact</a>
             <div class='mobile-language-switcher' role='group' aria-label='Language selection'><a
@@ -86,6 +85,7 @@
         </details>
       </div>
     </header>
+
     <main id='main' data-home-story>
       <section class='hero section home-hero' id='top' aria-labelledby='hero-title' data-home-hero>
         <div class='hero-backdrop' aria-hidden='true' data-hero-time-backdrop>
@@ -182,212 +182,6 @@
                     ></use></svg><p><strong>Clear conditions</strong><span>scope confirmed before work</span></p></div>
             </div>
           </aside>
-        </div>
-      </section>
-
-      <section
-        class='passport section section--soft'
-        id='passport'
-        aria-labelledby='passport-title'
-        tabindex='-1'
-        data-passport-bridge
-      >
-        <svg class='passport-energy-bridge' viewBox='0 0 1600 440' preserveAspectRatio='none' aria-hidden='true' focusable='false'><path pathLength='1' d='M1220 0 C 1120 104, 980 156, 890 420'></path></svg>
-        <div class='container passport-grid'>
-          <div class='passport-copy'>
-            <p class='eyebrow'>What you receive after calculation</p>
-            <h2 id='passport-title'>Example Solar Passport</h2>
-            <p>This is what a preliminary report looks like after a successful calculation: roof map, system parameters, generation and financial values when a tariff is supplied.</p>
-            <ul class='check-list' role='list'><li><svg
-                    class='inline-icon'
-                    aria-hidden='true'
-                  ><use href='/icons.svg#check'></use></svg>Roof map and example panel layout</li><li><svg
-                    class='inline-icon'
-                    aria-hidden='true'
-                  ><use href='/icons.svg#check'></use></svg>Monthly generation</li><li><svg
-                    class='inline-icon'
-                    aria-hidden='true'
-                  ><use href='/icons.svg#check'></use></svg>A 25-year financial model</li><li><svg
-                    class='inline-icon'
-                    aria-hidden='true'
-                  ><use href='/icons.svg#check'></use></svg>Recommended equipment</li><li><svg
-                    class='inline-icon'
-                    aria-hidden='true'
-                  ><use href='/icons.svg#check'></use></svg>Estimate assumptions and limitations</li></ul>
-            <a
-              class='button button--outline'
-              href='/en/calculator/'
-            >View report example</a>
-          </div>
-          <article class='passport-card' aria-label='Example Solar Passport'>
-            <div class='passport-card__top'><span class='wordmark wordmark--small'><span
-              >YOUR</span><strong>ENERGY</strong></span><span
-                class='pill'
-              >example</span></div>
-            <p class='passport-label'>SOLAR PASSPORT</p>
-            <h3>Illustrative home</h3>
-            <p class='passport-date'>Example report structure</p>
-            <div class='passport-card__visual'>
-              <picture>
-                <source
-                  type='image/avif'
-                  srcset='/images/roof-scan-480.avif 480w, /images/roof-scan-768.avif 768w'
-                  sizes='(max-width: 680px) 90vw, 25vw'
-                />
-                <source
-                  type='image/webp'
-                  srcset='/images/roof-scan-480.webp 480w, /images/roof-scan-768.webp 768w'
-                  sizes='(max-width: 680px) 90vw, 25vw'
-                />
-                <img
-                  src='/images/roof-scan-768.jpg'
-                  srcset='/images/roof-scan-480.jpg 480w, /images/roof-scan-768.jpg 768w'
-                  sizes='(max-width: 680px) 90vw, 25vw'
-                  width='768'
-                  height='512'
-                  alt='Illustrative aerial roof image before a property is confirmed'
-                  loading='lazy'
-                  decoding='async'
-                />
-              </picture>
-              <span class='mini-panels' aria-hidden='true'></span><span class='demo-badge'>Example data</span>
-            </div>
-            <dl class='passport-specs'>
-              <div><dt>Recommended system</dt><dd>10.4 kWp</dd></div>
-              <div><dt>Source: example data</dt><dd>16 × 650 W</dd></div>
-            </dl>
-          </article>
-          <div class='generation-card'>
-            <h3>Monthly generation, kWh</h3>
-            <p id='generation-chart-description'>A bar chart showing demonstration generation from January to December.</p>
-            <div class='bar-chart' aria-describedby='generation-chart-description'>
-                <button
-                  class='chart-bar'
-                  type='button'
-                  style='--bar-height: 32%;'
-                  title='Jan · January: 600 kWh'
-                  aria-label='Jan · January: 600 kWh'
-                ><span class='chart-bar__fill'></span><span>Jan</span></button>
-                <button
-                  class='chart-bar'
-                  type='button'
-                  style='--bar-height: 41%;'
-                  title='Feb · February: 750 kWh'
-                  aria-label='Feb · February: 750 kWh'
-                ><span class='chart-bar__fill'></span><span>Feb</span></button>
-                <button
-                  class='chart-bar'
-                  type='button'
-                  style='--bar-height: 57%;'
-                  title='Mar · March: 1050 kWh'
-                  aria-label='Mar · March: 1050 kWh'
-                ><span class='chart-bar__fill'></span><span>Mar</span></button>
-                <button
-                  class='chart-bar'
-                  type='button'
-                  style='--bar-height: 73%;'
-                  title='Apr · April: 1350 kWh'
-                  aria-label='Apr · April: 1350 kWh'
-                ><span class='chart-bar__fill'></span><span>Apr</span></button>
-                <button
-                  class='chart-bar'
-                  type='button'
-                  style='--bar-height: 86%;'
-                  title='May · May: 1600 kWh'
-                  aria-label='May · May: 1600 kWh'
-                ><span class='chart-bar__fill'></span><span>May</span></button>
-                <button
-                  class='chart-bar'
-                  type='button'
-                  style='--bar-height: 95%;'
-                  title='Jun · June: 1750 kWh'
-                  aria-label='Jun · June: 1750 kWh'
-                ><span class='chart-bar__fill'></span><span>Jun</span></button>
-                <button
-                  class='chart-bar'
-                  type='button'
-                  style='--bar-height: 100%;'
-                  title='Jul · July: 1850 kWh'
-                  aria-label='Jul · July: 1850 kWh'
-                ><span class='chart-bar__fill'></span><span>Jul</span></button>
-                <button
-                  class='chart-bar'
-                  type='button'
-                  style='--bar-height: 95%;'
-                  title='Aug · August: 1750 kWh'
-                  aria-label='Aug · August: 1750 kWh'
-                ><span class='chart-bar__fill'></span><span>Aug</span></button>
-                <button
-                  class='chart-bar'
-                  type='button'
-                  style='--bar-height: 78%;'
-                  title='Sep · September: 1450 kWh'
-                  aria-label='Sep · September: 1450 kWh'
-                ><span class='chart-bar__fill'></span><span>Sep</span></button>
-                <button
-                  class='chart-bar'
-                  type='button'
-                  style='--bar-height: 59%;'
-                  title='Oct · October: 1100 kWh'
-                  aria-label='Oct · October: 1100 kWh'
-                ><span class='chart-bar__fill'></span><span>Oct</span></button>
-                <button
-                  class='chart-bar'
-                  type='button'
-                  style='--bar-height: 41%;'
-                  title='Nov · November: 750 kWh'
-                  aria-label='Nov · November: 750 kWh'
-                ><span class='chart-bar__fill'></span><span>Nov</span></button>
-                <button
-                  class='chart-bar'
-                  type='button'
-                  style='--bar-height: 32%;'
-                  title='Dec · December: 600 kWh'
-                  aria-label='Dec · December: 600 kWh'
-                ><span class='chart-bar__fill'></span><span>Dec</span></button>
-            </div>
-            <details class='chart-data'><summary>Monthly generation data table</summary><table><caption
-                  class='visually-hidden'
-                >Monthly generation data table</caption><thead><tr><th scope='col'>Month</th><th scope='col'>kWh</th></tr></thead><tbody
-                ><tr><td>January</td><td>600</td></tr><tr><td>February</td><td>750</td></tr><tr><td>March</td><td>1050</td></tr><tr><td>April</td><td>1350</td></tr><tr><td>May</td><td>1600</td></tr><tr><td>June</td><td>1750</td></tr><tr><td>July</td><td>1850</td></tr><tr><td>August</td><td>1750</td></tr><tr><td>September</td><td>1450</td></tr><tr><td>October</td><td>1100</td></tr><tr><td>November</td><td>750</td></tr><tr><td>December</td><td>600</td></tr></tbody></table></details>
-          </div>
-        </div>
-      </section>
-      <section class='solutions section' id='solutions' aria-labelledby='solutions-title' >
-        <div class='container'>
-          <div class='section-heading'><div><p class='eyebrow'>Solutions</p><h2
-                id='solutions-title'
-              >Three practical solutions for your home</h2></div><p>Compare indicative capacity and generation. A preliminary budget appears after property analysis.</p></div>
-          <div class='solution-grid'>
-              <article class='solution-card'><p class='solution-index'>00</p><h3>Starter</h3><p>Lower initial investment</p>
-                <dl><div><dt>kWp</dt><dd>6.2 kWp</dd></div><div><dt>kWh</dt><dd>9,200 kWh / year</dd></div></dl>
-                <strong class='solution-price'>Preliminary budget after analysis</strong>
-                <details><summary>View details</summary><ul><li
-                      >10–12 panels in the selected class</li><li
-                      >Estimated area: 34–40 m²</li><li
-                      >Inverter, installation and basic monitoring</li></ul></details>
-                <a class='button button--outline' href='/en/calculator/'>Calculate my home</a>
-              </article>
-              <article class='solution-card solution-card--popular'><span class='solution-badge'>Popular option</span><p class='solution-index'>01</p><h3>Optimal</h3><p>The best balance of cost and return</p>
-                <dl><div><dt>kWp</dt><dd>10.4 kWp</dd></div><div><dt>kWh</dt><dd>≈16,000 kWh / year</dd></div></dl>
-                <strong class='solution-price'>Preliminary budget after analysis</strong>
-                <details><summary>View details</summary><ul><li
-                      >16 × 650 W panels</li><li
-                      >Estimated area: 54–62 m²</li><li
-                      >Inverter, design, installation and monitoring</li></ul></details>
-                <a class='button' href='/en/calculator/'>Calculate my home</a>
-              </article>
-              <article class='solution-card'><p class='solution-index'>02</p><h3>Energy independence</h3><p>Maximum coverage plus a battery</p>
-                <dl><div><dt>kWp</dt><dd>12.5 kWp + 10 kWh</dd></div><div><dt>kWh</dt><dd>18,900 kWh / year</dd></div></dl>
-                <strong class='solution-price'>Needs a separate estimate</strong>
-                <details><summary>View details</summary><ul><li
-                      >Higher-capacity system</li><li
-                      >10 kWh battery in the demonstration configuration</li><li
-                      >Hybrid inverter and backup scenarios</li></ul></details>
-                <a class='button button--outline' href='/en/calculator/'>Calculate my home</a>
-              </article>
-          </div>
-          <p class='section-disclosure'>The final configuration, price and outcome depend on the property and are confirmed after a site visit.</p>
         </div>
       </section>
 
@@ -1238,58 +1032,6 @@
           </div>
         </div>      </section>
 
-      <section class='engineering section' id='engineering' aria-labelledby='engineering-title'><div
-          class='container engineering-grid'
-        ><div class='engineering-photo'><picture><source
-                type='image/avif'
-                srcset='/images/engineer-onsite-480.avif 480w, /images/engineer-onsite-800.avif 800w, /images/engineer-onsite-1200.avif 1200w'
-                sizes='(max-width: 760px) 100vw, 50vw'
-              /><source
-                type='image/webp'
-                srcset='/images/engineer-onsite-480.webp 480w, /images/engineer-onsite-800.webp 800w, /images/engineer-onsite-1200.webp 1200w'
-                sizes='(max-width: 760px) 100vw, 50vw'
-              /><img
-                src='/images/engineer-onsite-800.jpg'
-                width='800'
-                height='533'
-                alt='Illustrative image of an engineer inspecting a solar system'
-                loading='lazy'
-                decoding='async'
-              /></picture><span class='demo-badge'>Illustrative image</span><p
-            >The person shown is not a confirmed YOURENERGY employee.</p></div><div><p
-              class='eyebrow'
-            >A human check</p><h2 id='engineering-title'>First we estimate digitally. Then we check on site.</h2><p
-            >A final offer is made only after an on-site inspection and engineering review of the property.</p><ul class='check-list' role='list'><li><svg class='inline-icon' aria-hidden='true'><use
-                      href='/icons.svg#check'
-                    ></use></svg>Roof condition and load-bearing capacity</li><li><svg class='inline-icon' aria-hidden='true'><use
-                      href='/icons.svg#check'
-                    ></use></svg>Shading, tilt and orientation</li><li><svg class='inline-icon' aria-hidden='true'><use
-                      href='/icons.svg#check'
-                    ></use></svg>Electrical panel and cable routes</li><li><svg class='inline-icon' aria-hidden='true'><use
-                      href='/icons.svg#check'
-                    ></use></svg>Protection, grounding and connection</li></ul></div></div></section>
-
-      <section class='company-record section section--soft' id='company-record' aria-labelledby='company-record-title'><div
-          class='container'
-        ><div class='company-record__heading'><div><p class='eyebrow'>Legal information</p><h2
-                id='company-record-title'
-              >A verifiable legal entity</h2><p>Before entering into a contract, you can independently verify the state-registration details of the legal entity you are working with.</p></div><a
-              class='button button--outline company-record__verify'
-              href='https://verify.e-gov.am'
-              target='_blank'
-              rel='noopener'
-            >Verify on the state platform <svg class='inline-icon' aria-hidden='true'><use
-                  href='/icons.svg#arrow-right'
-                ></use></svg></a></div><dl class='company-record__facts'><div><dt>Legal name</dt><dd>YOUR ENERGY LLC</dd></div><div><dt>State registration</dt><dd>17 August 2026</dd></div><div><dt>Registration number</dt><dd>999.110.1603227</dd></div><div><dt>Taxpayer number</dt><dd>02338724</dd></div></dl><div class='company-record__meta'><p><svg
-                class='inline-icon'
-                aria-hidden='true'
-              ><use href='/icons.svg#pin'></use></svg><span><strong>Registered address</strong>48 Artashisyan St., building 14, Shengavit, Yerevan 0039</span></p><p><svg
-                class='inline-icon'
-                aria-hidden='true'
-              ><use href='/icons.svg#check'></use></svg><span>Source: State Unified Registry extract dated 17 August 2026<small>Verification code: RBE4-88FA-4C78-8ECF</small></span></p></div><p
-            class='company-record__disclosure'
-          >This block verifies company state-registration details only. It is not evidence of installer qualification, insurance, equipment availability, warranty coverage or suitability for a specific property.</p></div></section>
-
       <section class='equipment' aria-labelledby='equipment-title'><div class='container'><h2
             id='equipment-title'
           >Equipment technical documentation</h2><div class='brand-row' role='list'><span role='listitem'>LONGi</span><span role='listitem'>SolaX</span></div><p
@@ -1380,30 +1122,16 @@
                     aria-hidden='true'
                   >+</span></summary><p>A preliminary Passport keeps the current session’s inputs, sources and assumptions together. It is not an engineering design, bank document or offer, and it is not stored as a permanent link or PDF.</p></details></div></div></section>
 
-      <section class='final-cta section' id='final-cta' aria-labelledby='final-title'><div
-          class='container final-cta__inner'
-        ><div><p class='eyebrow eyebrow--dark'>YOURENERGY</p><h2
-              id='final-title'
-            >Ready to discover your home’s potential?</h2><p>Start a preliminary analysis and see exactly which information is confirmed, missing or still needs an engineer.</p></div><div class='final-cta__actions'><a
-              class='button'
-              href='/en/calculator/'
-            >Calculate my home</a><small>Free, with no obligation and no commercial promise.</small></div></div></section>
     </main>
 
     <footer class='site-footer' id='contacts'><div class='container footer-grid'><div><a
             class='wordmark'
             href='/en/'
           ><span>YOUR</span><strong>ENERGY</strong></a><p>Solar systems for homes and businesses: audit, design, installation, service and monitoring.</p></div><div><h2>For homes</h2><ul role='list'><li><a
-                    href='#solutions'
-                  >Solutions</a></li><li><a
                     href='/en/calculator/'
                   >Calculator</a></li><li><a
                     href='#faq'
                   >FAQ</a></li></ul></div><div><h2>Company</h2><ul role='list'><li><a
-                    href='#engineering'
-                  >About us</a></li><li><a
-                    href='#company-record'
-                  >Registration</a></li><li><a
                     href='#process'
                   >How it works</a></li></ul></div><div><h2>Information</h2><ul role='list'><li><a
                     href='/en/#equipment-documents'

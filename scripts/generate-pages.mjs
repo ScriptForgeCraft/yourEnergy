@@ -281,9 +281,8 @@ const createHomeContext = (content, { pageKind = 'home' } = {}) => {
     navLinks: {
       home: content.homeHref,
       calculator: calculatorHref,
-      projects: homeSectionHref('#solutions'),
+      projects: homeSectionHref('#projects'),
       process: homeSectionHref('#process'),
-      about: homeSectionHref('#engineering'),
       contacts: '#contacts'
     },
     solutionHref: calculatorHref,

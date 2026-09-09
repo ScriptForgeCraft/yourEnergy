@@ -888,7 +888,6 @@ export default {
       {
         title: 'Տան համար',
         links: [
-          ['Լուծումներ', '#solutions'],
           ['Հաշվիչ', '#calculator'],
           ['ՀՏՀ', '#faq']
         ]
@@ -896,8 +895,6 @@ export default {
       {
         title: 'Ընկերություն',
         links: [
-          ['Մեր մասին', '#engineering'],
-          ['Գրանցում', '#company-record'],
           ['Ինչպես է աշխատում', '#process']
         ]
       },

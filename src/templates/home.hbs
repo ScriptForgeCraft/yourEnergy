@@ -121,109 +121,6 @@
       </section>
 
       <section
-        class='passport section section--soft'
-        id='passport'
-        aria-labelledby='passport-title'
-        tabindex='-1'
-        data-passport-bridge
-      >
-        <svg class='passport-energy-bridge' viewBox='0 0 1600 440' preserveAspectRatio='none' aria-hidden='true' focusable='false'><path pathLength='1' d='M1220 0 C 1120 104, 980 156, 890 420'></path></svg>
-        <div class='container passport-grid'>
-          <div class='passport-copy'>
-            <p class='eyebrow'>{{passport.eyebrow}}</p>
-            <h2 id='passport-title'>{{passport.title}}</h2>
-            <p>{{passport.copy}}</p>
-            <ul class='check-list' role='list'>{{#each passport.features}}<li><svg
-                    class='inline-icon'
-                    aria-hidden='true'
-                  ><use href='/icons.svg#check'></use></svg>{{this}}</li>{{/each}}</ul>
-            <a
-              class='button button--outline'
-              href='{{calculatorHref}}'
-            >{{passport.cta}}</a>
-          </div>
-          <article class='passport-card' aria-label='{{passport.title}}'>
-            <div class='passport-card__top'><span class='wordmark wordmark--small'><span
-              >YOUR</span><strong>ENERGY</strong></span><span
-                class='pill'
-              >{{passport.badge}}</span></div>
-            <p class='passport-label'>{{passport.reportLabel}}</p>
-            <h3>{{passport.reportAddress}}</h3>
-            <p class='passport-date'>{{passport.reportDate}}</p>
-            <div class='passport-card__visual'>
-              <picture>
-                <source
-                  type='image/avif'
-                  srcset='/images/roof-scan-480.avif 480w, /images/roof-scan-768.avif 768w'
-                  sizes='(max-width: 680px) 90vw, 25vw'
-                />
-                <source
-                  type='image/webp'
-                  srcset='/images/roof-scan-480.webp 480w, /images/roof-scan-768.webp 768w'
-                  sizes='(max-width: 680px) 90vw, 25vw'
-                />
-                <img
-                  src='/images/roof-scan-768.jpg'
-                  srcset='/images/roof-scan-480.jpg 480w, /images/roof-scan-768.jpg 768w'
-                  sizes='(max-width: 680px) 90vw, 25vw'
-                  width='768'
-                  height='512'
-                  alt='{{map.imageAlt}}'
-                  loading='lazy'
-                  decoding='async'
-                />
-              </picture>
-              <span class='mini-panels' aria-hidden='true'></span><span class='demo-badge'>{{map.demo}}</span>
-            </div>
-            <dl class='passport-specs'>
-              <div><dt>{{passport.system}}</dt><dd>{{passport.capacity}}</dd></div>
-              <div><dt>{{passport.source}}</dt><dd>{{passport.panels}}</dd></div>
-            </dl>
-          </article>
-          <div class='generation-card'>
-            <h3>{{passport.chartTitle}}</h3>
-            <p id='generation-chart-description'>{{passport.chartDescription}}</p>
-            <div class='bar-chart' aria-describedby='generation-chart-description'>
-              {{#each passport.months}}
-                <button
-                  class='chart-bar'
-                  type='button'
-                  style='--bar-height: {{percent}}%;'
-                  title='{{short}} · {{name}}: {{value}} kWh'
-                  aria-label='{{short}} · {{name}}: {{value}} kWh'
-                ><span class='chart-bar__fill'></span><span>{{short}}</span></button>
-              {{/each}}
-            </div>
-            <details class='chart-data'><summary>{{passport.tableTitle}}</summary><table><caption
-                  class='visually-hidden'
-                >{{passport.tableTitle}}</caption><thead><tr><th scope='col'>{{passport.monthLabel}}</th><th scope='col'>kWh</th></tr></thead><tbody
-                >{{#each passport.months}}<tr><td>{{name}}</td><td>{{value}}</td></tr>{{/each}}</tbody></table></details>
-          </div>
-        </div>
-      </section>
-      <section class='solutions section' id='solutions' aria-labelledby='solutions-title' >
-        <div class='container'>
-          <div class='section-heading'><div><p class='eyebrow'>{{solutions.eyebrow}}</p><h2
-                id='solutions-title'
-              >{{solutions.title}}</h2></div><p>{{solutions.copy}}</p></div>
-          <div class='solution-grid'>
-            {{#each solutions.items}}
-              <article class='{{cardClass}}'>
-                {{~#if badge}}<span class='solution-badge'>{{badge}}</span>{{/if~}}
-                <p class='solution-index'>0{{@index}}</p><h3>{{name}}</h3><p>{{subtitle}}</p>
-                <dl><div><dt>kWp</dt><dd>{{capacity}}</dd></div><div><dt>kWh</dt><dd>{{generation}}</dd></div></dl>
-                <strong class='solution-price'>{{price}}</strong>
-                <details><summary>{{detailsLabel}}</summary><ul>{{#each details}}<li
-                      >{{this}}</li>{{/each}}</ul></details>
-                <a class='{{buttonClass}}' href='{{../solutionHref}}'>{{ctaLabel}}</a>
-              </article>
-            {{/each}}
-          </div>
-          <p class='section-disclosure'>{{solutions.disclaimer}}</p>
-        </div>
-      </section>
-
-      <section
         class='projects section section--soft'
         id='projects'
         aria-labelledby='projects-title'
@@ -280,56 +177,6 @@
         {{> journey-story}}
       </section>
 
-      <section class='engineering section' id='engineering' aria-labelledby='engineering-title'><div
-          class='container engineering-grid'
-        ><div class='engineering-photo'><picture><source
-                type='image/avif'
-                srcset='/images/engineer-onsite-480.avif 480w, /images/engineer-onsite-800.avif 800w, /images/engineer-onsite-1200.avif 1200w'
-                sizes='(max-width: 760px) 100vw, 50vw'
-              /><source
-                type='image/webp'
-                srcset='/images/engineer-onsite-480.webp 480w, /images/engineer-onsite-800.webp 800w, /images/engineer-onsite-1200.webp 1200w'
-                sizes='(max-width: 760px) 100vw, 50vw'
-              /><img
-                src='/images/engineer-onsite-800.jpg'
-                width='800'
-                height='533'
-                alt='{{engineering.imageAlt}}'
-                loading='lazy'
-                decoding='async'
-              /></picture><span class='demo-badge'>{{common.illustrative}}</span><p
-            >{{engineering.imageNote}}</p></div><div><p
-              class='eyebrow'
-            >{{engineering.eyebrow}}</p><h2 id='engineering-title'>{{engineering.title}}</h2><p
-            >{{engineering.copy}}</p><ul class='check-list' role='list'>{{#each
-                engineering.items
-              }}<li><svg class='inline-icon' aria-hidden='true'><use
-                      href='/icons.svg#check'
-                    ></use></svg>{{this}}</li>{{/each}}</ul></div></div></section>
-
-      <section class='company-record section section--soft' id='company-record' aria-labelledby='company-record-title'><div
-          class='container'
-        ><div class='company-record__heading'><div><p class='eyebrow'>{{companyRecord.eyebrow}}</p><h2
-                id='company-record-title'
-              >{{companyRecord.title}}</h2><p>{{companyRecord.copy}}</p></div><a
-              class='button button--outline company-record__verify'
-              href='https://verify.e-gov.am'
-              target='_blank'
-              rel='noopener'
-            >{{companyRecord.action}} <svg class='inline-icon' aria-hidden='true'><use
-                  href='/icons.svg#arrow-right'
-                ></use></svg></a></div><dl class='company-record__facts'>{{#each
-              companyRecord.facts
-            }}<div><dt>{{label}}</dt><dd>{{value}}</dd></div>{{/each}}</dl><div class='company-record__meta'><p><svg
-                class='inline-icon'
-                aria-hidden='true'
-              ><use href='/icons.svg#pin'></use></svg><span><strong>{{companyRecord.addressLabel}}</strong>{{companyRecord.address}}</span></p><p><svg
-                class='inline-icon'
-                aria-hidden='true'
-              ><use href='/icons.svg#check'></use></svg><span>{{companyRecord.source}}<small>{{companyRecord.verification}}</small></span></p></div><p
-            class='company-record__disclosure'
-          >{{companyRecord.disclosure}}</p></div></section>
-
       <section class='equipment' aria-labelledby='equipment-title'><div class='container'><h2
             id='equipment-title'
           >{{equipment.title}}</h2><div class='brand-row' role='list'>{{#each
@@ -367,14 +214,6 @@
                     aria-hidden='true'
                   >+</span></summary><p>{{answer}}</p></details>{{/each}}</div></div></section>
 
-      <section class='final-cta section' id='final-cta' aria-labelledby='final-title'><div
-          class='container final-cta__inner'
-        ><div><p class='eyebrow eyebrow--dark'>YOURENERGY</p><h2
-              id='final-title'
-            >{{finalCta.title}}</h2><p>{{finalCta.copy}}</p></div><div class='final-cta__actions'><a
-              class='button'
-              href='{{calculatorHref}}'
-            >{{finalCta.primary}}</a><small>{{finalCta.note}}</small></div></div></section>
     </main>
 
     {{> site-footer}}

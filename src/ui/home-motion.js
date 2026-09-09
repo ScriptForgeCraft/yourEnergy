@@ -614,10 +614,9 @@ const initHeroCounters = (hero, reducedMotion) => {
 export const initHomeMotion = ({ config = {} } = {}) => {
   const root = document.querySelector('[data-home-story]');
   const hero = document.querySelector('[data-home-hero]');
-  const passport = document.querySelector('[data-passport-bridge]');
   const reducedMotionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
 
-  if (!root || !hero || !passport) return () => {};
+  if (!root || !hero) return () => {};
 
   const disposeHeroTime = initHeroTime(hero, { reducedMotion: reducedMotionQuery.matches });
   let disposeHeroCounters = () => {};

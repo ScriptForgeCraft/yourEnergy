@@ -662,9 +662,6 @@ function validateCinematicHomeHero(html, page, calculatorHref) {
   if (/equivalent to\s*~?\s*\d+\s*homes|эквивалент\s*~?\s*\d+\s*дом|տան\s*համարժեք/iu.test(hero)) {
     fail(`${page}: Hero must not claim a homes-equivalent benchmark`);
   }
-  if (!html.includes('data-passport-bridge')) {
-    fail(`${page}: homepage is missing the Solar Passport bridge`);
-  }
 }
 
 async function validateHeroTimeAssets() {
@@ -676,21 +673,6 @@ async function validateHeroTimeAssets() {
           fail(`missing local-time Hero asset: ${relative(distRoot, asset)}`);
       }
     }
-  }
-}
-
-function validateCompanyRecord(html, page) {
-  for (const marker of [
-    "id='company-record'",
-    'RBE4-88FA-4C78-8ECF',
-    '999.110.1603227',
-    '02338724',
-    "href='https://verify.e-gov.am'"
-  ]) {
-    if (!html.includes(marker)) fail(`${page}: missing verified company-record marker ${marker}`);
-  }
-  if (/\/documents\/(?:charter_template|RBE4-88FA-4C78-8ECF)\.pdf/iu.test(html)) {
-    fail(`${page}: must not publish the supplied legal source PDF with personal data`);
   }
 }
 
@@ -735,7 +717,6 @@ for (const [page, calculatorHref] of [
     validateHomeCalculatorSeparation(pages.get(page), page, calculatorHref);
     validateHomePublicSeoCopy(pages.get(page), page);
     validateCinematicHomeHero(pages.get(page), page, calculatorHref);
-    validateCompanyRecord(pages.get(page), page);
   }
 }
 for (const { page, locale, type } of toolPages) {

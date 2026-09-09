@@ -867,7 +867,6 @@ export default {
       {
         title: 'For homes',
         links: [
-          ['Solutions', '#solutions'],
           ['Calculator', '#calculator'],
           ['FAQ', '#faq']
         ]
@@ -875,8 +874,6 @@ export default {
       {
         title: 'Company',
         links: [
-          ['About us', '#engineering'],
-          ['Registration', '#company-record'],
           ['How it works', '#process']
         ]
       },

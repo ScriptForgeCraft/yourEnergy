@@ -35,9 +35,8 @@
         <nav class='desktop-nav' aria-label='Основная навигация'>
           <a href='/ru/'>Главная</a>
           <a href='/ru/calculator/'>Калькулятор</a>
-          <a href='#solutions'>Решения</a>
+          <a href='#projects'>Решения</a>
           <a href='#process'>Процесс</a>
-          <a href='#engineering'>О компании</a>
           <a href='#contacts'>Контакты</a>
         </nav>
         <div class='header-actions'>
@@ -66,9 +65,9 @@
           <nav aria-label='Мобильная навигация'>
             <a href='/ru/'>Главная</a><a
               href='/ru/calculator/'
-            >Калькулятор</a><a href='#solutions'>Решения</a><a
+            >Калькулятор</a><a href='#projects'>Решения</a><a
               href='#process'
-            >Процесс</a><a href='#engineering'>О компании</a><a
+            >Процесс</a><a
               href='#contacts'
             >Контакты</a>
             <div class='mobile-language-switcher' role='group' aria-label='Выбор языка'><a
@@ -86,6 +85,7 @@
         </details>
       </div>
     </header>
+
     <main id='main' data-home-story>
       <section class='hero section home-hero' id='top' aria-labelledby='hero-title' data-home-hero>
         <div class='hero-backdrop' aria-hidden='true' data-hero-time-backdrop>
@@ -182,212 +182,6 @@
                     ></use></svg><p><strong>Понятные условия</strong><span>состав подтверждается заранее</span></p></div>
             </div>
           </aside>
-        </div>
-      </section>
-
-      <section
-        class='passport section section--soft'
-        id='passport'
-        aria-labelledby='passport-title'
-        tabindex='-1'
-        data-passport-bridge
-      >
-        <svg class='passport-energy-bridge' viewBox='0 0 1600 440' preserveAspectRatio='none' aria-hidden='true' focusable='false'><path pathLength='1' d='M1220 0 C 1120 104, 980 156, 890 420'></path></svg>
-        <div class='container passport-grid'>
-          <div class='passport-copy'>
-            <p class='eyebrow'>Что вы получите после расчёта</p>
-            <h2 id='passport-title'>Пример Solar Passport</h2>
-            <p>Так выглядит предварительный отчёт после успешного расчёта: карта крыши, параметры системы, генерация и финансовые данные при указанном тарифе.</p>
-            <ul class='check-list' role='list'><li><svg
-                    class='inline-icon'
-                    aria-hidden='true'
-                  ><use href='/icons.svg#check'></use></svg>Карта крыши и пример размещения панелей</li><li><svg
-                    class='inline-icon'
-                    aria-hidden='true'
-                  ><use href='/icons.svg#check'></use></svg>Помесячная генерация</li><li><svg
-                    class='inline-icon'
-                    aria-hidden='true'
-                  ><use href='/icons.svg#check'></use></svg>Финансовая модель на 25 лет</li><li><svg
-                    class='inline-icon'
-                    aria-hidden='true'
-                  ><use href='/icons.svg#check'></use></svg>Рекомендуемое оборудование</li><li><svg
-                    class='inline-icon'
-                    aria-hidden='true'
-                  ><use href='/icons.svg#check'></use></svg>Допущения и ограничения расчёта</li></ul>
-            <a
-              class='button button--outline'
-              href='/ru/calculator/'
-            >Посмотреть пример отчёта</a>
-          </div>
-          <article class='passport-card' aria-label='Пример Solar Passport'>
-            <div class='passport-card__top'><span class='wordmark wordmark--small'><span
-              >YOUR</span><strong>ENERGY</strong></span><span
-                class='pill'
-              >пример</span></div>
-            <p class='passport-label'>SOLAR PASSPORT</p>
-            <h3>Иллюстративный дом</h3>
-            <p class='passport-date'>Пример структуры отчёта</p>
-            <div class='passport-card__visual'>
-              <picture>
-                <source
-                  type='image/avif'
-                  srcset='/images/roof-scan-480.avif 480w, /images/roof-scan-768.avif 768w'
-                  sizes='(max-width: 680px) 90vw, 25vw'
-                />
-                <source
-                  type='image/webp'
-                  srcset='/images/roof-scan-480.webp 480w, /images/roof-scan-768.webp 768w'
-                  sizes='(max-width: 680px) 90vw, 25vw'
-                />
-                <img
-                  src='/images/roof-scan-768.jpg'
-                  srcset='/images/roof-scan-480.jpg 480w, /images/roof-scan-768.jpg 768w'
-                  sizes='(max-width: 680px) 90vw, 25vw'
-                  width='768'
-                  height='512'
-                  alt='Иллюстративный аэрофотоснимок крыши до подтверждения объекта'
-                  loading='lazy'
-                  decoding='async'
-                />
-              </picture>
-              <span class='mini-panels' aria-hidden='true'></span><span class='demo-badge'>Пример данных</span>
-            </div>
-            <dl class='passport-specs'>
-              <div><dt>Рекомендованная система</dt><dd>10,4 kWp</dd></div>
-              <div><dt>Источник: пример данных</dt><dd>16 × 650 W</dd></div>
-            </dl>
-          </article>
-          <div class='generation-card'>
-            <h3>Помесячная генерация, kWh</h3>
-            <p id='generation-chart-description'>Столбчатый график демонстрационной генерации с января по декабрь.</p>
-            <div class='bar-chart' aria-describedby='generation-chart-description'>
-                <button
-                  class='chart-bar'
-                  type='button'
-                  style='--bar-height: 32%;'
-                  title='Янв · Январь: 600 kWh'
-                  aria-label='Янв · Январь: 600 kWh'
-                ><span class='chart-bar__fill'></span><span>Янв</span></button>
-                <button
-                  class='chart-bar'
-                  type='button'
-                  style='--bar-height: 41%;'
-                  title='Фев · Февраль: 750 kWh'
-                  aria-label='Фев · Февраль: 750 kWh'
-                ><span class='chart-bar__fill'></span><span>Фев</span></button>
-                <button
-                  class='chart-bar'
-                  type='button'
-                  style='--bar-height: 57%;'
-                  title='Мар · Март: 1050 kWh'
-                  aria-label='Мар · Март: 1050 kWh'
-                ><span class='chart-bar__fill'></span><span>Мар</span></button>
-                <button
-                  class='chart-bar'
-                  type='button'
-                  style='--bar-height: 73%;'
-                  title='Апр · Апрель: 1350 kWh'
-                  aria-label='Апр · Апрель: 1350 kWh'
-                ><span class='chart-bar__fill'></span><span>Апр</span></button>
-                <button
-                  class='chart-bar'
-                  type='button'
-                  style='--bar-height: 86%;'
-                  title='Май · Май: 1600 kWh'
-                  aria-label='Май · Май: 1600 kWh'
-                ><span class='chart-bar__fill'></span><span>Май</span></button>
-                <button
-                  class='chart-bar'
-                  type='button'
-                  style='--bar-height: 95%;'
-                  title='Июн · Июнь: 1750 kWh'
-                  aria-label='Июн · Июнь: 1750 kWh'
-                ><span class='chart-bar__fill'></span><span>Июн</span></button>
-                <button
-                  class='chart-bar'
-                  type='button'
-                  style='--bar-height: 100%;'
-                  title='Июл · Июль: 1850 kWh'
-                  aria-label='Июл · Июль: 1850 kWh'
-                ><span class='chart-bar__fill'></span><span>Июл</span></button>
-                <button
-                  class='chart-bar'
-                  type='button'
-                  style='--bar-height: 95%;'
-                  title='Авг · Август: 1750 kWh'
-                  aria-label='Авг · Август: 1750 kWh'
-                ><span class='chart-bar__fill'></span><span>Авг</span></button>
-                <button
-                  class='chart-bar'
-                  type='button'
-                  style='--bar-height: 78%;'
-                  title='Сен · Сентябрь: 1450 kWh'
-                  aria-label='Сен · Сентябрь: 1450 kWh'
-                ><span class='chart-bar__fill'></span><span>Сен</span></button>
-                <button
-                  class='chart-bar'
-                  type='button'
-                  style='--bar-height: 59%;'
-                  title='Окт · Октябрь: 1100 kWh'
-                  aria-label='Окт · Октябрь: 1100 kWh'
-                ><span class='chart-bar__fill'></span><span>Окт</span></button>
-                <button
-                  class='chart-bar'
-                  type='button'
-                  style='--bar-height: 41%;'
-                  title='Ноя · Ноябрь: 750 kWh'
-                  aria-label='Ноя · Ноябрь: 750 kWh'
-                ><span class='chart-bar__fill'></span><span>Ноя</span></button>
-                <button
-                  class='chart-bar'
-                  type='button'
-                  style='--bar-height: 32%;'
-                  title='Дек · Декабрь: 600 kWh'
-                  aria-label='Дек · Декабрь: 600 kWh'
-                ><span class='chart-bar__fill'></span><span>Дек</span></button>
-            </div>
-            <details class='chart-data'><summary>Числовые данные помесячной генерации</summary><table><caption
-                  class='visually-hidden'
-                >Числовые данные помесячной генерации</caption><thead><tr><th scope='col'>Месяц</th><th scope='col'>kWh</th></tr></thead><tbody
-                ><tr><td>Январь</td><td>600</td></tr><tr><td>Февраль</td><td>750</td></tr><tr><td>Март</td><td>1050</td></tr><tr><td>Апрель</td><td>1350</td></tr><tr><td>Май</td><td>1600</td></tr><tr><td>Июнь</td><td>1750</td></tr><tr><td>Июль</td><td>1850</td></tr><tr><td>Август</td><td>1750</td></tr><tr><td>Сентябрь</td><td>1450</td></tr><tr><td>Октябрь</td><td>1100</td></tr><tr><td>Ноябрь</td><td>750</td></tr><tr><td>Декабрь</td><td>600</td></tr></tbody></table></details>
-          </div>
-        </div>
-      </section>
-      <section class='solutions section' id='solutions' aria-labelledby='solutions-title' >
-        <div class='container'>
-          <div class='section-heading'><div><p class='eyebrow'>Решения</p><h2
-                id='solutions-title'
-              >3 оптимальных решения для вашего дома</h2></div><p>Сравните ориентировочную мощность и генерацию. Предварительный бюджет появится после анализа объекта.</p></div>
-          <div class='solution-grid'>
-              <article class='solution-card'><p class='solution-index'>00</p><h3>Старт</h3><p>Минимальные первоначальные вложения</p>
-                <dl><div><dt>kWp</dt><dd>6,2 kWp</dd></div><div><dt>kWh</dt><dd>9 200 kWh / год</dd></div></dl>
-                <strong class='solution-price'>Предварительный бюджет после анализа</strong>
-                <details><summary>Подробнее</summary><ul><li
-                      >10–12 панелей выбранного класса</li><li
-                      >Ориентировочная площадь: 34–40 м²</li><li
-                      >Инвертор, монтаж и базовый мониторинг</li></ul></details>
-                <a class='button button--outline' href='/ru/calculator/'>Рассчитать мой дом</a>
-              </article>
-              <article class='solution-card solution-card--popular'><span class='solution-badge'>Популярный вариант</span><p class='solution-index'>01</p><h3>Оптимальный</h3><p>Лучший баланс цены и выгоды</p>
-                <dl><div><dt>kWp</dt><dd>10,4 kWp</dd></div><div><dt>kWh</dt><dd>≈16 000 kWh / год</dd></div></dl>
-                <strong class='solution-price'>Предварительный бюджет после анализа</strong>
-                <details><summary>Подробнее</summary><ul><li
-                      >16 × 650 W панелей</li><li
-                      >Ориентировочная площадь: 54–62 м²</li><li
-                      >Инвертор, проектирование, монтаж и мониторинг</li></ul></details>
-                <a class='button' href='/ru/calculator/'>Рассчитать мой дом</a>
-              </article>
-              <article class='solution-card'><p class='solution-index'>02</p><h3>Энергонезависимость</h3><p>Максимальное покрытие + аккумулятор</p>
-                <dl><div><dt>kWp</dt><dd>12,5 kWp + 10 kWh</dd></div><div><dt>kWh</dt><dd>18 900 kWh / год</dd></div></dl>
-                <strong class='solution-price'>Требует отдельного расчёта</strong>
-                <details><summary>Подробнее</summary><ul><li
-                      >Система повышенной мощности</li><li
-                      >Аккумулятор 10 kWh в демо-комплектации</li><li
-                      >Гибридный инвертор и резервные сценарии</li></ul></details>
-                <a class='button button--outline' href='/ru/calculator/'>Рассчитать мой дом</a>
-              </article>
-          </div>
-          <p class='section-disclosure'>Точный состав, цена и результат зависят от объекта и подтверждаются после осмотра.</p>
         </div>
       </section>
 
@@ -1238,58 +1032,6 @@
           </div>
         </div>      </section>
 
-      <section class='engineering section' id='engineering' aria-labelledby='engineering-title'><div
-          class='container engineering-grid'
-        ><div class='engineering-photo'><picture><source
-                type='image/avif'
-                srcset='/images/engineer-onsite-480.avif 480w, /images/engineer-onsite-800.avif 800w, /images/engineer-onsite-1200.avif 1200w'
-                sizes='(max-width: 760px) 100vw, 50vw'
-              /><source
-                type='image/webp'
-                srcset='/images/engineer-onsite-480.webp 480w, /images/engineer-onsite-800.webp 800w, /images/engineer-onsite-1200.webp 1200w'
-                sizes='(max-width: 760px) 100vw, 50vw'
-              /><img
-                src='/images/engineer-onsite-800.jpg'
-                width='800'
-                height='533'
-                alt='Иллюстративное изображение инженера при проверке солнечной системы'
-                loading='lazy'
-                decoding='async'
-              /></picture><span class='demo-badge'>Иллюстративное изображение</span><p
-            >Показанный человек не является подтверждённым сотрудником YOURENERGY.</p></div><div><p
-              class='eyebrow'
-            >Человеческая проверка</p><h2 id='engineering-title'>Сначала считаем цифрово. Затем проверяем на месте.</h2><p
-            >Финальное предложение появляется только после осмотра и инженерной проверки объекта.</p><ul class='check-list' role='list'><li><svg class='inline-icon' aria-hidden='true'><use
-                      href='/icons.svg#check'
-                    ></use></svg>Состояние и несущая способность крыши</li><li><svg class='inline-icon' aria-hidden='true'><use
-                      href='/icons.svg#check'
-                    ></use></svg>Затенение, наклон и ориентация</li><li><svg class='inline-icon' aria-hidden='true'><use
-                      href='/icons.svg#check'
-                    ></use></svg>Электрощит и кабельные трассы</li><li><svg class='inline-icon' aria-hidden='true'><use
-                      href='/icons.svg#check'
-                    ></use></svg>Защита, заземление и подключение</li></ul></div></div></section>
-
-      <section class='company-record section section--soft' id='company-record' aria-labelledby='company-record-title'><div
-          class='container'
-        ><div class='company-record__heading'><div><p class='eyebrow'>Юридическая информация</p><h2
-                id='company-record-title'
-              >Проверяемое юридическое лицо</h2><p>До заключения договора вы можете самостоятельно проверить сведения о юридическом лице, с которым работаете.</p></div><a
-              class='button button--outline company-record__verify'
-              href='https://verify.e-gov.am'
-              target='_blank'
-              rel='noopener'
-            >Проверить на государственной платформе <svg class='inline-icon' aria-hidden='true'><use
-                  href='/icons.svg#arrow-right'
-                ></use></svg></a></div><dl class='company-record__facts'><div><dt>Юридическое название</dt><dd>ООО «ЮР ЭНЕРДЖИ»</dd></div><div><dt>Государственная регистрация</dt><dd>17.08.2026</dd></div><div><dt>Регистрационный номер</dt><dd>999.110.1603227</dd></div><div><dt>ИНН</dt><dd>02338724</dd></div></dl><div class='company-record__meta'><p><svg
-                class='inline-icon'
-                aria-hidden='true'
-              ><use href='/icons.svg#pin'></use></svg><span><strong>Юридический адрес</strong>Ереван, Шенгавит, ул. Арташисиян 48, строение 14, 0039</span></p><p><svg
-                class='inline-icon'
-                aria-hidden='true'
-              ><use href='/icons.svg#check'></use></svg><span>Источник: выписка из Государственного единого реестра от 17.08.2026<small>Контрольный номер: RBE4-88FA-4C78-8ECF</small></span></p></div><p
-            class='company-record__disclosure'
-          >Этот блок подтверждает только сведения о государственной регистрации компании. Он не является подтверждением квалификации монтажника, страхования, наличия оборудования, гарантии или пригодности решения для конкретного объекта.</p></div></section>
-
       <section class='equipment' aria-labelledby='equipment-title'><div class='container'><h2
             id='equipment-title'
           >Техническая документация оборудования</h2><div class='brand-row' role='list'><span role='listitem'>LONGi</span><span role='listitem'>SolaX</span></div><p
@@ -1380,30 +1122,16 @@
                     aria-hidden='true'
                   >+</span></summary><p>Предварительный Passport объединяет данные текущего сеанса, источники и допущения. Это не технический проект, банковский документ или оферта; постоянная ссылка и PDF пока не создаются.</p></details></div></div></section>
 
-      <section class='final-cta section' id='final-cta' aria-labelledby='final-title'><div
-          class='container final-cta__inner'
-        ><div><p class='eyebrow eyebrow--dark'>YOURENERGY</p><h2
-              id='final-title'
-            >Готовы узнать потенциал вашего дома?</h2><p>Начните предварительный анализ и увидите, какие данные подтверждены, отсутствуют или ещё требуют проверки инженера.</p></div><div class='final-cta__actions'><a
-              class='button'
-              href='/ru/calculator/'
-            >Рассчитать мой дом</a><small>Бесплатно, без обязательств и без коммерческого обещания.</small></div></div></section>
     </main>
 
     <footer class='site-footer' id='contacts'><div class='container footer-grid'><div><a
             class='wordmark'
             href='/ru/'
           ><span>YOUR</span><strong>ENERGY</strong></a><p>Солнечные системы для дома и бизнеса: аудит, проектирование, установка, сервис и мониторинг.</p></div><div><h2>Для дома</h2><ul role='list'><li><a
-                    href='#solutions'
-                  >Решения</a></li><li><a
                     href='/ru/calculator/'
                   >Калькулятор</a></li><li><a
                     href='#faq'
                   >FAQ</a></li></ul></div><div><h2>Компания</h2><ul role='list'><li><a
-                    href='#engineering'
-                  >О нас</a></li><li><a
-                    href='#company-record'
-                  >Регистрация</a></li><li><a
                     href='#process'
                   >Как это работает</a></li></ul></div><div><h2>Информация</h2><ul role='list'><li><a
                     href='/ru/#equipment-documents'
