@@ -132,7 +132,7 @@ export const buildQuickLeadContext = ({ analysis, state, locale } = {}) => {
 
 const format = (value, locale, options = {}) =>
   Number.isFinite(Number(value))
-    ? new Intl.NumberFormat(locale, options).format(Number(value))
+    ? new Intl.NumberFormat(locale, { maximumFractionDigits: 0, ...options }).format(Number(value))
     : '—';
 
 const metric = (label, value) => {

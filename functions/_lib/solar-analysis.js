@@ -17,7 +17,7 @@ const priceBookRepository = new PriceBookRepository();
 
 // Conservative, server-owned assumptions make a manually outlined roof part
 // of the preliminary capacity constraint without presenting it as a layout.
-const PRELIMINARY_PANEL_WATTS = 580;
+const PRELIMINARY_PANEL_WATTS = 650;
 const PRELIMINARY_PANEL_AREA_SQM = 2;
 const PRELIMINARY_USABLE_ROOF_RATIO = 0.7;
 const MAX_PROJECTED_AREA_TILT_DEGREES = 75;
@@ -219,7 +219,7 @@ export const buildP0SolarAnalysis = ({
     assumptions: [
       'PVGIS_SYSTEM_LOSS_14_PERCENT',
       'PRELIMINARY_ROOF_USABLE_AREA_70_PERCENT',
-      'PRELIMINARY_PANEL_SIZE_580W_2M2',
+      'PRELIMINARY_PANEL_SIZE_650W_2M2',
       ...(body?.roof?.areaMethod === 'map-projected'
         ? ['MAP_PROJECTED_AREA_CONVERTED_TO_ROOF_PLANE']
         : ['USER_MEASURED_ROOF_PLANE_AREA'])

@@ -14,7 +14,10 @@ export const TEMPORARY_YOURENERGY_PRICEBOOK = Object.freeze({
   checkedAt: '2026-08-29',
   validFrom: '2026-08-29',
   validUntil: '2026-09-28',
-  ratesAmdPerWp: Object.freeze({ p25: 232, p50: 247, p75: 264 }),
+  // The client-confirmed ceiling for the 10.4 kWp preliminary example is
+  // 2,150,000 AMD. 206.7 AMD/Wp is 2,149,680 AMD at 10.4 kWp, which is
+  // displayed as 2,150,000 AMD after the consumer-facing 10,000 AMD rounding.
+  ratesAmdPerWp: Object.freeze({ p25: 182, p50: 194, p75: 206.7 }),
   scope: Object.freeze([
     'panels',
     'inverter',

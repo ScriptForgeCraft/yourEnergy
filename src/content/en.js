@@ -292,8 +292,8 @@ export default {
           'PVGIS uses a 14% preliminary system-loss assumption; an engineer must confirm it.',
         PRELIMINARY_ROOF_USABLE_AREA_70_PERCENT:
           'Preliminary capacity uses 70% of the outlined roof area. An engineer verifies actual usable area, setbacks and access paths.',
-        PRELIMINARY_PANEL_SIZE_580W_2M2:
-          'Preliminary capacity uses a 580 W, 2 m² module; this is not a confirmed equipment specification.',
+        PRELIMINARY_PANEL_SIZE_650W_2M2:
+          'Preliminary capacity uses a 650 W, 2 m² module; this is not a confirmed equipment specification.',
         USER_PROVIDED_TARIFF:
           'The tariff was entered by the visitor from a bill and is not a tariff registry record.',
         TEMPORARY_PRICEBOOK_NOT_OFFER:
@@ -412,8 +412,8 @@ export default {
     reportAddress: 'Illustrative home',
     reportDate: 'Example report structure',
     system: 'Recommended system',
-    capacity: '9.86 kWp',
-    panels: '17 × 580 W',
+    capacity: '10.4 kWp',
+    panels: '16 × 650 W',
     source: 'Source: example data',
     chartTitle: 'Monthly generation, kWh',
     chartDescription: 'A bar chart showing demonstration generation from January to December.',
@@ -645,13 +645,13 @@ export default {
       {
         name: 'Optimal',
         subtitle: 'The best balance of cost and return',
-        capacity: '9.86 kWp',
-        generation: '14,600 kWh / year',
+        capacity: '10.4 kWp',
+        generation: '≈16,000 kWh / year',
         price: 'Preliminary budget after analysis',
         badge: 'Popular option',
         popular: true,
         details: [
-          '17 × 580 W panels',
+          '16 × 650 W panels',
           'Estimated area: 54–62 m²',
           'Inverter, design, installation and monitoring'
         ]
@@ -682,8 +682,8 @@ export default {
         id: 'arabkir',
         city: 'Single-storey home',
         image: 'project-arabkir',
-        capacity: '9.86 kWp',
-        generation: '14,600 kWh/year',
+        capacity: '10.4 kWp',
+        generation: '≈16,000 kWh/year',
         featured: true
       },
       {

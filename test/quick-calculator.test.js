@@ -89,7 +89,7 @@ test('regional quick analysis delegates unchanged sizing, budget and finance for
       source: region.source
     },
     roof: {},
-    system: { panelWatts: 580, panelAreaSqm: 2 },
+    system: { panelWatts: 650, panelAreaSqm: 2 },
     scope: 'regional-preliminary',
     limitations: [
       'REGIONAL_REFERENCE_POINT_NOT_PROPERTY_LOCATION',

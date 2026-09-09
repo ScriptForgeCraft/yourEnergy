@@ -75,15 +75,30 @@ test('temporary price book produces rounded P25/P50/P75 commercial planning esti
   assert.equal(priceBook.version, 'v0.1');
   assert.equal(estimate.available, true);
   assert.equal(estimate.kind, 'temporary');
-  assert.deepEqual(estimate.ratesAmdPerWp, { p25: 232, p50: 247, p75: 264 });
+  assert.deepEqual(estimate.ratesAmdPerWp, { p25: 182, p50: 194, p75: 206.7 });
   assert.deepEqual(estimate.rangeAmd, {
-    p25: 1_390_000,
-    p50: 1_480_000,
-    p75: 1_580_000
+    p25: 1_090_000,
+    p50: 1_160_000,
+    p75: 1_240_000
   });
-  assert.equal(estimate.primaryAmd, 1_480_000);
+  assert.equal(estimate.primaryAmd, 1_160_000);
   assert.equal(estimate.validUntil, '2026-09-28');
   assertFiniteTree(estimate);
+});
+
+test('the 10.4 kWp preliminary example never exceeds the client-approved 2.15M AMD ceiling', () => {
+  const estimate = buildCommercialEstimate({
+    capacityKwp: 10.4,
+    priceBook: TEMPORARY_YOURENERGY_PRICEBOOK,
+    at: ACTIVE_DATE
+  });
+
+  assert.deepEqual(estimate.rangeAmd, {
+    p25: 1_890_000,
+    p50: 2_020_000,
+    p75: 2_150_000
+  });
+  assert.ok(estimate.rangeAmd.p75 <= 2_150_000);
 });
 
 test('price book expires instead of silently serving a successor price', () => {
@@ -170,14 +185,14 @@ test('Offer Checker only compares a complete standard scope and returns P1 range
     priceBook: TEMPORARY_YOURENERGY_PRICEBOOK,
     at: ACTIVE_DATE
   };
-  const below = compareOffer({ ...shared, totalAmd: 1_380_000 });
-  const within = compareOffer({ ...shared, totalAmd: 1_482_000 });
-  const above = compareOffer({ ...shared, totalAmd: 1_590_000 });
+  const below = compareOffer({ ...shared, totalAmd: 1_080_000 });
+  const within = compareOffer({ ...shared, totalAmd: 1_164_000 });
+  const above = compareOffer({ ...shared, totalAmd: 1_242_000 });
 
   assert.equal(below.status, 'below-range');
   assert.equal(within.status, 'within-range');
   assert.equal(above.status, 'above-range');
-  assert.equal(within.amdPerWp, 247);
+  assert.equal(within.amdPerWp, 194);
   assert.deepEqual(within.questionKeys, ['equipmentTerms']);
   assertFiniteTree(below);
   assertFiniteTree(within);

@@ -35,7 +35,7 @@ export const buildRegionalQuickAnalysis = ({
     },
     production,
     tariffSelection,
-    system: { panelWatts: 580, panelAreaSqm: 2 },
+    system: { panelWatts: 650, panelAreaSqm: 2 },
     investment: {},
     priceBook,
     gridEmissionFactor,

@@ -53,21 +53,21 @@ test('consumer and engineering UI share the unchanged calculation contract', () 
   assert.equal(analysis.roof.areaSqm, 100);
   assert.deepEqual(scenario.limitations, []);
   assert.deepEqual(scenario.commercialEstimate.rangeAmd, {
-    p25: 1_750_000,
-    p50: 1_860_000,
-    p75: 1_990_000
+    p25: 1_370_000,
+    p50: 1_460_000,
+    p75: 1_560_000
   });
   assert.equal(scenario.generation.annualKwh, 11_310);
   assert.equal(scenario.financial.annualSavingsAmd, 588_120);
-  assert.equal(scenario.financial.paybackYears, 3.162619873495205);
-  assert.equal(scenario.financial.timeline.at(-1).netAmd, 12_843_000);
+  assert.equal(scenario.financial.paybackYears, 2.482486567367204);
+  assert.equal(scenario.financial.timeline.at(-1).netAmd, 13_243_000);
   assert.equal(passport.analysis.selectedScenario.generation.annualKwh, 11_310);
-  assert.equal(passport.analysis.commercialEstimate.primaryAmd, 1_860_000);
+  assert.equal(passport.analysis.commercialEstimate.primaryAmd, 1_460_000);
 });
 
 test('offer checker remains on the same P25/P50/P75 comparison contract', () => {
   const comparison = compareOffer({
-    totalAmd: 1_482_000,
+    totalAmd: 1_164_000,
     capacityKwp: 6,
     systemType: 'residential-grid-tied',
     inclusions: {
@@ -82,6 +82,6 @@ test('offer checker remains on the same P25/P50/P75 comparison contract', () => 
   });
 
   assert.equal(comparison.status, 'within-range');
-  assert.equal(comparison.amdPerWp, 247);
-  assert.deepEqual(comparison.estimate.ratesAmdPerWp, { p25: 232, p50: 247, p75: 264 });
+  assert.equal(comparison.amdPerWp, 194);
+  assert.deepEqual(comparison.estimate.ratesAmdPerWp, { p25: 182, p50: 194, p75: 206.7 });
 });
