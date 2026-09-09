@@ -42,6 +42,21 @@ export default defineConfig(({ mode }) => {
       }
     ],
     build: {
+      // Use Terser deliberately for production artefacts rather than relying
+      // on Vite's default. It makes the minification policy visible, strips
+      // debug-only code, and runs an additional compression pass.
+      minify: 'terser',
+      cssMinify: true,
+      terserOptions: {
+        compress: {
+          drop_console: true,
+          drop_debugger: true,
+          passes: 2
+        },
+        format: {
+          comments: false
+        }
+      },
       rollupOptions: {
         input: {
           hy: resolve(root, 'index.html'),
