@@ -18,4 +18,19 @@
       >{{contact.note}}</small></div></div><div class='container footer-bottom'><span
     >{{footer.copyright}}</span><span><a href='{{supportBase}}/privacy/'>{{footer.privacy}}</a><a
         href='{{supportBase}}/terms/'
-      >{{footer.terms}}</a></span></div></footer>
+      >{{footer.terms}}</a></span></div></footer><nav
+  class='floating-contact-actions'
+  aria-label='{{nav.contacts}}'
+><a
+    class='floating-contact-action floating-contact-action--whatsapp'
+    href='{{contact.whatsappHref}}'
+    target='_blank'
+    rel='noopener noreferrer'
+    aria-label='{{contact.whatsappLabel}}'
+    data-contact-label='WhatsApp'
+  ><svg aria-hidden='true' focusable='false'><use href='/icons.svg#whatsapp'></use></svg></a><a
+    class='floating-contact-action floating-contact-action--phone'
+    href='{{contact.phoneHref}}'
+    aria-label='{{contact.phoneLabel}}'
+    data-contact-label='{{contact.phone}}'
+  ><svg aria-hidden='true' focusable='false'><use href='/icons.svg#phone'></use></svg></a></nav>

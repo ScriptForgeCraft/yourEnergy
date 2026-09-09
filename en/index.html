@@ -21,7 +21,7 @@
     <link rel='canonical' href='https://yourenergy.am/en/' />
     <link rel='alternate' hreflang='hy' href='https://yourenergy.am/' /><link rel='alternate' hreflang='ru' href='https://yourenergy.am/ru/' /><link rel='alternate' hreflang='en' href='https://yourenergy.am/en/' /><link rel='alternate' hreflang='x-default' href='https://yourenergy.am/' />
     <link rel='icon' href='/favicon.svg' type='image/svg+xml' />
-    <link rel='stylesheet' href='/src/styles/main.css' />
+    <link rel='stylesheet' href='/src/styles/home.css' />
     <script type='application/ld+json'>{"@context":"https://schema.org","@graph":[{"@type":"WebSite","@id":"https://yourenergy.am/#website","name":"YOURENERGY","url":"https://yourenergy.am/"},{"@type":"Organization","@id":"https://yourenergy.am/#organization","name":"Your Energy LLC","alternateName":"YOURENERGY","url":"https://yourenergy.am/","telephone":"+374 91 095 950"},{"@type":"Service","@id":"https://yourenergy.am/en/#service","name":"Preliminary solar-system analysis","serviceType":"Preliminary solar-system analysis","description":"A preliminary residential solar calculation for Armenia: start with region and consumption, optionally refine the roof, then continue to a professional calculation.","url":"https://yourenergy.am/en/","provider":{"@id":"https://yourenergy.am/#organization"},"areaServed":{"@type":"Country","name":"Armenia"}},{"@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How much does a solar system cost?","acceptedAnswer":{"@type":"Answer","text":"Start with your region and average bill or consumption. The first result is preliminary; an optional roof refinement and engineering review confirm the final system and price."}},{"@type":"Question","name":"How is system capacity calculated?","acceptedAnswer":{"@type":"Answer","text":"The first calculation uses the selected region and your consumption. You can then refine it with your roof area; detailed roof, shading and grid checks remain an engineering task."}},{"@type":"Question","name":"What is the payback period?","acceptedAnswer":{"@type":"Answer","text":"Payback is shown only after PVGIS analysis and a tariff entered by you. The model excludes tariff growth, degradation, maintenance, financing, discounting, taxes and export rules."}},{"@type":"Question","name":"Do solar panels need maintenance?","acceptedAnswer":{"@type":"Answer","text":"Periodic inspection, monitoring checks and cleaning when needed help maintain the system. The exact schedule depends on the equipment and site conditions."}},{"@type":"Question","name":"What happens in cloudy weather?","acceptedAnswer":{"@type":"Answer","text":"Generation is lower and stops at night. The home uses the grid or a battery if one is included in the confirmed project."}},{"@type":"Question","name":"Can I install a battery?","acceptedAnswer":{"@type":"Answer","text":"Yes. A battery appears in the Energy independence demo option. Actual capacity is selected from the consumption profile and required backup time."}},{"@type":"Question","name":"Can I finance a system?","acceptedAnswer":{"@type":"Answer","text":"This version does not advertise a financing programme. Financing terms can be published only after a specific partner and agreement are confirmed."}},{"@type":"Question","name":"What is a Solar Passport?","acceptedAnswer":{"@type":"Answer","text":"A preliminary Passport keeps the current session’s inputs, sources and assumptions together. It is not an engineering design, bank document or offer, and it is not stored as a permanent link or PDF."}}]}]}</script>
   </head>
   <body class='page-home'>
@@ -88,31 +88,38 @@
     </header>
     <main id='main' data-home-story>
       <section class='hero section home-hero' id='top' aria-labelledby='hero-title' data-home-hero>
-        <picture class='hero-backdrop' aria-hidden='true' data-hero-time-backdrop>
-          <source
-            type='image/avif'
-            srcset='/images/hero-time-8-640.avif 640w, /images/hero-time-8-1024.avif 1024w, /images/hero-time-8-1600.avif 1600w'
-            sizes='100vw'
-            data-hero-time-source='avif'
-          />
-          <source
-            type='image/webp'
-            srcset='/images/hero-time-8-640.webp 640w, /images/hero-time-8-1024.webp 1024w, /images/hero-time-8-1600.webp 1600w'
-            sizes='100vw'
-            data-hero-time-source='webp'
-          />
-          <img
-            src='/images/hero-time-8-1600.jpg'
-            srcset='/images/hero-time-8-640.jpg 640w, /images/hero-time-8-1024.jpg 1024w, /images/hero-time-8-1600.jpg 1600w'
-            sizes='100vw'
-            width='1600'
-            height='900'
-            alt=''
-            fetchpriority='high'
-            decoding='async'
-            data-hero-time-image
-          />
-        </picture>
+        <div class='hero-backdrop' aria-hidden='true' data-hero-time-backdrop>
+          <picture class='hero-backdrop__picture'>
+            <source
+              type='image/avif'
+              srcset='/images/hero-time-8-640.avif 640w, /images/hero-time-8-1024.avif 1024w, /images/hero-time-8-1600.avif 1600w'
+              sizes='100vw'
+              data-hero-time-source='avif'
+            />
+            <source
+              type='image/webp'
+              srcset='/images/hero-time-8-640.webp 640w, /images/hero-time-8-1024.webp 1024w, /images/hero-time-8-1600.webp 1600w'
+              sizes='100vw'
+              data-hero-time-source='webp'
+            />
+            <img
+              src='/images/hero-time-8-1600.jpg'
+              srcset='/images/hero-time-8-640.jpg 640w, /images/hero-time-8-1024.jpg 1024w, /images/hero-time-8-1600.jpg 1600w'
+              sizes='100vw'
+              width='1600'
+              height='900'
+              alt=''
+              fetchpriority='high'
+              decoding='async'
+              data-hero-time-image
+            />
+          </picture>
+          <img class='hero-backdrop__transition' alt='' decoding='async' data-hero-time-transition />
+          <img class='hero-backdrop__transition' alt='' decoding='async' data-hero-time-transition />
+          <img class='hero-backdrop__transition' alt='' decoding='async' data-hero-time-transition />
+          <img class='hero-backdrop__transition' alt='' decoding='async' data-hero-time-transition />
+          <img class='hero-backdrop__transition' alt='' decoding='async' data-hero-time-transition />
+        </div>
         <div class='hero-scrim' aria-hidden='true'></div>
         <span class='hero-time-sun' data-hero-time-sun aria-hidden='true'></span>
         <div class='hero-frame'>
@@ -352,9 +359,7 @@
                 id='solutions-title'
               >Three practical solutions for your home</h2></div><p>Compare indicative capacity and generation. A preliminary budget appears after property analysis.</p></div>
           <div class='solution-grid'>
-              <article class='solution-card '>
-
-                <p class='solution-index'>00</p><h3>Starter</h3><p>Lower initial investment</p>
+              <article class='solution-card'><p class='solution-index'>00</p><h3>Starter</h3><p>Lower initial investment</p>
                 <dl><div><dt>kWp</dt><dd>6.2 kWp</dd></div><div><dt>kWh</dt><dd>9,200 kWh / year</dd></div></dl>
                 <strong class='solution-price'>Preliminary budget after analysis</strong>
                 <details><summary>View details</summary><ul><li
@@ -363,20 +368,16 @@
                       >Inverter, installation and basic monitoring</li></ul></details>
                 <a class='button button--outline' href='/en/calculator/'>Calculate my home</a>
               </article>
-              <article class='solution-card solution-card--popular'>
-                <span class='solution-badge'>Popular option</span>
-                <p class='solution-index'>01</p><h3>Optimal</h3><p>The best balance of cost and return</p>
+              <article class='solution-card solution-card--popular'><span class='solution-badge'>Popular option</span><p class='solution-index'>01</p><h3>Optimal</h3><p>The best balance of cost and return</p>
                 <dl><div><dt>kWp</dt><dd>9.86 kWp</dd></div><div><dt>kWh</dt><dd>14,600 kWh / year</dd></div></dl>
                 <strong class='solution-price'>Preliminary budget after analysis</strong>
                 <details><summary>View details</summary><ul><li
                       >17 × 580 W panels</li><li
                       >Estimated area: 54–62 m²</li><li
                       >Inverter, design, installation and monitoring</li></ul></details>
-                <a class='button ' href='/en/calculator/'>Calculate my home</a>
+                <a class='button' href='/en/calculator/'>Calculate my home</a>
               </article>
-              <article class='solution-card '>
-
-                <p class='solution-index'>02</p><h3>Energy independence</h3><p>Maximum coverage plus a battery</p>
+              <article class='solution-card'><p class='solution-index'>02</p><h3>Energy independence</h3><p>Maximum coverage plus a battery</p>
                 <dl><div><dt>kWp</dt><dd>12.5 kWp + 10 kWh</dd></div><div><dt>kWh</dt><dd>18,900 kWh / year</dd></div></dl>
                 <strong class='solution-price'>Needs a separate estimate</strong>
                 <details><summary>View details</summary><ul><li
@@ -496,38 +497,746 @@
         </div>
       </section>
 
-      <section class='process section' id='process' aria-labelledby='process-title'>
-        <div class='container'><div class='section-heading'><div><p
-                class='eyebrow'
-              >Customer journey</p><h2 id='process-title'>How it works</h2></div><p
-            >A preliminary result requires confirmed inputs; engineering design and commercial terms follow an inspection.</p></div>
-          <ol class='process-list'><li><span>01</span><svg
-                  class='inline-icon'
+      <section
+        class='process process-journey solutions section'
+        id='process'
+        aria-labelledby='process-title'
+        data-solutions-story
+      >
+        <h2 id='process-title' class='visually-hidden'>How it works</h2>
+        <div class='solutions-story__scroll'>
+          <div class='solutions-story__stage swiper' data-solutions-slider>
+            <div class='solutions-story__backdrop' aria-hidden='true'></div>
+            <ol class='solutions-progress' aria-label='Solar analysis journey'>
+                <li class='solutions-progress__item is-active' data-solutions-progress-step='0'>
+                  <button type='button'>
+                    <span class='solutions-progress__rail' aria-hidden='true'><i></i></span>
+                    <span class='solutions-progress__node'><b>01</b><svg
+                        aria-hidden='true'
+                        viewBox='0 0 16 16'
+                      ><path d='m3.2 8.2 3 3 6.7-6.6'></path></svg></span>
+                    <span>Enter your address</span>
+                  </button>
+                </li>
+                <li class='solutions-progress__item' data-solutions-progress-step='1'>
+                  <button type='button'>
+                    <span class='solutions-progress__rail' aria-hidden='true'><i></i></span>
+                    <span class='solutions-progress__node'><b>02</b><svg
+                        aria-hidden='true'
+                        viewBox='0 0 16 16'
+                      ><path d='m3.2 8.2 3 3 6.7-6.6'></path></svg></span>
+                    <span>Confirm the property</span>
+                  </button>
+                </li>
+                <li class='solutions-progress__item' data-solutions-progress-step='2'>
+                  <button type='button'>
+                    <span class='solutions-progress__rail' aria-hidden='true'><i></i></span>
+                    <span class='solutions-progress__node'><b>03</b><svg
+                        aria-hidden='true'
+                        viewBox='0 0 16 16'
+                      ><path d='m3.2 8.2 3 3 6.7-6.6'></path></svg></span>
+                    <span>Compare the estimate</span>
+                  </button>
+                </li>
+                <li class='solutions-progress__item' data-solutions-progress-step='3'>
+                  <button type='button'>
+                    <span class='solutions-progress__rail' aria-hidden='true'><i></i></span>
+                    <span class='solutions-progress__node'><b>04</b><svg
+                        aria-hidden='true'
+                        viewBox='0 0 16 16'
+                      ><path d='m3.2 8.2 3 3 6.7-6.6'></path></svg></span>
+                    <span>Engineer site visit</span>
+                  </button>
+                </li>
+                <li class='solutions-progress__item' data-solutions-progress-step='4'>
+                  <button type='button'>
+                    <span class='solutions-progress__rail' aria-hidden='true'><i></i></span>
+                    <span class='solutions-progress__node'><b>05</b><svg
+                        aria-hidden='true'
+                        viewBox='0 0 16 16'
+                      ><path d='m3.2 8.2 3 3 6.7-6.6'></path></svg></span>
+                    <span>System installation</span>
+                  </button>
+                </li>
+                <li class='solutions-progress__item' data-solutions-progress-step='5'>
+                  <button type='button'>
+                    <span class='solutions-progress__rail' aria-hidden='true'><i></i></span>
+                    <span class='solutions-progress__node'><b>06</b><svg
+                        aria-hidden='true'
+                        viewBox='0 0 16 16'
+                      ><path d='m3.2 8.2 3 3 6.7-6.6'></path></svg></span>
+                    <span>Monitoring</span>
+                  </button>
+                </li>
+            </ol>
+
+            <div class='solutions-story__steps swiper-wrapper'>
+                <article
+                  class='solutions-story__step swiper-slide is-active'
+                  data-solutions-step='0'
+                  aria-hidden='false'
+                >
+                  <div class='container solutions-story__shell'>
+                    <div class='solutions-story__copy'>
+                      <p class='solutions-story__eyebrow'><span>01</span>Enter your address</p>
+                      <h3>Enter your address</h3>
+                      <p class='solutions-story__intro'>and a few home details</p>
+                      <p
+                          class='solutions-story__status'
+                          data-solutions-status='home'
+                        >Example preview</p>
+                      <dl class='solutions-story__metrics'>
+                          <div class='solutions-story__metric'>
+                            <dt><svg class='inline-icon' aria-hidden='true'><use
+                                  href='/icons.svg#map-pin'
+                                ></use></svg>Location</dt>
+                            <dd
+                              data-solutions-field='location'
+                              data-solutions-default='Add this in the calculator'
+                            >Add this in the calculator</dd>
+                          </div>
+                          <div class='solutions-story__metric'>
+                            <dt><svg class='inline-icon' aria-hidden='true'><use
+                                  href='/icons.svg#zap'
+                                ></use></svg>Electricity use</dt>
+                            <dd
+                              data-solutions-field='consumption'
+                              data-solutions-default='Add this in the calculator'
+                            >Add this in the calculator</dd>
+                          </div>
+                          <div class='solutions-story__metric'>
+                            <dt><svg class='inline-icon' aria-hidden='true'><use
+                                  href='/icons.svg#sun'
+                                ></use></svg>Solar resource</dt>
+                            <dd
+                              data-solutions-field='solar-resource'
+                              data-solutions-default='Available after calculation'
+                            >Available after calculation</dd>
+                          </div>
+                      </dl>
+                      <div class='solutions-story__actions'>
+
+                        <button
+                            class='button solutions-story__next'
+                            type='button'
+                            data-solutions-next
+                          >Continue <span aria-hidden='true'>→</span></button>
+
+                      </div>
+                    </div>
+
+                    <div class='solutions-story__visual-wrap'>
+                      <div
+                        class='solutions-visual solutions-visual--home'
+                        data-solutions-visual='home'
+                        aria-hidden='true'
+                      >
+                        <picture class='solutions-visual__media'>
+                          <source
+                            type='image/avif'
+                            srcset='/images/solutions-home-640.avif 640w, /images/solutions-home-1024.avif 1024w, /images/solutions-home-1600.avif 1600w'
+                            sizes='(max-width: 767px) calc(100vw - 68px), 52vw'
+                          />
+                          <source
+                            type='image/webp'
+                            srcset='/images/solutions-home-640.webp 640w, /images/solutions-home-1024.webp 1024w, /images/solutions-home-1600.webp 1600w'
+                            sizes='(max-width: 767px) calc(100vw - 68px), 52vw'
+                          />
+                          <img
+                            src='/images/solutions-home-1024.jpg'
+                            srcset='/images/solutions-home-640.jpg 640w, /images/solutions-home-1024.jpg 1024w, /images/solutions-home-1600.jpg 1600w'
+                            sizes='(max-width: 767px) calc(100vw - 68px), 52vw'
+                            width='1600'
+                            height='914'
+                            alt=''
+                            loading='eager'
+                            fetchpriority='high'
+                            decoding='async'
+                          />
+                        </picture>
+                        <span class='solutions-visual__orb'></span><span
+                          class='solutions-visual__grid'
+                        ></span><span class='solutions-visual__roof'></span><span
+                          class='solutions-visual__panels'
+                        ></span><span class='solutions-visual__path'></span><span
+                          class='solutions-visual__label'
+                        >Home visual placeholder</span>
+                      </div>
+                        <div class='solutions-visual-cards'><div
+                              class='solutions-visual-card'
+                            ><span>Property</span><strong
+                                data-solutions-field='location'
+                                data-solutions-default='Preview'
+                              >Preview</strong></div><div
+                              class='solutions-visual-card'
+                            ><span>Input status</span><strong
+                                data-solutions-field='home-status'
+                                data-solutions-default='Waiting for your details'
+                              >Waiting for your details</strong></div></div>
+                    </div>
+                  </div>
+                </article>
+                <article
+                  class='solutions-story__step swiper-slide'
+                  data-solutions-step='1'
                   aria-hidden='true'
-                ><use href='/icons.svg#pin'></use></svg><h3>Enter your address</h3><p
-                >and a few home details</p></li><li><span>02</span><svg
-                  class='inline-icon'
+                >
+                  <div class='container solutions-story__shell'>
+                    <div class='solutions-story__copy'>
+                      <p class='solutions-story__eyebrow'><span>02</span>Confirm the property</p>
+                      <h3>Confirm the property</h3>
+                      <p class='solutions-story__intro'>or choose its point manually</p>
+                      <p
+                          class='solutions-story__status'
+                          data-solutions-status='roof'
+                        >Example preview</p>
+                      <dl class='solutions-story__metrics'>
+                          <div class='solutions-story__metric'>
+                            <dt><svg class='inline-icon' aria-hidden='true'><use
+                                  href='/icons.svg#satellite'
+                                ></use></svg>Usable roof area</dt>
+                            <dd
+                              data-solutions-field='roof-area'
+                              data-solutions-default='Add this in the calculator'
+                            >Add this in the calculator</dd>
+                          </div>
+                          <div class='solutions-story__metric'>
+                            <dt><svg class='inline-icon' aria-hidden='true'><use
+                                  href='/icons.svg#sun'
+                                ></use></svg>Roof direction</dt>
+                            <dd
+                              data-solutions-field='roof-direction'
+                              data-solutions-default='Add this in the calculator'
+                            >Add this in the calculator</dd>
+                          </div>
+                          <div class='solutions-story__metric'>
+                            <dt><svg class='inline-icon' aria-hidden='true'><use
+                                  href='/icons.svg#arrow-right'
+                                ></use></svg>Roof tilt</dt>
+                            <dd
+                              data-solutions-field='roof-tilt'
+                              data-solutions-default='Add this in the calculator'
+                            >Add this in the calculator</dd>
+                          </div>
+                      </dl>
+                      <div class='solutions-story__actions'>
+                        <button
+                            class='solutions-story__previous'
+                            type='button'
+                            data-solutions-previous
+                          >← Back</button>
+                        <button
+                            class='button solutions-story__next'
+                            type='button'
+                            data-solutions-next
+                          >Continue <span aria-hidden='true'>→</span></button>
+
+                      </div>
+                    </div>
+
+                    <div class='solutions-story__visual-wrap'>
+                      <div
+                        class='solutions-visual solutions-visual--roof'
+                        data-solutions-visual='roof'
+                        aria-hidden='true'
+                      >
+                        <picture class='solutions-visual__media'>
+                          <source
+                            type='image/avif'
+                            srcset='/images/solutions-roof-640.avif 640w, /images/solutions-roof-1024.avif 1024w, /images/solutions-roof-1600.avif 1600w'
+                            sizes='(max-width: 767px) calc(100vw - 68px), 52vw'
+                          />
+                          <source
+                            type='image/webp'
+                            srcset='/images/solutions-roof-640.webp 640w, /images/solutions-roof-1024.webp 1024w, /images/solutions-roof-1600.webp 1600w'
+                            sizes='(max-width: 767px) calc(100vw - 68px), 52vw'
+                          />
+                          <img
+                            src='/images/solutions-roof-1024.jpg'
+                            srcset='/images/solutions-roof-640.jpg 640w, /images/solutions-roof-1024.jpg 1024w, /images/solutions-roof-1600.jpg 1600w'
+                            sizes='(max-width: 767px) calc(100vw - 68px), 52vw'
+                            width='1600'
+                            height='914'
+                            alt=''
+                            loading='lazy'
+                            fetchpriority='auto'
+                            decoding='async'
+                          />
+                        </picture>
+                        <span class='solutions-visual__orb'></span><span
+                          class='solutions-visual__grid'
+                        ></span><span class='solutions-visual__roof'></span><span
+                          class='solutions-visual__panels'
+                        ></span><span class='solutions-visual__path'></span><span
+                          class='solutions-visual__label'
+                        >Roof outline visual placeholder</span>
+                      </div>
+                        <div class='solutions-visual-cards'><div
+                              class='solutions-visual-card'
+                            ><span>Roof outline</span><strong
+                                data-solutions-field='roof-status'
+                                data-solutions-default='Manual refinement'
+                              >Manual refinement</strong></div><div
+                              class='solutions-visual-card'
+                            ><span>Input status</span><strong
+                                data-solutions-field='roof-status'
+                                data-solutions-default='Not an automatic roof scan'
+                              >Not an automatic roof scan</strong></div></div>
+                    </div>
+                  </div>
+                </article>
+                <article
+                  class='solutions-story__step swiper-slide'
+                  data-solutions-step='2'
                   aria-hidden='true'
-                ><use href='/icons.svg#check'></use></svg><h3>Confirm the property</h3><p
-                >or choose its point manually</p></li><li><span>03</span><svg
-                  class='inline-icon'
+                >
+                  <div class='container solutions-story__shell'>
+                    <div class='solutions-story__copy'>
+                      <p class='solutions-story__eyebrow'><span>03</span>Compare the estimate</p>
+                      <h3>Compare the estimate</h3>
+                      <p class='solutions-story__intro'>and three system options</p>
+                      <p
+                          class='solutions-story__status'
+                          data-solutions-status='system'
+                        >Example preview</p>
+                      <dl class='solutions-story__metrics'>
+                          <div class='solutions-story__metric'>
+                            <dt><svg class='inline-icon' aria-hidden='true'><use
+                                  href='/icons.svg#zap'
+                                ></use></svg>System size</dt>
+                            <dd
+                              data-solutions-field='system-size'
+                              data-solutions-default='Example preview'
+                            >Example preview</dd>
+                          </div>
+                          <div class='solutions-story__metric'>
+                            <dt><svg class='inline-icon' aria-hidden='true'><use
+                                  href='/icons.svg#sun'
+                                ></use></svg>Solar panels</dt>
+                            <dd
+                              data-solutions-field='panel-count'
+                              data-solutions-default='Example preview'
+                            >Example preview</dd>
+                          </div>
+                          <div class='solutions-story__metric'>
+                            <dt><svg class='inline-icon' aria-hidden='true'><use
+                                  href='/icons.svg#shield-check'
+                                ></use></svg>Inverter</dt>
+                            <dd
+                              data-solutions-field='inverter'
+                              data-solutions-default='Confirmed during design'
+                            >Confirmed during design</dd>
+                          </div>
+                          <div class='solutions-story__metric'>
+                            <dt><svg class='inline-icon' aria-hidden='true'><use
+                                  href='/icons.svg#cycle'
+                                ></use></svg>Annual production</dt>
+                            <dd
+                              data-solutions-field='annual-production'
+                              data-solutions-default='Example preview'
+                            >Example preview</dd>
+                          </div>
+                      </dl>
+                      <div class='solutions-story__actions'>
+                        <button
+                            class='solutions-story__previous'
+                            type='button'
+                            data-solutions-previous
+                          >← Back</button>
+                        <button
+                            class='button solutions-story__next'
+                            type='button'
+                            data-solutions-next
+                          >Continue <span aria-hidden='true'>→</span></button>
+
+                      </div>
+                    </div>
+
+                    <div class='solutions-story__visual-wrap'>
+                      <div
+                        class='solutions-visual solutions-visual--system'
+                        data-solutions-visual='system'
+                        aria-hidden='true'
+                      >
+                        <picture class='solutions-visual__media'>
+                          <source
+                            type='image/avif'
+                            srcset='/images/solutions-system-640.avif 640w, /images/solutions-system-1024.avif 1024w, /images/solutions-system-1600.avif 1600w'
+                            sizes='(max-width: 767px) calc(100vw - 68px), 52vw'
+                          />
+                          <source
+                            type='image/webp'
+                            srcset='/images/solutions-system-640.webp 640w, /images/solutions-system-1024.webp 1024w, /images/solutions-system-1600.webp 1600w'
+                            sizes='(max-width: 767px) calc(100vw - 68px), 52vw'
+                          />
+                          <img
+                            src='/images/solutions-system-1024.jpg'
+                            srcset='/images/solutions-system-640.jpg 640w, /images/solutions-system-1024.jpg 1024w, /images/solutions-system-1600.jpg 1600w'
+                            sizes='(max-width: 767px) calc(100vw - 68px), 52vw'
+                            width='1600'
+                            height='914'
+                            alt=''
+                            loading='lazy'
+                            fetchpriority='auto'
+                            decoding='async'
+                          />
+                        </picture>
+                        <span class='solutions-visual__orb'></span><span
+                          class='solutions-visual__grid'
+                        ></span><span class='solutions-visual__roof'></span><span
+                          class='solutions-visual__panels'
+                        ></span><span class='solutions-visual__path'></span><span
+                          class='solutions-visual__label'
+                        >Solar system visual placeholder</span>
+                      </div>
+                        <div
+                          class='solutions-generation-chart'
+                          data-solutions-chart
+                          role='img'
+                          aria-label='Example chart — available after calculation'
+                        >
+                          <div class='solutions-generation-chart__bars' aria-hidden='true'><i style='--solutions-bar: 14%;'></i><i style='--solutions-bar: 14%;'></i><i style='--solutions-bar: 14%;'></i><i style='--solutions-bar: 14%;'></i><i style='--solutions-bar: 14%;'></i><i style='--solutions-bar: 14%;'></i><i style='--solutions-bar: 14%;'></i><i style='--solutions-bar: 14%;'></i><i style='--solutions-bar: 14%;'></i><i style='--solutions-bar: 14%;'></i><i style='--solutions-bar: 14%;'></i><i style='--solutions-bar: 14%;'></i></div>
+                          <div class='solutions-generation-chart__months' aria-hidden='true'><span>J</span><span>F</span><span>M</span><span>A</span><span>M</span><span>J</span><span>J</span><span>A</span><span>S</span><span>O</span><span>N</span><span>D</span></div>
+                          <p data-solutions-chart-label>Example chart — available after calculation</p>
+                        </div>
+                        <div class='solutions-visual-cards'><div
+                              class='solutions-visual-card'
+                            ><span>Recommended system</span><strong
+                                data-solutions-field='system-size'
+                                data-solutions-default='Example preview'
+                              >Example preview</strong></div><div
+                              class='solutions-visual-card'
+                            ><span>Data source</span><strong
+                                data-solutions-field='system-status'
+                                data-solutions-default='Available after calculation'
+                              >Available after calculation</strong></div></div>
+                    </div>
+                  </div>
+                </article>
+                <article
+                  class='solutions-story__step swiper-slide'
+                  data-solutions-step='3'
                   aria-hidden='true'
-                ><use href='/icons.svg#check'></use></svg><h3>Compare the estimate</h3><p
-                >and three system options</p></li><li><span>04</span><svg
-                  class='inline-icon'
+                >
+                  <div class='container solutions-story__shell'>
+                    <div class='solutions-story__copy'>
+                      <p class='solutions-story__eyebrow'><span>04</span>Engineer site visit</p>
+                      <h3>Engineer site visit</h3>
+                      <p class='solutions-story__intro'>to measure the roof and electrical panel</p>
+
+                      <dl class='solutions-story__metrics'>
+                          <div class='solutions-story__metric'>
+                            <dt><svg class='inline-icon' aria-hidden='true'><use
+                                  href='/icons.svg#pin'
+                                ></use></svg>Roof measurements</dt>
+                            <dd
+                              data-solutions-field=''
+                              data-solutions-default='During the survey'
+                            >During the survey</dd>
+                          </div>
+                          <div class='solutions-story__metric'>
+                            <dt><svg class='inline-icon' aria-hidden='true'><use
+                                  href='/icons.svg#calculator'
+                                ></use></svg>Electrical panel</dt>
+                            <dd
+                              data-solutions-field=''
+                              data-solutions-default='During the survey'
+                            >During the survey</dd>
+                          </div>
+                          <div class='solutions-story__metric'>
+                            <dt><svg class='inline-icon' aria-hidden='true'><use
+                                  href='/icons.svg#sun'
+                                ></use></svg>Shading review</dt>
+                            <dd
+                              data-solutions-field=''
+                              data-solutions-default='Verified on site'
+                            >Verified on site</dd>
+                          </div>
+                      </dl>
+                      <div class='solutions-story__actions'>
+                        <button
+                            class='solutions-story__previous'
+                            type='button'
+                            data-solutions-previous
+                          >← Back</button>
+                        <button
+                            class='button solutions-story__next'
+                            type='button'
+                            data-solutions-next
+                          >Continue <span aria-hidden='true'>→</span></button>
+
+                      </div>
+                    </div>
+
+                    <div class='solutions-story__visual-wrap'>
+                      <div
+                        class='solutions-visual solutions-visual--inspection'
+                        data-solutions-visual='inspection'
+                        aria-hidden='true'
+                      >
+                        <picture class='solutions-visual__media'>
+                          <source
+                            type='image/avif'
+                            srcset='/images/solutions-inspection-640.avif 640w, /images/solutions-inspection-1024.avif 1024w, /images/solutions-inspection-1600.avif 1600w'
+                            sizes='(max-width: 767px) calc(100vw - 68px), 52vw'
+                          />
+                          <source
+                            type='image/webp'
+                            srcset='/images/solutions-inspection-640.webp 640w, /images/solutions-inspection-1024.webp 1024w, /images/solutions-inspection-1600.webp 1600w'
+                            sizes='(max-width: 767px) calc(100vw - 68px), 52vw'
+                          />
+                          <img
+                            src='/images/solutions-inspection-1024.jpg'
+                            srcset='/images/solutions-inspection-640.jpg 640w, /images/solutions-inspection-1024.jpg 1024w, /images/solutions-inspection-1600.jpg 1600w'
+                            sizes='(max-width: 767px) calc(100vw - 68px), 52vw'
+                            width='1600'
+                            height='914'
+                            alt=''
+                            loading='lazy'
+                            fetchpriority='auto'
+                            decoding='async'
+                          />
+                        </picture>
+                        <span class='solutions-visual__orb'></span><span
+                          class='solutions-visual__grid'
+                        ></span><span class='solutions-visual__roof'></span><span
+                          class='solutions-visual__panels'
+                        ></span><span class='solutions-visual__path'></span><span
+                          class='solutions-visual__label'
+                        >On-site engineering survey</span>
+                      </div>
+                        <div class='solutions-visual-cards'><div
+                              class='solutions-visual-card'
+                            ><span>Site visit</span><strong
+                                data-solutions-field=''
+                                data-solutions-default='Before the final offer'
+                              >Before the final offer</strong></div><div
+                              class='solutions-visual-card'
+                            ><span>Engineering review</span><strong
+                                data-solutions-field=''
+                                data-solutions-default='In person'
+                              >In person</strong></div></div>
+                    </div>
+                  </div>
+                </article>
+                <article
+                  class='solutions-story__step swiper-slide'
+                  data-solutions-step='4'
                   aria-hidden='true'
-                ><use href='/icons.svg#check'></use></svg><h3>Engineer site visit</h3><p
-                >to measure the roof and electrical panel</p></li><li><span>05</span><svg
-                  class='inline-icon'
+                >
+                  <div class='container solutions-story__shell'>
+                    <div class='solutions-story__copy'>
+                      <p class='solutions-story__eyebrow'><span>05</span>System installation</p>
+                      <h3>System installation</h3>
+                      <p class='solutions-story__intro'>after the design and contract</p>
+
+                      <dl class='solutions-story__metrics'>
+                          <div class='solutions-story__metric'>
+                            <dt><svg class='inline-icon' aria-hidden='true'><use
+                                  href='/icons.svg#pin'
+                                ></use></svg>Site review</dt>
+                            <dd
+                              data-solutions-field=''
+                              data-solutions-default='Engineer verification'
+                            >Engineer verification</dd>
+                          </div>
+                          <div class='solutions-story__metric'>
+                            <dt><svg class='inline-icon' aria-hidden='true'><use
+                                  href='/icons.svg#calculator'
+                                ></use></svg>Final design</dt>
+                            <dd
+                              data-solutions-field=''
+                              data-solutions-default='After review'
+                            >After review</dd>
+                          </div>
+                          <div class='solutions-story__metric'>
+                            <dt><svg class='inline-icon' aria-hidden='true'><use
+                                  href='/icons.svg#sun'
+                                ></use></svg>Equipment preparation</dt>
+                            <dd
+                              data-solutions-field=''
+                              data-solutions-default='Confirmed for the project'
+                            >Confirmed for the project</dd>
+                          </div>
+                      </dl>
+                        <ol class='solutions-story__timeline'><li><span
+                              >01</span><p>Site review</p></li><li><span
+                              >02</span><p>Final design</p></li><li><span
+                              >03</span><p>Equipment preparation</p></li><li><span
+                              >04</span><p>Installation</p></li><li><span
+                              >05</span><p>Commissioning</p></li></ol>
+                      <div class='solutions-story__actions'>
+                        <button
+                            class='solutions-story__previous'
+                            type='button'
+                            data-solutions-previous
+                          >← Back</button>
+                        <button
+                            class='button solutions-story__next'
+                            type='button'
+                            data-solutions-next
+                          >Continue <span aria-hidden='true'>→</span></button>
+
+                      </div>
+                    </div>
+
+                    <div class='solutions-story__visual-wrap'>
+                      <div
+                        class='solutions-visual solutions-visual--installation'
+                        data-solutions-visual='installation'
+                        aria-hidden='true'
+                      >
+                        <picture class='solutions-visual__media'>
+                          <source
+                            type='image/avif'
+                            srcset='/images/solutions-installation-640.avif 640w, /images/solutions-installation-1024.avif 1024w, /images/solutions-installation-1600.avif 1600w'
+                            sizes='(max-width: 767px) calc(100vw - 68px), 52vw'
+                          />
+                          <source
+                            type='image/webp'
+                            srcset='/images/solutions-installation-640.webp 640w, /images/solutions-installation-1024.webp 1024w, /images/solutions-installation-1600.webp 1600w'
+                            sizes='(max-width: 767px) calc(100vw - 68px), 52vw'
+                          />
+                          <img
+                            src='/images/solutions-installation-1024.jpg'
+                            srcset='/images/solutions-installation-640.jpg 640w, /images/solutions-installation-1024.jpg 1024w, /images/solutions-installation-1600.jpg 1600w'
+                            sizes='(max-width: 767px) calc(100vw - 68px), 52vw'
+                            width='1600'
+                            height='914'
+                            alt=''
+                            loading='lazy'
+                            fetchpriority='auto'
+                            decoding='async'
+                          />
+                        </picture>
+                        <span class='solutions-visual__orb'></span><span
+                          class='solutions-visual__grid'
+                        ></span><span class='solutions-visual__roof'></span><span
+                          class='solutions-visual__panels'
+                        ></span><span class='solutions-visual__path'></span><span
+                          class='solutions-visual__label'
+                        >Installation visual placeholder</span>
+                      </div>
+                    </div>
+                  </div>
+                </article>
+                <article
+                  class='solutions-story__step swiper-slide'
+                  data-solutions-step='5'
                   aria-hidden='true'
-                ><use href='/icons.svg#check'></use></svg><h3>System installation</h3><p
-                >after the design and contract</p></li><li><span>06</span><svg
-                  class='inline-icon'
-                  aria-hidden='true'
-                ><use href='/icons.svg#check'></use></svg><h3>Monitoring</h3><p
-                >and support after start-up</p></li></ol>
-        </div>
-      </section>
+                >
+                  <div class='container solutions-story__shell'>
+                    <div class='solutions-story__copy'>
+                      <p class='solutions-story__eyebrow'><span>06</span>Monitoring</p>
+                      <h3>Monitoring</h3>
+                      <p class='solutions-story__intro'>and support after start-up</p>
+
+                      <dl class='solutions-story__metrics'>
+                          <div class='solutions-story__metric'>
+                            <dt><svg class='inline-icon' aria-hidden='true'><use
+                                  href='/icons.svg#file'
+                                ></use></svg>Solar Passport</dt>
+                            <dd
+                              data-solutions-field=''
+                              data-solutions-default='Your current analysis context'
+                            >Your current analysis context</dd>
+                          </div>
+                          <div class='solutions-story__metric'>
+                            <dt><svg class='inline-icon' aria-hidden='true'><use
+                                  href='/icons.svg#shield-check'
+                                ></use></svg>System information</dt>
+                            <dd
+                              data-solutions-field=''
+                              data-solutions-default='Project documentation'
+                            >Project documentation</dd>
+                          </div>
+                          <div class='solutions-story__metric'>
+                            <dt><svg class='inline-icon' aria-hidden='true'><use
+                                  href='/icons.svg#cycle'
+                                ></use></svg>Production context</dt>
+                            <dd
+                              data-solutions-field=''
+                              data-solutions-default='Available analysis inputs'
+                            >Available analysis inputs</dd>
+                          </div>
+                          <div class='solutions-story__metric'>
+                            <dt><svg class='inline-icon' aria-hidden='true'><use
+                                  href='/icons.svg#support'
+                                ></use></svg>Support</dt>
+                            <dd
+                              data-solutions-field=''
+                              data-solutions-default='Your support journey'
+                            >Your support journey</dd>
+                          </div>
+                      </dl>
+                      <div class='solutions-story__actions'>
+                        <button
+                            class='solutions-story__previous'
+                            type='button'
+                            data-solutions-previous
+                          >← Back</button>
+
+                        <a
+                            class='button solutions-story__cta'
+                            href='/en/calculator/'
+                          >Start my solar analysis</a>
+                      </div>
+                    </div>
+
+                    <div class='solutions-story__visual-wrap'>
+                      <div
+                        class='solutions-visual solutions-visual--support'
+                        data-solutions-visual='support'
+                        aria-hidden='true'
+                      >
+                        <picture class='solutions-visual__media'>
+                          <source
+                            type='image/avif'
+                            srcset='/images/solutions-support-640.avif 640w, /images/solutions-support-1024.avif 1024w, /images/solutions-support-1600.avif 1600w'
+                            sizes='(max-width: 767px) calc(100vw - 68px), 52vw'
+                          />
+                          <source
+                            type='image/webp'
+                            srcset='/images/solutions-support-640.webp 640w, /images/solutions-support-1024.webp 1024w, /images/solutions-support-1600.webp 1600w'
+                            sizes='(max-width: 767px) calc(100vw - 68px), 52vw'
+                          />
+                          <img
+                            src='/images/solutions-support-1024.jpg'
+                            srcset='/images/solutions-support-640.jpg 640w, /images/solutions-support-1024.jpg 1024w, /images/solutions-support-1600.jpg 1600w'
+                            sizes='(max-width: 767px) calc(100vw - 68px), 52vw'
+                            width='1600'
+                            height='914'
+                            alt=''
+                            loading='lazy'
+                            fetchpriority='auto'
+                            decoding='async'
+                          />
+                        </picture>
+                        <span class='solutions-visual__orb'></span><span
+                          class='solutions-visual__grid'
+                        ></span><span class='solutions-visual__roof'></span><span
+                          class='solutions-visual__panels'
+                        ></span><span class='solutions-visual__path'></span><span
+                          class='solutions-visual__label'
+                        >Support visual placeholder</span>
+                      </div>
+                        <div class='solutions-visual-cards'><div
+                              class='solutions-visual-card'
+                            ><span>Documents</span><strong
+                                data-solutions-field=''
+                                data-solutions-default='Together in one place'
+                              >Together in one place</strong></div><div
+                              class='solutions-visual-card'
+                            ><span>System context</span><strong
+                                data-solutions-field=''
+                                data-solutions-default='Kept with your journey'
+                              >Kept with your journey</strong></div></div>
+                    </div>
+                  </div>
+                </article>
+            </div>
+          </div>
+        </div>      </section>
 
       <section class='engineering section' id='engineering' aria-labelledby='engineering-title'><div
           class='container engineering-grid'
@@ -713,8 +1422,24 @@
           >Contact details provided by Your Energy LLC.</small></div></div><div class='container footer-bottom'><span
         >© 2026 YOURENERGY. All rights reserved.</span><span><a href='/en/privacy/'>Draft privacy policy</a><a
             href='/en/terms/'
-          >Draft terms of use</a></span></div></footer>
+          >Draft terms of use</a></span></div></footer><nav
+      class='floating-contact-actions'
+      aria-label='Contact'
+    ><a
+        class='floating-contact-action floating-contact-action--whatsapp'
+        href='https://wa.me/37491095950'
+        target='_blank'
+        rel='noopener noreferrer'
+        aria-label='Chat with us on WhatsApp'
+        data-contact-label='WhatsApp'
+      ><svg aria-hidden='true' focusable='false'><use href='/icons.svg#whatsapp'></use></svg></a><a
+        class='floating-contact-action floating-contact-action--phone'
+        href='tel:+37491095950'
+        aria-label='Call +374 91 095 950'
+        data-contact-label='+374 91 095 950'
+      ><svg aria-hidden='true' focusable='false'><use href='/icons.svg#phone'></use></svg></a></nav>
     <script id='home-page-config' type='application/json'>{"locale":"en-US","hero":{"eyebrow":"SOLAR ENERGY FOR YOUR HOME","titleLead":"Your roof","titleMiddle":"has more potential","titleAccent":"than you think.","homeCopy":"In a few steps, see your home’s solar potential, a preliminary system size and budget — plus savings when you enter your tariff.","calculatorCopy":"First choose and confirm a point manually, then see its PVGIS potential. Roof and consumption data are only needed for the detailed estimate.","disclosure":"A preliminary result requires property confirmation and does not replace a site visit, engineering design or commercial proposal.","addressLabel":"Address for the engineer (optional)","addressPlaceholder":"For example: Yerevan, Arabkir","addressHelp":"The address is not geocoded. Open the map, choose a point manually or enter coordinates below.","analyze":"Open point selection","openCalculator":"Calculate my home","uploadTitle":"Attach an electricity bill (optional)","uploadPrompt":"Choose a file or drag it here","uploadHelp":"PDF, JPG or PNG up to 10 MB. The file stays out of the server and is not read automatically; enter values manually.","removeFile":"Remove file","signatureLead":"Clean energy","signatureTail":"Brighter lives","dashboardAriaLabel":"Solar calculation summary","dashboardLocationSelected":"Selected point","dashboardLocationRegional":"Regional estimate","dashboardStatusPreliminary":"PRELIMINARY","dashboardReady":"Current session result","dashboardGeneration":"Annual generation","dashboardGenerationUnit":"kWh / year","dashboardCoverage":"Consumption coverage","dashboardCoverageUnit":"%","dashboardSavings":"Annual savings","dashboardSavingsUnit":"֏ / year","dashboardCo2":"CO₂ reduction","dashboardCo2Unit":"t / year","dashboardNeedConsumption":"Add consumption","dashboardNeedTariff":"Add tariff","dashboardLoading":"Calculating…","dashboardNotePreliminary":"Preliminary calculation. Final parameters and price require an engineering review.","dashboardExample":{"location":"Yerevan, Armenia","status":"EXAMPLE RESULT","label":"Annual production","annualGenerationKwh":8420,"annualGenerationDisplay":"8,420","monthlyGenerationKwh":[320,390,570,740,820,900,980,940,790,630,470,350],"monthlyBarPercent":[33,40,58,76,84,92,100,96,81,64,48,36],"co2Label":"CO₂ savings","treesLabel":"Tree CO₂ absorption equivalent","treesUnit":"trees / year","note":"Example result — calculate your home to see your figures.","co2Tons":1.541,"co2Display":"1.5","treeEquivalent":25.683,"trees":26}}}</script>
+    <script id='journey-page-config' type='application/json'>{"locale":"en-US","journey":{"title":"How it works","progressLabel":"Solar analysis journey","previewLabel":"Example preview","chartPreviewLabel":"Example chart — available after calculation","chartReadyLabel":"Monthly generation from your calculation","availableAfterCalculation":"Available after calculation","confirmedInput":"Confirmed input","awaitingInput":"Add this in the calculator","previousStepLabel":"Back","nextStepLabel":"Continue","chartMonths":["J","F","M","A","M","J","J","A","S","O","N","D"],"steps":[{"number":"01","nav":"Enter your address","visual":"home","visualLabel":"Home visual placeholder","headline":"Enter your address","copy":"and a few home details","status":"home","cards":[{"icon":"map-pin","label":"Location","value":"Add this in the calculator","data":"location"},{"icon":"zap","label":"Electricity use","value":"Add this in the calculator","data":"consumption"},{"icon":"sun","label":"Solar resource","value":"Available after calculation","data":"solar-resource"}],"visualCards":[{"label":"Property","value":"Preview","data":"location"},{"label":"Input status","value":"Waiting for your details","data":"home-status"}],"hasPrevious":false,"hasNext":true,"progressClass":"solutions-progress__item is-active","storyClass":"solutions-story__step swiper-slide is-active","ariaHidden":"false","loading":"eager","fetchPriority":"high","image":"solutions-home","avifSrcset":"/images/solutions-home-640.avif 640w, /images/solutions-home-1024.avif 1024w, /images/solutions-home-1600.avif 1600w","webpSrcset":"/images/solutions-home-640.webp 640w, /images/solutions-home-1024.webp 1024w, /images/solutions-home-1600.webp 1600w"},{"number":"02","nav":"Confirm the property","visual":"roof","visualLabel":"Roof outline visual placeholder","headline":"Confirm the property","copy":"or choose its point manually","status":"roof","cards":[{"icon":"satellite","label":"Usable roof area","value":"Add this in the calculator","data":"roof-area"},{"icon":"sun","label":"Roof direction","value":"Add this in the calculator","data":"roof-direction"},{"icon":"arrow-right","label":"Roof tilt","value":"Add this in the calculator","data":"roof-tilt"}],"visualCards":[{"label":"Roof outline","value":"Manual refinement","data":"roof-status"},{"label":"Input status","value":"Not an automatic roof scan","data":"roof-status"}],"hasPrevious":true,"hasNext":true,"progressClass":"solutions-progress__item","storyClass":"solutions-story__step swiper-slide","ariaHidden":"true","loading":"lazy","fetchPriority":"auto","image":"solutions-roof","avifSrcset":"/images/solutions-roof-640.avif 640w, /images/solutions-roof-1024.avif 1024w, /images/solutions-roof-1600.avif 1600w","webpSrcset":"/images/solutions-roof-640.webp 640w, /images/solutions-roof-1024.webp 1024w, /images/solutions-roof-1600.webp 1600w"},{"number":"03","nav":"Compare the estimate","visual":"system","visualLabel":"Solar system visual placeholder","headline":"Compare the estimate","copy":"and three system options","status":"system","chart":true,"cards":[{"icon":"zap","label":"System size","value":"Example preview","data":"system-size"},{"icon":"sun","label":"Solar panels","value":"Example preview","data":"panel-count"},{"icon":"shield-check","label":"Inverter","value":"Confirmed during design","data":"inverter"},{"icon":"cycle","label":"Annual production","value":"Example preview","data":"annual-production"}],"visualCards":[{"label":"Recommended system","value":"Example preview","data":"system-size"},{"label":"Data source","value":"Available after calculation","data":"system-status"}],"hasPrevious":true,"hasNext":true,"progressClass":"solutions-progress__item","storyClass":"solutions-story__step swiper-slide","ariaHidden":"true","loading":"lazy","fetchPriority":"auto","image":"solutions-system","avifSrcset":"/images/solutions-system-640.avif 640w, /images/solutions-system-1024.avif 1024w, /images/solutions-system-1600.avif 1600w","webpSrcset":"/images/solutions-system-640.webp 640w, /images/solutions-system-1024.webp 1024w, /images/solutions-system-1600.webp 1600w"},{"number":"04","nav":"Engineer site visit","visual":"inspection","visualLabel":"On-site engineering survey","headline":"Engineer site visit","copy":"to measure the roof and electrical panel","cards":[{"icon":"pin","label":"Roof measurements","value":"During the survey"},{"icon":"calculator","label":"Electrical panel","value":"During the survey"},{"icon":"sun","label":"Shading review","value":"Verified on site"}],"visualCards":[{"label":"Site visit","value":"Before the final offer"},{"label":"Engineering review","value":"In person"}],"hasPrevious":true,"hasNext":true,"progressClass":"solutions-progress__item","storyClass":"solutions-story__step swiper-slide","ariaHidden":"true","loading":"lazy","fetchPriority":"auto","image":"solutions-inspection","avifSrcset":"/images/solutions-inspection-640.avif 640w, /images/solutions-inspection-1024.avif 1024w, /images/solutions-inspection-1600.avif 1600w","webpSrcset":"/images/solutions-inspection-640.webp 640w, /images/solutions-inspection-1024.webp 1024w, /images/solutions-inspection-1600.webp 1600w"},{"number":"05","nav":"System installation","visual":"installation","visualLabel":"Installation visual placeholder","headline":"System installation","copy":"after the design and contract","cards":[{"icon":"pin","label":"Site review","value":"Engineer verification"},{"icon":"calculator","label":"Final design","value":"After review"},{"icon":"sun","label":"Equipment preparation","value":"Confirmed for the project"}],"timeline":[{"number":"01","label":"Site review"},{"number":"02","label":"Final design"},{"number":"03","label":"Equipment preparation"},{"number":"04","label":"Installation"},{"number":"05","label":"Commissioning"}],"hasPrevious":true,"hasNext":true,"progressClass":"solutions-progress__item","storyClass":"solutions-story__step swiper-slide","ariaHidden":"true","loading":"lazy","fetchPriority":"auto","image":"solutions-installation","avifSrcset":"/images/solutions-installation-640.avif 640w, /images/solutions-installation-1024.avif 1024w, /images/solutions-installation-1600.avif 1600w","webpSrcset":"/images/solutions-installation-640.webp 640w, /images/solutions-installation-1024.webp 1024w, /images/solutions-installation-1600.webp 1600w"},{"number":"06","nav":"Monitoring","visual":"support","visualLabel":"Support visual placeholder","headline":"Monitoring","copy":"and support after start-up","cards":[{"icon":"file","label":"Solar Passport","value":"Your current analysis context"},{"icon":"shield-check","label":"System information","value":"Project documentation"},{"icon":"cycle","label":"Production context","value":"Available analysis inputs"},{"icon":"support","label":"Support","value":"Your support journey"}],"visualCards":[{"label":"Documents","value":"Together in one place"},{"label":"System context","value":"Kept with your journey"}],"cta":"Start my solar analysis","hasPrevious":true,"hasNext":false,"progressClass":"solutions-progress__item","storyClass":"solutions-story__step swiper-slide","ariaHidden":"true","loading":"lazy","fetchPriority":"auto","image":"solutions-support","avifSrcset":"/images/solutions-support-640.avif 640w, /images/solutions-support-1024.avif 1024w, /images/solutions-support-1600.avif 1600w","webpSrcset":"/images/solutions-support-640.webp 640w, /images/solutions-support-1024.webp 1024w, /images/solutions-support-1600.webp 1600w"}]}}</script>
     <script type='module' src='/src/main.js'></script>
   </body>
 </html>

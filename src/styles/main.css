@@ -81,6 +81,80 @@ textarea {
   transform: translateY(0);
 }
 
+.floating-contact-actions {
+  position: fixed;
+  z-index: 60;
+  right: max(18px, env(safe-area-inset-right));
+  bottom: max(24px, env(safe-area-inset-bottom));
+  display: grid;
+  gap: 12px;
+}
+
+.floating-contact-action {
+  width: 52px;
+  height: 52px;
+  display: grid;
+  place-items: center;
+  position: relative;
+  border: 1px solid rgb(255 255 255 / 24%);
+  border-radius: 50%;
+  color: #fff;
+  box-shadow: 0 14px 28px rgb(3 21 37 / 24%);
+  transition:
+    transform 180ms ease,
+    box-shadow 180ms ease,
+    filter 180ms ease;
+}
+
+.floating-contact-action svg {
+  width: 22px;
+  height: 22px;
+  stroke-width: 2.15;
+}
+
+.floating-contact-action--whatsapp {
+  background: #24c76b;
+}
+
+.floating-contact-action--phone {
+  color: var(--color-navy);
+  background: var(--color-yellow);
+  box-shadow: 0 14px 28px rgb(245 189 24 / 27%);
+}
+
+.floating-contact-action::after {
+  position: absolute;
+  right: calc(100% + 12px);
+  padding: 7px 10px;
+  border-radius: 8px;
+  color: #fff;
+  background: var(--color-navy);
+  box-shadow: var(--shadow-sm);
+  content: attr(data-contact-label);
+  font-size: 0.72rem;
+  font-weight: 750;
+  line-height: 1;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(4px);
+  transition:
+    opacity 160ms ease,
+    transform 160ms ease;
+}
+
+.floating-contact-action:hover,
+.floating-contact-action:focus-visible {
+  filter: brightness(1.04);
+  transform: translateY(-3px);
+}
+
+.floating-contact-action:hover::after,
+.floating-contact-action:focus-visible::after {
+  opacity: 1;
+  transform: translateX(0);
+}
+
 .site-header {
   position: sticky;
   z-index: 50;
@@ -458,6 +532,30 @@ h1 mark {
 
   .hero-copy {
     max-width: 780px;
+  }
+}
+
+@media (max-width: 767px) {
+  .floating-contact-actions {
+    right: max(14px, env(safe-area-inset-right));
+    bottom: max(16px, env(safe-area-inset-bottom));
+    gap: 10px;
+  }
+
+  .floating-contact-action {
+    width: 48px;
+    height: 48px;
+  }
+
+  .floating-contact-action::after {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .floating-contact-action,
+  .floating-contact-action::after {
+    transition: none;
   }
 }
 
