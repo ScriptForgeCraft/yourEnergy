@@ -49,6 +49,10 @@ Handlebars.registerPartial(
   'site-footer',
   await readFile(resolve(root, 'src/templates/partials/site-footer.hbs'), 'utf8')
 );
+Handlebars.registerPartial(
+  'journey-story',
+  await readFile(resolve(root, 'src/templates/partials/journey-story.hbs'), 'utf8')
+);
 Handlebars.registerHelper('add', (left, right) => Number(left) + Number(right));
 
 const render = Handlebars.compile(template, { noEscape: false });
@@ -237,6 +241,34 @@ const createHomeContext = (content, { pageKind = 'home' } = {}) => {
   const isHome = pageKind === 'home';
   const homeSectionHref = (href) =>
     !isHome && href.startsWith('#') ? `${content.homeHref}${href}` : href;
+  const journey = {
+    ...content.journey,
+    title: content.process.title,
+    steps: content.journey.steps.map((step, index) => {
+      const processStep = content.process.steps[index];
+      const image = `solutions-${step.visual}`;
+      return {
+        ...step,
+        nav: processStep?.title ?? step.nav,
+        headline: processStep?.title ?? step.headline,
+        copy: processStep?.copy ?? step.copy,
+        hasPrevious: index > 0,
+        hasNext: index < content.journey.steps.length - 1,
+        progressClass:
+          index === 0 ? 'solutions-progress__item is-active' : 'solutions-progress__item',
+        storyClass:
+          index === 0
+            ? 'solutions-story__step swiper-slide is-active'
+            : 'solutions-story__step swiper-slide',
+        ariaHidden: index === 0 ? 'false' : 'true',
+        loading: index === 0 ? 'eager' : 'lazy',
+        fetchPriority: index === 0 ? 'high' : 'auto',
+        image,
+        avifSrcset: `/images/${image}-640.avif 640w, /images/${image}-1024.avif 1024w, /images/${image}-1600.avif 1600w`,
+        webpSrcset: `/images/${image}-640.webp 640w, /images/${image}-1024.webp 1024w, /images/${image}-1600.webp 1600w`
+      };
+    })
+  };
 
   return {
     ...content,
@@ -262,12 +294,13 @@ const createHomeContext = (content, { pageKind = 'home' } = {}) => {
       ...content.solutions,
       items: content.solutions.items.map((item) => ({
         ...item,
-        cardClass: item.popular ? 'solution-card--popular' : '',
-        buttonClass: item.popular ? '' : 'button--outline',
+        cardClass: item.popular ? 'solution-card solution-card--popular' : 'solution-card',
+        buttonClass: item.popular ? 'button' : 'button button--outline',
         detailsLabel: content.common.details,
         ctaLabel: content.common.cta
       }))
     },
+    journey,
     footer: {
       ...content.footer,
       columns: content.footer.columns.map((column) => ({
@@ -296,17 +329,14 @@ const createHomeContext = (content, { pageKind = 'home' } = {}) => {
         badgeLabel: content.projects.badge
       }))
     },
-    process: {
-      ...content.process,
-      steps: content.process.steps.map((step, index) => ({
-        ...step,
-        icon: index === 0 ? 'pin' : 'check'
-      }))
-    },
     jsonLd: escapeJsonForHtml(createJsonLd(content)),
     homePageConfig: escapeJsonForHtml({
       locale: runtimeLocales[content.locale],
       hero
+    }),
+    journeyPageConfig: escapeJsonForHtml({
+      locale: runtimeLocales[content.locale],
+      journey
     })
   };
 };

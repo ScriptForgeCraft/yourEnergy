@@ -52,6 +52,9 @@ export default {
   contact: {
     phone: '+374 91 095 950',
     phoneHref: 'tel:+37491095950',
+    whatsappHref: 'https://wa.me/37491095950',
+    whatsappLabel: 'Написать нам в WhatsApp',
+    phoneLabel: 'Позвонить по номеру +374 91 095 950',
     address: 'Artashisyan 48 14 Kotayq, Zovuni, 26 33 str, Yerevan',
     hours: 'Открыто до 21:00',
     note: 'Контактные данные предоставлены Your Energy LLC.'
@@ -427,6 +430,199 @@ export default {
       { icon: 'calculator', title: 'Система для дома', note: 'из подтверждённых данных' },
       { icon: 'support', title: 'Местные инженеры', note: 'для домов Армении' },
       { icon: 'shield', title: 'Понятные условия', note: 'состав подтверждается заранее' }
+    ]
+  },
+  journey: {
+    title: 'Ваш путь к солнечной энергии',
+    progressLabel: 'Путь солнечного анализа',
+    previewLabel: 'Пример для просмотра',
+    chartPreviewLabel: 'Пример графика — доступен после расчёта',
+    chartReadyLabel: 'Помесячная генерация из вашего расчёта',
+    availableAfterCalculation: 'Доступно после расчёта',
+    confirmedInput: 'Подтверждённые данные',
+    awaitingInput: 'Добавьте данные в калькуляторе',
+    previousStepLabel: 'Назад',
+    nextStepLabel: 'Далее',
+    chartMonths: ['Я', 'Ф', 'М', 'А', 'М', 'И', 'И', 'А', 'С', 'О', 'Н', 'Д'],
+    steps: [
+      {
+        number: '01',
+        nav: 'Ваш дом',
+        visual: 'home',
+        visualLabel: 'Заполнитель визуала дома',
+        headline: 'Начнём с вашего дома',
+        copy: 'Укажите местоположение и расход электричества. Так мы зададим отправную точку для анализа солнечного потенциала.',
+        status: 'home',
+        cards: [
+          {
+            icon: 'map-pin',
+            label: 'Местоположение',
+            value: 'Добавьте в калькуляторе',
+            data: 'location'
+          },
+          {
+            icon: 'zap',
+            label: 'Расход электричества',
+            value: 'Добавьте в калькуляторе',
+            data: 'consumption'
+          },
+          {
+            icon: 'sun',
+            label: 'Солнечный ресурс',
+            value: 'Доступно после расчёта',
+            data: 'solar-resource'
+          }
+        ],
+        visualCards: [
+          { label: 'Объект', value: 'Предпросмотр', data: 'location' },
+          { label: 'Статус данных', value: 'Ожидаем ваши данные', data: 'home-status' }
+        ]
+      },
+      {
+        number: '02',
+        nav: 'Параметры крыши',
+        visual: 'roof',
+        visualLabel: 'Заполнитель контура крыши',
+        headline: 'Разберёмся с вашей крышей',
+        copy: 'Уточните оценку по точке объекта, полезной площади крыши и её условиям.',
+        status: 'roof',
+        cards: [
+          {
+            icon: 'satellite',
+            label: 'Полезная площадь крыши',
+            value: 'Добавьте в калькуляторе',
+            data: 'roof-area'
+          },
+          {
+            icon: 'sun',
+            label: 'Направление крыши',
+            value: 'Добавьте в калькуляторе',
+            data: 'roof-direction'
+          },
+          {
+            icon: 'arrow-right',
+            label: 'Угол наклона',
+            value: 'Добавьте в калькуляторе',
+            data: 'roof-tilt'
+          }
+        ],
+        visualCards: [
+          { label: 'Контур крыши', value: 'Ручное уточнение', data: 'roof-status' },
+          {
+            label: 'Статус данных',
+            value: 'Это не автоматическое сканирование крыши',
+            data: 'roof-status'
+          }
+        ]
+      },
+      {
+        number: '03',
+        nav: 'Проект системы',
+        visual: 'system',
+        visualLabel: 'Заполнитель визуала солнечной системы',
+        headline: 'Ваша солнечная система обретает форму',
+        copy: 'Мы объединяем данные о расходе, местоположении и крыше, чтобы предложить систему, подходящую вашему дому.',
+        status: 'system',
+        chart: true,
+        cards: [
+          {
+            icon: 'zap',
+            label: 'Размер системы',
+            value: 'Пример для просмотра',
+            data: 'system-size'
+          },
+          {
+            icon: 'sun',
+            label: 'Солнечные панели',
+            value: 'Пример для просмотра',
+            data: 'panel-count'
+          },
+          {
+            icon: 'shield-check',
+            label: 'Инвертор',
+            value: 'Подтверждается в проекте',
+            data: 'inverter'
+          },
+          {
+            icon: 'cycle',
+            label: 'Годовая генерация',
+            value: 'Пример для просмотра',
+            data: 'annual-production'
+          }
+        ],
+        visualCards: [
+          { label: 'Рекомендованная система', value: 'Пример для просмотра', data: 'system-size' },
+          { label: 'Источник данных', value: 'Доступно после расчёта', data: 'system-status' }
+        ]
+      },
+      {
+        number: '04',
+        nav: 'Осмотр специалиста',
+        visual: 'inspection',
+        visualLabel: 'Инженерный осмотр объекта',
+        headline: 'Осмотр специалиста',
+        copy: 'Инженер проверит крышу, электрощит и затенение перед финальным проектом.',
+        cards: [
+          {
+            icon: 'pin',
+            label: 'Замеры крыши',
+            value: 'На осмотре'
+          },
+          {
+            icon: 'calculator',
+            label: 'Электрощит',
+            value: 'На осмотре'
+          },
+          {
+            icon: 'sun',
+            label: 'Затенение',
+            value: 'Проверяется на объекте'
+          }
+        ],
+        visualCards: [
+          { label: 'Осмотр объекта', value: 'До финального предложения' },
+          { label: 'Инженерная проверка', value: 'На месте' }
+        ]
+      },
+      {
+        number: '05',
+        nav: 'Установка',
+        visual: 'installation',
+        visualLabel: 'Заполнитель визуала установки',
+        headline: 'От анализа к установке',
+        copy: 'Инженер проверяет объект, завершает проект и готовит систему к профессиональному монтажу.',
+        cards: [
+          { icon: 'pin', label: 'Осмотр объекта', value: 'Проверка инженером' },
+          { icon: 'calculator', label: 'Финальный проект', value: 'После осмотра' },
+          { icon: 'sun', label: 'Подготовка оборудования', value: 'Подтверждается для проекта' }
+        ],
+        timeline: [
+          { number: '01', label: 'Осмотр объекта' },
+          { number: '02', label: 'Финальный проект' },
+          { number: '03', label: 'Подготовка оборудования' },
+          { number: '04', label: 'Монтаж' },
+          { number: '05', label: 'Ввод в эксплуатацию' }
+        ]
+      },
+      {
+        number: '06',
+        nav: 'Поддержка на весь срок',
+        visual: 'support',
+        visualLabel: 'Заполнитель визуала поддержки',
+        headline: 'Ваша система продолжает работать на вас',
+        copy: 'После установки храните вместе сведения о системе, контекст генерации и путь обращения в поддержку.',
+        cards: [
+          { icon: 'file', label: 'Solar Passport', value: 'Контекст текущего анализа' },
+          { icon: 'shield-check', label: 'Сведения о системе', value: 'Документация проекта' },
+          { icon: 'cycle', label: 'Контекст генерации', value: 'Доступные данные анализа' },
+          { icon: 'support', label: 'Поддержка', value: 'Ваш путь поддержки' }
+        ],
+        visualCards: [
+          { label: 'Документы', value: 'Всё в одном месте' },
+          { label: 'Контекст системы', value: 'Сохраняется вместе с вашим путём' }
+        ],
+        cta: 'Начать анализ солнечного потенциала'
+      }
     ]
   },
   solutions: {

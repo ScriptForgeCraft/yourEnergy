@@ -52,6 +52,9 @@ export default {
   contact: {
     phone: '+374 91 095 950',
     phoneHref: 'tel:+37491095950',
+    whatsappHref: 'https://wa.me/37491095950',
+    whatsappLabel: 'Chat with us on WhatsApp',
+    phoneLabel: 'Call +374 91 095 950',
     address: 'Artashisyan 48 14 Kotayq, Zovuni, 26 33 str, Yerevan',
     hours: 'Open until 21:00',
     note: 'Contact details provided by Your Energy LLC.'
@@ -437,6 +440,185 @@ export default {
         icon: 'shield',
         title: 'Clear conditions',
         note: 'scope confirmed before work'
+      }
+    ]
+  },
+  journey: {
+    title: 'Your solar journey',
+    progressLabel: 'Solar analysis journey',
+    previewLabel: 'Example preview',
+    chartPreviewLabel: 'Example chart — available after calculation',
+    chartReadyLabel: 'Monthly generation from your calculation',
+    availableAfterCalculation: 'Available after calculation',
+    confirmedInput: 'Confirmed input',
+    awaitingInput: 'Add this in the calculator',
+    previousStepLabel: 'Back',
+    nextStepLabel: 'Continue',
+    chartMonths: ['J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'],
+    steps: [
+      {
+        number: '01',
+        nav: 'Your Home',
+        visual: 'home',
+        visualLabel: 'Home visual placeholder',
+        headline: 'Let’s start with your home',
+        copy: 'Enter your location and electricity use. We’ll establish the starting point for your solar analysis.',
+        status: 'home',
+        cards: [
+          {
+            icon: 'map-pin',
+            label: 'Location',
+            value: 'Add this in the calculator',
+            data: 'location'
+          },
+          {
+            icon: 'zap',
+            label: 'Electricity use',
+            value: 'Add this in the calculator',
+            data: 'consumption'
+          },
+          {
+            icon: 'sun',
+            label: 'Solar resource',
+            value: 'Available after calculation',
+            data: 'solar-resource'
+          }
+        ],
+        visualCards: [
+          { label: 'Property', value: 'Preview', data: 'location' },
+          { label: 'Input status', value: 'Waiting for your details', data: 'home-status' }
+        ]
+      },
+      {
+        number: '02',
+        nav: 'Roof Details',
+        visual: 'roof',
+        visualLabel: 'Roof outline visual placeholder',
+        headline: 'Let’s understand your roof',
+        copy: 'Refine the estimate with your property point, usable roof area and roof conditions.',
+        status: 'roof',
+        cards: [
+          {
+            icon: 'satellite',
+            label: 'Usable roof area',
+            value: 'Add this in the calculator',
+            data: 'roof-area'
+          },
+          {
+            icon: 'sun',
+            label: 'Roof direction',
+            value: 'Add this in the calculator',
+            data: 'roof-direction'
+          },
+          {
+            icon: 'arrow-right',
+            label: 'Roof tilt',
+            value: 'Add this in the calculator',
+            data: 'roof-tilt'
+          }
+        ],
+        visualCards: [
+          { label: 'Roof outline', value: 'Manual refinement', data: 'roof-status' },
+          { label: 'Input status', value: 'Not an automatic roof scan', data: 'roof-status' }
+        ]
+      },
+      {
+        number: '03',
+        nav: 'System Design',
+        visual: 'system',
+        visualLabel: 'Solar system visual placeholder',
+        headline: 'Your solar system takes shape',
+        copy: 'We combine your consumption, location and roof inputs to recommend a system that fits your home.',
+        status: 'system',
+        chart: true,
+        cards: [
+          { icon: 'zap', label: 'System size', value: 'Example preview', data: 'system-size' },
+          { icon: 'sun', label: 'Solar panels', value: 'Example preview', data: 'panel-count' },
+          {
+            icon: 'shield-check',
+            label: 'Inverter',
+            value: 'Confirmed during design',
+            data: 'inverter'
+          },
+          {
+            icon: 'cycle',
+            label: 'Annual production',
+            value: 'Example preview',
+            data: 'annual-production'
+          }
+        ],
+        visualCards: [
+          { label: 'Recommended system', value: 'Example preview', data: 'system-size' },
+          { label: 'Data source', value: 'Available after calculation', data: 'system-status' }
+        ]
+      },
+      {
+        number: '04',
+        nav: 'Engineer Site Survey',
+        visual: 'inspection',
+        visualLabel: 'On-site engineering survey',
+        headline: 'Engineer site survey',
+        copy: 'An engineer checks the roof, electrical panel and shading before the final design.',
+        cards: [
+          {
+            icon: 'pin',
+            label: 'Roof measurements',
+            value: 'During the survey'
+          },
+          {
+            icon: 'calculator',
+            label: 'Electrical panel',
+            value: 'During the survey'
+          },
+          {
+            icon: 'sun',
+            label: 'Shading review',
+            value: 'Verified on site'
+          }
+        ],
+        visualCards: [
+          { label: 'Site visit', value: 'Before the final offer' },
+          { label: 'Engineering review', value: 'In person' }
+        ]
+      },
+      {
+        number: '05',
+        nav: 'Installation',
+        visual: 'installation',
+        visualLabel: 'Installation visual placeholder',
+        headline: 'From analysis to installation',
+        copy: 'An engineer verifies the property, finalizes the design and prepares the system for professional installation.',
+        cards: [
+          { icon: 'pin', label: 'Site review', value: 'Engineer verification' },
+          { icon: 'calculator', label: 'Final design', value: 'After review' },
+          { icon: 'sun', label: 'Equipment preparation', value: 'Confirmed for the project' }
+        ],
+        timeline: [
+          { number: '01', label: 'Site review' },
+          { number: '02', label: 'Final design' },
+          { number: '03', label: 'Equipment preparation' },
+          { number: '04', label: 'Installation' },
+          { number: '05', label: 'Commissioning' }
+        ]
+      },
+      {
+        number: '06',
+        nav: 'Lifetime Support',
+        visual: 'support',
+        visualLabel: 'Support visual placeholder',
+        headline: 'Your system keeps working for you',
+        copy: 'Keep your system information, production context and support journey together after installation.',
+        cards: [
+          { icon: 'file', label: 'Solar Passport', value: 'Your current analysis context' },
+          { icon: 'shield-check', label: 'System information', value: 'Project documentation' },
+          { icon: 'cycle', label: 'Production context', value: 'Available analysis inputs' },
+          { icon: 'support', label: 'Support', value: 'Your support journey' }
+        ],
+        visualCards: [
+          { label: 'Documents', value: 'Together in one place' },
+          { label: 'System context', value: 'Kept with your journey' }
+        ],
+        cta: 'Start my solar analysis'
       }
     ]
   },

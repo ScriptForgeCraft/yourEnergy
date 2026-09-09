@@ -13,6 +13,9 @@ const heroTimeProfiles = Object.freeze([
   { hour: 20, assetHour: 20, kind: 'evening', arcPoint: { x: 0.96, y: 0.213 } }
 ]);
 
+const HERO_INTRO_MAX_DURATION_MS = 5_200;
+const HERO_INTRO_TRANSITION_MAX_MS = 1_150;
+
 // No night scene was supplied. The 08:00 image is the neutral fallback asset,
 // but it is never presented as a current 08:00 solar position: the decorative
 // sun marker is hidden and the Hero records a neutral state instead.
@@ -69,6 +72,27 @@ export const getHeroTimeProfile = (date = new Date()) => {
 };
 
 /**
+ * On the first view, let a supplied daytime sequence catch up with the
+ * current Yerevan frame. The neutral night fallback intentionally skips this
+ * decorative sequence and stays honest about the unavailable night scene.
+ */
+export const getHeroIntroProfiles = (targetProfile) => {
+  if (targetProfile?.kind === 'neutral') return [];
+  const targetIndex = heroTimeProfiles.findIndex(
+    ({ assetHour }) => assetHour === targetProfile?.assetHour
+  );
+  return targetIndex === -1 ? [] : heroTimeProfiles.slice(0, targetIndex + 1);
+};
+
+export const getHeroIntroTransitionDuration = (profileCount) => {
+  const transitions = Math.max(1, profileCount - 1);
+  return Math.min(
+    HERO_INTRO_TRANSITION_MAX_MS,
+    Math.floor(HERO_INTRO_MAX_DURATION_MS / transitions)
+  );
+};
+
+/**
  * A failed candidate must never replace a working Hero image with an evening
  * frame. Prefer the last distinct successful frame; otherwise use neutral.
  */
@@ -112,43 +136,35 @@ export const getHeroCounterTarget = (value) => {
 };
 
 /**
- * The solar arc is embedded in each supplied time frame. Project its verified
- * source-image point through `object-fit: cover` so the decorative sun stays
- * on that arc when the hero aspect ratio changes.
+ * The solar arc is embedded in each supplied time frame. The backdrop fills
+ * the hero without `object-fit: cover`, so project its normalized source point
+ * straight into the rendered hero rectangle. This keeps the marker on the
+ * visible sun in every time-of-day frame, including non-16:9 viewports.
  */
-export const projectHeroArcPoint = (
-  profile,
-  { sourceWidth, sourceHeight, frameWidth, frameHeight } = {}
-) => {
+export const projectHeroArcPoint = (profile, { frameWidth, frameHeight } = {}) => {
   const point = profile?.arcPoint;
   if (
     !point ||
     !Number.isFinite(point.x) ||
     !Number.isFinite(point.y) ||
-    !Number.isFinite(sourceWidth) ||
-    !Number.isFinite(sourceHeight) ||
     !Number.isFinite(frameWidth) ||
     !Number.isFinite(frameHeight) ||
-    sourceWidth <= 0 ||
-    sourceHeight <= 0 ||
     frameWidth <= 0 ||
     frameHeight <= 0
   ) {
     return null;
   }
 
-  const scale = Math.max(frameWidth / sourceWidth, frameHeight / sourceHeight);
-  const renderedWidth = sourceWidth * scale;
-  const renderedHeight = sourceHeight * scale;
   return {
-    x: (frameWidth - renderedWidth) / 2 + point.x * renderedWidth,
-    y: (frameHeight - renderedHeight) / 2 + point.y * renderedHeight
+    x: point.x * frameWidth,
+    y: point.y * frameHeight
   };
 };
 
-const initHeroTime = (hero) => {
+const initHeroTime = (hero, { reducedMotion = false } = {}) => {
   const image = hero.querySelector('[data-hero-time-image]');
   const sources = [...hero.querySelectorAll('[data-hero-time-source]')];
+  const transitionImages = [...hero.querySelectorAll('[data-hero-time-transition]')];
   if (!image || sources.length === 0) return () => {};
 
   let timer = 0;
@@ -157,15 +173,17 @@ const initHeroTime = (hero) => {
   let lastSuccessfulProfile = null;
   let appliedProfile = neutralHeroTimeProfile;
   let restoringFrame = false;
+  let sunAnimationFrame = 0;
+  let isSunAnimating = false;
+  let persistentTransitionLayer = null;
+  const transitionAnimations = new Map();
 
   const sunMarker = hero.querySelector('[data-hero-time-sun]');
 
   const syncSunMarker = () => {
-    if (!sunMarker || appliedProfile.kind === 'neutral') return;
+    if (!sunMarker || isSunAnimating || appliedProfile.kind === 'neutral') return;
     const frame = hero.getBoundingClientRect();
     const projected = projectHeroArcPoint(appliedProfile, {
-      sourceWidth: image.naturalWidth,
-      sourceHeight: image.naturalHeight,
       frameWidth: frame.width,
       frameHeight: frame.height
     });
@@ -178,14 +196,21 @@ const initHeroTime = (hero) => {
   const heroResizeObserver =
     typeof ResizeObserver === 'undefined' ? null : new ResizeObserver(queueSunMarkerSync);
 
-  const applyFrame = (profile, { jpegOnly = false } = {}) => {
-    const frameHour = profile.assetHour;
+  const applyProfileState = (profile, { positionSun = true, syncSun = true } = {}) => {
     appliedProfile = profile;
     hero.dataset.heroTime = profile.hour === null ? 'neutral' : String(profile.hour);
     hero.dataset.heroTimeKind = profile.kind;
-    setProperty(hero, '--hero-sun-x', `${profile.arcPoint.x * 100}%`);
-    setProperty(hero, '--hero-sun-y', `${profile.arcPoint.y * 100}%`);
+    if (positionSun) {
+      setProperty(hero, '--hero-sun-x', `${profile.arcPoint.x * 100}%`);
+      setProperty(hero, '--hero-sun-y', `${profile.arcPoint.y * 100}%`);
+    }
     if (sunMarker) sunMarker.hidden = profile.kind === 'neutral';
+    if (syncSun) queueSunMarkerSync();
+  };
+
+  const applyFrame = (profile, { jpegOnly = false, positionSun = true, syncSun = true } = {}) => {
+    const frameHour = profile.assetHour;
+    applyProfileState(profile, { positionSun, syncSun });
 
     for (const source of sources) {
       if (jpegOnly) {
@@ -197,16 +222,164 @@ const initHeroTime = (hero) => {
     }
     image.srcset = getHeroTimeSrcset(frameHour, 'jpg');
     image.src = getHeroFrameUrl(frameHour, 'jpg');
-    queueSunMarkerSync();
   };
 
   const preload = (source) =>
     new Promise((resolve) => {
       const frame = new Image();
-      frame.onload = () => resolve(true);
+      frame.onload = async () => {
+        if (typeof frame.decode === 'function') {
+          try {
+            await frame.decode();
+          } catch {
+            // The browser has already loaded the asset. A decode hint failing
+            // here must not turn a usable visual frame into an error state.
+          }
+        }
+        resolve(true);
+      };
       frame.onerror = () => resolve(false);
       frame.src = source;
     });
+
+  const waitForImageLoad = (target, expectedHour = null) => {
+    const isExpectedFrame = () =>
+      expectedHour === null || target.currentSrc.includes(`/hero-time-${expectedHour}-`);
+    if (target.complete && isExpectedFrame()) return Promise.resolve(target.naturalWidth > 0);
+    return new Promise((resolve) => {
+      const settle = (successful) => {
+        target.removeEventListener('load', onLoad);
+        target.removeEventListener('error', onError);
+        resolve(successful);
+      };
+      const onLoad = () => settle(isExpectedFrame());
+      const onError = () => settle(false);
+      target.addEventListener('load', onLoad, { once: true });
+      target.addEventListener('error', onError, { once: true });
+    });
+  };
+
+  const hideTransitionLayer = (transitionImage) => {
+    transitionAnimations.get(transitionImage)?.cancel();
+    transitionAnimations.delete(transitionImage);
+    transitionImage.style.transition = 'none';
+    transitionImage.style.opacity = '0';
+    transitionImage.classList.remove('is-visible');
+    void transitionImage.offsetWidth;
+    transitionImage.style.removeProperty('transition');
+    transitionImage.style.removeProperty('opacity');
+  };
+
+  const resetTransition = () => {
+    for (const transitionImage of transitionImages) hideTransitionLayer(transitionImage);
+  };
+
+  const interpolateSunArc = (profiles, progress) => {
+    const segmentProgress = Math.min(Math.max(progress, 0), 1) * (profiles.length - 1);
+    const index = Math.min(Math.floor(segmentProgress), profiles.length - 2);
+    const localProgress = segmentProgress - index;
+    const first = profiles[Math.max(0, index - 1)].arcPoint;
+    const second = profiles[index].arcPoint;
+    const third = profiles[index + 1].arcPoint;
+    const fourth = profiles[Math.min(profiles.length - 1, index + 2)].arcPoint;
+    const t = localProgress;
+    const t2 = t * t;
+    const t3 = t2 * t;
+    const blend = (key) =>
+      0.5 *
+      (2 * second[key] +
+        (-first[key] + third[key]) * t +
+        (2 * first[key] - 5 * second[key] + 4 * third[key] - fourth[key]) * t2 +
+        (-first[key] + 3 * second[key] - 3 * third[key] + fourth[key]) * t3);
+    return { x: blend('x'), y: blend('y') };
+  };
+
+  const animateSunAcrossDayCycle = (profiles, duration) => {
+    if (!sunMarker || profiles.length < 2 || duration <= 0) {
+      syncSunMarker();
+      return Promise.resolve();
+    }
+
+    isSunAnimating = true;
+    const startedAt = window.performance.now();
+    return new Promise((resolve) => {
+      const frame = (now) => {
+        if (disposed) {
+          isSunAnimating = false;
+          sunAnimationFrame = 0;
+          resolve();
+          return;
+        }
+
+        const progress = Math.min((now - startedAt) / duration, 1);
+        const point = interpolateSunArc(profiles, progress);
+        const bounds = hero.getBoundingClientRect();
+        setProperty(hero, '--hero-sun-x', `${point.x * bounds.width}px`);
+        setProperty(hero, '--hero-sun-y', `${point.y * bounds.height}px`);
+
+        if (progress < 1) {
+          sunAnimationFrame = window.requestAnimationFrame(frame);
+          return;
+        }
+        isSunAnimating = false;
+        sunAnimationFrame = 0;
+        syncSunMarker();
+        resolve();
+      };
+      sunAnimationFrame = window.requestAnimationFrame(frame);
+    });
+  };
+
+  const prepareTransitionLayer = async (transitionImage, profile, extension, preloaded) => {
+    if (!preloaded || disposed) return false;
+    transitionImage.src = getHeroFrameUrl(profile.assetHour, extension);
+    const isLoaded =
+      transitionImage.complete && transitionImage.naturalWidth > 0
+        ? true
+        : await waitForImageLoad(transitionImage);
+    if (!isLoaded || disposed) return false;
+
+    if (typeof transitionImage.decode === 'function') {
+      try {
+        await transitionImage.decode();
+      } catch {
+        // The network preload has already completed. A browser-specific decode
+        // hint must not discard a usable layer.
+      }
+    }
+    return !disposed;
+  };
+
+  const startTransitionFade = (transitionImage, { delay = 0, duration }) => {
+    setProperty(hero, '--hero-day-cycle-duration', `${duration}ms`);
+    transitionAnimations.get(transitionImage)?.cancel();
+    transitionImage.style.transition = 'none';
+    transitionImage.style.opacity = '0';
+    transitionImage.classList.add('is-visible');
+    void transitionImage.offsetWidth;
+
+    const animation = transitionImage.animate([{ opacity: 0 }, { opacity: 1 }], {
+      duration,
+      delay,
+      easing: 'cubic-bezier(0.45, 0, 0.55, 1)',
+      fill: 'both'
+    });
+    transitionAnimations.set(transitionImage, animation);
+    return animation;
+  };
+
+  const finishTransitionFade = async (transitionImage, animation) => {
+    try {
+      await animation.finished;
+    } catch {
+      return false;
+    }
+    if (transitionAnimations.get(transitionImage) !== animation) return false;
+    transitionAnimations.delete(transitionImage);
+    transitionImage.style.opacity = '1';
+    animation.cancel();
+    return true;
+  };
 
   const update = async () => {
     if (disposed || isUpdating || hero.dataset.heroImageState === 'fallback') return;
@@ -222,12 +395,107 @@ const initHeroTime = (hero) => {
         lastSuccessfulProfile = profile;
         hero.dataset.heroImageState = 'ready';
         applyFrame(profile);
+        if (persistentTransitionLayer) {
+          const transitionLayer = persistentTransitionLayer;
+          const baseFrameReady = await waitForImageLoad(image, profile.assetHour);
+          if (baseFrameReady && persistentTransitionLayer === transitionLayer) {
+            hideTransitionLayer(transitionLayer);
+            persistentTransitionLayer = null;
+          }
+        }
       } else {
         // Keep the visible, already-loaded frame in place. A request failure
         // must not manufacture a different time of day or blank the Hero.
         hero.dataset.heroImageState = lastSuccessfulProfile ? 'retained' : 'neutral';
       }
     } finally {
+      isUpdating = false;
+    }
+  };
+
+  const runDayCycleIntro = async () => {
+    const targetProfile = getHeroTimeProfile();
+    const introProfiles = reducedMotion ? [] : getHeroIntroProfiles(targetProfile);
+    const transitionCount = introProfiles.length - 1;
+    if (introProfiles.length < 2 || transitionImages.length < transitionCount) {
+      await update();
+      return;
+    }
+
+    isUpdating = true;
+    try {
+      const firstProfile = introProfiles[0];
+      hero.dataset.heroDayCycle = 'playing';
+      applyFrame(firstProfile);
+      lastSuccessfulProfile = firstProfile;
+      hero.dataset.heroImageState = 'intro';
+
+      const extension =
+        getHeroImageExtension(image.currentSrc) ?? sources[0]?.dataset.heroTimeSource ?? 'jpg';
+      const preloadedFrames = new Map(
+        await Promise.all(
+          introProfiles
+            .slice(1)
+            .map(async (profile) => [
+              profile.assetHour,
+              await preload(getHeroFrameUrl(profile.assetHour, extension))
+            ])
+        )
+      );
+      if (disposed) return;
+
+      const transitionDuration = getHeroIntroTransitionDuration(introProfiles.length);
+      const totalDuration = transitionDuration * transitionCount;
+      const transitionPlan = introProfiles.slice(1).map((profile, index) => ({
+        profile,
+        layer: transitionImages[index],
+        delay: index * transitionDuration
+      }));
+      const preparedTransitions = await Promise.all(
+        transitionPlan.map(async (transition) => ({
+          ...transition,
+          ready: await prepareTransitionLayer(
+            transition.layer,
+            transition.profile,
+            extension,
+            preloadedFrames.get(transition.profile.assetHour)
+          )
+        }))
+      );
+      if (disposed || preparedTransitions.some(({ ready }) => !ready)) return;
+
+      // All layers have been decoded before a visual timer begins. Fades are
+      // created together with fixed offsets, so no late frame can begin after
+      // the solar arc has reached its final coordinate.
+      applyProfileState(targetProfile, { positionSun: false, syncSun: false });
+      const sunMotion = animateSunAcrossDayCycle(introProfiles, totalDuration);
+      const startedTransitions = preparedTransitions.map((transition) => ({
+        ...transition,
+        animation: startTransitionFade(transition.layer, {
+          delay: transition.delay,
+          duration: transitionDuration
+        })
+      }));
+      const completedTransitions = await Promise.all(
+        startedTransitions.map(async (transition) => ({
+          ...transition,
+          completed: await finishTransitionFade(transition.layer, transition.animation)
+        }))
+      );
+      await sunMotion;
+      if (disposed || completedTransitions.some(({ completed }) => !completed)) return;
+
+      const finalTransition = completedTransitions.at(-1);
+      for (const { layer } of completedTransitions) {
+        if (layer !== finalTransition.layer) hideTransitionLayer(layer);
+      }
+      applyFrame(targetProfile, { positionSun: false, syncSun: false });
+      lastSuccessfulProfile = targetProfile;
+      persistentTransitionLayer = finalTransition.layer;
+      if (!disposed) hero.dataset.heroImageState = 'ready';
+    } finally {
+      delete hero.dataset.heroDayCycle;
+      queueSunMarkerSync();
       isUpdating = false;
     }
   };
@@ -244,6 +512,10 @@ const initHeroTime = (hero) => {
   const handleError = async () => {
     if (disposed || restoringFrame) return;
     restoringFrame = true;
+    if (persistentTransitionLayer) {
+      resetTransition();
+      persistentTransitionLayer = null;
+    }
     try {
       const fallback = resolveHeroFrameFailure(lastSuccessfulProfile, appliedProfile);
       const isReady = await preload(getHeroFrameUrl(fallback.assetHour, 'jpg'));
@@ -267,12 +539,15 @@ const initHeroTime = (hero) => {
   image.addEventListener('load', queueSunMarkerSync);
   window.addEventListener('resize', queueSunMarkerSync, { passive: true });
   heroResizeObserver?.observe(hero);
-  void update();
+  void runDayCycleIntro();
   scheduleUpdate();
 
   return () => {
     disposed = true;
     window.clearTimeout(timer);
+    window.cancelAnimationFrame(sunAnimationFrame);
+    persistentTransitionLayer = null;
+    resetTransition();
     image.removeEventListener('error', handleError);
     image.removeEventListener('load', queueSunMarkerSync);
     window.removeEventListener('resize', queueSunMarkerSync);
@@ -344,7 +619,7 @@ export const initHomeMotion = ({ config = {} } = {}) => {
 
   if (!root || !hero || !passport) return () => {};
 
-  const disposeHeroTime = initHeroTime(hero);
+  const disposeHeroTime = initHeroTime(hero, { reducedMotion: reducedMotionQuery.matches });
   let disposeHeroCounters = () => {};
   const disposeHeroAnalysisCard = initHeroAnalysisCard({
     hero,

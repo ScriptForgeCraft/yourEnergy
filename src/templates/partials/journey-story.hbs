@@ -1,0 +1,138 @@
+<h2 id='process-title' class='visually-hidden'>{{journey.title}}</h2>
+<div class='solutions-story__scroll'>
+  <div class='solutions-story__stage swiper' data-solutions-slider>
+    <div class='solutions-story__backdrop' aria-hidden='true'></div>
+    <ol class='solutions-progress' aria-label='{{journey.progressLabel}}'>
+      {{#each journey.steps}}
+        <li class='{{progressClass}}' data-solutions-progress-step='{{@index}}'>
+          <button type='button'>
+            <span class='solutions-progress__rail' aria-hidden='true'><i></i></span>
+            <span class='solutions-progress__node'><b>{{number}}</b><svg
+                aria-hidden='true'
+                viewBox='0 0 16 16'
+              ><path d='m3.2 8.2 3 3 6.7-6.6'></path></svg></span>
+            <span>{{nav}}</span>
+          </button>
+        </li>
+      {{/each}}
+    </ol>
+
+    <div class='solutions-story__steps swiper-wrapper'>
+      {{#each journey.steps}}
+        <article
+          class='{{storyClass}}'
+          data-solutions-step='{{@index}}'
+          aria-hidden='{{ariaHidden}}'
+        >
+          <div class='container solutions-story__shell'>
+            <div class='solutions-story__copy'>
+              <p class='solutions-story__eyebrow'><span>{{number}}</span>{{nav}}</p>
+              <h3>{{headline}}</h3>
+              <p class='solutions-story__intro'>{{copy}}</p>
+              {{#if status}}<p
+                  class='solutions-story__status'
+                  data-solutions-status='{{status}}'
+                >{{@root.journey.previewLabel}}</p>{{/if}}
+              <dl class='solutions-story__metrics'>
+                {{#each cards}}
+                  <div class='solutions-story__metric'>
+                    <dt><svg class='inline-icon' aria-hidden='true'><use
+                          href='/icons.svg#{{icon}}'
+                        ></use></svg>{{label}}</dt>
+                    <dd
+                      data-solutions-field='{{data}}'
+                      data-solutions-default='{{value}}'
+                    >{{value}}</dd>
+                  </div>
+                {{/each}}
+              </dl>
+              {{#if timeline}}
+                <ol class='solutions-story__timeline'>{{#each timeline}}<li><span
+                      >{{number}}</span><p>{{this.label}}</p></li>{{/each}}</ol>
+              {{/if}}
+              <div class='solutions-story__actions'>
+                {{#if hasPrevious}}<button
+                    class='solutions-story__previous'
+                    type='button'
+                    data-solutions-previous
+                  >← {{@root.journey.previousStepLabel}}</button>{{/if}}
+                {{#if hasNext}}<button
+                    class='button solutions-story__next'
+                    type='button'
+                    data-solutions-next
+                  >{{@root.journey.nextStepLabel}} <span aria-hidden='true'>→</span></button>{{/if}}
+                {{#if cta}}<a
+                    class='button solutions-story__cta'
+                    href='{{@root.calculatorHref}}'
+                  >{{cta}}</a>{{/if}}
+              </div>
+            </div>
+
+            <div class='solutions-story__visual-wrap'>
+              <div
+                class='solutions-visual solutions-visual--{{visual}}'
+                data-solutions-visual='{{visual}}'
+                aria-hidden='true'
+              >
+                <picture class='solutions-visual__media'>
+                  <source
+                    type='image/avif'
+                    srcset='{{avifSrcset}}'
+                    sizes='(max-width: 767px) calc(100vw - 68px), 52vw'
+                  />
+                  <source
+                    type='image/webp'
+                    srcset='{{webpSrcset}}'
+                    sizes='(max-width: 767px) calc(100vw - 68px), 52vw'
+                  />
+                  <img
+                    src='/images/{{image}}-1024.jpg'
+                    srcset='/images/{{image}}-640.jpg 640w, /images/{{image}}-1024.jpg 1024w, /images/{{image}}-1600.jpg 1600w'
+                    sizes='(max-width: 767px) calc(100vw - 68px), 52vw'
+                    width='1600'
+                    height='914'
+                    alt=''
+                    loading='{{loading}}'
+                    fetchpriority='{{fetchPriority}}'
+                    decoding='async'
+                  />
+                </picture>
+                <span class='solutions-visual__orb'></span><span
+                  class='solutions-visual__grid'
+                ></span><span class='solutions-visual__roof'></span><span
+                  class='solutions-visual__panels'
+                ></span><span class='solutions-visual__path'></span><span
+                  class='solutions-visual__label'
+                >{{visualLabel}}</span>
+              </div>
+              {{#if chart}}
+                <div
+                  class='solutions-generation-chart'
+                  data-solutions-chart
+                  role='img'
+                  aria-label='{{@root.journey.chartPreviewLabel}}'
+                >
+                  <div class='solutions-generation-chart__bars' aria-hidden='true'>{{#each
+                      @root.journey.chartMonths
+                    }}<i style='--solutions-bar: 14%;'></i>{{/each}}</div>
+                  <div class='solutions-generation-chart__months' aria-hidden='true'>{{#each
+                      @root.journey.chartMonths
+                    }}<span>{{this}}</span>{{/each}}</div>
+                  <p data-solutions-chart-label>{{@root.journey.chartPreviewLabel}}</p>
+                </div>
+              {{/if}}
+              {{#if visualCards}}
+                <div class='solutions-visual-cards'>{{#each visualCards}}<div
+                      class='solutions-visual-card'
+                    ><span>{{label}}</span><strong
+                        data-solutions-field='{{data}}'
+                        data-solutions-default='{{value}}'
+                      >{{value}}</strong></div>{{/each}}</div>
+              {{/if}}
+            </div>
+          </div>
+        </article>
+      {{/each}}
+    </div>
+  </div>
+</div>

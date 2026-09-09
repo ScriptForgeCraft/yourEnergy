@@ -30,31 +30,38 @@
 
     <main id='main' data-home-story>
       <section class='hero section home-hero' id='top' aria-labelledby='hero-title' data-home-hero>
-        <picture class='hero-backdrop' aria-hidden='true' data-hero-time-backdrop>
-          <source
-            type='image/avif'
-            srcset='/images/hero-time-8-640.avif 640w, /images/hero-time-8-1024.avif 1024w, /images/hero-time-8-1600.avif 1600w'
-            sizes='100vw'
-            data-hero-time-source='avif'
-          />
-          <source
-            type='image/webp'
-            srcset='/images/hero-time-8-640.webp 640w, /images/hero-time-8-1024.webp 1024w, /images/hero-time-8-1600.webp 1600w'
-            sizes='100vw'
-            data-hero-time-source='webp'
-          />
-          <img
-            src='/images/hero-time-8-1600.jpg'
-            srcset='/images/hero-time-8-640.jpg 640w, /images/hero-time-8-1024.jpg 1024w, /images/hero-time-8-1600.jpg 1600w'
-            sizes='100vw'
-            width='1600'
-            height='900'
-            alt=''
-            fetchpriority='high'
-            decoding='async'
-            data-hero-time-image
-          />
-        </picture>
+        <div class='hero-backdrop' aria-hidden='true' data-hero-time-backdrop>
+          <picture class='hero-backdrop__picture'>
+            <source
+              type='image/avif'
+              srcset='/images/hero-time-8-640.avif 640w, /images/hero-time-8-1024.avif 1024w, /images/hero-time-8-1600.avif 1600w'
+              sizes='100vw'
+              data-hero-time-source='avif'
+            />
+            <source
+              type='image/webp'
+              srcset='/images/hero-time-8-640.webp 640w, /images/hero-time-8-1024.webp 1024w, /images/hero-time-8-1600.webp 1600w'
+              sizes='100vw'
+              data-hero-time-source='webp'
+            />
+            <img
+              src='/images/hero-time-8-1600.jpg'
+              srcset='/images/hero-time-8-640.jpg 640w, /images/hero-time-8-1024.jpg 1024w, /images/hero-time-8-1600.jpg 1600w'
+              sizes='100vw'
+              width='1600'
+              height='900'
+              alt=''
+              fetchpriority='high'
+              decoding='async'
+              data-hero-time-image
+            />
+          </picture>
+          <img class='hero-backdrop__transition' alt='' decoding='async' data-hero-time-transition />
+          <img class='hero-backdrop__transition' alt='' decoding='async' data-hero-time-transition />
+          <img class='hero-backdrop__transition' alt='' decoding='async' data-hero-time-transition />
+          <img class='hero-backdrop__transition' alt='' decoding='async' data-hero-time-transition />
+          <img class='hero-backdrop__transition' alt='' decoding='async' data-hero-time-transition />
+        </div>
         <div class='hero-scrim' aria-hidden='true'></div>
         <span class='hero-time-sun' data-hero-time-sun aria-hidden='true'></span>
         <div class='hero-frame'>
@@ -201,14 +208,14 @@
               >{{solutions.title}}</h2></div><p>{{solutions.copy}}</p></div>
           <div class='solution-grid'>
             {{#each solutions.items}}
-              <article class='solution-card {{cardClass}}'>
-                {{#if badge}}<span class='solution-badge'>{{badge}}</span>{{/if}}
+              <article class='{{cardClass}}'>
+                {{~#if badge}}<span class='solution-badge'>{{badge}}</span>{{/if~}}
                 <p class='solution-index'>0{{@index}}</p><h3>{{name}}</h3><p>{{subtitle}}</p>
                 <dl><div><dt>kWp</dt><dd>{{capacity}}</dd></div><div><dt>kWh</dt><dd>{{generation}}</dd></div></dl>
                 <strong class='solution-price'>{{price}}</strong>
                 <details><summary>{{detailsLabel}}</summary><ul>{{#each details}}<li
                       >{{this}}</li>{{/each}}</ul></details>
-                <a class='button {{buttonClass}}' href='{{../solutionHref}}'>{{ctaLabel}}</a>
+                <a class='{{buttonClass}}' href='{{../solutionHref}}'>{{ctaLabel}}</a>
               </article>
             {{/each}}
           </div>
@@ -264,17 +271,13 @@
         </div>
       </section>
 
-      <section class='process section' id='process' aria-labelledby='process-title'>
-        <div class='container'><div class='section-heading'><div><p
-                class='eyebrow'
-              >{{process.eyebrow}}</p><h2 id='process-title'>{{process.title}}</h2></div><p
-            >{{process.note}}</p></div>
-          <ol class='process-list'>{{#each process.steps}}<li><span>{{number}}</span><svg
-                  class='inline-icon'
-                  aria-hidden='true'
-                ><use href='/icons.svg#{{icon}}'></use></svg><h3>{{title}}</h3><p
-                >{{copy}}</p></li>{{/each}}</ol>
-        </div>
+      <section
+        class='process process-journey solutions section'
+        id='process'
+        aria-labelledby='process-title'
+        data-solutions-story
+      >
+        {{> journey-story}}
       </section>
 
       <section class='engineering section' id='engineering' aria-labelledby='engineering-title'><div
@@ -377,6 +380,7 @@
     {{> site-footer}}
 
     <script id='home-page-config' type='application/json'>{{{homePageConfig}}}</script>
+    <script id='journey-page-config' type='application/json'>{{{journeyPageConfig}}}</script>
     <script type='module' src='/src/main.js'></script>
   </body>
 </html>

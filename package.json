@@ -18,7 +18,9 @@
     "check": "npm test && npm run lint && npm run format:check && npm run build && npm run verify:build"
   },
   "dependencies": {
-    "leaflet": "^1.9.4"
+    "gsap": "^3.15.0",
+    "leaflet": "^1.9.4",
+    "swiper": "^12.2.0"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
@@ -27,6 +29,7 @@
     "handlebars": "^4.7.9",
     "prettier": "^3.9.6",
     "sharp": "^0.35.4",
+    "terser": "^5.51.2",
     "vite": "^8.2.2"
   }
 }

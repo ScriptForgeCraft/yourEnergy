@@ -10,6 +10,8 @@ import {
   HERO_TIME_ZONE,
   getHeroFrameUrl,
   getHeroImageExtension,
+  getHeroIntroProfiles,
+  getHeroIntroTransitionDuration,
   getHeroCounterTarget,
   getHeroTimeProfile,
   getHeroTimeSrcset,
@@ -94,6 +96,20 @@ test('time-based hero visual uses Asia/Yerevan and a neutral fallback outside su
   assert.equal(getHeroImageExtension(''), null);
 });
 
+test('first-view Hero day-cycle intro starts at morning and stops at the active supplied frame', () => {
+  const afternoon = getHeroTimeProfile(new Date('2026-09-07T13:00:00.000Z'));
+  assert.deepEqual(
+    getHeroIntroProfiles(afternoon).map(({ assetHour }) => assetHour),
+    [8, 12, 14, 16, 18]
+  );
+  assert.deepEqual(
+    getHeroIntroProfiles(getHeroTimeProfile(new Date('2026-09-07T18:00:00.000Z'))),
+    []
+  );
+  assert.equal(getHeroIntroTransitionDuration(5), 1_150);
+  assert.equal(getHeroIntroTransitionDuration(6) * 5 <= 5_200, true);
+});
+
 test('time-based Hero visual preloads a frame and retains the last successful frame before neutral recovery', async () => {
   const motion = await source('src/ui/home-motion.js');
   const daytime = getHeroTimeProfile(new Date('2026-09-07T10:00:00.000Z'));
@@ -105,20 +121,27 @@ test('time-based Hero visual preloads a frame and retains the last successful fr
   assert.match(motion, /resolveHeroFrameFailure\(lastSuccessfulProfile, appliedProfile\)/u);
   assert.match(motion, /source\.removeAttribute\('srcset'\)/u);
   assert.match(motion, /applyFrame\(fallback, \{ jpegOnly: true \}\)/u);
+  assert.match(motion, /await frame\.decode\(\)/u);
+  assert.match(motion, /await transitionImage\.decode\(\)/u);
+  assert.match(motion, /const preparedTransitions = await Promise\.all\(/u);
+  assert.match(motion, /delay: index \* transitionDuration/u);
+  assert.match(motion, /startTransitionFade/u);
+  assert.match(motion, /animateSunAcrossDayCycle/u);
+  assert.match(motion, /interpolateSunArc/u);
+  assert.match(motion, /transitionImage\.animate\(\[\{ opacity: 0 \}, \{ opacity: 1 \}\]/u);
+  assert.match(motion, /requestAnimationFrame\(frame\)/u);
   assert.doesNotMatch(motion, /date\?\.getHours/u);
 });
 
-test('Hero sun maps each source-frame arc point through object-fit cover', () => {
+test('Hero sun maps each source-frame arc point into the uncropped hero rectangle', () => {
   const evening = getHeroTimeProfile(new Date('2026-09-07T16:00:00.000Z'));
   const point = projectHeroArcPoint(evening, {
-    sourceWidth: 1672,
-    sourceHeight: 941,
     frameWidth: 1520.8,
     frameHeight: 791.2
   });
   assert.equal(Math.round(point.x), 1460);
-  assert.equal(Math.round(point.y), 150);
-  assert.equal(projectHeroArcPoint(evening, { frameWidth: 100, frameHeight: 100 }), null);
+  assert.equal(Math.round(point.y), 169);
+  assert.equal(projectHeroArcPoint(evening, { frameWidth: 100 }), null);
 });
 
 test('each supplied day-cycle frame carries a source-verified point on its solar arc', () => {

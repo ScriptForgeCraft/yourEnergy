@@ -52,6 +52,9 @@ export default {
   contact: {
     phone: '+374 91 095 950',
     phoneHref: 'tel:+37491095950',
+    whatsappHref: 'https://wa.me/37491095950',
+    whatsappLabel: 'Գրել մեզ WhatsApp-ով',
+    phoneLabel: 'Զանգել +374 91 095 950 համարով',
     address: 'Artashisyan 48 14 Kotayq, Zovuni, 26 33 str, Yerevan',
     hours: 'Բաց է մինչև 21:00',
     note: 'Կոնտակտային տվյալները տրամադրվել են Your Energy LLC-ի կողմից։'
@@ -436,6 +439,207 @@ export default {
         icon: 'shield',
         title: 'Հստակ պայմաններ',
         note: 'կազմը հաստատվում է նախապես'
+      }
+    ]
+  },
+  journey: {
+    title: 'Ձեր արևային ճանապարհը',
+    progressLabel: 'Արևային վերլուծության փուլեր',
+    previewLabel: 'Ցուցադրական նախադիտում',
+    chartPreviewLabel: 'Գրաֆիկի նախադիտում — հասանելի է հաշվարկից հետո',
+    chartReadyLabel: 'Ձեր հաշվարկի ամսական արտադրությունը',
+    availableAfterCalculation: 'Հասանելի է հաշվարկից հետո',
+    confirmedInput: 'Հաստատված տվյալ',
+    awaitingInput: 'Ավելացրեք հաշվիչում',
+    previousStepLabel: 'Հետ',
+    nextStepLabel: 'Շարունակել',
+    chartMonths: ['Հ', 'Փ', 'Մ', 'Ա', 'Մ', 'Հ', 'Հ', 'Օ', 'Ս', 'Հ', 'Ն', 'Դ'],
+    steps: [
+      {
+        number: '01',
+        nav: 'Ձեր տունը',
+        visual: 'home',
+        visualLabel: 'Տան տեսողական տեղապահ',
+        headline: 'Սկսենք ձեր տնից',
+        copy: 'Նշեք տեղադրությունը և էլեկտրաէներգիայի սպառումը։ Դրանք կդառնան արևային վերլուծության մեկնակետը։',
+        status: 'home',
+        cards: [
+          {
+            icon: 'map-pin',
+            label: 'Տեղադրություն',
+            value: 'Ավելացրեք հաշվիչում',
+            data: 'location'
+          },
+          {
+            icon: 'zap',
+            label: 'Էլեկտրաէներգիայի սպառում',
+            value: 'Ավելացրեք հաշվիչում',
+            data: 'consumption'
+          },
+          {
+            icon: 'sun',
+            label: 'Արևային ռեսուրս',
+            value: 'Հասանելի է հաշվարկից հետո',
+            data: 'solar-resource'
+          }
+        ],
+        visualCards: [
+          { label: 'Օբյեկտ', value: 'Նախադիտում', data: 'location' },
+          {
+            label: 'Տվյալների կարգավիճակ',
+            value: 'Սպասում ենք ձեր տվյալներին',
+            data: 'home-status'
+          }
+        ]
+      },
+      {
+        number: '02',
+        nav: 'Տանիքի տվյալները',
+        visual: 'roof',
+        visualLabel: 'Տանիքի ուրվագծի տեղապահ',
+        headline: 'Հասկանանք ձեր տանիքը',
+        copy: 'Ճշգրտեք գնահատականը օբյեկտի կետով, օգտագործելի մակերեսով և տանիքի պայմաններով։',
+        status: 'roof',
+        cards: [
+          {
+            icon: 'satellite',
+            label: 'Տանիքի օգտագործելի մակերես',
+            value: 'Ավելացրեք հաշվիչում',
+            data: 'roof-area'
+          },
+          {
+            icon: 'sun',
+            label: 'Տանիքի ուղղություն',
+            value: 'Ավելացրեք հաշվիչում',
+            data: 'roof-direction'
+          },
+          {
+            icon: 'arrow-right',
+            label: 'Տանիքի թեքություն',
+            value: 'Ավելացրեք հաշվիչում',
+            data: 'roof-tilt'
+          }
+        ],
+        visualCards: [
+          { label: 'Տանիքի ուրվագիծ', value: 'Ձեռքով ճշգրտում', data: 'roof-status' },
+          {
+            label: 'Տվյալների կարգավիճակ',
+            value: 'Սա ավտոմատ տանիքի սկանավորում չէ',
+            data: 'roof-status'
+          }
+        ]
+      },
+      {
+        number: '03',
+        nav: 'Համակարգի նախագիծ',
+        visual: 'system',
+        visualLabel: 'Արևային համակարգի տեղապահ',
+        headline: 'Ձեր արևային համակարգը ստանում է իր տեսքը',
+        copy: 'Մենք համադրում ենք սպառման, տեղադրության և տանիքի տվյալները՝ ձեր տանը համապատասխան համակարգ առաջարկելու համար։',
+        status: 'system',
+        chart: true,
+        cards: [
+          {
+            icon: 'zap',
+            label: 'Համակարգի հզորություն',
+            value: 'Ցուցադրական նախադիտում',
+            data: 'system-size'
+          },
+          {
+            icon: 'sun',
+            label: 'Արևային վահանակներ',
+            value: 'Ցուցադրական նախադիտում',
+            data: 'panel-count'
+          },
+          {
+            icon: 'shield-check',
+            label: 'Ինվերտոր',
+            value: 'Հաստատվում է նախագծման ընթացքում',
+            data: 'inverter'
+          },
+          {
+            icon: 'cycle',
+            label: 'Տարեկան արտադրություն',
+            value: 'Ցուցադրական նախադիտում',
+            data: 'annual-production'
+          }
+        ],
+        visualCards: [
+          { label: 'Առաջարկվող համակարգ', value: 'Ցուցադրական նախադիտում', data: 'system-size' },
+          { label: 'Տվյալների աղբյուր', value: 'Հասանելի է հաշվարկից հետո', data: 'system-status' }
+        ]
+      },
+      {
+        number: '04',
+        nav: 'Մասնագետի զննում',
+        visual: 'inspection',
+        visualLabel: 'Տեղում ինժեներական զննում',
+        headline: 'Մասնագետի զննում',
+        copy: 'Ինժեները վերջնական նախագծից առաջ ստուգում է տանիքը, էլեկտրական վահանակը և ստվերավորումը։',
+        cards: [
+          {
+            icon: 'pin',
+            label: 'Տանիքի չափումներ',
+            value: 'Տեղազննման ընթացքում'
+          },
+          {
+            icon: 'calculator',
+            label: 'Էլեկտրական վահանակ',
+            value: 'Տեղազննման ընթացքում'
+          },
+          {
+            icon: 'sun',
+            label: 'Ստվերավորման ստուգում',
+            value: 'Ստուգվում է տեղում'
+          }
+        ],
+        visualCards: [
+          { label: 'Տեղազննում', value: 'Մինչև վերջնական առաջարկը' },
+          { label: 'Ինժեներական ստուգում', value: 'Տեղում' }
+        ]
+      },
+      {
+        number: '05',
+        nav: 'Տեղադրում',
+        visual: 'installation',
+        visualLabel: 'Տեղադրման տեսողական տեղապահ',
+        headline: 'Վերլուծությունից դեպի տեղադրում',
+        copy: 'Ինժեները ստուգում է օբյեկտը, վերջնականացնում նախագիծը և համակարգը պատրաստում մասնագիտական տեղադրմանը։',
+        cards: [
+          { icon: 'pin', label: 'Տեղազննում', value: 'Ինժեների ստուգում' },
+          { icon: 'calculator', label: 'Վերջնական նախագիծ', value: 'Զննումից հետո' },
+          { icon: 'sun', label: 'Սարքավորումների պատրաստում', value: 'Հաստատվում է նախագծի համար' }
+        ],
+        timeline: [
+          { number: '01', label: 'Տեղազննում' },
+          { number: '02', label: 'Վերջնական նախագիծ' },
+          { number: '03', label: 'Սարքավորումների պատրաստում' },
+          { number: '04', label: 'Տեղադրում' },
+          { number: '05', label: 'Գործարկում' }
+        ]
+      },
+      {
+        number: '06',
+        nav: 'Երկարաժամկետ աջակցություն',
+        visual: 'support',
+        visualLabel: 'Աջակցության տեսողական տեղապահ',
+        headline: 'Ձեր համակարգը շարունակում է աշխատել ձեզ համար',
+        copy: 'Տեղադրումից հետո մեկտեղ պահեք համակարգի տվյալները, արտադրության համատեքստը և աջակցության ճանապարհը։',
+        cards: [
+          { icon: 'file', label: 'Solar Passport', value: 'Ձեր ընթացիկ վերլուծության համատեքստը' },
+          { icon: 'shield-check', label: 'Համակարգի տեղեկություններ', value: 'Նախագծի փաստաթղթեր' },
+          {
+            icon: 'cycle',
+            label: 'Արտադրության համատեքստ',
+            value: 'Վերլուծության հասանելի տվյալներ'
+          },
+          { icon: 'support', label: 'Աջակցություն', value: 'Ձեր աջակցության ճանապարհը' }
+        ],
+        visualCards: [
+          { label: 'Փաստաթղթեր', value: 'Ամենը մեկ տեղում' },
+          { label: 'Համակարգի համատեքստ', value: 'Պահվում է ձեր ճանապարհի հետ' }
+        ],
+        cta: 'Սկսել իմ արևային վերլուծությունը'
       }
     ]
   },
