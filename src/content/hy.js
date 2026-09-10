@@ -55,7 +55,8 @@ export default {
     whatsappHref: 'https://wa.me/37491095950',
     whatsappLabel: 'Գրել մեզ WhatsApp-ով',
     phoneLabel: 'Զանգել +374 91 095 950 համարով',
-    address: 'Artashisyan 48 14 Kotayq, Zovuni, 26 33 str, Yerevan',
+    address1: 'Հայաստան, Երևան, Արտաշիսյան փողոց, 48/14',
+    address2: 'Հայաստան, Կոտայքի մարզ, Զովունի, 26-րդ փողոց, 33',
     hours: 'Բաց է մինչև 21:00',
     note: 'Կոնտակտային տվյալները տրամադրվել են Your Energy LLC-ի կողմից։'
   },

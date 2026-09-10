@@ -444,7 +444,7 @@ h1 mark {
 .support-shell h1 {
   margin-bottom: 24px;
   font-size: clamp(2.4rem, 7vw, 5rem);
-  overflow-wrap: anywhere;
+  overflow-wrap: break-word;
 }
 
 .support-shell p:not(.eyebrow) {

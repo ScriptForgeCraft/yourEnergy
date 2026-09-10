@@ -55,7 +55,8 @@ export default {
     whatsappHref: 'https://wa.me/37491095950',
     whatsappLabel: 'Chat with us on WhatsApp',
     phoneLabel: 'Call +374 91 095 950',
-    address: 'Artashisyan 48 14 Kotayq, Zovuni, 26 33 str, Yerevan',
+    address1: '48/14 Artashisyan St., Yerevan, Armenia',
+    address2: '33, 26th Street, Zovuni, Kotayk Province, Armenia',
     hours: 'Open until 21:00',
     note: 'Contact details provided by Your Energy LLC.'
   },

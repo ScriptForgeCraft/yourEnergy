@@ -119,7 +119,7 @@
 .tool-hero h1 {
   max-width: 20ch;
   font-size: clamp(2.35rem, 4vw, 4.2rem);
-  overflow-wrap: anywhere;
+  overflow-wrap: break-word;
 }
 .tool-hero .section-disclosure {
   color: #dbe8f1;

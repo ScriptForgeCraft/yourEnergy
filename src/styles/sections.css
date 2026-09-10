@@ -22,7 +22,8 @@ button {
 h2,
 h3,
 p {
-  overflow-wrap: anywhere;
+  overflow-wrap: break-word;
+  word-break: normal;
 }
 
 h2 {
@@ -819,7 +820,7 @@ h3 {
   font-size: clamp(0.78rem, 1.2vw, 0.94rem);
   font-weight: 800;
   line-height: 1.3;
-  overflow-wrap: anywhere;
+  overflow-wrap: break-word;
 }
 
 .company-record__meta {
@@ -1120,6 +1121,11 @@ h3 {
   padding-block: 50px 32px;
 }
 
+.footer-grid > div,
+.footer-contact p {
+  min-width: 0;
+}
+
 .footer-grid .wordmark {
   color: #fff;
 }
@@ -1171,8 +1177,12 @@ h3 {
   padding-left: clamp(0px, 0.8vw, 12px);
 }
 
-.footer-contact address {
-  font-style: normal;
+.footer-contact .footer-address {
+  flex: 1 1 auto;
+  min-width: 0;
+  white-space: nowrap;
+  overflow-wrap: normal;
+  word-break: normal;
 }
 
 .footer-contact a {
@@ -1379,6 +1389,11 @@ h3 {
   .footer-grid {
     grid-template-columns: 1fr 1fr;
     gap: 30px 16px;
+  }
+
+  .footer-contact .footer-address {
+    white-space: normal;
+    overflow-wrap: break-word;
   }
 
   .footer-grid > div:first-child,

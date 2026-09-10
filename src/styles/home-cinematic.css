@@ -1276,11 +1276,13 @@
   }
 
   .page-home .hero-trust-strip .trust-strip__inner {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     min-height: 0;
     padding-inline: 16px;
   }
 
   .page-home .hero-trust-strip .trust-item {
+    align-items: flex-start;
     min-height: 76px;
     padding: 13px 12px;
   }
@@ -1293,6 +1295,12 @@
     padding-block: 76px;
   }
 
+
+@media (max-width: 390px) {
+  .page-home .hero-trust-strip .trust-strip__inner {
+    grid-template-columns: 1fr;
+  }
+}
   .page-home .passport-energy-bridge {
     height: 230px;
   }
