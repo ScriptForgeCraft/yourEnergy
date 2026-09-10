@@ -1,732 +1,353 @@
-import { createCalculatorSession } from './calculator-session.js';
 import { gsap } from 'gsap';
-import Swiper from 'swiper';
-import { A11y, EffectFade, Keyboard, Mousewheel } from 'swiper/modules';
+import { ScrollTrigger } from 'gsap/dist/ScrollTrigger.js';
+import { createCalculatorSession } from './calculator-session.js';
+import { getArmeniaRegionalBenchmark } from '../data/regions/armenia.js';
+import { toNonNegativeNumberOrNull, toPositiveNumberOrNull } from '../domain/numbers.js';
 
-const clamp = (value, minimum = 0, maximum = 1) => Math.min(maximum, Math.max(minimum, value));
+const signature = (state) =>
+  JSON.stringify([
+    state?.regionId ?? null,
+    state?.consumption?.mode ?? null,
+    state?.consumption?.averageMonthlyBillAmd ?? null,
+    state?.consumption?.averageMonthlyKwh ?? null
+  ]);
 
-const STORY_FRAME_TOLERANCE_PX = 1;
-
-/**
- * The desktop storyboard has one exact visual viewport of height. Do not let
- * its wheel-driven navigation capture a visitor's scroll until that complete
- * frame is on screen.
- */
-export const isSolutionsStoryFrameFullyVisible = ({ top, bottom, height, viewportHeight } = {}) => {
-  if (![top, bottom, height, viewportHeight].every(Number.isFinite) || viewportHeight <= 0) {
-    return false;
-  }
-
-  return (
-    Math.abs(height - viewportHeight) <= STORY_FRAME_TOLERANCE_PX &&
-    Math.abs(top) <= STORY_FRAME_TOLERANCE_PX &&
-    Math.abs(bottom - viewportHeight) <= STORY_FRAME_TOLERANCE_PX
-  );
-};
-
-export const moveSolutionsStoryStep = ({
-  index,
-  steps,
-  swiper = null,
-  setActive,
-  isDesktop,
-  reducedMotion
-}) => {
-  if (!steps.length) return null;
-
-  const nextIndex = clamp(index, 0, steps.length - 1);
-  if (swiper) {
-    swiper.slideTo(nextIndex);
-    return nextIndex;
-  }
-
-  setActive(nextIndex);
-  if (!isDesktop) {
-    steps[nextIndex]?.scrollIntoView({
-      behavior: reducedMotion ? 'auto' : 'smooth',
-      block: 'start'
+/** Input handoff only. Tariff confirmation and calculations stay in Quick. */
+export const buildSolutionsStartState = ({ regionId, mode, amount }, previous = {}) => {
+  const value = toPositiveNumberOrNull(amount);
+  if (!getArmeniaRegionalBenchmark(regionId) || !['bill', 'usage'].includes(mode) || value === null)
+    return null;
+  const consumption =
+    mode === 'bill' ? { mode, averageMonthlyBillAmd: value } : { mode, averageMonthlyKwh: value };
+  const next = { regionId, consumption };
+  if (signature(next) !== signature(previous)) {
+    Object.assign(next, {
+      analysis: null,
+      quickAnalysis: null,
+      solarPassport: null,
+      analysisStatus: 'idle'
     });
   }
-  return nextIndex;
-};
-
-const finite = (value) => {
-  const number = Number(value);
-  return Number.isFinite(number) ? number : null;
-};
-
-const meaningfulText = (value) =>
-  typeof value === 'string' && value.trim().length >= 2 ? value.trim() : null;
-
-const completeMonthlySeries = (value) =>
-  Array.isArray(value) && value.length === 12 && value.every((item) => finite(item) !== null)
-    ? value.map(Number)
-    : null;
-
-const localeWords = (locale = '') => {
-  if (locale.startsWith('ru')) {
-    return {
-      perYear: 'в год',
-      years: 'лет',
-      trees: 'деревьев в год',
-      confirmed: 'Подтверждённые данные'
-    };
+  if (previous.regionId !== regionId) {
+    Object.assign(next, { property: null, roof: null, sitePotential: null, userTariff: null });
   }
-  if (locale.startsWith('hy')) {
-    return { perYear: 'տարում', years: 'տարի', trees: 'ծառ / տարի', confirmed: 'Հաստատված տվյալ' };
-  }
-  return {
-    perYear: 'per year',
-    years: 'years',
-    trees: 'trees per year',
-    confirmed: 'Confirmed input'
-  };
+  return next;
 };
 
-/**
- * Presentation only: values are read from a completed SolarAnalysis snapshot.
- * This section never sizes a system or calculates financial/environmental data.
- */
+/** Only read completed results, never synthesize personalized metrics. */
 export const buildSolutionsPresentation = (analysis, { status = 'idle' } = {}) => {
-  const scenario = analysis?.selectedScenario ?? null;
-  const property = analysis?.property ?? null;
-  const roof = analysis?.roof ?? null;
-  const system = scenario?.system ?? null;
-  const generation = scenario?.generation ?? null;
-  const financial = scenario?.financial ?? null;
-  const hasResult = status === 'complete' || Boolean(analysis);
-
+  const valid = status === 'complete' && Boolean(analysis?.selectedScenario);
+  const result = valid ? analysis : null;
   return {
-    hasResult,
-    loading: status === 'loading',
-    location: meaningfulText(property?.address),
-    consumption: finite(analysis?.consumption?.annualKwh),
-    solarResource: finite(analysis?.production?.annualYieldKwhPerKwp),
-    roofArea: finite(roof?.areaSqm),
-    roofDirection: finite(roof?.orientationDegrees),
-    roofTilt: finite(roof?.tiltDegrees),
-    systemSize: finite(system?.capacityKwp),
-    panelCount: finite(system?.panelCount),
-    annualProduction: finite(generation?.annualKwh),
-    monthlyProduction: completeMonthlySeries(generation?.monthlyKwh),
-    coverage: finite(scenario?.coveragePercent),
-    annualSavings: finite(financial?.annualSavingsAmd),
-    payback: finite(financial?.paybackYears),
-    avoidedCo2: finite(analysis?.environmental?.avoidedCo2Tons),
-    treeEquivalent: finite(analysis?.environmental?.treeEquivalent)
+    hasResult: valid,
+    solarResource: toNonNegativeNumberOrNull(result?.production?.annualYieldKwhPerKwp),
+    source:
+      typeof result?.production?.source?.provider === 'string'
+        ? result.production.source.provider
+        : null,
+    systemSize: toNonNegativeNumberOrNull(result?.selectedScenario?.system?.capacityKwp),
+    panelCount: toNonNegativeNumberOrNull(result?.selectedScenario?.system?.panelCount),
+    annualProduction: toNonNegativeNumberOrNull(result?.selectedScenario?.generation?.annualKwh)
   };
-};
-
-const formatNumber = (value, locale, decimals = 0) =>
-  new Intl.NumberFormat(locale, {
-    minimumFractionDigits: decimals,
-    maximumFractionDigits: decimals
-  }).format(value);
-
-const valueWithUnit = (value, unit, locale, decimals = 0) =>
-  `${formatNumber(value, locale, decimals)}${unit ? ` ${unit}` : ''}`;
-
-const countElements = (root, field, value, unit, locale, decimals, reducedMotion) => {
-  root.querySelectorAll(`[data-solutions-field='${field}']`).forEach((element) => {
-    element.dataset.solutionsCountValue = String(value);
-    element.dataset.solutionsCountUnit = unit;
-    element.dataset.solutionsCountDecimals = String(decimals);
-    element.dataset.solutionsCountLocale = locale;
-    element.textContent = reducedMotion
-      ? valueWithUnit(value, unit, locale, decimals)
-      : valueWithUnit(0, unit, locale, decimals);
-  });
-};
-
-const textElements = (root, field, value) => {
-  root.querySelectorAll(`[data-solutions-field='${field}']`).forEach((element) => {
-    delete element.dataset.solutionsCountValue;
-    element.textContent = value ?? element.dataset.solutionsDefault ?? element.textContent;
-  });
-};
-
-const renderTextOrNumber = ({
-  root,
-  field,
-  value,
-  unit = '',
-  locale,
-  decimals = 0,
-  reducedMotion
-}) => {
-  if (value === null || value === undefined) {
-    textElements(root, field, null);
-    return;
-  }
-  countElements(root, field, value, unit, locale, decimals, reducedMotion);
-};
-
-const animateElement = (element, counters, reducedMotion, delay = 0) => {
-  const target = finite(element.dataset.solutionsCountValue);
-  if (target === null) return;
-  const decimals = Math.max(
-    0,
-    Number.parseInt(element.dataset.solutionsCountDecimals ?? '0', 10) || 0
-  );
-  const locale = element.dataset.solutionsCountLocale || document.documentElement.lang || undefined;
-  const unit = element.dataset.solutionsCountUnit ?? '';
-  const state = counters.get(element) ?? { value: 0 };
-  counters.set(element, state);
-  gsap.killTweensOf(state);
-  if (reducedMotion) {
-    element.textContent = valueWithUnit(target, unit, locale, decimals);
-    return;
-  }
-
-  state.value = 0;
-  gsap.to(state, {
-    value: target,
-    duration: 0.82,
-    delay,
-    ease: 'power3.out',
-    onUpdate: () => {
-      element.textContent = valueWithUnit(state.value, unit, locale, decimals);
-    }
-  });
-};
-
-const updateChart = (root, monthlyProduction, { locale, copy }) => {
-  const chart = root.querySelector('[data-solutions-chart]');
-  if (!chart) return;
-  const label = root.querySelector('[data-solutions-chart-label]');
-  const bars = [...chart.querySelectorAll('.solutions-generation-chart__bars i')];
-  if (!monthlyProduction) {
-    chart.dataset.state = 'preview';
-    chart.setAttribute('aria-label', copy.chartPreviewLabel);
-    if (label) label.textContent = copy.chartPreviewLabel;
-    bars.forEach((bar) => bar.style.setProperty('--solutions-bar', '14%'));
-    return;
-  }
-
-  const maximum = Math.max(...monthlyProduction, 1);
-  chart.dataset.state = 'ready';
-  chart.setAttribute('aria-label', copy.chartReadyLabel);
-  if (label) label.textContent = copy.chartReadyLabel;
-  bars.forEach((bar, index) => {
-    const value = monthlyProduction[index] ?? 0;
-    bar.style.setProperty('--solutions-bar', `${Math.max(8, (value / maximum) * 100)}%`);
-    bar.setAttribute('title', valueWithUnit(value, 'kWh', locale));
-  });
-};
-
-const renderPresentation = ({ root, presentation, config, reducedMotion }) => {
-  const locale = config.locale || document.documentElement.lang || 'en-US';
-  const copy = config.journey ?? {};
-  const words = localeWords(locale);
-  const hasRoofInputs = [
-    presentation.roofArea,
-    presentation.roofDirection,
-    presentation.roofTilt
-  ].some((value) => value !== null);
-  const hasSystem = presentation.systemSize !== null || presentation.annualProduction !== null;
-  const hasSavings = [
-    presentation.coverage,
-    presentation.annualSavings,
-    presentation.payback,
-    presentation.avoidedCo2,
-    presentation.treeEquivalent
-  ].some((value) => value !== null);
-
-  root.dataset.solutionsData = presentation.hasResult ? 'analysis' : 'preview';
-  root.dataset.solutionsLoading = String(presentation.loading);
-
-  textElements(root, 'location', presentation.location);
-  renderTextOrNumber({
-    root,
-    field: 'consumption',
-    value: presentation.consumption,
-    unit: `kWh ${words.perYear}`,
-    locale,
-    reducedMotion
-  });
-  renderTextOrNumber({
-    root,
-    field: 'solar-resource',
-    value: presentation.solarResource,
-    unit: `kWh/kWp ${words.perYear}`,
-    locale,
-    reducedMotion
-  });
-  renderTextOrNumber({
-    root,
-    field: 'roof-area',
-    value: presentation.roofArea,
-    unit: 'm²',
-    locale,
-    decimals: 1,
-    reducedMotion
-  });
-  renderTextOrNumber({
-    root,
-    field: 'roof-direction',
-    value: presentation.roofDirection,
-    unit: '°',
-    locale,
-    reducedMotion
-  });
-  renderTextOrNumber({
-    root,
-    field: 'roof-tilt',
-    value: presentation.roofTilt,
-    unit: '°',
-    locale,
-    reducedMotion
-  });
-  renderTextOrNumber({
-    root,
-    field: 'system-size',
-    value: presentation.systemSize,
-    unit: 'kWp',
-    locale,
-    decimals: 2,
-    reducedMotion
-  });
-  renderTextOrNumber({
-    root,
-    field: 'panel-count',
-    value: presentation.panelCount,
-    unit: '',
-    locale,
-    reducedMotion
-  });
-  renderTextOrNumber({
-    root,
-    field: 'annual-production',
-    value: presentation.annualProduction,
-    unit: `kWh ${words.perYear}`,
-    locale,
-    reducedMotion
-  });
-  renderTextOrNumber({
-    root,
-    field: 'coverage',
-    value:
-      presentation.coverage === null ? null : Math.min(100, Math.max(0, presentation.coverage)),
-    unit: '%',
-    locale,
-    reducedMotion
-  });
-  renderTextOrNumber({
-    root,
-    field: 'annual-savings',
-    value: presentation.annualSavings,
-    unit: `AMD ${words.perYear}`,
-    locale,
-    reducedMotion
-  });
-  renderTextOrNumber({
-    root,
-    field: 'payback',
-    value: presentation.payback,
-    unit: words.years,
-    locale,
-    decimals: 1,
-    reducedMotion
-  });
-  renderTextOrNumber({
-    root,
-    field: 'co2',
-    value: presentation.avoidedCo2,
-    unit: `t CO₂ ${words.perYear}`,
-    locale,
-    decimals: 1,
-    reducedMotion
-  });
-  renderTextOrNumber({
-    root,
-    field: 'trees',
-    value: presentation.treeEquivalent,
-    unit: words.trees,
-    locale,
-    reducedMotion
-  });
-
-  textElements(
-    root,
-    'home-status',
-    presentation.location || presentation.consumption !== null
-      ? copy.confirmedInput
-      : copy.awaitingInput
-  );
-  textElements(root, 'roof-status', hasRoofInputs ? copy.confirmedInput : copy.awaitingInput);
-  textElements(root, 'system-status', hasSystem ? words.confirmed : copy.availableAfterCalculation);
-  textElements(
-    root,
-    'savings-status',
-    hasSavings ? words.confirmed : copy.availableAfterCalculation
-  );
-  textElements(root, 'inverter', hasSystem ? copy.awaitingInput : null);
-
-  root.querySelectorAll('[data-solutions-status]').forEach((element) => {
-    const key = element.dataset.solutionsStatus;
-    const label =
-      key === 'savings'
-        ? hasSavings
-          ? words.confirmed
-          : copy.availableAfterCalculation
-        : key === 'roof'
-          ? hasRoofInputs
-            ? copy.confirmedInput
-            : copy.awaitingInput
-          : key === 'home'
-            ? presentation.location || presentation.consumption !== null
-              ? copy.confirmedInput
-              : copy.awaitingInput
-            : hasSystem
-              ? words.confirmed
-              : copy.previewLabel;
-    element.textContent = presentation.loading ? copy.awaitingInput : label;
-  });
-
-  updateChart(root, presentation.monthlyProduction, { locale, copy });
 };
 
 export const initSolutionsStory = ({ config = {} } = {}) => {
-  const root = document.querySelector('[data-solutions-story]');
+  const root = document.querySelector('[data-solutions-home]');
   if (!root) return () => {};
-
-  const sliderElement = root.querySelector('[data-solutions-slider]');
-  const scrollFrame = root.querySelector('.solutions-story__scroll');
-  const steps = [...root.querySelectorAll('[data-solutions-step]')];
-  const progressItems = [...root.querySelectorAll('[data-solutions-progress-step]')];
-  const progressControls = progressItems
-    .map((item) => item.querySelector('button'))
-    .filter(Boolean);
-  const previousButtons = [...root.querySelectorAll('[data-solutions-previous]')];
-  const nextButtons = [...root.querySelectorAll('[data-solutions-next]')];
-  const reducedMotionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
-  const desktopQuery = window.matchMedia('(min-width: 768px)');
-  let activeIndex = -1;
-  let swiper = null;
-  let scrollCaptureFrame = 0;
-  let storyScrollReady = false;
-  const counters = new Map();
-
-  const syncStoryScrollCapture = () => {
-    scrollCaptureFrame = 0;
-    const bounds = scrollFrame?.getBoundingClientRect();
-    const ready =
-      Boolean(swiper) &&
-      desktopQuery.matches &&
-      isSolutionsStoryFrameFullyVisible({
-        top: bounds?.top,
-        bottom: bounds?.bottom,
-        height: bounds?.height,
-        viewportHeight: window.innerHeight
-      });
-
-    if (ready === storyScrollReady) return;
-    storyScrollReady = ready;
-    root.dataset.solutionsScrollReady = String(ready);
-    if (ready) {
-      swiper?.mousewheel?.enable();
-      swiper?.keyboard?.enable();
-    } else {
-      swiper?.mousewheel?.disable();
-      swiper?.keyboard?.disable();
-    }
-  };
-
-  const requestStoryScrollCaptureSync = () => {
-    if (scrollCaptureFrame) return;
-    scrollCaptureFrame = window.requestAnimationFrame(syncStoryScrollCapture);
-  };
-
-  const animateStep = (step) => {
-    const countTargets = [...step.querySelectorAll('[data-solutions-count-value]')];
-    const eyebrow = step.querySelector('.solutions-story__eyebrow');
-    const headline = step.querySelector('.solutions-story__copy h3');
-    const intro = step.querySelector('.solutions-story__intro');
-    const status = step.querySelector('.solutions-story__status');
-    const copyTargets = [eyebrow, headline, intro, status].filter(Boolean);
-    const metricTargets = [...step.querySelectorAll('.solutions-story__metric')];
-    const timeline = step.querySelector('.solutions-story__timeline');
-    const actions = step.querySelector('.solutions-story__actions');
-    const visual = step.querySelector('.solutions-visual');
-    const visualCards = [...step.querySelectorAll('.solutions-visual-card')];
-    const chart = step.querySelector('.solutions-generation-chart');
-    const visualImage = step.querySelector('.solutions-visual__media img');
-    const entranceTargets = [
-      ...copyTargets,
-      ...metricTargets,
-      timeline,
-      actions,
-      visual,
-      ...visualCards,
-      chart
-    ].filter(Boolean);
-
-    gsap.killTweensOf(entranceTargets);
-    countTargets.forEach((element, index) =>
-      animateElement(element, counters, reducedMotionQuery.matches, 0.28 + index * 0.045)
+  gsap.registerPlugin(ScrollTrigger);
+  const copy = config.journey;
+  const locale = config.locale || document.documentElement.lang;
+  const frame = root.querySelector('.stage-home__frame');
+  const form = root.querySelector('[data-stage-form]');
+  const region = root.querySelector('[data-stage-region]');
+  const amount = root.querySelector('[data-stage-amount]');
+  const modes = [...form.querySelectorAll('[name="mode"]')];
+  const session = createCalculatorSession();
+  const media = gsap.matchMedia();
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const lighting = root.querySelector('[data-stage-lighting]');
+  const lightButtons = [...root.querySelectorAll('[data-stage-light]')];
+  const setLighting = (event) => {
+    const selected = event.currentTarget.dataset.stageLight;
+    root.dataset.lighting = selected;
+    lightButtons.forEach((button) =>
+      button.setAttribute('aria-pressed', String(button.dataset.stageLight === selected))
     );
-    if (reducedMotionQuery.matches) return;
-
-    if (eyebrow) {
-      gsap.fromTo(
-        eyebrow,
-        { autoAlpha: 0, x: -16 },
-        { autoAlpha: 1, x: 0, duration: 0.42, ease: 'power3.out' }
-      );
-    }
-    if (headline) {
-      gsap.fromTo(
-        headline,
-        { autoAlpha: 0, x: -28, clipPath: 'inset(0 100% 0 0)' },
-        {
-          autoAlpha: 1,
-          x: 0,
-          clipPath: 'inset(0 0% 0 0)',
-          duration: 0.68,
-          delay: 0.06,
-          ease: 'power4.out'
-        }
-      );
-    }
-    const introTargets = [intro, status].filter(Boolean);
-    if (introTargets.length) {
-      gsap.fromTo(
-        introTargets,
-        { autoAlpha: 0, y: 18 },
-        {
-          autoAlpha: 1,
-          y: 0,
-          duration: 0.48,
-          delay: 0.2,
-          ease: 'power3.out',
-          stagger: 0.07
-        }
-      );
-    }
-    if (metricTargets.length) {
-      gsap.fromTo(
-        metricTargets,
-        { autoAlpha: 0, x: -18, y: 12 },
-        {
-          autoAlpha: 1,
-          x: 0,
-          y: 0,
-          duration: 0.52,
-          delay: 0.17,
-          ease: 'power3.out',
-          stagger: 0.055
-        }
-      );
-    }
-    const supportingTargets = [timeline, actions].filter(Boolean);
-    if (supportingTargets.length) {
-      gsap.fromTo(
-        supportingTargets,
-        { autoAlpha: 0, y: 18 },
-        {
-          autoAlpha: 1,
-          y: 0,
-          duration: 0.48,
-          delay: 0.28,
-          ease: 'power3.out',
-          stagger: 0.08
-        }
-      );
-    }
-    if (visual) {
-      gsap.fromTo(
-        visual,
-        { autoAlpha: 0, x: 42, scale: 0.975, clipPath: 'inset(0 0 0 7% round 30px)' },
-        {
-          autoAlpha: 1,
-          x: 0,
-          scale: 1,
-          clipPath: 'inset(0 0 0 0% round 30px)',
-          duration: 0.82,
-          ease: 'power3.out'
-        }
-      );
-    }
-    if (visualImage) {
-      gsap.fromTo(
-        visualImage,
-        { scale: 1.075 },
-        { scale: 1.01, duration: 1.25, ease: 'power2.out' }
-      );
-    }
-    const floatingTargets = [...visualCards, chart].filter(Boolean);
-    if (floatingTargets.length) {
-      gsap.fromTo(
-        floatingTargets,
-        { autoAlpha: 0, y: 18 },
-        {
-          autoAlpha: 1,
-          y: 0,
-          duration: 0.52,
-          delay: 0.32,
-          ease: 'power3.out',
-          stagger: 0.08
-        }
-      );
-    }
-
-    const bars = step.querySelectorAll('.solutions-generation-chart__bars i');
-    if (bars.length) {
-      gsap.fromTo(
-        bars,
-        { scaleY: 0.08 },
-        { scaleY: 1, duration: 0.68, ease: 'power3.out', stagger: 0.035, transformOrigin: 'bottom' }
-      );
+  };
+  lightButtons.forEach((button) => button.addEventListener('click', setLighting));
+  if (lighting) lighting.hidden = false;
+  const counters = new Map();
+  const seen = new Set();
+  let isVisible = false;
+  let disposed = false;
+  let activePresentation = null;
+  let hasEditedInput = false;
+  const mode = () => modes.find((input) => input.checked)?.value ?? 'bill';
+  const draft = () =>
+    buildSolutionsStartState(
+      { regionId: region.value, mode: mode(), amount: amount.value },
+      session.read()
+    );
+  const initial = session.read();
+  if (getArmeniaRegionalBenchmark(initial.regionId)) region.value = initial.regionId;
+  modes.forEach((input) => {
+    input.checked = input.value === (initial.consumption?.mode ?? 'bill');
+  });
+  const amounts = {
+    bill: initial.consumption?.averageMonthlyBillAmd ?? '',
+    usage: initial.consumption?.averageMonthlyKwh ?? ''
+  };
+  let activeMode = mode();
+  amount.value = amounts[activeMode];
+  const consumptionFields = [...form.querySelectorAll('[data-stage-consumption]')];
+  const submitLabel = form.querySelector('[data-stage-submit-label]');
+  const setFormExpanded = (expanded) => {
+    root.dataset.formExpanded = String(expanded);
+    consumptionFields.forEach((element) => {
+      element.hidden = !expanded;
+    });
+    if (submitLabel) submitLabel.textContent = expanded ? copy.submit : copy.continue;
+  };
+  form.noValidate = true;
+  setFormExpanded(Boolean(amount.value));
+  const syncMode = () => {
+    const bill = mode() === 'bill';
+    root.querySelector('[data-stage-amount-label]').textContent = bill
+      ? copy.amountBill
+      : copy.amountUsage;
+    root.querySelector('[data-stage-help]').textContent = bill ? copy.billHelp : copy.usageHelp;
+    root.querySelector('[data-stage-unit]').textContent = bill ? 'AMD' : 'kWh';
+  };
+  const animateCounts = () => {
+    for (const [element, entry] of counters) {
+      if (!isVisible && !reduced.matches) continue;
+      const key = JSON.stringify([element.dataset.stageCount, entry.value, entry.resultKey]);
+      if (seen.has(key)) {
+        if (!gsap.isTweening(entry)) element.textContent = entry.format.format(entry.value);
+        continue;
+      }
+      seen.add(key);
+      if (reduced.matches) {
+        element.textContent = entry.format.format(entry.value);
+      } else {
+        entry.current = 0;
+        gsap.to(entry, {
+          current: entry.value,
+          duration: 0.85,
+          ease: 'power2.out',
+          onUpdate: () => {
+            element.textContent = entry.format.format(entry.current);
+          }
+        });
+      }
     }
   };
-
-  const setActive = (index, { force = false } = {}) => {
-    const nextIndex = clamp(index, 0, steps.length - 1);
-    if (!force && nextIndex === activeIndex) return;
-    activeIndex = nextIndex;
-    root.style.setProperty('--solutions-progress', String(progressForStep(nextIndex)));
-    steps.forEach((step, stepIndex) => {
-      const active = stepIndex === nextIndex;
-      step.classList.toggle('is-active', active);
-      step.setAttribute('aria-hidden', desktopQuery.matches && !active ? 'true' : 'false');
-      if (active) animateStep(step);
+  const render = () => {
+    const saved = session.read();
+    const current = draft();
+    const sameInput = current && signature(current) === signature(saved);
+    const analysis = saved.analysis ?? saved.quickAnalysis;
+    // A completed professional analysis may not carry Quick's optional form
+    // metadata. Show it on arrival, but never label it as matching edited input.
+    const presentation = buildSolutionsPresentation(
+      !hasEditedInput || sameInput ? analysis : null,
+      {
+        status: saved.analysisStatus
+      }
+    );
+    root.querySelector('[data-stage-location]').textContent =
+      copy.regions.find(({ id }) => id === region.value)?.label ?? copy.chooseRegion;
+    root.querySelector('[data-stage-resource]').textContent =
+      presentation.solarResource === null
+        ? copy.pending
+        : new Intl.NumberFormat(locale, { maximumFractionDigits: 0 }).format(
+            presentation.solarResource
+          ) + ' kWh/kWp';
+    root.querySelector('[data-stage-source]').textContent = presentation.source
+      ? copy.source + ': ' + presentation.source
+      : '';
+    const resultKey = JSON.stringify([presentation, analysis?.providerRetrievedAt]);
+    if (resultKey === activePresentation) return;
+    activePresentation = resultKey;
+    counters.forEach((entry) => gsap.killTweensOf(entry));
+    counters.clear();
+    root.querySelector('[data-stage-results]').hidden = ![
+      'annualProduction',
+      'systemSize',
+      'panelCount'
+    ].some((key) => presentation[key] !== null);
+    root.querySelectorAll('[data-stage-count]').forEach((element) => {
+      const value = presentation[element.dataset.stageCount];
+      element.parentElement.hidden = value === null;
+      if (value === null) {
+        element.textContent = '';
+        return;
+      }
+      const format = new Intl.NumberFormat(locale, {
+        maximumFractionDigits: element.dataset.stageCount === 'systemSize' ? 2 : 0
+      });
+      element.textContent = format.format(value);
+      counters.set(element, { value, format, resultKey, current: value });
     });
-    progressItems.forEach((item, itemIndex) => {
-      item.classList.toggle('is-active', itemIndex === nextIndex);
-      item.classList.toggle('is-complete', itemIndex < nextIndex);
-      progressControls[itemIndex]?.setAttribute(
-        'aria-current',
-        itemIndex === nextIndex ? 'step' : 'false'
-      );
-    });
+    animateCounts();
   };
-
-  const progressForStep = (index) =>
-    steps.length > 1 ? clamp(index, 0, steps.length - 1) / (steps.length - 1) : 0;
-
-  const setupSwiper = () => {
-    swiper?.destroy(true, true);
-    swiper = null;
-    storyScrollReady = false;
-    root.dataset.solutionsScrollReady = 'false';
-
-    if (!desktopQuery.matches || !sliderElement) {
-      setActive(0, { force: true });
+  const onMode = () => {
+    hasEditedInput = true;
+    amounts[activeMode] = amount.value;
+    activeMode = mode();
+    amount.value = amounts[activeMode];
+    syncMode();
+    render();
+  };
+  const onInput = () => {
+    hasEditedInput = true;
+    render();
+  };
+  const onSubmit = (event) => {
+    event.preventDefault();
+    if (!region.reportValidity()) return;
+    if (root.dataset.formExpanded !== 'true') {
+      setFormExpanded(true);
+      amount.focus({ preventScroll: true });
+      if (!reduced.matches)
+        gsap.fromTo(
+          consumptionFields,
+          { opacity: 0, y: 8 },
+          { opacity: 1, y: 0, duration: 0.4, stagger: 0.04 }
+        );
       return;
     }
-
-    swiper = new Swiper(sliderElement, {
-      modules: [A11y, EffectFade, Keyboard, Mousewheel],
-      direction: 'vertical',
-      slidesPerView: 1,
-      effect: 'fade',
-      fadeEffect: { crossFade: true },
-      speed: reducedMotionQuery.matches ? 0 : 720,
-      threshold: 1,
-      followFinger: false,
-      preventInteractionOnTransition: true,
-      mousewheel: {
-        enabled: false,
-        forceToAxis: true,
-        releaseOnEdges: true,
-        thresholdDelta: 1,
-        thresholdTime: 620
-      },
-      touchReleaseOnEdges: true,
-      keyboard: {
-        enabled: false,
-        onlyInViewport: true,
-        pageUpDown: true
-      },
-      a11y: { enabled: true },
-      on: {
-        init: (instance) => setActive(instance.activeIndex, { force: true }),
-        slideChangeTransitionStart: (instance) => setActive(instance.activeIndex)
+    if (!form.reportValidity()) return;
+    const next = draft();
+    if (!next) return;
+    session.write(next);
+    window.location.assign(form.action);
+  };
+  form.addEventListener('submit', onSubmit);
+  region.addEventListener('change', onInput);
+  amount.addEventListener('input', onInput);
+  modes.forEach((input) => input.addEventListener('change', onMode));
+  window.addEventListener('solar:analysis-updated', render);
+  window.addEventListener('pageshow', render);
+  syncMode();
+  render();
+  const visibility = new IntersectionObserver(
+    ([entry]) => {
+      isVisible = entry.isIntersecting;
+      if (isVisible) animateCounts();
+    },
+    { threshold: 0.12 }
+  );
+  visibility.observe(frame);
+  media.add(
+    {
+      desktop: '(min-width: 768px) and (min-height: 650px)',
+      pointer: '(hover: hover) and (pointer: fine)',
+      reduce: '(prefers-reduced-motion: reduce)'
+    },
+    (context) => {
+      const { desktop, pointer, reduce } = context.conditions;
+      if (reduce) {
+        counters.forEach((entry, element) => {
+          gsap.killTweensOf(entry);
+          element.textContent = entry.format.format(entry.value);
+        });
+        return;
       }
-    });
-    syncStoryScrollCapture();
-  };
-
-  const session = createCalculatorSession();
-  const refreshPresentation = ({ analysis, status } = {}) => {
-    const snapshot = analysis === undefined ? session.read() : null;
-    renderPresentation({
-      root,
-      presentation: buildSolutionsPresentation(
-        analysis ?? snapshot?.analysis ?? snapshot?.quickAnalysis,
-        {
-          status: status ?? snapshot?.analysisStatus ?? 'idle'
-        }
-      ),
-      config,
-      reducedMotion: reducedMotionQuery.matches
-    });
-    activeIndex = -1;
-    swiper?.update();
-    setActive(swiper?.activeIndex ?? 0, { force: true });
-  };
-
-  const onAnalysisUpdate = (event) => refreshPresentation(event.detail ?? {});
-  const onMotionChange = () => {
-    setupSwiper();
-    refreshPresentation();
-  };
-  const onBreakpointChange = () => {
-    setupSwiper();
-    refreshPresentation();
-  };
-
-  const moveTo = (index) => {
-    moveSolutionsStoryStep({
-      index,
-      steps,
-      swiper,
-      setActive: (nextIndex) => setActive(nextIndex, { force: true }),
-      isDesktop: desktopQuery.matches,
-      reducedMotion: reducedMotionQuery.matches
-    });
-  };
-
-  const onProgressActivate = (event) => {
-    const index = Number(event.currentTarget.dataset.solutionsProgressStep);
-    if (Number.isInteger(index)) moveTo(index);
-  };
-  const moveFromStep = (event, direction) => {
-    const index = Number(
-      event.currentTarget.closest('[data-solutions-step]')?.dataset.solutionsStep
-    );
-    if (Number.isInteger(index)) moveTo(index + direction);
-  };
-  const onPrevious = (event) => moveFromStep(event, -1);
-  const onNext = (event) => moveFromStep(event, 1);
-
-  progressItems.forEach((item) => {
-    item.addEventListener('click', onProgressActivate);
+      const reveals = root.querySelectorAll('[data-stage-reveal]');
+      const cards = root.querySelectorAll('[data-stage-card]');
+      const arc = root.querySelector('[data-stage-arc]');
+      const backdrop = root.querySelector('.stage-home__backdrop');
+      const art = root.querySelector('[data-solutions-visual]');
+      const progress = root.querySelector('.stage-home__progress');
+      const entrance = gsap.timeline({
+        scrollTrigger: { trigger: frame, start: 'top 75%', once: true },
+        defaults: { duration: 0.7, ease: 'power3.out' }
+      });
+      entrance
+        .from(backdrop, { opacity: 0 }, 0)
+        .from(reveals, { opacity: 0, y: 18, stagger: 0.09 }, 0.08)
+        .from(cards, { opacity: 0, y: 12, stagger: 0.12 }, 0.42)
+        .fromTo(arc, { opacity: 0 }, { opacity: 1 }, 0.64)
+        .from(progress, { opacity: 0, x: 8 }, 0.76);
+      if (!desktop) return;
+      // CSS reserves the short runway before initialization. Native scrolling
+      // drives one scene, with no wheel/touch capture or slide snapping.
+      const sun = root.querySelector('[data-stage-sun]');
+      const path = root.querySelector('[data-stage-arc-path]');
+      const pathLength = path.getTotalLength();
+      const solar = { progress: 0.6 };
+      const placeSun = () => {
+        const point = path.getPointAtLength(pathLength * solar.progress);
+        gsap.set(sun, { x: point.x, y: point.y });
+      };
+      placeSun();
+      const depth = gsap.timeline({
+        scrollTrigger: {
+          trigger: root,
+          pin: frame,
+          pinSpacing: false,
+          start: 'top top',
+          end: () => '+=' + Math.min(frame.offsetHeight * 0.45, 400),
+          scrub: 0.65,
+          invalidateOnRefresh: true
+        },
+        defaults: { duration: 1, ease: 'none' }
+      });
+      depth
+        .fromTo(art, { scale: 1.03, y: 0 }, { scale: 1.01, y: -4 }, 0)
+        .to(cards[0], { y: -8 }, 0)
+        .to(cards[1], { y: -16 }, 0)
+        .to(solar, { progress: 0.72, onUpdate: placeSun }, 0);
+      const pointerLayer = root.querySelector('[data-stage-pointer]');
+      const moveX = gsap.quickTo(pointerLayer, 'x', { duration: 0.7, ease: 'power3.out' });
+      const moveY = gsap.quickTo(pointerLayer, 'y', { duration: 0.7, ease: 'power3.out' });
+      const onPointer = (event) => {
+        const bounds = frame.getBoundingClientRect();
+        moveX(
+          Math.max(
+            -6,
+            Math.min(6, ((event.clientX - bounds.left - bounds.width / 2) / bounds.width) * 12)
+          )
+        );
+        moveY(
+          Math.max(
+            -6,
+            Math.min(6, ((event.clientY - bounds.top - bounds.height / 2) / bounds.height) * 12)
+          )
+        );
+      };
+      const resetPointer = () => {
+        moveX(0);
+        moveY(0);
+      };
+      if (pointer) {
+        frame.addEventListener('pointermove', onPointer);
+        frame.addEventListener('pointerleave', resetPointer);
+      }
+      return () => {
+        frame.removeEventListener('pointermove', onPointer);
+        frame.removeEventListener('pointerleave', resetPointer);
+      };
+    }
+  );
+  document.fonts?.ready.then(() => {
+    if (!disposed) ScrollTrigger.refresh();
   });
-  previousButtons.forEach((button) => button.addEventListener('click', onPrevious));
-  nextButtons.forEach((button) => button.addEventListener('click', onNext));
-  refreshPresentation();
-  setupSwiper();
-  window.addEventListener('solar:analysis-updated', onAnalysisUpdate);
-  window.addEventListener('scroll', requestStoryScrollCaptureSync, { passive: true });
-  window.addEventListener('resize', requestStoryScrollCaptureSync, { passive: true });
-  reducedMotionQuery.addEventListener('change', onMotionChange);
-  desktopQuery.addEventListener('change', onBreakpointChange);
-
   return () => {
-    swiper?.destroy(true, true);
-    window.cancelAnimationFrame(scrollCaptureFrame);
-    counters.forEach((state) => gsap.killTweensOf(state));
-    gsap.killTweensOf(root.querySelectorAll('.solutions-generation-chart__bars i'));
-    window.removeEventListener('solar:analysis-updated', onAnalysisUpdate);
-    window.removeEventListener('scroll', requestStoryScrollCaptureSync);
-    window.removeEventListener('resize', requestStoryScrollCaptureSync);
-    reducedMotionQuery.removeEventListener('change', onMotionChange);
-    desktopQuery.removeEventListener('change', onBreakpointChange);
-    progressItems.forEach((item) => {
-      item.removeEventListener('click', onProgressActivate);
-    });
-    previousButtons.forEach((button) => button.removeEventListener('click', onPrevious));
-    nextButtons.forEach((button) => button.removeEventListener('click', onNext));
+    disposed = true;
+    lightButtons.forEach((button) => button.removeEventListener('click', setLighting));
+    gsap.killTweensOf(consumptionFields);
+    form.noValidate = false;
+    setFormExpanded(true);
+    visibility.disconnect();
+    media.revert();
+    counters.forEach((entry) => gsap.killTweensOf(entry));
+    form.removeEventListener('submit', onSubmit);
+    region.removeEventListener('change', onInput);
+    amount.removeEventListener('input', onInput);
+    modes.forEach((input) => input.removeEventListener('change', onMode));
+    window.removeEventListener('solar:analysis-updated', render);
+    window.removeEventListener('pageshow', render);
   };
 };

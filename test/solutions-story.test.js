@@ -1,130 +1,91 @@
 import assert from 'node:assert/strict';
-import { readFile } from 'node:fs/promises';
-import { resolve } from 'node:path';
 import test from 'node:test';
+import { buildSolutionsPresentation, buildSolutionsStartState } from '../src/ui/solutions-story.js';
+import { createCalculatorSession } from '../src/ui/calculator-session.js';
 
-import {
-  buildSolutionsPresentation,
-  isSolutionsStoryFrameFullyVisible,
-  moveSolutionsStoryStep
-} from '../src/ui/solutions-story.js';
-
-const analysis = Object.freeze({
-  property: { address: 'Komitas Ave, Yerevan' },
-  consumption: { annualKwh: 10_200 },
-  production: { annualYieldKwhPerKwp: 1_500 },
-  roof: { areaSqm: 54.8, orientationDegrees: 180, tiltDegrees: 30 },
+const analysis = {
+  production: { annualYieldKwhPerKwp: 1500, source: { provider: 'PVGIS' } },
   selectedScenario: {
-    system: { capacityKwp: 6.96, panelCount: 12 },
-    generation: {
-      annualKwh: 10_440,
-      monthlyKwh: [420, 480, 680, 850, 980, 1010, 1080, 1020, 880, 720, 510, 310]
-    },
-    coveragePercent: 102.4,
-    financial: { annualSavingsAmd: 522_000, paybackYears: 5.33 }
-  },
-  environmental: { avoidedCo2Tons: 1.54, treeEquivalent: 25.7 }
+    system: { capacityKwp: 10.4, panelCount: 16 },
+    generation: { annualKwh: 15600 }
+  }
+};
+
+test('Stage 01 presents completed results and never coerces missing metrics to zero', () => {
+  assert.deepEqual(buildSolutionsPresentation(analysis, { status: 'complete' }), {
+    hasResult: true,
+    solarResource: 1500,
+    source: 'PVGIS',
+    systemSize: 10.4,
+    panelCount: 16,
+    annualProduction: 15600
+  });
+  for (const status of ['idle', 'loading', 'unavailable']) {
+    assert.equal(buildSolutionsPresentation(analysis, { status }).annualProduction, null);
+  }
+  assert.equal(
+    buildSolutionsPresentation({ selectedScenario: {} }, { status: 'complete' }).panelCount,
+    null
+  );
+  assert.equal(buildSolutionsPresentation(null, { status: 'complete' }).hasResult, false);
 });
 
-test('Solutions story presents completed SolarAnalysis values without calculating new ones', () => {
-  const presentation = buildSolutionsPresentation(analysis, { status: 'complete' });
-  assert.equal(presentation.hasResult, true);
-  assert.equal(presentation.location, 'Komitas Ave, Yerevan');
-  assert.equal(presentation.systemSize, 6.96);
-  assert.equal(presentation.panelCount, 12);
-  assert.equal(presentation.annualProduction, 10_440);
-  assert.deepEqual(presentation.monthlyProduction, analysis.selectedScenario.generation.monthlyKwh);
-  assert.equal(presentation.annualSavings, 522_000);
-  assert.equal(presentation.payback, 5.33);
-  assert.equal(presentation.avoidedCo2, 1.54);
-  assert.equal(presentation.treeEquivalent, 25.7);
-  assert.equal(analysis.selectedScenario.coveragePercent, 102.4);
+test('Stage 01 validates input and hands bill/kWh values to the existing CalculatorSession', () => {
+  let saved = null;
+  const session = createCalculatorSession({
+    storage: {
+      getItem: () => saved,
+      setItem: (_, value) => {
+        saved = value;
+      }
+    }
+  });
+  for (const [mode, field] of [
+    ['bill', 'averageMonthlyBillAmd'],
+    ['usage', 'averageMonthlyKwh']
+  ]) {
+    const next = buildSolutionsStartState(
+      { regionId: 'yerevan', mode, amount: '350' },
+      session.read()
+    );
+    session.write(next);
+    assert.equal(session.read().regionId, 'yerevan');
+    assert.deepEqual(session.read().consumption, { mode, [field]: 350 });
+    assert.equal(session.read().analysisStatus, 'idle');
+  }
+  for (const amount of ['', null, -1, 0, 'no', Infinity]) {
+    assert.equal(buildSolutionsStartState({ regionId: 'yerevan', mode: 'bill', amount }), null);
+  }
+  assert.equal(buildSolutionsStartState({ regionId: 'invalid', mode: 'bill', amount: 100 }), null);
 });
 
-test('Solutions story makes missing analysis explicit instead of falling back to an invented result', () => {
-  const presentation = buildSolutionsPresentation(null, { status: 'loading' });
-  assert.equal(presentation.loading, true);
-  assert.equal(presentation.hasResult, false);
-  assert.equal(presentation.systemSize, null);
-  assert.equal(presentation.annualProduction, null);
-  assert.equal(presentation.annualSavings, null);
-  assert.equal(presentation.monthlyProduction, null);
-});
-
-test('Solutions story navigation reaches every step on desktop and mobile', () => {
-  const steps = Array.from({ length: 6 }, () => ({ scrollIntoView() {} }));
-  const slides = [];
-  const swiper = { slideTo: (index) => slides.push(index) };
-
-  assert.equal(
-    moveSolutionsStoryStep({
-      index: 0,
-      steps,
-      swiper,
-      setActive: () => {},
-      isDesktop: true,
-      reducedMotion: false
-    }),
-    0
+test('editing the starting context invalidates results, changing region also clears the old roof', () => {
+  const previous = {
+    regionId: 'yerevan',
+    consumption: { mode: 'usage', averageMonthlyKwh: 350 },
+    analysis,
+    quickAnalysis: analysis,
+    analysisStatus: 'complete',
+    roof: { areaSqm: 80 },
+    userTariff: { rateAmdPerKwh: 50 }
+  };
+  const unchanged = buildSolutionsStartState(
+    { regionId: 'yerevan', mode: 'usage', amount: 350 },
+    previous
   );
-  assert.equal(
-    moveSolutionsStoryStep({
-      index: 5,
-      steps,
-      swiper,
-      setActive: () => {},
-      isDesktop: true,
-      reducedMotion: false
-    }),
-    5
+  assert.equal('analysis' in unchanged, false);
+  const changed = buildSolutionsStartState(
+    { regionId: 'yerevan', mode: 'usage', amount: 500 },
+    previous
   );
-  assert.deepEqual(slides, [0, 5]);
-
-  const active = [];
-  const scrollOptions = [];
-  const mobileSteps = Array.from({ length: 6 }, () => ({
-    scrollIntoView: (options) => scrollOptions.push(options)
-  }));
-  assert.equal(
-    moveSolutionsStoryStep({
-      index: 4,
-      steps: mobileSteps,
-      setActive: (index) => active.push(index),
-      isDesktop: false,
-      reducedMotion: false
-    }),
-    4
+  assert.equal(changed.analysis, null);
+  assert.equal(changed.quickAnalysis, null);
+  assert.equal('roof' in changed, false);
+  const moved = buildSolutionsStartState(
+    { regionId: 'lori', mode: 'usage', amount: 500 },
+    previous
   );
-  assert.deepEqual(active, [4]);
-  assert.deepEqual(scrollOptions, [{ behavior: 'smooth', block: 'start' }]);
-});
-
-test('desktop story captures the wheel only when its exact 100svh frame is visible', () => {
-  assert.equal(
-    isSolutionsStoryFrameFullyVisible({ top: 0, bottom: 900, height: 900, viewportHeight: 900 }),
-    true
-  );
-  assert.equal(
-    isSolutionsStoryFrameFullyVisible({ top: 42, bottom: 942, height: 900, viewportHeight: 900 }),
-    false
-  );
-  assert.equal(
-    isSolutionsStoryFrameFullyVisible({ top: 0, bottom: 860, height: 860, viewportHeight: 900 }),
-    false
-  );
-});
-
-test('Russian journey ships all six interactive steps and a distinct engineer-survey scene', async () => {
-  const page = await readFile(resolve('ru/index.html'), 'utf8');
-  const start = page.indexOf("id='process'");
-  const end = page.indexOf("id='engineering'", start);
-  const journey = page.slice(start, end);
-
-  assert.match(journey, /Как это работает/);
-  assert.equal((journey.match(/data-solutions-step=/g) ?? []).length, 6);
-  assert.equal((journey.match(/data-solutions-progress-step=/g) ?? []).length, 6);
-  assert.equal((journey.match(/data-solutions-next/g) ?? []).length, 5);
-  assert.equal((journey.match(/data-solutions-previous/g) ?? []).length, 5);
-  assert.match(journey, /solutions-inspection-1024\.jpg/);
-  assert.match(journey, /Начать анализ солнечного потенциала/);
+  assert.equal(moved.roof, null);
+  assert.equal(moved.property, null);
+  assert.equal(moved.userTariff, null);
 });

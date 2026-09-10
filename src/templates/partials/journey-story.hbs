@@ -1,138 +1,189 @@
-<h2 id='process-title' class='visually-hidden'>{{journey.title}}</h2>
-<div class='solutions-story__scroll'>
-  <div class='solutions-story__stage swiper' data-solutions-slider>
-    <div class='solutions-story__backdrop' aria-hidden='true'></div>
-    <ol class='solutions-progress' aria-label='{{journey.progressLabel}}'>
-      {{#each journey.steps}}
-        <li class='{{progressClass}}' data-solutions-progress-step='{{@index}}'>
-          <button type='button'>
-            <span class='solutions-progress__rail' aria-hidden='true'><i></i></span>
-            <span class='solutions-progress__node'><b>{{number}}</b><svg
-                aria-hidden='true'
-                viewBox='0 0 16 16'
-              ><path d='m3.2 8.2 3 3 6.7-6.6'></path></svg></span>
-            <span>{{nav}}</span>
-          </button>
-        </li>
-      {{/each}}
-    </ol>
-
-    <div class='solutions-story__steps swiper-wrapper'>
-      {{#each journey.steps}}
-        <article
-          class='{{storyClass}}'
-          data-solutions-step='{{@index}}'
-          aria-hidden='{{ariaHidden}}'
-        >
-          <div class='container solutions-story__shell'>
-            <div class='solutions-story__copy'>
-              <p class='solutions-story__eyebrow'><span>{{number}}</span>{{nav}}</p>
-              <h3>{{headline}}</h3>
-              <p class='solutions-story__intro'>{{copy}}</p>
-              {{#if status}}<p
-                  class='solutions-story__status'
-                  data-solutions-status='{{status}}'
-                >{{@root.journey.previewLabel}}</p>{{/if}}
-              <dl class='solutions-story__metrics'>
-                {{#each cards}}
-                  <div class='solutions-story__metric'>
-                    <dt><svg class='inline-icon' aria-hidden='true'><use
-                          href='/icons.svg#{{icon}}'
-                        ></use></svg>{{label}}</dt>
-                    <dd
-                      data-solutions-field='{{data}}'
-                      data-solutions-default='{{value}}'
-                    >{{value}}</dd>
-                  </div>
-                {{/each}}
-              </dl>
-              {{#if timeline}}
-                <ol class='solutions-story__timeline'>{{#each timeline}}<li><span
-                      >{{number}}</span><p>{{this.label}}</p></li>{{/each}}</ol>
-              {{/if}}
-              <div class='solutions-story__actions'>
-                {{#if hasPrevious}}<button
-                    class='solutions-story__previous'
-                    type='button'
-                    data-solutions-previous
-                  >← {{@root.journey.previousStepLabel}}</button>{{/if}}
-                {{#if hasNext}}<button
-                    class='button solutions-story__next'
-                    type='button'
-                    data-solutions-next
-                  >{{@root.journey.nextStepLabel}} <span aria-hidden='true'>→</span></button>{{/if}}
-                {{#if cta}}<a
-                    class='button solutions-story__cta'
-                    href='{{@root.calculatorHref}}'
-                  >{{cta}}</a>{{/if}}
-              </div>
-            </div>
-
-            <div class='solutions-story__visual-wrap'>
-              <div
-                class='solutions-visual solutions-visual--{{visual}}'
-                data-solutions-visual='{{visual}}'
-                aria-hidden='true'
-              >
-                <picture class='solutions-visual__media'>
-                  <source
-                    type='image/avif'
-                    srcset='{{avifSrcset}}'
-                    sizes='(max-width: 767px) calc(100vw - 68px), 52vw'
-                  />
-                  <source
-                    type='image/webp'
-                    srcset='{{webpSrcset}}'
-                    sizes='(max-width: 767px) calc(100vw - 68px), 52vw'
-                  />
-                  <img
-                    src='/images/{{image}}-1024.jpg'
-                    srcset='/images/{{image}}-640.jpg 640w, /images/{{image}}-1024.jpg 1024w, /images/{{image}}-1600.jpg 1600w'
-                    sizes='(max-width: 767px) calc(100vw - 68px), 52vw'
-                    width='1600'
-                    height='914'
-                    alt=''
-                    loading='{{loading}}'
-                    fetchpriority='{{fetchPriority}}'
-                    decoding='async'
-                  />
-                </picture>
-                <span class='solutions-visual__orb'></span><span
-                  class='solutions-visual__grid'
-                ></span><span class='solutions-visual__roof'></span><span
-                  class='solutions-visual__panels'
-                ></span><span class='solutions-visual__path'></span><span
-                  class='solutions-visual__label'
-                >{{visualLabel}}</span>
-              </div>
-              {{#if chart}}
-                <div
-                  class='solutions-generation-chart'
-                  data-solutions-chart
-                  role='img'
-                  aria-label='{{@root.journey.chartPreviewLabel}}'
-                >
-                  <div class='solutions-generation-chart__bars' aria-hidden='true'>{{#each
-                      @root.journey.chartMonths
-                    }}<i style='--solutions-bar: 14%;'></i>{{/each}}</div>
-                  <div class='solutions-generation-chart__months' aria-hidden='true'>{{#each
-                      @root.journey.chartMonths
-                    }}<span>{{this}}</span>{{/each}}</div>
-                  <p data-solutions-chart-label>{{@root.journey.chartPreviewLabel}}</p>
-                </div>
-              {{/if}}
-              {{#if visualCards}}
-                <div class='solutions-visual-cards'>{{#each visualCards}}<div
-                      class='solutions-visual-card'
-                    ><span>{{label}}</span><strong
-                        data-solutions-field='{{data}}'
-                        data-solutions-default='{{value}}'
-                      >{{value}}</strong></div>{{/each}}</div>
-              {{/if}}
-            </div>
-          </div>
-        </article>
-      {{/each}}
+<h2 id='process-title' class='visually-hidden'>{{journey.progress}}</h2>
+<div class='stage-home' id='solutions' data-solutions-home>
+  <div class='stage-home__frame solutions-story__step is-active' data-solutions-scene='1'>
+    <div class='stage-home__backdrop' aria-hidden='true' data-stage-pointer>
+      <picture class='stage-home__art' data-solutions-visual='home'>
+        <source
+          type='image/avif'
+          srcset='/images/solutions-home-640.avif 640w, /images/solutions-home-1024.avif 1024w, /images/solutions-home-1600.avif 1600w'
+          sizes='100vw'
+        />
+        <source
+          type='image/webp'
+          srcset='/images/solutions-home-640.webp 640w, /images/solutions-home-1024.webp 1024w, /images/solutions-home-1600.webp 1600w'
+          sizes='100vw'
+        />
+        <img
+          src='/images/solutions-home-1600.jpg'
+          width='1600'
+          height='900'
+          alt=''
+          loading='lazy'
+          decoding='async'
+        />
+      </picture>
+      <div class='stage-home__night-wash'></div>
     </div>
+    <div class='stage-home__scrim' aria-hidden='true'></div>
+    <div class='stage-home__body'>
+      <div class='stage-home__copy'>
+        <p class='stage-home__eyebrow' data-stage-reveal>{{journey.eyebrow}}</p>
+        <h3 class='stage-home__title'><span data-stage-reveal>{{journey.title}}</span>
+          <span data-stage-reveal>{{journey.titleLead}} <em>{{journey.titleAccent}}</em></span></h3>
+        <p class='stage-home__intro' data-stage-reveal>{{journey.intro}}</p>
+        <form
+          class='stage-home__form'
+          data-stage-form
+          action='{{calculatorHref}}'
+          method='get'
+          data-stage-reveal
+        >
+          <label class='visually-hidden' for='stage-region'>{{journey.region}}</label>
+          <div class='stage-home__select'>
+            <svg aria-hidden='true' viewBox='0 0 24 24'><path
+                d='M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 1 1 16 0Z'
+              /><circle cx='12' cy='10' r='2.5' /></svg>
+            <select id='stage-region' name='region' required data-stage-region>
+              <option value=''>{{journey.chooseRegion}}</option>
+              {{#each journey.regions}}<option value='{{id}}'>{{label}}</option>{{/each}}
+            </select>
+          </div>
+          <fieldset class='stage-home__modes' data-stage-consumption>
+            <legend class='visually-hidden'>{{journey.consumption}}</legend>
+            <label><input type='radio' name='mode' value='bill' checked /><span
+              >{{journey.bill}}</span></label>
+            <label><input type='radio' name='mode' value='usage' /><span
+              >{{journey.usage}}</span></label>
+          </fieldset>
+          <label
+            for='stage-amount'
+            data-stage-amount-label
+            data-stage-consumption
+          >{{journey.amountBill}}</label>
+          <div class='stage-home__amount' data-stage-consumption>
+            <input
+              id='stage-amount'
+              name='amount'
+              type='number'
+              inputmode='decimal'
+              min='0.01'
+              step='any'
+              required
+              aria-describedby='stage-input-help'
+              data-stage-amount
+            />
+            <span data-stage-unit>AMD</span>
+          </div>
+          <p
+            class='stage-home__help'
+            id='stage-input-help'
+            data-stage-help
+            data-stage-consumption
+          >{{journey.billHelp}}</p>
+          <button type='submit' class='stage-home__submit'><span
+              data-stage-submit-label
+            >{{journey.submit}}</span>
+            <span aria-hidden='true'>→</span></button>
+          <a class='stage-home__full' href='{{calculatorHref}}'>{{journey.full}}
+            <span aria-hidden='true'>↗</span></a>
+        </form>
+      </div>
+
+      <div class='stage-home__visual'>
+        <div class='stage-home__pointer'>
+          <svg class='stage-home__arc' viewBox='0 0 700 500' aria-hidden='true' data-stage-arc>
+            <path
+              class='stage-home__arc-line'
+              d='M 70 365 Q 350 -140 630 365'
+              data-stage-arc-path
+            />
+            <path class='stage-home__arc-base' d='M70 365H630' />
+            <circle cx='70' cy='365' r='4' /><circle cx='630' cy='365' r='4' />
+            <text x='53' y='392'>W</text><text x='343' y='92'>N</text><text x='634' y='392'>E</text>
+            <g data-stage-sun transform='translate(322 115)'>
+              <circle class='stage-home__sun-halo' r='29' />
+              <circle class='stage-home__sun-core' r='12' />
+              <path
+                class='stage-home__sun-rays'
+                d='M0 -23v-8M0 23v8M23 0h8M-23 0h-8M16 -16l6 -6M-16 16l-6 6M16 16l6 6M-16 -16l-6 -6'
+              />
+            </g>
+          </svg>
+          <div class='stage-home__glass stage-home__location' data-stage-card>
+            <svg aria-hidden='true' viewBox='0 0 24 24'><path
+                d='M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 1 1 16 0Z'
+              /><circle cx='12' cy='10' r='2.5' /></svg>
+            <div><span>{{journey.location}}</span><strong
+                data-stage-location
+              >{{journey.chooseRegion}}</strong><small>{{journey.country}}</small></div>
+          </div>
+          <div class='stage-home__glass stage-home__resource' data-stage-card>
+            <svg aria-hidden='true' viewBox='0 0 24 24'><circle cx='12' cy='12' r='4' /><path
+                d='M12 1v3m0 16v3M1 12h3m16 0h3M4 4l2 2m12 12 2 2M4 20l2-2M18 6l2-2'
+              /></svg>
+            <div><span>{{journey.resource}}</span><strong
+                data-stage-resource
+              >{{journey.pending}}</strong><small data-stage-source></small></div>
+          </div>
+        </div>
+        <div class='stage-home__glass stage-home__results' data-stage-results hidden>
+          <div><span>{{journey.production}}</span><strong
+              data-stage-count='annualProduction'
+            ></strong><small>{{journey.perYear}}</small></div>
+          <div><span>{{journey.capacity}}</span><strong
+              data-stage-count='systemSize'
+            ></strong><small>kWp</small></div>
+          <div><span>{{journey.panels}}</span><strong data-stage-count='panelCount'></strong></div>
+        </div>
+      </div>
+
+      <nav class='stage-home__progress' aria-label='{{journey.progress}}'>
+        <ol>{{#each journey.steps}}
+            <li data-solutions-step='{{number}}' class='{{stateClass}}'>
+              {{#if href}}
+                <a href='{{href}}' aria-current='{{current}}'><b>{{displayNumber}}</b><span
+                  >{{label}}</span></a>
+              {{else}}
+                <span class='stage-home__future'><b>{{displayNumber}}</b><span
+                  >{{label}}</span></span>
+              {{/if}}
+            </li>
+          {{/each}}</ol>
+      </nav>
+    </div>
+    <div
+      class='stage-home__lighting'
+      role='group'
+      aria-label='{{journey.lighting}}'
+      data-stage-lighting
+      hidden
+    >
+      <button type='button' data-stage-light='day' aria-pressed='true'><span
+          class='stage-home__thumbnail stage-home__thumbnail--day'
+          aria-hidden='true'
+        ></span><span>{{journey.day}}</span></button>
+      <button type='button' data-stage-light='night' aria-pressed='false'><span
+          class='stage-home__thumbnail stage-home__thumbnail--night'
+          aria-hidden='true'
+        ></span><span>{{journey.night}}</span></button>
+    </div>
+    <p class='stage-home__signature' aria-hidden='true'>{{journey.signature}}<svg
+        viewBox='0 0 160 36'
+      ><path d='M4 30Q73 0 151 9M50 25Q108 3 130 10' /></svg></p>
+    <div class='stage-home__bottom'>
+      <ul class='stage-home__trust'>{{#each journey.trust}}<li><svg
+              aria-hidden='true'
+              viewBox='0 0 24 24'
+            ><path d='{{icon}}' /></svg><div><strong>{{title}}</strong><span
+              >{{note}}</span></div></li>{{/each}}</ul>
+      <a href='#faq' class='stage-home__scroll'><svg aria-hidden='true' viewBox='0 0 24 32'><rect
+            x='4'
+            y='1'
+            width='16'
+            height='27'
+            rx='8'
+          /><path d='M12 7v5' /></svg>{{journey.scroll}}</a>
+    </div>
+    <p class='stage-home__caption'>{{journey.caption}}</p>
   </div>
 </div>

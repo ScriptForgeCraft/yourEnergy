@@ -19,8 +19,7 @@
   },
   "dependencies": {
     "gsap": "^3.15.0",
-    "leaflet": "^1.9.4",
-    "swiper": "^12.2.0"
+    "leaflet": "^1.9.4"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",

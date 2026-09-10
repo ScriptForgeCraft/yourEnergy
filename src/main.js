@@ -29,11 +29,7 @@ if (solutionsStory) {
   const loadSolutionsStory = () => {
     if (storyStarted) return;
     storyStarted = true;
-    void Promise.all([
-      import('swiper/css'),
-      import('swiper/css/effect-fade'),
-      import('./ui/solutions-story.js')
-    ]).then(([, , { initSolutionsStory }]) =>
+    void import('./ui/solutions-story.js').then(({ initSolutionsStory }) =>
       initSolutionsStory({ config: { ...config, ...journeyConfig } })
     );
   };

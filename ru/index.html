@@ -297,738 +297,221 @@
         aria-labelledby='process-title'
         data-solutions-story
       >
-        <h2 id='process-title' class='visually-hidden'>Как это работает</h2>
-        <div class='solutions-story__scroll'>
-          <div class='solutions-story__stage swiper' data-solutions-slider>
-            <div class='solutions-story__backdrop' aria-hidden='true'></div>
-            <ol class='solutions-progress' aria-label='Путь солнечного анализа'>
-                <li class='solutions-progress__item is-active' data-solutions-progress-step='0'>
-                  <button type='button'>
-                    <span class='solutions-progress__rail' aria-hidden='true'><i></i></span>
-                    <span class='solutions-progress__node'><b>01</b><svg
-                        aria-hidden='true'
-                        viewBox='0 0 16 16'
-                      ><path d='m3.2 8.2 3 3 6.7-6.6'></path></svg></span>
-                    <span>Введите адрес</span>
-                  </button>
-                </li>
-                <li class='solutions-progress__item' data-solutions-progress-step='1'>
-                  <button type='button'>
-                    <span class='solutions-progress__rail' aria-hidden='true'><i></i></span>
-                    <span class='solutions-progress__node'><b>02</b><svg
-                        aria-hidden='true'
-                        viewBox='0 0 16 16'
-                      ><path d='m3.2 8.2 3 3 6.7-6.6'></path></svg></span>
-                    <span>Подтвердите объект</span>
-                  </button>
-                </li>
-                <li class='solutions-progress__item' data-solutions-progress-step='2'>
-                  <button type='button'>
-                    <span class='solutions-progress__rail' aria-hidden='true'><i></i></span>
-                    <span class='solutions-progress__node'><b>03</b><svg
-                        aria-hidden='true'
-                        viewBox='0 0 16 16'
-                      ><path d='m3.2 8.2 3 3 6.7-6.6'></path></svg></span>
-                    <span>Сравните расчёт</span>
-                  </button>
-                </li>
-                <li class='solutions-progress__item' data-solutions-progress-step='3'>
-                  <button type='button'>
-                    <span class='solutions-progress__rail' aria-hidden='true'><i></i></span>
-                    <span class='solutions-progress__node'><b>04</b><svg
-                        aria-hidden='true'
-                        viewBox='0 0 16 16'
-                      ><path d='m3.2 8.2 3 3 6.7-6.6'></path></svg></span>
-                    <span>Осмотр специалиста</span>
-                  </button>
-                </li>
-                <li class='solutions-progress__item' data-solutions-progress-step='4'>
-                  <button type='button'>
-                    <span class='solutions-progress__rail' aria-hidden='true'><i></i></span>
-                    <span class='solutions-progress__node'><b>05</b><svg
-                        aria-hidden='true'
-                        viewBox='0 0 16 16'
-                      ><path d='m3.2 8.2 3 3 6.7-6.6'></path></svg></span>
-                    <span>Установка системы</span>
-                  </button>
-                </li>
-                <li class='solutions-progress__item' data-solutions-progress-step='5'>
-                  <button type='button'>
-                    <span class='solutions-progress__rail' aria-hidden='true'><i></i></span>
-                    <span class='solutions-progress__node'><b>06</b><svg
-                        aria-hidden='true'
-                        viewBox='0 0 16 16'
-                      ><path d='m3.2 8.2 3 3 6.7-6.6'></path></svg></span>
-                    <span>Мониторинг</span>
-                  </button>
-                </li>
-            </ol>
-
-            <div class='solutions-story__steps swiper-wrapper'>
-                <article
-                  class='solutions-story__step swiper-slide is-active'
-                  data-solutions-step='0'
-                  aria-hidden='false'
-                >
-                  <div class='container solutions-story__shell'>
-                    <div class='solutions-story__copy'>
-                      <p class='solutions-story__eyebrow'><span>01</span>Введите адрес</p>
-                      <h3>Введите адрес</h3>
-                      <p class='solutions-story__intro'>и основные данные дома</p>
-                      <p
-                          class='solutions-story__status'
-                          data-solutions-status='home'
-                        >Пример для просмотра</p>
-                      <dl class='solutions-story__metrics'>
-                          <div class='solutions-story__metric'>
-                            <dt><svg class='inline-icon' aria-hidden='true'><use
-                                  href='/icons.svg#map-pin'
-                                ></use></svg>Местоположение</dt>
-                            <dd
-                              data-solutions-field='location'
-                              data-solutions-default='Добавьте в калькуляторе'
-                            >Добавьте в калькуляторе</dd>
-                          </div>
-                          <div class='solutions-story__metric'>
-                            <dt><svg class='inline-icon' aria-hidden='true'><use
-                                  href='/icons.svg#zap'
-                                ></use></svg>Расход электричества</dt>
-                            <dd
-                              data-solutions-field='consumption'
-                              data-solutions-default='Добавьте в калькуляторе'
-                            >Добавьте в калькуляторе</dd>
-                          </div>
-                          <div class='solutions-story__metric'>
-                            <dt><svg class='inline-icon' aria-hidden='true'><use
-                                  href='/icons.svg#sun'
-                                ></use></svg>Солнечный ресурс</dt>
-                            <dd
-                              data-solutions-field='solar-resource'
-                              data-solutions-default='Доступно после расчёта'
-                            >Доступно после расчёта</dd>
-                          </div>
-                      </dl>
-                      <div class='solutions-story__actions'>
-
-                        <button
-                            class='button solutions-story__next'
-                            type='button'
-                            data-solutions-next
-                          >Далее <span aria-hidden='true'>→</span></button>
-
-                      </div>
-                    </div>
-
-                    <div class='solutions-story__visual-wrap'>
-                      <div
-                        class='solutions-visual solutions-visual--home'
-                        data-solutions-visual='home'
-                        aria-hidden='true'
-                      >
-                        <picture class='solutions-visual__media'>
-                          <source
-                            type='image/avif'
-                            srcset='/images/solutions-home-640.avif 640w, /images/solutions-home-1024.avif 1024w, /images/solutions-home-1600.avif 1600w'
-                            sizes='(max-width: 767px) calc(100vw - 68px), 52vw'
-                          />
-                          <source
-                            type='image/webp'
-                            srcset='/images/solutions-home-640.webp 640w, /images/solutions-home-1024.webp 1024w, /images/solutions-home-1600.webp 1600w'
-                            sizes='(max-width: 767px) calc(100vw - 68px), 52vw'
-                          />
-                          <img
-                            src='/images/solutions-home-1024.jpg'
-                            srcset='/images/solutions-home-640.jpg 640w, /images/solutions-home-1024.jpg 1024w, /images/solutions-home-1600.jpg 1600w'
-                            sizes='(max-width: 767px) calc(100vw - 68px), 52vw'
-                            width='1600'
-                            height='914'
-                            alt=''
-                            loading='eager'
-                            fetchpriority='high'
-                            decoding='async'
-                          />
-                        </picture>
-                        <span class='solutions-visual__orb'></span><span
-                          class='solutions-visual__grid'
-                        ></span><span class='solutions-visual__roof'></span><span
-                          class='solutions-visual__panels'
-                        ></span><span class='solutions-visual__path'></span><span
-                          class='solutions-visual__label'
-                        >Заполнитель визуала дома</span>
-                      </div>
-                        <div class='solutions-visual-cards'><div
-                              class='solutions-visual-card'
-                            ><span>Объект</span><strong
-                                data-solutions-field='location'
-                                data-solutions-default='Предпросмотр'
-                              >Предпросмотр</strong></div><div
-                              class='solutions-visual-card'
-                            ><span>Статус данных</span><strong
-                                data-solutions-field='home-status'
-                                data-solutions-default='Ожидаем ваши данные'
-                              >Ожидаем ваши данные</strong></div></div>
-                    </div>
-                  </div>
-                </article>
-                <article
-                  class='solutions-story__step swiper-slide'
-                  data-solutions-step='1'
-                  aria-hidden='true'
-                >
-                  <div class='container solutions-story__shell'>
-                    <div class='solutions-story__copy'>
-                      <p class='solutions-story__eyebrow'><span>02</span>Подтвердите объект</p>
-                      <h3>Подтвердите объект</h3>
-                      <p class='solutions-story__intro'>или выберите точку вручную</p>
-                      <p
-                          class='solutions-story__status'
-                          data-solutions-status='roof'
-                        >Пример для просмотра</p>
-                      <dl class='solutions-story__metrics'>
-                          <div class='solutions-story__metric'>
-                            <dt><svg class='inline-icon' aria-hidden='true'><use
-                                  href='/icons.svg#satellite'
-                                ></use></svg>Полезная площадь крыши</dt>
-                            <dd
-                              data-solutions-field='roof-area'
-                              data-solutions-default='Добавьте в калькуляторе'
-                            >Добавьте в калькуляторе</dd>
-                          </div>
-                          <div class='solutions-story__metric'>
-                            <dt><svg class='inline-icon' aria-hidden='true'><use
-                                  href='/icons.svg#sun'
-                                ></use></svg>Направление крыши</dt>
-                            <dd
-                              data-solutions-field='roof-direction'
-                              data-solutions-default='Добавьте в калькуляторе'
-                            >Добавьте в калькуляторе</dd>
-                          </div>
-                          <div class='solutions-story__metric'>
-                            <dt><svg class='inline-icon' aria-hidden='true'><use
-                                  href='/icons.svg#arrow-right'
-                                ></use></svg>Угол наклона</dt>
-                            <dd
-                              data-solutions-field='roof-tilt'
-                              data-solutions-default='Добавьте в калькуляторе'
-                            >Добавьте в калькуляторе</dd>
-                          </div>
-                      </dl>
-                      <div class='solutions-story__actions'>
-                        <button
-                            class='solutions-story__previous'
-                            type='button'
-                            data-solutions-previous
-                          >← Назад</button>
-                        <button
-                            class='button solutions-story__next'
-                            type='button'
-                            data-solutions-next
-                          >Далее <span aria-hidden='true'>→</span></button>
-
-                      </div>
-                    </div>
-
-                    <div class='solutions-story__visual-wrap'>
-                      <div
-                        class='solutions-visual solutions-visual--roof'
-                        data-solutions-visual='roof'
-                        aria-hidden='true'
-                      >
-                        <picture class='solutions-visual__media'>
-                          <source
-                            type='image/avif'
-                            srcset='/images/solutions-roof-640.avif 640w, /images/solutions-roof-1024.avif 1024w, /images/solutions-roof-1600.avif 1600w'
-                            sizes='(max-width: 767px) calc(100vw - 68px), 52vw'
-                          />
-                          <source
-                            type='image/webp'
-                            srcset='/images/solutions-roof-640.webp 640w, /images/solutions-roof-1024.webp 1024w, /images/solutions-roof-1600.webp 1600w'
-                            sizes='(max-width: 767px) calc(100vw - 68px), 52vw'
-                          />
-                          <img
-                            src='/images/solutions-roof-1024.jpg'
-                            srcset='/images/solutions-roof-640.jpg 640w, /images/solutions-roof-1024.jpg 1024w, /images/solutions-roof-1600.jpg 1600w'
-                            sizes='(max-width: 767px) calc(100vw - 68px), 52vw'
-                            width='1600'
-                            height='914'
-                            alt=''
-                            loading='lazy'
-                            fetchpriority='auto'
-                            decoding='async'
-                          />
-                        </picture>
-                        <span class='solutions-visual__orb'></span><span
-                          class='solutions-visual__grid'
-                        ></span><span class='solutions-visual__roof'></span><span
-                          class='solutions-visual__panels'
-                        ></span><span class='solutions-visual__path'></span><span
-                          class='solutions-visual__label'
-                        >Заполнитель контура крыши</span>
-                      </div>
-                        <div class='solutions-visual-cards'><div
-                              class='solutions-visual-card'
-                            ><span>Контур крыши</span><strong
-                                data-solutions-field='roof-status'
-                                data-solutions-default='Ручное уточнение'
-                              >Ручное уточнение</strong></div><div
-                              class='solutions-visual-card'
-                            ><span>Статус данных</span><strong
-                                data-solutions-field='roof-status'
-                                data-solutions-default='Это не автоматическое сканирование крыши'
-                              >Это не автоматическое сканирование крыши</strong></div></div>
-                    </div>
-                  </div>
-                </article>
-                <article
-                  class='solutions-story__step swiper-slide'
-                  data-solutions-step='2'
-                  aria-hidden='true'
-                >
-                  <div class='container solutions-story__shell'>
-                    <div class='solutions-story__copy'>
-                      <p class='solutions-story__eyebrow'><span>03</span>Сравните расчёт</p>
-                      <h3>Сравните расчёт</h3>
-                      <p class='solutions-story__intro'>и три варианта системы</p>
-                      <p
-                          class='solutions-story__status'
-                          data-solutions-status='system'
-                        >Пример для просмотра</p>
-                      <dl class='solutions-story__metrics'>
-                          <div class='solutions-story__metric'>
-                            <dt><svg class='inline-icon' aria-hidden='true'><use
-                                  href='/icons.svg#zap'
-                                ></use></svg>Размер системы</dt>
-                            <dd
-                              data-solutions-field='system-size'
-                              data-solutions-default='Пример для просмотра'
-                            >Пример для просмотра</dd>
-                          </div>
-                          <div class='solutions-story__metric'>
-                            <dt><svg class='inline-icon' aria-hidden='true'><use
-                                  href='/icons.svg#sun'
-                                ></use></svg>Солнечные панели</dt>
-                            <dd
-                              data-solutions-field='panel-count'
-                              data-solutions-default='Пример для просмотра'
-                            >Пример для просмотра</dd>
-                          </div>
-                          <div class='solutions-story__metric'>
-                            <dt><svg class='inline-icon' aria-hidden='true'><use
-                                  href='/icons.svg#shield-check'
-                                ></use></svg>Инвертор</dt>
-                            <dd
-                              data-solutions-field='inverter'
-                              data-solutions-default='Подтверждается в проекте'
-                            >Подтверждается в проекте</dd>
-                          </div>
-                          <div class='solutions-story__metric'>
-                            <dt><svg class='inline-icon' aria-hidden='true'><use
-                                  href='/icons.svg#cycle'
-                                ></use></svg>Годовая генерация</dt>
-                            <dd
-                              data-solutions-field='annual-production'
-                              data-solutions-default='Пример для просмотра'
-                            >Пример для просмотра</dd>
-                          </div>
-                      </dl>
-                      <div class='solutions-story__actions'>
-                        <button
-                            class='solutions-story__previous'
-                            type='button'
-                            data-solutions-previous
-                          >← Назад</button>
-                        <button
-                            class='button solutions-story__next'
-                            type='button'
-                            data-solutions-next
-                          >Далее <span aria-hidden='true'>→</span></button>
-
-                      </div>
-                    </div>
-
-                    <div class='solutions-story__visual-wrap'>
-                      <div
-                        class='solutions-visual solutions-visual--system'
-                        data-solutions-visual='system'
-                        aria-hidden='true'
-                      >
-                        <picture class='solutions-visual__media'>
-                          <source
-                            type='image/avif'
-                            srcset='/images/solutions-system-640.avif 640w, /images/solutions-system-1024.avif 1024w, /images/solutions-system-1600.avif 1600w'
-                            sizes='(max-width: 767px) calc(100vw - 68px), 52vw'
-                          />
-                          <source
-                            type='image/webp'
-                            srcset='/images/solutions-system-640.webp 640w, /images/solutions-system-1024.webp 1024w, /images/solutions-system-1600.webp 1600w'
-                            sizes='(max-width: 767px) calc(100vw - 68px), 52vw'
-                          />
-                          <img
-                            src='/images/solutions-system-1024.jpg'
-                            srcset='/images/solutions-system-640.jpg 640w, /images/solutions-system-1024.jpg 1024w, /images/solutions-system-1600.jpg 1600w'
-                            sizes='(max-width: 767px) calc(100vw - 68px), 52vw'
-                            width='1600'
-                            height='914'
-                            alt=''
-                            loading='lazy'
-                            fetchpriority='auto'
-                            decoding='async'
-                          />
-                        </picture>
-                        <span class='solutions-visual__orb'></span><span
-                          class='solutions-visual__grid'
-                        ></span><span class='solutions-visual__roof'></span><span
-                          class='solutions-visual__panels'
-                        ></span><span class='solutions-visual__path'></span><span
-                          class='solutions-visual__label'
-                        >Заполнитель визуала солнечной системы</span>
-                      </div>
-                        <div
-                          class='solutions-generation-chart'
-                          data-solutions-chart
-                          role='img'
-                          aria-label='Пример графика — доступен после расчёта'
-                        >
-                          <div class='solutions-generation-chart__bars' aria-hidden='true'><i style='--solutions-bar: 14%;'></i><i style='--solutions-bar: 14%;'></i><i style='--solutions-bar: 14%;'></i><i style='--solutions-bar: 14%;'></i><i style='--solutions-bar: 14%;'></i><i style='--solutions-bar: 14%;'></i><i style='--solutions-bar: 14%;'></i><i style='--solutions-bar: 14%;'></i><i style='--solutions-bar: 14%;'></i><i style='--solutions-bar: 14%;'></i><i style='--solutions-bar: 14%;'></i><i style='--solutions-bar: 14%;'></i></div>
-                          <div class='solutions-generation-chart__months' aria-hidden='true'><span>Я</span><span>Ф</span><span>М</span><span>А</span><span>М</span><span>И</span><span>И</span><span>А</span><span>С</span><span>О</span><span>Н</span><span>Д</span></div>
-                          <p data-solutions-chart-label>Пример графика — доступен после расчёта</p>
-                        </div>
-                        <div class='solutions-visual-cards'><div
-                              class='solutions-visual-card'
-                            ><span>Рекомендованная система</span><strong
-                                data-solutions-field='system-size'
-                                data-solutions-default='Пример для просмотра'
-                              >Пример для просмотра</strong></div><div
-                              class='solutions-visual-card'
-                            ><span>Источник данных</span><strong
-                                data-solutions-field='system-status'
-                                data-solutions-default='Доступно после расчёта'
-                              >Доступно после расчёта</strong></div></div>
-                    </div>
-                  </div>
-                </article>
-                <article
-                  class='solutions-story__step swiper-slide'
-                  data-solutions-step='3'
-                  aria-hidden='true'
-                >
-                  <div class='container solutions-story__shell'>
-                    <div class='solutions-story__copy'>
-                      <p class='solutions-story__eyebrow'><span>04</span>Осмотр специалиста</p>
-                      <h3>Осмотр специалиста</h3>
-                      <p class='solutions-story__intro'>замеры крыши и щита</p>
-
-                      <dl class='solutions-story__metrics'>
-                          <div class='solutions-story__metric'>
-                            <dt><svg class='inline-icon' aria-hidden='true'><use
-                                  href='/icons.svg#pin'
-                                ></use></svg>Замеры крыши</dt>
-                            <dd
-                              data-solutions-field=''
-                              data-solutions-default='На осмотре'
-                            >На осмотре</dd>
-                          </div>
-                          <div class='solutions-story__metric'>
-                            <dt><svg class='inline-icon' aria-hidden='true'><use
-                                  href='/icons.svg#calculator'
-                                ></use></svg>Электрощит</dt>
-                            <dd
-                              data-solutions-field=''
-                              data-solutions-default='На осмотре'
-                            >На осмотре</dd>
-                          </div>
-                          <div class='solutions-story__metric'>
-                            <dt><svg class='inline-icon' aria-hidden='true'><use
-                                  href='/icons.svg#sun'
-                                ></use></svg>Затенение</dt>
-                            <dd
-                              data-solutions-field=''
-                              data-solutions-default='Проверяется на объекте'
-                            >Проверяется на объекте</dd>
-                          </div>
-                      </dl>
-                      <div class='solutions-story__actions'>
-                        <button
-                            class='solutions-story__previous'
-                            type='button'
-                            data-solutions-previous
-                          >← Назад</button>
-                        <button
-                            class='button solutions-story__next'
-                            type='button'
-                            data-solutions-next
-                          >Далее <span aria-hidden='true'>→</span></button>
-
-                      </div>
-                    </div>
-
-                    <div class='solutions-story__visual-wrap'>
-                      <div
-                        class='solutions-visual solutions-visual--inspection'
-                        data-solutions-visual='inspection'
-                        aria-hidden='true'
-                      >
-                        <picture class='solutions-visual__media'>
-                          <source
-                            type='image/avif'
-                            srcset='/images/solutions-inspection-640.avif 640w, /images/solutions-inspection-1024.avif 1024w, /images/solutions-inspection-1600.avif 1600w'
-                            sizes='(max-width: 767px) calc(100vw - 68px), 52vw'
-                          />
-                          <source
-                            type='image/webp'
-                            srcset='/images/solutions-inspection-640.webp 640w, /images/solutions-inspection-1024.webp 1024w, /images/solutions-inspection-1600.webp 1600w'
-                            sizes='(max-width: 767px) calc(100vw - 68px), 52vw'
-                          />
-                          <img
-                            src='/images/solutions-inspection-1024.jpg'
-                            srcset='/images/solutions-inspection-640.jpg 640w, /images/solutions-inspection-1024.jpg 1024w, /images/solutions-inspection-1600.jpg 1600w'
-                            sizes='(max-width: 767px) calc(100vw - 68px), 52vw'
-                            width='1600'
-                            height='914'
-                            alt=''
-                            loading='lazy'
-                            fetchpriority='auto'
-                            decoding='async'
-                          />
-                        </picture>
-                        <span class='solutions-visual__orb'></span><span
-                          class='solutions-visual__grid'
-                        ></span><span class='solutions-visual__roof'></span><span
-                          class='solutions-visual__panels'
-                        ></span><span class='solutions-visual__path'></span><span
-                          class='solutions-visual__label'
-                        >Инженерный осмотр объекта</span>
-                      </div>
-                        <div class='solutions-visual-cards'><div
-                              class='solutions-visual-card'
-                            ><span>Осмотр объекта</span><strong
-                                data-solutions-field=''
-                                data-solutions-default='До финального предложения'
-                              >До финального предложения</strong></div><div
-                              class='solutions-visual-card'
-                            ><span>Инженерная проверка</span><strong
-                                data-solutions-field=''
-                                data-solutions-default='На месте'
-                              >На месте</strong></div></div>
-                    </div>
-                  </div>
-                </article>
-                <article
-                  class='solutions-story__step swiper-slide'
-                  data-solutions-step='4'
-                  aria-hidden='true'
-                >
-                  <div class='container solutions-story__shell'>
-                    <div class='solutions-story__copy'>
-                      <p class='solutions-story__eyebrow'><span>05</span>Установка системы</p>
-                      <h3>Установка системы</h3>
-                      <p class='solutions-story__intro'>после проекта и договора</p>
-
-                      <dl class='solutions-story__metrics'>
-                          <div class='solutions-story__metric'>
-                            <dt><svg class='inline-icon' aria-hidden='true'><use
-                                  href='/icons.svg#pin'
-                                ></use></svg>Осмотр объекта</dt>
-                            <dd
-                              data-solutions-field=''
-                              data-solutions-default='Проверка инженером'
-                            >Проверка инженером</dd>
-                          </div>
-                          <div class='solutions-story__metric'>
-                            <dt><svg class='inline-icon' aria-hidden='true'><use
-                                  href='/icons.svg#calculator'
-                                ></use></svg>Финальный проект</dt>
-                            <dd
-                              data-solutions-field=''
-                              data-solutions-default='После осмотра'
-                            >После осмотра</dd>
-                          </div>
-                          <div class='solutions-story__metric'>
-                            <dt><svg class='inline-icon' aria-hidden='true'><use
-                                  href='/icons.svg#sun'
-                                ></use></svg>Подготовка оборудования</dt>
-                            <dd
-                              data-solutions-field=''
-                              data-solutions-default='Подтверждается для проекта'
-                            >Подтверждается для проекта</dd>
-                          </div>
-                      </dl>
-                        <ol class='solutions-story__timeline'><li><span
-                              >01</span><p>Осмотр объекта</p></li><li><span
-                              >02</span><p>Финальный проект</p></li><li><span
-                              >03</span><p>Подготовка оборудования</p></li><li><span
-                              >04</span><p>Монтаж</p></li><li><span
-                              >05</span><p>Ввод в эксплуатацию</p></li></ol>
-                      <div class='solutions-story__actions'>
-                        <button
-                            class='solutions-story__previous'
-                            type='button'
-                            data-solutions-previous
-                          >← Назад</button>
-                        <button
-                            class='button solutions-story__next'
-                            type='button'
-                            data-solutions-next
-                          >Далее <span aria-hidden='true'>→</span></button>
-
-                      </div>
-                    </div>
-
-                    <div class='solutions-story__visual-wrap'>
-                      <div
-                        class='solutions-visual solutions-visual--installation'
-                        data-solutions-visual='installation'
-                        aria-hidden='true'
-                      >
-                        <picture class='solutions-visual__media'>
-                          <source
-                            type='image/avif'
-                            srcset='/images/solutions-installation-640.avif 640w, /images/solutions-installation-1024.avif 1024w, /images/solutions-installation-1600.avif 1600w'
-                            sizes='(max-width: 767px) calc(100vw - 68px), 52vw'
-                          />
-                          <source
-                            type='image/webp'
-                            srcset='/images/solutions-installation-640.webp 640w, /images/solutions-installation-1024.webp 1024w, /images/solutions-installation-1600.webp 1600w'
-                            sizes='(max-width: 767px) calc(100vw - 68px), 52vw'
-                          />
-                          <img
-                            src='/images/solutions-installation-1024.jpg'
-                            srcset='/images/solutions-installation-640.jpg 640w, /images/solutions-installation-1024.jpg 1024w, /images/solutions-installation-1600.jpg 1600w'
-                            sizes='(max-width: 767px) calc(100vw - 68px), 52vw'
-                            width='1600'
-                            height='914'
-                            alt=''
-                            loading='lazy'
-                            fetchpriority='auto'
-                            decoding='async'
-                          />
-                        </picture>
-                        <span class='solutions-visual__orb'></span><span
-                          class='solutions-visual__grid'
-                        ></span><span class='solutions-visual__roof'></span><span
-                          class='solutions-visual__panels'
-                        ></span><span class='solutions-visual__path'></span><span
-                          class='solutions-visual__label'
-                        >Заполнитель визуала установки</span>
-                      </div>
-                    </div>
-                  </div>
-                </article>
-                <article
-                  class='solutions-story__step swiper-slide'
-                  data-solutions-step='5'
-                  aria-hidden='true'
-                >
-                  <div class='container solutions-story__shell'>
-                    <div class='solutions-story__copy'>
-                      <p class='solutions-story__eyebrow'><span>06</span>Мониторинг</p>
-                      <h3>Мониторинг</h3>
-                      <p class='solutions-story__intro'>и поддержка после запуска</p>
-
-                      <dl class='solutions-story__metrics'>
-                          <div class='solutions-story__metric'>
-                            <dt><svg class='inline-icon' aria-hidden='true'><use
-                                  href='/icons.svg#file'
-                                ></use></svg>Solar Passport</dt>
-                            <dd
-                              data-solutions-field=''
-                              data-solutions-default='Контекст текущего анализа'
-                            >Контекст текущего анализа</dd>
-                          </div>
-                          <div class='solutions-story__metric'>
-                            <dt><svg class='inline-icon' aria-hidden='true'><use
-                                  href='/icons.svg#shield-check'
-                                ></use></svg>Сведения о системе</dt>
-                            <dd
-                              data-solutions-field=''
-                              data-solutions-default='Документация проекта'
-                            >Документация проекта</dd>
-                          </div>
-                          <div class='solutions-story__metric'>
-                            <dt><svg class='inline-icon' aria-hidden='true'><use
-                                  href='/icons.svg#cycle'
-                                ></use></svg>Контекст генерации</dt>
-                            <dd
-                              data-solutions-field=''
-                              data-solutions-default='Доступные данные анализа'
-                            >Доступные данные анализа</dd>
-                          </div>
-                          <div class='solutions-story__metric'>
-                            <dt><svg class='inline-icon' aria-hidden='true'><use
-                                  href='/icons.svg#support'
-                                ></use></svg>Поддержка</dt>
-                            <dd
-                              data-solutions-field=''
-                              data-solutions-default='Ваш путь поддержки'
-                            >Ваш путь поддержки</dd>
-                          </div>
-                      </dl>
-                      <div class='solutions-story__actions'>
-                        <button
-                            class='solutions-story__previous'
-                            type='button'
-                            data-solutions-previous
-                          >← Назад</button>
-
-                        <a
-                            class='button solutions-story__cta'
-                            href='/ru/calculator/'
-                          >Начать анализ солнечного потенциала</a>
-                      </div>
-                    </div>
-
-                    <div class='solutions-story__visual-wrap'>
-                      <div
-                        class='solutions-visual solutions-visual--support'
-                        data-solutions-visual='support'
-                        aria-hidden='true'
-                      >
-                        <picture class='solutions-visual__media'>
-                          <source
-                            type='image/avif'
-                            srcset='/images/solutions-support-640.avif 640w, /images/solutions-support-1024.avif 1024w, /images/solutions-support-1600.avif 1600w'
-                            sizes='(max-width: 767px) calc(100vw - 68px), 52vw'
-                          />
-                          <source
-                            type='image/webp'
-                            srcset='/images/solutions-support-640.webp 640w, /images/solutions-support-1024.webp 1024w, /images/solutions-support-1600.webp 1600w'
-                            sizes='(max-width: 767px) calc(100vw - 68px), 52vw'
-                          />
-                          <img
-                            src='/images/solutions-support-1024.jpg'
-                            srcset='/images/solutions-support-640.jpg 640w, /images/solutions-support-1024.jpg 1024w, /images/solutions-support-1600.jpg 1600w'
-                            sizes='(max-width: 767px) calc(100vw - 68px), 52vw'
-                            width='1600'
-                            height='914'
-                            alt=''
-                            loading='lazy'
-                            fetchpriority='auto'
-                            decoding='async'
-                          />
-                        </picture>
-                        <span class='solutions-visual__orb'></span><span
-                          class='solutions-visual__grid'
-                        ></span><span class='solutions-visual__roof'></span><span
-                          class='solutions-visual__panels'
-                        ></span><span class='solutions-visual__path'></span><span
-                          class='solutions-visual__label'
-                        >Заполнитель визуала поддержки</span>
-                      </div>
-                        <div class='solutions-visual-cards'><div
-                              class='solutions-visual-card'
-                            ><span>Документы</span><strong
-                                data-solutions-field=''
-                                data-solutions-default='Всё в одном месте'
-                              >Всё в одном месте</strong></div><div
-                              class='solutions-visual-card'
-                            ><span>Контекст системы</span><strong
-                                data-solutions-field=''
-                                data-solutions-default='Сохраняется вместе с вашим путём'
-                              >Сохраняется вместе с вашим путём</strong></div></div>
-                    </div>
-                  </div>
-                </article>
+        <h2 id='process-title' class='visually-hidden'>Путь к вашей солнечной системе</h2>
+        <div class='stage-home' id='solutions' data-solutions-home>
+          <div class='stage-home__frame solutions-story__step is-active' data-solutions-scene='1'>
+            <div class='stage-home__backdrop' aria-hidden='true' data-stage-pointer>
+              <picture class='stage-home__art' data-solutions-visual='home'>
+                <source
+                  type='image/avif'
+                  srcset='/images/solutions-home-640.avif 640w, /images/solutions-home-1024.avif 1024w, /images/solutions-home-1600.avif 1600w'
+                  sizes='100vw'
+                />
+                <source
+                  type='image/webp'
+                  srcset='/images/solutions-home-640.webp 640w, /images/solutions-home-1024.webp 1024w, /images/solutions-home-1600.webp 1600w'
+                  sizes='100vw'
+                />
+                <img
+                  src='/images/solutions-home-1600.jpg'
+                  width='1600'
+                  height='900'
+                  alt=''
+                  loading='lazy'
+                  decoding='async'
+                />
+              </picture>
+              <div class='stage-home__night-wash'></div>
             </div>
+            <div class='stage-home__scrim' aria-hidden='true'></div>
+            <div class='stage-home__body'>
+              <div class='stage-home__copy'>
+                <p class='stage-home__eyebrow' data-stage-reveal>ШАГ 1 ИЗ 6</p>
+                <h3 class='stage-home__title'><span data-stage-reveal>Начнём</span>
+                  <span data-stage-reveal>с <em>вашего дома</em></span></h3>
+                <p class='stage-home__intro' data-stage-reveal>Укажите регион и потребление электричества — это отправная точка анализа вашей солнечной системы.</p>
+                <form
+                  class='stage-home__form'
+                  data-stage-form
+                  action='/ru/calculator/'
+                  method='get'
+                  data-stage-reveal
+                >
+                  <label class='visually-hidden' for='stage-region'>Регион</label>
+                  <div class='stage-home__select'>
+                    <svg aria-hidden='true' viewBox='0 0 24 24'><path
+                        d='M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 1 1 16 0Z'
+                      /><circle cx='12' cy='10' r='2.5' /></svg>
+                    <select id='stage-region' name='region' required data-stage-region>
+                      <option value=''>Выберите регион</option>
+                      <option value='yerevan'>Ереван</option><option value='aragatsotn'>Арагацотн</option><option value='ararat'>Арарат</option><option value='armavir'>Армавир</option><option value='gegharkunik'>Гегаркуник</option><option value='kotayk'>Котайк</option><option value='lori'>Лори</option><option value='shirak'>Ширак</option><option value='syunik'>Сюник</option><option value='tavush'>Тавуш</option><option value='vayots-dzor'>Вайоц-Дзор</option>
+                    </select>
+                  </div>
+                  <fieldset class='stage-home__modes' data-stage-consumption>
+                    <legend class='visually-hidden'>Электроэнергия</legend>
+                    <label><input type='radio' name='mode' value='bill' checked /><span
+                      >Счёт за месяц</span></label>
+                    <label><input type='radio' name='mode' value='usage' /><span
+                      >kWh за месяц</span></label>
+                  </fieldset>
+                  <label
+                    for='stage-amount'
+                    data-stage-amount-label
+                    data-stage-consumption
+                  >Средний счёт за месяц</label>
+                  <div class='stage-home__amount' data-stage-consumption>
+                    <input
+                      id='stage-amount'
+                      name='amount'
+                      type='number'
+                      inputmode='decimal'
+                      min='0.01'
+                      step='any'
+                      required
+                      aria-describedby='stage-input-help'
+                      data-stage-amount
+                    />
+                    <span data-stage-unit>AMD</span>
+                  </div>
+                  <p
+                    class='stage-home__help'
+                    id='stage-input-help'
+                    data-stage-help
+                    data-stage-consumption
+                  >Тариф на электричество вы подтвердите в калькуляторе.</p>
+                  <button type='submit' class='stage-home__submit'><span
+                      data-stage-submit-label
+                    >Начать мой анализ</span>
+                    <span aria-hidden='true'>→</span></button>
+                  <a class='stage-home__full' href='/ru/calculator/'>Открыть полный калькулятор
+                    <span aria-hidden='true'>↗</span></a>
+                </form>
+              </div>
+
+              <div class='stage-home__visual'>
+                <div class='stage-home__pointer'>
+                  <svg class='stage-home__arc' viewBox='0 0 700 500' aria-hidden='true' data-stage-arc>
+                    <path
+                      class='stage-home__arc-line'
+                      d='M 70 365 Q 350 -140 630 365'
+                      data-stage-arc-path
+                    />
+                    <path class='stage-home__arc-base' d='M70 365H630' />
+                    <circle cx='70' cy='365' r='4' /><circle cx='630' cy='365' r='4' />
+                    <text x='53' y='392'>W</text><text x='343' y='92'>N</text><text x='634' y='392'>E</text>
+                    <g data-stage-sun transform='translate(322 115)'>
+                      <circle class='stage-home__sun-halo' r='29' />
+                      <circle class='stage-home__sun-core' r='12' />
+                      <path
+                        class='stage-home__sun-rays'
+                        d='M0 -23v-8M0 23v8M23 0h8M-23 0h-8M16 -16l6 -6M-16 16l-6 6M16 16l6 6M-16 -16l-6 -6'
+                      />
+                    </g>
+                  </svg>
+                  <div class='stage-home__glass stage-home__location' data-stage-card>
+                    <svg aria-hidden='true' viewBox='0 0 24 24'><path
+                        d='M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 1 1 16 0Z'
+                      /><circle cx='12' cy='10' r='2.5' /></svg>
+                    <div><span>Ваш регион</span><strong
+                        data-stage-location
+                      >Выберите регион</strong><small>Армения</small></div>
+                  </div>
+                  <div class='stage-home__glass stage-home__resource' data-stage-card>
+                    <svg aria-hidden='true' viewBox='0 0 24 24'><circle cx='12' cy='12' r='4' /><path
+                        d='M12 1v3m0 16v3M1 12h3m16 0h3M4 4l2 2m12 12 2 2M4 20l2-2M18 6l2-2'
+                      /></svg>
+                    <div><span>Солнечный ресурс</span><strong
+                        data-stage-resource
+                      >Рассчитаем с PVGIS после начала анализа</strong><small data-stage-source></small></div>
+                  </div>
+                </div>
+                <div class='stage-home__glass stage-home__results' data-stage-results hidden>
+                  <div><span>Годовая генерация</span><strong
+                      data-stage-count='annualProduction'
+                    ></strong><small>kWh/год</small></div>
+                  <div><span>Мощность системы</span><strong
+                      data-stage-count='systemSize'
+                    ></strong><small>kWp</small></div>
+                  <div><span>Панели</span><strong data-stage-count='panelCount'></strong></div>
+                </div>
+              </div>
+
+              <nav class='stage-home__progress' aria-label='Путь к вашей солнечной системе'>
+                <ol>
+                    <li data-solutions-step='1' class='is-active'>
+                        <a href='/ru/calculator/' aria-current='step'><b>01</b><span
+                          >Ваш дом</span></a>
+                    </li>
+
+                    <li data-solutions-step='2' class=''>
+                        <a href='/ru/calculator/refine/' aria-current='false'><b>02</b><span
+                          >Детали крыши</span></a>
+                    </li>
+
+                    <li data-solutions-step='3' class=''>
+                        <a href='/ru/calculator/pro/' aria-current='false'><b>03</b><span
+                          >Проект системы</span></a>
+                    </li>
+
+                    <li data-solutions-step='4' class=''>
+                        <span class='stage-home__future'><b>04</b><span
+                          >Ваша экономия</span></span>
+                    </li>
+
+                    <li data-solutions-step='5' class=''>
+                        <span class='stage-home__future'><b>05</b><span
+                          >Установка</span></span>
+                    </li>
+
+                    <li data-solutions-step='6' class=''>
+                        <span class='stage-home__future'><b>06</b><span
+                          >Поддержка</span></span>
+                    </li>
+                  </ol>
+              </nav>
+            </div>
+            <div
+              class='stage-home__lighting'
+              role='group'
+              aria-label='Предпросмотр освещения сцены'
+              data-stage-lighting
+              hidden
+            >
+              <button type='button' data-stage-light='day' aria-pressed='true'><span
+                  class='stage-home__thumbnail stage-home__thumbnail--day'
+                  aria-hidden='true'
+                ></span><span>День</span></button>
+              <button type='button' data-stage-light='night' aria-pressed='false'><span
+                  class='stage-home__thumbnail stage-home__thumbnail--night'
+                  aria-hidden='true'
+                ></span><span>Ночь</span></button>
+            </div>
+            <p class='stage-home__signature' aria-hidden='true'>Светлое будущее Армении — вместе<svg
+                viewBox='0 0 160 36'
+              ><path d='M4 30Q73 0 151 9M50 25Q108 3 130 10' /></svg></p>
+            <div class='stage-home__bottom'>
+              <ul class='stage-home__trust'><li><svg
+                      aria-hidden='true'
+                      viewBox='0 0 24 24'
+                    ><path d='m13 2-9 12h7l-1 8 10-13h-7l1-7Z' /></svg><div><strong>Солнечные данные</strong><span
+                      >На основе PVGIS</span></div></li><li><svg
+                      aria-hidden='true'
+                      viewBox='0 0 24 24'
+                    ><path d='M12 2 3 6v6c0 5 9 10 9 10s9-5 9-10V6l-9-4Zm-4 10 3 3 5-6' /></svg><div><strong>Официальные тарифы</strong><span
+                      >Реестр Армении</span></div></li><li><svg
+                      aria-hidden='true'
+                      viewBox='0 0 24 24'
+                    ><path d='M4 21c0-8 5-13 14-17M5 17C-2 6 13 2 21 2c0 10-2 20-16 15Z' /></svg><div><strong>Прозрачный расчёт</strong><span
+                      >Источники и допущения</span></div></li></ul>
+              <a href='#faq' class='stage-home__scroll'><svg aria-hidden='true' viewBox='0 0 24 32'><rect
+                    x='4'
+                    y='1'
+                    width='16'
+                    height='27'
+                    rx='8'
+                  /><path d='M12 7v5' /></svg>Листайте дальше</a>
+            </div>
+            <p class='stage-home__caption'>СОЛНЕЧНЫЕ РЕШЕНИЯ ДЛЯ ДОМА И БИЗНЕСА</p>
           </div>
         </div>      </section>
 
@@ -1097,7 +580,7 @@
         data-contact-label='+374 91 095 950'
       ><svg aria-hidden='true' focusable='false'><use href='/icons.svg#phone'></use></svg></a></nav>
     <script id='home-page-config' type='application/json'>{"locale":"ru-RU","hero":{"eyebrow":"СОЛНЕЧНАЯ ЭНЕРГИЯ ДЛЯ ВАШЕГО ДОМА","titleLead":"У вашей крыши","titleMiddle":"больше потенциала,","titleAccent":"чем вы думаете.","homeCopy":"За несколько шагов узнайте солнечный потенциал дома, предварительную мощность и бюджет, а с указанным тарифом — и экономику.","calculatorCopy":"Сначала вручную выберите и подтвердите точку, затем увидите её потенциал PVGIS. Данные крыши и потребления нужны только для подробного расчёта.","disclosure":"Предварительный результат требует подтверждения объекта и не заменяет осмотр, инженерный проект или коммерческое предложение.","addressLabel":"Адрес для инженера (необязательно)","addressPlaceholder":"Например, Ереван, Арабкир","addressHelp":"Адрес не геокодируется. Откройте карту, выберите точку вручную или введите координаты ниже.","analyze":"Открыть выбор точки","openCalculator":"Рассчитать для дома","uploadTitle":"Прикрепите счёт за электричество (необязательно)","uploadPrompt":"Выберите или перетащите файл","uploadHelp":"PDF, JPG или PNG до 10 МБ. Файл не отправляется на сервер и не считывается автоматически; внесите значения вручную.","removeFile":"Удалить файл","signatureLead":"Чистая энергия","signatureTail":"Светлее жизнь","dashboardAriaLabel":"Сводка солнечного расчёта","dashboardLocationSelected":"Выбранная точка","dashboardLocationRegional":"Региональная оценка","dashboardStatusPreliminary":"ПРЕДВАРИТЕЛЬНО","dashboardReady":"Результат текущей сессии","dashboardGeneration":"Годовая генерация","dashboardGenerationUnit":"kWh / год","dashboardCoverage":"Покрытие потребления","dashboardCoverageUnit":"%","dashboardSavings":"Экономия в год","dashboardSavingsUnit":"֏ / год","dashboardCo2":"Сокращение выбросов CO₂","dashboardCo2Unit":"т / год","dashboardNeedConsumption":"Добавьте потребление","dashboardNeedTariff":"Добавьте тариф","dashboardLoading":"Расчёт…","dashboardNotePreliminary":"Расчёт предварительный. Финальные параметры и стоимость подтверждает инженер.","dashboardExample":{"location":"Ереван, Армения","status":"ПРИМЕР РЕЗУЛЬТАТА","label":"Годовая генерация","annualGenerationKwh":8420,"annualGenerationDisplay":"8 420","monthlyGenerationKwh":[320,390,570,740,820,900,980,940,790,630,470,350],"monthlyBarPercent":[33,40,58,76,84,92,100,96,81,64,48,36],"co2Label":"Сокращение CO₂","treesLabel":"Эквивалент поглощения CO₂ деревьями","treesUnit":"деревьев / год","note":"Пример результата — рассчитайте дом, чтобы увидеть свои данные.","co2Tons":1.541,"co2Display":"1,5","treeEquivalent":25.683,"trees":26}}}</script>
-    <script id='journey-page-config' type='application/json'>{"locale":"ru-RU","journey":{"title":"Как это работает","progressLabel":"Путь солнечного анализа","previewLabel":"Пример для просмотра","chartPreviewLabel":"Пример графика — доступен после расчёта","chartReadyLabel":"Помесячная генерация из вашего расчёта","availableAfterCalculation":"Доступно после расчёта","confirmedInput":"Подтверждённые данные","awaitingInput":"Добавьте данные в калькуляторе","previousStepLabel":"Назад","nextStepLabel":"Далее","chartMonths":["Я","Ф","М","А","М","И","И","А","С","О","Н","Д"],"steps":[{"number":"01","nav":"Введите адрес","visual":"home","visualLabel":"Заполнитель визуала дома","headline":"Введите адрес","copy":"и основные данные дома","status":"home","cards":[{"icon":"map-pin","label":"Местоположение","value":"Добавьте в калькуляторе","data":"location"},{"icon":"zap","label":"Расход электричества","value":"Добавьте в калькуляторе","data":"consumption"},{"icon":"sun","label":"Солнечный ресурс","value":"Доступно после расчёта","data":"solar-resource"}],"visualCards":[{"label":"Объект","value":"Предпросмотр","data":"location"},{"label":"Статус данных","value":"Ожидаем ваши данные","data":"home-status"}],"hasPrevious":false,"hasNext":true,"progressClass":"solutions-progress__item is-active","storyClass":"solutions-story__step swiper-slide is-active","ariaHidden":"false","loading":"eager","fetchPriority":"high","image":"solutions-home","avifSrcset":"/images/solutions-home-640.avif 640w, /images/solutions-home-1024.avif 1024w, /images/solutions-home-1600.avif 1600w","webpSrcset":"/images/solutions-home-640.webp 640w, /images/solutions-home-1024.webp 1024w, /images/solutions-home-1600.webp 1600w"},{"number":"02","nav":"Подтвердите объект","visual":"roof","visualLabel":"Заполнитель контура крыши","headline":"Подтвердите объект","copy":"или выберите точку вручную","status":"roof","cards":[{"icon":"satellite","label":"Полезная площадь крыши","value":"Добавьте в калькуляторе","data":"roof-area"},{"icon":"sun","label":"Направление крыши","value":"Добавьте в калькуляторе","data":"roof-direction"},{"icon":"arrow-right","label":"Угол наклона","value":"Добавьте в калькуляторе","data":"roof-tilt"}],"visualCards":[{"label":"Контур крыши","value":"Ручное уточнение","data":"roof-status"},{"label":"Статус данных","value":"Это не автоматическое сканирование крыши","data":"roof-status"}],"hasPrevious":true,"hasNext":true,"progressClass":"solutions-progress__item","storyClass":"solutions-story__step swiper-slide","ariaHidden":"true","loading":"lazy","fetchPriority":"auto","image":"solutions-roof","avifSrcset":"/images/solutions-roof-640.avif 640w, /images/solutions-roof-1024.avif 1024w, /images/solutions-roof-1600.avif 1600w","webpSrcset":"/images/solutions-roof-640.webp 640w, /images/solutions-roof-1024.webp 1024w, /images/solutions-roof-1600.webp 1600w"},{"number":"03","nav":"Сравните расчёт","visual":"system","visualLabel":"Заполнитель визуала солнечной системы","headline":"Сравните расчёт","copy":"и три варианта системы","status":"system","chart":true,"cards":[{"icon":"zap","label":"Размер системы","value":"Пример для просмотра","data":"system-size"},{"icon":"sun","label":"Солнечные панели","value":"Пример для просмотра","data":"panel-count"},{"icon":"shield-check","label":"Инвертор","value":"Подтверждается в проекте","data":"inverter"},{"icon":"cycle","label":"Годовая генерация","value":"Пример для просмотра","data":"annual-production"}],"visualCards":[{"label":"Рекомендованная система","value":"Пример для просмотра","data":"system-size"},{"label":"Источник данных","value":"Доступно после расчёта","data":"system-status"}],"hasPrevious":true,"hasNext":true,"progressClass":"solutions-progress__item","storyClass":"solutions-story__step swiper-slide","ariaHidden":"true","loading":"lazy","fetchPriority":"auto","image":"solutions-system","avifSrcset":"/images/solutions-system-640.avif 640w, /images/solutions-system-1024.avif 1024w, /images/solutions-system-1600.avif 1600w","webpSrcset":"/images/solutions-system-640.webp 640w, /images/solutions-system-1024.webp 1024w, /images/solutions-system-1600.webp 1600w"},{"number":"04","nav":"Осмотр специалиста","visual":"inspection","visualLabel":"Инженерный осмотр объекта","headline":"Осмотр специалиста","copy":"замеры крыши и щита","cards":[{"icon":"pin","label":"Замеры крыши","value":"На осмотре"},{"icon":"calculator","label":"Электрощит","value":"На осмотре"},{"icon":"sun","label":"Затенение","value":"Проверяется на объекте"}],"visualCards":[{"label":"Осмотр объекта","value":"До финального предложения"},{"label":"Инженерная проверка","value":"На месте"}],"hasPrevious":true,"hasNext":true,"progressClass":"solutions-progress__item","storyClass":"solutions-story__step swiper-slide","ariaHidden":"true","loading":"lazy","fetchPriority":"auto","image":"solutions-inspection","avifSrcset":"/images/solutions-inspection-640.avif 640w, /images/solutions-inspection-1024.avif 1024w, /images/solutions-inspection-1600.avif 1600w","webpSrcset":"/images/solutions-inspection-640.webp 640w, /images/solutions-inspection-1024.webp 1024w, /images/solutions-inspection-1600.webp 1600w"},{"number":"05","nav":"Установка системы","visual":"installation","visualLabel":"Заполнитель визуала установки","headline":"Установка системы","copy":"после проекта и договора","cards":[{"icon":"pin","label":"Осмотр объекта","value":"Проверка инженером"},{"icon":"calculator","label":"Финальный проект","value":"После осмотра"},{"icon":"sun","label":"Подготовка оборудования","value":"Подтверждается для проекта"}],"timeline":[{"number":"01","label":"Осмотр объекта"},{"number":"02","label":"Финальный проект"},{"number":"03","label":"Подготовка оборудования"},{"number":"04","label":"Монтаж"},{"number":"05","label":"Ввод в эксплуатацию"}],"hasPrevious":true,"hasNext":true,"progressClass":"solutions-progress__item","storyClass":"solutions-story__step swiper-slide","ariaHidden":"true","loading":"lazy","fetchPriority":"auto","image":"solutions-installation","avifSrcset":"/images/solutions-installation-640.avif 640w, /images/solutions-installation-1024.avif 1024w, /images/solutions-installation-1600.avif 1600w","webpSrcset":"/images/solutions-installation-640.webp 640w, /images/solutions-installation-1024.webp 1024w, /images/solutions-installation-1600.webp 1600w"},{"number":"06","nav":"Мониторинг","visual":"support","visualLabel":"Заполнитель визуала поддержки","headline":"Мониторинг","copy":"и поддержка после запуска","cards":[{"icon":"file","label":"Solar Passport","value":"Контекст текущего анализа"},{"icon":"shield-check","label":"Сведения о системе","value":"Документация проекта"},{"icon":"cycle","label":"Контекст генерации","value":"Доступные данные анализа"},{"icon":"support","label":"Поддержка","value":"Ваш путь поддержки"}],"visualCards":[{"label":"Документы","value":"Всё в одном месте"},{"label":"Контекст системы","value":"Сохраняется вместе с вашим путём"}],"cta":"Начать анализ солнечного потенциала","hasPrevious":true,"hasNext":false,"progressClass":"solutions-progress__item","storyClass":"solutions-story__step swiper-slide","ariaHidden":"true","loading":"lazy","fetchPriority":"auto","image":"solutions-support","avifSrcset":"/images/solutions-support-640.avif 640w, /images/solutions-support-1024.avif 1024w, /images/solutions-support-1600.avif 1600w","webpSrcset":"/images/solutions-support-640.webp 640w, /images/solutions-support-1024.webp 1024w, /images/solutions-support-1600.webp 1600w"}]}}</script>
+    <script id='journey-page-config' type='application/json'>{"locale":"ru-RU","journey":{"eyebrow":"ШАГ 1 ИЗ 6","title":"Начнём","titleLead":"с","titleAccent":"вашего дома","intro":"Укажите регион и потребление электричества — это отправная точка анализа вашей солнечной системы.","region":"Регион","chooseRegion":"Выберите регион","consumption":"Электроэнергия","bill":"Счёт за месяц","usage":"kWh за месяц","amountBill":"Средний счёт за месяц","amountUsage":"Среднее потребление за месяц","billHelp":"Тариф на электричество вы подтвердите в калькуляторе.","usageHelp":"Укажите месячное потребление из вашего счёта.","submit":"Начать мой анализ","continue":"Продолжить","full":"Открыть полный калькулятор","country":"Армения","location":"Ваш регион","resource":"Солнечный ресурс","pending":"Рассчитаем с PVGIS после начала анализа","source":"Источник","production":"Годовая генерация","capacity":"Мощность системы","panels":"Панели","perYear":"kWh/год","lighting":"Предпросмотр освещения сцены","day":"День","night":"Ночь","signature":"Светлое будущее Армении — вместе","caption":"СОЛНЕЧНЫЕ РЕШЕНИЯ ДЛЯ ДОМА И БИЗНЕСА","scroll":"Листайте дальше","progress":"Путь к вашей солнечной системе","steps":[{"number":1,"displayNumber":"01","label":"Ваш дом","active":true,"stateClass":"is-active","current":"step","href":"/ru/calculator/"},{"number":2,"displayNumber":"02","label":"Детали крыши","active":false,"stateClass":"","current":"false","href":"/ru/calculator/refine/"},{"number":3,"displayNumber":"03","label":"Проект системы","active":false,"stateClass":"","current":"false","href":"/ru/calculator/pro/"},{"number":4,"displayNumber":"04","label":"Ваша экономия","active":false,"stateClass":"","current":"false","href":null},{"number":5,"displayNumber":"05","label":"Установка","active":false,"stateClass":"","current":"false","href":null},{"number":6,"displayNumber":"06","label":"Поддержка","active":false,"stateClass":"","current":"false","href":null}],"trust":[{"title":"Солнечные данные","note":"На основе PVGIS","icon":"m13 2-9 12h7l-1 8 10-13h-7l1-7Z"},{"title":"Официальные тарифы","note":"Реестр Армении","icon":"M12 2 3 6v6c0 5 9 10 9 10s9-5 9-10V6l-9-4Zm-4 10 3 3 5-6"},{"title":"Прозрачный расчёт","note":"Источники и допущения","icon":"M4 21c0-8 5-13 14-17M5 17C-2 6 13 2 21 2c0 10-2 20-16 15Z"}],"regions":[{"id":"yerevan","label":"Ереван"},{"id":"aragatsotn","label":"Арагацотн"},{"id":"ararat","label":"Арарат"},{"id":"armavir","label":"Армавир"},{"id":"gegharkunik","label":"Гегаркуник"},{"id":"kotayk","label":"Котайк"},{"id":"lori","label":"Лори"},{"id":"shirak","label":"Ширак"},{"id":"syunik","label":"Сюник"},{"id":"tavush","label":"Тавуш"},{"id":"vayots-dzor","label":"Вайоц-Дзор"}]}}</script>
     <script type='module' src='/src/main.js'></script>
   </body>
 </html>
