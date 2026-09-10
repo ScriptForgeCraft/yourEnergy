@@ -57,8 +57,7 @@ export default {
     phoneLabel: 'Call +374 91 095 950',
     address1: '48/14 Artashisyan St., Yerevan, Armenia',
     address2: '33, 26th Street, Zovuni, Kotayk Province, Armenia',
-    hours: 'Open until 21:00',
-    note: 'Contact details provided by Your Energy LLC.'
+    hours: 'Open until 21:00'
   },
   common: {
     cta: 'Calculate my home',
@@ -336,7 +335,7 @@ export default {
     months: months.map(({ short, name }) => ({ short, name }))
   },
   hero: {
-    eyebrow: 'SOLAR ENERGY FOR YOUR HOME',
+    eyebrow: 'Manage your energy your way.',
     titleLead: 'Your roof',
     titleMiddle: 'has more potential',
     titleAccent: 'than you think.',

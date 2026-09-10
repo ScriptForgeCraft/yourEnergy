@@ -57,8 +57,7 @@ export default {
     phoneLabel: 'Զանգել +374 91 095 950 համարով',
     address1: 'Հայաստան, Երևան, Արտաշիսյան փողոց, 48/14',
     address2: 'Հայաստան, Կոտայքի մարզ, Զովունի, 26-րդ փողոց, 33',
-    hours: 'Բաց է մինչև 21:00',
-    note: 'Կոնտակտային տվյալները տրամադրվել են Your Energy LLC-ի կողմից։'
+    hours: 'Բաց է մինչև 21:00'
   },
   common: {
     cta: 'Հաշվել իմ տունը',
@@ -335,7 +334,7 @@ export default {
     months: months.map(({ short, name }) => ({ short, name }))
   },
   hero: {
-    eyebrow: 'ԱՐԵՎԱՅԻՆ ԷՆԵՐԳԻԱ ՁԵՐ ՏԱՆ ՀԱՄԱՐ',
+    eyebrow: 'Տնօրինիր քո էներգիան յուրովի։',
     titleLead: 'Ձեր տանիքն ավելի',
     titleMiddle: 'մեծ ներուժ ունի,',
     titleAccent: 'քան կարծում եք։',
