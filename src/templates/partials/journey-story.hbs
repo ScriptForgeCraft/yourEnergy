@@ -1,189 +1,253 @@
-<h2 id='process-title' class='visually-hidden'>{{journey.progress}}</h2>
-<div class='stage-home' id='solutions' data-solutions-home>
-  <div class='stage-home__frame solutions-story__step is-active' data-solutions-scene='1'>
-    <div class='stage-home__backdrop' aria-hidden='true' data-stage-pointer>
-      <picture class='stage-home__art' data-solutions-visual='home'>
-        <source
-          type='image/avif'
-          srcset='/images/solutions-home-640.avif 640w, /images/solutions-home-1024.avif 1024w, /images/solutions-home-1600.avif 1600w'
-          sizes='100vw'
-        />
-        <source
-          type='image/webp'
-          srcset='/images/solutions-home-640.webp 640w, /images/solutions-home-1024.webp 1024w, /images/solutions-home-1600.webp 1600w'
-          sizes='100vw'
-        />
-        <img
-          src='/images/solutions-home-1600.jpg'
-          width='1600'
-          height='900'
-          alt=''
-          loading='lazy'
-          decoding='async'
-        />
-      </picture>
-      <div class='stage-home__night-wash'></div>
-    </div>
-    <div class='stage-home__scrim' aria-hidden='true'></div>
-    <div class='stage-home__body'>
-      <div class='stage-home__copy'>
-        <p class='stage-home__eyebrow' data-stage-reveal>{{journey.eyebrow}}</p>
-        <h3 class='stage-home__title'><span data-stage-reveal>{{journey.title}}</span>
-          <span data-stage-reveal>{{journey.titleLead}} <em>{{journey.titleAccent}}</em></span></h3>
-        <p class='stage-home__intro' data-stage-reveal>{{journey.intro}}</p>
-        <form
-          class='stage-home__form'
-          data-stage-form
-          action='{{calculatorHref}}'
-          method='get'
-          data-stage-reveal
+<h2 id='process-title' class='visually-hidden'>{{processStory.title}}</h2>
+<div class='process-stage' data-process-stage data-process-active='1'>
+  <div class='process-stage__frame'>
+    <div class='process-stage__ambient' aria-hidden='true'><span></span><span></span><span
+      ></span></div>
+
+    <nav class='process-progress' aria-label='{{processStory.progressLabel}}'>
+      <span class='process-progress__track' aria-hidden='true'><i
+          data-process-progress-fill
+        ></i></span>
+      <ol>
+        {{#each processStory.steps}}
+          <li class='{{progressClass}}' data-process-progress-step='{{index}}'>
+            <span class='process-progress__node' aria-hidden='true'><b>{{number}}</b><svg><use
+                  href='/icons.svg#check'
+                ></use></svg></span>
+            <span>{{nav}}</span>
+          </li>
+        {{/each}}
+      </ol>
+    </nav>
+
+    <div class='process-stage__states'>
+      {{#each processStory.steps}}
+        <article
+          class='process-state {{stateClass}}'
+          data-process-state='{{index}}'
+          aria-labelledby='process-step-title-{{number}}'
+          aria-hidden='{{ariaHidden}}'
         >
-          <label class='visually-hidden' for='stage-region'>{{journey.region}}</label>
-          <div class='stage-home__select'>
-            <svg aria-hidden='true' viewBox='0 0 24 24'><path
-                d='M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 1 1 16 0Z'
-              /><circle cx='12' cy='10' r='2.5' /></svg>
-            <select id='stage-region' name='region' required data-stage-region>
-              <option value=''>{{journey.chooseRegion}}</option>
-              {{#each journey.regions}}<option value='{{id}}'>{{label}}</option>{{/each}}
-            </select>
-          </div>
-          <fieldset class='stage-home__modes' data-stage-consumption>
-            <legend class='visually-hidden'>{{journey.consumption}}</legend>
-            <label><input type='radio' name='mode' value='bill' checked /><span
-              >{{journey.bill}}</span></label>
-            <label><input type='radio' name='mode' value='usage' /><span
-              >{{journey.usage}}</span></label>
-          </fieldset>
-          <label
-            for='stage-amount'
-            data-stage-amount-label
-            data-stage-consumption
-          >{{journey.amountBill}}</label>
-          <div class='stage-home__amount' data-stage-consumption>
-            <input
-              id='stage-amount'
-              name='amount'
-              type='number'
-              inputmode='decimal'
-              min='0.01'
-              step='any'
-              required
-              aria-describedby='stage-input-help'
-              data-stage-amount
-            />
-            <span data-stage-unit>AMD</span>
-          </div>
-          <p
-            class='stage-home__help'
-            id='stage-input-help'
-            data-stage-help
-            data-stage-consumption
-          >{{journey.billHelp}}</p>
-          <button type='submit' class='stage-home__submit'><span
-              data-stage-submit-label
-            >{{journey.submit}}</span>
-            <span aria-hidden='true'>→</span></button>
-          <a class='stage-home__full' href='{{calculatorHref}}'>{{journey.full}}
-            <span aria-hidden='true'>↗</span></a>
-        </form>
-      </div>
+          <div class='process-state__copy' data-process-copy>
+            <p class='process-state__eyebrow'><span aria-hidden='true'></span>{{stepLabel}}</p>
+            <h3 id='process-step-title-{{number}}' class='process-state__title'>
+              {{#each headlineLines}}<span>{{this}}</span>{{/each}}
+            </h3>
+            <p class='process-state__intro'>{{copy}}</p>
 
-      <div class='stage-home__visual'>
-        <div class='stage-home__pointer'>
-          <svg class='stage-home__arc' viewBox='0 0 700 500' aria-hidden='true' data-stage-arc>
-            <path
-              class='stage-home__arc-line'
-              d='M 70 365 Q 350 -140 630 365'
-              data-stage-arc-path
-            />
-            <path class='stage-home__arc-base' d='M70 365H630' />
-            <circle cx='70' cy='365' r='4' /><circle cx='630' cy='365' r='4' />
-            <text x='53' y='392'>W</text><text x='343' y='92'>N</text><text x='634' y='392'>E</text>
-            <g data-stage-sun transform='translate(322 115)'>
-              <circle class='stage-home__sun-halo' r='29' />
-              <circle class='stage-home__sun-core' r='12' />
-              <path
-                class='stage-home__sun-rays'
-                d='M0 -23v-8M0 23v8M23 0h8M-23 0h-8M16 -16l6 -6M-16 16l-6 6M16 16l6 6M-16 -16l-6 -6'
-              />
-            </g>
-          </svg>
-          <div class='stage-home__glass stage-home__location' data-stage-card>
-            <svg aria-hidden='true' viewBox='0 0 24 24'><path
-                d='M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 1 1 16 0Z'
-              /><circle cx='12' cy='10' r='2.5' /></svg>
-            <div><span>{{journey.location}}</span><strong
-                data-stage-location
-              >{{journey.chooseRegion}}</strong><small>{{journey.country}}</small></div>
-          </div>
-          <div class='stage-home__glass stage-home__resource' data-stage-card>
-            <svg aria-hidden='true' viewBox='0 0 24 24'><circle cx='12' cy='12' r='4' /><path
-                d='M12 1v3m0 16v3M1 12h3m16 0h3M4 4l2 2m12 12 2 2M4 20l2-2M18 6l2-2'
-              /></svg>
-            <div><span>{{journey.resource}}</span><strong
-                data-stage-resource
-              >{{journey.pending}}</strong><small data-stage-source></small></div>
-          </div>
-        </div>
-        <div class='stage-home__glass stage-home__results' data-stage-results hidden>
-          <div><span>{{journey.production}}</span><strong
-              data-stage-count='annualProduction'
-            ></strong><small>{{journey.perYear}}</small></div>
-          <div><span>{{journey.capacity}}</span><strong
-              data-stage-count='systemSize'
-            ></strong><small>kWp</small></div>
-          <div><span>{{journey.panels}}</span><strong data-stage-count='panelCount'></strong></div>
-        </div>
-      </div>
+            {{#if isAnalysis}}
+              <form
+                class='process-form'
+                data-process-form
+                action='{{@root.calculatorHref}}'
+                method='get'
+              >
+                <label
+                  class='visually-hidden'
+                  for='process-region'
+                >{{@root.processStory.form.region}}</label>
+                <div class='process-form__select'>
+                  <svg class='inline-icon' aria-hidden='true'><use
+                      href='/icons.svg#map-pin'
+                    ></use></svg>
+                  <select id='process-region' name='region' required data-process-region>
+                    <option value=''>{{@root.processStory.form.chooseRegion}}</option>
+                    {{#each @root.processStory.regions}}<option
+                        value='{{id}}'
+                      >{{label}}</option>{{/each}}
+                  </select>
+                </div>
+                <fieldset class='process-form__modes' data-process-consumption>
+                  <legend class='visually-hidden'>{{@root.processStory.form.consumption}}</legend>
+                  <label><input type='radio' name='mode' value='bill' checked /><span
+                    >{{@root.processStory.form.bill}}</span></label>
+                  <label><input type='radio' name='mode' value='usage' /><span
+                    >{{@root.processStory.form.usage}}</span></label>
+                </fieldset>
+                <label
+                  class='process-form__amount-label'
+                  for='process-amount'
+                  data-process-amount-label
+                  data-process-consumption
+                >{{@root.processStory.form.amountBill}}</label>
+                <div class='process-form__amount' data-process-consumption>
+                  <input
+                    id='process-amount'
+                    name='amount'
+                    type='number'
+                    inputmode='decimal'
+                    min='0.01'
+                    step='any'
+                    required
+                    aria-describedby='process-input-help'
+                    data-process-amount
+                  />
+                  <span data-process-unit>AMD</span>
+                </div>
+                <p
+                  class='process-form__help'
+                  id='process-input-help'
+                  data-process-help
+                  data-process-consumption
+                >{{@root.processStory.form.billHelp}}</p>
+                <button type='submit' class='process-form__submit'>
+                  <span data-process-submit-label>{{@root.processStory.form.submit}}</span>
+                  <svg class='inline-icon' aria-hidden='true'><use
+                      href='/icons.svg#arrow-right'
+                    ></use></svg>
+                </button>
+                <a
+                  class='process-form__full'
+                  href='{{@root.calculatorHref}}'
+                >{{@root.processStory.form.full}} <span aria-hidden='true'>↗</span></a>
+              </form>
+            {{/if}}
 
-      <nav class='stage-home__progress' aria-label='{{journey.progress}}'>
-        <ol>{{#each journey.steps}}
-            <li data-solutions-step='{{number}}' class='{{stateClass}}'>
-              {{#if href}}
-                <a href='{{href}}' aria-current='{{current}}'><b>{{displayNumber}}</b><span
-                  >{{label}}</span></a>
-              {{else}}
-                <span class='stage-home__future'><b>{{displayNumber}}</b><span
-                  >{{label}}</span></span>
+            {{#if isSupport}}
+              <a class='process-state__cta' href='{{@root.calculatorHref}}'>{{cta}}
+                <svg class='inline-icon' aria-hidden='true'><use
+                    href='/icons.svg#arrow-right'
+                  ></use></svg>
+              </a>
+            {{/if}}
+          </div>
+
+          <div
+            class='process-visual process-visual--{{visual}}'
+            data-process-visual='{{visual}}'
+            role='img'
+            aria-label='{{visualLabel}}'
+          >
+            <div class='process-visual__depth' aria-hidden='true'>
+              <span class='process-visual__halo'></span>
+
+              {{#if isAnalysis}}
+                <svg class='process-visual__solar-arc' viewBox='0 0 700 470' data-process-solar-arc>
+                  <path d='M76 354 Q350 -120 624 354' data-process-solar-path></path>
+                  <path class='process-visual__horizon' d='M76 354H624'></path>
+                  <text x='55' y='383'>W</text><text x='342' y='70'>N</text><text
+                    x='632'
+                    y='383'
+                  >E</text>
+                  <g data-process-sun transform='translate(350 105)'>
+                    <circle class='process-visual__sun-halo' r='31'></circle>
+                    <circle class='process-visual__sun-core' r='13'></circle>
+                    <path
+                      d='M0-25v-9M0 25v9M25 0h9M-25 0h-9M18-18l7-7M-18 18l-7 7M18 18l7 7M-18-18l-7-7'
+                    ></path>
+                  </g>
+                </svg>
+                <div class='process-house'><span class='process-house__roof'></span><span
+                    class='process-house__wall'
+                  ></span><span class='process-house__window'></span><span
+                    class='process-house__panel'
+                  ></span></div>
+                <span class='process-visual__terrain process-visual__terrain--one'></span><span
+                  class='process-visual__terrain process-visual__terrain--two'
+                ></span>
               {{/if}}
-            </li>
-          {{/each}}</ol>
-      </nav>
+
+              {{#if isInspection}}
+                <div class='process-roof'>
+                  <span class='process-roof__plane'></span><span
+                    class='process-roof__ridge'
+                  ></span><span class='process-roof__scan'></span>
+                  <i style='--point-x:16%;--point-y:72%'></i><i
+                    style='--point-x:36%;--point-y:18%'
+                  ></i><i style='--point-x:84%;--point-y:30%'></i><i
+                    style='--point-x:70%;--point-y:86%'
+                  ></i>
+                </div>
+                <svg class='process-measure' viewBox='0 0 640 400'><path
+                    d='M103 297 230 78 537 122 449 344Z'
+                  ></path><path
+                    class='process-measure__dash'
+                    d='M93 318H459M559 112v246'
+                  ></path><text x='238' y='342'>m²</text><text x='570' y='240'>°</text></svg>
+              {{/if}}
+
+              {{#if isDesign}}
+                <div class='process-system'>
+                  <div class='process-system__panels'>{{#each designPanels}}<span
+                        style='--panel-i:{{this}}'
+                      ></span>{{/each}}</div>
+                  <div class='process-system__inverter'><svg class='inline-icon'><use
+                        href='/icons.svg#zap'
+                      ></use></svg><i></i><i></i><i></i></div>
+                  <svg class='process-system__flow' viewBox='0 0 640 420'><path
+                      d='M108 279C253 363 370 345 507 228'
+                    ></path><circle cx='108' cy='279' r='5'></circle><circle
+                      cx='507'
+                      cy='228'
+                      r='5'
+                    ></circle></svg>
+                </div>
+              {{/if}}
+
+              {{#if isProposal}}
+                <div class='process-proposal'>
+                  <div class='process-proposal__sheet'><span
+                      class='process-proposal__brand'
+                    >YOURENERGY</span><strong>{{nav}}</strong><i></i><i></i><i></i><i></i><span
+                      class='process-proposal__seal'
+                    ><svg class='inline-icon'><use href='/icons.svg#check'></use></svg></span></div>
+                  <span class='process-proposal__card process-proposal__card--one'></span><span
+                    class='process-proposal__card process-proposal__card--two'
+                  ></span>
+                </div>
+              {{/if}}
+
+              {{#if isInstallation}}
+                <div class='process-install'><div class='process-install__system'>{{#each
+                      installPanels
+                    }}<span style='--install-i:{{this}}'></span>{{/each}}</div><span
+                    class='process-install__pulse'
+                  ></span></div>
+              {{/if}}
+
+              {{#if isSupport}}
+                <div class='process-passport'>
+                  <span class='process-passport__back'></span>
+                  <div class='process-passport__cover'><svg class='inline-icon'><use
+                        href='/icons.svg#sun'
+                      ></use></svg><small>YOURENERGY</small><strong>Solar<br />Passport</strong><i
+                    ></i></div>
+                  <div class='process-passport__page'><span></span><span></span><span></span><svg
+                      class='inline-icon'
+                    ><use href='/icons.svg#shield-check'></use></svg></div>
+                </div>
+              {{/if}}
+            </div>
+
+            {{#if cards}}
+              <ul class='process-metrics' role='list'>
+                {{#each cards}}
+                  <li class='process-metric' data-process-card>
+                    <svg class='inline-icon' aria-hidden='true'><use
+                        href='/icons.svg#{{icon}}'
+                      ></use></svg>
+                    <span>{{label}}</span>
+                    <strong
+                      data-process-value='{{data}}'
+                      data-default='{{value}}'
+                    >{{value}}</strong>
+                    <small data-process-value-note='{{data}}'></small>
+                  </li>
+                {{/each}}
+              </ul>
+            {{/if}}
+
+            {{#if timeline}}
+              <ol class='process-installation-timeline'>{{#each timeline}}<li
+                    data-process-install-step
+                  ><b>{{number}}</b><span>{{label}}</span></li>{{/each}}</ol>
+            {{/if}}
+          </div>
+        </article>
+      {{/each}}
     </div>
-    <div
-      class='stage-home__lighting'
-      role='group'
-      aria-label='{{journey.lighting}}'
-      data-stage-lighting
-      hidden
-    >
-      <button type='button' data-stage-light='day' aria-pressed='true'><span
-          class='stage-home__thumbnail stage-home__thumbnail--day'
-          aria-hidden='true'
-        ></span><span>{{journey.day}}</span></button>
-      <button type='button' data-stage-light='night' aria-pressed='false'><span
-          class='stage-home__thumbnail stage-home__thumbnail--night'
-          aria-hidden='true'
-        ></span><span>{{journey.night}}</span></button>
-    </div>
-    <p class='stage-home__signature' aria-hidden='true'>{{journey.signature}}<svg
-        viewBox='0 0 160 36'
-      ><path d='M4 30Q73 0 151 9M50 25Q108 3 130 10' /></svg></p>
-    <div class='stage-home__bottom'>
-      <ul class='stage-home__trust'>{{#each journey.trust}}<li><svg
-              aria-hidden='true'
-              viewBox='0 0 24 24'
-            ><path d='{{icon}}' /></svg><div><strong>{{title}}</strong><span
-              >{{note}}</span></div></li>{{/each}}</ul>
-      <a href='#faq' class='stage-home__scroll'><svg aria-hidden='true' viewBox='0 0 24 32'><rect
-            x='4'
-            y='1'
-            width='16'
-            height='27'
-            rx='8'
-          /><path d='M12 7v5' /></svg>{{journey.scroll}}</a>
-    </div>
-    <p class='stage-home__caption'>{{journey.caption}}</p>
+
+    <p class='process-stage__scroll-hint' aria-hidden='true'><span
+      ></span>{{processStory.scrollLabel}}</p>
   </div>
 </div>

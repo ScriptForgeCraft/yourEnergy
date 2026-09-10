@@ -7,7 +7,7 @@ import ru from '../src/content/ru.js';
 import en from '../src/content/en.js';
 import toolCopy from '../src/content/tools.js';
 import wizardCopy from '../src/content/calculator-wizard.js';
-import { solutionsHomeCopy } from '../src/content/solutions-home.js';
+import { processStoryCopy } from '../src/content/process-story.js';
 import { calculatorModes, regionLabels } from '../src/content/calculator-modes.js';
 import {
   ARMENIA_GRID_CO2_FACTOR,
@@ -242,35 +242,31 @@ const createHomeContext = (content, { pageKind = 'home' } = {}) => {
   const isHome = pageKind === 'home';
   const homeSectionHref = (href) =>
     !isHome && href.startsWith('#') ? `${content.homeHref}${href}` : href;
-  const stageCopy = solutionsHomeCopy[content.locale];
-  const journey = {
-    ...stageCopy,
+  const processCopy = processStoryCopy[content.locale];
+  const processStory = {
+    ...processCopy,
     regions: ARMENIA_REGIONAL_BENCHMARKS.map(({ id }) => ({
       id,
       label: regionLabels[content.locale][id]
     })),
-    trust: stageCopy.trust.map(([title, note], index) => ({
-      title,
-      note,
-      icon: [
-        'm13 2-9 12h7l-1 8 10-13h-7l1-7Z',
-        'M12 2 3 6v6c0 5 9 10 9 10s9-5 9-10V6l-9-4Zm-4 10 3 3 5-6',
-        'M4 21c0-8 5-13 14-17M5 17C-2 6 13 2 21 2c0 10-2 20-16 15Z'
-      ][index]
-    })),
-    steps: stageCopy.steps.map((label, index) => ({
-      number: index + 1,
-      displayNumber: String(index + 1).padStart(2, '0'),
-      label,
-      active: index === 0,
+    steps: processCopy.steps.map((step, index) => ({
+      ...step,
+      index,
+      headlineLines: step.headline.split('\n'),
+      stepLabel: processCopy.stepLabel
+        .replace('{current}', String(index + 1))
+        .replace('{total}', String(processCopy.steps.length)),
       stateClass: index === 0 ? 'is-active' : '',
-      current: index === 0 ? 'step' : 'false',
-      href:
-        [
-          calculatorHref,
-          toolPath(content.locale, 'calculator/refine'),
-          toolPath(content.locale, 'calculator/pro')
-        ][index] ?? null
+      ariaHidden: index === 0 ? 'false' : 'true',
+      progressClass: index === 0 ? 'is-active' : 'is-future',
+      isAnalysis: index === 0,
+      isInspection: index === 1,
+      isDesign: index === 2,
+      isProposal: index === 3,
+      isInstallation: index === 4,
+      isSupport: index === 5,
+      designPanels: index === 2 ? Array.from({ length: 12 }, (_, panel) => panel) : null,
+      installPanels: index === 4 ? Array.from({ length: 9 }, (_, panel) => panel) : null
     }))
   };
 
@@ -303,7 +299,7 @@ const createHomeContext = (content, { pageKind = 'home' } = {}) => {
         ctaLabel: content.common.cta
       }))
     },
-    journey,
+    processStory,
     footer: {
       ...content.footer,
       columns: content.footer.columns.map((column) => ({
@@ -337,9 +333,9 @@ const createHomeContext = (content, { pageKind = 'home' } = {}) => {
       locale: runtimeLocales[content.locale],
       hero
     }),
-    journeyPageConfig: escapeJsonForHtml({
+    processPageConfig: escapeJsonForHtml({
       locale: runtimeLocales[content.locale],
-      journey
+      processStory
     })
   };
 };

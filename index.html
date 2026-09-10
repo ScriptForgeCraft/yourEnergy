@@ -292,226 +292,785 @@
       </section>
 
       <section
-        class='process process-journey solutions section'
         id='process'
+        class='process process-journey section'
+        data-process-story
         aria-labelledby='process-title'
-        data-solutions-story
       >
-        <h2 id='process-title' class='visually-hidden'>Ձեր արևային համակարգի ուղին</h2>
-        <div class='stage-home' id='solutions' data-solutions-home>
-          <div class='stage-home__frame solutions-story__step is-active' data-solutions-scene='1'>
-            <div class='stage-home__backdrop' aria-hidden='true' data-stage-pointer>
-              <picture class='stage-home__art' data-solutions-visual='home'>
-                <source
-                  type='image/avif'
-                  srcset='/images/solutions-home-640.avif 640w, /images/solutions-home-1024.avif 1024w, /images/solutions-home-1600.avif 1600w'
-                  sizes='100vw'
-                />
-                <source
-                  type='image/webp'
-                  srcset='/images/solutions-home-640.webp 640w, /images/solutions-home-1024.webp 1024w, /images/solutions-home-1600.webp 1600w'
-                  sizes='100vw'
-                />
-                <img
-                  src='/images/solutions-home-1600.jpg'
-                  width='1600'
-                  height='900'
-                  alt=''
-                  loading='lazy'
-                  decoding='async'
-                />
-              </picture>
-              <div class='stage-home__night-wash'></div>
-            </div>
-            <div class='stage-home__scrim' aria-hidden='true'></div>
-            <div class='stage-home__body'>
-              <div class='stage-home__copy'>
-                <p class='stage-home__eyebrow' data-stage-reveal>ՔԱՅԼ 1 / 6</p>
-                <h3 class='stage-home__title'><span data-stage-reveal>Սկսենք</span>
-                  <span data-stage-reveal> <em>ձեր տնից</em></span></h3>
-                <p class='stage-home__intro' data-stage-reveal>Նշեք մարզը և էլեկտրաէներգիայի սպառումը՝ ձեր արևային համակարգի վերլուծությունը սկսելու համար։</p>
-                <form
-                  class='stage-home__form'
-                  data-stage-form
-                  action='/calculator/'
-                  method='get'
-                  data-stage-reveal
+        <h2 id='process-title' class='visually-hidden'>Ձեր արևային համակարգի ճանապարհը</h2>
+        <div class='process-stage' data-process-stage data-process-active='1'>
+          <div class='process-stage__frame'>
+            <div class='process-stage__ambient' aria-hidden='true'><span></span><span></span><span
+              ></span></div>
+
+            <nav class='process-progress' aria-label='Արևային համակարգի նախագծի փուլերը'>
+              <span class='process-progress__track' aria-hidden='true'><i
+                  data-process-progress-fill
+                ></i></span>
+              <ol>
+                  <li class='is-active' data-process-progress-step='0'>
+                    <span class='process-progress__node' aria-hidden='true'><b>01</b><svg><use
+                          href='/icons.svg#check'
+                        ></use></svg></span>
+                    <span>Ձեր արևային վերլուծությունը</span>
+                  </li>
+                  <li class='is-future' data-process-progress-step='1'>
+                    <span class='process-progress__node' aria-hidden='true'><b>02</b><svg><use
+                          href='/icons.svg#check'
+                        ></use></svg></span>
+                    <span>Ինժեների այց և տեղազննում</span>
+                  </li>
+                  <li class='is-future' data-process-progress-step='2'>
+                    <span class='process-progress__node' aria-hidden='true'><b>03</b><svg><use
+                          href='/icons.svg#check'
+                        ></use></svg></span>
+                    <span>Համակարգի վերջնական նախագիծ</span>
+                  </li>
+                  <li class='is-future' data-process-progress-step='3'>
+                    <span class='process-progress__node' aria-hidden='true'><b>04</b><svg><use
+                          href='/icons.svg#check'
+                        ></use></svg></span>
+                    <span>Հստակ առաջարկ և պայմանագիր</span>
+                  </li>
+                  <li class='is-future' data-process-progress-step='4'>
+                    <span class='process-progress__node' aria-hidden='true'><b>05</b><svg><use
+                          href='/icons.svg#check'
+                        ></use></svg></span>
+                    <span>Տեղադրում և գործարկում</span>
+                  </li>
+                  <li class='is-future' data-process-progress-step='5'>
+                    <span class='process-progress__node' aria-hidden='true'><b>06</b><svg><use
+                          href='/icons.svg#check'
+                        ></use></svg></span>
+                    <span>Solar Passport և աջակցություն</span>
+                  </li>
+              </ol>
+            </nav>
+
+            <div class='process-stage__states'>
+                <article
+                  class='process-state is-active'
+                  data-process-state='0'
+                  aria-labelledby='process-step-title-01'
+                  aria-hidden='false'
                 >
-                  <label class='visually-hidden' for='stage-region'>Մարզ</label>
-                  <div class='stage-home__select'>
-                    <svg aria-hidden='true' viewBox='0 0 24 24'><path
-                        d='M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 1 1 16 0Z'
-                      /><circle cx='12' cy='10' r='2.5' /></svg>
-                    <select id='stage-region' name='region' required data-stage-region>
-                      <option value=''>Ընտրեք մարզը</option>
-                      <option value='yerevan'>Երևան</option><option value='aragatsotn'>Արագածոտն</option><option value='ararat'>Արարատ</option><option value='armavir'>Արմավիր</option><option value='gegharkunik'>Գեղարքունիք</option><option value='kotayk'>Կոտայք</option><option value='lori'>Լոռի</option><option value='shirak'>Շիրակ</option><option value='syunik'>Սյունիք</option><option value='tavush'>Տավուշ</option><option value='vayots-dzor'>Վայոց ձոր</option>
-                    </select>
+                  <div class='process-state__copy' data-process-copy>
+                    <p class='process-state__eyebrow'><span aria-hidden='true'></span>Քայլ 1 / 6</p>
+                    <h3 id='process-step-title-01' class='process-state__title'>
+                      <span>Սկսում ենք թվերից։</span>
+                    </h3>
+                    <p class='process-state__intro'>Ձեր սպառումը, տեղադրությունը և արևային ռեսուրսի հասանելի տվյալները դառնում են ձեր համակարգի հստակ մեկնակետը։</p>
+
+                      <form
+                        class='process-form'
+                        data-process-form
+                        action='/calculator/'
+                        method='get'
+                      >
+                        <label
+                          class='visually-hidden'
+                          for='process-region'
+                        >Մարզ</label>
+                        <div class='process-form__select'>
+                          <svg class='inline-icon' aria-hidden='true'><use
+                              href='/icons.svg#map-pin'
+                            ></use></svg>
+                          <select id='process-region' name='region' required data-process-region>
+                            <option value=''>Ընտրեք մարզը</option>
+                            <option
+                                value='yerevan'
+                              >Երևան</option><option
+                                value='aragatsotn'
+                              >Արագածոտն</option><option
+                                value='ararat'
+                              >Արարատ</option><option
+                                value='armavir'
+                              >Արմավիր</option><option
+                                value='gegharkunik'
+                              >Գեղարքունիք</option><option
+                                value='kotayk'
+                              >Կոտայք</option><option
+                                value='lori'
+                              >Լոռի</option><option
+                                value='shirak'
+                              >Շիրակ</option><option
+                                value='syunik'
+                              >Սյունիք</option><option
+                                value='tavush'
+                              >Տավուշ</option><option
+                                value='vayots-dzor'
+                              >Վայոց ձոր</option>
+                          </select>
+                        </div>
+                        <fieldset class='process-form__modes' data-process-consumption>
+                          <legend class='visually-hidden'>Էլեկտրաէներգիա</legend>
+                          <label><input type='radio' name='mode' value='bill' checked /><span
+                            >Ամսական հաշիվ</span></label>
+                          <label><input type='radio' name='mode' value='usage' /><span
+                            >Ամսական kWh</span></label>
+                        </fieldset>
+                        <label
+                          class='process-form__amount-label'
+                          for='process-amount'
+                          data-process-amount-label
+                          data-process-consumption
+                        >Միջին ամսական հաշիվ</label>
+                        <div class='process-form__amount' data-process-consumption>
+                          <input
+                            id='process-amount'
+                            name='amount'
+                            type='number'
+                            inputmode='decimal'
+                            min='0.01'
+                            step='any'
+                            required
+                            aria-describedby='process-input-help'
+                            data-process-amount
+                          />
+                          <span data-process-unit>AMD</span>
+                        </div>
+                        <p
+                          class='process-form__help'
+                          id='process-input-help'
+                          data-process-help
+                          data-process-consumption
+                        >Էլեկտրաէներգիայի սակագինը կհաստատեք հաշվիչում։</p>
+                        <button type='submit' class='process-form__submit'>
+                          <span data-process-submit-label>Սկսել իմ վերլուծությունը</span>
+                          <svg class='inline-icon' aria-hidden='true'><use
+                              href='/icons.svg#arrow-right'
+                            ></use></svg>
+                        </button>
+                        <a
+                          class='process-form__full'
+                          href='/calculator/'
+                        >Բացել ամբողջական հաշվիչը <span aria-hidden='true'>↗</span></a>
+                      </form>
+
                   </div>
-                  <fieldset class='stage-home__modes' data-stage-consumption>
-                    <legend class='visually-hidden'>Էլեկտրաէներգիա</legend>
-                    <label><input type='radio' name='mode' value='bill' checked /><span
-                      >Ամսական հաշիվ</span></label>
-                    <label><input type='radio' name='mode' value='usage' /><span
-                      >Ամսական kWh</span></label>
-                  </fieldset>
-                  <label
-                    for='stage-amount'
-                    data-stage-amount-label
-                    data-stage-consumption
-                  >Միջին ամսական հաշիվ</label>
-                  <div class='stage-home__amount' data-stage-consumption>
-                    <input
-                      id='stage-amount'
-                      name='amount'
-                      type='number'
-                      inputmode='decimal'
-                      min='0.01'
-                      step='any'
-                      required
-                      aria-describedby='stage-input-help'
-                      data-stage-amount
-                    />
-                    <span data-stage-unit>AMD</span>
+
+                  <div
+                    class='process-visual process-visual--analysis'
+                    data-process-visual='analysis'
+                    role='img'
+                    aria-label='Արևային համակարգի վերլուծության տեսապատկեր'
+                  >
+                    <div class='process-visual__depth' aria-hidden='true'>
+                      <span class='process-visual__halo'></span>
+
+                        <svg class='process-visual__solar-arc' viewBox='0 0 700 470' data-process-solar-arc>
+                          <path d='M76 354 Q350 -120 624 354' data-process-solar-path></path>
+                          <path class='process-visual__horizon' d='M76 354H624'></path>
+                          <text x='55' y='383'>W</text><text x='342' y='70'>N</text><text
+                            x='632'
+                            y='383'
+                          >E</text>
+                          <g data-process-sun transform='translate(350 105)'>
+                            <circle class='process-visual__sun-halo' r='31'></circle>
+                            <circle class='process-visual__sun-core' r='13'></circle>
+                            <path
+                              d='M0-25v-9M0 25v9M25 0h9M-25 0h-9M18-18l7-7M-18 18l-7 7M18 18l7 7M-18-18l-7-7'
+                            ></path>
+                          </g>
+                        </svg>
+                        <div class='process-house'><span class='process-house__roof'></span><span
+                            class='process-house__wall'
+                          ></span><span class='process-house__window'></span><span
+                            class='process-house__panel'
+                          ></span></div>
+                        <span class='process-visual__terrain process-visual__terrain--one'></span><span
+                          class='process-visual__terrain process-visual__terrain--two'
+                        ></span>
+
+
+
+
+
+                    </div>
+
+                      <ul class='process-metrics' role='list'>
+                          <li class='process-metric' data-process-card>
+                            <svg class='inline-icon' aria-hidden='true'><use
+                                href='/icons.svg#map-pin'
+                              ></use></svg>
+                            <span>Տեղադրություն</span>
+                            <strong
+                              data-process-value='location'
+                              data-default='Ավելացրեք տվյալները հաշվիչում'
+                            >Ավելացրեք տվյալները հաշվիչում</strong>
+                            <small data-process-value-note='location'></small>
+                          </li>
+                          <li class='process-metric' data-process-card>
+                            <svg class='inline-icon' aria-hidden='true'><use
+                                href='/icons.svg#zap'
+                              ></use></svg>
+                            <span>Սպառում</span>
+                            <strong
+                              data-process-value='consumption'
+                              data-default='Ավելացրեք տվյալները հաշվիչում'
+                            >Ավելացրեք տվյալները հաշվիչում</strong>
+                            <small data-process-value-note='consumption'></small>
+                          </li>
+                          <li class='process-metric' data-process-card>
+                            <svg class='inline-icon' aria-hidden='true'><use
+                                href='/icons.svg#sun'
+                              ></use></svg>
+                            <span>Արևային ռեսուրս</span>
+                            <strong
+                              data-process-value='solar-resource'
+                              data-default='Հասանելի կլինի ձեր վերլուծությունից հետո'
+                            >Հասանելի կլինի ձեր վերլուծությունից հետո</strong>
+                            <small data-process-value-note='solar-resource'></small>
+                          </li>
+                          <li class='process-metric' data-process-card>
+                            <svg class='inline-icon' aria-hidden='true'><use
+                                href='/icons.svg#calculator'
+                              ></use></svg>
+                            <span>Առաջարկվող համակարգ</span>
+                            <strong
+                              data-process-value='system-capacity'
+                              data-default='Հասանելի կլինի ձեր վերլուծությունից հետո'
+                            >Հասանելի կլինի ձեր վերլուծությունից հետո</strong>
+                            <small data-process-value-note='system-capacity'></small>
+                          </li>
+                          <li class='process-metric' data-process-card>
+                            <svg class='inline-icon' aria-hidden='true'><use
+                                href='/icons.svg#cycle'
+                              ></use></svg>
+                            <span>Սպասվող արտադրություն</span>
+                            <strong
+                              data-process-value='annual-generation'
+                              data-default='Հասանելի կլինի ձեր վերլուծությունից հետո'
+                            >Հասանելի կլինի ձեր վերլուծությունից հետո</strong>
+                            <small data-process-value-note='annual-generation'></small>
+                          </li>
+                      </ul>
+
                   </div>
-                  <p
-                    class='stage-home__help'
-                    id='stage-input-help'
-                    data-stage-help
-                    data-stage-consumption
-                  >Էլեկտրաէներգիայի սակագինը կհաստատեք հաշվիչում։</p>
-                  <button type='submit' class='stage-home__submit'><span
-                      data-stage-submit-label
-                    >Սկսել իմ վերլուծությունը</span>
-                    <span aria-hidden='true'>→</span></button>
-                  <a class='stage-home__full' href='/calculator/'>Բացել ամբողջական հաշվիչը
-                    <span aria-hidden='true'>↗</span></a>
-                </form>
-              </div>
-
-              <div class='stage-home__visual'>
-                <div class='stage-home__pointer'>
-                  <svg class='stage-home__arc' viewBox='0 0 700 500' aria-hidden='true' data-stage-arc>
-                    <path
-                      class='stage-home__arc-line'
-                      d='M 70 365 Q 350 -140 630 365'
-                      data-stage-arc-path
-                    />
-                    <path class='stage-home__arc-base' d='M70 365H630' />
-                    <circle cx='70' cy='365' r='4' /><circle cx='630' cy='365' r='4' />
-                    <text x='53' y='392'>W</text><text x='343' y='92'>N</text><text x='634' y='392'>E</text>
-                    <g data-stage-sun transform='translate(322 115)'>
-                      <circle class='stage-home__sun-halo' r='29' />
-                      <circle class='stage-home__sun-core' r='12' />
-                      <path
-                        class='stage-home__sun-rays'
-                        d='M0 -23v-8M0 23v8M23 0h8M-23 0h-8M16 -16l6 -6M-16 16l-6 6M16 16l6 6M-16 -16l-6 -6'
-                      />
-                    </g>
-                  </svg>
-                  <div class='stage-home__glass stage-home__location' data-stage-card>
-                    <svg aria-hidden='true' viewBox='0 0 24 24'><path
-                        d='M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 1 1 16 0Z'
-                      /><circle cx='12' cy='10' r='2.5' /></svg>
-                    <div><span>Ձեր մարզը</span><strong
-                        data-stage-location
-                      >Ընտրեք մարզը</strong><small>Հայաստան</small></div>
-                  </div>
-                  <div class='stage-home__glass stage-home__resource' data-stage-card>
-                    <svg aria-hidden='true' viewBox='0 0 24 24'><circle cx='12' cy='12' r='4' /><path
-                        d='M12 1v3m0 16v3M1 12h3m16 0h3M4 4l2 2m12 12 2 2M4 20l2-2M18 6l2-2'
-                      /></svg>
-                    <div><span>Արևային ռեսուրս</span><strong
-                        data-stage-resource
-                      >Կհաշվարկվի PVGIS-ով՝ վերլուծությունը սկսելուց հետո</strong><small data-stage-source></small></div>
-                  </div>
-                </div>
-                <div class='stage-home__glass stage-home__results' data-stage-results hidden>
-                  <div><span>Տարեկան արտադրություն</span><strong
-                      data-stage-count='annualProduction'
-                    ></strong><small>kWh/տարի</small></div>
-                  <div><span>Համակարգի հզորություն</span><strong
-                      data-stage-count='systemSize'
-                    ></strong><small>kWp</small></div>
-                  <div><span>Վահանակներ</span><strong data-stage-count='panelCount'></strong></div>
-                </div>
-              </div>
-
-              <nav class='stage-home__progress' aria-label='Ձեր արևային համակարգի ուղին'>
-                <ol>
-                    <li data-solutions-step='1' class='is-active'>
-                        <a href='/calculator/' aria-current='step'><b>01</b><span
-                          >Ձեր տունը</span></a>
-                    </li>
-
-                    <li data-solutions-step='2' class=''>
-                        <a href='/calculator/refine/' aria-current='false'><b>02</b><span
-                          >Տանիքի տվյալներ</span></a>
-                    </li>
-
-                    <li data-solutions-step='3' class=''>
-                        <a href='/calculator/pro/' aria-current='false'><b>03</b><span
-                          >Համակարգի նախագիծ</span></a>
-                    </li>
-
-                    <li data-solutions-step='4' class=''>
-                        <span class='stage-home__future'><b>04</b><span
-                          >Ձեր խնայողությունը</span></span>
-                    </li>
-
-                    <li data-solutions-step='5' class=''>
-                        <span class='stage-home__future'><b>05</b><span
-                          >Տեղադրում</span></span>
-                    </li>
-
-                    <li data-solutions-step='6' class=''>
-                        <span class='stage-home__future'><b>06</b><span
-                          >Աջակցություն</span></span>
-                    </li>
-                  </ol>
-              </nav>
-            </div>
-            <div
-              class='stage-home__lighting'
-              role='group'
-              aria-label='Տեսարանի լուսավորության նախադիտում'
-              data-stage-lighting
-              hidden
-            >
-              <button type='button' data-stage-light='day' aria-pressed='true'><span
-                  class='stage-home__thumbnail stage-home__thumbnail--day'
+                </article>
+                <article
+                  class='process-state '
+                  data-process-state='1'
+                  aria-labelledby='process-step-title-02'
                   aria-hidden='true'
-                ></span><span>Ցերեկ</span></button>
-              <button type='button' data-stage-light='night' aria-pressed='false'><span
-                  class='stage-home__thumbnail stage-home__thumbnail--night'
+                >
+                  <div class='process-state__copy' data-process-copy>
+                    <p class='process-state__eyebrow'><span aria-hidden='true'></span>Քայլ 2 / 6</p>
+                    <h3 id='process-step-title-02' class='process-state__title'>
+                      <span>Այնուհետև տունը ստուգում ենք տեղում։</span>
+                    </h3>
+                    <p class='process-state__intro'>Ինժեները ստուգում է տանիքը, օգտագործելի մակերեսը, կողմնորոշումը, ստվերավորումը և էլեկտրական պայմանները։</p>
+
+
+                  </div>
+
+                  <div
+                    class='process-visual process-visual--inspection'
+                    data-process-visual='inspection'
+                    role='img'
+                    aria-label='Օբյեկտի ինժեներական տեղազննման տեսապատկեր'
+                  >
+                    <div class='process-visual__depth' aria-hidden='true'>
+                      <span class='process-visual__halo'></span>
+
+
+                        <div class='process-roof'>
+                          <span class='process-roof__plane'></span><span
+                            class='process-roof__ridge'
+                          ></span><span class='process-roof__scan'></span>
+                          <i style='--point-x:16%;--point-y:72%'></i><i
+                            style='--point-x:36%;--point-y:18%'
+                          ></i><i style='--point-x:84%;--point-y:30%'></i><i
+                            style='--point-x:70%;--point-y:86%'
+                          ></i>
+                        </div>
+                        <svg class='process-measure' viewBox='0 0 640 400'><path
+                            d='M103 297 230 78 537 122 449 344Z'
+                          ></path><path
+                            class='process-measure__dash'
+                            d='M93 318H459M559 112v246'
+                          ></path><text x='238' y='342'>m²</text><text x='570' y='240'>°</text></svg>
+
+
+
+
+                    </div>
+
+                      <ul class='process-metrics' role='list'>
+                          <li class='process-metric' data-process-card>
+                            <svg class='inline-icon' aria-hidden='true'><use
+                                href='/icons.svg#satellite'
+                              ></use></svg>
+                            <span>Տանիքի մակերես</span>
+                            <strong
+                              data-process-value='roof-area'
+                              data-default='Ստուգվում է տեղազննման ընթացքում'
+                            >Ստուգվում է տեղազննման ընթացքում</strong>
+                            <small data-process-value-note='roof-area'></small>
+                          </li>
+                          <li class='process-metric' data-process-card>
+                            <svg class='inline-icon' aria-hidden='true'><use
+                                href='/icons.svg#sun'
+                              ></use></svg>
+                            <span>Կողմնորոշում</span>
+                            <strong
+                              data-process-value='orientation'
+                              data-default='Ստուգվում է տեղազննման ընթացքում'
+                            >Ստուգվում է տեղազննման ընթացքում</strong>
+                            <small data-process-value-note='orientation'></small>
+                          </li>
+                          <li class='process-metric' data-process-card>
+                            <svg class='inline-icon' aria-hidden='true'><use
+                                href='/icons.svg#arrow-right'
+                              ></use></svg>
+                            <span>Թեքություն</span>
+                            <strong
+                              data-process-value='tilt'
+                              data-default='Ստուգվում է տեղազննման ընթացքում'
+                            >Ստուգվում է տեղազննման ընթացքում</strong>
+                            <small data-process-value-note='tilt'></small>
+                          </li>
+                          <li class='process-metric' data-process-card>
+                            <svg class='inline-icon' aria-hidden='true'><use
+                                href='/icons.svg#sun'
+                              ></use></svg>
+                            <span>Ստվերավորում</span>
+                            <strong
+                              data-process-value='shading'
+                              data-default='Ստուգվում է տեղազննման ընթացքում'
+                            >Ստուգվում է տեղազննման ընթացքում</strong>
+                            <small data-process-value-note='shading'></small>
+                          </li>
+                          <li class='process-metric' data-process-card>
+                            <svg class='inline-icon' aria-hidden='true'><use
+                                href='/icons.svg#zap'
+                              ></use></svg>
+                            <span>Էլեկտրական վահանակ</span>
+                            <strong
+                              data-process-value='electrical-panel'
+                              data-default='Ստուգվում է տեղազննման ընթացքում'
+                            >Ստուգվում է տեղազննման ընթացքում</strong>
+                            <small data-process-value-note='electrical-panel'></small>
+                          </li>
+                      </ul>
+
+                  </div>
+                </article>
+                <article
+                  class='process-state '
+                  data-process-state='2'
+                  aria-labelledby='process-step-title-03'
                   aria-hidden='true'
-                ></span><span>Գիշեր</span></button>
+                >
+                  <div class='process-state__copy' data-process-copy>
+                    <p class='process-state__eyebrow'><span aria-hidden='true'></span>Քայլ 3 / 6</p>
+                    <h3 id='process-step-title-03' class='process-state__title'>
+                      <span>Ձեր համակարգը ստանում է վերջնական տեսքը։</span>
+                    </h3>
+                    <p class='process-state__intro'>Ստուգված չափումների հիման վրա կազմում ենք վահանակների դասավորությունը, ինվերտորի կազմաձևը և վերջնական ինժեներական նախագիծը։</p>
+
+
+                  </div>
+
+                  <div
+                    class='process-visual process-visual--design'
+                    data-process-visual='design'
+                    role='img'
+                    aria-label='Արևային համակարգի վերջնական նախագծի տեսապատկեր'
+                  >
+                    <div class='process-visual__depth' aria-hidden='true'>
+                      <span class='process-visual__halo'></span>
+
+
+
+                        <div class='process-system'>
+                          <div class='process-system__panels'><span
+                                style='--panel-i:0'
+                              ></span><span
+                                style='--panel-i:1'
+                              ></span><span
+                                style='--panel-i:2'
+                              ></span><span
+                                style='--panel-i:3'
+                              ></span><span
+                                style='--panel-i:4'
+                              ></span><span
+                                style='--panel-i:5'
+                              ></span><span
+                                style='--panel-i:6'
+                              ></span><span
+                                style='--panel-i:7'
+                              ></span><span
+                                style='--panel-i:8'
+                              ></span><span
+                                style='--panel-i:9'
+                              ></span><span
+                                style='--panel-i:10'
+                              ></span><span
+                                style='--panel-i:11'
+                              ></span></div>
+                          <div class='process-system__inverter'><svg class='inline-icon'><use
+                                href='/icons.svg#zap'
+                              ></use></svg><i></i><i></i><i></i></div>
+                          <svg class='process-system__flow' viewBox='0 0 640 420'><path
+                              d='M108 279C253 363 370 345 507 228'
+                            ></path><circle cx='108' cy='279' r='5'></circle><circle
+                              cx='507'
+                              cy='228'
+                              r='5'
+                            ></circle></svg>
+                        </div>
+
+
+
+                    </div>
+
+                      <ul class='process-metrics' role='list'>
+                          <li class='process-metric' data-process-card>
+                            <svg class='inline-icon' aria-hidden='true'><use
+                                href='/icons.svg#satellite'
+                              ></use></svg>
+                            <span>Վահանակների դասավորություն</span>
+                            <strong
+                              data-process-value='panel-layout'
+                              data-default='Հաստատվում է վերջնական նախագծում'
+                            >Հաստատվում է վերջնական նախագծում</strong>
+                            <small data-process-value-note='panel-layout'></small>
+                          </li>
+                          <li class='process-metric' data-process-card>
+                            <svg class='inline-icon' aria-hidden='true'><use
+                                href='/icons.svg#zap'
+                              ></use></svg>
+                            <span>Համակարգի հզորություն</span>
+                            <strong
+                              data-process-value='system-capacity'
+                              data-default='Հասանելի կլինի ձեր վերլուծությունից հետո'
+                            >Հասանելի կլինի ձեր վերլուծությունից հետո</strong>
+                            <small data-process-value-note='system-capacity'></small>
+                          </li>
+                          <li class='process-metric' data-process-card>
+                            <svg class='inline-icon' aria-hidden='true'><use
+                                href='/icons.svg#sun'
+                              ></use></svg>
+                            <span>Վահանակների քանակ</span>
+                            <strong
+                              data-process-value='panel-count'
+                              data-default='Հասանելի կլինի ձեր վերլուծությունից հետո'
+                            >Հասանելի կլինի ձեր վերլուծությունից հետո</strong>
+                            <small data-process-value-note='panel-count'></small>
+                          </li>
+                          <li class='process-metric' data-process-card>
+                            <svg class='inline-icon' aria-hidden='true'><use
+                                href='/icons.svg#shield-check'
+                              ></use></svg>
+                            <span>Ինվերտոր</span>
+                            <strong
+                              data-process-value='inverter'
+                              data-default='Հաստատվում է վերջնական նախագծում'
+                            >Հաստատվում է վերջնական նախագծում</strong>
+                            <small data-process-value-note='inverter'></small>
+                          </li>
+                          <li class='process-metric' data-process-card>
+                            <svg class='inline-icon' aria-hidden='true'><use
+                                href='/icons.svg#cycle'
+                              ></use></svg>
+                            <span>Սպասվող արտադրություն</span>
+                            <strong
+                              data-process-value='annual-generation'
+                              data-default='Հասանելի կլինի ձեր վերլուծությունից հետո'
+                            >Հասանելի կլինի ձեր վերլուծությունից հետո</strong>
+                            <small data-process-value-note='annual-generation'></small>
+                          </li>
+                      </ul>
+
+                  </div>
+                </article>
+                <article
+                  class='process-state '
+                  data-process-state='3'
+                  aria-labelledby='process-step-title-04'
+                  aria-hidden='true'
+                >
+                  <div class='process-state__copy' data-process-copy>
+                    <p class='process-state__eyebrow'><span aria-hidden='true'></span>Քայլ 4 / 6</p>
+                    <h3 id='process-step-title-04' class='process-state__title'>
+                      <span>Մինչև տեղադրումն ամեն ինչ հստակ է։</span>
+                    </h3>
+                    <p class='process-state__intro'>Աշխատանքները սկսելուց առաջ ստանում եք սարքավորումների վերջնական ցանկը, գինը, աշխատանքի ծավալը, երաշխիքները և նախագծի պայմանները։</p>
+
+
+                  </div>
+
+                  <div
+                    class='process-visual process-visual--proposal'
+                    data-process-visual='proposal'
+                    role='img'
+                    aria-label='Առաջարկի և պայմանագրի տեսապատկեր'
+                  >
+                    <div class='process-visual__depth' aria-hidden='true'>
+                      <span class='process-visual__halo'></span>
+
+
+
+
+                        <div class='process-proposal'>
+                          <div class='process-proposal__sheet'><span
+                              class='process-proposal__brand'
+                            >YOURENERGY</span><strong>Հստակ առաջարկ և պայմանագիր</strong><i></i><i></i><i></i><i></i><span
+                              class='process-proposal__seal'
+                            ><svg class='inline-icon'><use href='/icons.svg#check'></use></svg></span></div>
+                          <span class='process-proposal__card process-proposal__card--one'></span><span
+                            class='process-proposal__card process-proposal__card--two'
+                          ></span>
+                        </div>
+
+
+                    </div>
+
+                      <ul class='process-metrics' role='list'>
+                          <li class='process-metric' data-process-card>
+                            <svg class='inline-icon' aria-hidden='true'><use
+                                href='/icons.svg#sun'
+                              ></use></svg>
+                            <span>Սարքավորումներ</span>
+                            <strong
+                              data-process-value='equipment'
+                              data-default='Նշվում է վերջնական առաջարկում'
+                            >Նշվում է վերջնական առաջարկում</strong>
+                            <small data-process-value-note='equipment'></small>
+                          </li>
+                          <li class='process-metric' data-process-card>
+                            <svg class='inline-icon' aria-hidden='true'><use
+                                href='/icons.svg#zap'
+                              ></use></svg>
+                            <span>Համակարգի հզորություն</span>
+                            <strong
+                              data-process-value='system-capacity'
+                              data-default='Հաստատվում է վերջնական նախագծում'
+                            >Հաստատվում է վերջնական նախագծում</strong>
+                            <small data-process-value-note='system-capacity'></small>
+                          </li>
+                          <li class='process-metric' data-process-card>
+                            <svg class='inline-icon' aria-hidden='true'><use
+                                href='/icons.svg#file'
+                              ></use></svg>
+                            <span>Աշխատանքի ծավալ</span>
+                            <strong
+                              data-process-value='project-scope'
+                              data-default='Նշվում է վերջնական առաջարկում'
+                            >Նշվում է վերջնական առաջարկում</strong>
+                            <small data-process-value-note='project-scope'></small>
+                          </li>
+                          <li class='process-metric' data-process-card>
+                            <svg class='inline-icon' aria-hidden='true'><use
+                                href='/icons.svg#calculator'
+                              ></use></svg>
+                            <span>Գին</span>
+                            <strong
+                              data-process-value='commercial-estimate'
+                              data-default='Նախնական գնահատական՝ առկայության դեպքում'
+                            >Նախնական գնահատական՝ առկայության դեպքում</strong>
+                            <small data-process-value-note='commercial-estimate'></small>
+                          </li>
+                          <li class='process-metric' data-process-card>
+                            <svg class='inline-icon' aria-hidden='true'><use
+                                href='/icons.svg#shield-check'
+                              ></use></svg>
+                            <span>Երաշխիք</span>
+                            <strong
+                              data-process-value='warranty'
+                              data-default='Նշվում է վերջնական առաջարկում'
+                            >Նշվում է վերջնական առաջարկում</strong>
+                            <small data-process-value-note='warranty'></small>
+                          </li>
+                          <li class='process-metric' data-process-card>
+                            <svg class='inline-icon' aria-hidden='true'><use
+                                href='/icons.svg#file'
+                              ></use></svg>
+                            <span>Պայմաններ</span>
+                            <strong
+                              data-process-value='terms'
+                              data-default='Նշվում են վերջնական առաջարկում'
+                            >Նշվում են վերջնական առաջարկում</strong>
+                            <small data-process-value-note='terms'></small>
+                          </li>
+                      </ul>
+
+                  </div>
+                </article>
+                <article
+                  class='process-state '
+                  data-process-state='4'
+                  aria-labelledby='process-step-title-05'
+                  aria-hidden='true'
+                >
+                  <div class='process-state__copy' data-process-copy>
+                    <p class='process-state__eyebrow'><span aria-hidden='true'></span>Քայլ 5 / 6</p>
+                    <h3 id='process-step-title-05' class='process-state__title'>
+                      <span>Տեղադրում ենք։</span><span>Փորձարկում ենք։</span><span>Գործարկում ենք։</span>
+                    </h3>
+                    <p class='process-state__intro'>Համակարգը տեղադրվում է հաստատված նախագծի համաձայն, ստուգվում և հանձնվում շահագործման։</p>
+
+
+                  </div>
+
+                  <div
+                    class='process-visual process-visual--installation'
+                    data-process-visual='installation'
+                    role='img'
+                    aria-label='Տեղադրման և գործարկման տեսապատկեր'
+                  >
+                    <div class='process-visual__depth' aria-hidden='true'>
+                      <span class='process-visual__halo'></span>
+
+
+
+
+
+                        <div class='process-install'><div class='process-install__system'><span style='--install-i:0'></span><span style='--install-i:1'></span><span style='--install-i:2'></span><span style='--install-i:3'></span><span style='--install-i:4'></span><span style='--install-i:5'></span><span style='--install-i:6'></span><span style='--install-i:7'></span><span style='--install-i:8'></span></div><span
+                            class='process-install__pulse'
+                          ></span></div>
+
+                    </div>
+
+
+                      <ol class='process-installation-timeline'><li
+                            data-process-install-step
+                          ><b>01</b><span>Օբյեկտի նախապատրաստում</span></li><li
+                            data-process-install-step
+                          ><b>02</b><span>Կրող համակարգի մոնտաժ</span></li><li
+                            data-process-install-step
+                          ><b>03</b><span>Վահանակներ</span></li><li
+                            data-process-install-step
+                          ><b>04</b><span>Ինվերտոր և էլեկտրական աշխատանքներ</span></li><li
+                            data-process-install-step
+                          ><b>05</b><span>Փորձարկում</span></li><li
+                            data-process-install-step
+                          ><b>06</b><span>Համակարգը գործարկված է</span></li></ol>
+                  </div>
+                </article>
+                <article
+                  class='process-state '
+                  data-process-state='5'
+                  aria-labelledby='process-step-title-06'
+                  aria-hidden='true'
+                >
+                  <div class='process-state__copy' data-process-copy>
+                    <p class='process-state__eyebrow'><span aria-hidden='true'></span>Քայլ 6 / 6</p>
+                    <h3 id='process-step-title-06' class='process-state__title'>
+                      <span>Տեղադրումը միայն սկիզբն է։</span>
+                    </h3>
+                    <p class='process-state__intro'>Գործարկումից հետո ձեր համակարգի տվյալները, փաստաթղթերը, երաշխիքները և աջակցության տեղեկությունները մնում են մեկ տեղում։</p>
+
+
+                      <a class='process-state__cta' href='/calculator/'>Սկսել իմ արևային վերլուծությունը
+                        <svg class='inline-icon' aria-hidden='true'><use
+                            href='/icons.svg#arrow-right'
+                          ></use></svg>
+                      </a>
+                  </div>
+
+                  <div
+                    class='process-visual process-visual--support'
+                    data-process-visual='support'
+                    role='img'
+                    aria-label='Solar Passport-ի և աջակցության տեսապատկեր'
+                  >
+                    <div class='process-visual__depth' aria-hidden='true'>
+                      <span class='process-visual__halo'></span>
+
+
+
+
+
+
+                        <div class='process-passport'>
+                          <span class='process-passport__back'></span>
+                          <div class='process-passport__cover'><svg class='inline-icon'><use
+                                href='/icons.svg#sun'
+                              ></use></svg><small>YOURENERGY</small><strong>Solar<br />Passport</strong><i
+                            ></i></div>
+                          <div class='process-passport__page'><span></span><span></span><span></span><svg
+                              class='inline-icon'
+                            ><use href='/icons.svg#shield-check'></use></svg></div>
+                        </div>
+                    </div>
+
+                      <ul class='process-metrics' role='list'>
+                          <li class='process-metric' data-process-card>
+                            <svg class='inline-icon' aria-hidden='true'><use
+                                href='/icons.svg#file'
+                              ></use></svg>
+                            <span>Solar Passport</span>
+                            <strong
+                              data-process-value='solar-passport'
+                              data-default='Ձեր համակարգի անձնագիրը'
+                            >Ձեր համակարգի անձնագիրը</strong>
+                            <small data-process-value-note='solar-passport'></small>
+                          </li>
+                          <li class='process-metric' data-process-card>
+                            <svg class='inline-icon' aria-hidden='true'><use
+                                href='/icons.svg#shield-check'
+                              ></use></svg>
+                            <span>Համակարգի տեղեկություններ</span>
+                            <strong
+                              data-process-value='system-information'
+                              data-default='Պահվում են նախագծի նյութերի հետ'
+                            >Պահվում են նախագծի նյութերի հետ</strong>
+                            <small data-process-value-note='system-information'></small>
+                          </li>
+                          <li class='process-metric' data-process-card>
+                            <svg class='inline-icon' aria-hidden='true'><use
+                                href='/icons.svg#file'
+                              ></use></svg>
+                            <span>Փաստաթղթեր</span>
+                            <strong
+                              data-process-value='documents'
+                              data-default='Պահվում են նախագծի նյութերի հետ'
+                            >Պահվում են նախագծի նյութերի հետ</strong>
+                            <small data-process-value-note='documents'></small>
+                          </li>
+                          <li class='process-metric' data-process-card>
+                            <svg class='inline-icon' aria-hidden='true'><use
+                                href='/icons.svg#shield'
+                              ></use></svg>
+                            <span>Երաշխիքներ</span>
+                            <strong
+                              data-process-value='warranties'
+                              data-default='Պահվում են նախագծի նյութերի հետ'
+                            >Պահվում են նախագծի նյութերի հետ</strong>
+                            <small data-process-value-note='warranties'></small>
+                          </li>
+                          <li class='process-metric' data-process-card>
+                            <svg class='inline-icon' aria-hidden='true'><use
+                                href='/icons.svg#cycle'
+                              ></use></svg>
+                            <span>Արտադրության համատեքստ</span>
+                            <strong
+                              data-process-value='production-context'
+                              data-default='Վերլուծության հասանելի տվյալների հիման վրա'
+                            >Վերլուծության հասանելի տվյալների հիման վրա</strong>
+                            <small data-process-value-note='production-context'></small>
+                          </li>
+                          <li class='process-metric' data-process-card>
+                            <svg class='inline-icon' aria-hidden='true'><use
+                                href='/icons.svg#support'
+                              ></use></svg>
+                            <span>Աջակցություն</span>
+                            <strong
+                              data-process-value='support'
+                              data-default='Կապի և սպասարկման տեղեկություններ'
+                            >Կապի և սպասարկման տեղեկություններ</strong>
+                            <small data-process-value-note='support'></small>
+                          </li>
+                      </ul>
+
+                  </div>
+                </article>
             </div>
-            <p class='stage-home__signature' aria-hidden='true'>Միասին՝ ավելի լուսավոր Հայաստան<svg
-                viewBox='0 0 160 36'
-              ><path d='M4 30Q73 0 151 9M50 25Q108 3 130 10' /></svg></p>
-            <div class='stage-home__bottom'>
-              <ul class='stage-home__trust'><li><svg
-                      aria-hidden='true'
-                      viewBox='0 0 24 24'
-                    ><path d='m13 2-9 12h7l-1 8 10-13h-7l1-7Z' /></svg><div><strong>Արևային տվյալներ</strong><span
-                      >PVGIS-ի հիման վրա</span></div></li><li><svg
-                      aria-hidden='true'
-                      viewBox='0 0 24 24'
-                    ><path d='M12 2 3 6v6c0 5 9 10 9 10s9-5 9-10V6l-9-4Zm-4 10 3 3 5-6' /></svg><div><strong>Պաշտոնական սակագներ</strong><span
-                      >Հայաստանի ռեեստր</span></div></li><li><svg
-                      aria-hidden='true'
-                      viewBox='0 0 24 24'
-                    ><path d='M4 21c0-8 5-13 14-17M5 17C-2 6 13 2 21 2c0 10-2 20-16 15Z' /></svg><div><strong>Թափանցիկ հաշվարկ</strong><span
-                      >Աղբյուրներ և ենթադրություններ</span></div></li></ul>
-              <a href='#faq' class='stage-home__scroll'><svg aria-hidden='true' viewBox='0 0 24 32'><rect
-                    x='4'
-                    y='1'
-                    width='16'
-                    height='27'
-                    rx='8'
-                  /><path d='M12 7v5' /></svg>Ոլորեք՝ շարունակելու համար</a>
-            </div>
-            <p class='stage-home__caption'>ԱՐԵՎԱՅԻՆ ԼՈՒԾՈՒՄՆԵՐ ՏԱՆ ԵՎ ԲԻԶՆԵՍԻ ՀԱՄԱՐ</p>
+
+            <p class='process-stage__scroll-hint' aria-hidden='true'><span
+              ></span>Ոլորեք՝ շարունակելու համար</p>
           </div>
         </div>      </section>
 
@@ -580,7 +1139,7 @@
         data-contact-label='+374 91 095 950'
       ><svg aria-hidden='true' focusable='false'><use href='/icons.svg#phone'></use></svg></a></nav>
     <script id='home-page-config' type='application/json'>{"locale":"hy-AM","hero":{"eyebrow":"ԱՐԵՎԱՅԻՆ ԷՆԵՐԳԻԱ ՁԵՐ ՏԱՆ ՀԱՄԱՐ","titleLead":"Ձեր տանիքն ավելի","titleMiddle":"մեծ ներուժ ունի,","titleAccent":"քան կարծում եք։","homeCopy":"Մի քանի քայլով բացահայտեք ձեր տան արևային ներուժը, նախնական հզորությունն ու բյուջեն, իսկ սակագինը նշելու դեպքում՝ նաև տնտեսումը։","calculatorCopy":"Սկզբում քարտեզի վրա ձեռքով ընտրեք և հաստատեք կետը, ապա տեսեք դրա PVGIS ներուժը։ Տանիքի և սպառման տվյալները պետք են միայն մանրամասն հաշվարկի համար։","disclosure":"Նախնական արդյունքը պահանջում է օբյեկտի հաստատում և չի փոխարինում տեղազննմանը, ինժեներական նախագծին կամ առևտրային առաջարկին։","addressLabel":"Հասցե ինժեների համար (ընտրովի)","addressPlaceholder":"Օրինակ՝ Երևան, Արաբկիր","addressHelp":"Հասցեն չի գեոկոդավորվում։ Բացեք քարտեզը, ձեռքով ընտրեք կետ կամ մուտքագրեք ներքևի կոորդինատները։","analyze":"Բացել կետի ընտրությունը","openCalculator":"Հաշվել իմ տան համար","uploadTitle":"Կցեք էլեկտրաէներգիայի հաշիվը (ընտրովի)","uploadPrompt":"Ընտրեք կամ քաշեք ֆայլը այստեղ","uploadHelp":"PDF, JPG կամ PNG՝ մինչև 10 ՄԲ։ Ֆայլը չի ուղարկվում սերվեր և ավտոմատ չի կարդացվում․ արժեքները մուտքագրեք ձեռքով։","removeFile":"Հեռացնել ֆայլը","signatureLead":"Մաքուր էներգիա","signatureTail":"Ավելի պայծառ կյանք","dashboardAriaLabel":"Արևային հաշվարկի ամփոփում","dashboardLocationSelected":"Ընտրված կետ","dashboardLocationRegional":"Տարածաշրջանային գնահատում","dashboardStatusPreliminary":"ՆԱԽՆԱԿԱՆ","dashboardReady":"Ընթացիկ սեսիայի արդյունք","dashboardGeneration":"Տարեկան արտադրություն","dashboardGenerationUnit":"kWh / տարի","dashboardCoverage":"Սպառման ծածկում","dashboardCoverageUnit":"%","dashboardSavings":"Տարեկան խնայողություն","dashboardSavingsUnit":"֏ / տարի","dashboardCo2":"CO₂ արտանետումների կրճատում","dashboardCo2Unit":"տ / տարի","dashboardNeedConsumption":"Ավելացրեք սպառումը","dashboardNeedTariff":"Ավելացրեք սակագինը","dashboardLoading":"Հաշվարկ…","dashboardNotePreliminary":"Հաշվարկը նախնական է։ Վերջնական պարամետրերն ու գինը հաստատում է ինժեները։","dashboardExample":{"location":"Երևան, Հայաստան","status":"ԱՐԴՅՈՒՆՔԻ ՕՐԻՆԱԿ","label":"Տարեկան արտադրություն","annualGenerationKwh":8420,"annualGenerationDisplay":"8 420","monthlyGenerationKwh":[320,390,570,740,820,900,980,940,790,630,470,350],"monthlyBarPercent":[33,40,58,76,84,92,100,96,81,64,48,36],"co2Label":"CO₂-ի կրճատում","treesLabel":"Ծառերի CO₂ կլանման համարժեք","treesUnit":"ծառ / տարի","note":"Արդյունքի օրինակ․ հաշվարկեք ձեր տունը՝ ձեր տվյալները տեսնելու համար։","co2Tons":1.541,"co2Display":"1,5","treeEquivalent":25.683,"trees":26}}}</script>
-    <script id='journey-page-config' type='application/json'>{"locale":"hy-AM","journey":{"eyebrow":"ՔԱՅԼ 1 / 6","title":"Սկսենք","titleLead":"","titleAccent":"ձեր տնից","intro":"Նշեք մարզը և էլեկտրաէներգիայի սպառումը՝ ձեր արևային համակարգի վերլուծությունը սկսելու համար։","region":"Մարզ","chooseRegion":"Ընտրեք մարզը","consumption":"Էլեկտրաէներգիա","bill":"Ամսական հաշիվ","usage":"Ամսական kWh","amountBill":"Միջին ամսական հաշիվ","amountUsage":"Միջին ամսական սպառում","billHelp":"Էլեկտրաէներգիայի սակագինը կհաստատեք հաշվիչում։","usageHelp":"Նշեք ձեր հաշվում նշված ամսական սպառումը։","submit":"Սկսել իմ վերլուծությունը","continue":"Շարունակել","full":"Բացել ամբողջական հաշվիչը","country":"Հայաստան","location":"Ձեր մարզը","resource":"Արևային ռեսուրս","pending":"Կհաշվարկվի PVGIS-ով՝ վերլուծությունը սկսելուց հետո","source":"Աղբյուր","production":"Տարեկան արտադրություն","capacity":"Համակարգի հզորություն","panels":"Վահանակներ","perYear":"kWh/տարի","lighting":"Տեսարանի լուսավորության նախադիտում","day":"Ցերեկ","night":"Գիշեր","signature":"Միասին՝ ավելի լուսավոր Հայաստան","caption":"ԱՐԵՎԱՅԻՆ ԼՈՒԾՈՒՄՆԵՐ ՏԱՆ ԵՎ ԲԻԶՆԵՍԻ ՀԱՄԱՐ","scroll":"Ոլորեք՝ շարունակելու համար","progress":"Ձեր արևային համակարգի ուղին","steps":[{"number":1,"displayNumber":"01","label":"Ձեր տունը","active":true,"stateClass":"is-active","current":"step","href":"/calculator/"},{"number":2,"displayNumber":"02","label":"Տանիքի տվյալներ","active":false,"stateClass":"","current":"false","href":"/calculator/refine/"},{"number":3,"displayNumber":"03","label":"Համակարգի նախագիծ","active":false,"stateClass":"","current":"false","href":"/calculator/pro/"},{"number":4,"displayNumber":"04","label":"Ձեր խնայողությունը","active":false,"stateClass":"","current":"false","href":null},{"number":5,"displayNumber":"05","label":"Տեղադրում","active":false,"stateClass":"","current":"false","href":null},{"number":6,"displayNumber":"06","label":"Աջակցություն","active":false,"stateClass":"","current":"false","href":null}],"trust":[{"title":"Արևային տվյալներ","note":"PVGIS-ի հիման վրա","icon":"m13 2-9 12h7l-1 8 10-13h-7l1-7Z"},{"title":"Պաշտոնական սակագներ","note":"Հայաստանի ռեեստր","icon":"M12 2 3 6v6c0 5 9 10 9 10s9-5 9-10V6l-9-4Zm-4 10 3 3 5-6"},{"title":"Թափանցիկ հաշվարկ","note":"Աղբյուրներ և ենթադրություններ","icon":"M4 21c0-8 5-13 14-17M5 17C-2 6 13 2 21 2c0 10-2 20-16 15Z"}],"regions":[{"id":"yerevan","label":"Երևան"},{"id":"aragatsotn","label":"Արագածոտն"},{"id":"ararat","label":"Արարատ"},{"id":"armavir","label":"Արմավիր"},{"id":"gegharkunik","label":"Գեղարքունիք"},{"id":"kotayk","label":"Կոտայք"},{"id":"lori","label":"Լոռի"},{"id":"shirak","label":"Շիրակ"},{"id":"syunik","label":"Սյունիք"},{"id":"tavush","label":"Տավուշ"},{"id":"vayots-dzor","label":"Վայոց ձոր"}]}}</script>
+    <script id='process-page-config' type='application/json'>{"locale":"hy-AM","processStory":{"title":"Ձեր արևային համակարգի ճանապարհը","progressLabel":"Արևային համակարգի նախագծի փուլերը","stepLabel":"Քայլ {current} / {total}","previousStepLabel":"Նախորդ քայլը","nextStepLabel":"Հաջորդ քայլը","scrollLabel":"Ոլորեք՝ շարունակելու համար","availableAfterAnalysis":"Հասանելի կլինի ձեր վերլուծությունից հետո","addInCalculator":"Ավելացրեք տվյալները հաշվիչում","verifiedOnSite":"Ստուգվում է տեղազննման ընթացքում","confirmedInDesign":"Հաստատվում է վերջնական նախագծում","includedInProposal":"Նշվում է վերջնական առաջարկում","preliminaryEstimate":"Նախնական գնահատական՝ առկայության դեպքում","form":{"region":"Մարզ","chooseRegion":"Ընտրեք մարզը","consumption":"Էլեկտրաէներգիա","bill":"Ամսական հաշիվ","usage":"Ամսական kWh","amountBill":"Միջին ամսական հաշիվ","amountUsage":"Միջին ամսական սպառում","billHelp":"Էլեկտրաէներգիայի սակագինը կհաստատեք հաշվիչում։","usageHelp":"Նշեք ձեր հաշվում նշված ամսական սպառումը։","continue":"Շարունակել","submit":"Սկսել իմ վերլուծությունը","full":"Բացել ամբողջական հաշվիչը"},"data":{"source":"Աղբյուր","preliminary":"Նախնական","upTo":"մինչև","passportReady":"Ստեղծված է այս աշխատաշրջանի համար","country":"Հայաստան","billUnit":"AMD/ամիս","usageUnit":"kWh/ամիս"},"steps":[{"number":"01","nav":"Ձեր արևային վերլուծությունը","visual":"analysis","visualLabel":"Արևային համակարգի վերլուծության տեսապատկեր","headline":"Սկսում ենք թվերից։","copy":"Ձեր սպառումը, տեղադրությունը և արևային ռեսուրսի հասանելի տվյալները դառնում են ձեր համակարգի հստակ մեկնակետը։","cards":[{"icon":"map-pin","label":"Տեղադրություն","value":"Ավելացրեք տվյալները հաշվիչում","data":"location"},{"icon":"zap","label":"Սպառում","value":"Ավելացրեք տվյալները հաշվիչում","data":"consumption"},{"icon":"sun","label":"Արևային ռեսուրս","value":"Հասանելի կլինի ձեր վերլուծությունից հետո","data":"solar-resource"},{"icon":"calculator","label":"Առաջարկվող համակարգ","value":"Հասանելի կլինի ձեր վերլուծությունից հետո","data":"system-capacity"},{"icon":"cycle","label":"Սպասվող արտադրություն","value":"Հասանելի կլինի ձեր վերլուծությունից հետո","data":"annual-generation"}],"cta":"Սկսել իմ վերլուծությունը","index":0,"headlineLines":["Սկսում ենք թվերից։"],"stepLabel":"Քայլ 1 / 6","stateClass":"is-active","ariaHidden":"false","progressClass":"is-active","isAnalysis":true,"isInspection":false,"isDesign":false,"isProposal":false,"isInstallation":false,"isSupport":false,"designPanels":null,"installPanels":null},{"number":"02","nav":"Ինժեների այց և տեղազննում","visual":"inspection","visualLabel":"Օբյեկտի ինժեներական տեղազննման տեսապատկեր","headline":"Այնուհետև տունը ստուգում ենք տեղում։","copy":"Ինժեները ստուգում է տանիքը, օգտագործելի մակերեսը, կողմնորոշումը, ստվերավորումը և էլեկտրական պայմանները։","cards":[{"icon":"satellite","label":"Տանիքի մակերես","value":"Ստուգվում է տեղազննման ընթացքում","data":"roof-area"},{"icon":"sun","label":"Կողմնորոշում","value":"Ստուգվում է տեղազննման ընթացքում","data":"orientation"},{"icon":"arrow-right","label":"Թեքություն","value":"Ստուգվում է տեղազննման ընթացքում","data":"tilt"},{"icon":"sun","label":"Ստվերավորում","value":"Ստուգվում է տեղազննման ընթացքում","data":"shading"},{"icon":"zap","label":"Էլեկտրական վահանակ","value":"Ստուգվում է տեղազննման ընթացքում","data":"electrical-panel"}],"index":1,"headlineLines":["Այնուհետև տունը ստուգում ենք տեղում։"],"stepLabel":"Քայլ 2 / 6","stateClass":"","ariaHidden":"true","progressClass":"is-future","isAnalysis":false,"isInspection":true,"isDesign":false,"isProposal":false,"isInstallation":false,"isSupport":false,"designPanels":null,"installPanels":null},{"number":"03","nav":"Համակարգի վերջնական նախագիծ","visual":"design","visualLabel":"Արևային համակարգի վերջնական նախագծի տեսապատկեր","headline":"Ձեր համակարգը ստանում է վերջնական տեսքը։","copy":"Ստուգված չափումների հիման վրա կազմում ենք վահանակների դասավորությունը, ինվերտորի կազմաձևը և վերջնական ինժեներական նախագիծը։","cards":[{"icon":"satellite","label":"Վահանակների դասավորություն","value":"Հաստատվում է վերջնական նախագծում","data":"panel-layout"},{"icon":"zap","label":"Համակարգի հզորություն","value":"Հասանելի կլինի ձեր վերլուծությունից հետո","data":"system-capacity"},{"icon":"sun","label":"Վահանակների քանակ","value":"Հասանելի կլինի ձեր վերլուծությունից հետո","data":"panel-count"},{"icon":"shield-check","label":"Ինվերտոր","value":"Հաստատվում է վերջնական նախագծում","data":"inverter"},{"icon":"cycle","label":"Սպասվող արտադրություն","value":"Հասանելի կլինի ձեր վերլուծությունից հետո","data":"annual-generation"}],"index":2,"headlineLines":["Ձեր համակարգը ստանում է վերջնական տեսքը։"],"stepLabel":"Քայլ 3 / 6","stateClass":"","ariaHidden":"true","progressClass":"is-future","isAnalysis":false,"isInspection":false,"isDesign":true,"isProposal":false,"isInstallation":false,"isSupport":false,"designPanels":[0,1,2,3,4,5,6,7,8,9,10,11],"installPanels":null},{"number":"04","nav":"Հստակ առաջարկ և պայմանագիր","visual":"proposal","visualLabel":"Առաջարկի և պայմանագրի տեսապատկեր","headline":"Մինչև տեղադրումն ամեն ինչ հստակ է։","copy":"Աշխատանքները սկսելուց առաջ ստանում եք սարքավորումների վերջնական ցանկը, գինը, աշխատանքի ծավալը, երաշխիքները և նախագծի պայմանները։","cards":[{"icon":"sun","label":"Սարքավորումներ","value":"Նշվում է վերջնական առաջարկում","data":"equipment"},{"icon":"zap","label":"Համակարգի հզորություն","value":"Հաստատվում է վերջնական նախագծում","data":"system-capacity"},{"icon":"file","label":"Աշխատանքի ծավալ","value":"Նշվում է վերջնական առաջարկում","data":"project-scope"},{"icon":"calculator","label":"Գին","value":"Նախնական գնահատական՝ առկայության դեպքում","data":"commercial-estimate"},{"icon":"shield-check","label":"Երաշխիք","value":"Նշվում է վերջնական առաջարկում","data":"warranty"},{"icon":"file","label":"Պայմաններ","value":"Նշվում են վերջնական առաջարկում","data":"terms"}],"index":3,"headlineLines":["Մինչև տեղադրումն ամեն ինչ հստակ է։"],"stepLabel":"Քայլ 4 / 6","stateClass":"","ariaHidden":"true","progressClass":"is-future","isAnalysis":false,"isInspection":false,"isDesign":false,"isProposal":true,"isInstallation":false,"isSupport":false,"designPanels":null,"installPanels":null},{"number":"05","nav":"Տեղադրում և գործարկում","visual":"installation","visualLabel":"Տեղադրման և գործարկման տեսապատկեր","headline":"Տեղադրում ենք։\nՓորձարկում ենք։\nԳործարկում ենք։","copy":"Համակարգը տեղադրվում է հաստատված նախագծի համաձայն, ստուգվում և հանձնվում շահագործման։","timeline":[{"number":"01","label":"Օբյեկտի նախապատրաստում"},{"number":"02","label":"Կրող համակարգի մոնտաժ"},{"number":"03","label":"Վահանակներ"},{"number":"04","label":"Ինվերտոր և էլեկտրական աշխատանքներ"},{"number":"05","label":"Փորձարկում"},{"number":"06","label":"Համակարգը գործարկված է"}],"index":4,"headlineLines":["Տեղադրում ենք։","Փորձարկում ենք։","Գործարկում ենք։"],"stepLabel":"Քայլ 5 / 6","stateClass":"","ariaHidden":"true","progressClass":"is-future","isAnalysis":false,"isInspection":false,"isDesign":false,"isProposal":false,"isInstallation":true,"isSupport":false,"designPanels":null,"installPanels":[0,1,2,3,4,5,6,7,8]},{"number":"06","nav":"Solar Passport և աջակցություն","visual":"support","visualLabel":"Solar Passport-ի և աջակցության տեսապատկեր","headline":"Տեղադրումը միայն սկիզբն է։","copy":"Գործարկումից հետո ձեր համակարգի տվյալները, փաստաթղթերը, երաշխիքները և աջակցության տեղեկությունները մնում են մեկ տեղում։","cards":[{"icon":"file","label":"Solar Passport","value":"Ձեր համակարգի անձնագիրը","data":"solar-passport"},{"icon":"shield-check","label":"Համակարգի տեղեկություններ","value":"Պահվում են նախագծի նյութերի հետ","data":"system-information"},{"icon":"file","label":"Փաստաթղթեր","value":"Պահվում են նախագծի նյութերի հետ","data":"documents"},{"icon":"shield","label":"Երաշխիքներ","value":"Պահվում են նախագծի նյութերի հետ","data":"warranties"},{"icon":"cycle","label":"Արտադրության համատեքստ","value":"Վերլուծության հասանելի տվյալների հիման վրա","data":"production-context"},{"icon":"support","label":"Աջակցություն","value":"Կապի և սպասարկման տեղեկություններ","data":"support"}],"cta":"Սկսել իմ արևային վերլուծությունը","index":5,"headlineLines":["Տեղադրումը միայն սկիզբն է։"],"stepLabel":"Քայլ 6 / 6","stateClass":"","ariaHidden":"true","progressClass":"is-future","isAnalysis":false,"isInspection":false,"isDesign":false,"isProposal":false,"isInstallation":false,"isSupport":true,"designPanels":null,"installPanels":null}],"regions":[{"id":"yerevan","label":"Երևան"},{"id":"aragatsotn","label":"Արագածոտն"},{"id":"ararat","label":"Արարատ"},{"id":"armavir","label":"Արմավիր"},{"id":"gegharkunik","label":"Գեղարքունիք"},{"id":"kotayk","label":"Կոտայք"},{"id":"lori","label":"Լոռի"},{"id":"shirak","label":"Շիրակ"},{"id":"syunik","label":"Սյունիք"},{"id":"tavush","label":"Տավուշ"},{"id":"vayots-dzor","label":"Վայոց ձոր"}]}}</script>
     <script type='module' src='/src/main.js'></script>
   </body>
 </html>

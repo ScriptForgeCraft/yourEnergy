@@ -13,7 +13,7 @@ const readConfig = (selector = '#page-config, #home-page-config') => {
 };
 
 const config = readConfig();
-const journeyConfig = readConfig('#journey-page-config');
+const processConfig = readConfig('#process-page-config');
 
 initNavigation();
 initScrollers();
@@ -22,30 +22,35 @@ if (document.querySelector('[data-home-hero]')) {
   void import('./ui/home-motion.js').then(({ initHomeMotion }) => initHomeMotion({ config }));
 }
 
-const solutionsStory = document.querySelector('[data-solutions-story]');
+const processStory = document.querySelector('[data-process-story]');
 
-if (solutionsStory) {
+if (processStory) {
   let storyStarted = false;
-  const loadSolutionsStory = () => {
+  const loadProcessStory = () => {
     if (storyStarted) return;
     storyStarted = true;
-    void import('./ui/solutions-story.js').then(({ initSolutionsStory }) =>
-      initSolutionsStory({ config: { ...config, ...journeyConfig } })
-    );
+    void import('./ui/process-story.js').then(({ initProcessStory }) => {
+      initProcessStory({ config: { ...config, ...processConfig } });
+      if (window.location.hash === '#process') {
+        window.requestAnimationFrame(() => {
+          window.requestAnimationFrame(() => processStory.scrollIntoView({ block: 'start' }));
+        });
+      }
+    });
   };
 
-  if (typeof IntersectionObserver === 'undefined') {
-    loadSolutionsStory();
+  if (window.location.hash === '#process' || typeof IntersectionObserver === 'undefined') {
+    loadProcessStory();
   } else {
     const storyObserver = new IntersectionObserver(
       ([entry]) => {
         if (!entry.isIntersecting) return;
         storyObserver.disconnect();
-        loadSolutionsStory();
+        loadProcessStory();
       },
       { rootMargin: '800px 0px' }
     );
-    storyObserver.observe(solutionsStory);
+    storyObserver.observe(processStory);
   }
 }
 

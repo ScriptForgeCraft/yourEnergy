@@ -292,226 +292,785 @@
       </section>
 
       <section
-        class='process process-journey solutions section'
         id='process'
+        class='process process-journey section'
+        data-process-story
         aria-labelledby='process-title'
-        data-solutions-story
       >
-        <h2 id='process-title' class='visually-hidden'>Путь к вашей солнечной системе</h2>
-        <div class='stage-home' id='solutions' data-solutions-home>
-          <div class='stage-home__frame solutions-story__step is-active' data-solutions-scene='1'>
-            <div class='stage-home__backdrop' aria-hidden='true' data-stage-pointer>
-              <picture class='stage-home__art' data-solutions-visual='home'>
-                <source
-                  type='image/avif'
-                  srcset='/images/solutions-home-640.avif 640w, /images/solutions-home-1024.avif 1024w, /images/solutions-home-1600.avif 1600w'
-                  sizes='100vw'
-                />
-                <source
-                  type='image/webp'
-                  srcset='/images/solutions-home-640.webp 640w, /images/solutions-home-1024.webp 1024w, /images/solutions-home-1600.webp 1600w'
-                  sizes='100vw'
-                />
-                <img
-                  src='/images/solutions-home-1600.jpg'
-                  width='1600'
-                  height='900'
-                  alt=''
-                  loading='lazy'
-                  decoding='async'
-                />
-              </picture>
-              <div class='stage-home__night-wash'></div>
-            </div>
-            <div class='stage-home__scrim' aria-hidden='true'></div>
-            <div class='stage-home__body'>
-              <div class='stage-home__copy'>
-                <p class='stage-home__eyebrow' data-stage-reveal>ШАГ 1 ИЗ 6</p>
-                <h3 class='stage-home__title'><span data-stage-reveal>Начнём</span>
-                  <span data-stage-reveal>с <em>вашего дома</em></span></h3>
-                <p class='stage-home__intro' data-stage-reveal>Укажите регион и потребление электричества — это отправная точка анализа вашей солнечной системы.</p>
-                <form
-                  class='stage-home__form'
-                  data-stage-form
-                  action='/ru/calculator/'
-                  method='get'
-                  data-stage-reveal
+        <h2 id='process-title' class='visually-hidden'>Ваш путь к солнечной системе</h2>
+        <div class='process-stage' data-process-stage data-process-active='1'>
+          <div class='process-stage__frame'>
+            <div class='process-stage__ambient' aria-hidden='true'><span></span><span></span><span
+              ></span></div>
+
+            <nav class='process-progress' aria-label='Этапы проекта солнечной системы'>
+              <span class='process-progress__track' aria-hidden='true'><i
+                  data-process-progress-fill
+                ></i></span>
+              <ol>
+                  <li class='is-active' data-process-progress-step='0'>
+                    <span class='process-progress__node' aria-hidden='true'><b>01</b><svg><use
+                          href='/icons.svg#check'
+                        ></use></svg></span>
+                    <span>Анализ вашей системы</span>
+                  </li>
+                  <li class='is-future' data-process-progress-step='1'>
+                    <span class='process-progress__node' aria-hidden='true'><b>02</b><svg><use
+                          href='/icons.svg#check'
+                        ></use></svg></span>
+                    <span>Выезд инженера</span>
+                  </li>
+                  <li class='is-future' data-process-progress-step='2'>
+                    <span class='process-progress__node' aria-hidden='true'><b>03</b><svg><use
+                          href='/icons.svg#check'
+                        ></use></svg></span>
+                    <span>Финальный проект системы</span>
+                  </li>
+                  <li class='is-future' data-process-progress-step='3'>
+                    <span class='process-progress__node' aria-hidden='true'><b>04</b><svg><use
+                          href='/icons.svg#check'
+                        ></use></svg></span>
+                    <span>Понятное предложение и договор</span>
+                  </li>
+                  <li class='is-future' data-process-progress-step='4'>
+                    <span class='process-progress__node' aria-hidden='true'><b>05</b><svg><use
+                          href='/icons.svg#check'
+                        ></use></svg></span>
+                    <span>Монтаж и ввод в эксплуатацию</span>
+                  </li>
+                  <li class='is-future' data-process-progress-step='5'>
+                    <span class='process-progress__node' aria-hidden='true'><b>06</b><svg><use
+                          href='/icons.svg#check'
+                        ></use></svg></span>
+                    <span>Solar Passport и поддержка</span>
+                  </li>
+              </ol>
+            </nav>
+
+            <div class='process-stage__states'>
+                <article
+                  class='process-state is-active'
+                  data-process-state='0'
+                  aria-labelledby='process-step-title-01'
+                  aria-hidden='false'
                 >
-                  <label class='visually-hidden' for='stage-region'>Регион</label>
-                  <div class='stage-home__select'>
-                    <svg aria-hidden='true' viewBox='0 0 24 24'><path
-                        d='M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 1 1 16 0Z'
-                      /><circle cx='12' cy='10' r='2.5' /></svg>
-                    <select id='stage-region' name='region' required data-stage-region>
-                      <option value=''>Выберите регион</option>
-                      <option value='yerevan'>Ереван</option><option value='aragatsotn'>Арагацотн</option><option value='ararat'>Арарат</option><option value='armavir'>Армавир</option><option value='gegharkunik'>Гегаркуник</option><option value='kotayk'>Котайк</option><option value='lori'>Лори</option><option value='shirak'>Ширак</option><option value='syunik'>Сюник</option><option value='tavush'>Тавуш</option><option value='vayots-dzor'>Вайоц-Дзор</option>
-                    </select>
+                  <div class='process-state__copy' data-process-copy>
+                    <p class='process-state__eyebrow'><span aria-hidden='true'></span>Этап 1 из 6</p>
+                    <h3 id='process-step-title-01' class='process-state__title'>
+                      <span>Начинаем с цифр.</span>
+                    </h3>
+                    <p class='process-state__intro'>Ваше потребление, местоположение и доступные данные о солнечном ресурсе становятся понятной отправной точкой для вашей системы.</p>
+
+                      <form
+                        class='process-form'
+                        data-process-form
+                        action='/ru/calculator/'
+                        method='get'
+                      >
+                        <label
+                          class='visually-hidden'
+                          for='process-region'
+                        >Регион</label>
+                        <div class='process-form__select'>
+                          <svg class='inline-icon' aria-hidden='true'><use
+                              href='/icons.svg#map-pin'
+                            ></use></svg>
+                          <select id='process-region' name='region' required data-process-region>
+                            <option value=''>Выберите регион</option>
+                            <option
+                                value='yerevan'
+                              >Ереван</option><option
+                                value='aragatsotn'
+                              >Арагацотн</option><option
+                                value='ararat'
+                              >Арарат</option><option
+                                value='armavir'
+                              >Армавир</option><option
+                                value='gegharkunik'
+                              >Гегаркуник</option><option
+                                value='kotayk'
+                              >Котайк</option><option
+                                value='lori'
+                              >Лори</option><option
+                                value='shirak'
+                              >Ширак</option><option
+                                value='syunik'
+                              >Сюник</option><option
+                                value='tavush'
+                              >Тавуш</option><option
+                                value='vayots-dzor'
+                              >Вайоц-Дзор</option>
+                          </select>
+                        </div>
+                        <fieldset class='process-form__modes' data-process-consumption>
+                          <legend class='visually-hidden'>Электроэнергия</legend>
+                          <label><input type='radio' name='mode' value='bill' checked /><span
+                            >Счёт за месяц</span></label>
+                          <label><input type='radio' name='mode' value='usage' /><span
+                            >kWh за месяц</span></label>
+                        </fieldset>
+                        <label
+                          class='process-form__amount-label'
+                          for='process-amount'
+                          data-process-amount-label
+                          data-process-consumption
+                        >Средний счёт за месяц</label>
+                        <div class='process-form__amount' data-process-consumption>
+                          <input
+                            id='process-amount'
+                            name='amount'
+                            type='number'
+                            inputmode='decimal'
+                            min='0.01'
+                            step='any'
+                            required
+                            aria-describedby='process-input-help'
+                            data-process-amount
+                          />
+                          <span data-process-unit>AMD</span>
+                        </div>
+                        <p
+                          class='process-form__help'
+                          id='process-input-help'
+                          data-process-help
+                          data-process-consumption
+                        >Тариф на электричество вы подтвердите в калькуляторе.</p>
+                        <button type='submit' class='process-form__submit'>
+                          <span data-process-submit-label>Начать мой анализ</span>
+                          <svg class='inline-icon' aria-hidden='true'><use
+                              href='/icons.svg#arrow-right'
+                            ></use></svg>
+                        </button>
+                        <a
+                          class='process-form__full'
+                          href='/ru/calculator/'
+                        >Открыть полный калькулятор <span aria-hidden='true'>↗</span></a>
+                      </form>
+
                   </div>
-                  <fieldset class='stage-home__modes' data-stage-consumption>
-                    <legend class='visually-hidden'>Электроэнергия</legend>
-                    <label><input type='radio' name='mode' value='bill' checked /><span
-                      >Счёт за месяц</span></label>
-                    <label><input type='radio' name='mode' value='usage' /><span
-                      >kWh за месяц</span></label>
-                  </fieldset>
-                  <label
-                    for='stage-amount'
-                    data-stage-amount-label
-                    data-stage-consumption
-                  >Средний счёт за месяц</label>
-                  <div class='stage-home__amount' data-stage-consumption>
-                    <input
-                      id='stage-amount'
-                      name='amount'
-                      type='number'
-                      inputmode='decimal'
-                      min='0.01'
-                      step='any'
-                      required
-                      aria-describedby='stage-input-help'
-                      data-stage-amount
-                    />
-                    <span data-stage-unit>AMD</span>
+
+                  <div
+                    class='process-visual process-visual--analysis'
+                    data-process-visual='analysis'
+                    role='img'
+                    aria-label='Визуализация анализа солнечной системы'
+                  >
+                    <div class='process-visual__depth' aria-hidden='true'>
+                      <span class='process-visual__halo'></span>
+
+                        <svg class='process-visual__solar-arc' viewBox='0 0 700 470' data-process-solar-arc>
+                          <path d='M76 354 Q350 -120 624 354' data-process-solar-path></path>
+                          <path class='process-visual__horizon' d='M76 354H624'></path>
+                          <text x='55' y='383'>W</text><text x='342' y='70'>N</text><text
+                            x='632'
+                            y='383'
+                          >E</text>
+                          <g data-process-sun transform='translate(350 105)'>
+                            <circle class='process-visual__sun-halo' r='31'></circle>
+                            <circle class='process-visual__sun-core' r='13'></circle>
+                            <path
+                              d='M0-25v-9M0 25v9M25 0h9M-25 0h-9M18-18l7-7M-18 18l-7 7M18 18l7 7M-18-18l-7-7'
+                            ></path>
+                          </g>
+                        </svg>
+                        <div class='process-house'><span class='process-house__roof'></span><span
+                            class='process-house__wall'
+                          ></span><span class='process-house__window'></span><span
+                            class='process-house__panel'
+                          ></span></div>
+                        <span class='process-visual__terrain process-visual__terrain--one'></span><span
+                          class='process-visual__terrain process-visual__terrain--two'
+                        ></span>
+
+
+
+
+
+                    </div>
+
+                      <ul class='process-metrics' role='list'>
+                          <li class='process-metric' data-process-card>
+                            <svg class='inline-icon' aria-hidden='true'><use
+                                href='/icons.svg#map-pin'
+                              ></use></svg>
+                            <span>Местоположение</span>
+                            <strong
+                              data-process-value='location'
+                              data-default='Добавьте данные в калькуляторе'
+                            >Добавьте данные в калькуляторе</strong>
+                            <small data-process-value-note='location'></small>
+                          </li>
+                          <li class='process-metric' data-process-card>
+                            <svg class='inline-icon' aria-hidden='true'><use
+                                href='/icons.svg#zap'
+                              ></use></svg>
+                            <span>Потребление</span>
+                            <strong
+                              data-process-value='consumption'
+                              data-default='Добавьте данные в калькуляторе'
+                            >Добавьте данные в калькуляторе</strong>
+                            <small data-process-value-note='consumption'></small>
+                          </li>
+                          <li class='process-metric' data-process-card>
+                            <svg class='inline-icon' aria-hidden='true'><use
+                                href='/icons.svg#sun'
+                              ></use></svg>
+                            <span>Солнечный ресурс</span>
+                            <strong
+                              data-process-value='solar-resource'
+                              data-default='Доступно после вашего анализа'
+                            >Доступно после вашего анализа</strong>
+                            <small data-process-value-note='solar-resource'></small>
+                          </li>
+                          <li class='process-metric' data-process-card>
+                            <svg class='inline-icon' aria-hidden='true'><use
+                                href='/icons.svg#calculator'
+                              ></use></svg>
+                            <span>Рекомендованная система</span>
+                            <strong
+                              data-process-value='system-capacity'
+                              data-default='Доступно после вашего анализа'
+                            >Доступно после вашего анализа</strong>
+                            <small data-process-value-note='system-capacity'></small>
+                          </li>
+                          <li class='process-metric' data-process-card>
+                            <svg class='inline-icon' aria-hidden='true'><use
+                                href='/icons.svg#cycle'
+                              ></use></svg>
+                            <span>Ожидаемая генерация</span>
+                            <strong
+                              data-process-value='annual-generation'
+                              data-default='Доступно после вашего анализа'
+                            >Доступно после вашего анализа</strong>
+                            <small data-process-value-note='annual-generation'></small>
+                          </li>
+                      </ul>
+
                   </div>
-                  <p
-                    class='stage-home__help'
-                    id='stage-input-help'
-                    data-stage-help
-                    data-stage-consumption
-                  >Тариф на электричество вы подтвердите в калькуляторе.</p>
-                  <button type='submit' class='stage-home__submit'><span
-                      data-stage-submit-label
-                    >Начать мой анализ</span>
-                    <span aria-hidden='true'>→</span></button>
-                  <a class='stage-home__full' href='/ru/calculator/'>Открыть полный калькулятор
-                    <span aria-hidden='true'>↗</span></a>
-                </form>
-              </div>
-
-              <div class='stage-home__visual'>
-                <div class='stage-home__pointer'>
-                  <svg class='stage-home__arc' viewBox='0 0 700 500' aria-hidden='true' data-stage-arc>
-                    <path
-                      class='stage-home__arc-line'
-                      d='M 70 365 Q 350 -140 630 365'
-                      data-stage-arc-path
-                    />
-                    <path class='stage-home__arc-base' d='M70 365H630' />
-                    <circle cx='70' cy='365' r='4' /><circle cx='630' cy='365' r='4' />
-                    <text x='53' y='392'>W</text><text x='343' y='92'>N</text><text x='634' y='392'>E</text>
-                    <g data-stage-sun transform='translate(322 115)'>
-                      <circle class='stage-home__sun-halo' r='29' />
-                      <circle class='stage-home__sun-core' r='12' />
-                      <path
-                        class='stage-home__sun-rays'
-                        d='M0 -23v-8M0 23v8M23 0h8M-23 0h-8M16 -16l6 -6M-16 16l-6 6M16 16l6 6M-16 -16l-6 -6'
-                      />
-                    </g>
-                  </svg>
-                  <div class='stage-home__glass stage-home__location' data-stage-card>
-                    <svg aria-hidden='true' viewBox='0 0 24 24'><path
-                        d='M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 1 1 16 0Z'
-                      /><circle cx='12' cy='10' r='2.5' /></svg>
-                    <div><span>Ваш регион</span><strong
-                        data-stage-location
-                      >Выберите регион</strong><small>Армения</small></div>
-                  </div>
-                  <div class='stage-home__glass stage-home__resource' data-stage-card>
-                    <svg aria-hidden='true' viewBox='0 0 24 24'><circle cx='12' cy='12' r='4' /><path
-                        d='M12 1v3m0 16v3M1 12h3m16 0h3M4 4l2 2m12 12 2 2M4 20l2-2M18 6l2-2'
-                      /></svg>
-                    <div><span>Солнечный ресурс</span><strong
-                        data-stage-resource
-                      >Рассчитаем с PVGIS после начала анализа</strong><small data-stage-source></small></div>
-                  </div>
-                </div>
-                <div class='stage-home__glass stage-home__results' data-stage-results hidden>
-                  <div><span>Годовая генерация</span><strong
-                      data-stage-count='annualProduction'
-                    ></strong><small>kWh/год</small></div>
-                  <div><span>Мощность системы</span><strong
-                      data-stage-count='systemSize'
-                    ></strong><small>kWp</small></div>
-                  <div><span>Панели</span><strong data-stage-count='panelCount'></strong></div>
-                </div>
-              </div>
-
-              <nav class='stage-home__progress' aria-label='Путь к вашей солнечной системе'>
-                <ol>
-                    <li data-solutions-step='1' class='is-active'>
-                        <a href='/ru/calculator/' aria-current='step'><b>01</b><span
-                          >Ваш дом</span></a>
-                    </li>
-
-                    <li data-solutions-step='2' class=''>
-                        <a href='/ru/calculator/refine/' aria-current='false'><b>02</b><span
-                          >Детали крыши</span></a>
-                    </li>
-
-                    <li data-solutions-step='3' class=''>
-                        <a href='/ru/calculator/pro/' aria-current='false'><b>03</b><span
-                          >Проект системы</span></a>
-                    </li>
-
-                    <li data-solutions-step='4' class=''>
-                        <span class='stage-home__future'><b>04</b><span
-                          >Ваша экономия</span></span>
-                    </li>
-
-                    <li data-solutions-step='5' class=''>
-                        <span class='stage-home__future'><b>05</b><span
-                          >Установка</span></span>
-                    </li>
-
-                    <li data-solutions-step='6' class=''>
-                        <span class='stage-home__future'><b>06</b><span
-                          >Поддержка</span></span>
-                    </li>
-                  </ol>
-              </nav>
-            </div>
-            <div
-              class='stage-home__lighting'
-              role='group'
-              aria-label='Предпросмотр освещения сцены'
-              data-stage-lighting
-              hidden
-            >
-              <button type='button' data-stage-light='day' aria-pressed='true'><span
-                  class='stage-home__thumbnail stage-home__thumbnail--day'
+                </article>
+                <article
+                  class='process-state '
+                  data-process-state='1'
+                  aria-labelledby='process-step-title-02'
                   aria-hidden='true'
-                ></span><span>День</span></button>
-              <button type='button' data-stage-light='night' aria-pressed='false'><span
-                  class='stage-home__thumbnail stage-home__thumbnail--night'
+                >
+                  <div class='process-state__copy' data-process-copy>
+                    <p class='process-state__eyebrow'><span aria-hidden='true'></span>Этап 2 из 6</p>
+                    <h3 id='process-step-title-02' class='process-state__title'>
+                      <span>Затем проверяем ваш дом на месте.</span>
+                    </h3>
+                    <p class='process-state__intro'>Инженер проверяет крышу, полезную площадь, ориентацию, затенение и состояние электрики.</p>
+
+
+                  </div>
+
+                  <div
+                    class='process-visual process-visual--inspection'
+                    data-process-visual='inspection'
+                    role='img'
+                    aria-label='Визуализация инженерного осмотра объекта'
+                  >
+                    <div class='process-visual__depth' aria-hidden='true'>
+                      <span class='process-visual__halo'></span>
+
+
+                        <div class='process-roof'>
+                          <span class='process-roof__plane'></span><span
+                            class='process-roof__ridge'
+                          ></span><span class='process-roof__scan'></span>
+                          <i style='--point-x:16%;--point-y:72%'></i><i
+                            style='--point-x:36%;--point-y:18%'
+                          ></i><i style='--point-x:84%;--point-y:30%'></i><i
+                            style='--point-x:70%;--point-y:86%'
+                          ></i>
+                        </div>
+                        <svg class='process-measure' viewBox='0 0 640 400'><path
+                            d='M103 297 230 78 537 122 449 344Z'
+                          ></path><path
+                            class='process-measure__dash'
+                            d='M93 318H459M559 112v246'
+                          ></path><text x='238' y='342'>m²</text><text x='570' y='240'>°</text></svg>
+
+
+
+
+                    </div>
+
+                      <ul class='process-metrics' role='list'>
+                          <li class='process-metric' data-process-card>
+                            <svg class='inline-icon' aria-hidden='true'><use
+                                href='/icons.svg#satellite'
+                              ></use></svg>
+                            <span>Площадь крыши</span>
+                            <strong
+                              data-process-value='roof-area'
+                              data-default='Проверяется при осмотре объекта'
+                            >Проверяется при осмотре объекта</strong>
+                            <small data-process-value-note='roof-area'></small>
+                          </li>
+                          <li class='process-metric' data-process-card>
+                            <svg class='inline-icon' aria-hidden='true'><use
+                                href='/icons.svg#sun'
+                              ></use></svg>
+                            <span>Ориентация</span>
+                            <strong
+                              data-process-value='orientation'
+                              data-default='Проверяется при осмотре объекта'
+                            >Проверяется при осмотре объекта</strong>
+                            <small data-process-value-note='orientation'></small>
+                          </li>
+                          <li class='process-metric' data-process-card>
+                            <svg class='inline-icon' aria-hidden='true'><use
+                                href='/icons.svg#arrow-right'
+                              ></use></svg>
+                            <span>Угол наклона</span>
+                            <strong
+                              data-process-value='tilt'
+                              data-default='Проверяется при осмотре объекта'
+                            >Проверяется при осмотре объекта</strong>
+                            <small data-process-value-note='tilt'></small>
+                          </li>
+                          <li class='process-metric' data-process-card>
+                            <svg class='inline-icon' aria-hidden='true'><use
+                                href='/icons.svg#sun'
+                              ></use></svg>
+                            <span>Затенение</span>
+                            <strong
+                              data-process-value='shading'
+                              data-default='Проверяется при осмотре объекта'
+                            >Проверяется при осмотре объекта</strong>
+                            <small data-process-value-note='shading'></small>
+                          </li>
+                          <li class='process-metric' data-process-card>
+                            <svg class='inline-icon' aria-hidden='true'><use
+                                href='/icons.svg#zap'
+                              ></use></svg>
+                            <span>Электрощит</span>
+                            <strong
+                              data-process-value='electrical-panel'
+                              data-default='Проверяется при осмотре объекта'
+                            >Проверяется при осмотре объекта</strong>
+                            <small data-process-value-note='electrical-panel'></small>
+                          </li>
+                      </ul>
+
+                  </div>
+                </article>
+                <article
+                  class='process-state '
+                  data-process-state='2'
+                  aria-labelledby='process-step-title-03'
                   aria-hidden='true'
-                ></span><span>Ночь</span></button>
+                >
+                  <div class='process-state__copy' data-process-copy>
+                    <p class='process-state__eyebrow'><span aria-hidden='true'></span>Этап 3 из 6</p>
+                    <h3 id='process-step-title-03' class='process-state__title'>
+                      <span>Ваша система обретает окончательную форму.</span>
+                    </h3>
+                    <p class='process-state__intro'>На основе проверенных замеров мы готовим схему размещения панелей, конфигурацию инвертора и финальный инженерный проект.</p>
+
+
+                  </div>
+
+                  <div
+                    class='process-visual process-visual--design'
+                    data-process-visual='design'
+                    role='img'
+                    aria-label='Визуализация финального проекта солнечной системы'
+                  >
+                    <div class='process-visual__depth' aria-hidden='true'>
+                      <span class='process-visual__halo'></span>
+
+
+
+                        <div class='process-system'>
+                          <div class='process-system__panels'><span
+                                style='--panel-i:0'
+                              ></span><span
+                                style='--panel-i:1'
+                              ></span><span
+                                style='--panel-i:2'
+                              ></span><span
+                                style='--panel-i:3'
+                              ></span><span
+                                style='--panel-i:4'
+                              ></span><span
+                                style='--panel-i:5'
+                              ></span><span
+                                style='--panel-i:6'
+                              ></span><span
+                                style='--panel-i:7'
+                              ></span><span
+                                style='--panel-i:8'
+                              ></span><span
+                                style='--panel-i:9'
+                              ></span><span
+                                style='--panel-i:10'
+                              ></span><span
+                                style='--panel-i:11'
+                              ></span></div>
+                          <div class='process-system__inverter'><svg class='inline-icon'><use
+                                href='/icons.svg#zap'
+                              ></use></svg><i></i><i></i><i></i></div>
+                          <svg class='process-system__flow' viewBox='0 0 640 420'><path
+                              d='M108 279C253 363 370 345 507 228'
+                            ></path><circle cx='108' cy='279' r='5'></circle><circle
+                              cx='507'
+                              cy='228'
+                              r='5'
+                            ></circle></svg>
+                        </div>
+
+
+
+                    </div>
+
+                      <ul class='process-metrics' role='list'>
+                          <li class='process-metric' data-process-card>
+                            <svg class='inline-icon' aria-hidden='true'><use
+                                href='/icons.svg#satellite'
+                              ></use></svg>
+                            <span>Схема панелей</span>
+                            <strong
+                              data-process-value='panel-layout'
+                              data-default='Подтверждается в финальном проекте'
+                            >Подтверждается в финальном проекте</strong>
+                            <small data-process-value-note='panel-layout'></small>
+                          </li>
+                          <li class='process-metric' data-process-card>
+                            <svg class='inline-icon' aria-hidden='true'><use
+                                href='/icons.svg#zap'
+                              ></use></svg>
+                            <span>Мощность системы</span>
+                            <strong
+                              data-process-value='system-capacity'
+                              data-default='Доступно после вашего анализа'
+                            >Доступно после вашего анализа</strong>
+                            <small data-process-value-note='system-capacity'></small>
+                          </li>
+                          <li class='process-metric' data-process-card>
+                            <svg class='inline-icon' aria-hidden='true'><use
+                                href='/icons.svg#sun'
+                              ></use></svg>
+                            <span>Количество панелей</span>
+                            <strong
+                              data-process-value='panel-count'
+                              data-default='Доступно после вашего анализа'
+                            >Доступно после вашего анализа</strong>
+                            <small data-process-value-note='panel-count'></small>
+                          </li>
+                          <li class='process-metric' data-process-card>
+                            <svg class='inline-icon' aria-hidden='true'><use
+                                href='/icons.svg#shield-check'
+                              ></use></svg>
+                            <span>Инвертор</span>
+                            <strong
+                              data-process-value='inverter'
+                              data-default='Подтверждается в финальном проекте'
+                            >Подтверждается в финальном проекте</strong>
+                            <small data-process-value-note='inverter'></small>
+                          </li>
+                          <li class='process-metric' data-process-card>
+                            <svg class='inline-icon' aria-hidden='true'><use
+                                href='/icons.svg#cycle'
+                              ></use></svg>
+                            <span>Ожидаемая генерация</span>
+                            <strong
+                              data-process-value='annual-generation'
+                              data-default='Доступно после вашего анализа'
+                            >Доступно после вашего анализа</strong>
+                            <small data-process-value-note='annual-generation'></small>
+                          </li>
+                      </ul>
+
+                  </div>
+                </article>
+                <article
+                  class='process-state '
+                  data-process-state='3'
+                  aria-labelledby='process-step-title-04'
+                  aria-hidden='true'
+                >
+                  <div class='process-state__copy' data-process-copy>
+                    <p class='process-state__eyebrow'><span aria-hidden='true'></span>Этап 4 из 6</p>
+                    <h3 id='process-step-title-04' class='process-state__title'>
+                      <span>До начала монтажа всё ясно.</span>
+                    </h3>
+                    <p class='process-state__intro'>До начала работ вы получаете финальный список оборудования, цену, объём работ, гарантии и условия проекта.</p>
+
+
+                  </div>
+
+                  <div
+                    class='process-visual process-visual--proposal'
+                    data-process-visual='proposal'
+                    role='img'
+                    aria-label='Визуализация предложения и договора'
+                  >
+                    <div class='process-visual__depth' aria-hidden='true'>
+                      <span class='process-visual__halo'></span>
+
+
+
+
+                        <div class='process-proposal'>
+                          <div class='process-proposal__sheet'><span
+                              class='process-proposal__brand'
+                            >YOURENERGY</span><strong>Понятное предложение и договор</strong><i></i><i></i><i></i><i></i><span
+                              class='process-proposal__seal'
+                            ><svg class='inline-icon'><use href='/icons.svg#check'></use></svg></span></div>
+                          <span class='process-proposal__card process-proposal__card--one'></span><span
+                            class='process-proposal__card process-proposal__card--two'
+                          ></span>
+                        </div>
+
+
+                    </div>
+
+                      <ul class='process-metrics' role='list'>
+                          <li class='process-metric' data-process-card>
+                            <svg class='inline-icon' aria-hidden='true'><use
+                                href='/icons.svg#sun'
+                              ></use></svg>
+                            <span>Оборудование</span>
+                            <strong
+                              data-process-value='equipment'
+                              data-default='Указывается в финальном предложении'
+                            >Указывается в финальном предложении</strong>
+                            <small data-process-value-note='equipment'></small>
+                          </li>
+                          <li class='process-metric' data-process-card>
+                            <svg class='inline-icon' aria-hidden='true'><use
+                                href='/icons.svg#zap'
+                              ></use></svg>
+                            <span>Мощность системы</span>
+                            <strong
+                              data-process-value='system-capacity'
+                              data-default='Подтверждается в финальном проекте'
+                            >Подтверждается в финальном проекте</strong>
+                            <small data-process-value-note='system-capacity'></small>
+                          </li>
+                          <li class='process-metric' data-process-card>
+                            <svg class='inline-icon' aria-hidden='true'><use
+                                href='/icons.svg#file'
+                              ></use></svg>
+                            <span>Объём работ</span>
+                            <strong
+                              data-process-value='project-scope'
+                              data-default='Указывается в финальном предложении'
+                            >Указывается в финальном предложении</strong>
+                            <small data-process-value-note='project-scope'></small>
+                          </li>
+                          <li class='process-metric' data-process-card>
+                            <svg class='inline-icon' aria-hidden='true'><use
+                                href='/icons.svg#calculator'
+                              ></use></svg>
+                            <span>Цена</span>
+                            <strong
+                              data-process-value='commercial-estimate'
+                              data-default='Предварительная оценка, если она доступна'
+                            >Предварительная оценка, если она доступна</strong>
+                            <small data-process-value-note='commercial-estimate'></small>
+                          </li>
+                          <li class='process-metric' data-process-card>
+                            <svg class='inline-icon' aria-hidden='true'><use
+                                href='/icons.svg#shield-check'
+                              ></use></svg>
+                            <span>Гарантия</span>
+                            <strong
+                              data-process-value='warranty'
+                              data-default='Указывается в финальном предложении'
+                            >Указывается в финальном предложении</strong>
+                            <small data-process-value-note='warranty'></small>
+                          </li>
+                          <li class='process-metric' data-process-card>
+                            <svg class='inline-icon' aria-hidden='true'><use
+                                href='/icons.svg#file'
+                              ></use></svg>
+                            <span>Условия</span>
+                            <strong
+                              data-process-value='terms'
+                              data-default='Указываются в финальном предложении'
+                            >Указываются в финальном предложении</strong>
+                            <small data-process-value-note='terms'></small>
+                          </li>
+                      </ul>
+
+                  </div>
+                </article>
+                <article
+                  class='process-state '
+                  data-process-state='4'
+                  aria-labelledby='process-step-title-05'
+                  aria-hidden='true'
+                >
+                  <div class='process-state__copy' data-process-copy>
+                    <p class='process-state__eyebrow'><span aria-hidden='true'></span>Этап 5 из 6</p>
+                    <h3 id='process-step-title-05' class='process-state__title'>
+                      <span>Монтируем.</span><span>Проверяем.</span><span>Запускаем.</span>
+                    </h3>
+                    <p class='process-state__intro'>Систему монтируют по утверждённому проекту, затем проверяют и вводят в эксплуатацию.</p>
+
+
+                  </div>
+
+                  <div
+                    class='process-visual process-visual--installation'
+                    data-process-visual='installation'
+                    role='img'
+                    aria-label='Визуализация монтажа и ввода в эксплуатацию'
+                  >
+                    <div class='process-visual__depth' aria-hidden='true'>
+                      <span class='process-visual__halo'></span>
+
+
+
+
+
+                        <div class='process-install'><div class='process-install__system'><span style='--install-i:0'></span><span style='--install-i:1'></span><span style='--install-i:2'></span><span style='--install-i:3'></span><span style='--install-i:4'></span><span style='--install-i:5'></span><span style='--install-i:6'></span><span style='--install-i:7'></span><span style='--install-i:8'></span></div><span
+                            class='process-install__pulse'
+                          ></span></div>
+
+                    </div>
+
+
+                      <ol class='process-installation-timeline'><li
+                            data-process-install-step
+                          ><b>01</b><span>Подготовка объекта</span></li><li
+                            data-process-install-step
+                          ><b>02</b><span>Монтаж конструкций</span></li><li
+                            data-process-install-step
+                          ><b>03</b><span>Панели</span></li><li
+                            data-process-install-step
+                          ><b>04</b><span>Инвертор и электрика</span></li><li
+                            data-process-install-step
+                          ><b>05</b><span>Проверка</span></li><li
+                            data-process-install-step
+                          ><b>06</b><span>Система запущена</span></li></ol>
+                  </div>
+                </article>
+                <article
+                  class='process-state '
+                  data-process-state='5'
+                  aria-labelledby='process-step-title-06'
+                  aria-hidden='true'
+                >
+                  <div class='process-state__copy' data-process-copy>
+                    <p class='process-state__eyebrow'><span aria-hidden='true'></span>Этап 6 из 6</p>
+                    <h3 id='process-step-title-06' class='process-state__title'>
+                      <span>Установка — это только начало.</span>
+                    </h3>
+                    <p class='process-state__intro'>После запуска сведения о системе, документы, гарантии и информация о поддержке остаются в одном месте.</p>
+
+
+                      <a class='process-state__cta' href='/ru/calculator/'>Начать анализ солнечной системы
+                        <svg class='inline-icon' aria-hidden='true'><use
+                            href='/icons.svg#arrow-right'
+                          ></use></svg>
+                      </a>
+                  </div>
+
+                  <div
+                    class='process-visual process-visual--support'
+                    data-process-visual='support'
+                    role='img'
+                    aria-label='Визуализация Solar Passport и поддержки'
+                  >
+                    <div class='process-visual__depth' aria-hidden='true'>
+                      <span class='process-visual__halo'></span>
+
+
+
+
+
+
+                        <div class='process-passport'>
+                          <span class='process-passport__back'></span>
+                          <div class='process-passport__cover'><svg class='inline-icon'><use
+                                href='/icons.svg#sun'
+                              ></use></svg><small>YOURENERGY</small><strong>Solar<br />Passport</strong><i
+                            ></i></div>
+                          <div class='process-passport__page'><span></span><span></span><span></span><svg
+                              class='inline-icon'
+                            ><use href='/icons.svg#shield-check'></use></svg></div>
+                        </div>
+                    </div>
+
+                      <ul class='process-metrics' role='list'>
+                          <li class='process-metric' data-process-card>
+                            <svg class='inline-icon' aria-hidden='true'><use
+                                href='/icons.svg#file'
+                              ></use></svg>
+                            <span>Solar Passport</span>
+                            <strong
+                              data-process-value='solar-passport'
+                              data-default='Паспорт вашей системы'
+                            >Паспорт вашей системы</strong>
+                            <small data-process-value-note='solar-passport'></small>
+                          </li>
+                          <li class='process-metric' data-process-card>
+                            <svg class='inline-icon' aria-hidden='true'><use
+                                href='/icons.svg#shield-check'
+                              ></use></svg>
+                            <span>Сведения о системе</span>
+                            <strong
+                              data-process-value='system-information'
+                              data-default='Хранятся с материалами проекта'
+                            >Хранятся с материалами проекта</strong>
+                            <small data-process-value-note='system-information'></small>
+                          </li>
+                          <li class='process-metric' data-process-card>
+                            <svg class='inline-icon' aria-hidden='true'><use
+                                href='/icons.svg#file'
+                              ></use></svg>
+                            <span>Документы</span>
+                            <strong
+                              data-process-value='documents'
+                              data-default='Хранятся с материалами проекта'
+                            >Хранятся с материалами проекта</strong>
+                            <small data-process-value-note='documents'></small>
+                          </li>
+                          <li class='process-metric' data-process-card>
+                            <svg class='inline-icon' aria-hidden='true'><use
+                                href='/icons.svg#shield'
+                              ></use></svg>
+                            <span>Гарантии</span>
+                            <strong
+                              data-process-value='warranties'
+                              data-default='Хранятся с материалами проекта'
+                            >Хранятся с материалами проекта</strong>
+                            <small data-process-value-note='warranties'></small>
+                          </li>
+                          <li class='process-metric' data-process-card>
+                            <svg class='inline-icon' aria-hidden='true'><use
+                                href='/icons.svg#cycle'
+                              ></use></svg>
+                            <span>Контекст генерации</span>
+                            <strong
+                              data-process-value='production-context'
+                              data-default='На основе доступных данных анализа'
+                            >На основе доступных данных анализа</strong>
+                            <small data-process-value-note='production-context'></small>
+                          </li>
+                          <li class='process-metric' data-process-card>
+                            <svg class='inline-icon' aria-hidden='true'><use
+                                href='/icons.svg#support'
+                              ></use></svg>
+                            <span>Поддержка</span>
+                            <strong
+                              data-process-value='support'
+                              data-default='Контакты и сервисная информация'
+                            >Контакты и сервисная информация</strong>
+                            <small data-process-value-note='support'></small>
+                          </li>
+                      </ul>
+
+                  </div>
+                </article>
             </div>
-            <p class='stage-home__signature' aria-hidden='true'>Светлое будущее Армении — вместе<svg
-                viewBox='0 0 160 36'
-              ><path d='M4 30Q73 0 151 9M50 25Q108 3 130 10' /></svg></p>
-            <div class='stage-home__bottom'>
-              <ul class='stage-home__trust'><li><svg
-                      aria-hidden='true'
-                      viewBox='0 0 24 24'
-                    ><path d='m13 2-9 12h7l-1 8 10-13h-7l1-7Z' /></svg><div><strong>Солнечные данные</strong><span
-                      >На основе PVGIS</span></div></li><li><svg
-                      aria-hidden='true'
-                      viewBox='0 0 24 24'
-                    ><path d='M12 2 3 6v6c0 5 9 10 9 10s9-5 9-10V6l-9-4Zm-4 10 3 3 5-6' /></svg><div><strong>Официальные тарифы</strong><span
-                      >Реестр Армении</span></div></li><li><svg
-                      aria-hidden='true'
-                      viewBox='0 0 24 24'
-                    ><path d='M4 21c0-8 5-13 14-17M5 17C-2 6 13 2 21 2c0 10-2 20-16 15Z' /></svg><div><strong>Прозрачный расчёт</strong><span
-                      >Источники и допущения</span></div></li></ul>
-              <a href='#faq' class='stage-home__scroll'><svg aria-hidden='true' viewBox='0 0 24 32'><rect
-                    x='4'
-                    y='1'
-                    width='16'
-                    height='27'
-                    rx='8'
-                  /><path d='M12 7v5' /></svg>Листайте дальше</a>
-            </div>
-            <p class='stage-home__caption'>СОЛНЕЧНЫЕ РЕШЕНИЯ ДЛЯ ДОМА И БИЗНЕСА</p>
+
+            <p class='process-stage__scroll-hint' aria-hidden='true'><span
+              ></span>Листайте дальше</p>
           </div>
         </div>      </section>
 
@@ -580,7 +1139,7 @@
         data-contact-label='+374 91 095 950'
       ><svg aria-hidden='true' focusable='false'><use href='/icons.svg#phone'></use></svg></a></nav>
     <script id='home-page-config' type='application/json'>{"locale":"ru-RU","hero":{"eyebrow":"СОЛНЕЧНАЯ ЭНЕРГИЯ ДЛЯ ВАШЕГО ДОМА","titleLead":"У вашей крыши","titleMiddle":"больше потенциала,","titleAccent":"чем вы думаете.","homeCopy":"За несколько шагов узнайте солнечный потенциал дома, предварительную мощность и бюджет, а с указанным тарифом — и экономику.","calculatorCopy":"Сначала вручную выберите и подтвердите точку, затем увидите её потенциал PVGIS. Данные крыши и потребления нужны только для подробного расчёта.","disclosure":"Предварительный результат требует подтверждения объекта и не заменяет осмотр, инженерный проект или коммерческое предложение.","addressLabel":"Адрес для инженера (необязательно)","addressPlaceholder":"Например, Ереван, Арабкир","addressHelp":"Адрес не геокодируется. Откройте карту, выберите точку вручную или введите координаты ниже.","analyze":"Открыть выбор точки","openCalculator":"Рассчитать для дома","uploadTitle":"Прикрепите счёт за электричество (необязательно)","uploadPrompt":"Выберите или перетащите файл","uploadHelp":"PDF, JPG или PNG до 10 МБ. Файл не отправляется на сервер и не считывается автоматически; внесите значения вручную.","removeFile":"Удалить файл","signatureLead":"Чистая энергия","signatureTail":"Светлее жизнь","dashboardAriaLabel":"Сводка солнечного расчёта","dashboardLocationSelected":"Выбранная точка","dashboardLocationRegional":"Региональная оценка","dashboardStatusPreliminary":"ПРЕДВАРИТЕЛЬНО","dashboardReady":"Результат текущей сессии","dashboardGeneration":"Годовая генерация","dashboardGenerationUnit":"kWh / год","dashboardCoverage":"Покрытие потребления","dashboardCoverageUnit":"%","dashboardSavings":"Экономия в год","dashboardSavingsUnit":"֏ / год","dashboardCo2":"Сокращение выбросов CO₂","dashboardCo2Unit":"т / год","dashboardNeedConsumption":"Добавьте потребление","dashboardNeedTariff":"Добавьте тариф","dashboardLoading":"Расчёт…","dashboardNotePreliminary":"Расчёт предварительный. Финальные параметры и стоимость подтверждает инженер.","dashboardExample":{"location":"Ереван, Армения","status":"ПРИМЕР РЕЗУЛЬТАТА","label":"Годовая генерация","annualGenerationKwh":8420,"annualGenerationDisplay":"8 420","monthlyGenerationKwh":[320,390,570,740,820,900,980,940,790,630,470,350],"monthlyBarPercent":[33,40,58,76,84,92,100,96,81,64,48,36],"co2Label":"Сокращение CO₂","treesLabel":"Эквивалент поглощения CO₂ деревьями","treesUnit":"деревьев / год","note":"Пример результата — рассчитайте дом, чтобы увидеть свои данные.","co2Tons":1.541,"co2Display":"1,5","treeEquivalent":25.683,"trees":26}}}</script>
-    <script id='journey-page-config' type='application/json'>{"locale":"ru-RU","journey":{"eyebrow":"ШАГ 1 ИЗ 6","title":"Начнём","titleLead":"с","titleAccent":"вашего дома","intro":"Укажите регион и потребление электричества — это отправная точка анализа вашей солнечной системы.","region":"Регион","chooseRegion":"Выберите регион","consumption":"Электроэнергия","bill":"Счёт за месяц","usage":"kWh за месяц","amountBill":"Средний счёт за месяц","amountUsage":"Среднее потребление за месяц","billHelp":"Тариф на электричество вы подтвердите в калькуляторе.","usageHelp":"Укажите месячное потребление из вашего счёта.","submit":"Начать мой анализ","continue":"Продолжить","full":"Открыть полный калькулятор","country":"Армения","location":"Ваш регион","resource":"Солнечный ресурс","pending":"Рассчитаем с PVGIS после начала анализа","source":"Источник","production":"Годовая генерация","capacity":"Мощность системы","panels":"Панели","perYear":"kWh/год","lighting":"Предпросмотр освещения сцены","day":"День","night":"Ночь","signature":"Светлое будущее Армении — вместе","caption":"СОЛНЕЧНЫЕ РЕШЕНИЯ ДЛЯ ДОМА И БИЗНЕСА","scroll":"Листайте дальше","progress":"Путь к вашей солнечной системе","steps":[{"number":1,"displayNumber":"01","label":"Ваш дом","active":true,"stateClass":"is-active","current":"step","href":"/ru/calculator/"},{"number":2,"displayNumber":"02","label":"Детали крыши","active":false,"stateClass":"","current":"false","href":"/ru/calculator/refine/"},{"number":3,"displayNumber":"03","label":"Проект системы","active":false,"stateClass":"","current":"false","href":"/ru/calculator/pro/"},{"number":4,"displayNumber":"04","label":"Ваша экономия","active":false,"stateClass":"","current":"false","href":null},{"number":5,"displayNumber":"05","label":"Установка","active":false,"stateClass":"","current":"false","href":null},{"number":6,"displayNumber":"06","label":"Поддержка","active":false,"stateClass":"","current":"false","href":null}],"trust":[{"title":"Солнечные данные","note":"На основе PVGIS","icon":"m13 2-9 12h7l-1 8 10-13h-7l1-7Z"},{"title":"Официальные тарифы","note":"Реестр Армении","icon":"M12 2 3 6v6c0 5 9 10 9 10s9-5 9-10V6l-9-4Zm-4 10 3 3 5-6"},{"title":"Прозрачный расчёт","note":"Источники и допущения","icon":"M4 21c0-8 5-13 14-17M5 17C-2 6 13 2 21 2c0 10-2 20-16 15Z"}],"regions":[{"id":"yerevan","label":"Ереван"},{"id":"aragatsotn","label":"Арагацотн"},{"id":"ararat","label":"Арарат"},{"id":"armavir","label":"Армавир"},{"id":"gegharkunik","label":"Гегаркуник"},{"id":"kotayk","label":"Котайк"},{"id":"lori","label":"Лори"},{"id":"shirak","label":"Ширак"},{"id":"syunik","label":"Сюник"},{"id":"tavush","label":"Тавуш"},{"id":"vayots-dzor","label":"Вайоц-Дзор"}]}}</script>
+    <script id='process-page-config' type='application/json'>{"locale":"ru-RU","processStory":{"title":"Ваш путь к солнечной системе","progressLabel":"Этапы проекта солнечной системы","stepLabel":"Этап {current} из {total}","previousStepLabel":"Предыдущий этап","nextStepLabel":"Следующий этап","scrollLabel":"Листайте дальше","availableAfterAnalysis":"Доступно после вашего анализа","addInCalculator":"Добавьте данные в калькуляторе","verifiedOnSite":"Проверяется при осмотре объекта","confirmedInDesign":"Подтверждается в финальном проекте","includedInProposal":"Указывается в финальном предложении","preliminaryEstimate":"Предварительная оценка, если она доступна","form":{"region":"Регион","chooseRegion":"Выберите регион","consumption":"Электроэнергия","bill":"Счёт за месяц","usage":"kWh за месяц","amountBill":"Средний счёт за месяц","amountUsage":"Среднее потребление за месяц","billHelp":"Тариф на электричество вы подтвердите в калькуляторе.","usageHelp":"Укажите месячное потребление из вашего счёта.","continue":"Продолжить","submit":"Начать мой анализ","full":"Открыть полный калькулятор"},"data":{"source":"Источник","preliminary":"Предварительно","upTo":"до","passportReady":"Создан для этой сессии","country":"Армения","billUnit":"AMD/месяц","usageUnit":"kWh/месяц"},"steps":[{"number":"01","nav":"Анализ вашей системы","visual":"analysis","visualLabel":"Визуализация анализа солнечной системы","headline":"Начинаем с цифр.","copy":"Ваше потребление, местоположение и доступные данные о солнечном ресурсе становятся понятной отправной точкой для вашей системы.","cards":[{"icon":"map-pin","label":"Местоположение","value":"Добавьте данные в калькуляторе","data":"location"},{"icon":"zap","label":"Потребление","value":"Добавьте данные в калькуляторе","data":"consumption"},{"icon":"sun","label":"Солнечный ресурс","value":"Доступно после вашего анализа","data":"solar-resource"},{"icon":"calculator","label":"Рекомендованная система","value":"Доступно после вашего анализа","data":"system-capacity"},{"icon":"cycle","label":"Ожидаемая генерация","value":"Доступно после вашего анализа","data":"annual-generation"}],"cta":"Начать мой анализ","index":0,"headlineLines":["Начинаем с цифр."],"stepLabel":"Этап 1 из 6","stateClass":"is-active","ariaHidden":"false","progressClass":"is-active","isAnalysis":true,"isInspection":false,"isDesign":false,"isProposal":false,"isInstallation":false,"isSupport":false,"designPanels":null,"installPanels":null},{"number":"02","nav":"Выезд инженера","visual":"inspection","visualLabel":"Визуализация инженерного осмотра объекта","headline":"Затем проверяем ваш дом на месте.","copy":"Инженер проверяет крышу, полезную площадь, ориентацию, затенение и состояние электрики.","cards":[{"icon":"satellite","label":"Площадь крыши","value":"Проверяется при осмотре объекта","data":"roof-area"},{"icon":"sun","label":"Ориентация","value":"Проверяется при осмотре объекта","data":"orientation"},{"icon":"arrow-right","label":"Угол наклона","value":"Проверяется при осмотре объекта","data":"tilt"},{"icon":"sun","label":"Затенение","value":"Проверяется при осмотре объекта","data":"shading"},{"icon":"zap","label":"Электрощит","value":"Проверяется при осмотре объекта","data":"electrical-panel"}],"index":1,"headlineLines":["Затем проверяем ваш дом на месте."],"stepLabel":"Этап 2 из 6","stateClass":"","ariaHidden":"true","progressClass":"is-future","isAnalysis":false,"isInspection":true,"isDesign":false,"isProposal":false,"isInstallation":false,"isSupport":false,"designPanels":null,"installPanels":null},{"number":"03","nav":"Финальный проект системы","visual":"design","visualLabel":"Визуализация финального проекта солнечной системы","headline":"Ваша система обретает окончательную форму.","copy":"На основе проверенных замеров мы готовим схему размещения панелей, конфигурацию инвертора и финальный инженерный проект.","cards":[{"icon":"satellite","label":"Схема панелей","value":"Подтверждается в финальном проекте","data":"panel-layout"},{"icon":"zap","label":"Мощность системы","value":"Доступно после вашего анализа","data":"system-capacity"},{"icon":"sun","label":"Количество панелей","value":"Доступно после вашего анализа","data":"panel-count"},{"icon":"shield-check","label":"Инвертор","value":"Подтверждается в финальном проекте","data":"inverter"},{"icon":"cycle","label":"Ожидаемая генерация","value":"Доступно после вашего анализа","data":"annual-generation"}],"index":2,"headlineLines":["Ваша система обретает окончательную форму."],"stepLabel":"Этап 3 из 6","stateClass":"","ariaHidden":"true","progressClass":"is-future","isAnalysis":false,"isInspection":false,"isDesign":true,"isProposal":false,"isInstallation":false,"isSupport":false,"designPanels":[0,1,2,3,4,5,6,7,8,9,10,11],"installPanels":null},{"number":"04","nav":"Понятное предложение и договор","visual":"proposal","visualLabel":"Визуализация предложения и договора","headline":"До начала монтажа всё ясно.","copy":"До начала работ вы получаете финальный список оборудования, цену, объём работ, гарантии и условия проекта.","cards":[{"icon":"sun","label":"Оборудование","value":"Указывается в финальном предложении","data":"equipment"},{"icon":"zap","label":"Мощность системы","value":"Подтверждается в финальном проекте","data":"system-capacity"},{"icon":"file","label":"Объём работ","value":"Указывается в финальном предложении","data":"project-scope"},{"icon":"calculator","label":"Цена","value":"Предварительная оценка, если она доступна","data":"commercial-estimate"},{"icon":"shield-check","label":"Гарантия","value":"Указывается в финальном предложении","data":"warranty"},{"icon":"file","label":"Условия","value":"Указываются в финальном предложении","data":"terms"}],"index":3,"headlineLines":["До начала монтажа всё ясно."],"stepLabel":"Этап 4 из 6","stateClass":"","ariaHidden":"true","progressClass":"is-future","isAnalysis":false,"isInspection":false,"isDesign":false,"isProposal":true,"isInstallation":false,"isSupport":false,"designPanels":null,"installPanels":null},{"number":"05","nav":"Монтаж и ввод в эксплуатацию","visual":"installation","visualLabel":"Визуализация монтажа и ввода в эксплуатацию","headline":"Монтируем.\nПроверяем.\nЗапускаем.","copy":"Систему монтируют по утверждённому проекту, затем проверяют и вводят в эксплуатацию.","timeline":[{"number":"01","label":"Подготовка объекта"},{"number":"02","label":"Монтаж конструкций"},{"number":"03","label":"Панели"},{"number":"04","label":"Инвертор и электрика"},{"number":"05","label":"Проверка"},{"number":"06","label":"Система запущена"}],"index":4,"headlineLines":["Монтируем.","Проверяем.","Запускаем."],"stepLabel":"Этап 5 из 6","stateClass":"","ariaHidden":"true","progressClass":"is-future","isAnalysis":false,"isInspection":false,"isDesign":false,"isProposal":false,"isInstallation":true,"isSupport":false,"designPanels":null,"installPanels":[0,1,2,3,4,5,6,7,8]},{"number":"06","nav":"Solar Passport и поддержка","visual":"support","visualLabel":"Визуализация Solar Passport и поддержки","headline":"Установка — это только начало.","copy":"После запуска сведения о системе, документы, гарантии и информация о поддержке остаются в одном месте.","cards":[{"icon":"file","label":"Solar Passport","value":"Паспорт вашей системы","data":"solar-passport"},{"icon":"shield-check","label":"Сведения о системе","value":"Хранятся с материалами проекта","data":"system-information"},{"icon":"file","label":"Документы","value":"Хранятся с материалами проекта","data":"documents"},{"icon":"shield","label":"Гарантии","value":"Хранятся с материалами проекта","data":"warranties"},{"icon":"cycle","label":"Контекст генерации","value":"На основе доступных данных анализа","data":"production-context"},{"icon":"support","label":"Поддержка","value":"Контакты и сервисная информация","data":"support"}],"cta":"Начать анализ солнечной системы","index":5,"headlineLines":["Установка — это только начало."],"stepLabel":"Этап 6 из 6","stateClass":"","ariaHidden":"true","progressClass":"is-future","isAnalysis":false,"isInspection":false,"isDesign":false,"isProposal":false,"isInstallation":false,"isSupport":true,"designPanels":null,"installPanels":null}],"regions":[{"id":"yerevan","label":"Ереван"},{"id":"aragatsotn","label":"Арагацотн"},{"id":"ararat","label":"Арарат"},{"id":"armavir","label":"Армавир"},{"id":"gegharkunik","label":"Гегаркуник"},{"id":"kotayk","label":"Котайк"},{"id":"lori","label":"Лори"},{"id":"shirak","label":"Ширак"},{"id":"syunik","label":"Сюник"},{"id":"tavush","label":"Тавуш"},{"id":"vayots-dzor","label":"Вайоц-Дзор"}]}}</script>
     <script type='module' src='/src/main.js'></script>
   </body>
 </html>

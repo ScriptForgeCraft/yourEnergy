@@ -292,226 +292,785 @@
       </section>
 
       <section
-        class='process process-journey solutions section'
         id='process'
+        class='process process-journey section'
+        data-process-story
         aria-labelledby='process-title'
-        data-solutions-story
       >
         <h2 id='process-title' class='visually-hidden'>Your solar journey</h2>
-        <div class='stage-home' id='solutions' data-solutions-home>
-          <div class='stage-home__frame solutions-story__step is-active' data-solutions-scene='1'>
-            <div class='stage-home__backdrop' aria-hidden='true' data-stage-pointer>
-              <picture class='stage-home__art' data-solutions-visual='home'>
-                <source
-                  type='image/avif'
-                  srcset='/images/solutions-home-640.avif 640w, /images/solutions-home-1024.avif 1024w, /images/solutions-home-1600.avif 1600w'
-                  sizes='100vw'
-                />
-                <source
-                  type='image/webp'
-                  srcset='/images/solutions-home-640.webp 640w, /images/solutions-home-1024.webp 1024w, /images/solutions-home-1600.webp 1600w'
-                  sizes='100vw'
-                />
-                <img
-                  src='/images/solutions-home-1600.jpg'
-                  width='1600'
-                  height='900'
-                  alt=''
-                  loading='lazy'
-                  decoding='async'
-                />
-              </picture>
-              <div class='stage-home__night-wash'></div>
-            </div>
-            <div class='stage-home__scrim' aria-hidden='true'></div>
-            <div class='stage-home__body'>
-              <div class='stage-home__copy'>
-                <p class='stage-home__eyebrow' data-stage-reveal>STEP 1 OF 6</p>
-                <h3 class='stage-home__title'><span data-stage-reveal>Let’s start</span>
-                  <span data-stage-reveal>with <em>your home</em></span></h3>
-                <p class='stage-home__intro' data-stage-reveal>Enter your location and electricity use to create the starting point for your solar analysis.</p>
-                <form
-                  class='stage-home__form'
-                  data-stage-form
-                  action='/en/calculator/'
-                  method='get'
-                  data-stage-reveal
+        <div class='process-stage' data-process-stage data-process-active='1'>
+          <div class='process-stage__frame'>
+            <div class='process-stage__ambient' aria-hidden='true'><span></span><span></span><span
+              ></span></div>
+
+            <nav class='process-progress' aria-label='Your solar project journey'>
+              <span class='process-progress__track' aria-hidden='true'><i
+                  data-process-progress-fill
+                ></i></span>
+              <ol>
+                  <li class='is-active' data-process-progress-step='0'>
+                    <span class='process-progress__node' aria-hidden='true'><b>01</b><svg><use
+                          href='/icons.svg#check'
+                        ></use></svg></span>
+                    <span>Your Solar Analysis</span>
+                  </li>
+                  <li class='is-future' data-process-progress-step='1'>
+                    <span class='process-progress__node' aria-hidden='true'><b>02</b><svg><use
+                          href='/icons.svg#check'
+                        ></use></svg></span>
+                    <span>Engineer Site Visit</span>
+                  </li>
+                  <li class='is-future' data-process-progress-step='2'>
+                    <span class='process-progress__node' aria-hidden='true'><b>03</b><svg><use
+                          href='/icons.svg#check'
+                        ></use></svg></span>
+                    <span>Final System Design</span>
+                  </li>
+                  <li class='is-future' data-process-progress-step='3'>
+                    <span class='process-progress__node' aria-hidden='true'><b>04</b><svg><use
+                          href='/icons.svg#check'
+                        ></use></svg></span>
+                    <span>Clear Proposal &amp; Agreement</span>
+                  </li>
+                  <li class='is-future' data-process-progress-step='4'>
+                    <span class='process-progress__node' aria-hidden='true'><b>05</b><svg><use
+                          href='/icons.svg#check'
+                        ></use></svg></span>
+                    <span>Installation &amp; Commissioning</span>
+                  </li>
+                  <li class='is-future' data-process-progress-step='5'>
+                    <span class='process-progress__node' aria-hidden='true'><b>06</b><svg><use
+                          href='/icons.svg#check'
+                        ></use></svg></span>
+                    <span>Solar Passport &amp; Support</span>
+                  </li>
+              </ol>
+            </nav>
+
+            <div class='process-stage__states'>
+                <article
+                  class='process-state is-active'
+                  data-process-state='0'
+                  aria-labelledby='process-step-title-01'
+                  aria-hidden='false'
                 >
-                  <label class='visually-hidden' for='stage-region'>Region</label>
-                  <div class='stage-home__select'>
-                    <svg aria-hidden='true' viewBox='0 0 24 24'><path
-                        d='M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 1 1 16 0Z'
-                      /><circle cx='12' cy='10' r='2.5' /></svg>
-                    <select id='stage-region' name='region' required data-stage-region>
-                      <option value=''>Choose your region</option>
-                      <option value='yerevan'>Yerevan</option><option value='aragatsotn'>Aragatsotn</option><option value='ararat'>Ararat</option><option value='armavir'>Armavir</option><option value='gegharkunik'>Gegharkunik</option><option value='kotayk'>Kotayk</option><option value='lori'>Lori</option><option value='shirak'>Shirak</option><option value='syunik'>Syunik</option><option value='tavush'>Tavush</option><option value='vayots-dzor'>Vayots Dzor</option>
-                    </select>
+                  <div class='process-state__copy' data-process-copy>
+                    <p class='process-state__eyebrow'><span aria-hidden='true'></span>Step 1 of 6</p>
+                    <h3 id='process-step-title-01' class='process-state__title'>
+                      <span>We start with the numbers.</span>
+                    </h3>
+                    <p class='process-state__intro'>Your consumption, location and available solar data become a clear starting point for your system.</p>
+
+                      <form
+                        class='process-form'
+                        data-process-form
+                        action='/en/calculator/'
+                        method='get'
+                      >
+                        <label
+                          class='visually-hidden'
+                          for='process-region'
+                        >Region</label>
+                        <div class='process-form__select'>
+                          <svg class='inline-icon' aria-hidden='true'><use
+                              href='/icons.svg#map-pin'
+                            ></use></svg>
+                          <select id='process-region' name='region' required data-process-region>
+                            <option value=''>Choose your region</option>
+                            <option
+                                value='yerevan'
+                              >Yerevan</option><option
+                                value='aragatsotn'
+                              >Aragatsotn</option><option
+                                value='ararat'
+                              >Ararat</option><option
+                                value='armavir'
+                              >Armavir</option><option
+                                value='gegharkunik'
+                              >Gegharkunik</option><option
+                                value='kotayk'
+                              >Kotayk</option><option
+                                value='lori'
+                              >Lori</option><option
+                                value='shirak'
+                              >Shirak</option><option
+                                value='syunik'
+                              >Syunik</option><option
+                                value='tavush'
+                              >Tavush</option><option
+                                value='vayots-dzor'
+                              >Vayots Dzor</option>
+                          </select>
+                        </div>
+                        <fieldset class='process-form__modes' data-process-consumption>
+                          <legend class='visually-hidden'>Electricity use</legend>
+                          <label><input type='radio' name='mode' value='bill' checked /><span
+                            >Monthly bill</span></label>
+                          <label><input type='radio' name='mode' value='usage' /><span
+                            >Monthly kWh</span></label>
+                        </fieldset>
+                        <label
+                          class='process-form__amount-label'
+                          for='process-amount'
+                          data-process-amount-label
+                          data-process-consumption
+                        >Average monthly bill</label>
+                        <div class='process-form__amount' data-process-consumption>
+                          <input
+                            id='process-amount'
+                            name='amount'
+                            type='number'
+                            inputmode='decimal'
+                            min='0.01'
+                            step='any'
+                            required
+                            aria-describedby='process-input-help'
+                            data-process-amount
+                          />
+                          <span data-process-unit>AMD</span>
+                        </div>
+                        <p
+                          class='process-form__help'
+                          id='process-input-help'
+                          data-process-help
+                          data-process-consumption
+                        >You’ll confirm your electricity tariff in the calculator.</p>
+                        <button type='submit' class='process-form__submit'>
+                          <span data-process-submit-label>Start my analysis</span>
+                          <svg class='inline-icon' aria-hidden='true'><use
+                              href='/icons.svg#arrow-right'
+                            ></use></svg>
+                        </button>
+                        <a
+                          class='process-form__full'
+                          href='/en/calculator/'
+                        >Open full calculator <span aria-hidden='true'>↗</span></a>
+                      </form>
+
                   </div>
-                  <fieldset class='stage-home__modes' data-stage-consumption>
-                    <legend class='visually-hidden'>Electricity use</legend>
-                    <label><input type='radio' name='mode' value='bill' checked /><span
-                      >Monthly bill</span></label>
-                    <label><input type='radio' name='mode' value='usage' /><span
-                      >Monthly kWh</span></label>
-                  </fieldset>
-                  <label
-                    for='stage-amount'
-                    data-stage-amount-label
-                    data-stage-consumption
-                  >Average monthly bill</label>
-                  <div class='stage-home__amount' data-stage-consumption>
-                    <input
-                      id='stage-amount'
-                      name='amount'
-                      type='number'
-                      inputmode='decimal'
-                      min='0.01'
-                      step='any'
-                      required
-                      aria-describedby='stage-input-help'
-                      data-stage-amount
-                    />
-                    <span data-stage-unit>AMD</span>
+
+                  <div
+                    class='process-visual process-visual--analysis'
+                    data-process-visual='analysis'
+                    role='img'
+                    aria-label='Solar analysis visual placeholder'
+                  >
+                    <div class='process-visual__depth' aria-hidden='true'>
+                      <span class='process-visual__halo'></span>
+
+                        <svg class='process-visual__solar-arc' viewBox='0 0 700 470' data-process-solar-arc>
+                          <path d='M76 354 Q350 -120 624 354' data-process-solar-path></path>
+                          <path class='process-visual__horizon' d='M76 354H624'></path>
+                          <text x='55' y='383'>W</text><text x='342' y='70'>N</text><text
+                            x='632'
+                            y='383'
+                          >E</text>
+                          <g data-process-sun transform='translate(350 105)'>
+                            <circle class='process-visual__sun-halo' r='31'></circle>
+                            <circle class='process-visual__sun-core' r='13'></circle>
+                            <path
+                              d='M0-25v-9M0 25v9M25 0h9M-25 0h-9M18-18l7-7M-18 18l-7 7M18 18l7 7M-18-18l-7-7'
+                            ></path>
+                          </g>
+                        </svg>
+                        <div class='process-house'><span class='process-house__roof'></span><span
+                            class='process-house__wall'
+                          ></span><span class='process-house__window'></span><span
+                            class='process-house__panel'
+                          ></span></div>
+                        <span class='process-visual__terrain process-visual__terrain--one'></span><span
+                          class='process-visual__terrain process-visual__terrain--two'
+                        ></span>
+
+
+
+
+
+                    </div>
+
+                      <ul class='process-metrics' role='list'>
+                          <li class='process-metric' data-process-card>
+                            <svg class='inline-icon' aria-hidden='true'><use
+                                href='/icons.svg#map-pin'
+                              ></use></svg>
+                            <span>Location</span>
+                            <strong
+                              data-process-value='location'
+                              data-default='Add this in the calculator'
+                            >Add this in the calculator</strong>
+                            <small data-process-value-note='location'></small>
+                          </li>
+                          <li class='process-metric' data-process-card>
+                            <svg class='inline-icon' aria-hidden='true'><use
+                                href='/icons.svg#zap'
+                              ></use></svg>
+                            <span>Consumption</span>
+                            <strong
+                              data-process-value='consumption'
+                              data-default='Add this in the calculator'
+                            >Add this in the calculator</strong>
+                            <small data-process-value-note='consumption'></small>
+                          </li>
+                          <li class='process-metric' data-process-card>
+                            <svg class='inline-icon' aria-hidden='true'><use
+                                href='/icons.svg#sun'
+                              ></use></svg>
+                            <span>Solar resource</span>
+                            <strong
+                              data-process-value='solar-resource'
+                              data-default='Available after your analysis'
+                            >Available after your analysis</strong>
+                            <small data-process-value-note='solar-resource'></small>
+                          </li>
+                          <li class='process-metric' data-process-card>
+                            <svg class='inline-icon' aria-hidden='true'><use
+                                href='/icons.svg#calculator'
+                              ></use></svg>
+                            <span>Recommended system</span>
+                            <strong
+                              data-process-value='system-capacity'
+                              data-default='Available after your analysis'
+                            >Available after your analysis</strong>
+                            <small data-process-value-note='system-capacity'></small>
+                          </li>
+                          <li class='process-metric' data-process-card>
+                            <svg class='inline-icon' aria-hidden='true'><use
+                                href='/icons.svg#cycle'
+                              ></use></svg>
+                            <span>Expected generation</span>
+                            <strong
+                              data-process-value='annual-generation'
+                              data-default='Available after your analysis'
+                            >Available after your analysis</strong>
+                            <small data-process-value-note='annual-generation'></small>
+                          </li>
+                      </ul>
+
                   </div>
-                  <p
-                    class='stage-home__help'
-                    id='stage-input-help'
-                    data-stage-help
-                    data-stage-consumption
-                  >You’ll confirm your electricity tariff in the calculator.</p>
-                  <button type='submit' class='stage-home__submit'><span
-                      data-stage-submit-label
-                    >Start my analysis</span>
-                    <span aria-hidden='true'>→</span></button>
-                  <a class='stage-home__full' href='/en/calculator/'>Open full calculator
-                    <span aria-hidden='true'>↗</span></a>
-                </form>
-              </div>
-
-              <div class='stage-home__visual'>
-                <div class='stage-home__pointer'>
-                  <svg class='stage-home__arc' viewBox='0 0 700 500' aria-hidden='true' data-stage-arc>
-                    <path
-                      class='stage-home__arc-line'
-                      d='M 70 365 Q 350 -140 630 365'
-                      data-stage-arc-path
-                    />
-                    <path class='stage-home__arc-base' d='M70 365H630' />
-                    <circle cx='70' cy='365' r='4' /><circle cx='630' cy='365' r='4' />
-                    <text x='53' y='392'>W</text><text x='343' y='92'>N</text><text x='634' y='392'>E</text>
-                    <g data-stage-sun transform='translate(322 115)'>
-                      <circle class='stage-home__sun-halo' r='29' />
-                      <circle class='stage-home__sun-core' r='12' />
-                      <path
-                        class='stage-home__sun-rays'
-                        d='M0 -23v-8M0 23v8M23 0h8M-23 0h-8M16 -16l6 -6M-16 16l-6 6M16 16l6 6M-16 -16l-6 -6'
-                      />
-                    </g>
-                  </svg>
-                  <div class='stage-home__glass stage-home__location' data-stage-card>
-                    <svg aria-hidden='true' viewBox='0 0 24 24'><path
-                        d='M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 1 1 16 0Z'
-                      /><circle cx='12' cy='10' r='2.5' /></svg>
-                    <div><span>Your location</span><strong
-                        data-stage-location
-                      >Choose your region</strong><small>Armenia</small></div>
-                  </div>
-                  <div class='stage-home__glass stage-home__resource' data-stage-card>
-                    <svg aria-hidden='true' viewBox='0 0 24 24'><circle cx='12' cy='12' r='4' /><path
-                        d='M12 1v3m0 16v3M1 12h3m16 0h3M4 4l2 2m12 12 2 2M4 20l2-2M18 6l2-2'
-                      /></svg>
-                    <div><span>Solar resource</span><strong
-                        data-stage-resource
-                      >Calculated with PVGIS after you start</strong><small data-stage-source></small></div>
-                  </div>
-                </div>
-                <div class='stage-home__glass stage-home__results' data-stage-results hidden>
-                  <div><span>Annual production</span><strong
-                      data-stage-count='annualProduction'
-                    ></strong><small>kWh/year</small></div>
-                  <div><span>System capacity</span><strong
-                      data-stage-count='systemSize'
-                    ></strong><small>kWp</small></div>
-                  <div><span>Panels</span><strong data-stage-count='panelCount'></strong></div>
-                </div>
-              </div>
-
-              <nav class='stage-home__progress' aria-label='Your solar journey'>
-                <ol>
-                    <li data-solutions-step='1' class='is-active'>
-                        <a href='/en/calculator/' aria-current='step'><b>01</b><span
-                          >Your Home</span></a>
-                    </li>
-
-                    <li data-solutions-step='2' class=''>
-                        <a href='/en/calculator/refine/' aria-current='false'><b>02</b><span
-                          >Roof Details</span></a>
-                    </li>
-
-                    <li data-solutions-step='3' class=''>
-                        <a href='/en/calculator/pro/' aria-current='false'><b>03</b><span
-                          >System Design</span></a>
-                    </li>
-
-                    <li data-solutions-step='4' class=''>
-                        <span class='stage-home__future'><b>04</b><span
-                          >Your Savings</span></span>
-                    </li>
-
-                    <li data-solutions-step='5' class=''>
-                        <span class='stage-home__future'><b>05</b><span
-                          >Installation</span></span>
-                    </li>
-
-                    <li data-solutions-step='6' class=''>
-                        <span class='stage-home__future'><b>06</b><span
-                          >Lifetime Support</span></span>
-                    </li>
-                  </ol>
-              </nav>
-            </div>
-            <div
-              class='stage-home__lighting'
-              role='group'
-              aria-label='Scene lighting preview'
-              data-stage-lighting
-              hidden
-            >
-              <button type='button' data-stage-light='day' aria-pressed='true'><span
-                  class='stage-home__thumbnail stage-home__thumbnail--day'
+                </article>
+                <article
+                  class='process-state '
+                  data-process-state='1'
+                  aria-labelledby='process-step-title-02'
                   aria-hidden='true'
-                ></span><span>Day</span></button>
-              <button type='button' data-stage-light='night' aria-pressed='false'><span
-                  class='stage-home__thumbnail stage-home__thumbnail--night'
+                >
+                  <div class='process-state__copy' data-process-copy>
+                    <p class='process-state__eyebrow'><span aria-hidden='true'></span>Step 2 of 6</p>
+                    <h3 id='process-step-title-02' class='process-state__title'>
+                      <span>Then we verify the real home.</span>
+                    </h3>
+                    <p class='process-state__intro'>An engineer checks the roof, usable area, orientation, shading and electrical conditions.</p>
+
+
+                  </div>
+
+                  <div
+                    class='process-visual process-visual--inspection'
+                    data-process-visual='inspection'
+                    role='img'
+                    aria-label='On-site engineering inspection placeholder'
+                  >
+                    <div class='process-visual__depth' aria-hidden='true'>
+                      <span class='process-visual__halo'></span>
+
+
+                        <div class='process-roof'>
+                          <span class='process-roof__plane'></span><span
+                            class='process-roof__ridge'
+                          ></span><span class='process-roof__scan'></span>
+                          <i style='--point-x:16%;--point-y:72%'></i><i
+                            style='--point-x:36%;--point-y:18%'
+                          ></i><i style='--point-x:84%;--point-y:30%'></i><i
+                            style='--point-x:70%;--point-y:86%'
+                          ></i>
+                        </div>
+                        <svg class='process-measure' viewBox='0 0 640 400'><path
+                            d='M103 297 230 78 537 122 449 344Z'
+                          ></path><path
+                            class='process-measure__dash'
+                            d='M93 318H459M559 112v246'
+                          ></path><text x='238' y='342'>m²</text><text x='570' y='240'>°</text></svg>
+
+
+
+
+                    </div>
+
+                      <ul class='process-metrics' role='list'>
+                          <li class='process-metric' data-process-card>
+                            <svg class='inline-icon' aria-hidden='true'><use
+                                href='/icons.svg#satellite'
+                              ></use></svg>
+                            <span>Roof area</span>
+                            <strong
+                              data-process-value='roof-area'
+                              data-default='Verified during the site visit'
+                            >Verified during the site visit</strong>
+                            <small data-process-value-note='roof-area'></small>
+                          </li>
+                          <li class='process-metric' data-process-card>
+                            <svg class='inline-icon' aria-hidden='true'><use
+                                href='/icons.svg#sun'
+                              ></use></svg>
+                            <span>Orientation</span>
+                            <strong
+                              data-process-value='orientation'
+                              data-default='Verified during the site visit'
+                            >Verified during the site visit</strong>
+                            <small data-process-value-note='orientation'></small>
+                          </li>
+                          <li class='process-metric' data-process-card>
+                            <svg class='inline-icon' aria-hidden='true'><use
+                                href='/icons.svg#arrow-right'
+                              ></use></svg>
+                            <span>Tilt</span>
+                            <strong
+                              data-process-value='tilt'
+                              data-default='Verified during the site visit'
+                            >Verified during the site visit</strong>
+                            <small data-process-value-note='tilt'></small>
+                          </li>
+                          <li class='process-metric' data-process-card>
+                            <svg class='inline-icon' aria-hidden='true'><use
+                                href='/icons.svg#sun'
+                              ></use></svg>
+                            <span>Shading</span>
+                            <strong
+                              data-process-value='shading'
+                              data-default='Verified during the site visit'
+                            >Verified during the site visit</strong>
+                            <small data-process-value-note='shading'></small>
+                          </li>
+                          <li class='process-metric' data-process-card>
+                            <svg class='inline-icon' aria-hidden='true'><use
+                                href='/icons.svg#zap'
+                              ></use></svg>
+                            <span>Electrical panel</span>
+                            <strong
+                              data-process-value='electrical-panel'
+                              data-default='Verified during the site visit'
+                            >Verified during the site visit</strong>
+                            <small data-process-value-note='electrical-panel'></small>
+                          </li>
+                      </ul>
+
+                  </div>
+                </article>
+                <article
+                  class='process-state '
+                  data-process-state='2'
+                  aria-labelledby='process-step-title-03'
                   aria-hidden='true'
-                ></span><span>Night</span></button>
+                >
+                  <div class='process-state__copy' data-process-copy>
+                    <p class='process-state__eyebrow'><span aria-hidden='true'></span>Step 3 of 6</p>
+                    <h3 id='process-step-title-03' class='process-state__title'>
+                      <span>Your system takes its final shape.</span>
+                    </h3>
+                    <p class='process-state__intro'>We turn verified measurements into the panel layout, inverter configuration and final engineering design.</p>
+
+
+                  </div>
+
+                  <div
+                    class='process-visual process-visual--design'
+                    data-process-visual='design'
+                    role='img'
+                    aria-label='Final solar system design placeholder'
+                  >
+                    <div class='process-visual__depth' aria-hidden='true'>
+                      <span class='process-visual__halo'></span>
+
+
+
+                        <div class='process-system'>
+                          <div class='process-system__panels'><span
+                                style='--panel-i:0'
+                              ></span><span
+                                style='--panel-i:1'
+                              ></span><span
+                                style='--panel-i:2'
+                              ></span><span
+                                style='--panel-i:3'
+                              ></span><span
+                                style='--panel-i:4'
+                              ></span><span
+                                style='--panel-i:5'
+                              ></span><span
+                                style='--panel-i:6'
+                              ></span><span
+                                style='--panel-i:7'
+                              ></span><span
+                                style='--panel-i:8'
+                              ></span><span
+                                style='--panel-i:9'
+                              ></span><span
+                                style='--panel-i:10'
+                              ></span><span
+                                style='--panel-i:11'
+                              ></span></div>
+                          <div class='process-system__inverter'><svg class='inline-icon'><use
+                                href='/icons.svg#zap'
+                              ></use></svg><i></i><i></i><i></i></div>
+                          <svg class='process-system__flow' viewBox='0 0 640 420'><path
+                              d='M108 279C253 363 370 345 507 228'
+                            ></path><circle cx='108' cy='279' r='5'></circle><circle
+                              cx='507'
+                              cy='228'
+                              r='5'
+                            ></circle></svg>
+                        </div>
+
+
+
+                    </div>
+
+                      <ul class='process-metrics' role='list'>
+                          <li class='process-metric' data-process-card>
+                            <svg class='inline-icon' aria-hidden='true'><use
+                                href='/icons.svg#satellite'
+                              ></use></svg>
+                            <span>Panel layout</span>
+                            <strong
+                              data-process-value='panel-layout'
+                              data-default='Confirmed in the final design'
+                            >Confirmed in the final design</strong>
+                            <small data-process-value-note='panel-layout'></small>
+                          </li>
+                          <li class='process-metric' data-process-card>
+                            <svg class='inline-icon' aria-hidden='true'><use
+                                href='/icons.svg#zap'
+                              ></use></svg>
+                            <span>System capacity</span>
+                            <strong
+                              data-process-value='system-capacity'
+                              data-default='Available after your analysis'
+                            >Available after your analysis</strong>
+                            <small data-process-value-note='system-capacity'></small>
+                          </li>
+                          <li class='process-metric' data-process-card>
+                            <svg class='inline-icon' aria-hidden='true'><use
+                                href='/icons.svg#sun'
+                              ></use></svg>
+                            <span>Panel count</span>
+                            <strong
+                              data-process-value='panel-count'
+                              data-default='Available after your analysis'
+                            >Available after your analysis</strong>
+                            <small data-process-value-note='panel-count'></small>
+                          </li>
+                          <li class='process-metric' data-process-card>
+                            <svg class='inline-icon' aria-hidden='true'><use
+                                href='/icons.svg#shield-check'
+                              ></use></svg>
+                            <span>Inverter</span>
+                            <strong
+                              data-process-value='inverter'
+                              data-default='Confirmed in the final design'
+                            >Confirmed in the final design</strong>
+                            <small data-process-value-note='inverter'></small>
+                          </li>
+                          <li class='process-metric' data-process-card>
+                            <svg class='inline-icon' aria-hidden='true'><use
+                                href='/icons.svg#cycle'
+                              ></use></svg>
+                            <span>Expected generation</span>
+                            <strong
+                              data-process-value='annual-generation'
+                              data-default='Available after your analysis'
+                            >Available after your analysis</strong>
+                            <small data-process-value-note='annual-generation'></small>
+                          </li>
+                      </ul>
+
+                  </div>
+                </article>
+                <article
+                  class='process-state '
+                  data-process-state='3'
+                  aria-labelledby='process-step-title-04'
+                  aria-hidden='true'
+                >
+                  <div class='process-state__copy' data-process-copy>
+                    <p class='process-state__eyebrow'><span aria-hidden='true'></span>Step 4 of 6</p>
+                    <h3 id='process-step-title-04' class='process-state__title'>
+                      <span>Everything is clear before installation.</span>
+                    </h3>
+                    <p class='process-state__intro'>You receive the final equipment list, price, scope, warranties and project terms before work begins.</p>
+
+
+                  </div>
+
+                  <div
+                    class='process-visual process-visual--proposal'
+                    data-process-visual='proposal'
+                    role='img'
+                    aria-label='Proposal and agreement placeholder'
+                  >
+                    <div class='process-visual__depth' aria-hidden='true'>
+                      <span class='process-visual__halo'></span>
+
+
+
+
+                        <div class='process-proposal'>
+                          <div class='process-proposal__sheet'><span
+                              class='process-proposal__brand'
+                            >YOURENERGY</span><strong>Clear Proposal &amp; Agreement</strong><i></i><i></i><i></i><i></i><span
+                              class='process-proposal__seal'
+                            ><svg class='inline-icon'><use href='/icons.svg#check'></use></svg></span></div>
+                          <span class='process-proposal__card process-proposal__card--one'></span><span
+                            class='process-proposal__card process-proposal__card--two'
+                          ></span>
+                        </div>
+
+
+                    </div>
+
+                      <ul class='process-metrics' role='list'>
+                          <li class='process-metric' data-process-card>
+                            <svg class='inline-icon' aria-hidden='true'><use
+                                href='/icons.svg#sun'
+                              ></use></svg>
+                            <span>Equipment</span>
+                            <strong
+                              data-process-value='equipment'
+                              data-default='Included in the final proposal'
+                            >Included in the final proposal</strong>
+                            <small data-process-value-note='equipment'></small>
+                          </li>
+                          <li class='process-metric' data-process-card>
+                            <svg class='inline-icon' aria-hidden='true'><use
+                                href='/icons.svg#zap'
+                              ></use></svg>
+                            <span>System size</span>
+                            <strong
+                              data-process-value='system-capacity'
+                              data-default='Confirmed in the final design'
+                            >Confirmed in the final design</strong>
+                            <small data-process-value-note='system-capacity'></small>
+                          </li>
+                          <li class='process-metric' data-process-card>
+                            <svg class='inline-icon' aria-hidden='true'><use
+                                href='/icons.svg#file'
+                              ></use></svg>
+                            <span>Project scope</span>
+                            <strong
+                              data-process-value='project-scope'
+                              data-default='Included in the final proposal'
+                            >Included in the final proposal</strong>
+                            <small data-process-value-note='project-scope'></small>
+                          </li>
+                          <li class='process-metric' data-process-card>
+                            <svg class='inline-icon' aria-hidden='true'><use
+                                href='/icons.svg#calculator'
+                              ></use></svg>
+                            <span>Price</span>
+                            <strong
+                              data-process-value='commercial-estimate'
+                              data-default='Preliminary estimate, if available'
+                            >Preliminary estimate, if available</strong>
+                            <small data-process-value-note='commercial-estimate'></small>
+                          </li>
+                          <li class='process-metric' data-process-card>
+                            <svg class='inline-icon' aria-hidden='true'><use
+                                href='/icons.svg#shield-check'
+                              ></use></svg>
+                            <span>Warranty</span>
+                            <strong
+                              data-process-value='warranty'
+                              data-default='Included in the final proposal'
+                            >Included in the final proposal</strong>
+                            <small data-process-value-note='warranty'></small>
+                          </li>
+                          <li class='process-metric' data-process-card>
+                            <svg class='inline-icon' aria-hidden='true'><use
+                                href='/icons.svg#file'
+                              ></use></svg>
+                            <span>Terms</span>
+                            <strong
+                              data-process-value='terms'
+                              data-default='Included in the final proposal'
+                            >Included in the final proposal</strong>
+                            <small data-process-value-note='terms'></small>
+                          </li>
+                      </ul>
+
+                  </div>
+                </article>
+                <article
+                  class='process-state '
+                  data-process-state='4'
+                  aria-labelledby='process-step-title-05'
+                  aria-hidden='true'
+                >
+                  <div class='process-state__copy' data-process-copy>
+                    <p class='process-state__eyebrow'><span aria-hidden='true'></span>Step 5 of 6</p>
+                    <h3 id='process-step-title-05' class='process-state__title'>
+                      <span>We build it.</span><span>Test it.</span><span>Turn it on.</span>
+                    </h3>
+                    <p class='process-state__intro'>The system is installed according to the approved design, checked and commissioned for operation.</p>
+
+
+                  </div>
+
+                  <div
+                    class='process-visual process-visual--installation'
+                    data-process-visual='installation'
+                    role='img'
+                    aria-label='Installation and commissioning placeholder'
+                  >
+                    <div class='process-visual__depth' aria-hidden='true'>
+                      <span class='process-visual__halo'></span>
+
+
+
+
+
+                        <div class='process-install'><div class='process-install__system'><span style='--install-i:0'></span><span style='--install-i:1'></span><span style='--install-i:2'></span><span style='--install-i:3'></span><span style='--install-i:4'></span><span style='--install-i:5'></span><span style='--install-i:6'></span><span style='--install-i:7'></span><span style='--install-i:8'></span></div><span
+                            class='process-install__pulse'
+                          ></span></div>
+
+                    </div>
+
+
+                      <ol class='process-installation-timeline'><li
+                            data-process-install-step
+                          ><b>01</b><span>Site preparation</span></li><li
+                            data-process-install-step
+                          ><b>02</b><span>Mounting</span></li><li
+                            data-process-install-step
+                          ><b>03</b><span>Panels</span></li><li
+                            data-process-install-step
+                          ><b>04</b><span>Inverter &amp; electrical</span></li><li
+                            data-process-install-step
+                          ><b>05</b><span>Testing</span></li><li
+                            data-process-install-step
+                          ><b>06</b><span>System online</span></li></ol>
+                  </div>
+                </article>
+                <article
+                  class='process-state '
+                  data-process-state='5'
+                  aria-labelledby='process-step-title-06'
+                  aria-hidden='true'
+                >
+                  <div class='process-state__copy' data-process-copy>
+                    <p class='process-state__eyebrow'><span aria-hidden='true'></span>Step 6 of 6</p>
+                    <h3 id='process-step-title-06' class='process-state__title'>
+                      <span>Installation is only the beginning.</span>
+                    </h3>
+                    <p class='process-state__intro'>Your system information, documents, warranties and support stay together after launch.</p>
+
+
+                      <a class='process-state__cta' href='/en/calculator/'>Start my solar analysis
+                        <svg class='inline-icon' aria-hidden='true'><use
+                            href='/icons.svg#arrow-right'
+                          ></use></svg>
+                      </a>
+                  </div>
+
+                  <div
+                    class='process-visual process-visual--support'
+                    data-process-visual='support'
+                    role='img'
+                    aria-label='Solar Passport and support placeholder'
+                  >
+                    <div class='process-visual__depth' aria-hidden='true'>
+                      <span class='process-visual__halo'></span>
+
+
+
+
+
+
+                        <div class='process-passport'>
+                          <span class='process-passport__back'></span>
+                          <div class='process-passport__cover'><svg class='inline-icon'><use
+                                href='/icons.svg#sun'
+                              ></use></svg><small>YOURENERGY</small><strong>Solar<br />Passport</strong><i
+                            ></i></div>
+                          <div class='process-passport__page'><span></span><span></span><span></span><svg
+                              class='inline-icon'
+                            ><use href='/icons.svg#shield-check'></use></svg></div>
+                        </div>
+                    </div>
+
+                      <ul class='process-metrics' role='list'>
+                          <li class='process-metric' data-process-card>
+                            <svg class='inline-icon' aria-hidden='true'><use
+                                href='/icons.svg#file'
+                              ></use></svg>
+                            <span>Solar Passport</span>
+                            <strong
+                              data-process-value='solar-passport'
+                              data-default='Your system record'
+                            >Your system record</strong>
+                            <small data-process-value-note='solar-passport'></small>
+                          </li>
+                          <li class='process-metric' data-process-card>
+                            <svg class='inline-icon' aria-hidden='true'><use
+                                href='/icons.svg#shield-check'
+                              ></use></svg>
+                            <span>System information</span>
+                            <strong
+                              data-process-value='system-information'
+                              data-default='Kept with the project record'
+                            >Kept with the project record</strong>
+                            <small data-process-value-note='system-information'></small>
+                          </li>
+                          <li class='process-metric' data-process-card>
+                            <svg class='inline-icon' aria-hidden='true'><use
+                                href='/icons.svg#file'
+                              ></use></svg>
+                            <span>Documents</span>
+                            <strong
+                              data-process-value='documents'
+                              data-default='Kept with the project record'
+                            >Kept with the project record</strong>
+                            <small data-process-value-note='documents'></small>
+                          </li>
+                          <li class='process-metric' data-process-card>
+                            <svg class='inline-icon' aria-hidden='true'><use
+                                href='/icons.svg#shield'
+                              ></use></svg>
+                            <span>Warranties</span>
+                            <strong
+                              data-process-value='warranties'
+                              data-default='Kept with the project record'
+                            >Kept with the project record</strong>
+                            <small data-process-value-note='warranties'></small>
+                          </li>
+                          <li class='process-metric' data-process-card>
+                            <svg class='inline-icon' aria-hidden='true'><use
+                                href='/icons.svg#cycle'
+                              ></use></svg>
+                            <span>Production context</span>
+                            <strong
+                              data-process-value='production-context'
+                              data-default='Based on available analysis data'
+                            >Based on available analysis data</strong>
+                            <small data-process-value-note='production-context'></small>
+                          </li>
+                          <li class='process-metric' data-process-card>
+                            <svg class='inline-icon' aria-hidden='true'><use
+                                href='/icons.svg#support'
+                              ></use></svg>
+                            <span>Support</span>
+                            <strong
+                              data-process-value='support'
+                              data-default='Contact and service information'
+                            >Contact and service information</strong>
+                            <small data-process-value-note='support'></small>
+                          </li>
+                      </ul>
+
+                  </div>
+                </article>
             </div>
-            <p class='stage-home__signature' aria-hidden='true'>A brighter Armenia together<svg
-                viewBox='0 0 160 36'
-              ><path d='M4 30Q73 0 151 9M50 25Q108 3 130 10' /></svg></p>
-            <div class='stage-home__bottom'>
-              <ul class='stage-home__trust'><li><svg
-                      aria-hidden='true'
-                      viewBox='0 0 24 24'
-                    ><path d='m13 2-9 12h7l-1 8 10-13h-7l1-7Z' /></svg><div><strong>Accurate solar data</strong><span
-                      >Based on PVGIS</span></div></li><li><svg
-                      aria-hidden='true'
-                      viewBox='0 0 24 24'
-                    ><path d='M12 2 3 6v6c0 5 9 10 9 10s9-5 9-10V6l-9-4Zm-4 10 3 3 5-6' /></svg><div><strong>Official electricity tariffs</strong><span
-                      >Armenia registry</span></div></li><li><svg
-                      aria-hidden='true'
-                      viewBox='0 0 24 24'
-                    ><path d='M4 21c0-8 5-13 14-17M5 17C-2 6 13 2 21 2c0 10-2 20-16 15Z' /></svg><div><strong>Transparent calculations</strong><span
-                      >Sources and assumptions shown</span></div></li></ul>
-              <a href='#faq' class='stage-home__scroll'><svg aria-hidden='true' viewBox='0 0 24 32'><rect
-                    x='4'
-                    y='1'
-                    width='16'
-                    height='27'
-                    rx='8'
-                  /><path d='M12 7v5' /></svg>Scroll to continue</a>
-            </div>
-            <p class='stage-home__caption'>SOLAR SOLUTIONS FOR HOMES AND BUSINESSES</p>
+
+            <p class='process-stage__scroll-hint' aria-hidden='true'><span
+              ></span>Scroll to continue</p>
           </div>
         </div>      </section>
 
@@ -580,7 +1139,7 @@
         data-contact-label='+374 91 095 950'
       ><svg aria-hidden='true' focusable='false'><use href='/icons.svg#phone'></use></svg></a></nav>
     <script id='home-page-config' type='application/json'>{"locale":"en-US","hero":{"eyebrow":"SOLAR ENERGY FOR YOUR HOME","titleLead":"Your roof","titleMiddle":"has more potential","titleAccent":"than you think.","homeCopy":"In a few steps, see your home’s solar potential, a preliminary system size and budget — plus savings when you enter your tariff.","calculatorCopy":"First choose and confirm a point manually, then see its PVGIS potential. Roof and consumption data are only needed for the detailed estimate.","disclosure":"A preliminary result requires property confirmation and does not replace a site visit, engineering design or commercial proposal.","addressLabel":"Address for the engineer (optional)","addressPlaceholder":"For example: Yerevan, Arabkir","addressHelp":"The address is not geocoded. Open the map, choose a point manually or enter coordinates below.","analyze":"Open point selection","openCalculator":"Calculate my home","uploadTitle":"Attach an electricity bill (optional)","uploadPrompt":"Choose a file or drag it here","uploadHelp":"PDF, JPG or PNG up to 10 MB. The file stays out of the server and is not read automatically; enter values manually.","removeFile":"Remove file","signatureLead":"Clean energy","signatureTail":"Brighter lives","dashboardAriaLabel":"Solar calculation summary","dashboardLocationSelected":"Selected point","dashboardLocationRegional":"Regional estimate","dashboardStatusPreliminary":"PRELIMINARY","dashboardReady":"Current session result","dashboardGeneration":"Annual generation","dashboardGenerationUnit":"kWh / year","dashboardCoverage":"Consumption coverage","dashboardCoverageUnit":"%","dashboardSavings":"Annual savings","dashboardSavingsUnit":"֏ / year","dashboardCo2":"CO₂ reduction","dashboardCo2Unit":"t / year","dashboardNeedConsumption":"Add consumption","dashboardNeedTariff":"Add tariff","dashboardLoading":"Calculating…","dashboardNotePreliminary":"Preliminary calculation. Final parameters and price require an engineering review.","dashboardExample":{"location":"Yerevan, Armenia","status":"EXAMPLE RESULT","label":"Annual production","annualGenerationKwh":8420,"annualGenerationDisplay":"8,420","monthlyGenerationKwh":[320,390,570,740,820,900,980,940,790,630,470,350],"monthlyBarPercent":[33,40,58,76,84,92,100,96,81,64,48,36],"co2Label":"CO₂ savings","treesLabel":"Tree CO₂ absorption equivalent","treesUnit":"trees / year","note":"Example result — calculate your home to see your figures.","co2Tons":1.541,"co2Display":"1.5","treeEquivalent":25.683,"trees":26}}}</script>
-    <script id='journey-page-config' type='application/json'>{"locale":"en-US","journey":{"eyebrow":"STEP 1 OF 6","title":"Let’s start","titleLead":"with","titleAccent":"your home","intro":"Enter your location and electricity use to create the starting point for your solar analysis.","region":"Region","chooseRegion":"Choose your region","consumption":"Electricity use","bill":"Monthly bill","usage":"Monthly kWh","amountBill":"Average monthly bill","amountUsage":"Average monthly usage","billHelp":"You’ll confirm your electricity tariff in the calculator.","usageHelp":"Use the monthly consumption shown on your bill.","submit":"Start my analysis","continue":"Continue","full":"Open full calculator","country":"Armenia","location":"Your location","resource":"Solar resource","pending":"Calculated with PVGIS after you start","source":"Source","production":"Annual production","capacity":"System capacity","panels":"Panels","perYear":"kWh/year","lighting":"Scene lighting preview","day":"Day","night":"Night","signature":"A brighter Armenia together","caption":"SOLAR SOLUTIONS FOR HOMES AND BUSINESSES","scroll":"Scroll to continue","progress":"Your solar journey","steps":[{"number":1,"displayNumber":"01","label":"Your Home","active":true,"stateClass":"is-active","current":"step","href":"/en/calculator/"},{"number":2,"displayNumber":"02","label":"Roof Details","active":false,"stateClass":"","current":"false","href":"/en/calculator/refine/"},{"number":3,"displayNumber":"03","label":"System Design","active":false,"stateClass":"","current":"false","href":"/en/calculator/pro/"},{"number":4,"displayNumber":"04","label":"Your Savings","active":false,"stateClass":"","current":"false","href":null},{"number":5,"displayNumber":"05","label":"Installation","active":false,"stateClass":"","current":"false","href":null},{"number":6,"displayNumber":"06","label":"Lifetime Support","active":false,"stateClass":"","current":"false","href":null}],"trust":[{"title":"Accurate solar data","note":"Based on PVGIS","icon":"m13 2-9 12h7l-1 8 10-13h-7l1-7Z"},{"title":"Official electricity tariffs","note":"Armenia registry","icon":"M12 2 3 6v6c0 5 9 10 9 10s9-5 9-10V6l-9-4Zm-4 10 3 3 5-6"},{"title":"Transparent calculations","note":"Sources and assumptions shown","icon":"M4 21c0-8 5-13 14-17M5 17C-2 6 13 2 21 2c0 10-2 20-16 15Z"}],"regions":[{"id":"yerevan","label":"Yerevan"},{"id":"aragatsotn","label":"Aragatsotn"},{"id":"ararat","label":"Ararat"},{"id":"armavir","label":"Armavir"},{"id":"gegharkunik","label":"Gegharkunik"},{"id":"kotayk","label":"Kotayk"},{"id":"lori","label":"Lori"},{"id":"shirak","label":"Shirak"},{"id":"syunik","label":"Syunik"},{"id":"tavush","label":"Tavush"},{"id":"vayots-dzor","label":"Vayots Dzor"}]}}</script>
+    <script id='process-page-config' type='application/json'>{"locale":"en-US","processStory":{"title":"Your solar journey","progressLabel":"Your solar project journey","stepLabel":"Step {current} of {total}","previousStepLabel":"Previous step","nextStepLabel":"Next step","scrollLabel":"Scroll to continue","availableAfterAnalysis":"Available after your analysis","addInCalculator":"Add this in the calculator","verifiedOnSite":"Verified during the site visit","confirmedInDesign":"Confirmed in the final design","includedInProposal":"Included in the final proposal","preliminaryEstimate":"Preliminary estimate, if available","form":{"region":"Region","chooseRegion":"Choose your region","consumption":"Electricity use","bill":"Monthly bill","usage":"Monthly kWh","amountBill":"Average monthly bill","amountUsage":"Average monthly usage","billHelp":"You’ll confirm your electricity tariff in the calculator.","usageHelp":"Use the monthly consumption shown on your bill.","continue":"Continue","submit":"Start my analysis","full":"Open full calculator"},"data":{"source":"Source","preliminary":"Preliminary","upTo":"up to","passportReady":"Created for this session","country":"Armenia","billUnit":"AMD/month","usageUnit":"kWh/month"},"steps":[{"number":"01","nav":"Your Solar Analysis","visual":"analysis","visualLabel":"Solar analysis visual placeholder","headline":"We start with the numbers.","copy":"Your consumption, location and available solar data become a clear starting point for your system.","cards":[{"icon":"map-pin","label":"Location","value":"Add this in the calculator","data":"location"},{"icon":"zap","label":"Consumption","value":"Add this in the calculator","data":"consumption"},{"icon":"sun","label":"Solar resource","value":"Available after your analysis","data":"solar-resource"},{"icon":"calculator","label":"Recommended system","value":"Available after your analysis","data":"system-capacity"},{"icon":"cycle","label":"Expected generation","value":"Available after your analysis","data":"annual-generation"}],"cta":"Start my analysis","index":0,"headlineLines":["We start with the numbers."],"stepLabel":"Step 1 of 6","stateClass":"is-active","ariaHidden":"false","progressClass":"is-active","isAnalysis":true,"isInspection":false,"isDesign":false,"isProposal":false,"isInstallation":false,"isSupport":false,"designPanels":null,"installPanels":null},{"number":"02","nav":"Engineer Site Visit","visual":"inspection","visualLabel":"On-site engineering inspection placeholder","headline":"Then we verify the real home.","copy":"An engineer checks the roof, usable area, orientation, shading and electrical conditions.","cards":[{"icon":"satellite","label":"Roof area","value":"Verified during the site visit","data":"roof-area"},{"icon":"sun","label":"Orientation","value":"Verified during the site visit","data":"orientation"},{"icon":"arrow-right","label":"Tilt","value":"Verified during the site visit","data":"tilt"},{"icon":"sun","label":"Shading","value":"Verified during the site visit","data":"shading"},{"icon":"zap","label":"Electrical panel","value":"Verified during the site visit","data":"electrical-panel"}],"index":1,"headlineLines":["Then we verify the real home."],"stepLabel":"Step 2 of 6","stateClass":"","ariaHidden":"true","progressClass":"is-future","isAnalysis":false,"isInspection":true,"isDesign":false,"isProposal":false,"isInstallation":false,"isSupport":false,"designPanels":null,"installPanels":null},{"number":"03","nav":"Final System Design","visual":"design","visualLabel":"Final solar system design placeholder","headline":"Your system takes its final shape.","copy":"We turn verified measurements into the panel layout, inverter configuration and final engineering design.","cards":[{"icon":"satellite","label":"Panel layout","value":"Confirmed in the final design","data":"panel-layout"},{"icon":"zap","label":"System capacity","value":"Available after your analysis","data":"system-capacity"},{"icon":"sun","label":"Panel count","value":"Available after your analysis","data":"panel-count"},{"icon":"shield-check","label":"Inverter","value":"Confirmed in the final design","data":"inverter"},{"icon":"cycle","label":"Expected generation","value":"Available after your analysis","data":"annual-generation"}],"index":2,"headlineLines":["Your system takes its final shape."],"stepLabel":"Step 3 of 6","stateClass":"","ariaHidden":"true","progressClass":"is-future","isAnalysis":false,"isInspection":false,"isDesign":true,"isProposal":false,"isInstallation":false,"isSupport":false,"designPanels":[0,1,2,3,4,5,6,7,8,9,10,11],"installPanels":null},{"number":"04","nav":"Clear Proposal \u0026 Agreement","visual":"proposal","visualLabel":"Proposal and agreement placeholder","headline":"Everything is clear before installation.","copy":"You receive the final equipment list, price, scope, warranties and project terms before work begins.","cards":[{"icon":"sun","label":"Equipment","value":"Included in the final proposal","data":"equipment"},{"icon":"zap","label":"System size","value":"Confirmed in the final design","data":"system-capacity"},{"icon":"file","label":"Project scope","value":"Included in the final proposal","data":"project-scope"},{"icon":"calculator","label":"Price","value":"Preliminary estimate, if available","data":"commercial-estimate"},{"icon":"shield-check","label":"Warranty","value":"Included in the final proposal","data":"warranty"},{"icon":"file","label":"Terms","value":"Included in the final proposal","data":"terms"}],"index":3,"headlineLines":["Everything is clear before installation."],"stepLabel":"Step 4 of 6","stateClass":"","ariaHidden":"true","progressClass":"is-future","isAnalysis":false,"isInspection":false,"isDesign":false,"isProposal":true,"isInstallation":false,"isSupport":false,"designPanels":null,"installPanels":null},{"number":"05","nav":"Installation \u0026 Commissioning","visual":"installation","visualLabel":"Installation and commissioning placeholder","headline":"We build it.\nTest it.\nTurn it on.","copy":"The system is installed according to the approved design, checked and commissioned for operation.","timeline":[{"number":"01","label":"Site preparation"},{"number":"02","label":"Mounting"},{"number":"03","label":"Panels"},{"number":"04","label":"Inverter \u0026 electrical"},{"number":"05","label":"Testing"},{"number":"06","label":"System online"}],"index":4,"headlineLines":["We build it.","Test it.","Turn it on."],"stepLabel":"Step 5 of 6","stateClass":"","ariaHidden":"true","progressClass":"is-future","isAnalysis":false,"isInspection":false,"isDesign":false,"isProposal":false,"isInstallation":true,"isSupport":false,"designPanels":null,"installPanels":[0,1,2,3,4,5,6,7,8]},{"number":"06","nav":"Solar Passport \u0026 Support","visual":"support","visualLabel":"Solar Passport and support placeholder","headline":"Installation is only the beginning.","copy":"Your system information, documents, warranties and support stay together after launch.","cards":[{"icon":"file","label":"Solar Passport","value":"Your system record","data":"solar-passport"},{"icon":"shield-check","label":"System information","value":"Kept with the project record","data":"system-information"},{"icon":"file","label":"Documents","value":"Kept with the project record","data":"documents"},{"icon":"shield","label":"Warranties","value":"Kept with the project record","data":"warranties"},{"icon":"cycle","label":"Production context","value":"Based on available analysis data","data":"production-context"},{"icon":"support","label":"Support","value":"Contact and service information","data":"support"}],"cta":"Start my solar analysis","index":5,"headlineLines":["Installation is only the beginning."],"stepLabel":"Step 6 of 6","stateClass":"","ariaHidden":"true","progressClass":"is-future","isAnalysis":false,"isInspection":false,"isDesign":false,"isProposal":false,"isInstallation":false,"isSupport":true,"designPanels":null,"installPanels":null}],"regions":[{"id":"yerevan","label":"Yerevan"},{"id":"aragatsotn","label":"Aragatsotn"},{"id":"ararat","label":"Ararat"},{"id":"armavir","label":"Armavir"},{"id":"gegharkunik","label":"Gegharkunik"},{"id":"kotayk","label":"Kotayk"},{"id":"lori","label":"Lori"},{"id":"shirak","label":"Shirak"},{"id":"syunik","label":"Syunik"},{"id":"tavush","label":"Tavush"},{"id":"vayots-dzor","label":"Vayots Dzor"}]}}</script>
     <script type='module' src='/src/main.js'></script>
   </body>
 </html>

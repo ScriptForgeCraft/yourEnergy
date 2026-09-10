@@ -169,10 +169,10 @@
       </section>
 
       <section
-        class='process process-journey solutions section'
         id='process'
+        class='process process-journey section'
+        data-process-story
         aria-labelledby='process-title'
-        data-solutions-story
       >
         {{> journey-story}}
       </section>
@@ -190,7 +190,7 @@
     {{> site-footer}}
 
     <script id='home-page-config' type='application/json'>{{{homePageConfig}}}</script>
-    <script id='journey-page-config' type='application/json'>{{{journeyPageConfig}}}</script>
+    <script id='process-page-config' type='application/json'>{{{processPageConfig}}}</script>
     <script type='module' src='/src/main.js'></script>
   </body>
 </html>
