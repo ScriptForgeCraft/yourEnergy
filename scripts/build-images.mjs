@@ -49,38 +49,38 @@ const assets = [
   {
     name: 'process-step-analysis',
     source: 'process/process-step-analysis',
-    widths: [640, 1024, 1600],
-    quality: 68
+    widths: [640, 1024, 1600, 2560, 3200],
+    quality: 74
   },
   {
     name: 'process-step-inspection',
     source: 'process/process-step-inspection',
-    widths: [640, 1024, 1600],
-    quality: 68
+    widths: [640, 1024, 1600, 2560, 3200],
+    quality: 74
   },
   {
     name: 'process-step-design',
     source: 'process/process-step-design',
-    widths: [640, 1024, 1600],
-    quality: 68
+    widths: [640, 1024, 1600, 2560, 3200],
+    quality: 74
   },
   {
     name: 'process-step-proposal',
     source: 'process/process-step-proposal',
-    widths: [640, 1024, 1600],
-    quality: 68
+    widths: [640, 1024, 1600, 2560, 3200],
+    quality: 74
   },
   {
     name: 'process-step-installation',
     source: 'process/process-step-installation',
-    widths: [640, 1024, 1600],
-    quality: 68
+    widths: [640, 1024, 1600, 2560, 3200],
+    quality: 74
   },
   {
     name: 'process-step-support',
     source: 'process/process-step-support',
-    widths: [640, 1024, 1600],
-    quality: 68
+    widths: [640, 1024, 1600, 2560, 3200],
+    quality: 74
   },
   { name: 'solutions-home', source: 'solutions/solutions-home', widths: [640, 1024, 1600] },
   { name: 'solutions-roof', source: 'solutions/solutions-roof', widths: [640, 1024, 1600] },
