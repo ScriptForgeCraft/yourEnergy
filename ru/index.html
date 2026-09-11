@@ -349,11 +349,46 @@
 
             <div class='process-stage__states'>
                 <article
-                  class='process-state is-active'
+                  class='process-state is-active process-state--photo process-state--analysis'
                   data-process-state='0'
                   aria-labelledby='process-step-title-01'
                   aria-hidden='false'
                 >
+                  <picture class='process-state__media' aria-hidden='true'>
+                    <source
+                      type='image/avif'
+                      srcset='/images/process-step-analysis-640.avif 640w, /images/process-step-analysis-1024.avif 1024w, /images/process-step-analysis-1600.avif 1600w'
+                      sizes='100vw'
+                    />
+                    <source
+                      type='image/webp'
+                      srcset='/images/process-step-analysis-640.webp 640w, /images/process-step-analysis-1024.webp 1024w, /images/process-step-analysis-1600.webp 1600w'
+                      sizes='100vw'
+                    />
+                    <img
+                      src='/images/process-step-analysis-1600.jpg'
+                      srcset='/images/process-step-analysis-640.jpg 640w, /images/process-step-analysis-1024.jpg 1024w, /images/process-step-analysis-1600.jpg 1600w'
+                      sizes='100vw'
+                      width='1600'
+                      height='900'
+                      alt=''
+                      loading='lazy'
+                      decoding='async'
+                    />
+                  </picture>
+
+                    <svg
+                      class='process-analysis-orientation'
+                      viewBox='0 0 1536 1024'
+                      preserveAspectRatio='xMidYMid slice'
+                      aria-hidden='true'
+                    >
+                      <text x='292' y='355'>W</text>
+                      <text x='768' y='96'>N</text>
+                      <text x='1225' y='355'>E</text>
+                    </svg>
+
+
                   <div class='process-state__copy' data-process-copy>
                     <p class='process-state__eyebrow'><span aria-hidden='true'></span>Этап 1 из 6</p>
                     <h3 id='process-step-title-01' class='process-state__title'>
@@ -455,38 +490,6 @@
                     role='img'
                     aria-label='Визуализация анализа солнечной системы'
                   >
-                    <div class='process-visual__depth' aria-hidden='true'>
-                      <span class='process-visual__halo'></span>
-
-                        <svg class='process-visual__solar-arc' viewBox='0 0 700 470' data-process-solar-arc>
-                          <path d='M76 354 Q350 -120 624 354' data-process-solar-path></path>
-                          <path class='process-visual__horizon' d='M76 354H624'></path>
-                          <text x='55' y='383'>W</text><text x='342' y='70'>N</text><text
-                            x='632'
-                            y='383'
-                          >E</text>
-                          <g data-process-sun transform='translate(350 105)'>
-                            <circle class='process-visual__sun-halo' r='31'></circle>
-                            <circle class='process-visual__sun-core' r='13'></circle>
-                            <path
-                              d='M0-25v-9M0 25v9M25 0h9M-25 0h-9M18-18l7-7M-18 18l-7 7M18 18l7 7M-18-18l-7-7'
-                            ></path>
-                          </g>
-                        </svg>
-                        <div class='process-house'><span class='process-house__roof'></span><span
-                            class='process-house__wall'
-                          ></span><span class='process-house__window'></span><span
-                            class='process-house__panel'
-                          ></span></div>
-                        <span class='process-visual__terrain process-visual__terrain--one'></span><span
-                          class='process-visual__terrain process-visual__terrain--two'
-                        ></span>
-
-
-
-
-
-                    </div>
 
                       <ul class='process-metrics' role='list'>
                           <li class='process-metric' data-process-card>
@@ -549,11 +552,36 @@
                   </div>
                 </article>
                 <article
-                  class='process-state '
+                  class='process-state  process-state--photo process-state--inspection'
                   data-process-state='1'
                   aria-labelledby='process-step-title-02'
                   aria-hidden='true'
                 >
+                  <picture class='process-state__media' aria-hidden='true'>
+                    <source
+                      type='image/avif'
+                      srcset='/images/process-step-inspection-640.avif 640w, /images/process-step-inspection-1024.avif 1024w, /images/process-step-inspection-1600.avif 1600w'
+                      sizes='100vw'
+                    />
+                    <source
+                      type='image/webp'
+                      srcset='/images/process-step-inspection-640.webp 640w, /images/process-step-inspection-1024.webp 1024w, /images/process-step-inspection-1600.webp 1600w'
+                      sizes='100vw'
+                    />
+                    <img
+                      src='/images/process-step-inspection-1600.jpg'
+                      srcset='/images/process-step-inspection-640.jpg 640w, /images/process-step-inspection-1024.jpg 1024w, /images/process-step-inspection-1600.jpg 1600w'
+                      sizes='100vw'
+                      width='1600'
+                      height='900'
+                      alt=''
+                      loading='lazy'
+                      decoding='async'
+                    />
+                  </picture>
+
+
+
                   <div class='process-state__copy' data-process-copy>
                     <p class='process-state__eyebrow'><span aria-hidden='true'></span>Этап 2 из 6</p>
                     <h3 id='process-step-title-02' class='process-state__title'>
@@ -570,31 +598,6 @@
                     role='img'
                     aria-label='Визуализация инженерного осмотра объекта'
                   >
-                    <div class='process-visual__depth' aria-hidden='true'>
-                      <span class='process-visual__halo'></span>
-
-
-                        <div class='process-roof'>
-                          <span class='process-roof__plane'></span><span
-                            class='process-roof__ridge'
-                          ></span><span class='process-roof__scan'></span>
-                          <i style='--point-x:16%;--point-y:72%'></i><i
-                            style='--point-x:36%;--point-y:18%'
-                          ></i><i style='--point-x:84%;--point-y:30%'></i><i
-                            style='--point-x:70%;--point-y:86%'
-                          ></i>
-                        </div>
-                        <svg class='process-measure' viewBox='0 0 640 400'><path
-                            d='M103 297 230 78 537 122 449 344Z'
-                          ></path><path
-                            class='process-measure__dash'
-                            d='M93 318H459M559 112v246'
-                          ></path><text x='238' y='342'>m²</text><text x='570' y='240'>°</text></svg>
-
-
-
-
-                    </div>
 
                       <ul class='process-metrics' role='list'>
                           <li class='process-metric' data-process-card>
@@ -657,11 +660,36 @@
                   </div>
                 </article>
                 <article
-                  class='process-state '
+                  class='process-state  process-state--photo process-state--design'
                   data-process-state='2'
                   aria-labelledby='process-step-title-03'
                   aria-hidden='true'
                 >
+                  <picture class='process-state__media' aria-hidden='true'>
+                    <source
+                      type='image/avif'
+                      srcset='/images/process-step-design-640.avif 640w, /images/process-step-design-1024.avif 1024w, /images/process-step-design-1600.avif 1600w'
+                      sizes='100vw'
+                    />
+                    <source
+                      type='image/webp'
+                      srcset='/images/process-step-design-640.webp 640w, /images/process-step-design-1024.webp 1024w, /images/process-step-design-1600.webp 1600w'
+                      sizes='100vw'
+                    />
+                    <img
+                      src='/images/process-step-design-1600.jpg'
+                      srcset='/images/process-step-design-640.jpg 640w, /images/process-step-design-1024.jpg 1024w, /images/process-step-design-1600.jpg 1600w'
+                      sizes='100vw'
+                      width='1600'
+                      height='900'
+                      alt=''
+                      loading='lazy'
+                      decoding='async'
+                    />
+                  </picture>
+
+
+
                   <div class='process-state__copy' data-process-copy>
                     <p class='process-state__eyebrow'><span aria-hidden='true'></span>Этап 3 из 6</p>
                     <h3 id='process-step-title-03' class='process-state__title'>
@@ -678,52 +706,6 @@
                     role='img'
                     aria-label='Визуализация финального проекта солнечной системы'
                   >
-                    <div class='process-visual__depth' aria-hidden='true'>
-                      <span class='process-visual__halo'></span>
-
-
-
-                        <div class='process-system'>
-                          <div class='process-system__panels'><span
-                                style='--panel-i:0'
-                              ></span><span
-                                style='--panel-i:1'
-                              ></span><span
-                                style='--panel-i:2'
-                              ></span><span
-                                style='--panel-i:3'
-                              ></span><span
-                                style='--panel-i:4'
-                              ></span><span
-                                style='--panel-i:5'
-                              ></span><span
-                                style='--panel-i:6'
-                              ></span><span
-                                style='--panel-i:7'
-                              ></span><span
-                                style='--panel-i:8'
-                              ></span><span
-                                style='--panel-i:9'
-                              ></span><span
-                                style='--panel-i:10'
-                              ></span><span
-                                style='--panel-i:11'
-                              ></span></div>
-                          <div class='process-system__inverter'><svg class='inline-icon'><use
-                                href='/icons.svg#zap'
-                              ></use></svg><i></i><i></i><i></i></div>
-                          <svg class='process-system__flow' viewBox='0 0 640 420'><path
-                              d='M108 279C253 363 370 345 507 228'
-                            ></path><circle cx='108' cy='279' r='5'></circle><circle
-                              cx='507'
-                              cy='228'
-                              r='5'
-                            ></circle></svg>
-                        </div>
-
-
-
-                    </div>
 
                       <ul class='process-metrics' role='list'>
                           <li class='process-metric' data-process-card>
@@ -786,11 +768,36 @@
                   </div>
                 </article>
                 <article
-                  class='process-state '
+                  class='process-state  process-state--photo process-state--proposal'
                   data-process-state='3'
                   aria-labelledby='process-step-title-04'
                   aria-hidden='true'
                 >
+                  <picture class='process-state__media' aria-hidden='true'>
+                    <source
+                      type='image/avif'
+                      srcset='/images/process-step-proposal-640.avif 640w, /images/process-step-proposal-1024.avif 1024w, /images/process-step-proposal-1600.avif 1600w'
+                      sizes='100vw'
+                    />
+                    <source
+                      type='image/webp'
+                      srcset='/images/process-step-proposal-640.webp 640w, /images/process-step-proposal-1024.webp 1024w, /images/process-step-proposal-1600.webp 1600w'
+                      sizes='100vw'
+                    />
+                    <img
+                      src='/images/process-step-proposal-1600.jpg'
+                      srcset='/images/process-step-proposal-640.jpg 640w, /images/process-step-proposal-1024.jpg 1024w, /images/process-step-proposal-1600.jpg 1600w'
+                      sizes='100vw'
+                      width='1600'
+                      height='900'
+                      alt=''
+                      loading='lazy'
+                      decoding='async'
+                    />
+                  </picture>
+
+
+
                   <div class='process-state__copy' data-process-copy>
                     <p class='process-state__eyebrow'><span aria-hidden='true'></span>Этап 4 из 6</p>
                     <h3 id='process-step-title-04' class='process-state__title'>
@@ -807,25 +814,6 @@
                     role='img'
                     aria-label='Визуализация предложения и договора'
                   >
-                    <div class='process-visual__depth' aria-hidden='true'>
-                      <span class='process-visual__halo'></span>
-
-
-
-
-                        <div class='process-proposal'>
-                          <div class='process-proposal__sheet'><span
-                              class='process-proposal__brand'
-                            >YOURENERGY</span><strong>Понятное предложение и договор</strong><i></i><i></i><i></i><i></i><span
-                              class='process-proposal__seal'
-                            ><svg class='inline-icon'><use href='/icons.svg#check'></use></svg></span></div>
-                          <span class='process-proposal__card process-proposal__card--one'></span><span
-                            class='process-proposal__card process-proposal__card--two'
-                          ></span>
-                        </div>
-
-
-                    </div>
 
                       <ul class='process-metrics' role='list'>
                           <li class='process-metric' data-process-card>
@@ -899,11 +887,36 @@
                   </div>
                 </article>
                 <article
-                  class='process-state '
+                  class='process-state  process-state--photo process-state--installation'
                   data-process-state='4'
                   aria-labelledby='process-step-title-05'
                   aria-hidden='true'
                 >
+                  <picture class='process-state__media' aria-hidden='true'>
+                    <source
+                      type='image/avif'
+                      srcset='/images/process-step-installation-640.avif 640w, /images/process-step-installation-1024.avif 1024w, /images/process-step-installation-1600.avif 1600w'
+                      sizes='100vw'
+                    />
+                    <source
+                      type='image/webp'
+                      srcset='/images/process-step-installation-640.webp 640w, /images/process-step-installation-1024.webp 1024w, /images/process-step-installation-1600.webp 1600w'
+                      sizes='100vw'
+                    />
+                    <img
+                      src='/images/process-step-installation-1600.jpg'
+                      srcset='/images/process-step-installation-640.jpg 640w, /images/process-step-installation-1024.jpg 1024w, /images/process-step-installation-1600.jpg 1600w'
+                      sizes='100vw'
+                      width='1600'
+                      height='900'
+                      alt=''
+                      loading='lazy'
+                      decoding='async'
+                    />
+                  </picture>
+
+
+
                   <div class='process-state__copy' data-process-copy>
                     <p class='process-state__eyebrow'><span aria-hidden='true'></span>Этап 5 из 6</p>
                     <h3 id='process-step-title-05' class='process-state__title'>
@@ -920,18 +933,6 @@
                     role='img'
                     aria-label='Визуализация монтажа и ввода в эксплуатацию'
                   >
-                    <div class='process-visual__depth' aria-hidden='true'>
-                      <span class='process-visual__halo'></span>
-
-
-
-
-
-                        <div class='process-install'><div class='process-install__system'><span style='--install-i:0'></span><span style='--install-i:1'></span><span style='--install-i:2'></span><span style='--install-i:3'></span><span style='--install-i:4'></span><span style='--install-i:5'></span><span style='--install-i:6'></span><span style='--install-i:7'></span><span style='--install-i:8'></span></div><span
-                            class='process-install__pulse'
-                          ></span></div>
-
-                    </div>
 
 
                       <ol class='process-installation-timeline'><li
@@ -950,11 +951,36 @@
                   </div>
                 </article>
                 <article
-                  class='process-state '
+                  class='process-state  process-state--photo process-state--support'
                   data-process-state='5'
                   aria-labelledby='process-step-title-06'
                   aria-hidden='true'
                 >
+                  <picture class='process-state__media' aria-hidden='true'>
+                    <source
+                      type='image/avif'
+                      srcset='/images/process-step-support-640.avif 640w, /images/process-step-support-1024.avif 1024w, /images/process-step-support-1600.avif 1600w'
+                      sizes='100vw'
+                    />
+                    <source
+                      type='image/webp'
+                      srcset='/images/process-step-support-640.webp 640w, /images/process-step-support-1024.webp 1024w, /images/process-step-support-1600.webp 1600w'
+                      sizes='100vw'
+                    />
+                    <img
+                      src='/images/process-step-support-1600.jpg'
+                      srcset='/images/process-step-support-640.jpg 640w, /images/process-step-support-1024.jpg 1024w, /images/process-step-support-1600.jpg 1600w'
+                      sizes='100vw'
+                      width='1600'
+                      height='900'
+                      alt=''
+                      loading='lazy'
+                      decoding='async'
+                    />
+                  </picture>
+
+
+
                   <div class='process-state__copy' data-process-copy>
                     <p class='process-state__eyebrow'><span aria-hidden='true'></span>Этап 6 из 6</p>
                     <h3 id='process-step-title-06' class='process-state__title'>
@@ -976,25 +1002,6 @@
                     role='img'
                     aria-label='Визуализация Solar Passport и поддержки'
                   >
-                    <div class='process-visual__depth' aria-hidden='true'>
-                      <span class='process-visual__halo'></span>
-
-
-
-
-
-
-                        <div class='process-passport'>
-                          <span class='process-passport__back'></span>
-                          <div class='process-passport__cover'><svg class='inline-icon'><use
-                                href='/icons.svg#sun'
-                              ></use></svg><small>YOURENERGY</small><strong>Solar<br />Passport</strong><i
-                            ></i></div>
-                          <div class='process-passport__page'><span></span><span></span><span></span><svg
-                              class='inline-icon'
-                            ><use href='/icons.svg#shield-check'></use></svg></div>
-                        </div>
-                    </div>
 
                       <ul class='process-metrics' role='list'>
                           <li class='process-metric' data-process-card>

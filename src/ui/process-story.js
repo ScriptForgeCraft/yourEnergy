@@ -564,13 +564,8 @@ export const initProcessStory = ({ config = {} } = {}) => {
       const copies = states.map((state) => state.querySelector('[data-process-copy]'));
       const visuals = states.map((state) => state.querySelector('[data-process-visual]'));
       const ambient = root.querySelector('.process-stage__ambient');
-      const sun = root.querySelector('[data-process-sun]');
-      const sunPath = root.querySelector('[data-process-solar-path]');
-      const solar = { progress: 0.44 };
-      const sunPathLength = sun && sunPath ? sunPath.getTotalLength() : 0;
       let transition = null;
       let sceneTween = null;
-      let sunTween = null;
       let pinTrigger = null;
       let programmaticScroll = false;
       let programmaticScrollFrame = 0;
@@ -600,16 +595,9 @@ export const initProcessStory = ({ config = {} } = {}) => {
         animateStepMetrics(nextIndex);
       };
 
-      const placeSun = () => {
-        if (!sun || !sunPath || !sunPathLength) return;
-        const point = sunPath.getPointAtLength(sunPathLength * solar.progress);
-        gsap.set(sun, { x: point.x, y: point.y });
-      };
-
       const animateSceneToStep = (index, immediate = false) => {
         const progress = index / Math.max(states.length - 1, 1);
         sceneTween?.kill();
-        sunTween?.kill();
         if (ambient) {
           if (immediate) {
             gsap.set(ambient, { yPercent: -4 * progress, scale: 1 + 0.035 * progress });
@@ -622,19 +610,6 @@ export const initProcessStory = ({ config = {} } = {}) => {
               overwrite: 'auto'
             });
           }
-        }
-        const targetSunProgress = 0.44 + 0.26 * progress;
-        if (immediate) {
-          solar.progress = targetSunProgress;
-          placeSun();
-        } else if (sun && sunPath) {
-          sunTween = gsap.to(solar, {
-            progress: targetSunProgress,
-            duration: 0.7,
-            ease: 'power2.out',
-            onUpdate: placeSun,
-            overwrite: true
-          });
         }
       };
 
@@ -894,7 +869,6 @@ export const initProcessStory = ({ config = {} } = {}) => {
       return () => {
         transition?.kill();
         sceneTween?.kill();
-        sunTween?.kill();
         pinTrigger?.kill();
         window.clearTimeout(wheelBurstTimer);
         window.cancelAnimationFrame(programmaticScrollFrame);

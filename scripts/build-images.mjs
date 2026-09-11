@@ -46,6 +46,42 @@ const assets = [
   { name: 'project-vagharshapat', widths: [480, 800] },
   { name: 'project-ararat', widths: [480, 800] },
   { name: 'engineer-onsite', widths: [480, 800, 1200] },
+  {
+    name: 'process-step-analysis',
+    source: 'process/process-step-analysis',
+    widths: [640, 1024, 1600],
+    quality: 68
+  },
+  {
+    name: 'process-step-inspection',
+    source: 'process/process-step-inspection',
+    widths: [640, 1024, 1600],
+    quality: 68
+  },
+  {
+    name: 'process-step-design',
+    source: 'process/process-step-design',
+    widths: [640, 1024, 1600],
+    quality: 68
+  },
+  {
+    name: 'process-step-proposal',
+    source: 'process/process-step-proposal',
+    widths: [640, 1024, 1600],
+    quality: 68
+  },
+  {
+    name: 'process-step-installation',
+    source: 'process/process-step-installation',
+    widths: [640, 1024, 1600],
+    quality: 68
+  },
+  {
+    name: 'process-step-support',
+    source: 'process/process-step-support',
+    widths: [640, 1024, 1600],
+    quality: 68
+  },
   { name: 'solutions-home', source: 'solutions/solutions-home', widths: [640, 1024, 1600] },
   { name: 'solutions-roof', source: 'solutions/solutions-roof', widths: [640, 1024, 1600] },
   {

@@ -22,6 +22,32 @@ load, the last successfully loaded frame remains visible; otherwise the same
 neutral fallback is used. Replace all six source files together if the day-cycle
 art is updated, then run `npm run assets:build`.
 
+## Process steps 01–06: photographic Customer Journey scenes
+
+`assets/source/process/` contains one full-bleed illustrative source image for every
+Customer Journey step:
+
+- `process-step-analysis.png` — Step 01 / solar analysis.
+- `process-step-inspection.png` — Step 02 / on-site inspection.
+- `process-step-design.png` — Step 03 / final system design.
+- `process-step-proposal.png` — Step 04 / proposal and agreement.
+- `process-step-installation.png` — Step 05 / installation and commissioning.
+- `process-step-support.png` — Step 06 / Solar Passport and support.
+
+All six steps now use these real image files as the photographic scene behind the
+existing process copy, progress rail, metric cards and installation timeline.
+The old CSS/SVG roof, system, proposal, installation and Solar Passport
+illustrations are no longer used. Step 01 keeps only its separate `W / N / E`
+orientation labels for now.
+
+`npm run assets:build` converts every process source to responsive AVIF/WebP/JPEG
+variants at 640, 1024 and 1600 px output names. The Step 01 source is smaller
+than 1600 px, so Sharp's existing `withoutEnlargement` rule keeps its native
+resolution while still writing the `-1600` fallback filename.
+
+Replace a process source in place and rerun `npm run assets:build` whenever a
+scene changes.
+
 ## Replacement checklist
 
 - Replace `roof-scan` with licensed aerial imagery that permits interface overlays.
