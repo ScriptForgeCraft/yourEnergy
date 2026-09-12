@@ -214,13 +214,12 @@ textarea {
   color: #fff;
 }
 
-.site-header .wordmark__sun {
-  width: 31px;
-  height: 31px;
-  color: var(--color-yellow);
-  fill: none;
-  stroke: currentcolor;
-  stroke-width: 1.8;
+.site-header .wordmark__mark {
+  width: 44px;
+  height: 44px;
+  display: block;
+  flex: 0 0 auto;
+  object-fit: contain;
 }
 
 .desktop-nav {
@@ -753,7 +752,7 @@ h1 mark {
     font-size: 1rem;
   }
 
-  .site-header .wordmark__sun {
+  .site-header .wordmark__mark {
     width: 25px;
     height: 25px;
   }
