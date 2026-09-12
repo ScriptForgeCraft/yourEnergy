@@ -681,15 +681,16 @@ font-size: clamp(32px, 3.2vw, 56px);
   border: 1px solid #ffffff4d;
   border-radius: 50%;
   background: #0c1c26;
-  color: #c7d0d5;
+  color: #c7d0d5 ;
   box-shadow: 0 0 0 5px #06131c;
   font-variant-numeric: tabular-nums;
   transition:
     background 220ms ease,
     border-color 220ms ease,
     color 220ms ease;
+ 
 }
-
+ 
 .process-progress__node b {
   font-size: 10px;
   font-weight: 650;
@@ -729,6 +730,9 @@ font-size: clamp(32px, 3.2vw, 56px);
 }
 .process-progress__button.is-complete .process-progress__node svg {
   display: block;
+  color: #f0ca60;
+  fill: none;
+  stroke: #f0ca60;
 }
 
 .process-stage__scroll-hint {
