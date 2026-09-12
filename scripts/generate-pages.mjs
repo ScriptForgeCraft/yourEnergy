@@ -257,12 +257,34 @@ const createPageConfig = (content, extra = {}) => ({
   ...extra
 });
 
+const headerNavigationKeys = Object.freeze([
+  'home',
+  'calculator',
+  'projects',
+  'process',
+  'contacts',
+  'about',
+  'blog'
+]);
+
+const createHeaderNavigationState = (activeKey = null) =>
+  Object.fromEntries(
+    headerNavigationKeys.map((key) => [key, key === activeKey ? 'is-active' : ''])
+  );
+
 const createHomeContext = (content, { pageKind = 'home' } = {}) => {
   const hero = createHeroContent(content);
   const calculatorHref = toolPath(content.locale, 'calculator');
   const projectsHref = placeholderPath(content.locale, 'projects');
   const contactsHref = placeholderPath(content.locale, 'contacts');
   const isHome = pageKind === 'home';
+  const activeNavigation = createHeaderNavigationState(
+    pageKind === 'home'
+      ? 'home'
+      : pageKind === 'calculator' || pageKind === 'offer-checker'
+        ? 'calculator'
+        : null
+  );
   const homeSectionHref = (href) =>
     !isHome && href.startsWith('#') ? `${content.homeHref}${href}` : href;
   const processCopy = processStoryCopy[content.locale];
@@ -297,11 +319,11 @@ const createHomeContext = (content, { pageKind = 'home' } = {}) => {
   return {
     ...content,
     hero,
-    headerOverlay: isHome,
-    headerClass: isHome ? ' site-header--overlay' : '',
     currentLanguageLabel: content.locale === 'hy' ? 'AM' : content.locale.toUpperCase(),
+    activeNavigation,
     calculatorHref,
     headerCtaHref: calculatorHref,
+    headerCtaLabel: content.common.headerCta,
     navLinks: {
       home: content.homeHref,
       calculator: calculatorHref,
@@ -400,7 +422,10 @@ const createQuickCalculatorContext = (content) => {
     path,
     meta: modeCopy.quickMeta,
     quick: modeCopy.quick,
-    headerCtaHref: `${path}#quick-calculator`,
+    // Visitors are already at the calculator, so the header CTA should move
+    // them forward to a conversation instead of pointing back to this page.
+    headerCtaHref: base.navLinks.contacts,
+    headerCtaLabel: content.projects.discuss,
     regions: ARMENIA_REGIONAL_BENCHMARKS.map((region) => ({
       id: region.id,
       label: regionLabels[content.locale][region.id]
@@ -482,6 +507,7 @@ const createPlaceholderContext = (content, { type, title }) => {
     ...createHomeContext(content, { pageKind: 'placeholder' }),
     path,
     title,
+    activeNavigation: createHeaderNavigationState(type),
     alternateLinks: createPlaceholderAlternateLinks(type),
     languageLinks: createPlaceholderLanguageLinks(content.locale, type)
   };

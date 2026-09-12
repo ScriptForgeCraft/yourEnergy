@@ -108,7 +108,7 @@
 /* Calculator wizard: functional UI stays in normal document flow so a map or
    result cannot appear on top of an unrelated hero card. */
 .tool-hero {
-  padding-block: clamp(2.5rem, 5vw, 4.5rem) 2rem;
+  padding: calc(var(--header-height) + clamp(2.5rem, 5vw, 4.5rem)) 0 2rem;
   background: linear-gradient(120deg, #071a2d 0%, #0d2c48 64%, #123650 100%);
   color: #fff;
 }

@@ -15,20 +15,28 @@
     <a class='skip-link' href='#main'>Անցնել հիմնական բովանդակությանը</a>
     <header class='site-header' data-header>
       <div class='container header-row'>
-        <a class='wordmark' href='/' aria-label='YOURENERGY — գլխավոր էջ'><span>YOUR</span><strong>ENERGY</strong></a>
+        <a class='wordmark' href='/' aria-label='YOURENERGY — գլխավոր էջ'><svg
+            class='wordmark__sun'
+            aria-hidden='true'
+          ><use href='/icons.svg#sun'></use></svg><span>YOUR</span><strong>ENERGY</strong></a>
         <nav class='desktop-nav' aria-label='Հիմնական նավիգացիա'>
-          <a href='/'>Գլխավոր</a>
-          <a href='/calculator/'>Հաշվիչ</a>
-          <a href='/projects/'>Նախագծեր</a>
-          <a href='/#process'>Ընթացք</a>
-          <a href='/contacts/'>Կապ</a>
-          <a href='/about/'>Մեր մասին</a>
-          <a href='/blog/'>Բլոգ</a>
+          <a class='' href='/'>Գլխավոր</a>
+          <a
+            class=''
+            href='/calculator/'
+          >Հաշվիչ</a>
+          <a class='' href='/projects/'>Նախագծեր</a>
+          <a class='' href='/#process'>Ընթացք</a>
+          <a class='' href='/contacts/'>Կապ</a>
+          <a class='is-active' href='/about/'>Մեր մասին</a>
+          <a class='' href='/blog/'>Բլոգ</a>
         </nav>
         <div class='header-actions'>
-          <a class='header-phone' href='tel:+37491095950'><strong>+374 91 095 950</strong><small
-            >Բաց է մինչև 21:00</small></a>
-            <nav class='language-switcher' aria-label='Լեզվի ընտրություն'><a
+          <details class='language-menu'>
+            <summary aria-label='Լեզվի ընտրություն'>AM<span
+                aria-hidden='true'
+              ></span></summary>
+            <nav aria-label='Լեզվի ընտրություն'><a
                   class='language-link'
                   href='/ru/about/'
                   hreflang='ru'
@@ -39,18 +47,31 @@
                   hreflang='en'
                   aria-label='EN — Անգլերեն'
                 >EN</a></nav>
+          </details>
           <a class='button button--small' href='/calculator/'>Ստանալ հաշվարկ</a>
         </div>
         <details class='mobile-menu' data-mobile-menu>
           <summary aria-label='Բացել նավիգացիոն ցանկը'><span></span><span></span><span></span></summary>
           <nav aria-label='Բջջային նավիգացիա'>
-            <a href='/'>Գլխավոր</a><a
+            <a class='' href='/'>Գլխավոր</a><a
+              class=''
               href='/calculator/'
-            >Հաշվիչ</a><a href='/projects/'>Նախագծեր</a><a
+            >Հաշվիչ</a><a
+              class=''
+              href='/projects/'
+            >Նախագծեր</a><a
+              class=''
               href='/#process'
-            >Ընթացք</a><a href='/contacts/'>Կապ</a><a
+            >Ընթացք</a><a
+              class=''
+              href='/contacts/'
+            >Կապ</a><a
+              class='is-active'
               href='/about/'
-            >Մեր մասին</a><a href='/blog/'>Բլոգ</a>
+            >Մեր մասին</a><a
+              class=''
+              href='/blog/'
+            >Բլոգ</a>
             <div class='mobile-language-switcher' role='group' aria-label='Լեզվի ընտրություն'><a
                   class='language-link'
                   href='/ru/about/'
@@ -70,5 +91,50 @@
         <h1 id='placeholder-title'>Մեր մասին</h1>
       </section>
     </main>
-  </body>
+    <footer class='site-footer' id='contacts'><div class='container footer-grid'><div><a
+            class='wordmark'
+            href='/'
+          ><span>YOUR</span><strong>ENERGY</strong></a><p>Արևային համակարգեր տան և բիզնեսի համար՝ աուդիտ, նախագծում, տեղադրում, սպասարկում և մոնիտորինգ։</p></div><div><h2>Տան համար</h2><ul role='list'><li><a
+                    href='/calculator/'
+                  >Հաշվիչ</a></li><li><a
+                    href='/#faq'
+                  >ՀՏՀ</a></li></ul></div><div><h2>Ընկերություն</h2><ul role='list'><li><a
+                    href='/#process'
+                  >Ինչպես է աշխատում</a></li></ul></div><div><h2>Տեղեկություն</h2><ul role='list'><li><a
+                    href='/#contacts'
+                  >Կապ</a></li></ul></div><div class='footer-contact'><h2
+          >Կապ</h2><p><svg class='inline-icon' aria-hidden='true'><use
+                href='/icons.svg#phone'
+              ></use></svg><a href='tel:+37491095950'>+374 91 095 950</a></p><p><svg
+              class='inline-icon'
+              aria-hidden='true'
+            ><use href='/icons.svg#pin'></use></svg><span
+              class='footer-address'
+            >Հայաստան, Երևան, Արտաշիսյան փողոց, 48/14</span></p><p><svg class='inline-icon' aria-hidden='true'><use
+                href='/icons.svg#pin'
+              ></use></svg><span class='footer-address'>Հայաստան, Կոտայքի մարզ, Զովունի, 26-րդ փողոց, 33</span></p><p><svg
+              class='inline-icon'
+              aria-hidden='true'
+            ><use href='/icons.svg#sun'></use></svg><span>Բաց է մինչև 21:00</span></p></div></div><div
+        class='container footer-bottom'
+      ><span>© 2026 YOURENERGY։ Բոլոր իրավունքները պաշտպանված են։</span><span><a
+            href='/privacy/'
+          >Գաղտնիության քաղաքականության նախագիծ</a><a
+            href='/terms/'
+          >Օգտագործման պայմանների նախագիծ</a></span></div></footer><nav
+      class='floating-contact-actions'
+      aria-label='Կապ'
+    ><a
+        class='floating-contact-action floating-contact-action--whatsapp'
+        href='https://wa.me/37491095950'
+        target='_blank'
+        rel='noopener noreferrer'
+        aria-label='Գրել մեզ WhatsApp-ով'
+        data-contact-label='WhatsApp'
+      ><svg aria-hidden='true' focusable='false'><use href='/icons.svg#whatsapp'></use></svg></a><a
+        class='floating-contact-action floating-contact-action--phone'
+        href='tel:+37491095950'
+        aria-label='Զանգել +374 91 095 950 համարով'
+        data-contact-label='+374 91 095 950'
+      ><svg aria-hidden='true' focusable='false'><use href='/icons.svg#phone'></use></svg></a></nav>  </body>
 </html>

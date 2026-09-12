@@ -50,3 +50,25 @@ test('page generator only emits useful support routes', async () => {
   assert.match(generator, /'terms\/index\.html'/u);
   assert.doesNotMatch(generator, /soon/iu);
 });
+
+test('every published page composes the shared cinematic header and footer', async () => {
+  const templates = await Promise.all(
+    [
+      'src/templates/home.hbs',
+      'src/templates/calculator-quick.hbs',
+      'src/templates/calculator-refine.hbs',
+      'src/templates/calculator.hbs',
+      'src/templates/offer-checker.hbs',
+      'src/templates/support.hbs',
+      'src/templates/placeholder.hbs'
+    ].map(async (path) => [path, await source(path)])
+  );
+
+  for (const [path, template] of templates) {
+    assert.match(template, /\{\{> site-header\}\}/u, `${path} must use the shared header`);
+    assert.match(template, /\{\{> site-footer\}\}/u, `${path} must use the shared footer`);
+  }
+
+  const header = await source('src/templates/partials/site-header.hbs');
+  assert.doesNotMatch(header, /headerOverlay|headerClass/u);
+});

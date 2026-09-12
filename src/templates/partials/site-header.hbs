@@ -1,53 +1,57 @@
-<header class='site-header{{headerClass}}' data-header>
+<header class='site-header' data-header>
   <div class='container header-row'>
-    <a class='wordmark' href='{{homeHref}}' aria-label='{{aria.logo}}'>{{#if headerOverlay}}<svg
-          class='wordmark__sun'
-          aria-hidden='true'
-        ><use href='/icons.svg#sun'></use></svg>{{/if}}<span>YOUR</span><strong>ENERGY</strong></a>
+    <a class='wordmark' href='{{homeHref}}' aria-label='{{aria.logo}}'><svg
+        class='wordmark__sun'
+        aria-hidden='true'
+      ><use href='/icons.svg#sun'></use></svg><span>YOUR</span><strong>ENERGY</strong></a>
     <nav class='desktop-nav' aria-label='{{aria.primaryNav}}'>
-      <a href='{{navLinks.home}}'>{{nav.home}}</a>
-      <a href='{{navLinks.calculator}}'>{{nav.calculator}}</a>
-      <a href='{{navLinks.projects}}'>{{nav.projects}}</a>
-      <a href='{{navLinks.process}}'>{{nav.process}}</a>
-      <a href='{{navLinks.contacts}}'>{{nav.contacts}}</a>
-      <a href='{{navLinks.about}}'>{{nav.about}}</a>
-      <a href='{{navLinks.blog}}'>{{nav.blog}}</a>
+      <a class='{{activeNavigation.home}}' href='{{navLinks.home}}'>{{nav.home}}</a>
+      <a
+        class='{{activeNavigation.calculator}}'
+        href='{{navLinks.calculator}}'
+      >{{nav.calculator}}</a>
+      <a class='{{activeNavigation.projects}}' href='{{navLinks.projects}}'>{{nav.projects}}</a>
+      <a class='{{activeNavigation.process}}' href='{{navLinks.process}}'>{{nav.process}}</a>
+      <a class='{{activeNavigation.contacts}}' href='{{navLinks.contacts}}'>{{nav.contacts}}</a>
+      <a class='{{activeNavigation.about}}' href='{{navLinks.about}}'>{{nav.about}}</a>
+      <a class='{{activeNavigation.blog}}' href='{{navLinks.blog}}'>{{nav.blog}}</a>
     </nav>
     <div class='header-actions'>
-      <a class='header-phone' href='{{contact.phoneHref}}'><strong>{{contact.phone}}</strong><small
-        >{{contact.hours}}</small></a>
-      {{#if headerOverlay}}
-        <details class='language-menu'>
-          <summary aria-label='{{aria.languageNav}}'>{{currentLanguageLabel}}<span
-              aria-hidden='true'
-            ></span></summary>
-          <nav aria-label='{{aria.languageNav}}'>{{#each languageLinks}}<a
-                class='language-link'
-                href='{{href}}'
-                hreflang='{{hreflang}}'
-                aria-label='{{label}} — {{name}}'
-              >{{label}}</a>{{/each}}</nav>
-        </details>
-      {{else}}
-        <nav class='language-switcher' aria-label='{{aria.languageNav}}'>{{#each languageLinks}}<a
+      <details class='language-menu'>
+        <summary aria-label='{{aria.languageNav}}'>{{currentLanguageLabel}}<span
+            aria-hidden='true'
+          ></span></summary>
+        <nav aria-label='{{aria.languageNav}}'>{{#each languageLinks}}<a
               class='language-link'
               href='{{href}}'
               hreflang='{{hreflang}}'
               aria-label='{{label}} — {{name}}'
             >{{label}}</a>{{/each}}</nav>
-      {{/if}}
-      <a class='button button--small' href='{{headerCtaHref}}'>{{common.headerCta}}</a>
+      </details>
+      <a class='button button--small' href='{{headerCtaHref}}'>{{headerCtaLabel}}</a>
     </div>
     <details class='mobile-menu' data-mobile-menu>
       <summary aria-label='{{aria.menu}}'><span></span><span></span><span></span></summary>
       <nav aria-label='{{aria.mobileNav}}'>
-        <a href='{{navLinks.home}}'>{{nav.home}}</a><a
+        <a class='{{activeNavigation.home}}' href='{{navLinks.home}}'>{{nav.home}}</a><a
+          class='{{activeNavigation.calculator}}'
           href='{{navLinks.calculator}}'
-        >{{nav.calculator}}</a><a href='{{navLinks.projects}}'>{{nav.projects}}</a><a
+        >{{nav.calculator}}</a><a
+          class='{{activeNavigation.projects}}'
+          href='{{navLinks.projects}}'
+        >{{nav.projects}}</a><a
+          class='{{activeNavigation.process}}'
           href='{{navLinks.process}}'
-        >{{nav.process}}</a><a href='{{navLinks.contacts}}'>{{nav.contacts}}</a><a
+        >{{nav.process}}</a><a
+          class='{{activeNavigation.contacts}}'
+          href='{{navLinks.contacts}}'
+        >{{nav.contacts}}</a><a
+          class='{{activeNavigation.about}}'
           href='{{navLinks.about}}'
-        >{{nav.about}}</a><a href='{{navLinks.blog}}'>{{nav.blog}}</a>
+        >{{nav.about}}</a><a
+          class='{{activeNavigation.blog}}'
+          href='{{navLinks.blog}}'
+        >{{nav.blog}}</a>
         <div class='mobile-language-switcher' role='group' aria-label='{{aria.languageNav}}'>{{#each
             languageLinks
           }}<a
