@@ -421,38 +421,55 @@
   backdrop-filter: blur(8px) saturate(112%);
 }
 
+@font-face {
+  font-family: 'Caveat Signature';
+  src: url('/fonts/caveat-500.ttf') format('truetype');
+  font-display: block;
+  font-weight: 500;
+}
+
+@font-face {
+  font-family: 'Poqrik Dzeragir';
+  src: url('/fonts/poqrik-dzeragir.ttf') format('truetype');
+  font-display: block;
+}
+
 .page-home .hero-signature {
   position: absolute;
   z-index: 2;
   bottom: clamp(90px, 11.5vh, 110px);
   left: clamp(24px, 5.5vw, 96px);
-  display: grid;
-  width: 108px;
-  color: rgb(255 255 255 / 88%);
-  font-family: 'Segoe Print', 'Bradley Hand', 'Comic Sans MS', cursive;
-  font-size: clamp(0.84rem, 1.05vw, 1.02rem);
+  width: 158px;
+  margin: 0;
+  color: #fffdf7;
+  font-family: 'Caveat Signature';
+  font-size: clamp(1.4rem, 1.9vw, 1.78rem);
   font-style: normal;
-  line-height: 1.08;
-  letter-spacing: 0.02em;
-  text-shadow: 0 2px 14px rgb(0 0 0 / 42%);
+  font-synthesis: none;
+  font-weight: 500;
+  line-height: 1;
+  text-align: left;
+  text-shadow: 0 2px 16px rgb(0 0 0 / 62%);
+  transform: rotate(-4deg);
 }
 
-.page-home .hero-signature span {
-  max-width: 92px;
+html[lang='hy'] .page-home .hero-signature {
+  font-family: 'Poqrik Dzeragir';
+  font-size: clamp(1.22rem, 1.64vw, 1.52rem);
+  font-weight: 400;
+  line-height: 1.14;
 }
 
-.page-home .hero-signature__flourish {
-  width: 102px;
-  height: 15px;
-  margin-top: 4px;
+.page-home .hero-signature svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin-top: 5px;
   overflow: visible;
-}
-
-.page-home .hero-signature__flourish path {
   fill: none;
-  stroke: rgb(245 189 24 / 86%);
+  stroke: #f2d27b;
   stroke-linecap: round;
-  stroke-width: 1.2;
+  stroke-width: 1.25;
 }
 
 .page-home .hero-trust-strip .trust-strip__inner {

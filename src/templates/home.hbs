@@ -109,7 +109,13 @@
               <p class='hero-dashboard__note'><svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#zap'></use></svg><span data-hero-analysis-note>{{hero.dashboardExample.note}}</span></p>
             </aside>
           </div>
-          <p class='hero-signature' aria-hidden='true'><span>{{hero.signatureLead}}</span><span>{{hero.signatureTail}}</span><svg class='hero-signature__flourish' viewBox='0 0 126 18' focusable='false'><path d='M2 14c25-7 50-9 72-6 19 2 34 1 50-5'></path></svg></p>
+          <p class='hero-signature'>{{hero.signatureLead}}<br />{{hero.signatureTail}}<svg
+              viewBox='0 0 160 24'
+              aria-hidden='true'
+              focusable='false'
+            ><path d='M58 10c15-4 31-5 47-2'></path><path
+                d='M82 16c18-3 36-3 53-1 4 0 7 1 10 1'
+              ></path></svg></p>
           <aside class='trust-strip hero-trust-strip' aria-label='{{trust.disclosure}}'>
             <div class='container trust-strip__inner'>
               {{#each trust.items}}
