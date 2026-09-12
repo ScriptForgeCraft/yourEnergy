@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang='{{locale}}'>
+  <head>
+    <meta charset='UTF-8' />
+    <meta name='viewport' content='width=device-width, initial-scale=1.0' />
+    <meta name='robots' content='noindex,follow' />
+    <meta name='theme-color' content='#071a2d' />
+    <title>{{title}} | YOURENERGY</title>
+    <link rel='canonical' href='https://yourenergy.am{{path}}' />
+    {{#each alternateLinks}}<link rel='alternate' hreflang='{{hreflang}}' href='{{href}}' />{{/each}}
+    <link rel='icon' href='/favicon.svg' type='image/svg+xml' />
+    <link rel='stylesheet' href='/src/styles/support.css' />
+  </head>
+  <body class='support-page'>
+    <a class='skip-link' href='#main'>{{aria.skip}}</a>
+    {{> site-header}}
+    <main class='support-main' id='main'>
+      <section class='support-shell' aria-labelledby='placeholder-title'>
+        <h1 id='placeholder-title'>{{title}}</h1>
+      </section>
+    </main>
+  </body>
+</html>

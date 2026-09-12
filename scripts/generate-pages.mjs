@@ -42,6 +42,7 @@ const offerCheckerTemplate = await readFile(
   'utf8'
 );
 const supportTemplate = await readFile(resolve(root, 'src/templates/support.hbs'), 'utf8');
+const placeholderTemplate = await readFile(resolve(root, 'src/templates/placeholder.hbs'), 'utf8');
 
 Handlebars.registerPartial(
   'site-header',
@@ -63,6 +64,7 @@ const renderQuickCalculator = Handlebars.compile(quickCalculatorTemplate, { noEs
 const renderRefineCalculator = Handlebars.compile(refineCalculatorTemplate, { noEscape: false });
 const renderOfferChecker = Handlebars.compile(offerCheckerTemplate, { noEscape: false });
 const renderSupport = Handlebars.compile(supportTemplate, { noEscape: false });
+const renderPlaceholder = Handlebars.compile(placeholderTemplate, { noEscape: false });
 const writeGenerated = (file, markup) => writeFile(file, markup.replace(/[ \t]+\n/g, '\n'), 'utf8');
 
 const runtimeLocales = Object.freeze(
@@ -133,6 +135,9 @@ const createLanguageLinks = (currentLocale) =>
 const toolPath = (locale, type) => (locale === 'hy' ? `/${type}/` : `/${locale}/${type}/`);
 const toolFile = (locale, type) =>
   locale === 'hy' ? `${type}/index.html` : `${locale}/${type}/index.html`;
+const placeholderPath = (locale, type) => (locale === 'hy' ? `/${type}/` : `/${locale}/${type}/`);
+const placeholderFile = (locale, type) =>
+  locale === 'hy' ? `${type}/index.html` : `${locale}/${type}/index.html`;
 const createToolAlternateLinks = (type) =>
   Object.freeze([
     ...GENERATED_CONTENT_LOCALES.map(({ key }) => ({
@@ -144,6 +149,21 @@ const createToolAlternateLinks = (type) =>
 const createToolLanguageLinks = (currentLocale, type) =>
   GENERATED_CONTENT_LOCALES.filter(({ key }) => key !== currentLocale).map(({ key }) => ({
     href: toolPath(key, type),
+    hreflang: key,
+    label: languageLabels[key],
+    name: localizedLanguageNames[currentLocale][key]
+  }));
+const createPlaceholderAlternateLinks = (type) =>
+  Object.freeze([
+    ...GENERATED_CONTENT_LOCALES.map(({ key }) => ({
+      hreflang: key,
+      href: `${origin}${placeholderPath(key, type)}`
+    })),
+    { hreflang: 'x-default', href: `${origin}${placeholderPath('hy', type)}` }
+  ]);
+const createPlaceholderLanguageLinks = (currentLocale, type) =>
+  GENERATED_CONTENT_LOCALES.filter(({ key }) => key !== currentLocale).map(({ key }) => ({
+    href: placeholderPath(key, type),
     hreflang: key,
     label: languageLabels[key],
     name: localizedLanguageNames[currentLocale][key]
@@ -283,9 +303,11 @@ const createHomeContext = (content, { pageKind = 'home' } = {}) => {
     navLinks: {
       home: content.homeHref,
       calculator: calculatorHref,
-      projects: homeSectionHref('#projects'),
+      projects: placeholderPath(content.locale, 'projects'),
       process: homeSectionHref('#process'),
-      contacts: '#contacts'
+      contacts: placeholderPath(content.locale, 'contacts'),
+      about: placeholderPath(content.locale, 'about'),
+      blog: placeholderPath(content.locale, 'blog')
     },
     solutionHref: calculatorHref,
     offerCheckerHref: toolPath(content.locale, 'offer-checker'),
@@ -453,6 +475,17 @@ const createOfferCheckerContext = (content) => {
   };
 };
 
+const createPlaceholderContext = (content, { type, title }) => {
+  const path = placeholderPath(content.locale, type);
+  return {
+    ...createHomeContext(content, { pageKind: 'placeholder' }),
+    path,
+    title,
+    alternateLinks: createPlaceholderAlternateLinks(type),
+    languageLinks: createPlaceholderLanguageLinks(content.locale, type)
+  };
+};
+
 const homeContent = { hy, ru, en };
 
 for (const { file, key } of GENERATED_CONTENT_LOCALES) {
@@ -523,6 +556,37 @@ for (const { key } of GENERATED_CONTENT_LOCALES) {
   const output = resolve(root, toolFile(key, 'offer-checker'));
   await mkdir(dirname(output), { recursive: true });
   await writeGenerated(output, renderOfferChecker(createOfferCheckerContext(content)));
+}
+
+const placeholderPages = Object.freeze([
+  {
+    type: 'projects',
+    titles: { hy: 'Նախագծեր', ru: 'Проекты', en: 'Projects' }
+  },
+  {
+    type: 'contacts',
+    titles: { hy: 'Կապ', ru: 'Контакты', en: 'Contacts' }
+  },
+  {
+    type: 'about',
+    titles: { hy: 'Մեր մասին', ru: 'О нас', en: 'About us' }
+  },
+  {
+    type: 'blog',
+    titles: { hy: 'Բլոգ', ru: 'Блог', en: 'Blog' }
+  }
+]);
+
+for (const { key } of GENERATED_CONTENT_LOCALES) {
+  const content = homeContent[key];
+  for (const { type, titles } of placeholderPages) {
+    const output = resolve(root, placeholderFile(key, type));
+    await mkdir(dirname(output), { recursive: true });
+    await writeGenerated(
+      output,
+      renderPlaceholder(createPlaceholderContext(content, { type, title: titles[key] }))
+    );
+  }
 }
 
 const supportPages = [

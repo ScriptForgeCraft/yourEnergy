@@ -44,10 +44,11 @@ export default {
   nav: {
     home: 'Главная',
     calculator: 'Калькулятор',
-    projects: 'Решения',
+    projects: 'Проекты',
     process: 'Процесс',
-    about: 'О компании',
-    contacts: 'Контакты'
+    contacts: 'Контакты',
+    about: 'О нас',
+    blog: 'Блог'
   },
   contact: {
     phone: '+374 91 095 950',

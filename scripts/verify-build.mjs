@@ -21,6 +21,12 @@ const privateCalculatorPages = [
   { page: 'ru/calculator/pro/index.html', locale: 'ru', type: 'calculator/pro' },
   { page: 'en/calculator/pro/index.html', locale: 'en', type: 'calculator/pro' }
 ];
+const placeholderTypes = ['projects', 'contacts', 'about', 'blog'];
+const placeholderPages = placeholderTypes.flatMap((type) => [
+  `${type}/index.html`,
+  `ru/${type}/index.html`,
+  `en/${type}/index.html`
+]);
 const expectedPages = [
   'index.html',
   'ru/index.html',
@@ -31,6 +37,7 @@ const expectedPages = [
   'en/index.html',
   'en/privacy/index.html',
   'en/terms/index.html',
+  ...placeholderPages,
   ...toolPages.map(({ page }) => page),
   ...privateCalculatorPages.map(({ page }) => page)
 ];
@@ -749,12 +756,16 @@ const supportPageSet = new Set([
   'en/privacy/index.html',
   'en/terms/index.html'
 ]);
+const placeholderPageSet = new Set(placeholderPages);
 for (const page of expectedPages.filter(
-  (page) => !publishedPages.has(page) && supportPageSet.has(page)
+  (page) => !publishedPages.has(page) && (supportPageSet.has(page) || placeholderPageSet.has(page))
 )) {
   if (!pages.has(page)) continue;
   const locale = page.startsWith('ru/') ? 'ru' : page.startsWith('en/') ? 'en' : 'hy';
-  const type = page.includes('/privacy/') || page === 'privacy/index.html' ? 'privacy' : 'terms';
+  const type =
+    placeholderTypes.find(
+      (candidate) => page === `${candidate}/index.html` || page.endsWith(`/${candidate}/index.html`)
+    ) ?? (page.includes('/privacy/') || page === 'privacy/index.html' ? 'privacy' : 'terms');
   validateNoindexLocalizedPage(pages.get(page), page, locale, type);
 }
 await validateSitemap();

@@ -44,10 +44,11 @@ export default {
   nav: {
     home: 'Գլխավոր',
     calculator: 'Հաշվիչ',
-    projects: 'Լուծումներ',
+    projects: 'Նախագծեր',
     process: 'Ընթացք',
+    contacts: 'Կապ',
     about: 'Մեր մասին',
-    contacts: 'Կապ'
+    blog: 'Բլոգ'
   },
   contact: {
     phone: '+374 91 095 950',
