@@ -260,6 +260,8 @@ const createPageConfig = (content, extra = {}) => ({
 const createHomeContext = (content, { pageKind = 'home' } = {}) => {
   const hero = createHeroContent(content);
   const calculatorHref = toolPath(content.locale, 'calculator');
+  const projectsHref = placeholderPath(content.locale, 'projects');
+  const contactsHref = placeholderPath(content.locale, 'contacts');
   const isHome = pageKind === 'home';
   const homeSectionHref = (href) =>
     !isHome && href.startsWith('#') ? `${content.homeHref}${href}` : href;
@@ -303,9 +305,9 @@ const createHomeContext = (content, { pageKind = 'home' } = {}) => {
     navLinks: {
       home: content.homeHref,
       calculator: calculatorHref,
-      projects: placeholderPath(content.locale, 'projects'),
+      projects: projectsHref,
       process: homeSectionHref('#process'),
-      contacts: placeholderPath(content.locale, 'contacts'),
+      contacts: contactsHref,
       about: placeholderPath(content.locale, 'about'),
       blog: placeholderPath(content.locale, 'blog')
     },
@@ -340,16 +342,15 @@ const createHomeContext = (content, { pageKind = 'home' } = {}) => {
     },
     projects: {
       ...content.projects,
+      allHref: projectsHref,
+      discussHref: contactsHref,
       items: content.projects.items.map((item) => ({
         ...item,
-        cardClass: item.featured ? 'project-card--featured' : '',
-        avifSrcset: `/images/${item.image}-480.avif 480w, /images/${item.image}-800.avif 800w${item.featured ? `, /images/${item.image}-1200.avif 1200w` : ''}`,
-        webpSrcset: `/images/${item.image}-480.webp 480w, /images/${item.image}-800.webp 800w${item.featured ? `, /images/${item.image}-1200.webp 1200w` : ''}`,
-        imageSizes: item.featured
-          ? '(max-width: 720px) 82vw, 52vw'
-          : '(max-width: 720px) 82vw, 24vw',
+        avifSrcset: `/images/${item.image}-480.avif 480w, /images/${item.image}-800.avif 800w`,
+        webpSrcset: `/images/${item.image}-480.webp 480w, /images/${item.image}-800.webp 800w`,
+        imageSizes: '(max-width: 720px) 82vw, (max-width: 1100px) 44vw, 22vw',
         illustrativeLabel: content.common.illustrative,
-        badgeLabel: content.projects.badge
+        href: projectsHref
       }))
     },
     jsonLd: escapeJsonForHtml(createJsonLd(content)),

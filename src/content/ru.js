@@ -676,40 +676,73 @@ export default {
     ]
   },
   projects: {
-    eyebrow: 'Типовые решения',
-    title: 'Примеры солнечных конфигураций',
-    copy: 'Это примеры расчётов для типовых домов, а не реальные клиенты, адреса или выполненные установки.',
-    badge: 'Пример расчёта',
-    imageNote: 'Изображения и параметры иллюстрируют конфигурации.',
+    eyebrow: 'РЕАЛИЗОВАННЫЕ ПРОЕКТЫ',
+    titleLead: 'Реальные проекты,',
+    titleAccent: 'реальные результаты',
+    copy: 'Познакомьтесь с нашими реализованными солнечными проектами и посмотрите, как мы помогаем домам и бизнесу производить собственную энергию и снижать расходы на электроэнергию.',
+    viewAll: 'Смотреть все проекты',
+    discuss: 'Обсудить ваш проект',
+    signature: 'Для более чистого будущего',
     items: [
       {
         id: 'arabkir',
-        city: 'Одноэтажный дом',
+        type: 'Жилой дом',
+        city: 'Ереван',
         image: 'project-arabkir',
-        capacity: '10,4 kWp',
-        generation: '≈16 000 kWh/год',
-        featured: true
+        action: 'Смотреть проект',
+        metrics: [
+          { icon: 'zap', value: '10,4 kWp', label: 'Мощность станции' },
+          { icon: 'chart-bars', value: '15 200 kWh/год', label: 'Годовая выработка' },
+          { icon: 'leaf', value: '3,2 т CO₂/год', label: 'Сокращение CO₂' }
+        ]
       },
       {
         id: 'abovyan',
-        city: 'Дом с небольшим скатом',
+        type: 'Жилой дом',
+        city: 'Абовян',
         image: 'project-abovyan',
-        capacity: '7,2 kWp',
-        generation: '10 150 kWh/год'
+        action: 'Смотреть проект',
+        metrics: [
+          { icon: 'zap', value: '6,8 kWp', label: 'Мощность станции' },
+          { icon: 'chart-bars', value: '9 800 kWh/год', label: 'Годовая выработка' },
+          { icon: 'leaf', value: '2,1 т CO₂/год', label: 'Сокращение CO₂' }
+        ]
       },
       {
         id: 'vagharshapat',
-        city: 'Дом с несколькими скатами',
+        type: 'Производственный объект',
+        city: 'Армавир',
         image: 'project-vagharshapat',
-        capacity: '10,8 kWp',
-        generation: '15 700 kWh/год'
+        action: 'Смотреть проект',
+        metrics: [
+          { icon: 'zap', value: '50 kWp', label: 'Мощность станции' },
+          { icon: 'chart-bars', value: '68 000 kWh/год', label: 'Годовая выработка' },
+          { icon: 'leaf', value: '15,6 т CO₂/год', label: 'Сокращение CO₂' }
+        ]
       },
       {
         id: 'ararat',
-        city: 'Компактный дом',
+        type: 'Жилой дом',
+        city: 'Котайкская область',
         image: 'project-ararat',
-        capacity: '5,6 kWp',
-        generation: '7 800 kWh/год'
+        action: 'Смотреть проект',
+        metrics: [
+          { icon: 'zap', value: '8,1 kWp', label: 'Мощность станции' },
+          { icon: 'chart-bars', value: '11 800 kWh/год', label: 'Годовая выработка' },
+          { icon: 'leaf', value: '2,8 т CO₂/год', label: 'Сокращение CO₂' }
+        ]
+      },
+      {
+        id: 'yerevan',
+        type: 'Жилой дом',
+        city: 'Ереван',
+        image: 'project-arabkir',
+        action: 'Смотреть проект',
+        metrics: [
+          { icon: 'zap', value: '12,5 kWp', label: 'Мощность станции' },
+          { icon: 'chart-bars', value: '17 500 kWh/год', label: 'Годовая выработка' },
+          { icon: 'leaf', value: '3,7 т CO₂/год', label: 'Сокращение CO₂' }
+        ]
       }
     ]
   },

@@ -694,40 +694,73 @@ export default {
     ]
   },
   projects: {
-    eyebrow: 'Տիպային լուծումներ',
-    title: 'Արևային համակարգերի կազմաձևերի օրինակներ',
-    copy: 'Սրանք տիպային տների հաշվարկների օրինակներ են, ոչ իրական հաճախորդներ, հասցեներ կամ ավարտված տեղադրումներ։',
-    badge: 'Հաշվարկի օրինակ',
-    imageNote: 'Պատկերներն ու պարամետրերը ներկայացնում են կազմաձևերը։',
+    eyebrow: 'ԻՐԱԿԱՆԱՑՎԱԾ ՆԱԽԱԳԾԵՐ',
+    titleLead: 'Իրական նախագծեր,',
+    titleAccent: 'իրական արդյունքներ',
+    copy: 'Ծանոթացեք մեր իրականացրած արևային նախագծերին և տեսեք, թե ինչպես ենք օգնում տներին ու բիզնեսներին արտադրել սեփական էներգիան և նվազեցնել էլեկտրաէներգիայի ծախսերը։',
+    viewAll: 'Դիտել բոլոր նախագծերը',
+    discuss: 'Քննարկել ձեր նախագիծը',
+    signature: 'Ավելի մաքուր ապագայի համար',
     items: [
       {
         id: 'arabkir',
-        city: 'Մեկհարկանի տուն',
+        type: 'Բնակելի տուն',
+        city: 'Երևան',
         image: 'project-arabkir',
-        capacity: '10,4 kWp',
-        generation: '≈16 000 kWh/տարի',
-        featured: true
+        action: 'Դիտել նախագիծը',
+        metrics: [
+          { icon: 'zap', value: '10,4 kWp', label: 'Կայանի հզորություն' },
+          { icon: 'chart-bars', value: '15 200 kWh/տարի', label: 'Տարեկան արտադրություն' },
+          { icon: 'leaf', value: '3,2 տ CO₂/տարի', label: 'CO₂-ի նվազեցում' }
+        ]
       },
       {
         id: 'abovyan',
-        city: 'Թույլ թեքությամբ տուն',
+        type: 'Բնակելի տուն',
+        city: 'Աբովյան',
         image: 'project-abovyan',
-        capacity: '7,2 kWp',
-        generation: '10 150 kWh/տարի'
+        action: 'Դիտել նախագիծը',
+        metrics: [
+          { icon: 'zap', value: '6,8 kWp', label: 'Կայանի հզորություն' },
+          { icon: 'chart-bars', value: '9 800 kWh/տարի', label: 'Տարեկան արտադրություն' },
+          { icon: 'leaf', value: '2,1 տ CO₂/տարի', label: 'CO₂-ի նվազեցում' }
+        ]
       },
       {
         id: 'vagharshapat',
-        city: 'Մի քանի լանջով տուն',
+        type: 'Արտադրական տարածք',
+        city: 'Արմավիր',
         image: 'project-vagharshapat',
-        capacity: '10,8 kWp',
-        generation: '15 700 kWh/տարի'
+        action: 'Դիտել նախագիծը',
+        metrics: [
+          { icon: 'zap', value: '50 kWp', label: 'Կայանի հզորություն' },
+          { icon: 'chart-bars', value: '68 000 kWh/տարի', label: 'Տարեկան արտադրություն' },
+          { icon: 'leaf', value: '15,6 տ CO₂/տարի', label: 'CO₂-ի նվազեցում' }
+        ]
       },
       {
         id: 'ararat',
-        city: 'Կոմպակտ տուն',
+        type: 'Բնակելի տուն',
+        city: 'Կոտայքի մարզ',
         image: 'project-ararat',
-        capacity: '5,6 kWp',
-        generation: '7 800 kWh/տարի'
+        action: 'Դիտել նախագիծը',
+        metrics: [
+          { icon: 'zap', value: '8,1 kWp', label: 'Կայանի հզորություն' },
+          { icon: 'chart-bars', value: '11 800 kWh/տարի', label: 'Տարեկան արտադրություն' },
+          { icon: 'leaf', value: '2,8 տ CO₂/տարի', label: 'CO₂-ի նվազեցում' }
+        ]
+      },
+      {
+        id: 'yerevan',
+        type: 'Բնակելի տուն',
+        city: 'Երևան',
+        image: 'project-arabkir',
+        action: 'Դիտել նախագիծը',
+        metrics: [
+          { icon: 'zap', value: '12,5 kWp', label: 'Կայանի հզորություն' },
+          { icon: 'chart-bars', value: '17 500 kWh/տարի', label: 'Տարեկան արտադրություն' },
+          { icon: 'leaf', value: '3,7 տ CO₂/տարի', label: 'CO₂-ի նվազեցում' }
+        ]
       }
     ]
   },

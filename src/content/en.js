@@ -673,40 +673,73 @@ export default {
     ]
   },
   projects: {
-    eyebrow: 'Typical solutions',
-    title: 'Examples of solar configurations',
-    copy: 'These are example calculations for typical homes, not real clients, addresses or completed installations.',
-    badge: 'Calculation example',
-    imageNote: 'Images and parameters illustrate configurations.',
+    eyebrow: 'COMPLETED PROJECTS',
+    titleLead: 'Real projects,',
+    titleAccent: 'real results',
+    copy: 'Explore our completed solar projects and see how we help homes and businesses produce their own energy and reduce electricity costs.',
+    viewAll: 'View all projects',
+    discuss: 'Discuss your project',
+    signature: 'For a cleaner future',
     items: [
       {
         id: 'arabkir',
-        city: 'Single-storey home',
+        type: 'Residential home',
+        city: 'Yerevan',
         image: 'project-arabkir',
-        capacity: '10.4 kWp',
-        generation: '≈16,000 kWh/year',
-        featured: true
+        action: 'View project',
+        metrics: [
+          { icon: 'zap', value: '10.4 kWp', label: 'System capacity' },
+          { icon: 'chart-bars', value: '15,200 kWh/year', label: 'Annual production' },
+          { icon: 'leaf', value: '3.2 t CO₂/year', label: 'CO₂ avoided' }
+        ]
       },
       {
         id: 'abovyan',
-        city: 'Home with a shallow roof',
+        type: 'Residential home',
+        city: 'Abovyan',
         image: 'project-abovyan',
-        capacity: '7.2 kWp',
-        generation: '10,150 kWh/year'
+        action: 'View project',
+        metrics: [
+          { icon: 'zap', value: '6.8 kWp', label: 'System capacity' },
+          { icon: 'chart-bars', value: '9,800 kWh/year', label: 'Annual production' },
+          { icon: 'leaf', value: '2.1 t CO₂/year', label: 'CO₂ avoided' }
+        ]
       },
       {
         id: 'vagharshapat',
-        city: 'Home with multiple roof planes',
+        type: 'Commercial facility',
+        city: 'Armavir',
         image: 'project-vagharshapat',
-        capacity: '10.8 kWp',
-        generation: '15,700 kWh/year'
+        action: 'View project',
+        metrics: [
+          { icon: 'zap', value: '50 kWp', label: 'System capacity' },
+          { icon: 'chart-bars', value: '68,000 kWh/year', label: 'Annual production' },
+          { icon: 'leaf', value: '15.6 t CO₂/year', label: 'CO₂ avoided' }
+        ]
       },
       {
         id: 'ararat',
-        city: 'Compact home',
+        type: 'Residential home',
+        city: 'Kotayk region',
         image: 'project-ararat',
-        capacity: '5.6 kWp',
-        generation: '7,800 kWh/year'
+        action: 'View project',
+        metrics: [
+          { icon: 'zap', value: '8.1 kWp', label: 'System capacity' },
+          { icon: 'chart-bars', value: '11,800 kWh/year', label: 'Annual production' },
+          { icon: 'leaf', value: '2.8 t CO₂/year', label: 'CO₂ avoided' }
+        ]
+      },
+      {
+        id: 'yerevan',
+        type: 'Residential home',
+        city: 'Yerevan',
+        image: 'project-arabkir',
+        action: 'View project',
+        metrics: [
+          { icon: 'zap', value: '12.5 kWp', label: 'System capacity' },
+          { icon: 'chart-bars', value: '17,500 kWh/year', label: 'Annual production' },
+          { icon: 'leaf', value: '3.7 t CO₂/year', label: 'CO₂ avoided' }
+        ]
       }
     ]
   },
