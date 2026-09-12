@@ -29,13 +29,13 @@ p {
 h2 {
   margin: 0;
   max-width: 19ch;
-  font-size: clamp(2rem, 3.7vw, 4rem);
-  line-height: 1.01;
-  letter-spacing: -0.055em;
+  font-size: clamp(2rem, 3.7vw, 4rem) !important;
+  line-height: 1.01 !important;
 }
 
 h3 {
   margin: 0;
+
   letter-spacing: -0.035em;
 }
 
