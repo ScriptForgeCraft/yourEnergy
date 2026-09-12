@@ -1046,7 +1046,8 @@ h3 {
   max-width: none;
   margin: 0 0 14px;
   color: #fff;
-  font-size: 0.8rem;
+  font-size: 0.8rem !important;
+  line-height: 1.2 !important;
   letter-spacing: 0;
 }
 
