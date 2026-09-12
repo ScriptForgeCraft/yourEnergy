@@ -873,15 +873,11 @@ export default {
       },
       {
         title: 'Company',
-        links: [
-          ['How it works', '#process']
-        ]
+        links: [['How it works', '#process']]
       },
       {
         title: 'Information',
-        links: [
-          ['Contact', '#contacts']
-        ]
+        links: [['Contact', '#contacts']]
       }
     ],
     privacy: 'Draft privacy policy',

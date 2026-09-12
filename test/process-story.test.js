@@ -6,6 +6,7 @@ import {
   getProcessStepIndex
 } from '../src/ui/process-story.js';
 import { processStoryCopy } from '../src/content/process-story.js';
+import { PROCESS_IMAGE_ASSETS, createProcessImageContext } from '../src/config/process-images.js';
 import { createCalculatorSession } from '../src/ui/calculator-session.js';
 
 const analysis = {
@@ -137,4 +138,28 @@ test('HY, RU and EN expose the same six process visuals and content shape', () =
     );
     assert.ok(copy.steps.every(({ nav, headline, copy: body }) => nav && headline && body));
   }
+});
+
+test('process image srcsets describe only real generated widths', () => {
+  assert.deepEqual(
+    PROCESS_IMAGE_ASSETS.map(({ visual, widths, width, height }) => ({
+      visual,
+      widths: [...widths],
+      width,
+      height
+    })),
+    [
+      { visual: 'analysis', widths: [640, 1024, 1536], width: 1536, height: 1024 },
+      { visual: 'inspection', widths: [640, 1024, 1600], width: 1600, height: 900 },
+      { visual: 'design', widths: [640, 1024, 1600], width: 1600, height: 900 },
+      { visual: 'proposal', widths: [640, 1024, 1600], width: 1600, height: 900 },
+      { visual: 'installation', widths: [640, 1024, 1600], width: 1600, height: 900 },
+      { visual: 'support', widths: [640, 1024, 1600], width: 1600, height: 900 }
+    ]
+  );
+
+  const analysis = createProcessImageContext('analysis');
+  assert.equal(analysis.src, '/images/process-step-analysis-1536.jpg');
+  assert.match(analysis.avifSrcset, /process-step-analysis-1536\.avif 1536w/u);
+  assert.doesNotMatch(analysis.avifSrcset, /(?:1600|2560|3200)w/u);
 });

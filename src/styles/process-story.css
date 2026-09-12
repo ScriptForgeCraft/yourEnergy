@@ -379,7 +379,6 @@
   will-change: transform, opacity;
 }
 
-
 .process-metrics {
   position: absolute;
   z-index: 5;
@@ -647,15 +646,29 @@
 
 .process-progress li {
   position: relative;
-  display: grid;
-  grid-template-columns: 34px 1fr;
-  align-items: center;
-  gap: 12px;
   min-width: 0;
   color: #84939d;
   font-size: clamp(9px, 0.72vw, 12px);
   font-weight: 500;
   line-height: 1.25;
+}
+
+.process-progress__button {
+  display: grid;
+  grid-template-columns: 34px 1fr;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  line-height: inherit;
+  text-align: left;
+  cursor: pointer;
   transition: color 220ms ease;
 }
 
@@ -688,12 +701,12 @@
   height: 17px;
 }
 
-.process-progress li.is-active {
+.process-progress__button.is-active {
   color: #fff;
   font-weight: 650;
 }
 
-.process-progress li.is-active .process-progress__node {
+.process-progress__button.is-active .process-progress__node {
   border-color: #ffe184;
   background: linear-gradient(145deg, #f3ca5c, #b77907);
   color: #fff;
@@ -702,19 +715,19 @@
     0 0 22px #e8ae304c;
 }
 
-.process-progress li.is-complete {
+.process-progress__button.is-complete {
   color: #c1cbd0;
 }
 
-.process-progress li.is-complete .process-progress__node {
+.process-progress__button.is-complete .process-progress__node {
   border-color: #d7b44f;
   color: #f0ca60;
 }
 
-.process-progress li.is-complete .process-progress__node b {
+.process-progress__button.is-complete .process-progress__node b {
   display: none;
 }
-.process-progress li.is-complete .process-progress__node svg {
+.process-progress__button.is-complete .process-progress__node svg {
   display: block;
 }
 
@@ -768,10 +781,10 @@
     right: 18px;
     width: 38px;
   }
-  .process-progress li {
+  .process-progress__button {
     grid-template-columns: 34px;
   }
-  .process-progress li > span:last-child {
+  .process-progress__button > span:last-child {
     position: absolute;
     width: 1px;
     height: 1px;
@@ -907,13 +920,13 @@
     transform: scaleX(var(--process-progress));
     transform-origin: left;
   }
-  .process-progress li {
+  .process-progress__button {
     display: grid;
     grid-template-columns: 1fr;
     justify-items: center;
     gap: 0;
   }
-  .process-progress li > span:last-child {
+  .process-progress__button > span:last-child {
     position: absolute;
     width: 1px;
     height: 1px;

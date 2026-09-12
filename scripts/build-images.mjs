@@ -1,6 +1,7 @@
-import { mkdir } from 'node:fs/promises';
+import { mkdir, readdir, stat, unlink } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import sharp from 'sharp';
+import { PROCESS_IMAGE_ASSETS } from '../src/config/process-images.js';
 
 const root = resolve(import.meta.dirname, '..');
 const sourceDir = resolve(root, 'assets/source');
@@ -40,48 +41,13 @@ const assets = [
     widths: [640, 1024, 1600],
     quality: 68
   },
-  { name: 'roof-scan', widths: [480, 768, 1200, 1600] },
+  { name: 'roof-scan', widths: [480, 768, 1200, 1536] },
   { name: 'project-arabkir', widths: [480, 800, 1200] },
   { name: 'project-abovyan', widths: [480, 800] },
   { name: 'project-vagharshapat', widths: [480, 800] },
   { name: 'project-ararat', widths: [480, 800] },
   { name: 'engineer-onsite', widths: [480, 800, 1200] },
-  {
-    name: 'process-step-analysis',
-    source: 'process/process-step-analysis',
-    widths: [640, 1024, 1600, 2560, 3200],
-    quality: 74
-  },
-  {
-    name: 'process-step-inspection',
-    source: 'process/process-step-inspection',
-    widths: [640, 1024, 1600, 2560, 3200],
-    quality: 74
-  },
-  {
-    name: 'process-step-design',
-    source: 'process/process-step-design',
-    widths: [640, 1024, 1600, 2560, 3200],
-    quality: 74
-  },
-  {
-    name: 'process-step-proposal',
-    source: 'process/process-step-proposal',
-    widths: [640, 1024, 1600, 2560, 3200],
-    quality: 74
-  },
-  {
-    name: 'process-step-installation',
-    source: 'process/process-step-installation',
-    widths: [640, 1024, 1600, 2560, 3200],
-    quality: 74
-  },
-  {
-    name: 'process-step-support',
-    source: 'process/process-step-support',
-    widths: [640, 1024, 1600, 2560, 3200],
-    quality: 74
-  },
+  ...PROCESS_IMAGE_ASSETS,
   { name: 'solutions-home', source: 'solutions/solutions-home', widths: [640, 1024, 1600] },
   { name: 'solutions-roof', source: 'solutions/solutions-roof', widths: [640, 1024, 1600] },
   {
@@ -111,9 +77,48 @@ const assets = [
   }
 ];
 
+const outputExtensions = ['avif', 'webp', 'jpg'];
+const expectedOutputs = new Set(
+  assets.flatMap(({ name, widths }) =>
+    widths.flatMap((width) => outputExtensions.map((extension) => `${name}-${width}.${extension}`))
+  )
+);
+const managedNames = new Set(assets.map(({ name }) => name));
+
+for (const filename of await readdir(outputDir)) {
+  const match = filename.match(/^(.+)-(\d+)\.(avif|webp|jpg)$/u);
+  if (match && managedNames.has(match[1]) && !expectedOutputs.has(filename)) {
+    await unlink(resolve(outputDir, filename));
+  }
+}
+
+const outputIsCurrent = async (sourcePath, outputPaths) => {
+  const sourceModifiedAt = (await stat(sourcePath)).mtimeMs;
+  try {
+    const outputs = await Promise.all(outputPaths.map((outputPath) => stat(outputPath)));
+    return outputs.every(({ mtimeMs }) => mtimeMs >= sourceModifiedAt);
+  } catch {
+    return false;
+  }
+};
+
 for (const { name, source = name, widths, quality } of assets) {
+  const sourcePath = resolve(sourceDir, `${source}.png`);
+  const sourceMetadata = await sharp(sourcePath).metadata();
+
   for (const width of widths) {
-    const image = sharp(resolve(sourceDir, `${source}.png`)).resize({
+    if (!sourceMetadata.width || width > sourceMetadata.width) {
+      throw new Error(
+        `${name} requests ${width}px, but its source is only ${sourceMetadata.width ?? 'unknown'}px wide.`
+      );
+    }
+
+    const outputPaths = outputExtensions.map((extension) =>
+      resolve(outputDir, `${name}-${width}.${extension}`)
+    );
+    if (await outputIsCurrent(sourcePath, outputPaths)) continue;
+
+    const image = sharp(sourcePath).resize({
       width,
       withoutEnlargement: true
     });
@@ -122,15 +127,15 @@ for (const { name, source = name, widths, quality } of assets) {
       image
         .clone()
         .avif({ quality: quality ?? 56, effort: 5 })
-        .toFile(resolve(outputDir, `${name}-${width}.avif`)),
+        .toFile(outputPaths[0]),
       image
         .clone()
         .webp({ quality: quality ? 84 : 76, effort: 5 })
-        .toFile(resolve(outputDir, `${name}-${width}.webp`)),
+        .toFile(outputPaths[1]),
       image
         .clone()
         .jpeg({ quality: quality ? 88 : 78, progressive: true, mozjpeg: true })
-        .toFile(resolve(outputDir, `${name}-${width}.jpg`))
+        .toFile(outputPaths[2])
     ]);
   }
 }

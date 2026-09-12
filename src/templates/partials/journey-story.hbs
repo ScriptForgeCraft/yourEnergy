@@ -10,11 +10,18 @@
         ></i></span>
       <ol>
         {{#each processStory.steps}}
-          <li class='{{progressClass}}' data-process-progress-step='{{index}}'>
-            <span class='process-progress__node' aria-hidden='true'><b>{{number}}</b><svg><use
-                  href='/icons.svg#check'
-                ></use></svg></span>
-            <span>{{nav}}</span>
+          <li>
+            <button
+              class='process-progress__button {{progressClass}}'
+              type='button'
+              data-process-progress-step='{{index}}'
+              aria-controls='process-state-{{number}}'
+            >
+              <span class='process-progress__node' aria-hidden='true'><b>{{number}}</b><svg><use
+                    href='/icons.svg#check'
+                  ></use></svg></span>
+              <span>{{nav}}</span>
+            </button>
           </li>
         {{/each}}
       </ol>
@@ -23,28 +30,21 @@
     <div class='process-stage__states'>
       {{#each processStory.steps}}
         <article
+          id='process-state-{{number}}'
           class='process-state {{stateClass}} process-state--photo process-state--{{visual}}'
           data-process-state='{{index}}'
           aria-labelledby='process-step-title-{{number}}'
           aria-hidden='{{ariaHidden}}'
         >
           <picture class='process-state__media' aria-hidden='true'>
-            <source
-              type='image/avif'
-              srcset='/images/process-step-{{visual}}-640.avif 640w, /images/process-step-{{visual}}-1024.avif 1024w, /images/process-step-{{visual}}-1600.avif 1600w, /images/process-step-{{visual}}-2560.avif 2560w, /images/process-step-{{visual}}-3200.avif 3200w'
-              sizes='100vw'
-            />
-            <source
-              type='image/webp'
-              srcset='/images/process-step-{{visual}}-640.webp 640w, /images/process-step-{{visual}}-1024.webp 1024w, /images/process-step-{{visual}}-1600.webp 1600w, /images/process-step-{{visual}}-2560.webp 2560w, /images/process-step-{{visual}}-3200.webp 3200w'
-              sizes='100vw'
-            />
+            <source type='image/avif' srcset='{{image.avifSrcset}}' sizes='100vw' />
+            <source type='image/webp' srcset='{{image.webpSrcset}}' sizes='100vw' />
             <img
-              src='/images/process-step-{{visual}}-3200.jpg'
-              srcset='/images/process-step-{{visual}}-640.jpg 640w, /images/process-step-{{visual}}-1024.jpg 1024w, /images/process-step-{{visual}}-1600.jpg 1600w, /images/process-step-{{visual}}-2560.jpg 2560w, /images/process-step-{{visual}}-3200.jpg 3200w'
+              src='{{image.src}}'
+              srcset='{{image.jpegSrcset}}'
               sizes='100vw'
-              width='3200'
-              height='1800'
+              width='{{image.width}}'
+              height='{{image.height}}'
               alt=''
               loading='lazy'
               decoding='async'
@@ -63,7 +63,6 @@
               <text x='1225' y='355'>E</text>
             </svg>
           {{/if}}
-
 
           <div class='process-state__copy' data-process-copy>
             <p class='process-state__eyebrow'><span aria-hidden='true'></span>{{stepLabel}}</p>

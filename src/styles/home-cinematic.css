@@ -1295,12 +1295,11 @@
     padding-block: 76px;
   }
 
-
-@media (max-width: 390px) {
-  .page-home .hero-trust-strip .trust-strip__inner {
-    grid-template-columns: 1fr;
+  @media (max-width: 390px) {
+    .page-home .hero-trust-strip .trust-strip__inner {
+      grid-template-columns: 1fr;
+    }
   }
-}
   .page-home .passport-energy-bridge {
     height: 230px;
   }

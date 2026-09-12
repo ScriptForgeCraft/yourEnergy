@@ -222,8 +222,6 @@ export const initProcessStory = ({ config = {} } = {}) => {
     states[index]?.querySelectorAll('[data-process-number]').forEach(animateMetric);
   };
 
-
-
   const form = root.querySelector('[data-process-form]');
   const region = form?.querySelector('[data-process-region]');
   const amount = form?.querySelector('[data-process-amount]');
@@ -385,6 +383,8 @@ export const initProcessStory = ({ config = {} } = {}) => {
         let mobileWheelBurst = false;
         let mobileNavigating = false;
         let mobileTransition = null;
+        let mobileScrollBehaviorFrame = 0;
+        let mobileSavedScrollBehavior = null;
         let touchStartY = null;
         let touchDirection = 0;
 
@@ -392,6 +392,21 @@ export const initProcessStory = ({ config = {} } = {}) => {
           const header = document.querySelector('.site-header');
           const progress = root.querySelector('.process-progress');
           return (header?.offsetHeight ?? 0) + (progress?.offsetHeight ?? 0) + 8;
+        };
+
+        const setMobileScrollTop = (top) => {
+          const documentElement = document.documentElement;
+          if (mobileSavedScrollBehavior === null) {
+            mobileSavedScrollBehavior = documentElement.style.scrollBehavior;
+          }
+          documentElement.style.scrollBehavior = 'auto';
+          window.cancelAnimationFrame(mobileScrollBehaviorFrame);
+          window.scrollTo({ top: Math.max(0, top), behavior: 'auto' });
+          mobileScrollBehaviorFrame = window.requestAnimationFrame(() => {
+            documentElement.style.scrollBehavior = mobileSavedScrollBehavior;
+            mobileSavedScrollBehavior = null;
+            mobileScrollBehaviorFrame = 0;
+          });
         };
 
         const activeStateOwnsViewport = () => {
@@ -445,8 +460,8 @@ export const initProcessStory = ({ config = {} } = {}) => {
 
           const top =
             window.scrollY + state.getBoundingClientRect().top - Math.max(0, mobileScrollOffset());
-          window.scrollTo({ top: Math.max(0, top), behavior: 'auto' });
-          animateMobileStep(targetIndex, direction);
+          setMobileScrollTop(top);
+          if (!reducedMotion) animateMobileStep(targetIndex, direction);
 
           mobileNavigationTimer = window.setTimeout(() => {
             mobileNavigating = false;
@@ -458,6 +473,12 @@ export const initProcessStory = ({ config = {} } = {}) => {
           if (targetIndex < 0 || targetIndex >= states.length) return false;
           scrollToMobileStep(targetIndex, direction);
           return true;
+        };
+
+        const onProgressStepClick = (event) => {
+          const targetIndex = Number(event.currentTarget.dataset.processProgressStep);
+          if (!Number.isInteger(targetIndex) || targetIndex === activeIndex) return;
+          scrollToMobileStep(targetIndex, targetIndex > activeIndex ? 1 : -1);
         };
 
         const wheelDirection = (event) => {
@@ -532,6 +553,7 @@ export const initProcessStory = ({ config = {} } = {}) => {
           { rootMargin: '-18% 0px -32%', threshold: 0.12 }
         );
         states.forEach((state) => mobileObserver.observe(state));
+        progressSteps.forEach((step) => step.addEventListener('click', onProgressStepClick));
         if (reducedMotion) states.forEach((_, index) => animateStepMetrics(index));
         else {
           story.addEventListener('wheel', onMobileWheel, { passive: false });
@@ -546,6 +568,11 @@ export const initProcessStory = ({ config = {} } = {}) => {
           mobileTransition?.kill();
           window.clearTimeout(mobileNavigationTimer);
           window.clearTimeout(mobileWheelBurstTimer);
+          window.cancelAnimationFrame(mobileScrollBehaviorFrame);
+          if (mobileSavedScrollBehavior !== null) {
+            document.documentElement.style.scrollBehavior = mobileSavedScrollBehavior;
+          }
+          progressSteps.forEach((step) => step.removeEventListener('click', onProgressStepClick));
           story.removeEventListener('wheel', onMobileWheel);
           story.removeEventListener('touchstart', onMobileTouchStart);
           story.removeEventListener('touchmove', onMobileTouchMove);
@@ -570,6 +597,8 @@ export const initProcessStory = ({ config = {} } = {}) => {
       let programmaticScroll = false;
       let programmaticScrollFrame = 0;
       let transitionInProgress = false;
+      let pendingScrollIndex = null;
+      let savedScrollBehavior = null;
       let wheelBurst = false;
       let wheelBurstTimer = 0;
       let touchStartY = null;
@@ -617,6 +646,15 @@ export const initProcessStory = ({ config = {} } = {}) => {
         transitionInProgress = false;
         transition = null;
         setExclusiveState(index);
+
+        // Native scrollbar dragging can cross several step boundaries while a
+        // cinematic fade is still running. Finish the current fade first, then
+        // reconcile with the final scrollbar position.
+        const pendingIndex = pendingScrollIndex;
+        pendingScrollIndex = null;
+        if (pendingIndex !== null && pendingIndex !== index) {
+          transitionToStep(pendingIndex, pendingIndex > index ? 1 : -1);
+        }
       };
 
       const transitionToStep = (index, direction) => {
@@ -680,11 +718,7 @@ export const initProcessStory = ({ config = {} } = {}) => {
           )
           .to(incomingCopy, { autoAlpha: 1, y: 0, duration: 0.34 }, 0.3)
           .to(incomingVisual, { autoAlpha: 1, scale: 1, duration: 0.48 }, 0.3)
-          .to(
-            incomingCards,
-            { autoAlpha: 1, y: 0, z: 0, duration: 0.32, stagger: 0.035 },
-            0.42
-          );
+          .to(incomingCards, { autoAlpha: 1, y: 0, z: 0, duration: 0.32, stagger: 0.035 }, 0.42);
         return true;
       };
 
@@ -700,8 +734,14 @@ export const initProcessStory = ({ config = {} } = {}) => {
       const setScrollTop = (top) => {
         programmaticScroll = true;
         window.cancelAnimationFrame(programmaticScrollFrame);
+        const documentElement = document.documentElement;
+        if (savedScrollBehavior === null)
+          savedScrollBehavior = documentElement.style.scrollBehavior;
+        documentElement.style.scrollBehavior = 'auto';
         window.scrollTo({ top: Math.max(0, top), behavior: 'auto' });
         programmaticScrollFrame = window.requestAnimationFrame(() => {
+          documentElement.style.scrollBehavior = savedScrollBehavior;
+          savedScrollBehavior = null;
           programmaticScroll = false;
           ScrollTrigger.update();
         });
@@ -715,10 +755,30 @@ export const initProcessStory = ({ config = {} } = {}) => {
         return transitionToStep(nextIndex, direction);
       };
 
+      const onProgressStepClick = (event) => {
+        const targetIndex = Number(event.currentTarget.dataset.processProgressStep);
+        if (!Number.isInteger(targetIndex)) return;
+
+        // Progress clicks are direct jumps, not queued wheel steps. Stop a
+        // partially completed fade, restore the current state, then animate
+        // only the requested destination into view.
+        if (transitionInProgress) {
+          transition?.kill();
+          transition = null;
+          transitionInProgress = false;
+          pendingScrollIndex = null;
+          setExclusiveState(activeIndex);
+        }
+        if (targetIndex === activeIndex) return;
+        const direction = targetIndex > activeIndex ? 1 : -1;
+        moveToStep(targetIndex, direction);
+      };
+
       const leavePinnedStory = (direction) => {
         if (!pinTrigger) return;
         transition?.kill();
         transitionInProgress = false;
+        pendingScrollIndex = null;
         if (direction > 0) {
           setExclusiveState(states.length - 1);
           animateSceneToStep(states.length - 1, true);
@@ -807,6 +867,18 @@ export const initProcessStory = ({ config = {} } = {}) => {
         moveByDirection(direction);
       };
 
+      const syncStepWithScrollbar = (trigger) => {
+        if (programmaticScroll) return;
+        const nextIndex = getProcessStepIndex(trigger.progress, states.length);
+
+        if (transitionInProgress) {
+          pendingScrollIndex = nextIndex;
+          return;
+        }
+        if (nextIndex === activeIndex) return;
+        transitionToStep(nextIndex, nextIndex > activeIndex ? 1 : -1);
+      };
+
       setExclusiveState(0);
       animateSceneToStep(0, true);
 
@@ -817,10 +889,12 @@ export const initProcessStory = ({ config = {} } = {}) => {
         end: () => `+=${Math.round(window.innerHeight * 4.5)}`,
         anticipatePin: 1,
         invalidateOnRefresh: true,
+        onUpdate: syncStepWithScrollbar,
         onEnter: () => {
           if (programmaticScroll) return;
           transition?.kill();
           transitionInProgress = false;
+          pendingScrollIndex = null;
           setExclusiveState(0);
           animateSceneToStep(0, true);
           window.requestAnimationFrame(() => setScrollTop(stepScrollTop(0)));
@@ -829,6 +903,7 @@ export const initProcessStory = ({ config = {} } = {}) => {
           if (programmaticScroll) return;
           transition?.kill();
           transitionInProgress = false;
+          pendingScrollIndex = null;
           setExclusiveState(states.length - 1);
           animateSceneToStep(states.length - 1, true);
           window.requestAnimationFrame(() => setScrollTop(stepScrollTop(states.length - 1)));
@@ -849,6 +924,7 @@ export const initProcessStory = ({ config = {} } = {}) => {
       window.addEventListener('touchend', onTouchEnd, { passive: true, capture: true });
       window.addEventListener('touchcancel', onTouchEnd, { passive: true, capture: true });
       window.addEventListener('keydown', onKeyDown, { capture: true });
+      progressSteps.forEach((step) => step.addEventListener('click', onProgressStepClick));
 
       const moveX = gsap.quickTo(ambient, 'x', { duration: 0.8, ease: 'power3.out' });
       const moveY = gsap.quickTo(ambient, 'y', { duration: 0.8, ease: 'power3.out' });
@@ -872,6 +948,9 @@ export const initProcessStory = ({ config = {} } = {}) => {
         pinTrigger?.kill();
         window.clearTimeout(wheelBurstTimer);
         window.cancelAnimationFrame(programmaticScrollFrame);
+        if (savedScrollBehavior !== null) {
+          document.documentElement.style.scrollBehavior = savedScrollBehavior;
+        }
         frame.removeEventListener('pointermove', onPointer);
         frame.removeEventListener('pointerleave', resetPointer);
         window.removeEventListener('wheel', onWheel, true);
@@ -880,6 +959,7 @@ export const initProcessStory = ({ config = {} } = {}) => {
         window.removeEventListener('touchend', onTouchEnd, true);
         window.removeEventListener('touchcancel', onTouchEnd, true);
         window.removeEventListener('keydown', onKeyDown, true);
+        progressSteps.forEach((step) => step.removeEventListener('click', onProgressStepClick));
         root.style.removeProperty('--process-progress');
         states.forEach((state) => {
           state.removeAttribute('aria-hidden');

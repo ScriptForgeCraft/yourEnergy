@@ -18,6 +18,7 @@ import { ARMENIA_REGIONAL_BENCHMARKS } from '../src/data/regions/armenia.js';
 import { TEMPORARY_YOURENERGY_PRICEBOOK } from '../src/data/pricebooks/armenia.js';
 import { ARMENIA_TARIFF_DATASET } from '../src/data/tariffs/armenia.js';
 import { GENERATED_CONTENT_LOCALES } from '../src/content/schema.js';
+import { createProcessImageContext } from '../src/config/process-images.js';
 
 const root = resolve(import.meta.dirname, '..');
 const mode = process.argv[2] ?? 'production';
@@ -252,6 +253,7 @@ const createHomeContext = (content, { pageKind = 'home' } = {}) => {
     steps: processCopy.steps.map((step, index) => ({
       ...step,
       index,
+      image: createProcessImageContext(step.visual),
       headlineLines: step.headline.split('\n'),
       stepLabel: processCopy.stepLabel
         .replace('{current}', String(index + 1))
