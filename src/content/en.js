@@ -850,8 +850,26 @@ export default {
     ]
   },
   faq: {
-    eyebrow: 'Answers without the fine print',
+    eyebrow: 'FAQ',
     title: 'Frequently asked questions',
+    homeTitle: 'Answers to important questions',
+    pageTitle: 'Solar system questions, answered',
+    intro: 'Clear, concise answers to help you make a confident decision about a solar system.',
+    answersEyebrow: 'All questions',
+    answersTitle: 'Detailed answers',
+    answersIntro: 'The essentials on calculations, pricing, installation and how a solar system works.',
+    allQuestions: 'All questions',
+    notFound: 'Didn’t find an answer?',
+    contactLink: 'Contact us',
+    calculatorPrompt: 'Questions about the calculation?',
+    calculatorFaqLink: 'Open FAQ',
+    faqCalculatorLink: 'Open calculator',
+    meta: {
+      title: 'Solar system FAQ in Armenia | YOURENERGY',
+      description: 'Answers to common questions about solar-system pricing, estimates, payback, installation and maintenance.',
+      ogTitle: 'Solar system FAQ | YOURENERGY',
+      ogDescription: 'Clear answers about solar-system calculations, installation and operation.'
+    },
     items: [
       [
         'How much does a solar system cost?',
@@ -885,7 +903,11 @@ export default {
         'What is a Solar Passport?',
         'A preliminary Passport keeps the current session’s inputs, sources and assumptions together. It is not an engineering design, bank document or offer, and it is not stored as a permanent link or PDF.'
       ]
-    ].map(([question, answer]) => ({ question, answer }))
+    ].map(([question, answer], index) => ({
+      question,
+      answer,
+      icon: ['calculator', 'zap', 'satellite', 'shield-check', 'sun', 'cycle', 'file', 'message-square'][index]
+    }))
   },
   finalCta: {
     title: 'Ready to discover your home’s potential?',

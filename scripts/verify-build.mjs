@@ -13,6 +13,11 @@ const toolPages = [
   { page: 'ru/offer-checker/index.html', locale: 'ru', type: 'offer-checker' },
   { page: 'en/offer-checker/index.html', locale: 'en', type: 'offer-checker' }
 ];
+const faqPages = [
+  { page: 'faq/index.html', locale: 'hy', type: 'faq' },
+  { page: 'ru/faq/index.html', locale: 'ru', type: 'faq' },
+  { page: 'en/faq/index.html', locale: 'en', type: 'faq' }
+];
 const privateCalculatorPages = [
   { page: 'calculator/refine/index.html', locale: 'hy', type: 'calculator/refine' },
   { page: 'ru/calculator/refine/index.html', locale: 'ru', type: 'calculator/refine' },
@@ -38,6 +43,7 @@ const expectedPages = [
   'en/privacy/index.html',
   'en/terms/index.html',
   ...placeholderPages,
+  ...faqPages.map(({ page }) => page),
   ...toolPages.map(({ page }) => page),
   ...privateCalculatorPages.map(({ page }) => page)
 ];
@@ -174,7 +180,7 @@ function includesType(node, expectedType) {
   return Array.isArray(value) ? value.includes(expectedType) : value === expectedType;
 }
 
-function validateJsonLd(html, page) {
+function validateJsonLd(html, page, { requiresFaq = false } = {}) {
   const documents = getJsonLd(html, page);
   if (documents.length === 0) {
     fail(`${page}: missing JSON-LD`);
@@ -182,26 +188,30 @@ function validateJsonLd(html, page) {
   }
 
   const nodes = documents.flatMap(flattenJsonLd);
-  for (const type of ['WebSite', 'Organization', 'Service', 'FAQPage']) {
+  for (const type of ['WebSite', 'Organization', 'Service']) {
     if (!nodes.some((node) => includesType(node, type))) {
       fail(`${page}: JSON-LD missing ${type}`);
     }
   }
 
   const faq = nodes.find((node) => includesType(node, 'FAQPage'));
-  if (!faq || !Array.isArray(faq.mainEntity) || faq.mainEntity.length === 0) {
-    fail(`${page}: FAQPage needs visible FAQ mainEntity entries`);
-  } else if (
-    faq.mainEntity.some(
-      (item) =>
-        !includesType(item, 'Question') ||
-        !item.name ||
-        !item.acceptedAnswer ||
-        !includesType(item.acceptedAnswer, 'Answer') ||
-        !item.acceptedAnswer.text
-    )
-  ) {
-    fail(`${page}: FAQPage contains an incomplete question/answer`);
+  if (requiresFaq) {
+    if (!faq || !Array.isArray(faq.mainEntity) || faq.mainEntity.length === 0) {
+      fail(`${page}: FAQPage needs visible FAQ mainEntity entries`);
+    } else if (
+      faq.mainEntity.some(
+        (item) =>
+          !includesType(item, 'Question') ||
+          !item.name ||
+          !item.acceptedAnswer ||
+          !includesType(item.acceptedAnswer, 'Answer') ||
+          !item.acceptedAnswer.text
+      )
+    ) {
+      fail(`${page}: FAQPage contains an incomplete question/answer`);
+    }
+  } else if (faq) {
+    fail(`${page}: FAQPage belongs only on the dedicated FAQ route`);
   }
 
   const organization = nodes.find((node) => includesType(node, 'Organization'));
@@ -443,26 +453,29 @@ async function validateSitemap() {
   const sitemap = await readFile(sitemapPath, 'utf8');
   const locations = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/giu)].map((match) => match[1].trim());
   const homeRoutes = [`${origin}/`, `${origin}/ru/`, `${origin}/en/`];
+  const faqRoutes = faqPages.map(({ locale, type }) =>
+    locale === 'hy' ? `${origin}/${type}/` : `${origin}/${locale}/${type}/`
+  );
   const toolRoutes = toolPages.map(({ locale, type }) =>
     locale === 'hy' ? `${origin}/${type}/` : `${origin}/${locale}/${type}/`
   );
-  const expected = [...homeRoutes, ...toolRoutes];
+  const expected = [...homeRoutes, ...faqRoutes, ...toolRoutes];
   if (locations.length !== expected.length || expected.some((url) => !locations.includes(url))) {
     fail(`sitemap must include ${expected.join(', ')}`);
   }
   const entries = [...sitemap.matchAll(/<url>([\s\S]*?)<\/url>/giu)];
   for (const entry of entries) {
     const location = entry[1].match(/<loc>([^<]+)<\/loc>/iu)?.[1]?.trim() ?? 'unknown URL';
-    const matchedTool = toolPages.find(({ locale, type }) => {
+    const matchedPublicRoute = [...faqPages, ...toolPages].find(({ locale, type }) => {
       const url = locale === 'hy' ? `${origin}/${type}/` : `${origin}/${locale}/${type}/`;
       return location === url;
     });
-    const expectedAlternates = matchedTool
+    const expectedAlternates = matchedPublicRoute
       ? new Map([
-          ['hy', `${origin}/${matchedTool.type}/`],
-          ['ru', `${origin}/ru/${matchedTool.type}/`],
-          ['en', `${origin}/en/${matchedTool.type}/`],
-          ['x-default', `${origin}/${matchedTool.type}/`]
+          ['hy', `${origin}/${matchedPublicRoute.type}/`],
+          ['ru', `${origin}/ru/${matchedPublicRoute.type}/`],
+          ['en', `${origin}/en/${matchedPublicRoute.type}/`],
+          ['x-default', `${origin}/${matchedPublicRoute.type}/`]
         ])
       : new Map([
           ['hy', `${origin}/`],
@@ -726,6 +739,13 @@ for (const [page, calculatorHref] of [
     validateCinematicHomeHero(pages.get(page), page, calculatorHref);
   }
 }
+for (const { page, locale, type } of faqPages) {
+  if (!pages.has(page)) continue;
+  const canonical = locale === 'hy' ? `${origin}/${type}/` : `${origin}/${locale}/${type}/`;
+  await validateToolSeo(pages.get(page), page, canonical, type);
+  validateToolLanguageSwitcher(pages.get(page), page, locale, type);
+  validateJsonLd(pages.get(page), page, { requiresFaq: true });
+}
 for (const { page, locale, type } of toolPages) {
   if (!pages.has(page)) continue;
   const canonical = locale === 'hy' ? `${origin}/${type}/` : `${origin}/${locale}/${type}/`;
@@ -746,6 +766,7 @@ const publishedPages = new Set([
   'index.html',
   'ru/index.html',
   'en/index.html',
+  ...faqPages.map(({ page }) => page),
   ...toolPages.map(({ page }) => page)
 ]);
 const supportPageSet = new Set([

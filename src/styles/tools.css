@@ -116,6 +116,44 @@
 .tool-hero__inner {
   max-width: 54rem;
 }
+
+.calculator-faq-link {
+  display: inline-grid;
+  grid-template-columns: auto 1fr auto auto;
+  gap: 0.55rem;
+  align-items: center;
+  max-width: 37rem;
+  margin-top: 1.35rem;
+  padding: 0.8rem 0.95rem;
+  border: 1px solid rgb(245 189 24 / 45%);
+  border-radius: 0.8rem;
+  color: #f8fbfd;
+  background: rgb(255 255 255 / 6%);
+  font-size: 0.9rem;
+  line-height: 1.35;
+  transition:
+    background 180ms ease,
+    border-color 180ms ease;
+}
+
+.calculator-faq-link:hover,
+.calculator-faq-link:focus-visible {
+  border-color: var(--color-yellow);
+  background: rgb(255 255 255 / 12%);
+}
+
+.calculator-faq-link > :first-child,
+.calculator-faq-link > :last-child {
+  width: 1.15rem;
+  height: 1.15rem;
+  color: var(--color-yellow);
+}
+
+.calculator-faq-link strong {
+  color: var(--color-yellow);
+  font-size: 0.82rem;
+  white-space: nowrap;
+}
 .tool-hero h1 {
   max-width: 20ch;
   font-size: clamp(2.35rem, 4vw, 4.2rem);
@@ -740,6 +778,14 @@
 }
 
 @media (max-width: 560px) {
+  .calculator-faq-link {
+    grid-template-columns: auto 1fr auto;
+  }
+
+  .calculator-faq-link > :last-child {
+    display: none;
+  }
+
   .tool-hero,
   .tool-workspace {
     padding-inline: 0;

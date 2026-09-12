@@ -853,8 +853,26 @@ export default {
     ]
   },
   faq: {
-    eyebrow: 'Ответы без мелкого шрифта',
+    eyebrow: 'FAQ',
     title: 'Частые вопросы',
+    homeTitle: 'Ответы на важные вопросы',
+    pageTitle: 'Вопросы о солнечной системе',
+    intro: 'Коротко и по делу — чтобы вам было проще принять решение о солнечной электростанции.',
+    answersEyebrow: 'Все вопросы',
+    answersTitle: 'Подробные ответы',
+    answersIntro: 'Собрали главное о расчёте, стоимости, установке и работе солнечной системы.',
+    allQuestions: 'Все вопросы',
+    notFound: 'Не нашли ответ?',
+    contactLink: 'Свяжитесь с нами',
+    calculatorPrompt: 'Есть вопросы по расчёту?',
+    calculatorFaqLink: 'Открыть FAQ',
+    faqCalculatorLink: 'Открыть калькулятор',
+    meta: {
+      title: 'FAQ о солнечных системах в Армении | YOURENERGY',
+      description: 'Ответы на частые вопросы о стоимости, расчёте, окупаемости, установке и обслуживании солнечной системы.',
+      ogTitle: 'FAQ о солнечных системах | YOURENERGY',
+      ogDescription: 'Понятные ответы о расчёте, установке и работе солнечной системы.'
+    },
     items: [
       [
         'Сколько стоит солнечная система?',
@@ -888,7 +906,11 @@ export default {
         'Что такое Solar Passport?',
         'Предварительный Passport объединяет данные текущего сеанса, источники и допущения. Это не технический проект, банковский документ или оферта; постоянная ссылка и PDF пока не создаются.'
       ]
-    ].map(([question, answer]) => ({ question, answer }))
+    ].map(([question, answer], index) => ({
+      question,
+      answer,
+      icon: ['calculator', 'zap', 'satellite', 'shield-check', 'sun', 'cycle', 'file', 'message-square'][index]
+    }))
   },
   finalCta: {
     title: 'Готовы узнать потенциал вашего дома?',

@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang='{{locale}}'>
+  <head>
+    <meta charset='UTF-8' />
+    <meta name='viewport' content='width=device-width, initial-scale=1.0' />
+    <meta name='theme-color' content='#071a2d' />
+    <meta name='color-scheme' content='light' />
+    <title>{{meta.title}}</title>
+    <meta name='description' content='{{meta.description}}' />
+    <meta property='og:type' content='website' />
+    <meta property='og:site_name' content='YOURENERGY' />
+    <meta property='og:locale' content='{{localeCode}}' />
+    <meta property='og:title' content='{{meta.ogTitle}}' />
+    <meta property='og:description' content='{{meta.ogDescription}}' />
+    <meta property='og:url' content='https://yourenergy.am{{path}}' />
+    <meta property='og:image' content='https://yourenergy.am/og.png' />
+    <meta name='twitter:card' content='summary_large_image' />
+    <meta name='twitter:title' content='{{meta.ogTitle}}' />
+    <meta name='twitter:description' content='{{meta.ogDescription}}' />
+    <meta name='twitter:image' content='https://yourenergy.am/og.png' />
+    <link rel='canonical' href='https://yourenergy.am{{path}}' />
+    {{#each alternateLinks}}<link rel='alternate' hreflang='{{hreflang}}' href='{{href}}' />{{/each}}
+    <link rel='icon' href='/favicon.ico' sizes='any' />
+    <link rel='icon' href='/yourenergy-mark.svg' type='image/svg+xml' />
+    <link rel='apple-touch-icon' href='/apple-touch-icon.png' />
+    <link rel='stylesheet' href='/src/styles/faq.css' />
+    <script type='application/ld+json'>{{{jsonLd}}}</script>
+  </head>
+  <body class='faq-page'>
+    <a class='skip-link' href='#main'>{{aria.skip}}</a>
+    {{> site-header}}
+    <main id='main'>
+      <section class='faq-page-hero' aria-labelledby='faq-page-title'>
+        <div class='faq-page-hero__backdrop' aria-hidden='true'><picture><source
+              type='image/avif'
+              srcset='/images/hero-time-18-1024.avif 1024w, /images/hero-time-18-1600.avif 1600w'
+              sizes='100vw'
+            /><source
+              type='image/webp'
+              srcset='/images/hero-time-18-1024.webp 1024w, /images/hero-time-18-1600.webp 1600w'
+              sizes='100vw'
+            /><img src='/images/hero-time-18-1600.jpg' width='1600' height='900' alt='' /></picture></div>
+        <div class='container faq-page-hero__inner'><p class='eyebrow'>{{faq.eyebrow}}</p><h1 id='faq-page-title'>{{faq.pageTitle}}</h1><p>{{faq.intro}}</p></div>
+      </section>
+      <section class='faq-answers section' aria-labelledby='faq-answers-title'>
+        <div class='container faq-answers__layout'>
+          <header class='faq-answers__heading'><p class='eyebrow'>{{faq.answersEyebrow}}</p><h2 id='faq-answers-title'>{{faq.answersTitle}}</h2><p>{{faq.answersIntro}}</p><a class='faq-answers__calculator-link' href='{{calculatorHref}}'><svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#calculator'></use></svg><span>{{faq.calculatorPrompt}}</span><strong>{{faq.faqCalculatorLink}}</strong><svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#arrow-right'></use></svg></a></header>
+          <div class='faq-answers__list'>{{#each faq.items}}<details id='faq-{{add @index 1}}' class='faq-answer'><summary><span class='faq-answer__number'>{{add @index 1}}</span><span>{{question}}</span><span class='faq-answer__toggle' aria-hidden='true'>+</span></summary><div class='faq-answer__body'><p>{{answer}}</p></div></details>{{/each}}</div>
+        </div>
+      </section>
+    </main>
+    {{> site-footer}}
+  </body>
+</html>

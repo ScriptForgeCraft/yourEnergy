@@ -23,6 +23,27 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://yourenergy.am/" />
   </url>
   <url>
+    <loc>https://yourenergy.am/faq/</loc>
+    <xhtml:link rel="alternate" hreflang="hy" href="https://yourenergy.am/faq/" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://yourenergy.am/ru/faq/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://yourenergy.am/en/faq/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://yourenergy.am/faq/" />
+  </url>
+  <url>
+    <loc>https://yourenergy.am/ru/faq/</loc>
+    <xhtml:link rel="alternate" hreflang="hy" href="https://yourenergy.am/faq/" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://yourenergy.am/ru/faq/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://yourenergy.am/en/faq/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://yourenergy.am/faq/" />
+  </url>
+  <url>
+    <loc>https://yourenergy.am/en/faq/</loc>
+    <xhtml:link rel="alternate" hreflang="hy" href="https://yourenergy.am/faq/" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://yourenergy.am/ru/faq/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://yourenergy.am/en/faq/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://yourenergy.am/faq/" />
+  </url>
+  <url>
     <loc>https://yourenergy.am/calculator/</loc>
     <xhtml:link rel="alternate" hreflang="hy" href="https://yourenergy.am/calculator/" />
     <xhtml:link rel="alternate" hreflang="ru" href="https://yourenergy.am/ru/calculator/" />

@@ -41,6 +41,7 @@ const offerCheckerTemplate = await readFile(
   resolve(root, 'src/templates/offer-checker.hbs'),
   'utf8'
 );
+const faqTemplate = await readFile(resolve(root, 'src/templates/faq.hbs'), 'utf8');
 const supportTemplate = await readFile(resolve(root, 'src/templates/support.hbs'), 'utf8');
 const placeholderTemplate = await readFile(resolve(root, 'src/templates/placeholder.hbs'), 'utf8');
 
@@ -63,6 +64,7 @@ const renderCalculator = Handlebars.compile(calculatorTemplate, { noEscape: fals
 const renderQuickCalculator = Handlebars.compile(quickCalculatorTemplate, { noEscape: false });
 const renderRefineCalculator = Handlebars.compile(refineCalculatorTemplate, { noEscape: false });
 const renderOfferChecker = Handlebars.compile(offerCheckerTemplate, { noEscape: false });
+const renderFaq = Handlebars.compile(faqTemplate, { noEscape: false });
 const renderSupport = Handlebars.compile(supportTemplate, { noEscape: false });
 const renderPlaceholder = Handlebars.compile(placeholderTemplate, { noEscape: false });
 const writeGenerated = (file, markup) => writeFile(file, markup.replace(/[ \t]+\n/g, '\n'), 'utf8');
@@ -135,6 +137,8 @@ const createLanguageLinks = (currentLocale) =>
 const toolPath = (locale, type) => (locale === 'hy' ? `/${type}/` : `/${locale}/${type}/`);
 const toolFile = (locale, type) =>
   locale === 'hy' ? `${type}/index.html` : `${locale}/${type}/index.html`;
+const faqPath = (locale) => toolPath(locale, 'faq');
+const faqFile = (locale) => toolFile(locale, 'faq');
 const placeholderPath = (locale, type) => (locale === 'hy' ? `/${type}/` : `/${locale}/${type}/`);
 const placeholderFile = (locale, type) =>
   locale === 'hy' ? `${type}/index.html` : `${locale}/${type}/index.html`;
@@ -275,6 +279,7 @@ const createHeaderNavigationState = (activeKey = null) =>
 const createHomeContext = (content, { pageKind = 'home' } = {}) => {
   const hero = createHeroContent(content);
   const calculatorHref = toolPath(content.locale, 'calculator');
+  const faqHref = faqPath(content.locale);
   const projectsHref = placeholderPath(content.locale, 'projects');
   const contactsHref = placeholderPath(content.locale, 'contacts');
   const isHome = pageKind === 'home';
@@ -322,6 +327,8 @@ const createHomeContext = (content, { pageKind = 'home' } = {}) => {
     currentLanguageLabel: content.locale === 'hy' ? 'AM' : content.locale.toUpperCase(),
     activeNavigation,
     calculatorHref,
+    faqHref,
+    contactsHref,
     headerCtaHref: calculatorHref,
     headerCtaLabel: content.common.headerCta,
     navLinks: {
@@ -356,6 +363,8 @@ const createHomeContext = (content, { pageKind = 'home' } = {}) => {
           label,
           href === '#calculator'
             ? calculatorHref
+            : href === '#faq'
+              ? faqHref
             : !isHome && href.startsWith('#')
               ? `${content.homeHref}${href}`
               : href
@@ -375,7 +384,11 @@ const createHomeContext = (content, { pageKind = 'home' } = {}) => {
         href: projectsHref
       }))
     },
-    jsonLd: escapeJsonForHtml(createJsonLd(content)),
+    faq: {
+      ...content.faq,
+      previewItems: content.faq.items.slice(0, 4)
+    },
+    jsonLd: escapeJsonForHtml(createJsonLd(content, { includeFaq: false })),
     homePageConfig: escapeJsonForHtml({
       locale: runtimeLocales[content.locale],
       hero
@@ -384,6 +397,20 @@ const createHomeContext = (content, { pageKind = 'home' } = {}) => {
       locale: runtimeLocales[content.locale],
       processStory
     })
+  };
+};
+
+const createFaqContext = (content) => {
+  const path = faqPath(content.locale);
+  const base = createHomeContext(content, { pageKind: 'faq' });
+  return {
+    ...base,
+    path,
+    faqHref: path,
+    meta: content.faq.meta,
+    alternateLinks: createToolAlternateLinks('faq'),
+    languageLinks: createToolLanguageLinks(content.locale, 'faq'),
+    jsonLd: escapeJsonForHtml(createJsonLd({ ...content, path }))
   };
 };
 
@@ -523,6 +550,13 @@ for (const { file, key } of GENERATED_CONTENT_LOCALES) {
   const output = resolve(root, file);
   await mkdir(dirname(output), { recursive: true });
   await writeGenerated(output, render(createHomeContext(content)));
+}
+
+for (const { key } of GENERATED_CONTENT_LOCALES) {
+  const content = homeContent[key];
+  const output = resolve(root, faqFile(key));
+  await mkdir(dirname(output), { recursive: true });
+  await writeGenerated(output, renderFaq(createFaqContext(content)));
 }
 
 const scopeItems = (tool) => [

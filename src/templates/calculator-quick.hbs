@@ -13,7 +13,7 @@
   <body class='calculator-page calculator-page--quick'>
     <a class='skip-link' href='#main'>{{aria.skip}}</a>{{> site-header}}
     <main id='main'>
-      <section class='tool-hero section'><div class='container tool-hero__inner'><p class='eyebrow'>{{quick.eyebrow}}</p><h1>{{quick.title}}</h1><p>{{quick.intro}}</p></div></section>
+      <section class='tool-hero section'><div class='container tool-hero__inner'><p class='eyebrow'>{{quick.eyebrow}}</p><h1>{{quick.title}}</h1><p>{{quick.intro}}</p><a class='calculator-faq-link' href='{{faqHref}}'><svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#message-square'></use></svg><span>{{faq.calculatorPrompt}}</span><strong>{{faq.calculatorFaqLink}}</strong><svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#arrow-right'></use></svg></a></div></section>
       <section class='quick-calculator section' id='quick-calculator' data-quick-calculator><div class='container quick-calculator__grid'>
         <form class='tool-form quick-calculator__form' data-quick-form novalidate aria-describedby='quick-status'>
           <h2>{{toolShared.calculator}}</h2>
