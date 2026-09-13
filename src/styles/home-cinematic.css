@@ -740,6 +740,8 @@ html[lang='hy'] .page-home .hero-signature {
 .page-home .portfolio-projects__header {
   position: relative;
   display: flex;
+  min-width: 0;
+  max-width: 100%;
   align-items: center;
   justify-content: space-between;
   gap: clamp(28px, 5vw, 96px);
@@ -804,13 +806,18 @@ html[lang='hy'] .page-home .hero-signature {
 
 .page-home .portfolio-projects__actions {
   display: flex;
-  flex: 0 0 auto;
+  min-width: 0;
+  max-width: 100%;
+  flex: 0 1 600px;
   flex-wrap: wrap;
   justify-content: flex-end;
   gap: 14px;
 }
 
 .page-home .portfolio-projects__button {
+  box-sizing: border-box;
+  min-width: 0;
+  max-width: 100%;
   min-height: 60px;
   display: inline-flex;
   align-items: center;
@@ -830,6 +837,14 @@ html[lang='hy'] .page-home .hero-signature {
     background 180ms ease,
     box-shadow 180ms ease,
     transform 180ms ease;
+}
+
+/* Long localized CTA labels must shrink inside the header instead of widening the page. */
+.page-home .portfolio-projects__button > span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .page-home .portfolio-projects__button .inline-icon,
@@ -1538,12 +1553,13 @@ html[lang='hy'] .page-home .hero-signature {
 @media (min-width: 1221px) {
   .page-home .portfolio-projects__header {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(480px, 600px);
+    grid-template-columns: minmax(0, 1fr) minmax(0, 600px);
     gap: clamp(28px, 3.2vw, 54px);
   }
 
   .page-home .portfolio-projects__actions {
     width: 100%;
+    min-width: 0;
     max-width: 600px;
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
