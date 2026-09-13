@@ -82,3 +82,30 @@ if (document.querySelector('[data-contact-form]')) {
     initContactForm({ config: contactConfig })
   );
 }
+
+const projectsVideo = document.querySelector('[data-projects-video]');
+const projectsVideoToggle = document.querySelector('[data-projects-video-toggle]');
+
+if (projectsVideo && projectsVideoToggle) {
+  const label = projectsVideoToggle.querySelector('[data-projects-video-label]');
+  const setVideoState = (isPlaying) => {
+    projectsVideo.classList.toggle('is-playing', isPlaying);
+    projectsVideoToggle.setAttribute('aria-pressed', String(isPlaying));
+    if (label) {
+      label.textContent = isPlaying
+        ? projectsVideoToggle.dataset.projectsVideoPause
+        : projectsVideoToggle.dataset.projectsVideoWatch;
+    }
+  };
+
+  projectsVideo.addEventListener('playing', () => setVideoState(true));
+  projectsVideo.addEventListener('pause', () => setVideoState(false));
+  projectsVideoToggle.addEventListener('click', () => {
+    if (!projectsVideo.currentSrc) return;
+    if (projectsVideo.paused) {
+      void projectsVideo.play().catch(() => setVideoState(false));
+    } else {
+      projectsVideo.pause();
+    }
+  });
+}

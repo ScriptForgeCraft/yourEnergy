@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang='{{locale}}'>
+  <head>
+    <meta charset='UTF-8' />
+    <meta name='viewport' content='width=device-width, initial-scale=1.0' />
+    <meta name='theme-color' content='#071a2d' />
+    <meta name='color-scheme' content='light' />
+    <title>{{meta.title}}</title>
+    <meta name='description' content='{{meta.description}}' />
+    <meta property='og:type' content='website' />
+    <meta property='og:site_name' content='YOURENERGY' />
+    <meta property='og:locale' content='{{localeCode}}' />
+    <meta property='og:title' content='{{meta.ogTitle}}' />
+    <meta property='og:description' content='{{meta.ogDescription}}' />
+    <meta property='og:url' content='https://yourenergy.am{{path}}' />
+    <meta property='og:image' content='https://yourenergy.am/images/project-arabkir-1200.jpg' />
+    <meta name='twitter:card' content='summary_large_image' />
+    <meta name='twitter:title' content='{{meta.ogTitle}}' />
+    <meta name='twitter:description' content='{{meta.ogDescription}}' />
+    <meta name='twitter:image' content='https://yourenergy.am/images/project-arabkir-1200.jpg' />
+    <link rel='canonical' href='https://yourenergy.am{{path}}' />
+    {{#each alternateLinks}}<link rel='alternate' hreflang='{{hreflang}}' href='{{href}}' />{{/each}}
+    <link rel='icon' href='/favicon.ico' sizes='any' />
+    <link rel='icon' href='/yourenergy-mark.svg' type='image/svg+xml' />
+    <link rel='apple-touch-icon' href='/apple-touch-icon.png' />
+    <link rel='stylesheet' href='/src/styles/projects.css' />
+  </head>
+  <body class='page-projects'>
+    <a class='skip-link' href='#main'>{{aria.skip}}</a>
+    {{> site-header}}
+
+    <main id='main'>
+      <section class='projects-hero' aria-labelledby='projects-hero-title'>
+        <div class='projects-hero__media' aria-hidden='true'>
+          <picture class='projects-hero__poster'>
+            <source type='image/avif' srcset='/images/hero-time-20-1024.avif 1024w, /images/hero-time-20-1600.avif 1600w' sizes='100vw' />
+            <source type='image/webp' srcset='/images/hero-time-20-1024.webp 1024w, /images/hero-time-20-1600.webp 1600w' sizes='100vw' />
+            <img src='/images/hero-time-20-1600.jpg' width='1600' height='900' alt='' fetchpriority='high' decoding='async' />
+          </picture>
+          <video class='projects-hero__video' data-projects-video autoplay muted loop playsinline preload='metadata' poster='/images/hero-time-20-1600.jpg'>{{#if projectsPage.videoSrc}}<source src='{{projectsPage.videoSrc}}' type='video/mp4' />{{/if}}</video>
+        </div>
+        <div class='projects-hero__scrim' aria-hidden='true'></div>
+        <div class='container projects-hero__content'>
+          <div class='projects-hero__copy'>
+            <p class='projects-kicker'>{{projectsPage.hero.kicker}}</p>
+            <h1 id='projects-hero-title'>{{projectsPage.hero.titleLead}}<br /><mark>{{projectsPage.hero.titleAccent}}</mark></h1>
+            <p class='projects-hero__intro'>{{projectsPage.hero.copy}}</p>
+            <button class='projects-video-button' type='button' data-projects-video-toggle data-projects-video-watch='{{projectsPage.hero.watch}}' data-projects-video-pause='{{projectsPage.hero.pause}}' aria-pressed='false'>
+              <span class='projects-video-button__icon' aria-hidden='true'>▶</span>
+              <span><strong data-projects-video-label>{{projectsPage.hero.watch}}</strong><small>{{projectsPage.hero.duration}}</small></span>
+            </button>
+          </div>
+          <div class='projects-hero__aside'>
+            <p class='projects-hero__script'>{{projectsPage.hero.noteLead}}<br />{{projectsPage.hero.noteTail}}</p>
+            <ol class='projects-hero__points'>{{#each projectsPage.hero.points}}<li><b>{{number}}</b><span>{{title}}<small>{{copy}}</small></span></li>{{/each}}</ol>
+            <p class='projects-hero__coordinates'><svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#map-pin'></use></svg><span>{{projectsPage.hero.location}}<small>{{projectsPage.hero.coordinates}}</small></span></p>
+          </div>
+          <p class='projects-hero__scroll'><span></span>{{projectsPage.hero.scroll}}</p>
+        </div>
+      </section>
+
+      <section class='projects-featured section' aria-labelledby='featured-project-title'>
+        <div class='container'>
+          <div class='projects-section-topline'>
+            <p class='projects-kicker projects-kicker--dark'>{{projectsPage.featured.kicker}}</p>
+            <div class='projects-featured__pagination'><button type='button' class='projects-featured__arrow' disabled aria-label='{{aria.previousProject}}'><svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#arrow-left'></use></svg></button><b>01</b><span>/ {{projectsPage.featured.total}}</span><button type='button' class='projects-featured__arrow' aria-label='{{aria.nextProject}}'><svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#arrow-right'></use></svg></button></div>
+          </div>
+          <article class='projects-featured__card'>
+            <div class='projects-featured__media'>
+              <picture><source type='image/avif' srcset='/images/project-arabkir-800.avif 800w, /images/project-arabkir-1200.avif 1200w' sizes='(max-width: 820px) 100vw, 56vw' /><source type='image/webp' srcset='/images/project-arabkir-800.webp 800w, /images/project-arabkir-1200.webp 1200w' sizes='(max-width: 820px) 100vw, 56vw' /><img src='/images/project-arabkir-1200.jpg' width='1200' height='800' alt='{{projectsPage.featured.imageAlt}}' loading='lazy' decoding='async' /></picture>
+              <span class='projects-project-tag'><svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#faq-home'></use></svg>{{projectsPage.featured.tag}}</span>
+            </div>
+            <div class='projects-featured__body'>
+              <p class='projects-location'><svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#map-pin'></use></svg>{{projectsPage.featured.location}}</p>
+              <h2 id='featured-project-title'>{{projectsPage.featured.title}}</h2>
+              <p class='projects-featured__copy'>{{projectsPage.featured.copy}}</p>
+              <dl class='projects-featured__metrics'>{{#each projectsPage.featured.metrics}}<div><dt><span><svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#{{icon}}'></use></svg></span>{{label}}</dt><dd>{{value}}</dd></div>{{/each}}</dl>
+              <a class='projects-primary-button' href='{{projectsPage.contactHref}}'><span>{{projectsPage.featured.action}}</span><svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#arrow-right'></use></svg></a>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class='projects-list section' aria-labelledby='all-projects-title'>
+        <div class='container'>
+          <div class='projects-list__heading'>
+            <div><p class='projects-kicker projects-kicker--dark'>{{projectsPage.list.kicker}}</p><h2 id='all-projects-title'>{{projectsPage.list.titleLead}}<br />{{projectsPage.list.titleTail}}</h2></div>
+            <a class='projects-list__all' href='#all-projects-title'>{{projectsPage.list.viewAll}} <svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#arrow-right'></use></svg></a>
+          </div>
+          <div class='projects-card-grid'>{{#each projectsPage.items}}
+            <article class='projects-card'>
+              <div class='projects-card__media'><picture><source type='image/avif' srcset='{{avifSrcset}}' sizes='(max-width: 640px) 100vw, (max-width: 960px) 50vw, 33vw' /><source type='image/webp' srcset='{{webpSrcset}}' sizes='(max-width: 640px) 100vw, (max-width: 960px) 50vw, 33vw' /><img src='/images/{{image}}-800.jpg' width='800' height='533' alt='{{imageAlt}}' loading='lazy' decoding='async' /></picture><span class='projects-project-tag'><svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#{{tagIcon}}'></use></svg>{{tag}}</span></div>
+              <div class='projects-card__body'><div><h3>{{title}}</h3><p class='projects-location'><svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#map-pin'></use></svg>{{city}}</p></div><a class='projects-card__link' href='{{../projectsPage.contactHref}}' aria-label='{{action}}: {{title}}'><svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#arrow-right'></use></svg></a></div>
+              <ul class='projects-card__metrics' role='list'>{{#each metrics}}<li><svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#{{icon}}'></use></svg><b>{{value}}</b></li>{{/each}}</ul>
+            </article>
+          {{/each}}</div>
+        </div>
+      </section>
+
+      <section class='projects-process' aria-labelledby='projects-process-title'>
+        <div class='projects-process__backdrop' aria-hidden='true'><picture><source type='image/avif' srcset='/images/hero-time-20-1024.avif 1024w, /images/hero-time-20-1600.avif 1600w' sizes='100vw' /><source type='image/webp' srcset='/images/hero-time-20-1024.webp 1024w, /images/hero-time-20-1600.webp 1600w' sizes='100vw' /><img src='/images/hero-time-20-1600.jpg' width='1600' height='900' alt='' loading='lazy' decoding='async' /></picture></div>
+        <div class='container projects-process__content'>
+          <div class='projects-process__head'><div><p class='projects-kicker'>{{projectsPage.process.kicker}}</p><h2 id='projects-process-title'>{{projectsPage.process.title}}</h2></div><p>{{projectsPage.process.note}}</p></div>
+          <ol class='projects-process__steps'>{{#each projectsPage.process.steps}}<li><div class='projects-process__number'>{{number}}</div><h3>{{title}}</h3><p>{{copy}}</p></li>{{/each}}</ol>
+        </div>
+      </section>
+
+      <section class='projects-cta'>
+        <div class='projects-cta__media' aria-hidden='true'><picture><source type='image/avif' srcset='/images/hero-time-18-1024.avif 1024w, /images/hero-time-18-1600.avif 1600w' sizes='100vw' /><source type='image/webp' srcset='/images/hero-time-18-1024.webp 1024w, /images/hero-time-18-1600.webp 1600w' sizes='100vw' /><img src='/images/hero-time-18-1600.jpg' width='1600' height='900' alt='' loading='lazy' decoding='async' /></picture></div>
+        <div class='projects-cta__shade' aria-hidden='true'></div>
+        <div class='container projects-cta__content'><div><h2>{{projectsPage.cta.title}}</h2><p>{{projectsPage.cta.copy}}</p><div class='projects-cta__actions'><a class='projects-primary-button' href='{{calculatorHref}}'>{{projectsPage.cta.primary}} <svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#arrow-right'></use></svg></a><a class='projects-secondary-button' href='{{projectsPage.contactHref}}'><svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#message-square'></use></svg>{{projectsPage.cta.secondary}}</a></div></div><p class='projects-cta__script'>{{projectsPage.cta.note}}</p></div>
+      </section>
+    </main>
+    {{> site-footer}}
+    <script type='module' src='/src/main.js'></script>
+  </body>
+</html>

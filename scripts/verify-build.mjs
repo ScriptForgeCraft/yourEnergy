@@ -26,7 +26,12 @@ const privateCalculatorPages = [
   { page: 'ru/calculator/pro/index.html', locale: 'ru', type: 'calculator/pro' },
   { page: 'en/calculator/pro/index.html', locale: 'en', type: 'calculator/pro' }
 ];
-const placeholderTypes = ['projects', 'contacts', 'about', 'blog'];
+const projectsPages = [
+  { page: 'projects/index.html', locale: 'hy', type: 'projects' },
+  { page: 'ru/projects/index.html', locale: 'ru', type: 'projects' },
+  { page: 'en/projects/index.html', locale: 'en', type: 'projects' }
+];
+const placeholderTypes = ['contacts', 'about', 'blog'];
 const placeholderPages = placeholderTypes.flatMap((type) => [
   `${type}/index.html`,
   `ru/${type}/index.html`,
@@ -42,6 +47,7 @@ const expectedPages = [
   'en/index.html',
   'en/privacy/index.html',
   'en/terms/index.html',
+  ...projectsPages.map(({ page }) => page),
   ...placeholderPages,
   ...faqPages.map(({ page }) => page),
   ...toolPages.map(({ page }) => page),
@@ -459,17 +465,22 @@ async function validateSitemap() {
   const toolRoutes = toolPages.map(({ locale, type }) =>
     locale === 'hy' ? `${origin}/${type}/` : `${origin}/${locale}/${type}/`
   );
-  const expected = [...homeRoutes, ...faqRoutes, ...toolRoutes];
+  const projectsRoutes = projectsPages.map(({ locale, type }) =>
+    locale === 'hy' ? `${origin}/${type}/` : `${origin}/${locale}/${type}/`
+  );
+  const expected = [...homeRoutes, ...projectsRoutes, ...faqRoutes, ...toolRoutes];
   if (locations.length !== expected.length || expected.some((url) => !locations.includes(url))) {
     fail(`sitemap must include ${expected.join(', ')}`);
   }
   const entries = [...sitemap.matchAll(/<url>([\s\S]*?)<\/url>/giu)];
   for (const entry of entries) {
     const location = entry[1].match(/<loc>([^<]+)<\/loc>/iu)?.[1]?.trim() ?? 'unknown URL';
-    const matchedPublicRoute = [...faqPages, ...toolPages].find(({ locale, type }) => {
-      const url = locale === 'hy' ? `${origin}/${type}/` : `${origin}/${locale}/${type}/`;
-      return location === url;
-    });
+    const matchedPublicRoute = [...projectsPages, ...faqPages, ...toolPages].find(
+      ({ locale, type }) => {
+        const url = locale === 'hy' ? `${origin}/${type}/` : `${origin}/${locale}/${type}/`;
+        return location === url;
+      }
+    );
     const expectedAlternates = matchedPublicRoute
       ? new Map([
           ['hy', `${origin}/${matchedPublicRoute.type}/`],
@@ -752,6 +763,12 @@ for (const { page, locale, type } of toolPages) {
   await validateToolSeo(pages.get(page), page, canonical, type);
   validateToolLanguageSwitcher(pages.get(page), page, locale, type);
 }
+for (const { page, locale, type } of projectsPages) {
+  if (!pages.has(page)) continue;
+  const canonical = locale === 'hy' ? `${origin}/${type}/` : `${origin}/${locale}/${type}/`;
+  await validateToolSeo(pages.get(page), page, canonical, type);
+  validateToolLanguageSwitcher(pages.get(page), page, locale, type);
+}
 for (const { page, type } of toolPages) {
   if (!pages.has(page)) continue;
   if (type === 'calculator') validateQuickCalculatorMarkup(pages.get(page), page);
@@ -766,6 +783,7 @@ const publishedPages = new Set([
   'index.html',
   'ru/index.html',
   'en/index.html',
+  ...projectsPages.map(({ page }) => page),
   ...faqPages.map(({ page }) => page),
   ...toolPages.map(({ page }) => page)
 ]);

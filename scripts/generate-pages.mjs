@@ -46,6 +46,7 @@ const faqTemplate = await readFile(resolve(root, 'src/templates/faq.hbs'), 'utf8
 const supportTemplate = await readFile(resolve(root, 'src/templates/support.hbs'), 'utf8');
 const placeholderTemplate = await readFile(resolve(root, 'src/templates/placeholder.hbs'), 'utf8');
 const contactsTemplate = await readFile(resolve(root, 'src/templates/contacts.hbs'), 'utf8');
+const projectsTemplate = await readFile(resolve(root, 'src/templates/projects.hbs'), 'utf8');
 
 Handlebars.registerPartial(
   'site-header',
@@ -70,6 +71,7 @@ const renderFaq = Handlebars.compile(faqTemplate, { noEscape: false });
 const renderSupport = Handlebars.compile(supportTemplate, { noEscape: false });
 const renderPlaceholder = Handlebars.compile(placeholderTemplate, { noEscape: false });
 const renderContacts = Handlebars.compile(contactsTemplate, { noEscape: false });
+const renderProjects = Handlebars.compile(projectsTemplate, { noEscape: false });
 const writeGenerated = (file, markup) => writeFile(file, markup.replace(/[ \t]+\n/g, '\n'), 'utf8');
 
 const runtimeLocales = Object.freeze(
@@ -392,6 +394,384 @@ const createHomeContext = (content, { pageKind = 'home' } = {}) => {
   };
 };
 
+const projectsPageCopy = Object.freeze({
+  ru: {
+    meta: {
+      title: 'Наши проекты солнечных станций в Армении | YOURENERGY',
+      description:
+        'Реализованные солнечные станции YOURENERGY для домов, бизнеса и производственных объектов в Армении.',
+      ogTitle: 'Реальные проекты солнечной энергетики | YOURENERGY',
+      ogDescription: 'Смотрите реализованные солнечные станции и их результаты.'
+    },
+    hero: {
+      kicker: 'НАШИ ПРОЕКТЫ',
+      titleLead: 'Энергия,',
+      titleAccent: 'которая уже работает.',
+      copy: 'Реальные солнечные станции в Армении. От идеи до стабильной генерации.',
+      watch: 'Смотреть видео',
+      pause: 'Поставить видео на паузу',
+      duration: '00:48',
+      noteLead: 'Настоящие проекты.',
+      noteTail: 'Настоящие результаты.',
+      scroll: 'Листайте вниз',
+      location: 'Ереван, Армения',
+      coordinates: '40.1772° N, 44.5033° E',
+      points: [
+        { number: '01', title: 'Реальные объекты', copy: 'в разных регионах' },
+        { number: '02', title: 'Проверенные решения', copy: 'для каждой задачи' },
+        { number: '03', title: 'Чистая энергия', copy: 'в Армении' }
+      ]
+    },
+    featured: {
+      kicker: 'ВЫБРАННЫЙ ПРОЕКТ',
+      total: '20',
+      tag: 'Частный дом',
+      imageAlt: 'Современный дом с солнечной станцией в Ереване',
+      location: 'Ереван, Армения',
+      title: 'Современный дом с солнечной станцией',
+      copy: 'Надёжное и эстетичное решение для семьи, которое обеспечивает значительную часть потребления электроэнергии.',
+      action: 'Подробнее о проекте',
+      metrics: [
+        { icon: 'zap', label: 'Установленная мощность', value: '8.4 kWp' },
+        { icon: 'chart-bars', label: 'Годовая выработка', value: '8 420 kWh' },
+        { icon: 'leaf', label: 'Сокращение CO₂ в год', value: '3.5 т' }
+      ]
+    },
+    list: {
+      kicker: 'ДРУГИЕ ПРОЕКТЫ',
+      titleLead: 'Разные объекты.',
+      titleTail: 'Один результат — чистая энергия.',
+      viewAll: 'Смотреть все проекты'
+    },
+    process: {
+      kicker: 'НАШ ПОДХОД',
+      title: 'От идеи до результата',
+      note: 'Комплексный подход к каждому проекту',
+      steps: [
+        {
+          number: '01',
+          title: 'Анализ и расчёт',
+          copy: 'Подбираем оптимальное решение под ваши задачи'
+        },
+        { number: '02', title: 'Проектирование', copy: 'Разрабатываем техническое решение' },
+        { number: '03', title: 'Монтаж', copy: 'Профессиональная установка и запуск' },
+        { number: '04', title: 'Стабильная генерация', copy: 'Чистая энергия на долгие годы' }
+      ]
+    },
+    cta: {
+      title: 'Ваш проект может быть следующим',
+      copy: 'Рассчитайте потенциал вашего объекта и получите персональное предложение.',
+      primary: 'Получить расчёт',
+      secondary: 'Обсудить проект',
+      note: 'Чистая энергия начинается здесь'
+    },
+    gallery: [
+      {
+        tag: 'Частный дом',
+        title: 'Загородный дом',
+        city: 'Котайк',
+        image: 'project-ararat',
+        metrics: ['10.4 kWp', '13 500 kWh/год', '5.8 т CO₂']
+      },
+      {
+        tag: 'Бизнес',
+        title: 'Офисное здание',
+        city: 'Ереван',
+        image: 'project-abovyan',
+        metrics: ['30 kWp', '42 000 kWh/год', '17.6 т CO₂']
+      },
+      {
+        tag: 'Образование',
+        title: 'Учебное учреждение',
+        city: 'Ереван',
+        image: 'project-arabkir',
+        metrics: ['20 kWp', '28 000 kWh/год', '11.7 т CO₂']
+      },
+      {
+        tag: 'Промышленность',
+        title: 'Производственный объект',
+        city: 'Армавир',
+        image: 'project-vagharshapat',
+        metrics: ['50 kWp', '68 000 kWh/год', '28.4 т CO₂']
+      },
+      {
+        tag: 'Частный дом',
+        title: 'Дом в горах',
+        city: 'Дилижан',
+        image: 'project-ararat',
+        metrics: ['7.5 kWp', '9 800 kWh/год', '4.1 т CO₂']
+      },
+      {
+        tag: 'Сельское хозяйство',
+        title: 'Агропредприятие',
+        city: 'Армавир',
+        image: 'project-vagharshapat',
+        metrics: ['25 kWp', '37 000 kWh/год', '15.4 т CO₂']
+      }
+    ]
+  },
+  hy: {
+    meta: {
+      title: 'Մեր արևային նախագծերը Հայաստանում | YOURENERGY',
+      description:
+        'YOURENERGY-ի իրականացված արևային կայաններ Հայաստանի տների, բիզնեսների և արտադրական օբյեկտների համար։',
+      ogTitle: 'Արևային էներգետիկայի իրական նախագծեր | YOURENERGY',
+      ogDescription: 'Տեսեք իրականացված արևային կայաններն ու դրանց արդյունքները։'
+    },
+    hero: {
+      kicker: 'ՄԵՐ ՆԱԽԱԳԾԵՐԸ',
+      titleLead: 'Էներգիա,',
+      titleAccent: 'որն արդեն աշխատում է։',
+      copy: 'Իրական արևային կայաններ Հայաստանում։ Գաղափարից մինչև կայուն արտադրություն։',
+      watch: 'Դիտել տեսանյութը',
+      pause: 'Դադարեցնել տեսանյութը',
+      duration: '00:48',
+      noteLead: 'Իրական նախագծեր։',
+      noteTail: 'Իրական արդյունքներ։',
+      scroll: 'Շարունակեք ներքև',
+      location: 'Երևան, Հայաստան',
+      coordinates: '40.1772° N, 44.5033° E',
+      points: [
+        { number: '01', title: 'Իրական օբյեկտներ', copy: 'տարբեր մարզերում' },
+        { number: '02', title: 'Փորձված լուծումներ', copy: 'յուրաքանչյուր խնդրի համար' },
+        { number: '03', title: 'Մաքուր էներգիա', copy: 'Հայաստանում' }
+      ]
+    },
+    featured: {
+      kicker: 'ԸՆՏՐՎԱԾ ՆԱԽԱԳԻԾ',
+      total: '20',
+      tag: 'Առանձնատուն',
+      imageAlt: 'Ժամանակակից տուն արևային կայանով Երևանում',
+      location: 'Երևան, Հայաստան',
+      title: 'Ժամանակակից տուն արևային կայանով',
+      copy: 'Ընտանիքի համար հուսալի և գեղագիտական լուծում, որը ծածկում է էլեկտրաէներգիայի սպառման զգալի մասը։',
+      action: 'Նախագծի մանրամասները',
+      metrics: [
+        { icon: 'zap', label: 'Տեղադրված հզորություն', value: '8.4 kWp' },
+        { icon: 'chart-bars', label: 'Տարեկան արտադրություն', value: '8 420 kWh' },
+        { icon: 'leaf', label: 'CO₂-ի կրճատում', value: '3.5 տ' }
+      ]
+    },
+    list: {
+      kicker: 'ԱՅԼ ՆԱԽԱԳԾԵՐ',
+      titleLead: 'Տարբեր օբյեկտներ։',
+      titleTail: 'Մեկ արդյունք՝ մաքուր էներգիա։',
+      viewAll: 'Տեսնել բոլոր նախագծերը'
+    },
+    process: {
+      kicker: 'ՄԵՐ ՄՈՏԵՑՈՒՄԸ',
+      title: 'Գաղափարից մինչև արդյունք',
+      note: 'Համապարփակ մոտեցում յուրաքանչյուր նախագծի համար',
+      steps: [
+        { number: '01', title: 'Վերլուծություն և հաշվարկ', copy: 'Ընտրում ենք օպտիմալ լուծումը' },
+        { number: '02', title: 'Նախագծում', copy: 'Մշակում ենք տեխնիկական լուծումը' },
+        { number: '03', title: 'Տեղադրում', copy: 'Մասնագիտական տեղադրում և գործարկում' },
+        { number: '04', title: 'Կայուն արտադրություն', copy: 'Մաքուր էներգիա երկար տարիներ' }
+      ]
+    },
+    cta: {
+      title: 'Ձեր նախագիծը կարող է լինել հաջորդը',
+      copy: 'Հաշվարկեք ձեր օբյեկտի ներուժը և ստացեք անհատական առաջարկ։',
+      primary: 'Ստանալ հաշվարկ',
+      secondary: 'Քննարկել նախագիծը',
+      note: 'Մաքուր էներգիան սկսվում է այստեղ'
+    },
+    gallery: [
+      {
+        tag: 'Առանձնատուն',
+        title: 'Ամառանոց',
+        city: 'Կոտայք',
+        image: 'project-ararat',
+        metrics: ['10.4 kWp', '13 500 kWh/տարի', '5.8 տ CO₂']
+      },
+      {
+        tag: 'Բիզնես',
+        title: 'Գրասենյակային շենք',
+        city: 'Երևան',
+        image: 'project-abovyan',
+        metrics: ['30 kWp', '42 000 kWh/տարի', '17.6 տ CO₂']
+      },
+      {
+        tag: 'Կրթություն',
+        title: 'Ուսումնական կենտրոն',
+        city: 'Երևան',
+        image: 'project-arabkir',
+        metrics: ['20 kWp', '28 000 kWh/տարի', '11.7 տ CO₂']
+      },
+      {
+        tag: 'Արդյունաբերություն',
+        title: 'Արտադրական օբյեկտ',
+        city: 'Արմավիր',
+        image: 'project-vagharshapat',
+        metrics: ['50 kWp', '68 000 kWh/տարի', '28.4 տ CO₂']
+      },
+      {
+        tag: 'Առանձնատուն',
+        title: 'Տուն լեռներում',
+        city: 'Դիլիջան',
+        image: 'project-ararat',
+        metrics: ['7.5 kWp', '9 800 kWh/տարի', '4.1 տ CO₂']
+      },
+      {
+        tag: 'Գյուղատնտեսություն',
+        title: 'Ագրոձեռնարկություն',
+        city: 'Արմավիր',
+        image: 'project-vagharshapat',
+        metrics: ['25 kWp', '37 000 kWh/տարի', '15.4 տ CO₂']
+      }
+    ]
+  },
+  en: {
+    meta: {
+      title: 'Our solar projects in Armenia | YOURENERGY',
+      description:
+        'Completed YOURENERGY solar installations for homes, businesses and industrial sites across Armenia.',
+      ogTitle: 'Real solar energy projects | YOURENERGY',
+      ogDescription: 'See completed solar installations and the results they deliver.'
+    },
+    hero: {
+      kicker: 'OUR PROJECTS',
+      titleLead: 'Energy',
+      titleAccent: 'already at work.',
+      copy: 'Real solar installations in Armenia. From an idea to dependable generation.',
+      watch: 'Watch video',
+      pause: 'Pause video',
+      duration: '00:48',
+      noteLead: 'Real projects.',
+      noteTail: 'Real results.',
+      scroll: 'Scroll down',
+      location: 'Yerevan, Armenia',
+      coordinates: '40.1772° N, 44.5033° E',
+      points: [
+        { number: '01', title: 'Real sites', copy: 'across Armenia' },
+        { number: '02', title: 'Proven solutions', copy: 'for every task' },
+        { number: '03', title: 'Clean energy', copy: 'made in Armenia' }
+      ]
+    },
+    featured: {
+      kicker: 'FEATURED PROJECT',
+      total: '20',
+      tag: 'Private home',
+      imageAlt: 'Modern home with a solar station in Yerevan',
+      location: 'Yerevan, Armenia',
+      title: 'Modern home with a solar station',
+      copy: 'A reliable and elegant family solution that covers a significant share of household electricity use.',
+      action: 'Project details',
+      metrics: [
+        { icon: 'zap', label: 'Installed capacity', value: '8.4 kWp' },
+        { icon: 'chart-bars', label: 'Annual production', value: '8,420 kWh' },
+        { icon: 'leaf', label: 'CO₂ avoided a year', value: '3.5 t' }
+      ]
+    },
+    list: {
+      kicker: 'MORE PROJECTS',
+      titleLead: 'Different sites.',
+      titleTail: 'One result — clean energy.',
+      viewAll: 'View all projects'
+    },
+    process: {
+      kicker: 'OUR APPROACH',
+      title: 'From idea to result',
+      note: 'A comprehensive approach to every project',
+      steps: [
+        {
+          number: '01',
+          title: 'Analysis and estimate',
+          copy: 'We select the right solution for your needs'
+        },
+        { number: '02', title: 'Engineering', copy: 'We develop the technical solution' },
+        { number: '03', title: 'Installation', copy: 'Professional installation and start-up' },
+        { number: '04', title: 'Reliable generation', copy: 'Clean energy for years to come' }
+      ]
+    },
+    cta: {
+      title: 'Your project could be next',
+      copy: 'Calculate your property’s potential and receive a personal proposal.',
+      primary: 'Get an estimate',
+      secondary: 'Discuss a project',
+      note: 'Clean energy starts here'
+    },
+    gallery: [
+      {
+        tag: 'Private home',
+        title: 'Country house',
+        city: 'Kotayk',
+        image: 'project-ararat',
+        metrics: ['10.4 kWp', '13,500 kWh/year', '5.8 t CO₂']
+      },
+      {
+        tag: 'Business',
+        title: 'Office building',
+        city: 'Yerevan',
+        image: 'project-abovyan',
+        metrics: ['30 kWp', '42,000 kWh/year', '17.6 t CO₂']
+      },
+      {
+        tag: 'Education',
+        title: 'Education centre',
+        city: 'Yerevan',
+        image: 'project-arabkir',
+        metrics: ['20 kWp', '28,000 kWh/year', '11.7 t CO₂']
+      },
+      {
+        tag: 'Industry',
+        title: 'Production facility',
+        city: 'Armavir',
+        image: 'project-vagharshapat',
+        metrics: ['50 kWp', '68,000 kWh/year', '28.4 t CO₂']
+      },
+      {
+        tag: 'Private home',
+        title: 'Mountain home',
+        city: 'Dilijan',
+        image: 'project-ararat',
+        metrics: ['7.5 kWp', '9,800 kWh/year', '4.1 t CO₂']
+      },
+      {
+        tag: 'Agriculture',
+        title: 'Agricultural site',
+        city: 'Armavir',
+        image: 'project-vagharshapat',
+        metrics: ['25 kWp', '37,000 kWh/year', '15.4 t CO₂']
+      }
+    ]
+  }
+});
+
+const createProjectsPageContext = (content) => {
+  const path = placeholderPath(content.locale, 'projects');
+  const base = createHomeContext(content, { pageKind: 'projects' });
+  const copy = projectsPageCopy[content.locale];
+  if (!copy) throw new Error(`Missing projects page content for ${content.locale}.`);
+  const metricsIcons = ['zap', 'chart-bars', 'leaf'];
+
+  return {
+    ...base,
+    path,
+    meta: copy.meta,
+    activeNavigation: createHeaderNavigationState('projects'),
+    alternateLinks: createPlaceholderAlternateLinks('projects'),
+    languageLinks: createPlaceholderLanguageLinks(content.locale, 'projects'),
+    projectsPage: {
+      ...copy,
+      videoSrc: sameOriginPath(publicEnv.VITE_PROJECTS_HERO_VIDEO, ''),
+      contactHref: base.navLinks.contacts,
+      items: copy.gallery.map((item, index) => ({
+        ...item,
+        tagIcon: index === 3 ? 'chart-bars' : index === 5 ? 'leaf' : 'faq-home',
+        action: copy.featured.action,
+        imageAlt: `${item.title}, ${item.city}`,
+        avifSrcset: `/images/${item.image}-480.avif 480w, /images/${item.image}-800.avif 800w`,
+        webpSrcset: `/images/${item.image}-480.webp 480w, /images/${item.image}-800.webp 800w`,
+        metrics: item.metrics.map((value, metricIndex) => ({
+          icon: metricsIcons[metricIndex],
+          value
+        }))
+      }))
+    }
+  };
+};
+
 const createFaqContext = (content) => {
   const path = faqPath(content.locale);
   const base = createHomeContext(content, { pageKind: 'faq' });
@@ -633,11 +1013,14 @@ for (const { key } of GENERATED_CONTENT_LOCALES) {
   await writeGenerated(output, renderOfferChecker(createOfferCheckerContext(content)));
 }
 
+for (const { key } of GENERATED_CONTENT_LOCALES) {
+  const content = homeContent[key];
+  const output = resolve(root, placeholderFile(key, 'projects'));
+  await mkdir(dirname(output), { recursive: true });
+  await writeGenerated(output, renderProjects(createProjectsPageContext(content)));
+}
+
 const placeholderPages = Object.freeze([
-  {
-    type: 'projects',
-    titles: { hy: 'Նախագծեր', ru: 'Проекты', en: 'Projects' }
-  },
   {
     type: 'contacts',
     titles: { hy: 'Կապ', ru: 'Контакты', en: 'Contacts' }
