@@ -46,6 +46,7 @@ export default {
     calculator: 'Հաշվիչ',
     projects: 'Նախագծեր',
     process: 'Ընթացք',
+    equipment: 'Սարքավորումներ',
     contacts: 'Կապ',
     about: 'Մեր մասին',
     blog: 'Բլոգ'

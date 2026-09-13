@@ -39,6 +39,7 @@ const placeholderPages = placeholderTypes.flatMap((type) => [
 ]);
 const expectedPages = [
   'index.html',
+  'equipment/index.html',
   'ru/index.html',
   'privacy/index.html',
   'terms/index.html',
@@ -722,7 +723,14 @@ for (const page of expectedPages) {
 }
 
 for (const [page, html] of pages) {
-  const locale = page.startsWith('ru/') ? 'ru' : page.startsWith('en/') ? 'en' : 'hy';
+  const locale =
+    page === 'equipment/index.html'
+      ? 'ru'
+      : page.startsWith('ru/')
+        ? 'ru'
+        : page.startsWith('en/')
+          ? 'en'
+          : 'hy';
   validateBaseDocument(html, page, locale);
   await validateAssets(html, page);
   await validateAnchors(html, page, pages);

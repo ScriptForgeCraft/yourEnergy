@@ -46,6 +46,7 @@ export default {
     calculator: 'Calculator',
     projects: 'Projects',
     process: 'Process',
+    equipment: 'Equipment',
     contacts: 'Contact',
     about: 'About us',
     blog: 'Blog'

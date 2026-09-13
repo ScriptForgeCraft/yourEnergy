@@ -274,6 +274,7 @@ const headerNavigationKeys = Object.freeze([
   'calculator',
   'projects',
   'process',
+  'equipment',
   'contacts',
   'about',
   'blog'
@@ -344,6 +345,7 @@ const createHomeContext = (content, { pageKind = 'home' } = {}) => {
       calculator: calculatorHref,
       projects: projectsHref,
       process: homeSectionHref('#process'),
+      equipment: '/equipment/',
       contacts: contactsHref,
       about: placeholderPath(content.locale, 'about'),
       blog: placeholderPath(content.locale, 'blog')
