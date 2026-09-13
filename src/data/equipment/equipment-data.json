@@ -1,0 +1,180 @@
+{
+  "hero": {
+    "eyebrow": "Оборудование",
+    "title": "Надёжные технологии для чистой энергии",
+    "subtitle": "Проверенные решения от производителей солнечного оборудования для дома и бизнеса.",
+    "background": "/assets/equipment/hero/hero-bg.png"
+  },
+  "categories": [
+    {"id": "solar-panels", "label": "Солнечные панели", "enabled": true},
+    {"id": "inverters", "label": "Инверторы", "enabled": true},
+    {"id": "batteries", "label": "Аккумуляторы", "enabled": true},
+    {"id": "mounting", "label": "Монтажные системы", "enabled": false},
+    {"id": "monitoring", "label": "Системы мониторинга", "enabled": false}
+  ],
+  "products": [
+    {
+      "id": "longi-hi-mo-x10-guardian-lr7-72hvdf",
+      "category": "solar-panels",
+      "brand": "LONGi",
+      "name": "Hi-MO X10 Guardian",
+      "model": "LR7-72HVDF",
+      "powerRange": "640–665 W",
+      "image": "/assets/equipment/products/1.png",
+      "datasheetPdf": "/assets/equipment/docs/LR7-72HVDF-640-665M.pdf",
+      "shortDescription": "Высокоэффективный двухстекольный модуль с HPBC 2.0 и конструкцией Anti-Dust для стабильной работы в сложных условиях.",
+      "highlights": [
+        {"label": "Макс. эффективность", "value": "24.6%"},
+        {"label": "Гарантия на материалы", "value": "15 лет"},
+        {"label": "Линейная гарантия мощности", "value": "30 лет"},
+        {"label": "Диапазон мощности", "value": "640–665 W"}
+      ],
+      "hotspots": [
+        {"id": "cell", "label": "HPBC 2.0", "text": "Высокоэффективная технология ячеек HPBC 2.0."},
+        {"id": "glass", "label": "Двойное стекло", "text": "Двойное полузакалённое стекло толщиной 2.0 мм."},
+        {"id": "frame", "label": "Алюминиевая рама", "text": "Рама из анодированного алюминиевого сплава."},
+        {"id": "antidust", "label": "Anti-Dust", "text": "Конструкция рамы снижает влияние накопления пыли."},
+        {"id": "efficiency", "label": "Эффективность", "text": "Максимальная эффективность модуля до 24.6%."}
+      ],
+      "specs": {
+        "cellOrientation": "144 (6×24)",
+        "junctionBox": "IP68, 3 диода",
+        "glass": "Double glass, 2.0 mm semi-tempered",
+        "frame": "Anodized aluminum alloy",
+        "weight": "33.5 kg",
+        "dimensions": "2382 × 1134 × 30 mm",
+        "operatingTemperature": "-40°C … +85°C",
+        "maxSystemVoltage": "DC 1500 V (IEC)",
+        "protectionClass": "Class II",
+        "bifaciality": "70 ± 5%",
+        "frontStaticLoad": "5400 Pa",
+        "rearStaticLoad": "2400 Pa"
+      },
+      "documents": [
+        {"label": "Технический паспорт", "type": "pdf", "url": "/assets/equipment/docs/LR7-72HVDF-640-665M.pdf"}
+      ]
+    },
+    {
+      "id": "longi-hi-mo-x10-scientist-lr8-66hvd",
+      "category": "solar-panels",
+      "brand": "LONGi",
+      "name": "Hi-MO X10 Scientist",
+      "model": "LR8-66HVD",
+      "powerRange": "640–665 W",
+      "image": "/assets/equipment/products/2.png",
+      "datasheetPdf": "/assets/equipment/docs/Longi 650 w.pdf",
+      "shortDescription": "Высокоэффективный модуль серии Hi-MO X10 с N-TaiRay, HPBC 2.0 и 0BB, ориентированный на высокую мощность и снижение потерь от затенения.",
+      "highlights": [
+        {"label": "Макс. эффективность", "value": "24.62%"},
+        {"label": "Гарантия на материалы", "value": "15 лет"},
+        {"label": "Линейная гарантия мощности", "value": "30 лет"},
+        {"label": "Диапазон мощности", "value": "640–665 W"}
+      ],
+      "hotspots": [
+        {"id": "cell", "label": "HPBC 2.0 + 0BB", "text": "Архитектура N-TaiRay + HPBC 2.0 + 0BB."},
+        {"id": "glass", "label": "Двойное стекло", "text": "Полузакалённое стекло 2.0 + 2.0 мм."},
+        {"id": "frame", "label": "Алюминиевая рама", "text": "Анодированный алюминиевый сплав."},
+        {"id": "shading", "label": "A+ Anti-Shading", "text": "Конструкция рассчитана на снижение потерь от частичного затенения."},
+        {"id": "efficiency", "label": "Эффективность", "text": "Максимальная эффективность модуля до 24.62%."}
+      ],
+      "specs": {
+        "cellOrientation": "132 (6×22)",
+        "junctionBox": "IP68, 3 диода",
+        "glass": "Dual glass, 2.0 + 2.0 mm semi-tempered",
+        "frame": "Anodized aluminum alloy",
+        "weight": "33.5 kg",
+        "dimensions": "2382 × 1134 × 30 mm",
+        "operatingTemperature": "-40°C … +85°C",
+        "maxSystemVoltage": "DC 1500 V (IEC)",
+        "protectionClass": "Class II",
+        "bifaciality": "75 ± 5%",
+        "frontStaticLoad": "5400 Pa",
+        "rearStaticLoad": "2400 Pa"
+      },
+      "documents": [
+        {"label": "Технический паспорт", "type": "pdf", "url": "/assets/equipment/docs/Longi 650 w.pdf"}
+      ]
+    },
+    {
+      "id": "solax-x1-lite-lv",
+      "category": "inverters",
+      "brand": "SolaX",
+      "name": "X1-Lite-LV",
+      "model": "X1-Lite-LV Series",
+      "powerRange": "8 / 10 / 12 kW",
+      "image": "/assets/equipment/products/3.png",
+      "datasheetPdf": "/assets/equipment/docs/SolaX X1-Lite LV-Datasheet-EN-V1.5-2401251.pdf",
+      "shortDescription": "Низковольтный инвертор SolaX с быстрым EPS-переключением, интеллектуальным управлением нагрузками и поддержкой высокомощных солнечных панелей.",
+      "highlights": [
+        {"label": "Мощность", "value": "8 / 10 / 12 kW"},
+        {"label": "Макс. эффективность", "value": "97.6%"},
+        {"label": "EPS switching", "value": "< 4 ms"},
+        {"label": "Защита", "value": "IP65"}
+      ],
+      "hotspots": [
+        {"id": "pv", "label": "PV oversizing", "text": "Поддержка до 200% PV oversizing и до 110% AC output."},
+        {"id": "eps", "label": "EPS < 4 ms", "text": "Переключение уровня UPS менее чем за 4 мс."},
+        {"id": "battery", "label": "Battery interface", "text": "Максимальный ток заряда/разряда до 250 A в зависимости от модели."},
+        {"id": "protection", "label": "IP65", "text": "Корпус со степенью защиты IP65."},
+        {"id": "comms", "label": "Связь", "text": "CAN, RS485, CT, Meter, USB, NTC, WiFi + LAN."}
+      ],
+      "specs": {
+        "models": "X1-Lite-8.0-LV / 10.0-LV / 12.0-LV",
+        "maxEfficiency": "97.6%",
+        "mpptEfficiency": "> 99.9%",
+        "batteryType": "Lithium / Lead-Acid",
+        "batteryVoltageRange": "40–60 V",
+        "degreeOfProtection": "IP65",
+        "operatingTemperature": "-25°C … +60°C",
+        "dimensions": "631 × 431 × 259.8 mm",
+        "weight": "35 kg",
+        "cooling": "Smart Cooling",
+        "warranty": "5 years"
+      },
+      "documents": [
+        {"label": "Технический паспорт", "type": "pdf", "url": "/assets/equipment/docs/SolaX X1-Lite LV-Datasheet-EN-V1.5-2401251.pdf"}
+      ]
+    },
+    {
+      "id": "solax-t-bat-sys-lv-d53",
+      "category": "batteries",
+      "brand": "SolaX",
+      "name": "T-BAT-SYS-LV D53",
+      "model": "T-BAT-SYS-LV D53",
+      "powerRange": "5.3–85.1 kWh",
+      "image": "/assets/equipment/products/4.png",
+      "datasheetPdf": "/assets/equipment/docs/T-BAT-SYS-LV D53 V1.2.pdf",
+      "shortDescription": "Модульная низковольтная LFP-система хранения энергии с масштабированием до 16 модулей и интеллектуальным мониторингом.",
+      "highlights": [
+        {"label": "Номинальная ёмкость", "value": "5.3–85.1 kWh"},
+        {"label": "Тип батареи", "value": "LFP"},
+        {"label": "Гарантия", "value": "10 лет"},
+        {"label": "Cycle life", "value": "> 6000"}
+      ],
+      "hotspots": [
+        {"id": "chemistry", "label": "LFP", "text": "Cobalt-Free Lithium Iron Phosphate chemistry."},
+        {"id": "modular", "label": "Модульность", "text": "До 16 модулей параллельно, номинальная ёмкость до 85.1 kWh."},
+        {"id": "monitoring", "label": "Smart Management", "text": "AI-driven мониторинг, алгоритмы SOC и диагностика неисправностей."},
+        {"id": "protection", "label": "IP65", "text": "Степень защиты IP65."},
+        {"id": "lifetime", "label": "Срок службы", "text": "Более 6000 циклов при условиях, указанных производителем."}
+      ],
+      "specs": {
+        "moduleCapacity": "5.3 kWh",
+        "maxSystemCapacity": "85.1 kWh nominal",
+        "maxUsableCapacity": "76.6 kWh at 90% DOD",
+        "batteryType": "Lithium Iron Phosphate",
+        "nominalVoltage": "51.2 V",
+        "operatingVoltageRange": "45–58 V",
+        "communication": "CAN / RS485",
+        "degreeOfProtection": "IP65",
+        "dimensions": "645 × 150 × 430 mm per module",
+        "weight": "48.5 kg per module",
+        "warranty": "10 years",
+        "cycleLife": "> 6000"
+      },
+      "documents": [
+        {"label": "Технический паспорт", "type": "pdf", "url": "/assets/equipment/docs/T-BAT-SYS-LV D53 V1.2.pdf"}
+      ]
+    }
+  ]
+}

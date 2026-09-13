@@ -1,0 +1,339 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#071713" />
+    <meta name="color-scheme" content="dark" />
+    <meta
+      name="description"
+      content="Оборудование YOURENERGY: солнечные панели, инверторы и аккумуляторные системы."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="YOURENERGY" />
+    <meta property="og:locale" content="ru_RU" />
+    <meta property="og:title" content="Оборудование | YOURENERGY" />
+    <meta
+      property="og:description"
+      content="Проверенные решения от производителей солнечного оборудования для дома и бизнеса."
+    />
+    <meta property="og:url" content="https://yourenergy.am/equipment/" />
+    <meta
+      property="og:image"
+      content="https://yourenergy.am/assets/equipment/hero/hero-bg.png"
+    />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="canonical" href="https://yourenergy.am/equipment/" />
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="icon" href="/yourenergy-mark.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="preload" as="image" href="/assets/equipment/hero/hero-bg.png" />
+    <link rel="stylesheet" href="/src/styles/main.css" />
+    <link rel="stylesheet" href="/src/styles/equipment.css" />
+    <title>Оборудование | YOURENERGY</title>
+  </head>
+  <body class="page-equipment" data-equipment-page>
+    <a class="skip-link" href="#main">Перейти к основному содержанию</a>
+
+    <header class="site-header equipment-header" data-header>
+      <div class="equipment-header__row">
+        <a class="wordmark equipment-wordmark" href="/ru/" aria-label="YOURENERGY — главная">
+          <img
+            class="wordmark__mark"
+            src="/yourenergy-mark.svg"
+            alt=""
+            aria-hidden="true"
+          />
+          <span class="equipment-wordmark__copy">
+            <span class="equipment-wordmark__name">YOURENERGY</span>
+            <small>Чистая энергия для лучшего завтра</small>
+          </span>
+        </a>
+
+        <nav class="desktop-nav equipment-nav" aria-label="Основная навигация">
+          <a href="/ru/">Главная</a>
+          <a href="/ru/calculator/">Калькулятор</a>
+          <a href="/ru/projects/">Типовые решения</a>
+          <a href="/ru/#process">Процесс</a>
+          <a href="/ru/about/">О компании</a>
+          <a class="is-active" href="/equipment/" aria-current="page">Оборудование</a>
+          <a href="/ru/contacts/">Контакты</a>
+        </nav>
+
+        <div class="header-actions equipment-header__actions">
+          <a class="button button--small" href="/ru/calculator/">
+            Получить расчёт
+            <svg class="equipment-icon" aria-hidden="true">
+              <use href="/icons.svg#arrow-right"></use>
+            </svg>
+          </a>
+          <span class="equipment-language" aria-label="Текущий язык — русский">RU</span>
+        </div>
+
+        <details class="mobile-menu" data-mobile-menu>
+          <summary aria-label="Открыть навигационное меню"><span></span><span></span><span></span></summary>
+          <nav aria-label="Мобильная навигация">
+            <a href="/ru/">Главная</a>
+            <a href="/ru/calculator/">Калькулятор</a>
+            <a href="/ru/projects/">Типовые решения</a>
+            <a href="/ru/#process">Процесс</a>
+            <a href="/ru/about/">О компании</a>
+            <a class="is-active" href="/equipment/" aria-current="page">Оборудование</a>
+            <a href="/ru/contacts/">Контакты</a>
+          </nav>
+        </details>
+      </div>
+    </header>
+
+    <main id="main" class="equipment-showroom" data-equipment-showroom aria-busy="true">
+      <div class="equipment-showroom__backdrop" aria-hidden="true"></div>
+      <div class="equipment-showroom__noise" aria-hidden="true"></div>
+
+      <div class="equipment-shell">
+        <div class="equipment-stage">
+          <section class="equipment-intro" aria-labelledby="equipment-title" data-intro>
+            <p class="equipment-eyebrow" data-page-eyebrow></p>
+            <h1 id="equipment-title" data-page-title></h1>
+            <p class="equipment-intro__text" data-page-subtitle></p>
+            <div
+              class="equipment-categories"
+              data-category-list
+              aria-label="Категории оборудования"
+            ></div>
+          </section>
+
+          <section class="product-viewer" aria-label="Интерактивный обзор продукта" data-viewer>
+            <div class="product-viewer__halo" aria-hidden="true"></div>
+            <div class="product-visual" data-product-visual>
+              <div class="product-visual__depth" data-product-depth>
+                <img
+                  class="product-visual__image"
+                  data-product-image
+                  alt=""
+                  fetchpriority="high"
+                  decoding="async"
+                />
+                <div class="product-hotspots" data-hotspots></div>
+              </div>
+            </div>
+            <p class="product-viewer__hint" data-rotate-hint>
+              <span class="product-viewer__axis" aria-hidden="true"></span>
+              <span data-rotate-hint-text></span>
+            </p>
+            <p class="sr-status" data-product-status aria-live="polite"></p>
+          </section>
+
+          <aside class="product-panel" data-product-panel aria-label="Информация о продукте">
+            <button
+              class="product-panel__fullscreen"
+              type="button"
+              data-fullscreen-open
+              aria-label="Открыть полный обзор"
+              title="Открыть полный обзор"
+            >
+              <span aria-hidden="true">⛶</span>
+            </button>
+
+            <div class="product-panel__content" data-panel-content>
+              <div class="product-panel__brand-row">
+                <span class="product-panel__brand" data-product-brand></span>
+                <span class="product-panel__popular" data-product-popular></span>
+              </div>
+              <h2 data-product-name></h2>
+              <p class="product-panel__model" data-product-model></p>
+              <p class="product-panel__power" data-product-power></p>
+              <p class="product-panel__description" data-product-description></p>
+
+              <div class="product-highlights" data-product-highlights></div>
+
+              <div class="product-panel__actions">
+                <a class="equipment-action equipment-action--primary" href="/ru/contacts/">
+                  <span data-request-price></span>
+                  <svg class="equipment-icon" aria-hidden="true">
+                    <use href="/icons.svg#arrow-right"></use>
+                  </svg>
+                </a>
+                <a
+                  class="equipment-action equipment-action--secondary"
+                  data-pdf-link
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <svg class="equipment-icon" aria-hidden="true">
+                    <use href="/icons.svg#file"></use>
+                  </svg>
+                  <span data-download-pdf></span>
+                </a>
+              </div>
+
+              <div class="equipment-accordions" data-accordions>
+                <section class="equipment-accordion">
+                  <button
+                    class="equipment-accordion__trigger"
+                    type="button"
+                    aria-expanded="false"
+                    aria-controls="equipment-benefits-panel"
+                    data-accordion-trigger="benefits"
+                  >
+                    <span>
+                      <svg class="equipment-icon" aria-hidden="true">
+                        <use href="/icons.svg#zap"></use>
+                      </svg>
+                      <span data-accordion-label="benefits"></span>
+                    </span>
+                    <i aria-hidden="true"></i>
+                  </button>
+                  <div
+                    class="equipment-accordion__panel"
+                    id="equipment-benefits-panel"
+                    data-accordion-panel="benefits"
+                    hidden
+                  ></div>
+                </section>
+
+                <section class="equipment-accordion">
+                  <button
+                    class="equipment-accordion__trigger"
+                    type="button"
+                    aria-expanded="false"
+                    aria-controls="equipment-specs-panel"
+                    data-accordion-trigger="specs"
+                  >
+                    <span>
+                      <svg class="equipment-icon" aria-hidden="true">
+                        <use href="/icons.svg#calculator"></use>
+                      </svg>
+                      <span data-accordion-label="specs"></span>
+                    </span>
+                    <i aria-hidden="true"></i>
+                  </button>
+                  <div
+                    class="equipment-accordion__panel"
+                    id="equipment-specs-panel"
+                    data-accordion-panel="specs"
+                    hidden
+                  ></div>
+                </section>
+
+                <section class="equipment-accordion">
+                  <button
+                    class="equipment-accordion__trigger"
+                    type="button"
+                    aria-expanded="false"
+                    aria-controls="equipment-documents-panel"
+                    data-accordion-trigger="documents"
+                  >
+                    <span>
+                      <svg class="equipment-icon" aria-hidden="true">
+                        <use href="/icons.svg#file"></use>
+                      </svg>
+                      <span data-accordion-label="documents"></span>
+                      <b data-document-count></b>
+                    </span>
+                    <i aria-hidden="true"></i>
+                  </button>
+                  <div
+                    class="equipment-accordion__panel"
+                    id="equipment-documents-panel"
+                    data-accordion-panel="documents"
+                    hidden
+                  ></div>
+                </section>
+
+                <section class="equipment-accordion">
+                  <button
+                    class="equipment-accordion__trigger"
+                    type="button"
+                    aria-expanded="false"
+                    aria-controls="equipment-warranty-panel"
+                    data-accordion-trigger="warranty"
+                  >
+                    <span>
+                      <svg class="equipment-icon" aria-hidden="true">
+                        <use href="/icons.svg#shield-check"></use>
+                      </svg>
+                      <span data-accordion-label="warranty"></span>
+                    </span>
+                    <i aria-hidden="true"></i>
+                  </button>
+                  <div
+                    class="equipment-accordion__panel"
+                    id="equipment-warranty-panel"
+                    data-accordion-panel="warranty"
+                    hidden
+                  ></div>
+                </section>
+              </div>
+            </div>
+          </aside>
+        </div>
+
+        <section class="product-rail" aria-label="Другие продукты" data-product-rail>
+          <div class="product-rail__tabs" data-rail-categories></div>
+          <div class="product-rail__navigation">
+            <button class="product-rail__arrow" type="button" data-product-previous>
+              <svg class="equipment-icon" aria-hidden="true">
+                <use href="/icons.svg#arrow-left"></use>
+              </svg>
+              <span class="sr-only">Предыдущий продукт</span>
+            </button>
+            <div class="product-rail__viewport" data-product-viewport>
+              <div class="product-rail__track" data-product-track></div>
+            </div>
+            <button class="product-rail__arrow" type="button" data-product-next>
+              <svg class="equipment-icon" aria-hidden="true">
+                <use href="/icons.svg#arrow-right"></use>
+              </svg>
+              <span class="sr-only">Следующий продукт</span>
+            </button>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <dialog class="product-explorer" data-product-explorer aria-labelledby="explorer-title">
+      <button
+        class="product-explorer__close"
+        type="button"
+        data-fullscreen-close
+        aria-label="Закрыть полный обзор"
+      >
+        <svg class="equipment-icon" aria-hidden="true">
+          <use href="/icons.svg#close"></use>
+        </svg>
+      </button>
+      <div class="product-explorer__layout">
+        <section class="product-explorer__visual" aria-label="Продукт и интерактивные точки">
+          <div class="product-explorer__image-wrap">
+            <img data-explorer-image alt="" />
+            <div class="product-hotspots product-hotspots--explorer" data-explorer-hotspots></div>
+          </div>
+        </section>
+        <section class="product-explorer__details">
+          <p class="product-explorer__brand" data-explorer-brand></p>
+          <h2 id="explorer-title" data-explorer-name></h2>
+          <p class="product-explorer__model" data-explorer-model></p>
+          <p class="product-explorer__description" data-explorer-description></p>
+          <div class="product-explorer__highlights" data-explorer-highlights></div>
+          <div class="product-explorer__section">
+            <h3 data-explorer-specs-title></h3>
+            <dl class="product-explorer__specs" data-explorer-specs></dl>
+          </div>
+          <div class="product-explorer__section">
+            <h3 data-explorer-warranty-title></h3>
+            <div data-explorer-warranty></div>
+          </div>
+          <div class="product-explorer__documents" data-explorer-documents></div>
+        </section>
+      </div>
+    </dialog>
+
+    <noscript>
+      <p class="equipment-noscript">
+        Для интерактивного просмотра оборудования включите JavaScript. Технические паспорта доступны
+        по запросу у YOURENERGY.
+      </p>
+    </noscript>
+    <script type="module" src="/src/equipment.js"></script>
+  </body>
+</html>

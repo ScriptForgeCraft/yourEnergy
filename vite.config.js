@@ -80,6 +80,7 @@ export default defineConfig(({ mode }) => {
           'about-hy': resolve(root, 'about/index.html'),
           'about-ru': resolve(root, 'ru/about/index.html'),
           'about-en': resolve(root, 'en/about/index.html'),
+          equipment: resolve(root, 'equipment/index.html'),
           'blog-hy': resolve(root, 'blog/index.html'),
           'blog-ru': resolve(root, 'ru/blog/index.html'),
           'blog-en': resolve(root, 'en/blog/index.html'),
