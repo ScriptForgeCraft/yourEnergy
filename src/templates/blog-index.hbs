@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang='{{locale}}'>
+  <head>
+    <meta charset='UTF-8' />
+    <meta name='viewport' content='width=device-width, initial-scale=1.0' />
+    <meta name='theme-color' content='#071a2d' />
+    <meta name='description' content='{{blogCopy.heroText}}' />
+    <title>{{blogCopy.heroBefore}} {{blogCopy.heroAccent}} | YOURENERGY</title>
+    <link rel='canonical' href='https://yourenergy.am{{path}}' />
+    {{#each alternateLinks}}<link rel='alternate' hreflang='{{hreflang}}' href='{{href}}' />{{/each}}
+    <link rel='icon' href='/favicon.ico' sizes='any' />
+    <link rel='icon' href='/yourenergy-mark.svg' type='image/svg+xml' />
+    <link rel='apple-touch-icon' href='/apple-touch-icon.png' />
+    <link rel='stylesheet' href='/src/styles/blog.css' />
+  </head>
+  <body class='blog-page' data-blog-page>
+    <a class='skip-link' href='#main'>{{aria.skip}}</a>
+    {{> site-header}}
+    <main id='main'>
+      <section class='blog-hero' aria-labelledby='blog-title'>
+        <img src='/images/hero-time-20-1600.webp' alt='' aria-hidden='true' />
+        <div class='container blog-hero__content' data-blog-reveal>
+          <p class='blog-eyebrow'>{{blogCopy.journal}}</p>
+          <h1 id='blog-title'>{{blogCopy.heroBefore}} <span>{{blogCopy.heroAccent}}</span></h1>
+          <p>{{blogCopy.heroText}}</p>
+          <label class='blog-search' for='blog-search'>
+            <span class='visually-hidden'>{{blogCopy.searchLabel}}</span>
+            <svg aria-hidden='true' viewBox='0 0 24 24'><circle cx='10.8' cy='10.8' r='6.5'></circle><path d='m16 16 4.2 4.2'></path></svg>
+            <input id='blog-search' type='search' autocomplete='off' placeholder='{{blogCopy.searchPlaceholder}}' data-blog-search />
+            <span aria-hidden='true'>→</span>
+          </label>
+        </div>
+      </section>
+
+      <section class='blog-catalog container' aria-label='{{blogCopy.allArticles}}'>
+        <div class='blog-categories' role='toolbar' aria-label='{{blogCopy.allArticles}}'>
+          <button class='blog-category is-active' type='button' aria-pressed='true' data-blog-filter='all'>{{blogCopy.allArticles}}</button>
+          {{#each categories}}<button class='blog-category' type='button' aria-pressed='false' data-blog-filter='{{key}}'>{{label}}</button>{{/each}}
+        </div>
+
+        <article class='featured-article' data-blog-reveal>
+          <a class='featured-article__image' href='{{featured.path}}' tabindex='-1' aria-hidden='true'><img src='{{featured.image}}' alt='' /></a>
+          <div class='featured-article__content'>
+            <p class='article-kicker'><span>{{featured.category}}</span> · {{blogCopy.featured}}</p>
+            <h2><a href='{{featured.path}}'>{{featured.h1}}</a></h2>
+            <p class='featured-article__description'>{{featured.description}}</p>
+            <div class='article-meta'><span>{{blogCopy.verified}} {{featured.verifiedDate}}</span><span>{{featured.readingTimeLabel}}</span></div>
+            <a class='article-arrow-link' href='{{featured.path}}'>{{blogCopy.readArticle}} <span aria-hidden='true'>→</span></a>
+          </div>
+        </article>
+
+        <div class='blog-section-heading'>
+          <div><p class='blog-eyebrow'>{{blogCopy.journal}}</p><h2>{{blogCopy.latest}}</h2></div>
+          <div class='blog-view-toggle' role='group' aria-label='{{blogCopy.latest}}'>
+            <button class='is-active' type='button' aria-pressed='true' data-blog-view='grid'>{{blogCopy.grid}}</button>
+            <button type='button' aria-pressed='false' data-blog-view='list'>{{blogCopy.list}}</button>
+          </div>
+        </div>
+
+        <div class='blog-content-layout'>
+          <div class='blog-article-grid' data-blog-grid>
+            {{#each articles}}<article class='blog-card' data-blog-card data-category='{{categoryKey}}' data-search='{{searchText}}' data-blog-reveal>
+              <a class='blog-card__image' href='{{path}}' tabindex='-1' aria-hidden='true'><img src='{{image}}' alt='' loading='lazy' /></a>
+              <div class='blog-card__content'><p class='article-kicker'>{{category}}</p><h3><a href='{{path}}'>{{h1}}</a></h3><p class='blog-card__summary'>{{description}}</p><div class='blog-card__bottom'><span>{{blogCopy.verified}} {{verifiedDate}}</span><span>{{readingTimeLabel}}</span><a href='{{path}}' aria-label='{{blogCopy.readArticle}}: {{h1}}'>→</a></div></div>
+            </article>{{/each}}
+            <p class='blog-no-results' hidden data-blog-no-results>{{blogCopy.noResults}}</p>
+          </div>
+
+          <aside class='blog-sidebar' aria-label='{{blogCopy.popular}}' data-blog-reveal>
+            <section class='popular-articles'><p class='blog-eyebrow'>01 — 05</p><h2>{{blogCopy.popular}}</h2><ol>{{#each articles}}<li><a href='{{path}}'><span>{{number}}</span><span>{{h1}}</span></a></li>{{/each}}</ol></section>
+            <section class='blog-side-cta'><p>{{blogCopy.ctaTitle}}</p><span>{{blogCopy.ctaText}}</span><a href='{{calculatorHref}}'>{{blogCopy.calculate}} <span aria-hidden='true'>→</span></a></section>
+          </aside>
+        </div>
+      </section>
+    </main>
+    {{> site-footer}}
+    <script type='module' src='/src/main.js'></script>
+  </body>
+</html>

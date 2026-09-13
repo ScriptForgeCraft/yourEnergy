@@ -1,0 +1,1639 @@
+YOURENERGY BLOG — 5 EVERGREEN ARTICLES
+RU / EN / HY
+Verified factual basis: 14 September 2026
+
+IMPORTANT EDITORIAL NOTE
+These materials are long-form blog drafts for YOURENERGY. The Russian, English and Armenian versions preserve the same factual meaning and structure. Regulatory and tariff facts concerning Armenia were checked against the Public Services Regulatory Commission of Armenia (PSRC) and ARLIS as of 14 September 2026. Before publishing much later, re-check tariffs and legislation because they can change.
+
+======================================================================
+ARTICLE 1
+======================================================================
+
+SLUG:
+/blog/solar-panels-for-home-armenia/
+
+CATEGORY:
+For Home / Для дома / Տան համար
+
+----------------------------------------------------------------------
+RU
+----------------------------------------------------------------------
+
+SEO TITLE:
+Солнечные панели для дома в Армении: с чего начать | YOURENERGY
+
+META DESCRIPTION:
+Подробный гид по солнечной электростанции для дома в Армении: как оценить потребление, крышу, мощность системы, инвертор, аккумулятор и ожидаемую генерацию.
+
+H1:
+Солнечная электростанция для дома в Армении: с чего начать
+
+Солнечная электростанция для дома начинается не с выбора бренда панели и не с вопроса «сколько панелей поместится на крыше». Правильный проект начинается с понимания того, сколько электроэнергии дом реально потребляет, когда именно происходит это потребление и какую задачу должна решить будущая система.
+
+Для одного владельца главная цель — уменьшить счета за электричество. Для другого важнее резервное питание при отключениях. Третий хочет подготовить дом к электромобилю, тепловому насосу или росту потребления в будущем. Поэтому два одинаковых по площади дома могут требовать совершенно разных решений.
+
+### 1. Начните с реального потребления
+
+Лучший первый источник данных — счета за электроэнергию за последние 12 месяцев. Один месяц почти ничего не показывает: летом расход может вырасти из-за кондиционирования, зимой — из-за электрического отопления, бойлера или других нагрузок.
+
+Сумма потребления за год даёт отправную точку для расчёта. Но даже годовое потребление нельзя просто разделить на мощность одной панели. Нужно учитывать солнечный ресурс, ориентацию крыши, температуру, затенение, потери системы и профиль потребления.
+
+Мощность солнечной станции обычно указывается в kWp — киловатт-пик. Это суммарная номинальная мощность солнечных модулей при стандартных тестовых условиях.
+
+Произведённая энергия измеряется уже в kWh — киловатт-часах.
+
+Это разные величины. Система мощностью 10 kWp не производит 10 kWh каждый час. В разные часы и сезоны её фактическая мощность меняется.
+
+### 2. Оцените крышу и место установки
+
+Даже качественная панель не сможет показать хороший результат, если установлена в неподходящем месте.
+
+Для проекта важны ориентация поверхности, угол наклона, доступная площадь, деревья, соседние здания, дымоходы, парапеты, другие источники тени, состояние кровли и возможность безопасного монтажа конструкции.
+
+Министерство энергетики США отдельно отмечает, что деревья и чрезмерное затенение могут сделать крышу менее подходящей для солнечной системы. Это универсальный физический принцип, который актуален и для Армении.
+
+Поэтому серьёзный расчёт должен учитывать не только площадь крыши, но и то, сколько солнечной энергии реально достигает модулей.
+
+### 3. Панели — только одна часть электростанции
+
+Часто пользователь видит только солнечные модули, но система состоит из нескольких важных компонентов.
+
+Типичная конфигурация включает:
+
+солнечные панели → монтажную систему → DC-кабели и защиту → инвертор → AC-защиту → учёт → сеть или нагрузки дома → систему мониторинга.
+
+Инвертор преобразует постоянный ток DC от солнечных панелей в переменный ток AC, который используется домашними электроприборами.
+
+Современный инвертор также участвует в управлении системой, контролирует рабочие параметры, собирает данные и может передавать их в приложение или веб-интерфейс мониторинга.
+
+### 4. Нужен ли аккумулятор
+
+Аккумулятор не является обязательной частью каждой солнечной электростанции.
+
+Если задача — в первую очередь снизить покупку электроэнергии из сети, сетевой проект может работать без батареи.
+
+Аккумулятор становится особенно полезным, если нужно использовать часть дневной солнечной энергии вечером, увеличить долю собственного потребления, иметь резерв при отключении сети, поддерживать критические нагрузки или повысить энергетическую независимость объекта.
+
+Важно: обычная grid-connected солнечная система обычно отключается при исчезновении внешней сети по требованиям безопасности. Для резервного питания нужна правильно спроектированная система с подходящим инвертором, схемой переключения и, как правило, накопителем энергии.
+
+### 5. Не выбирайте систему только по количеству панелей
+
+Фраза «установим 20 панелей» сама по себе почти ничего не говорит о качестве проекта.
+
+Намного важнее знать суммарную мощность системы, ожидаемую годовую генерацию, предполагаемые потери, тип инвертора, совместимость компонентов, гарантию, способ мониторинга и ожидаемую долю покрытия потребления.
+
+Количество модулей является следствием расчёта, а не его началом.
+
+### 6. Учитывайте будущее потребление
+
+Если сегодня дом потребляет 6 000 kWh в год, но через год планируется электромобиль, электрическое отопление, бассейн или расширение дома, будущая нагрузка может значительно измениться.
+
+Хороший проект учитывает не только прошлогодние счета, но и реалистичные планы владельца.
+
+Иногда разумнее заранее выбрать архитектуру, которую потом можно расширить, чем полностью перестраивать систему через два года.
+
+### 7. Что должно быть результатом нормального предварительного расчёта
+
+До покупки оборудования клиент должен увидеть понятную картину: текущее потребление, рекомендуемую мощность системы, примерную ожидаемую генерацию, подходящую конфигурацию, нужна ли батарея, какие ограничения есть у крыши и какие следующие шаги нужны для точного проекта.
+
+Онлайн-калькулятор может дать хорошую предварительную оценку, но окончательный инженерный проект должен учитывать конкретный объект.
+
+Солнечная электростанция — это система, которая будет работать много лет. Поэтому правильный первый шаг — не покупать первую понравившуюся панель, а собрать данные и сделать расчёт.
+
+CTA:
+Рассчитать солнечную систему для моего дома →
+
+SOURCES:
+https://www.energy.gov/cmei/systems/homeowners-guide-solar
+https://www.energy.gov/cmei/systems/solar-energy-guide-homebuilders
+https://www.energy.gov/cmei/systems/photovoltaic-system-design-and-energy-yield
+https://www.energy.gov/cmei/systems/solar-and-resilience-basics
+
+----------------------------------------------------------------------
+EN
+----------------------------------------------------------------------
+
+SEO TITLE:
+Solar Panels for a Home in Armenia: Where to Start | YOURENERGY
+
+META DESCRIPTION:
+A detailed guide to planning a residential solar system in Armenia: electricity consumption, roof suitability, system size, inverter, battery and expected energy production.
+
+H1:
+Solar Power for a Home in Armenia: Where to Start
+
+A residential solar project should not begin with a brand name or with the question, “How many panels can fit on my roof?” A good project begins by understanding how much electricity the home actually uses, when that electricity is consumed, and what the future solar system is expected to achieve.
+
+For one homeowner, the main goal may be to reduce electricity bills. Another may care more about backup power during outages. A third may want to prepare the home for an electric vehicle, a heat pump, or higher future electricity demand. That is why two homes with a similar size can require very different solar solutions.
+
+### 1. Start with real electricity consumption
+
+The best starting point is the electricity bills from the last 12 months. One month is rarely enough: summer consumption may increase because of air conditioning, while winter consumption may rise because of electric heating, water heating or other loads.
+
+Annual consumption gives a useful baseline, but it still cannot simply be divided by the wattage of one solar panel. A proper estimate must consider solar resource, roof orientation, temperature, shading, system losses and the timing of electricity use.
+
+Solar system size is commonly expressed in kWp, or kilowatt-peak. This is the combined nominal output of the solar modules under standard test conditions. Energy production is measured in kWh, or kilowatt-hours.
+
+These are not the same thing. A 10 kWp system does not generate 10 kWh every hour. Its actual output changes throughout the day and across the seasons.
+
+### 2. Evaluate the roof and installation area
+
+Even an excellent solar module will underperform if it is installed in an unsuitable location.
+
+A project should consider orientation, tilt angle, usable roof area, trees, nearby buildings, chimneys, parapets, other shading sources, roof condition and safe mounting possibilities.
+
+The U.S. Department of Energy notes that trees and excessive shade can make a rooftop less suitable for solar. This is a universal physical consideration and is equally relevant in Armenia.
+
+A serious design therefore considers not only roof area but also how much sunlight actually reaches the modules.
+
+### 3. Solar panels are only one part of the system
+
+The modules are the most visible component, but a complete solar installation includes several important elements.
+
+A typical system includes:
+
+solar modules → mounting structure → DC cabling and protection → inverter → AC protection → metering → the home/grid → monitoring.
+
+The inverter converts the DC electricity produced by solar modules into AC electricity that household appliances can use. Modern inverters can also manage system operation, monitor performance, collect data and send information to a monitoring application or web interface.
+
+### 4. Do you need a battery?
+
+A battery is not mandatory for every solar installation.
+
+If the main objective is to reduce the amount of electricity purchased from the grid, a grid-connected system can work without battery storage.
+
+A battery becomes especially useful when you want to use daytime solar energy in the evening, increase self-consumption, maintain backup power during an outage, support critical loads or increase the property's energy independence.
+
+An important point: a standard grid-connected solar system generally shuts down when the external grid is unavailable for safety reasons. Backup operation requires a properly configured inverter, switching architecture and usually an energy storage system.
+
+### 5. Do not choose a system only by panel count
+
+The statement “we will install 20 panels” tells you very little about the quality of the proposed system.
+
+More important questions are the total system capacity, expected annual generation, assumed losses, inverter type, component compatibility, warranty, monitoring method and the expected share of electricity demand covered.
+
+Panel count is the result of the design process, not the starting point.
+
+### 6. Think about future electricity demand
+
+A home may consume 6,000 kWh per year today but add an electric vehicle, electric heating, a pool or a larger living area next year.
+
+A good solar design looks not only at historical bills but also at realistic future plans.
+
+In some cases, choosing a system architecture that can be expanded later is more sensible than rebuilding the system a few years from now.
+
+### 7. What a useful preliminary calculation should provide
+
+Before buying equipment, a homeowner should receive a clear picture of current annual electricity use, recommended solar capacity, estimated annual solar generation, suitable system configuration, whether battery storage is useful, roof limitations and the next steps required for a final engineering design.
+
+An online calculator can provide a strong preliminary estimate, but a final engineering design should be based on the actual property.
+
+A solar power system is expected to operate for many years. The correct first step is therefore not to buy the first attractive panel, but to gather data and perform a proper calculation.
+
+CTA:
+Calculate a solar system for my home →
+
+SOURCES:
+https://www.energy.gov/cmei/systems/homeowners-guide-solar
+https://www.energy.gov/cmei/systems/solar-energy-guide-homebuilders
+https://www.energy.gov/cmei/systems/photovoltaic-system-design-and-energy-yield
+https://www.energy.gov/cmei/systems/solar-and-resilience-basics
+
+----------------------------------------------------------------------
+HY
+----------------------------------------------------------------------
+
+SEO TITLE:
+Արևային վահանակներ տան համար Հայաստանում․ որտեղի՞ց սկսել | YOURENERGY
+
+META DESCRIPTION:
+Մանրամասն ուղեցույց Հայաստանում տան արևային կայանի համար՝ էլեկտրաէներգիայի սպառում, տանիք, կայանի հզորություն, ինվերտոր, մարտկոց և սպասվող արտադրություն։
+
+H1:
+Արևային էլեկտրակայան տան համար Հայաստանում․ որտեղի՞ց սկսել
+
+Տան արևային համակարգի նախագծումը չպետք է սկսվի վահանակի ապրանքանիշ ընտրելուց կամ «քանի վահանակ կտեղավորվի տանիքին» հարցից։ Ճիշտ նախագիծը սկսվում է հասկանալուց, թե տունն իրականում որքան էլեկտրաէներգիա է սպառում, երբ է այդ սպառումը տեղի ունենում և ինչ խնդիր պետք է լուծի ապագա արևային համակարգը։
+
+Մի սեփականատիրոջ համար հիմնական նպատակը կարող է լինել էլեկտրաէներգիայի ծախսերի նվազեցումը։ Մյուսի համար ավելի կարևոր է հոսանքի անջատման ժամանակ պահուստային սնուցումը։ Երրորդը կարող է պատրաստվել էլեկտրամեքենայի, ջերմային պոմպի կամ ապագա սպառման աճին։ Այդ պատճառով նույնիսկ նույն մակերեսով երկու տներ կարող են պահանջել տարբեր լուծումներ։
+
+### 1. Սկսեք իրական սպառումից
+
+Լավագույն մեկնարկային տվյալը վերջին 12 ամսվա էլեկտրաէներգիայի հաշիվներն են։ Միայն մեկ ամսվա տվյալը բավարար չէ․ ամռանը սպառումը կարող է աճել օդորակիչների պատճառով, իսկ ձմռանը՝ էլեկտրական ջեռուցման, ջրատաքացուցիչների և այլ սարքերի պատճառով։
+
+Տարեկան սպառումը տալիս է հաշվարկի ելակետը, սակայն նույնիսկ այն հնարավոր չէ պարզապես բաժանել մեկ վահանակի հզորության վրա։ Անհրաժեշտ է հաշվի առնել արևային ռեսուրսը, տանիքի կողմնորոշումը, ջերմաստիճանը, ստվերները, համակարգային կորուստները և սպառման ժամային պրոֆիլը։
+
+Արևային կայանի անվանական հզորությունը սովորաբար նշվում է kWp-ով՝ կիլովատ-պիկ։ Դա վահանակների ընդհանուր անվանական հզորությունն է ստանդարտ փորձարկման պայմաններում։ Արտադրված էներգիան չափվում է kWh-ով՝ կիլովատ-ժամերով։
+
+Սրանք տարբեր մեծություններ են։ 10 kWp համակարգը չի արտադրում 10 kWh յուրաքանչյուր ժամում։ Իրական հզորությունը փոփոխվում է օրվա և տարվա ընթացքում։
+
+### 2. Գնահատեք տանիքը և տեղադրման տարածքը
+
+Նույնիսկ բարձրորակ վահանակը չի աշխատի իր ամբողջ ներուժով, եթե տեղադրված է անհարմար վայրում։
+
+Նախագծման ժամանակ կարևոր են կողմնորոշումը, թեքության անկյունը, օգտագործելի մակերեսը, ծառերը, հարևան շենքերը, ծխնելույզները, պարապետները, այլ ստվերող օբյեկտները, տանիքի վիճակը և ամրացման անվտանգ հնարավորությունը։
+
+ԱՄՆ Էներգետիկայի նախարարությունը նշում է, որ ծառերն ու ուժեղ ստվերումը կարող են տանիքը պակաս հարմար դարձնել արևային համակարգի համար։ Սա ֆիզիկական համընդհանուր սկզբունք է և լիովին կիրառելի է նաև Հայաստանում։
+
+Ուստի լուրջ նախագիծը հաշվի է առնում ոչ միայն տանիքի մակերեսը, այլ նաև այն, թե իրականում որքան արևային ճառագայթում է հասնում վահանակներին։
+
+### 3. Վահանակները համակարգի միայն մի մասն են
+
+Վահանակներն ամենատեսանելի բաղադրիչն են, բայց ամբողջ համակարգը բաղկացած է մի քանի կարևոր տարրերից։
+
+Տիպային համակարգը ներառում է՝
+
+արևային վահանակներ → ամրացման համակարգ → DC մալուխներ և պաշտպանություն → ինվերտոր → AC պաշտպանություն → հաշվառում → տուն/ցանց → մոնիթորինգ։
+
+Ինվերտորը վահանակներից ստացվող DC հաստատուն հոսանքը փոխակերպում է AC փոփոխական հոսանքի, որը օգտագործվում է կենցաղային սարքերում։ Ժամանակակից ինվերտորները նաև վերահսկում են աշխատանքային պարամետրերը, հավաքում տվյալներ և դրանք փոխանցում մոնիթորինգի հավելված կամ վեբ համակարգ։
+
+### 4. Պե՞տք է մարտկոց
+
+Մարտկոցը պարտադիր չէ յուրաքանչյուր արևային կայանի համար։
+
+Եթե հիմնական նպատակը ցանցից գնվող էլեկտրաէներգիայի նվազեցումն է, ցանցային համակարգը կարող է աշխատել նաև առանց մարտկոցի։
+
+Մարտկոցն առավել օգտակար է, երբ անհրաժեշտ է ցերեկային արևային էներգիան օգտագործել երեկոյան, բարձրացնել սեփական սպառման բաժինը, ունենալ պահուստային սնուցում հոսանքի անջատման ժամանակ, պահել կարևոր բեռների աշխատանքը կամ բարձրացնել օբյեկտի էներգետիկ անկախությունը։
+
+Կարևոր է հասկանալ, որ սովորական ցանցին միացված արևային համակարգը անվտանգության պատճառով հիմնականում անջատվում է, երբ արտաքին ցանցը բացակայում է։ Պահուստային աշխատանքի համար անհրաժեշտ է ճիշտ ընտրված ինվերտոր, համապատասխան միացման սխեմա և սովորաբար էներգիայի կուտակիչ։
+
+### 5. Համակարգը մի ընտրեք միայն վահանակների քանակով
+
+«Կտեղադրենք 20 վահանակ» արտահայտությունը ինքնին գրեթե ոչինչ չի ասում նախագծի որակի մասին։
+
+Ավելի կարևոր է իմանալ համակարգի ընդհանուր հզորությունը, սպասվող տարեկան արտադրությունը, հաշվարկված կորուստները, ինվերտորի տեսակը, բաղադրիչների համատեղելիությունը, երաշխիքը, մոնիթորինգի եղանակը և սպառման ինչ բաժին է նախատեսվում ծածկել։
+
+Վահանակների քանակը հաշվարկի արդյունքն է, ոչ թե մեկնարկային կետը։
+
+### 6. Հաշվի առեք ապագա սպառումը
+
+Եթե այսօր տունը տարեկան օգտագործում է 6 000 kWh, բայց հաջորդ տարի նախատեսվում է էլեկտրամեքենա, էլեկտրական ջեռուցում, լողավազան կամ տան ընդլայնում, բեռը կարող է զգալիորեն աճել։
+
+Լավ նախագիծը դիտարկում է ոչ միայն անցած տարվա հաշիվները, այլ նաև սեփականատիրոջ իրատեսական ապագա ծրագրերը։
+
+Որոշ դեպքերում ավելի տրամաբանական է սկզբից ընտրել ընդլայնվող համակարգի ճարտարապետություն, քան մի քանի տարի հետո ամբողջ համակարգը վերակառուցել։
+
+### 7. Ինչ պետք է ստանալ նախնական ճիշտ հաշվարկից
+
+Սարքավորում գնելուց առաջ սեփականատերը պետք է հստակ տեսնի ընթացիկ սպառումը, առաջարկվող արևային հզորությունը, սպասվող տարեկան արտադրությունը, համապատասխան կոնֆիգուրացիան, արդյոք մարտկոցը նպատակահարմար է, տանիքի սահմանափակումները և վերջնական նախագծման հաջորդ քայլերը։
+
+Առցանց հաշվիչը կարող է տալ լավ նախնական գնահատում, բայց վերջնական ինժեներական նախագիծը պետք է հիմնված լինի կոնկրետ օբյեկտի վրա։
+
+Արևային կայանը երկար տարիներ աշխատող համակարգ է։ Այդ պատճառով ճիշտ առաջին քայլը առաջին պատահած վահանակը գնելը չէ, այլ տվյալներ հավաքելը և հաշվարկ կատարելը։
+
+CTA:
+Հաշվել իմ տան արևային համակարգը →
+
+SOURCES:
+https://www.energy.gov/cmei/systems/homeowners-guide-solar
+https://www.energy.gov/cmei/systems/solar-energy-guide-homebuilders
+https://www.energy.gov/cmei/systems/photovoltaic-system-design-and-energy-yield
+https://www.energy.gov/cmei/systems/solar-and-resilience-basics
+
+======================================================================
+ARTICLE 2
+======================================================================
+
+SLUG:
+/blog/solar-savings-armenia/
+
+CATEGORY:
+Savings / Экономия / Խնայողություն
+
+----------------------------------------------------------------------
+RU
+----------------------------------------------------------------------
+
+SEO TITLE:
+Сколько можно сэкономить с солнечной электростанцией в Армении? | YOURENERGY
+
+META DESCRIPTION:
+Как правильно оценить экономию солнечной электростанции в Армении: тарифы, потребление, генерация, собственное потребление и почему универсального срока окупаемости не существует.
+
+H1:
+Сколько можно сэкономить с солнечной электростанцией в Армении?
+
+Один из первых вопросов перед установкой солнечной станции звучит так: «Через сколько лет она окупится?»
+
+Вопрос правильный, но универсального ответа на него нет.
+
+Окупаемость зависит от конкретного объекта, профиля потребления, цены системы, реальной генерации, стоимости электроэнергии, будущих изменений потребления и выбранной конфигурации.
+
+Поэтому обещание «любая солнечная система окупается за X лет» без изучения объекта — слишком грубое упрощение.
+
+### 1. Сначала нужно понять, сколько электричества вы покупаете
+
+Главный источник экономии — электроэнергия, которую после установки станции объект перестаёт покупать из сети либо компенсирует собственной генерацией в рамках действующих правил.
+
+В 2026 году Комиссия по регулированию общественных услуг Армении сообщила, что тарифы для потребителей остаются без изменений.
+
+Для бытовых потребителей на напряжении 0,38 kV и ниже действуют разные ставки в зависимости от месячного потребления.
+
+По действующей структуре тарифов:
+
+— до 200 kWh в месяц: 46,48 AMD/kWh днём и 36,48 AMD/kWh ночью;
+— от 201 до 400 kWh в месяц: 48,48 AMD/kWh днём и 38,48 AMD/kWh ночью;
+— для общей категории низковольтных потребителей вне специальных льготных диапазонов: 53,48 AMD/kWh днём и 43,48 AMD/kWh ночью.
+
+Ночной тариф применяется при наличии соответствующего многотарифного электронного счётчика и в установленные тарифные часы.
+
+Это означает, что одинаковые 1 000 kWh экономии могут иметь разную денежную ценность для разных объектов.
+
+### 2. Экономия зависит не только от годовой генерации
+
+Представим два дома, каждый потребляет 8 000 kWh в год.
+
+У первого большая часть расхода происходит днём: работают кондиционирование, насосы, кухня, бытовая техника и другие нагрузки.
+
+У второго основное потребление приходится на поздний вечер.
+
+Даже при одинаковой солнечной станции профиль взаимодействия с генерацией будет отличаться.
+
+Именно поэтому полезно знать не только «сколько kWh в год», но и когда расходуется энергия.
+
+### 3. Больше панелей не всегда означает лучшую экономику
+
+Технически можно стремиться использовать всю доступную площадь крыши. Экономически это не всегда оптимально.
+
+Если станция систематически производит намного больше энергии, чем объекту требуется в рамках выбранной модели использования и действующих правил взаиморасчётов, дополнительные панели могут увеличивать стоимость быстрее, чем финансовую пользу.
+
+Цель хорошего проектирования — найти разумный баланс между потреблением, доступной площадью, разрешённой мощностью подключения, солнечным ресурсом, бюджетом и будущими нагрузками.
+
+### 4. Что должно входить в расчёт
+
+Минимальный расчёт должен содержать:
+
+— годовое потребление объекта;
+— предполагаемую мощность станции;
+— ожидаемую годовую генерацию;
+— системные потери;
+— стоимость проекта;
+— предполагаемую долю собственного использования;
+— действующие тарифы;
+— ожидаемые изменения потребления;
+— допущения, на которых построен финансовый результат.
+
+Если в расчёте показан только красивый срок окупаемости без исходных данных, клиенту трудно проверить, насколько он реалистичен.
+
+### 5. Аккумулятор может улучшить использование энергии, но увеличивает инвестицию
+
+Батарея позволяет переносить часть солнечной энергии на вечерние часы и может дать резервное питание.
+
+Но накопитель увеличивает первоначальную стоимость проекта.
+
+Поэтому система с аккумулятором не обязана иметь более короткий простой срок окупаемости, чем система без него. Решение зависит от того, какую ценность клиент придаёт резервному питанию, автономности и большей доле собственного потребления.
+
+### 6. Будущее тоже влияет на экономику
+
+Если владелец планирует приобрести электромобиль, установить тепловой насос, электрическое отопление или расширить бизнес, годовое потребление может увеличиться.
+
+Станция, которая сегодня выглядит слегка избыточной, может через два года оказаться оптимальной.
+
+И наоборот, если потребление объекта будет снижаться, слишком большая установка может быть менее рациональной.
+
+### 7. Правильный вопрос
+
+Вместо вопроса «за сколько лет окупятся солнечные панели?» полезнее спросить:
+
+«Какую часть моего реального потребления сможет покрыть правильно спроектированная система, сколько она будет производить, сколько стоит и какие допущения заложены в расчёт?»
+
+Такой подход позволяет сравнивать предложения не по рекламной цифре, а по понятной модели.
+
+CTA:
+Рассчитать экономику моего объекта →
+
+SOURCES:
+https://www.psrc.am/contents/newsPress/electricity-tariff-2026
+https://www.psrc.am/contents/document/8910
+
+----------------------------------------------------------------------
+EN
+----------------------------------------------------------------------
+
+SEO TITLE:
+How Much Can a Solar System Save in Armenia? | YOURENERGY
+
+META DESCRIPTION:
+How to estimate solar savings in Armenia correctly: electricity tariffs, consumption profile, solar generation, self-consumption and why there is no universal payback period.
+
+H1:
+How Much Can You Save with a Solar Power System in Armenia?
+
+One of the first questions before installing solar is: “How many years will it take to pay back?”
+
+It is a valid question, but there is no universal answer.
+
+Payback depends on the individual property, its consumption profile, the system price, actual energy production, electricity tariffs, future changes in demand and the selected system configuration.
+
+That is why a claim such as “every solar system pays back in X years” is too simplistic without studying the actual site.
+
+### 1. First understand how much electricity you currently purchase
+
+The main financial benefit of solar comes from electricity that the property no longer needs to purchase from the grid, or that can be offset under the applicable energy-accounting rules.
+
+In 2026, Armenia's Public Services Regulatory Commission stated that electricity tariffs for consumers would remain unchanged.
+
+For residential consumers supplied at 0.38 kV and below, different tariff bands apply depending on monthly consumption.
+
+Under the current tariff structure:
+
+— up to 200 kWh per month: AMD 46.48/kWh during the day and AMD 36.48/kWh at night;
+— 201–400 kWh per month: AMD 48.48/kWh during the day and AMD 38.48/kWh at night;
+— the general low-voltage consumer category outside the special residential bands: AMD 53.48/kWh during the day and AMD 43.48/kWh at night.
+
+The night tariff applies where the appropriate multi-tariff electronic metering equipment is installed and during the applicable tariff hours.
+
+This means that the financial value of saving the same 1,000 kWh can differ between customers.
+
+### 2. Savings depend on more than annual generation
+
+Imagine two homes that each consume 8,000 kWh per year.
+
+The first uses much of its electricity during daylight hours for air conditioning, pumps, appliances and other loads.
+
+The second consumes most of its electricity late in the evening.
+
+Even with an identical solar system, the way each home interacts with solar generation will be different.
+
+This is why it is useful to know not only annual consumption but also when the electricity is used.
+
+### 3. More panels do not automatically mean better economics
+
+It may be technically possible to cover every available part of a roof with modules. That is not always the optimal financial decision.
+
+If a system consistently produces much more energy than the property needs within the chosen usage model and applicable settlement rules, the cost of additional panels may rise faster than their financial value.
+
+A good design seeks a reasonable balance between electricity consumption, available area, permitted connection capacity, solar resource, budget and future loads.
+
+### 4. What a financial estimate should include
+
+At a minimum, a useful solar calculation should show:
+
+— annual electricity consumption;
+— proposed system capacity;
+— estimated annual generation;
+— expected losses;
+— project cost;
+— estimated self-consumption;
+— current electricity tariffs;
+— expected future changes in demand;
+— the assumptions used for the financial result.
+
+If a proposal shows only an attractive payback figure without its underlying assumptions, it is difficult for the customer to evaluate how realistic it is.
+
+### 5. A battery can improve energy use but increases the investment
+
+Battery storage can move daytime solar production into the evening and can provide backup capability.
+
+However, a battery also increases initial project cost.
+
+A solar-plus-storage project therefore does not automatically have a shorter simple payback than a grid-connected system without storage. The decision depends on the value the customer places on resilience, independence and higher self-consumption.
+
+### 6. Future demand matters
+
+If the homeowner plans to purchase an electric vehicle, add a heat pump, use electric heating, or expand a business, annual electricity demand may rise.
+
+A system that looks slightly oversized today may become appropriate two years from now.
+
+The opposite is also true: if demand is expected to decrease, an unnecessarily large system may be less rational.
+
+### 7. Ask the better question
+
+Instead of asking only, “How many years until solar panels pay back?”, ask:
+
+“How much of my real electricity use can a properly designed system cover, how much energy will it generate, what will it cost, and what assumptions are used in the calculation?”
+
+That makes it possible to compare proposals using a transparent model rather than a marketing number.
+
+CTA:
+Calculate the economics of my property →
+
+SOURCES:
+https://www.psrc.am/contents/newsPress/electricity-tariff-2026
+https://www.psrc.am/contents/document/8910
+
+----------------------------------------------------------------------
+HY
+----------------------------------------------------------------------
+
+SEO TITLE:
+Որքա՞ն կարելի է խնայել արևային կայանով Հայաստանում | YOURENERGY
+
+META DESCRIPTION:
+Ինչպես ճիշտ գնահատել արևային կայանի խնայողությունը Հայաստանում՝ սակագներ, սպառում, արտադրություն, սեփական սպառում և վերադարձելիության իրական հաշվարկ։
+
+H1:
+Որքա՞ն կարելի է խնայել արևային էլեկտրակայանով Հայաստանում
+
+Արևային համակարգ տեղադրելուց առաջ ամենատարածված հարցերից մեկն է․ «Քանի՞ տարում այն կվերադարձնի ներդրումը»։
+
+Հարցը ճիշտ է, բայց մեկ ընդհանուր պատասխան գոյություն չունի։
+
+Վերադարձելիությունը կախված է կոնկրետ օբյեկտից, սպառման պրոֆիլից, համակարգի գնից, իրական արտադրությունից, էլեկտրաէներգիայի սակագնից, ապագա սպառման փոփոխություններից և ընտրված կոնֆիգուրացիայից։
+
+Այդ պատճառով «յուրաքանչյուր արևային կայան վերադարձնում է ներդրումը X տարում» պնդումը չափազանց պարզեցված է, եթե օբյեկտը չի ուսումնասիրվել։
+
+### 1. Նախ պետք է հասկանալ՝ որքան էլեկտրաէներգիա եք գնում
+
+Արևային համակարգի հիմնական ֆինանսական օգուտը գալիս է այն էլեկտրաէներգիայից, որը տեղադրումից հետո այլևս անհրաժեշտ չէ նույն ծավալով գնել ցանցից կամ որը կարող է հաշվանցվել գործող կանոնների շրջանակում։
+
+2026 թվականին ՀՀ հանրային ծառայությունները կարգավորող հանձնաժողովը հայտնել է, որ սպառողների էլեկտրաէներգիայի սակագները մնում են անփոփոխ։
+
+0.38 կՎ և ավելի ցածր լարմամբ սնվող բնակիչ սպառողների համար կիրառվում են տարբեր սակագներ՝ կախված ամսական սպառումից։
+
+Գործող սակագնային կառուցվածքով՝
+
+— մինչև 200 kWh ամսական՝ 46.48 դրամ/kWh ցերեկային և 36.48 դրամ/kWh գիշերային;
+— 201–400 kWh ամսական՝ 48.48 դրամ/kWh ցերեկային և 38.48 դրամ/kWh գիշերային;
+— ցածր լարման ընդհանուր կատեգորիայի համար՝ 53.48 դրամ/kWh ցերեկային և 43.48 դրամ/kWh գիշերային։
+
+Գիշերային սակագինը կիրառվում է համապատասխան բազմասակագնային էլեկտրոնային հաշվիչի առկայության և սահմանված ժամային միջակայքների դեպքում։
+
+Այսինքն նույն 1 000 kWh-ի տնտեսումը տարբեր սպառողների համար կարող է ունենալ տարբեր դրամական արժեք։
+
+### 2. Խնայողությունը կախված է ոչ միայն տարեկան արտադրությունից
+
+Պատկերացնենք երկու տուն, որոնցից յուրաքանչյուրը տարեկան օգտագործում է 8 000 kWh։
+
+Առաջին տանը սպառման մեծ մասը տեղի է ունենում ցերեկը՝ օդորակիչներ, պոմպեր, խոհանոցային սարքեր և այլ բեռներ։
+
+Երկրորդ տանը հիմնական սպառումը երեկոյան է։
+
+Նույն արևային կայանի դեպքում անգամ նրանց փոխազդեցությունը արևային արտադրության հետ տարբեր կլինի։
+
+Ուստի կարևոր է իմանալ ոչ միայն տարեկան սպառումը, այլ նաև այն, թե օրվա որ ժամերին է այն տեղի ունենում։
+
+### 3. Ավելի շատ վահանակներ միշտ չեն նշանակում ավելի լավ տնտեսություն
+
+Տեխնիկապես հնարավոր է փորձել ամբողջ հասանելի մակերեսը ծածկել վահանակներով։ Սակայն ֆինանսական տեսանկյունից դա միշտ չէ, որ լավագույն լուծումն է։
+
+Եթե համակարգը շարունակաբար արտադրում է շատ ավելի շատ էներգիա, քան օբյեկտին պետք է ընտրված օգտագործման մոդելի և գործող հաշվարկային կանոնների պայմաններում, լրացուցիչ վահանակների արժեքը կարող է աճել ավելի արագ, քան դրանց ֆինանսական օգուտը։
+
+Ճիշտ նախագծումը հավասարակշռում է սպառումը, հասանելի մակերեսը, թույլատրելի միացման հզորությունը, արևային ռեսուրսը, բյուջեն և ապագա բեռները։
+
+### 4. Ինչ պետք է ներառի ֆինանսական հաշվարկը
+
+Առնվազն պետք է ներկայացվեն տարեկան սպառումը, առաջարկվող կայանի հզորությունը, սպասվող տարեկան արտադրությունը, կորուստները, նախագծի արժեքը, սեփական սպառման ենթադրվող բաժինը, գործող սակագները, ապագա սպառման հնարավոր փոփոխությունները և հաշվարկի հիմնական ենթադրությունները։
+
+Եթե առաջարկում նշված է միայն գեղեցիկ «վերադարձելիության ժամկետ», առանց ելակետային տվյալների, հաճախորդի համար դժվար է գնահատել դրա իրատեսականությունը։
+
+### 5. Մարտկոցը կարող է բարելավել էներգիայի օգտագործումը, բայց մեծացնում է ներդրումը
+
+Մարտկոցը կարող է ցերեկային արևային էներգիայի մի մասը տեղափոխել երեկոյան ժամեր և ապահովել պահուստային սնուցում։
+
+Սակայն մարտկոցը նաև բարձրացնում է սկզբնական ներդրումը։
+
+Այդ պատճառով մարտկոցով համակարգը պարտադիր չէ, որ ունենա ավելի կարճ պարզ վերադարձելիության ժամկետ, քան առանց մարտկոցի ցանցային համակարգը։ Որոշումը կախված է պահուստային սնուցման, անկախության և սեփական սպառման բարձրացման արժեքից կոնկրետ հաճախորդի համար։
+
+### 6. Ապագա սպառումն ազդում է տնտեսության վրա
+
+Եթե սեփականատերը նախատեսում է էլեկտրամեքենա, ջերմային պոմպ, էլեկտրական ջեռուցում կամ բիզնեսի ընդլայնում, տարեկան սպառումը կարող է մեծանալ։
+
+Այսօր փոքր-ինչ մեծ թվացող համակարգը երկու տարի անց կարող է դառնալ ճիշտ չափի։
+
+Հակառակն էլ է հնարավոր․ եթե սպառումը նվազելու է, չափազանց մեծ կայանը կարող է տնտեսապես պակաս նպատակահարմար լինել։
+
+### 7. Ավելի ճիշտ հարցը
+
+«Քանի՞ տարում կվերադարձվեն արևային վահանակները» հարցի փոխարեն օգտակար է հարցնել․
+
+«Իմ իրական սպառման ինչ մասը կծածկի ճիշտ նախագծված համակարգը, որքան էներգիա կարտադրի, որքան կարժենա և ինչ ենթադրություններով է հաշվարկված արդյունքը»։
+
+Այս մոտեցումը թույլ է տալիս համեմատել առաջարկները ոչ թե գովազդային թվով, այլ թափանցիկ մոդելով։
+
+CTA:
+Հաշվել իմ օբյեկտի արևային տնտեսությունը →
+
+SOURCES:
+https://www.psrc.am/contents/newsPress/electricity-tariff-2026
+https://www.psrc.am/contents/document/8910
+
+======================================================================
+ARTICLE 3
+======================================================================
+
+SLUG:
+/blog/do-i-need-solar-battery/
+
+CATEGORY:
+Batteries / Аккумуляторы / Կուտակիչներ
+
+----------------------------------------------------------------------
+RU
+----------------------------------------------------------------------
+
+SEO TITLE:
+Нужен ли аккумулятор для солнечной электростанции? | YOURENERGY
+
+META DESCRIPTION:
+Когда солнечной системе действительно нужен аккумулятор: собственное потребление, резервное питание, kW и kWh, критические нагрузки и правильный выбор ёмкости.
+
+H1:
+Нужен ли аккумулятор для солнечной электростанции?
+
+Солнечные панели и аккумулятор выполняют разные задачи.
+
+Панели производят электроэнергию тогда, когда есть достаточное солнечное излучение. Аккумулятор позволяет сохранить часть этой энергии и использовать её позже.
+
+Поэтому вопрос «нужен ли мне аккумулятор?» нельзя правильно решить, просто посмотрев на мощность солнечных панелей. Сначала нужно понять, какую задачу должен выполнять накопитель.
+
+### 1. Сценарий: перенести солнечную энергию на вечер
+
+Днём солнечная станция часто производит больше энергии, чем дом потребляет в данный момент.
+
+Вечером ситуация меняется: солнечная генерация снижается, а люди возвращаются домой, включают освещение, кухонную технику, кондиционирование и другие нагрузки.
+
+Аккумулятор позволяет сохранить часть дневной энергии и использовать её позже.
+
+Министерство энергетики США описывает storage именно как способ сохранять электричество и использовать его в другое время, чем оно было произведено.
+
+### 2. Сценарий: резервное питание
+
+Одна из самых понятных причин установки батареи — работа при отключении внешней сети.
+
+Но здесь есть важный нюанс.
+
+Солнечные панели сами по себе обычно не обеспечивают питание дома во время аварии в сети. Обычные grid-connected системы в целях безопасности отключаются вместе с сетью.
+
+Чтобы дом продолжал получать питание, нужна система, способная перейти в автономный режим: подходящий инвертор, правильная схема переключения и накопитель энергии.
+
+Не каждая батарея и не каждый инвертор автоматически дают полноценный backup всего дома.
+
+### 3. Определите критические нагрузки
+
+До выбора ёмкости полезно составить список того, что должно продолжать работать при отключении.
+
+Например:
+
+— холодильник;
+— интернет;
+— освещение;
+— система отопления;
+— насос;
+— ворота;
+— рабочий компьютер;
+— медицинское оборудование;
+— кондиционер.
+
+Затем определяется их одновременная мощность и необходимое время автономной работы.
+
+Это гораздо правильнее, чем просто сказать: «хочу батарею на 10 kWh».
+
+### 4. Разница между kW и kWh
+
+Это один из самых важных моментов.
+
+kWh показывает запас энергии.
+
+kW показывает мощность — насколько большую нагрузку система способна питать в конкретный момент.
+
+Условно, батарея с запасом 10 kWh имеет определённое количество энергии, но это не означает, что она способна одновременно отдать любую мощность.
+
+На реальную работу влияют максимальная мощность батареи, мощность инвертора, глубина разряда, эффективность, температура, настройки резервного режима и состояние заряда.
+
+Поэтому ёмкость и мощность всегда нужно рассматривать вместе.
+
+### 5. Нужна ли батарея, если сеть стабильна
+
+Не обязательно.
+
+Если объект редко сталкивается с отключениями, большая часть потребления происходит днём, а основной приоритет — экономическая эффективность, система без накопителя может быть вполне рациональной.
+
+В таком случае солнечная станция уменьшает объём энергии, покупаемой из сети, без дополнительной стоимости крупного storage-компонента.
+
+### 6. Когда батарея становится особенно логичной
+
+Накопитель имеет сильный смысл, если одновременно выполняются несколько условий:
+
+— есть регулярные отключения;
+— есть критические нагрузки;
+— большая часть потребления приходится на вечер;
+— клиент хочет повысить собственное использование солнечной энергии;
+— важна энергетическая независимость;
+— объект находится там, где качество сети является проблемой.
+
+### 7. Больше ёмкость — не всегда лучше
+
+Слишком маленькая батарея не выполнит поставленную задачу.
+
+Но чрезмерно большая батарея также может оказаться неоптимальной: она увеличивает стоимость, а значительная часть её ёмкости может редко использоваться.
+
+Поэтому размер storage должен быть следствием сценария использования.
+
+Хороший расчёт отвечает на четыре вопроса:
+
+1. Что нужно питать?
+2. Какова пиковая мощность этих нагрузок?
+3. Сколько часов они должны работать?
+4. Как система должна восстанавливать заряд после отключения?
+
+После этого выбираются батарея, инвертор и схема системы.
+
+CTA:
+Подобрать солнечную систему с аккумулятором →
+
+SOURCES:
+https://www.energy.gov/cmei/systems/homeowners-guide-solar
+https://www.energy.gov/cmei/systems/solar-and-resilience-basics
+https://www.energy.gov/cmei/systems/solar-integration-solar-energy-and-storage-basics
+
+----------------------------------------------------------------------
+EN
+----------------------------------------------------------------------
+
+SEO TITLE:
+Do You Need a Battery for a Solar Power System? | YOURENERGY
+
+META DESCRIPTION:
+When a solar system actually needs battery storage: self-consumption, backup power, kW versus kWh, critical loads and choosing the right battery size.
+
+H1:
+Do You Need a Battery for a Solar Power System?
+
+Solar panels and batteries perform different jobs.
+
+Solar modules generate electricity when sufficient sunlight is available. A battery stores part of that energy so it can be used later.
+
+For that reason, the question “Do I need a battery?” cannot be answered simply by looking at the solar array size. First, you need to define what the storage system is expected to do.
+
+### 1. Use daytime solar energy in the evening
+
+During the day, a solar system may produce more electricity than the home is using at that moment.
+
+In the evening, solar production falls while people return home and switch on lighting, cooking appliances, air conditioning and other loads.
+
+Battery storage can keep part of the daytime solar energy and make it available later.
+
+The U.S. Department of Energy describes energy storage as a way to capture electricity and use it at a different time from when it was generated.
+
+### 2. Backup power during outages
+
+One of the clearest reasons to install storage is to keep selected loads running when the external grid fails.
+
+There is an important detail, however.
+
+Solar panels alone generally do not keep a home powered during a grid outage. Standard grid-connected systems are designed to shut down with the grid for safety.
+
+To continue operating, the property needs a system capable of islanded operation: a suitable inverter, correct switching architecture and energy storage.
+
+Not every battery and not every inverter automatically provides whole-home backup.
+
+### 3. Define critical loads
+
+Before selecting battery capacity, make a list of the devices that must keep operating during an outage.
+
+For example:
+
+— refrigerator;
+— internet equipment;
+— lighting;
+— heating controls;
+— pumps;
+— gates;
+— work computers;
+— medical equipment;
+— air conditioning.
+
+Then determine their simultaneous power demand and the required backup duration.
+
+That is much more useful than simply saying, “I want a 10 kWh battery.”
+
+### 4. Understand the difference between kW and kWh
+
+This is one of the most important concepts.
+
+kWh describes stored energy.
+
+kW describes power — how much load the system can supply at a given moment.
+
+A 10 kWh battery stores a certain amount of energy, but that does not mean it can supply an unlimited load.
+
+Real performance depends on battery output power, inverter power, depth of discharge, efficiency, temperature, backup settings and state of charge.
+
+Energy capacity and power therefore need to be evaluated together.
+
+### 5. Do you need a battery if the grid is reliable?
+
+Not necessarily.
+
+If outages are rare, much of the electricity is consumed during daylight hours, and the main goal is financial efficiency, a solar system without storage can be entirely reasonable.
+
+The solar installation can reduce the amount of electricity purchased from the grid without adding the cost of a large battery system.
+
+### 6. When storage becomes especially valuable
+
+Battery storage is particularly useful when several of the following apply:
+
+— grid outages are frequent;
+— there are important critical loads;
+— much of the property's demand occurs in the evening;
+— the customer wants higher solar self-consumption;
+— energy independence is important;
+— grid quality is a concern.
+
+### 7. Larger is not automatically better
+
+A battery that is too small may not meet the objective.
+
+But an oversized battery can also be inefficient financially: it costs more and a significant portion of its capacity may rarely be used.
+
+Storage size should therefore follow the use case.
+
+A good design answers four questions:
+
+1. What must remain powered?
+2. What is the peak power of those loads?
+3. How many hours should they operate?
+4. How should the system recharge after an outage?
+
+Only after that should the battery, inverter and system architecture be selected.
+
+CTA:
+Choose a solar system with battery storage →
+
+SOURCES:
+https://www.energy.gov/cmei/systems/homeowners-guide-solar
+https://www.energy.gov/cmei/systems/solar-and-resilience-basics
+https://www.energy.gov/cmei/systems/solar-integration-solar-energy-and-storage-basics
+
+----------------------------------------------------------------------
+HY
+----------------------------------------------------------------------
+
+SEO TITLE:
+Պե՞տք է մարտկոց արևային էլեկտրակայանի համար | YOURENERGY
+
+META DESCRIPTION:
+Երբ է արևային համակարգին իրականում անհրաժեշտ կուտակիչ՝ սեփական սպառում, պահուստային սնուցում, kW և kWh, կարևոր բեռներ և ճիշտ հզորության ընտրություն։
+
+H1:
+Պե՞տք է մարտկոց արևային էլեկտրակայանի համար
+
+Արևային վահանակներն ու մարտկոցը տարբեր խնդիրներ են լուծում։
+
+Վահանակները էլեկտրաէներգիա են արտադրում, երբ կա բավարար արևային ճառագայթում։ Մարտկոցը հնարավորություն է տալիս այդ էներգիայի մի մասը պահել և օգտագործել ավելի ուշ։
+
+Հետևաբար «ինձ մարտկոց պե՞տք է» հարցին հնարավոր չէ ճիշտ պատասխանել միայն վահանակների հզորությանը նայելով։ Նախ պետք է հասկանալ, թե կուտակիչը կոնկրետ ինչ խնդիր պետք է լուծի։
+
+### 1. Ցերեկային արևային էներգիան տեղափոխել երեկո
+
+Ցերեկը արևային կայանը հաճախ կարող է արտադրել ավելի շատ, քան տունը տվյալ պահին օգտագործում է։
+
+Երեկոյան արևային արտադրությունը նվազում է, իսկ մարդիկ տուն են վերադառնում և միացնում են լուսավորությունը, խոհանոցային տեխնիկան, օդորակիչները և այլ սարքեր։
+
+Մարտկոցը թույլ է տալիս ցերեկային էներգիայի մի մասը պահել և օգտագործել ավելի ուշ։
+
+ԱՄՆ Էներգետիկայի նախարարությունը կուտակումը նկարագրում է որպես էլեկտրաէներգիան պահելու և արտադրության ժամանակից տարբեր պահին օգտագործելու հնարավորություն։
+
+### 2. Պահուստային սնուցում անջատումների ժամանակ
+
+Կուտակիչ տեղադրելու ամենահասկանալի պատճառներից մեկը արտաքին ցանցի անջատման ժամանակ կարևոր սարքերի աշխատանքը պահպանելն է։
+
+Սակայն այստեղ կա կարևոր նրբություն։
+
+Միայն արևային վահանակները սովորաբար չեն շարունակում տունը սնուցել ցանցային վթարի ժամանակ։ Սովորական grid-connected համակարգերը անվտանգության պատճառով անջատվում են արտաքին ցանցի հետ միասին։
+
+Տունը սնուցելու համար անհրաժեշտ է ինքնավար աշխատանքի հնարավորություն ունեցող համակարգ՝ համապատասխան ինվերտոր, ճիշտ switching architecture և էներգիայի կուտակիչ։
+
+Յուրաքանչյուր մարտկոց և յուրաքանչյուր ինվերտոր ինքնաբերաբար ամբողջ տան backup չի ապահովում։
+
+### 3. Սահմանեք կարևոր բեռները
+
+Մարտկոցի տարողությունն ընտրելուց առաջ օգտակար է կազմել այն սարքերի ցուցակը, որոնք անջատման ժամանակ պետք է շարունակեն աշխատել։
+
+Օրինակ՝ սառնարան, ինտերնետ, լուսավորություն, ջեռուցման կառավարում, պոմպ, դարպաս, աշխատանքային համակարգիչ, բժշկական սարք կամ օդորակիչ։
+
+Այնուհետև հաշվարկվում է դրանց միաժամանակյա հզորությունը և անհրաժեշտ ինքնավար աշխատանքի տևողությունը։
+
+Սա շատ ավելի ճիշտ մոտեցում է, քան պարզապես ասել «ուզում եմ 10 kWh մարտկոց»։
+
+### 4. kW-ի և kWh-ի տարբերությունը
+
+Սա ամենակարևոր հասկացություններից մեկն է։
+
+kWh-ը ցույց է տալիս պահված էներգիայի քանակը։
+
+kW-ը ցույց է տալիս հզորությունը՝ որքան մեծ բեռ կարող է համակարգը տվյալ պահին սպասարկել։
+
+10 kWh մարտկոցը որոշակի էներգիայի պաշար ունի, բայց դա չի նշանակում, որ կարող է ցանկացած հզորության սարք միաժամանակ սնուցել։
+
+Իրական աշխատանքի վրա ազդում են մարտկոցի առավելագույն հզորությունը, ինվերտորի հզորությունը, թույլատրելի լիցքաթափման խորությունը, արդյունավետությունը, ջերմաստիճանը, backup ռեժիմի կարգավորումները և լիցքավորման մակարդակը։
+
+Ուստի տարողությունն ու հզորությունը պետք է գնահատել միասին։
+
+### 5. Եթե ցանցը կայուն է, մարտկոց պարտադիր չէ
+
+Եթե անջատումները հազվադեպ են, սպառման մեծ մասը ցերեկն է, իսկ հիմնական նպատակը ֆինանսական արդյունավետությունն է, առանց մարտկոցի արևային համակարգը կարող է լինել լիովին տրամաբանական լուծում։
+
+Այն կարող է նվազեցնել ցանցից գնվող էներգիան՝ առանց մեծ storage համակարգի լրացուցիչ արժեքի։
+
+### 6. Երբ մարտկոցը հատկապես օգտակար է
+
+Կուտակիչը շատ տրամաբանական է, եթե միաժամանակ առկա են հետևյալ պայմաններից մի քանիսը՝ հաճախակի անջատումներ, կարևոր բեռներ, մեծ երեկոյան սպառում, արևային էներգիայի սեփական օգտագործումը բարձրացնելու ցանկություն, էներգետիկ անկախության կարևորություն կամ ցանցի որակի խնդիրներ։
+
+### 7. Ավելի մեծ տարողությունը միշտ չէ, որ ավելի լավ է
+
+Շատ փոքր մարտկոցը չի կատարի առաջադրված խնդիրը։
+
+Բայց չափազանց մեծ մարտկոցը կարող է նաև ոչ օպտիմալ լինել․ այն ավելի թանկ է, իսկ տարողության մի մասը կարող է հազվադեպ օգտագործվել։
+
+Լավ հաշվարկը պատասխանում է չորս հարցի՝
+
+1. Ի՞նչ պետք է սնուցվի։
+2. Որքա՞ն է այդ բեռների պիկային հզորությունը։
+3. Քանի՞ ժամ պետք է աշխատեն։
+4. Ինչպե՞ս պետք է համակարգը վերականգնի լիցքը անջատումից հետո։
+
+Դրանից հետո ընտրվում են մարտկոցը, ինվերտորը և համակարգի սխեման։
+
+CTA:
+Ընտրել արևային համակարգ մարտկոցով →
+
+SOURCES:
+https://www.energy.gov/cmei/systems/homeowners-guide-solar
+https://www.energy.gov/cmei/systems/solar-and-resilience-basics
+https://www.energy.gov/cmei/systems/solar-integration-solar-energy-and-storage-basics
+
+======================================================================
+ARTICLE 4
+======================================================================
+
+SLUG:
+/blog/how-to-size-solar-system/
+
+CATEGORY:
+Guides / Советы / Ուղեցույց
+
+----------------------------------------------------------------------
+RU
+----------------------------------------------------------------------
+
+SEO TITLE:
+Как рассчитать мощность солнечной станции для дома | YOURENERGY
+
+META DESCRIPTION:
+Как правильно подобрать мощность солнечной электростанции: годовое потребление, крыша, затенение, реальная генерация, будущие нагрузки и ограничения подключения.
+
+H1:
+Как правильно подобрать мощность солнечной станции
+
+Подбор мощности солнечной станции — это не формула «площадь дома × коэффициент».
+
+Дом площадью 250 м² может потреблять меньше электроэнергии, чем дом площадью 120 м². Всё зависит от оборудования, отопления, кондиционирования, числа жильцов, образа жизни, наличия бассейна, насосов, серверов, электромобиля и множества других факторов.
+
+Поэтому площадь здания сама по себе не является надёжной основой для расчёта.
+
+### 1. Соберите годовое потребление
+
+Первый шаг — счета за 12 месяцев.
+
+Сложите фактическое потребление в kWh. Это покажет, сколько электроэнергии объект использовал за полный год и поможет увидеть сезонность.
+
+Если есть почасовые или суточные данные, они ещё полезнее: они показывают, когда именно возникает нагрузка.
+
+### 2. Не путайте мощность и энергию
+
+Мощность станции указывается в kWp.
+
+Генерация за период — в kWh.
+
+Например, две системы одинаковой мощности могут произвести разное количество энергии, если одна установлена без тени и с хорошей ориентацией, а другая имеет затенение, высокие температурные потери или неблагоприятный угол.
+
+Именно поэтому реальную производительность нельзя оценивать только по цифре kWp.
+
+### 3. Учитывайте реальный energy yield
+
+Министерство энергетики США разделяет лабораторную эффективность модуля и energy yield — фактическое количество энергии, получаемое системой в реальных условиях.
+
+На energy yield влияют температура, загрязнение, пыль, тени, ориентация, угол, электрические потери и характеристики оборудования.
+
+Это особенно важно в реальном проектировании: модуль с высокой паспортной эффективностью не гарантирует максимальный годовой результат, если система спроектирована плохо.
+
+### 4. Проверьте крышу
+
+После предварительного расчёта мощности нужно проверить, можно ли физически разместить необходимое количество модулей.
+
+Учитываются геометрия скатов, полезная площадь, расстояния от краёв, дымоходы, люки, оборудование на крыше, тени, состояние конструкции и места безопасного обслуживания.
+
+Если крыша сложная, иногда выгоднее использовать другую поверхность или несколько зон установки.
+
+### 5. Проанализируйте затенение
+
+Даже небольшие тени могут влиять на выработку.
+
+Важно понимать не только «есть тень или нет», но и в какое время она появляется, в какой сезон, какие модули затрагивает, какова электрическая конфигурация строк и какие функции управления затенением поддерживает оборудование.
+
+Оценка затенения должна быть частью проектирования, а не сюрпризом после монтажа.
+
+### 6. Учитывайте разрешённую мощность подключения
+
+Солнечная система взаимодействует с электрической инфраструктурой объекта.
+
+Поэтому кроме желаемой генерации нужно учитывать допустимую мощность подключения и требования действующих правил.
+
+Для автономного производителя в Армении установленная мощность не может превышать максимальную разрешённую мощность соответствующей точки подключения и одновременно ограничена законодательным верхним пределом 150 kW.
+
+Этот вопрос особенно важен для больших домов и коммерческих объектов.
+
+### 7. Добавьте будущие нагрузки
+
+Перед окончательным выбором мощности спросите:
+
+— появится ли электромобиль?
+— планируется ли тепловой насос?
+— будет ли электрическое отопление?
+— увеличится ли площадь?
+— появится ли новое производственное оборудование?
+— будет ли аккумулятор?
+
+Будущий рост потребления может повлиять на оптимальный размер станции.
+
+### 8. Что значит «правильная мощность»
+
+Правильная мощность — не максимальная мощность, которую можно физически установить.
+
+Это мощность, которая разумно соответствует:
+
+потреблению + солнечному ресурсу + крыше + электрическому подключению + бюджету + будущим задачам.
+
+Именно поэтому хороший предварительный калькулятор полезен, но окончательное решение должно приниматься после анализа конкретного объекта.
+
+CTA:
+Рассчитать рекомендуемую мощность →
+
+SOURCES:
+https://www.energy.gov/cmei/systems/photovoltaic-system-design-and-energy-yield
+https://www.energy.gov/cmei/systems/homeowners-guide-solar
+https://www.arlis.am/hy/acts/216338
+
+----------------------------------------------------------------------
+EN
+----------------------------------------------------------------------
+
+SEO TITLE:
+How to Size a Solar Power System for a Home | YOURENERGY
+
+META DESCRIPTION:
+How to choose the right solar system size: annual electricity use, roof area, shading, real energy yield, future loads and grid connection limits.
+
+H1:
+How to Choose the Right Solar System Size
+
+Solar sizing is not a formula such as “house area × coefficient.”
+
+A 250 m² home may use less electricity than a 120 m² home. Demand depends on appliances, heating, air conditioning, number of occupants, lifestyle, swimming pools, pumps, servers, electric vehicles and many other factors.
+
+Building area alone is therefore not a reliable sizing method.
+
+### 1. Collect annual electricity consumption
+
+Start with 12 months of electricity bills.
+
+Add the actual kWh consumption for the full year. This shows how much electricity the property used across all seasons and reveals seasonal patterns.
+
+If hourly or daily data is available, it is even more useful because it shows when the load occurs.
+
+### 2. Do not confuse power and energy
+
+Solar system capacity is measured in kWp.
+
+Energy produced over a period is measured in kWh.
+
+Two systems with the same kWp capacity can generate different amounts of energy if one has good orientation and no shading while the other suffers from shade, temperature losses or a poor tilt angle.
+
+That is why real performance cannot be estimated using kWp alone.
+
+### 3. Consider real energy yield
+
+The U.S. Department of Energy distinguishes module efficiency under laboratory conditions from energy yield — the amount of usable energy actually harvested by a system in real operation.
+
+Energy yield is influenced by temperature, dirt and dust, shading, orientation, tilt, electrical losses and equipment characteristics.
+
+This distinction matters in real system design. A module with excellent laboratory efficiency does not guarantee maximum annual energy if the system is poorly designed.
+
+### 4. Check the roof
+
+After estimating the required capacity, confirm whether the necessary modules can physically be installed.
+
+Consider roof geometry, usable area, setbacks from edges, chimneys, roof hatches, rooftop equipment, shade, structural condition and safe service access.
+
+If the roof is complex, it may be better to use another surface or several installation zones.
+
+### 5. Analyse shading
+
+Even partial shading can affect production.
+
+The important questions are not simply “is there shade?” but what time it occurs, during which season, which modules are affected, how the strings are configured and what shading-management features the selected equipment provides.
+
+Shading analysis should be part of design, not a surprise after installation.
+
+### 6. Consider the permitted connection capacity
+
+A solar installation interacts with the property's electrical connection.
+
+The desired production level must therefore be considered together with the permitted connection capacity and applicable interconnection rules.
+
+For autonomous generation in Armenia, installed capacity cannot exceed the maximum permitted capacity of the relevant connection point and is also subject to a statutory upper limit of 150 kW.
+
+This becomes especially important for larger homes and commercial projects.
+
+### 7. Add future loads
+
+Before choosing the final system size, ask:
+
+— will there be an electric vehicle?
+— is a heat pump planned?
+— will heating become electric?
+— will the property be expanded?
+— will new business equipment be installed?
+— will battery storage be added?
+
+Future electricity demand can change the optimal system size.
+
+### 8. What does “right-sized” mean?
+
+The right system is not the largest system that can physically fit.
+
+It is the system that reasonably matches:
+
+electricity use + solar resource + roof + electrical connection + budget + future needs.
+
+A preliminary calculator is useful, but the final decision should be based on the actual property.
+
+CTA:
+Calculate the recommended solar capacity →
+
+SOURCES:
+https://www.energy.gov/cmei/systems/photovoltaic-system-design-and-energy-yield
+https://www.energy.gov/cmei/systems/homeowners-guide-solar
+https://www.arlis.am/hy/acts/216338
+
+----------------------------------------------------------------------
+HY
+----------------------------------------------------------------------
+
+SEO TITLE:
+Ինչպես ճիշտ հաշվարկել արևային կայանի հզորությունը | YOURENERGY
+
+META DESCRIPTION:
+Ինչպես ընտրել արևային կայանի ճիշտ հզորությունը՝ տարեկան սպառում, տանիք, ստվերում, իրական արտադրություն, ապագա բեռներ և միացման սահմանափակումներ։
+
+H1:
+Ինչպես ճիշտ ընտրել արևային կայանի հզորությունը
+
+Արևային կայանի հզորությունը չի կարելի ճիշտ ընտրել «տան մակերես × գործակից» պարզ բանաձևով։
+
+250 մ² տունը կարող է ավելի քիչ էլեկտրաէներգիա օգտագործել, քան 120 մ² տունը։ Սպառումը կախված է սարքավորումներից, ջեռուցումից, օդորակումից, բնակիչների թվից, կյանքի ռեժիմից, լողավազանից, պոմպերից, սերվերներից, էլեկտրամեքենայից և բազմաթիվ այլ գործոններից։
+
+Ուստի շենքի մակերեսը միայնակ վստահելի հիմք չէ հաշվարկի համար։
+
+### 1. Հավաքեք տարեկան սպառման տվյալները
+
+Սկսեք վերջին 12 ամսվա էլեկտրաէներգիայի հաշիվներից։
+
+Գումարեք ամբողջ տարվա փաստացի kWh սպառումը։ Դա ցույց կտա օբյեկտի տարեկան պահանջարկը և սեզոնային փոփոխությունները։
+
+Եթե կան ժամային կամ օրական տվյալներ, դրանք առավել օգտակար են, քանի որ ցույց են տալիս, թե բեռը երբ է առաջանում։
+
+### 2. Մի շփոթեք հզորությունն ու էներգիան
+
+Կայանի հզորությունը նշվում է kWp-ով։
+
+Որոշակի ժամանակահատվածում արտադրված էներգիան՝ kWh-ով։
+
+Նույն kWp հզորությամբ երկու համակարգ կարող են տարբեր էներգիա արտադրել, եթե մեկը ճիշտ կողմնորոշված է և ստվեր չունի, իսկ մյուսը տուժում է ստվերից, ջերմաստիճանային կորուստներից կամ անհարմար թեքությունից։
+
+Ուստի իրական արդյունքը հնարավոր չէ գնահատել միայն kWp թվով։
+
+### 3. Հաշվի առեք իրական energy yield-ը
+
+ԱՄՆ Էներգետիկայի նախարարությունը տարբերակում է լաբորատոր պայմաններում մոդուլի արդյունավետությունը և energy yield-ը՝ իրական պայմաններում համակարգի կողմից ստացվող էներգիայի քանակը։
+
+Energy yield-ի վրա ազդում են ջերմաստիճանը, կեղտը և փոշին, ստվերը, կողմնորոշումը, թեքությունը, էլեկտրական կորուստները և սարքավորումների բնութագրերը։
+
+Սա կարևոր տարբերություն է։ Բարձր լաբորատոր արդյունավետությամբ մոդուլը չի երաշխավորում լավագույն տարեկան արդյունքը, եթե ամբողջ համակարգը վատ է նախագծված։
+
+### 4. Ստուգեք տանիքը
+
+Նախնական հզորությունը որոշելուց հետո պետք է համոզվել, որ անհրաժեշտ վահանակները ֆիզիկապես հնարավոր է տեղադրել։
+
+Հաշվի են առնվում տանիքի երկրաչափությունը, օգտագործելի մակերեսը, եզրերից անհրաժեշտ հեռավորությունները, ծխնելույզները, տանիքի ելքերը, այլ սարքավորումները, ստվերը, կառուցվածքի վիճակը և սպասարկման անվտանգ տարածքը։
+
+Բարդ տանիքի դեպքում հնարավոր է ավելի արդյունավետ լինի օգտագործել մի քանի տեղադրման գոտի կամ այլ մակերես։
+
+### 5. Վերլուծեք ստվերումը
+
+Նույնիսկ մասնակի ստվերը կարող է ազդել արտադրության վրա։
+
+Կարևոր է հասկանալ ոչ միայն «ստվեր կա՞», այլ նաև երբ է այն առաջանում, տարվա որ շրջանում, որ վահանակներն է ընդգրկում, ինչպես են միացված string-երը և ընտրված սարքավորումն ինչ ստվերային կառավարման հնարավորություններ ունի։
+
+Ստվերի գնահատումը պետք է լինի նախագծման փուլում։
+
+### 6. Հաշվի առեք միացման թույլատրելի հզորությունը
+
+Արևային համակարգը փոխկապակցված է օբյեկտի էլեկտրական ենթակառուցվածքի հետ։
+
+Ուստի ցանկալի արտադրությունը պետք է համադրել միացման թույլատրելի հզորության և գործող կանոնների հետ։
+
+Հայաստանում ինքնավար էներգաարտադրողի կայանի դրվածքային հզորությունը չի կարող գերազանցել համապատասխան միացման կետի առավելագույն թույլատրելի հզորությունը և միաժամանակ ենթակա է 150 kW օրենսդրական առավելագույն սահմանին։
+
+Սա հատկապես կարևոր է մեծ տների և բիզնես օբյեկտների համար։
+
+### 7. Ավելացրեք ապագա բեռները
+
+Վերջնական հզորությունը ընտրելուց առաջ հարցրեք՝ կլինի՞ էլեկտրամեքենա, նախատեսվո՞ւմ է ջերմային պոմպ, ջեռուցումը դառնալո՞ւ է էլեկտրական, օբյեկտը մեծանալո՞ւ է, նոր արտադրական սարքավորում լինելո՞ւ է, մարտկոց նախատեսվո՞ւմ է։
+
+Ապագա սպառումը կարող է փոխել լավագույն հզորության ընտրությունը։
+
+### 8. Ի՞նչ է նշանակում «ճիշտ հզորություն»
+
+Ճիշտ հզորությունը այն առավելագույնը չէ, որը ֆիզիկապես հնարավոր է տեղադրել։
+
+Դա այն հզորությունն է, որը տրամաբանորեն համապատասխանում է՝
+
+սպառում + արևային ռեսուրս + տանիք + էլեկտրական միացում + բյուջե + ապագա նպատակներ։
+
+Նախնական հաշվիչը օգտակար է, սակայն վերջնական որոշումը պետք է հիմնվի կոնկրետ օբյեկտի ուսումնասիրության վրա։
+
+CTA:
+Հաշվել առաջարկվող արևային հզորությունը →
+
+SOURCES:
+https://www.energy.gov/cmei/systems/photovoltaic-system-design-and-energy-yield
+https://www.energy.gov/cmei/systems/homeowners-guide-solar
+https://www.arlis.am/hy/acts/216338
+
+======================================================================
+ARTICLE 5
+======================================================================
+
+SLUG:
+/blog/net-metering-armenia/
+
+CATEGORY:
+Armenia / Армения / Հայաստան
+
+----------------------------------------------------------------------
+RU
+----------------------------------------------------------------------
+
+SEO TITLE:
+Net metering в Армении: как работает солнечная станция с сетью | YOURENERGY
+
+META DESCRIPTION:
+Как работает режим автономного энергопроизводства в Армении: лимит мощности, месячный взаимозачёт, перенос положительного баланса и расчётный год с 1 мая по 30 апреля.
+
+H1:
+Как работает взаимозачёт солнечной энергии в Армении
+
+Когда солнечная электростанция производит больше энергии, чем объект потребляет в конкретный момент, возникает естественный вопрос: что происходит с избытком?
+
+В Армении для автономных энергопроизводителей действует законодательный механизм учёта электрической энергии, передаваемой гарантированному поставщику и потребляемой объектом. В бытовой речи такой подход часто называют net metering, хотя для точного юридического описания лучше использовать терминологию действующего законодательства об автономном энергопроизводстве и взаимных потоках.
+
+Ниже — базовая логика по действующим нормам, проверенным на 14 сентября 2026 года.
+
+### 1. Кто такой автономный энергопроизводитель
+
+Законодательство Армении предусматривает режим, при котором потребитель производит электрическую энергию из возобновляемого источника для собственных нужд и взаимодействует с системой по установленным правилам.
+
+Это позволяет солнечной станции работать не как изолированный источник, а как часть энергоснабжения объекта, связанного с распределительной сетью.
+
+### 2. Ограничение мощности
+
+По действующей статье 56.1 Закона Армении «Об энергетике» установленная мощность установок автономного энергопроизводителя не может превышать максимальную разрешённую мощность, закреплённую договором потребителя для соответствующей точки подключения к распределительной сети.
+
+Кроме того, установлен законодательный верхний предел — 150 kW для автономного энергопроизводителя.
+
+Для автономной группы совокупная установленная мощность включённых в неё установок не может превышать 1050 kW.
+
+Это важно: предел 150 kW не означает, что любой объект автоматически может установить 150 kW. Ограничивающим фактором остаётся также максимальная разрешённая мощность конкретной точки подключения.
+
+### 3. Что происходит в течение месяца
+
+Закон сравнивает на месячной основе:
+
+— количество электроэнергии, переданной гарантированному поставщику;
+— количество электроэнергии, потреблённой автономным энергопроизводителем.
+
+Если возникает положительная разница — то есть передано больше, чем потреблено в расчётном месяце, — соответствующий объём добавляется к количеству электроэнергии, переданной в следующем месяце.
+
+Проще говоря, положительный энергетический баланс переносится вперёд в рамках установленного механизма.
+
+### 4. Что происходит, если потребление больше
+
+Если месячная разница отрицательная — объект потребил больше, чем передал в рамках механизма, — за соответствующий объём автономный энергопроизводитель оплачивает гарантированному поставщику по тарифу, установленному Комиссией для соответствующей группы потребителей.
+
+То есть солнечная система не отменяет сам факт подключения к сети и не означает автоматически нулевой счёт каждый месяц.
+
+### 5. Расчётный год
+
+Для этого механизма законодательство определяет специальный расчётный год:
+
+с 1 мая каждого календарного года по 30 апреля следующего календарного года включительно.
+
+Это важно при анализе годового баланса.
+
+Если по итогам последнего месяца расчётного года сохраняется положительная разница, включая накопленный баланс предыдущих месяцев, гарантированный поставщик производит оплату в соответствии с предусмотренным законом механизмом — по годовой минимальной цене продажи электроэнергии, возникшей по результатам небалансов на балансирующем рынке.
+
+Это не следует путать с обычным розничным тарифом, по которому потребитель покупает электричество.
+
+### 6. Почему нельзя просто установить максимально возможную станцию
+
+Наличие механизма взаимозачёта не означает, что экономически выгодно устанавливать максимально возможную мощность.
+
+Основная цель солнечной станции для собственного потребления — разумно сопоставить производство и потребности объекта.
+
+Слишком большая система может потребовать большей инвестиции, сильнее зависеть от условий расчёта избытков и использовать доступную мощность подключения без реальной необходимости.
+
+Поэтому мощность должна рассчитываться по потреблению, а не только по свободной площади крыши.
+
+### 7. Нужна ли батарея для работы с сетью
+
+Нет, сама возможность взаимодействия сетевой солнечной станции с распределительной сетью не требует обязательного наличия аккумулятора.
+
+Батарея решает другую задачу: физически сохраняет электроэнергию внутри объекта для использования позже или для резервного питания.
+
+Сеть и аккумулятор — разные инструменты.
+
+### 8. Что нужно проверить перед проектированием
+
+Перед окончательным предложением необходимо проверить актуальные на момент проекта:
+
+— договорную разрешённую мощность точки подключения;
+— техническую схему присоединения;
+— требования оператора/поставщика;
+— правила учёта;
+— действующие тарифы;
+— действующую редакцию законодательства.
+
+Эта статья описывает нормы, проверенные на 14 сентября 2026 года. Для реального проекта правила нужно подтверждать на дату подключения.
+
+CTA:
+Проверить мой объект и рассчитать солнечную станцию →
+
+SOURCES:
+https://www.arlis.am/hy/acts/216338
+https://www.arlis.am/hy/acts/198029
+https://www.arlis.am/hy/acts/228752
+https://www.psrc.am/contents/newsPress/electricity-tariff-2026
+
+----------------------------------------------------------------------
+EN
+----------------------------------------------------------------------
+
+SEO TITLE:
+Net Metering in Armenia: How Solar Works with the Grid | YOURENERGY
+
+META DESCRIPTION:
+How Armenia's autonomous electricity generation framework works: capacity limits, monthly energy balance, rollover of positive balances and the settlement year from May 1 to April 30.
+
+H1:
+How Solar Energy Settlement Works in Armenia
+
+When a solar system produces more energy than the property is using at a given moment, an obvious question appears: what happens to the surplus?
+
+Armenian legislation provides a framework for autonomous electricity producers that accounts for electricity supplied to the guaranteed supplier and electricity consumed by the property. In everyday language this is often described as net metering, although the most precise legal description is the autonomous generation and energy-flow framework defined by Armenian law.
+
+The following is the basic logic under rules verified as of 14 September 2026.
+
+### 1. What is an autonomous electricity producer?
+
+Armenian law provides a framework in which a consumer can generate electricity from renewable energy resources for its own needs and interact with the electricity system under defined rules.
+
+This allows a solar installation to function as part of a grid-connected property's energy system rather than only as an isolated source.
+
+### 2. Capacity limit
+
+Under the applicable Article 56.1 of Armenia's Energy Law, the installed capacity of an autonomous producer's generating installation cannot exceed the maximum permitted capacity specified in the consumer's contract for the relevant point of connection to the distribution grid.
+
+There is also a statutory upper limit of 150 kW for an autonomous producer.
+
+For an autonomous group, the total installed capacity of participating generating installations cannot exceed 1,050 kW.
+
+This distinction is important: the 150 kW statutory ceiling does not mean that every property can automatically install 150 kW. The maximum permitted capacity of the specific grid connection is also a limiting factor.
+
+### 3. What happens each month?
+
+The law compares, on a monthly basis:
+
+— the quantity of electricity supplied to the guaranteed supplier;
+— the quantity of electricity consumed by the autonomous producer.
+
+If the difference is positive — more energy was supplied than consumed under the monthly calculation — that quantity is carried forward and added to the electricity supplied in the following month.
+
+In simple terms, the positive energy balance rolls forward within the legal settlement mechanism.
+
+### 4. What happens when consumption is higher?
+
+If the monthly difference is negative — the property consumed more electricity than it supplied — the autonomous producer pays the guaranteed supplier for the relevant amount at the tariff established by the Commission for that consumer category.
+
+A solar installation therefore does not eliminate the grid connection and does not automatically mean a zero electricity bill every month.
+
+### 5. The settlement year
+
+The legislation defines a specific settlement year for this mechanism:
+
+from May 1 of each calendar year through April 30 of the following calendar year, inclusive.
+
+This is important when evaluating the annual energy balance.
+
+If a positive difference remains at the end of the final month of the settlement year, including balances carried over from earlier months, the guaranteed supplier pays for that remaining amount under the method defined by law, based on the annual minimum electricity sale price resulting from imbalances in the balancing market.
+
+This should not be confused with the normal retail electricity tariff paid by consumers.
+
+### 6. Why maximum system size is not automatically the best choice
+
+The existence of an energy settlement mechanism does not mean that installing the maximum possible solar capacity is necessarily the best economic decision.
+
+For a self-consumption solar project, the primary objective is to match generation sensibly with the property's demand.
+
+An oversized system can require a larger upfront investment, depend more heavily on the settlement treatment of surplus energy, and consume available connection capacity without a real need.
+
+System size should therefore be driven by consumption and project objectives, not only by available roof area.
+
+### 7. Is a battery required for a grid-connected system?
+
+No. Participation in the grid-connected autonomous generation framework does not inherently require battery storage.
+
+A battery serves a different purpose: it physically stores electricity at the property for later use or backup.
+
+The grid and the battery are two different energy-management tools.
+
+### 8. What should be checked before final design?
+
+Before a final proposal, verify the rules and conditions that are current on the actual project date:
+
+— contractual permitted capacity of the connection point;
+— technical connection arrangement;
+— distributor/supplier requirements;
+— metering rules;
+— applicable tariffs;
+— the current version of the legislation.
+
+This article reflects rules verified on 14 September 2026. A real project should always confirm requirements again at the date of connection.
+
+CTA:
+Check my property and calculate a solar system →
+
+SOURCES:
+https://www.arlis.am/hy/acts/216338
+https://www.arlis.am/hy/acts/198029
+https://www.arlis.am/hy/acts/228752
+https://www.psrc.am/contents/newsPress/electricity-tariff-2026
+
+----------------------------------------------------------------------
+HY
+----------------------------------------------------------------------
+
+SEO TITLE:
+Net metering Հայաստանում․ ինչպես է արևային կայանն աշխատում ցանցի հետ | YOURENERGY
+
+META DESCRIPTION:
+Ինչպես է գործում ինքնավար էներգաարտադրության համակարգը Հայաստանում՝ հզորության սահման, ամսական հաշվեկշիռ, դրական մնացորդի տեղափոխում և մայիսի 1-ից ապրիլի 30 հաշվարկային տարի։
+
+H1:
+Ինչպես է գործում արևային էներգիայի հաշվանցումը Հայաստանում
+
+Երբ արևային կայանը տվյալ պահին ավելի շատ էներգիա է արտադրում, քան օբյեկտը սպառում է, բնական հարց է առաջանում․ ի՞նչ է լինում ավելցուկի հետ։
+
+Հայաստանի օրենսդրությունը ինքնավար էներգաարտադրողների համար նախատեսում է մեխանիզմ, որով հաշվառվում է երաշխավորված մատակարարին մատակարարված և օբյեկտի կողմից սպառված էլեկտրաէներգիան։ Առօրյա խոսքում այս մոտեցումը հաճախ կոչվում է net metering, սակայն իրավական առումով ավելի ճիշտ է օգտագործել ինքնավար էներգաարտադրության և փոխհոսքերի վերաբերյալ գործող օրենսդրության տերմինաբանությունը։
+
+Ստորև ներկայացված է 2026 թվականի սեպտեմբերի 14-ի դրությամբ ստուգված հիմնական տրամաբանությունը։
+
+### 1. Ո՞վ է ինքնավար էներգաարտադրողը
+
+Հայաստանի օրենսդրությունը նախատեսում է ռեժիմ, որի շրջանակում սպառողը վերականգնվող էներգետիկ ռեսուրսներով արտադրում է էլեկտրաէներգիա սեփական կարիքների համար և սահմանված կանոններով փոխգործակցում է էլեկտրաէներգետիկական համակարգի հետ։
+
+Այսպիսով արևային կայանը կարող է լինել բաշխման ցանցին միացված օբյեկտի էներգահամակարգի մի մասը։
+
+### 2. Հզորության սահմանը
+
+«Էներգետիկայի մասին» ՀՀ օրենքի գործող 56.1-րդ հոդվածի համաձայն՝ ինքնավար էներգաարտադրողի տեղակայանքների դրվածքային հզորությունը չի կարող գերազանցել բաշխման ցանցին համապատասխան միացման կետի համար սպառողի պայմանագրով ամրագրված առավելագույն թույլատրելի հզորությունը։
+
+Բացի դրանից, ինքնավար էներգաարտադրողի համար գործում է 150 kW օրենսդրական առավելագույն սահման։
+
+Ինքնավար խմբի դեպքում խմբում ընդգրկված կայանների ընդհանուր դրվածքային հզորությունը չի կարող գերազանցել 1050 kW-ը։
+
+Սա կարևոր տարբերակում է․ 150 kW սահմանը չի նշանակում, որ յուրաքանչյուր օբյեկտ ավտոմատ կարող է տեղադրել 150 kW։ Սահմանափակող գործոն է նաև կոնկրետ միացման կետի պայմանագրային թույլատրելի հզորությունը։
+
+### 3. Ի՞նչ է տեղի ունենում ամսվա ընթացքում
+
+Օրենքով ամսական կտրվածքով համեմատվում են՝
+
+— երաշխավորված մատակարարին մատակարարված էլեկտրաէներգիայի քանակը;
+— ինքնավար էներգաարտադրողի սպառած էլեկտրաէներգիայի քանակը։
+
+Եթե տարբերությունը դրական է՝ այսինքն տվյալ ամսվա հաշվարկով մատակարարվել է ավելի շատ, քան սպառվել, այդ էներգիան գումարվում է հաջորդ ամսում մատակարարված էլեկտրաէներգիայի քանակին։
+
+Պարզ ձևակերպմամբ՝ դրական էներգետիկ մնացորդը տեղափոխվում է հաջորդ ամիս՝ օրենքով սահմանված մեխանիզմի շրջանակում։
+
+### 4. Ի՞նչ է լինում, եթե սպառումն ավելի մեծ է
+
+Եթե ամսական տարբերությունը բացասական է՝ օբյեկտը ավելի շատ էներգիա է սպառել, քան մատակարարել, ինքնավար էներգաարտադրողը համապատասխան քանակի համար վճարում է երաշխավորված մատակարարին տվյալ սպառողական խմբի համար Հանձնաժողովի սահմանած սակագնով։
+
+Այսինքն արևային կայանը չի վերացնում ցանցի հետ կապը և չի նշանակում, որ յուրաքանչյուր ամիս հաշիվը պարտադիր զրոյական է լինելու։
+
+### 5. Հաշվարկային տարին
+
+Այս մեխանիզմի համար օրենսդրությամբ սահմանված է հատուկ հաշվարկային տարի՝
+
+յուրաքանչյուր օրացուցային տարվա մայիսի 1-ից մինչև հաջորդ տարվա ապրիլի 30-ը ներառյալ։
+
+Սա կարևոր է տարեկան հաշվեկշիռը գնահատելիս։
+
+Եթե հաշվարկային տարվա վերջին ամսվա ավարտին մնում է դրական տարբերություն, ներառյալ նախորդ ամիսներից կուտակված մնացորդը, երաշխավորված մատակարարը վճարում է այդ քանակի համար օրենքով սահմանված մեխանիզմով՝ հաշվեկշռման շուկայում անհաշվեկշռույթների արդյունքում առաջացած էլեկտրաէներգիայի վաճառքի տարեկան նվազագույն գնով։
+
+Այդ գինը չպետք է շփոթել սպառողի սովորական մանրածախ սակագնի հետ։
+
+### 6. Ինչու առավելագույն հնարավոր կայանը միշտ չէ լավագույնը
+
+Հաշվանցման մեխանիզմի առկայությունը չի նշանակում, որ տնտեսապես նպատակահարմար է տեղադրել առավելագույն հնարավոր հզորությունը։
+
+Սեփական կարիքների արևային նախագծի հիմնական նպատակն է արտադրությունը տրամաբանորեն համապատասխանեցնել օբյեկտի իրական պահանջարկին։
+
+Չափազանց մեծ համակարգը կարող է պահանջել ավելի մեծ սկզբնական ներդրում, ավելի շատ կախված լինել ավելցուկային էներգիայի հաշվարկման պայմաններից և զբաղեցնել հասանելի միացման հզորությունը առանց անհրաժեշտության։
+
+Ուստի կայանի հզորությունը պետք է հաշվարկել սպառումից և նպատակներից ելնելով, ոչ միայն տանիքի ազատ մակերեսից։
+
+### 7. Ցանցային աշխատանքի համար մարտկոց պե՞տք է
+
+Ոչ։ Բաշխման ցանցի հետ աշխատող ինքնավար արևային համակարգի համար մարտկոցի առկայությունը ինքնին պարտադիր պայման չէ։
+
+Մարտկոցը այլ խնդիր է լուծում․ այն ֆիզիկապես պահում է էներգիան օբյեկտում՝ ավելի ուշ օգտագործելու կամ պահուստային սնուցման համար։
+
+Ցանցը և մարտկոցը էներգիայի կառավարման տարբեր գործիքներ են։
+
+### 8. Ի՞նչ ստուգել վերջնական նախագծումից առաջ
+
+Վերջնական առաջարկից առաջ անհրաժեշտ է տվյալ նախագծի իրական ամսաթվով հաստատել՝
+
+— միացման կետի պայմանագրային թույլատրելի հզորությունը;
+— միացման տեխնիկական սխեման;
+— բաշխողի/մատակարարի պահանջները;
+— հաշվառման գործող կանոնները;
+— գործող սակագները;
+— օրենքի գործող խմբագրությունը։
+
+Այս հոդվածը ներկայացնում է 2026 թվականի սեպտեմբերի 14-ի դրությամբ ստուգված կանոնները։ Իրական նախագծի դեպքում դրանք պետք է կրկին ստուգվեն միացման պահին։
+
+CTA:
+Ստուգել իմ օբյեկտը և հաշվարկել արևային կայանը →
+
+SOURCES:
+https://www.arlis.am/hy/acts/216338
+https://www.arlis.am/hy/acts/198029
+https://www.arlis.am/hy/acts/228752
+https://www.psrc.am/contents/newsPress/electricity-tariff-2026
+
+======================================================================
+VERIFIED FACTS USED IN THE ARTICLES
+======================================================================
+
+1. Armenia electricity tariffs
+PSRC states that consumer electricity tariffs remain unchanged for 2026.
+Current low-voltage residential tariff structure includes:
+— up to 200 kWh/month: 46.48 AMD/kWh day, 36.48 AMD/kWh night;
+— 201–400 kWh/month: 48.48 AMD/kWh day, 38.48 AMD/kWh night;
+— general 0.38 kV and below consumer category: 53.48 AMD/kWh day, 43.48 AMD/kWh night.
+Sources:
+https://www.psrc.am/contents/newsPress/electricity-tariff-2026
+https://www.psrc.am/contents/document/8910
+
+2. Armenia autonomous generation capacity
+The installed capacity for an autonomous producer cannot exceed the maximum permitted capacity of the relevant connection point and cannot exceed 150 kW.
+For an autonomous group, total installed capacity cannot exceed 1050 kW.
+Source:
+https://www.arlis.am/hy/acts/216338
+
+3. Monthly positive energy balance
+A positive monthly difference between electricity supplied and consumed is carried forward to the following month under the autonomous generation mechanism.
+Source:
+https://www.arlis.am/hy/acts/198029
+
+4. Settlement year
+The settlement year runs from May 1 through April 30 of the following calendar year.
+Source:
+https://www.arlis.am/hy/acts/198029
+
+5. End-of-year positive balance
+Remaining positive balance at the end of the settlement year is paid according to the mechanism defined by law, using the annual minimum electricity sale price resulting from imbalances in the balancing market.
+Source:
+https://www.arlis.am/hy/acts/198029
+
+6. Solar and storage
+Battery storage can shift solar energy from the time it is generated to the time it is needed and can contribute to backup/resilience.
+Source:
+https://www.energy.gov/cmei/systems/solar-integration-solar-energy-and-storage-basics
+
+7. Solar during grid outages
+Standard grid-connected residential solar systems generally shut down during a grid outage for safety. Backup operation requires appropriate inverter/storage architecture.
+Source:
+https://www.energy.gov/cmei/systems/solar-and-resilience-basics
+
+8. Real PV energy yield
+Actual solar energy yield is influenced by external factors including heat, dirt and shade; module laboratory efficiency is not the same as real annual energy yield.
+Source:
+https://www.energy.gov/cmei/systems/photovoltaic-system-design-and-energy-yield
+
+======================================================================
+END OF FILE
+======================================================================

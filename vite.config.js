@@ -5,6 +5,20 @@ import { defineConfig, loadEnv } from 'vite';
 const root = process.cwd();
 const DEFAULT_OSM_TILE_URL = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
 const CLOUDFLARE_INSIGHTS_SCRIPT_ORIGIN = 'https://static.cloudflareinsights.com';
+const BLOG_ARTICLE_SLUGS = [
+  'solar-panels-for-home-armenia',
+  'solar-savings-armenia',
+  'do-i-need-solar-battery',
+  'how-to-size-solar-system',
+  'net-metering-armenia'
+];
+const blogArticleInputs = Object.fromEntries(
+  BLOG_ARTICLE_SLUGS.flatMap((slug) => [
+    [`blog-hy-${slug}`, resolve(root, `blog/${slug}/index.html`)],
+    [`blog-ru-${slug}`, resolve(root, `ru/blog/${slug}/index.html`)],
+    [`blog-en-${slug}`, resolve(root, `en/blog/${slug}/index.html`)]
+  ])
+);
 
 const trustedMapOrigin = (tileUrl) => {
   if (!tileUrl) return '';
@@ -95,7 +109,8 @@ export default defineConfig(({ mode }) => {
           'calculator-pro-en': resolve(root, 'en/calculator/pro/index.html'),
           'offer-checker-hy': resolve(root, 'offer-checker/index.html'),
           'offer-checker-ru': resolve(root, 'ru/offer-checker/index.html'),
-          'offer-checker-en': resolve(root, 'en/offer-checker/index.html')
+          'offer-checker-en': resolve(root, 'en/offer-checker/index.html'),
+          ...blogArticleInputs
         }
       }
     }

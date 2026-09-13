@@ -21,6 +21,7 @@ import { TEMPORARY_YOURENERGY_PRICEBOOK } from '../src/data/pricebooks/armenia.j
 import { ARMENIA_TARIFF_DATASET } from '../src/data/tariffs/armenia.js';
 import { GENERATED_CONTENT_LOCALES } from '../src/content/schema.js';
 import { createProcessImageContext } from '../src/config/process-images.js';
+import { BLOG_COPY, getBlogPath, loadBlogArticles } from '../src/content/blog.js';
 
 const root = resolve(import.meta.dirname, '..');
 const mode = process.argv[2] ?? 'production';
@@ -49,6 +50,8 @@ const placeholderTemplate = await readFile(resolve(root, 'src/templates/placehol
 const contactsTemplate = await readFile(resolve(root, 'src/templates/contacts.hbs'), 'utf8');
 const projectsTemplate = await readFile(resolve(root, 'src/templates/projects.hbs'), 'utf8');
 const aboutTemplate = await readFile(resolve(root, 'src/templates/about.hbs'), 'utf8');
+const blogIndexTemplate = await readFile(resolve(root, 'src/templates/blog-index.hbs'), 'utf8');
+const blogArticleTemplate = await readFile(resolve(root, 'src/templates/blog-article.hbs'), 'utf8');
 
 Handlebars.registerPartial(
   'site-header',
@@ -75,6 +78,8 @@ const renderPlaceholder = Handlebars.compile(placeholderTemplate, { noEscape: fa
 const renderContacts = Handlebars.compile(contactsTemplate, { noEscape: false });
 const renderProjects = Handlebars.compile(projectsTemplate, { noEscape: false });
 const renderAbout = Handlebars.compile(aboutTemplate, { noEscape: false });
+const renderBlogIndex = Handlebars.compile(blogIndexTemplate, { noEscape: false });
+const renderBlogArticle = Handlebars.compile(blogArticleTemplate, { noEscape: false });
 const writeGenerated = (file, markup) => writeFile(file, markup.replace(/[ \t]+\n/g, '\n'), 'utf8');
 
 const runtimeLocales = Object.freeze(
@@ -150,6 +155,9 @@ const faqFile = (locale) => toolFile(locale, 'faq');
 const placeholderPath = (locale, type) => (locale === 'hy' ? `/${type}/` : `/${locale}/${type}/`);
 const placeholderFile = (locale, type) =>
   locale === 'hy' ? `${type}/index.html` : `${locale}/${type}/index.html`;
+const blogFile = (locale) => (locale === 'hy' ? 'blog/index.html' : `${locale}/blog/index.html`);
+const blogArticleFile = (locale, slug) =>
+  locale === 'hy' ? `blog/${slug}/index.html` : `${locale}/blog/${slug}/index.html`;
 const createToolAlternateLinks = (type) =>
   Object.freeze([
     ...GENERATED_CONTENT_LOCALES.map(({ key }) => ({
@@ -176,6 +184,21 @@ const createPlaceholderAlternateLinks = (type) =>
 const createPlaceholderLanguageLinks = (currentLocale, type) =>
   GENERATED_CONTENT_LOCALES.filter(({ key }) => key !== currentLocale).map(({ key }) => ({
     href: placeholderPath(key, type),
+    hreflang: key,
+    label: languageLabels[key],
+    name: localizedLanguageNames[currentLocale][key]
+  }));
+const createBlogAlternateLinks = (slug = null) =>
+  Object.freeze([
+    ...GENERATED_CONTENT_LOCALES.map(({ key }) => ({
+      hreflang: key,
+      href: `${origin}${slug ? getBlogPath(key, slug) : placeholderPath(key, 'blog')}`
+    })),
+    { hreflang: 'x-default', href: `${origin}${slug ? getBlogPath('hy', slug) : '/blog/'}` }
+  ]);
+const createBlogLanguageLinks = (currentLocale, slug = null) =>
+  GENERATED_CONTENT_LOCALES.filter(({ key }) => key !== currentLocale).map(({ key }) => ({
+    href: slug ? getBlogPath(key, slug) : placeholderPath(key, 'blog'),
     hreflang: key,
     label: languageLabels[key],
     name: localizedLanguageNames[currentLocale][key]
@@ -954,7 +977,65 @@ const createAboutContext = (content) => {
   };
 };
 
+const createBlogArticleJsonLd = (article, content) =>
+  escapeJsonForHtml({
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    '@id': `${origin}${article.path}#article`,
+    headline: article.h1,
+    description: article.description,
+    image: [`${origin}${article.image}`],
+    dateModified: article.verifiedDateIso,
+    inLanguage: runtimeLocales[content.locale],
+    mainEntityOfPage: { '@type': 'WebPage', '@id': `${origin}${article.path}` },
+    author: { '@type': 'Organization', name: 'YOURENERGY' },
+    publisher: { '@type': 'Organization', name: 'YOURENERGY', url: origin }
+  });
+
+const createBlogIndexContext = (content, articles) => {
+  const localeArticles = articles.map((article, index) => ({
+    ...article[content.locale],
+    number: String(index + 1).padStart(2, '0')
+  }));
+  const categories = localeArticles.map((article) => ({
+    key: article.categoryKey,
+    label: article.category
+  }));
+  return {
+    ...createHomeContext(content, { pageKind: 'blog' }),
+    path: placeholderPath(content.locale, 'blog'),
+    blogCopy: BLOG_COPY[content.locale],
+    featured: localeArticles[0],
+    articles: localeArticles,
+    categories,
+    calculatorHref: toolPath(content.locale, 'calculator'),
+    activeNavigation: createHeaderNavigationState('blog'),
+    alternateLinks: createBlogAlternateLinks(),
+    languageLinks: createBlogLanguageLinks(content.locale)
+  };
+};
+
+const createBlogArticleContext = (content, article, articles) => {
+  const localizedArticle = article[content.locale];
+  return {
+    ...createHomeContext(content, { pageKind: 'blog' }),
+    blogHref: placeholderPath(content.locale, 'blog'),
+    blogCopy: BLOG_COPY[content.locale],
+    article: localizedArticle,
+    calculatorHref: toolPath(content.locale, 'calculator'),
+    relatedArticles: articles
+      .filter((candidate) => candidate[content.locale].slug !== localizedArticle.slug)
+      .slice(0, 2)
+      .map((candidate) => candidate[content.locale]),
+    activeNavigation: createHeaderNavigationState('blog'),
+    alternateLinks: createBlogAlternateLinks(localizedArticle.slug),
+    languageLinks: createBlogLanguageLinks(content.locale, localizedArticle.slug),
+    articleJsonLd: createBlogArticleJsonLd(localizedArticle, content)
+  };
+};
+
 const homeContent = { hy, ru, en };
+const blogArticles = await loadBlogArticles();
 
 for (const { file, key } of GENERATED_CONTENT_LOCALES) {
   const content = homeContent[key];
@@ -964,6 +1045,22 @@ for (const { file, key } of GENERATED_CONTENT_LOCALES) {
   const output = resolve(root, file);
   await mkdir(dirname(output), { recursive: true });
   await writeGenerated(output, render(createHomeContext(content)));
+}
+
+for (const { key } of GENERATED_CONTENT_LOCALES) {
+  const content = homeContent[key];
+  const output = resolve(root, blogFile(key));
+  await mkdir(dirname(output), { recursive: true });
+  await writeGenerated(output, renderBlogIndex(createBlogIndexContext(content, blogArticles)));
+
+  for (const article of blogArticles) {
+    const articleOutput = resolve(root, blogArticleFile(key, article[key].slug));
+    await mkdir(dirname(articleOutput), { recursive: true });
+    await writeGenerated(
+      articleOutput,
+      renderBlogArticle(createBlogArticleContext(content, article, blogArticles))
+    );
+  }
 }
 
 for (const { key } of GENERATED_CONTENT_LOCALES) {
@@ -1051,10 +1148,6 @@ const placeholderPages = Object.freeze([
   {
     type: 'contacts',
     titles: { hy: 'Կապ', ru: 'Контакты', en: 'Contacts' }
-  },
-  {
-    type: 'blog',
-    titles: { hy: 'Բլոգ', ru: 'Блог', en: 'Blog' }
   }
 ]);
 
