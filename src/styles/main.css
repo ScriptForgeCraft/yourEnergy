@@ -14,7 +14,9 @@
   --radius-lg: 24px;
   --shadow-sm: 0 8px 24px rgb(9 30 50 / 8%);
   --shadow-md: 0 24px 70px rgb(3 21 37 / 18%);
-  --container: 1380px;
+  /* One shared readable line length for every content area. Full-bleed media
+     remains on the section itself; only its actual content is constrained. */
+  --container: 1440px;
   --header-height: 74px;
 }
 
@@ -29,10 +31,15 @@
 }
 
 html {
+  min-height: 100%;
   scroll-behavior: smooth;
 }
 
 body {
+  min-height: 100vh;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
   margin: 0;
   color: var(--color-text);
   background: var(--color-background);
@@ -45,6 +52,14 @@ body {
     'Noto Sans Armenian',
     sans-serif;
   line-height: 1.5;
+}
+
+body > main {
+  flex: 1 0 auto;
+}
+
+.site-footer {
+  margin-top: auto;
 }
 
 a {
@@ -179,14 +194,13 @@ textarea {
 
 @media (min-width: 681px) {
   .site-header .header-row {
-    width: min(calc(100% - clamp(64px, 10vw, 160px)), 1260px);
+    width: min(calc(100% - 48px), var(--container));
   }
 }
 
 @media (min-width: 1181px) {
   .site-header .header-row {
-    width: calc(100% - clamp(160px, 11vw, 192px));
-    max-width: none;
+    width: min(calc(100% - clamp(64px, 8vw, 160px)), var(--container));
   }
 }
 

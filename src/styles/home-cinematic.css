@@ -23,7 +23,7 @@
 
 @media (min-width: 681px) {
   .page-home .home-hero .hero-grid {
-    width: min(calc(100% - clamp(64px, 10vw, 160px)), 1260px);
+    width: min(calc(100% - 48px), var(--container));
   }
 }
 
@@ -480,15 +480,13 @@ html[lang='hy'] .page-home .hero-signature {
 
 @media (min-width: 1181px) {
   .page-home .home-hero .hero-grid {
-    width: calc(100% - clamp(160px, 11vw, 192px));
-    max-width: none;
+    width: min(calc(100% - clamp(64px, 8vw, 160px)), var(--container));
   }
 
   .page-home .hero-trust-strip .trust-strip__inner {
-    width: 100%;
-    max-width: none;
-    margin-inline: 0;
-    padding-inline: clamp(38px, 5.1vw, 96px);
+    width: min(calc(100% - clamp(64px, 8vw, 160px)), var(--container));
+    margin-inline: auto;
+    padding-inline: 0;
   }
 
   .page-home .hero-dashboard {
@@ -883,7 +881,7 @@ html[lang='hy'] .page-home .hero-signature {
 
 .page-home .portfolio-projects__rail {
   position: relative;
-  width: min(100%, 1840px);
+  width: min(calc(100% - 48px), var(--container));
   margin: clamp(35px, 4.2vw, 58px) auto 0;
   padding-inline: clamp(20px, 2vw, 36px);
 }
