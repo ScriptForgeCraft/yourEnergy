@@ -1480,6 +1480,7 @@ html[lang='hy'] .page-home .hero-signature {
     block-size: 100svh;
     max-block-size: 100svh;
     display: grid;
+    grid-template-columns: minmax(0, 1fr);
     grid-template-rows: auto auto;
     align-content: space-between;
     padding-block: clamp(30px, 6svh, 70px) clamp(20px, 4svh, 44px);
@@ -1582,7 +1583,17 @@ html[lang='hy'] .page-home .hero-signature {
   }
 
   .page-home .portfolio-projects__actions {
-    justify-content: flex-start;
+    width: min(100%, 600px);
+    max-width: 100%;
+    flex: 0 0 auto;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    justify-content: start;
+    gap: 12px;
+  }
+
+  .page-home .portfolio-projects__button {
+    width: 100%;
   }
 
   .page-home .portfolio-projects__track {

@@ -990,8 +990,7 @@ h3 {
 .footer-contact .footer-address {
   flex: 1 1 auto;
   min-width: 0;
-  white-space: nowrap;
-  overflow-wrap: normal;
+  overflow-wrap: anywhere;
   word-break: normal;
 }
 
@@ -1054,6 +1053,16 @@ h3 {
 
 .dialog-content > .eyebrow {
   margin-right: 52px;
+}
+
+@media (min-width: 1181px) and (max-width: 1280px) {
+  .footer-grid {
+    grid-template-columns: 1.5fr repeat(3, 1fr);
+  }
+
+  .footer-contact {
+    grid-column: span 2;
+  }
 }
 
 @media (max-width: 1180px) {

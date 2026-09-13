@@ -339,7 +339,7 @@ html[lang='hy'] .faq-preview__art p {
   }
 }
 
-@media (max-width: 1120px) {
+@media (max-width: 1280px) {
   .faq-preview::before {
     background: linear-gradient(
       90deg,
