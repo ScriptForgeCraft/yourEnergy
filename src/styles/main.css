@@ -16,7 +16,7 @@
   --shadow-md: 0 24px 70px rgb(3 21 37 / 18%);
   /* One shared readable line length for every content area. Full-bleed media
      remains on the section itself; only its actual content is constrained. */
-  --container: 1440px;
+  --container: 1700px;
   --header-height: 74px;
 }
 
