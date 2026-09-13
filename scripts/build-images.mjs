@@ -46,35 +46,7 @@ const assets = [
   { name: 'project-abovyan', widths: [480, 800] },
   { name: 'project-vagharshapat', widths: [480, 800] },
   { name: 'project-ararat', widths: [480, 800] },
-  { name: 'engineer-onsite', widths: [480, 800, 1200] },
-  ...PROCESS_IMAGE_ASSETS,
-  { name: 'solutions-home', source: 'solutions/solutions-home', widths: [640, 1024, 1600] },
-  { name: 'solutions-roof', source: 'solutions/solutions-roof', widths: [640, 1024, 1600] },
-  {
-    name: 'solutions-system',
-    source: 'solutions/solutions-system',
-    widths: [640, 1024, 1600]
-  },
-  {
-    name: 'solutions-savings',
-    source: 'solutions/solutions-savings',
-    widths: [640, 1024, 1600]
-  },
-  {
-    name: 'solutions-inspection',
-    source: 'solutions/solutions-inspection',
-    widths: [640, 1024, 1600]
-  },
-  {
-    name: 'solutions-installation',
-    source: 'solutions/solutions-installation',
-    widths: [640, 1024, 1600]
-  },
-  {
-    name: 'solutions-support',
-    source: 'solutions/solutions-support',
-    widths: [640, 1024, 1600]
-  }
+  ...PROCESS_IMAGE_ASSETS
 ];
 
 const outputExtensions = ['avif', 'webp', 'jpg'];

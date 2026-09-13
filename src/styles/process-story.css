@@ -149,7 +149,7 @@
   max-width: 13ch;
   margin: 0;
   color: #fff;
-font-size: clamp(32px, 3.2vw, 56px);
+  font-size: clamp(32px, 3.2vw, 56px);
   font-weight: 650;
   line-height: 1.04;
   letter-spacing: -0.045em;
@@ -681,16 +681,15 @@ font-size: clamp(32px, 3.2vw, 56px);
   border: 1px solid #ffffff4d;
   border-radius: 50%;
   background: #0c1c26;
-  color: #c7d0d5 ;
+  color: #c7d0d5;
   box-shadow: 0 0 0 5px #06131c;
   font-variant-numeric: tabular-nums;
   transition:
     background 220ms ease,
     border-color 220ms ease,
     color 220ms ease;
- 
 }
- 
+
 .process-progress__node b {
   font-size: 10px;
   font-weight: 650;

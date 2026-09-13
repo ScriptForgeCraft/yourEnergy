@@ -52,11 +52,10 @@ scene changes.
 
 - Replace `roof-scan` with licensed aerial imagery that permits interface overlays.
 - Replace all `project-*` images and metrics together using verified project records.
-- Replace `engineer-onsite` only with a consented YOURENERGY team photograph.
 - Re-run `npm run assets:build` after replacing any source image.
 - Keep the visible demo labels until every related claim and image is verified.
 
-Prompts used: photorealistic architectural views of Armenian homes and one on-site solar engineer; every prompt prohibited logos, watermarks, embedded text, and claims of real customer identity. The social preview prompt is recorded in the final engineering handoff.
+Prompts used: photorealistic architectural views of Armenian homes and process scenes; every prompt prohibited logos, watermarks, embedded text, and claims of real customer identity. The social preview prompt is recorded in the final engineering handoff.
 
 ## Manufacturer data sheets
 

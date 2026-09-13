@@ -61,11 +61,9 @@ export default {
     hours: 'Open until 21:00'
   },
   common: {
-    cta: 'Calculate my home',
     headerCta: 'Get a quote',
     demo: 'Demonstration example',
-    illustrative: 'Illustrative image',
-    details: 'View details'
+    illustrative: 'Illustrative image'
   },
   product: {
     common: {
@@ -623,55 +621,6 @@ export default {
       }
     ]
   },
-  solutions: {
-    eyebrow: 'Solutions',
-    title: 'Three practical solutions for your home',
-    copy: 'Compare indicative capacity and generation. A preliminary budget appears after property analysis.',
-    disclaimer:
-      'The final configuration, price and outcome depend on the property and are confirmed after a site visit.',
-    items: [
-      {
-        name: 'Starter',
-        subtitle: 'Lower initial investment',
-        capacity: '6.2 kWp',
-        generation: '9,200 kWh / year',
-        price: 'Preliminary budget after analysis',
-        popular: false,
-        details: [
-          '10–12 panels in the selected class',
-          'Estimated area: 34–40 m²',
-          'Inverter, installation and basic monitoring'
-        ]
-      },
-      {
-        name: 'Optimal',
-        subtitle: 'The best balance of cost and return',
-        capacity: '10.4 kWp',
-        generation: '≈16,000 kWh / year',
-        price: 'Preliminary budget after analysis',
-        badge: 'Popular option',
-        popular: true,
-        details: [
-          '16 × 650 W panels',
-          'Estimated area: 54–62 m²',
-          'Inverter, design, installation and monitoring'
-        ]
-      },
-      {
-        name: 'Energy independence',
-        subtitle: 'Maximum coverage plus a battery',
-        capacity: '12.5 kWp + 10 kWh',
-        generation: '18,900 kWh / year',
-        price: 'Needs a separate estimate',
-        popular: false,
-        details: [
-          'Higher-capacity system',
-          '10 kWh battery in the demonstration configuration',
-          'Hybrid inverter and backup scenarios'
-        ]
-      }
-    ]
-  },
   projects: {
     eyebrow: 'COMPLETED PROJECTS',
     titleLead: 'Real projects,',
@@ -857,16 +806,41 @@ export default {
     intro: 'Clear, concise answers to help you make a confident decision about a solar system.',
     answersEyebrow: 'All questions',
     answersTitle: 'Detailed answers',
-    answersIntro: 'The essentials on calculations, pricing, installation and how a solar system works.',
+    answersIntro:
+      'The essentials on calculations, pricing, installation and how a solar system works.',
     allQuestions: 'All questions',
     notFound: 'Didn’t find an answer?',
     contactLink: 'Contact us',
     calculatorPrompt: 'Questions about the calculation?',
     calculatorFaqLink: 'Open FAQ',
     faqCalculatorLink: 'Open calculator',
+    previewItems: [
+      {
+        question: 'How much does a solar system cost?',
+        answer: 'The price depends on your consumption, property type and chosen equipment.',
+        icon: 'home'
+      },
+      {
+        question: 'How much energy can I get?',
+        answer:
+          'Estimate the expected generation for your home in our calculator in a few minutes.',
+        icon: 'zap'
+      },
+      {
+        question: 'How does installation work?',
+        answer: 'From system design to commissioning, our team coordinates every stage.',
+        icon: 'settings'
+      },
+      {
+        question: 'Are permits required?',
+        answer: 'We help with documents and requirements that apply to your property.',
+        icon: 'shield-check'
+      }
+    ],
     meta: {
       title: 'Solar system FAQ in Armenia | YOURENERGY',
-      description: 'Answers to common questions about solar-system pricing, estimates, payback, installation and maintenance.',
+      description:
+        'Answers to common questions about solar-system pricing, estimates, payback, installation and maintenance.',
       ogTitle: 'Solar system FAQ | YOURENERGY',
       ogDescription: 'Clear answers about solar-system calculations, installation and operation.'
     },
@@ -906,7 +880,16 @@ export default {
     ].map(([question, answer], index) => ({
       question,
       answer,
-      icon: ['calculator', 'zap', 'satellite', 'shield-check', 'sun', 'cycle', 'file', 'message-square'][index]
+      icon: [
+        'calculator',
+        'zap',
+        'satellite',
+        'shield-check',
+        'sun',
+        'cycle',
+        'file',
+        'message-square'
+      ][index]
     }))
   },
   finalCta: {

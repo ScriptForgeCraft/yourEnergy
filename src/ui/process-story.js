@@ -361,11 +361,10 @@ export const initProcessStory = ({ config = {} } = {}) => {
   media.add(
     {
       desktop: '(min-width: 768px) and (min-height: 650px)',
-      pointer: '(hover: hover) and (pointer: fine)',
       reduce: '(prefers-reduced-motion: reduce)'
     },
     (context) => {
-      const { desktop, pointer, reduce: reducedMotion } = context.conditions;
+      const { desktop, reduce: reducedMotion } = context.conditions;
       mobileObserver?.disconnect();
       mobileObserver = null;
 
@@ -926,22 +925,6 @@ export const initProcessStory = ({ config = {} } = {}) => {
       window.addEventListener('keydown', onKeyDown, { capture: true });
       progressSteps.forEach((step) => step.addEventListener('click', onProgressStepClick));
 
-      const moveX = gsap.quickTo(ambient, 'x', { duration: 0.8, ease: 'power3.out' });
-      const moveY = gsap.quickTo(ambient, 'y', { duration: 0.8, ease: 'power3.out' });
-      const onPointer = (event) => {
-        const bounds = frame.getBoundingClientRect();
-        moveX(((event.clientX - bounds.left) / bounds.width - 0.5) * 10);
-        moveY(((event.clientY - bounds.top) / bounds.height - 0.5) * 8);
-      };
-      const resetPointer = () => {
-        moveX(0);
-        moveY(0);
-      };
-      if (pointer) {
-        frame.addEventListener('pointermove', onPointer);
-        frame.addEventListener('pointerleave', resetPointer);
-      }
-
       return () => {
         transition?.kill();
         sceneTween?.kill();
@@ -951,8 +934,6 @@ export const initProcessStory = ({ config = {} } = {}) => {
         if (savedScrollBehavior !== null) {
           document.documentElement.style.scrollBehavior = savedScrollBehavior;
         }
-        frame.removeEventListener('pointermove', onPointer);
-        frame.removeEventListener('pointerleave', resetPointer);
         window.removeEventListener('wheel', onWheel, true);
         window.removeEventListener('touchstart', onTouchStart, true);
         window.removeEventListener('touchmove', onTouchMove, true);

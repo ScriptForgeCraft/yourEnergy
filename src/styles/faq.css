@@ -17,8 +17,19 @@
   z-index: -1;
   inset: 0;
   background:
-    radial-gradient(circle at 76% 38%, transparent 0 22%, rgb(249 247 241 / 34%) 22.15% 42%, transparent 42.15%),
-    linear-gradient(90deg, #f9f7f1 0%, rgb(249 247 241 / 98%) 37%, rgb(249 247 241 / 58%) 62%, rgb(249 247 241 / 6%) 100%);
+    radial-gradient(
+      circle at 76% 38%,
+      transparent 0 22%,
+      rgb(249 247 241 / 34%) 22.15% 42%,
+      transparent 42.15%
+    ),
+    linear-gradient(
+      90deg,
+      #f9f7f1 0%,
+      rgb(249 247 241 / 98%) 37%,
+      rgb(249 247 241 / 58%) 62%,
+      rgb(249 247 241 / 6%) 100%
+    );
   content: '';
 }
 
@@ -220,7 +231,13 @@
 
 .faq-page-hero::before {
   background:
-    linear-gradient(90deg, #f9f7f1 0%, rgb(249 247 241 / 94%) 40%, rgb(249 247 241 / 36%) 70%, rgb(249 247 241 / 8%) 100%),
+    linear-gradient(
+      90deg,
+      #f9f7f1 0%,
+      rgb(249 247 241 / 94%) 40%,
+      rgb(249 247 241 / 36%) 70%,
+      rgb(249 247 241 / 8%) 100%
+    ),
     linear-gradient(0deg, rgb(249 247 241 / 90%), transparent 62%);
 }
 
@@ -386,7 +403,12 @@
   }
 
   .faq-preview::before {
-    background: linear-gradient(90deg, #f9f7f1 0%, rgb(249 247 241 / 88%) 56%, rgb(249 247 241 / 38%) 100%);
+    background: linear-gradient(
+      90deg,
+      #f9f7f1 0%,
+      rgb(249 247 241 / 88%) 56%,
+      rgb(249 247 241 / 38%) 100%
+    );
   }
 
   .faq-answers__layout {
@@ -458,7 +480,12 @@
 
   .faq-page-hero::before,
   .faq-preview::before {
-    background: linear-gradient(90deg, #f9f7f1 0%, rgb(249 247 241 / 86%) 64%, rgb(249 247 241 / 42%) 100%);
+    background: linear-gradient(
+      90deg,
+      #f9f7f1 0%,
+      rgb(249 247 241 / 86%) 64%,
+      rgb(249 247 241 / 42%) 100%
+    );
   }
 
   .faq-answers__calculator-link {

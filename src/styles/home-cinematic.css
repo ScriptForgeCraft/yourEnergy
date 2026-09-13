@@ -660,16 +660,7 @@ html[lang='hy'] .page-home .hero-signature {
   background: linear-gradient(180deg, #ffe47a, var(--cinematic-gold));
 }
 
-.page-home .solutions {
-  position: relative;
-  background:
-    radial-gradient(circle at 76% 0%, rgb(245 189 24 / 15%), transparent 21%),
-    var(--cinematic-paper);
-}
-
 .page-home .section-heading > p,
-.page-home .solution-card > p:not(.solution-index),
-.page-home .solution-card details,
 .page-home .company-record__heading p:not(.eyebrow),
 .page-home .company-record__meta p,
 .page-home .company-record__disclosure,
@@ -679,7 +670,6 @@ html[lang='hy'] .page-home .hero-signature {
 }
 
 .page-home .section-heading h2,
-.page-home .solutions h3,
 .page-home .company-record h2,
 .page-home .equipment h2,
 .page-home .equipment h3,
@@ -687,32 +677,6 @@ html[lang='hy'] .page-home .hero-signature {
 .page-home .faq h2,
 .page-home .faq summary {
   color: #0a2237;
-}
-
-.page-home .solution-card {
-  overflow: hidden;
-  border-color: rgb(12 40 61 / 12%);
-  border-radius: 22px;
-  background: rgb(255 255 255 / 68%);
-  box-shadow: 0 16px 38px rgb(5 27 43 / 8%);
-  transition:
-    transform 180ms ease,
-    box-shadow 180ms ease;
-}
-
-.page-home .solution-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 25px 52px rgb(5 27 43 / 14%);
-}
-
-.page-home .solution-card--popular {
-  border-color: rgb(245 189 24 / 76%);
-  background: linear-gradient(160deg, #fffdf6, #fff4cb);
-}
-
-.page-home .solution-price,
-.page-home .solution-index {
-  color: #8d6300;
 }
 
 .page-home .portfolio-projects {

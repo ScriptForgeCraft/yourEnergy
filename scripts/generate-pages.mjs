@@ -340,20 +340,9 @@ const createHomeContext = (content, { pageKind = 'home' } = {}) => {
       about: placeholderPath(content.locale, 'about'),
       blog: placeholderPath(content.locale, 'blog')
     },
-    solutionHref: calculatorHref,
     offerCheckerHref: toolPath(content.locale, 'offer-checker'),
     alternateLinks: publishedAlternateLinks,
     languageLinks: createLanguageLinks(content.locale),
-    solutions: {
-      ...content.solutions,
-      items: content.solutions.items.map((item) => ({
-        ...item,
-        cardClass: item.popular ? 'solution-card solution-card--popular' : 'solution-card',
-        buttonClass: item.popular ? 'button' : 'button button--outline',
-        detailsLabel: content.common.details,
-        ctaLabel: content.common.cta
-      }))
-    },
     processStory,
     footer: {
       ...content.footer,
@@ -365,9 +354,9 @@ const createHomeContext = (content, { pageKind = 'home' } = {}) => {
             ? calculatorHref
             : href === '#faq'
               ? faqHref
-            : !isHome && href.startsWith('#')
-              ? `${content.homeHref}${href}`
-              : href
+              : !isHome && href.startsWith('#')
+                ? `${content.homeHref}${href}`
+                : href
         ])
       }))
     },
@@ -386,7 +375,7 @@ const createHomeContext = (content, { pageKind = 'home' } = {}) => {
     },
     faq: {
       ...content.faq,
-      previewItems: content.faq.items.slice(0, 4)
+      previewItems: content.faq.previewItems ?? content.faq.items.slice(0, 4)
     },
     jsonLd: escapeJsonForHtml(createJsonLd(content, { includeFaq: false })),
     homePageConfig: escapeJsonForHtml({

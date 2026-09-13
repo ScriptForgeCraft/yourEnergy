@@ -257,8 +257,7 @@ h3 {
   font-size: 0.9rem;
 }
 
-.pill,
-.solution-badge {
+.pill {
   display: inline-flex;
   align-items: center;
   border-radius: 999px;
@@ -496,98 +495,6 @@ h3 {
 
 .section-heading--actions {
   margin-bottom: 20px;
-}
-
-.solution-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
-}
-
-.solution-card {
-  position: relative;
-  display: flex;
-  min-height: 370px;
-  flex-direction: column;
-  border: 1px solid #dfe6e9;
-  border-radius: 16px;
-  padding: 25px;
-  background: #fff;
-}
-
-.solution-card--popular {
-  border-color: #f1bb19;
-  box-shadow: 0 16px 38px rgb(245 189 24 / 15%);
-}
-
-.solution-badge {
-  position: absolute;
-  top: -11px;
-  left: 22px;
-}
-
-.solution-index {
-  margin: 0 0 20px;
-  color: #627789;
-  font-size: 0.68rem;
-  font-weight: 800;
-}
-
-.solution-card h3 {
-  font-size: 1.22rem;
-}
-
-.solution-card > p:not(.solution-index) {
-  min-height: 38px;
-  margin: 8px 0 20px;
-  color: var(--soft-ink);
-  font-size: 0.8rem;
-}
-
-.solution-card dl {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-  margin: 0;
-}
-
-.solution-card dt {
-  color: #596b7a;
-  font-size: 0.65rem;
-}
-
-.solution-card dd {
-  margin: 3px 0 0;
-  font-size: 0.91rem;
-  font-weight: 850;
-}
-
-.solution-price {
-  display: block;
-  margin: 20px 0 14px;
-  color: #14293d;
-  font-size: 1.17rem;
-}
-
-.solution-card details {
-  margin: 0 0 18px;
-  color: #4b5d6d;
-  font-size: 0.76rem;
-}
-
-.solution-card summary {
-  cursor: pointer;
-  font-weight: 800;
-}
-
-.solution-card details ul {
-  margin: 9px 0 0;
-  padding-inline-start: 18px;
-}
-
-.solution-card .button {
-  width: 100%;
-  margin-top: auto;
 }
 
 .section-disclosure {
@@ -1187,14 +1094,6 @@ h3 {
 
   .section-heading > p {
     margin: 0;
-  }
-
-  .solution-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .solution-card {
-    min-height: 0;
   }
 
   .equipment-documents__grid {
