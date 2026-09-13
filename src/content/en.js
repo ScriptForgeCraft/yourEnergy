@@ -818,7 +818,7 @@ export default {
       {
         question: 'How much does a solar system cost?',
         answer: 'The price depends on your consumption, property type and chosen equipment.',
-        icon: 'home'
+        icon: 'faq-home'
       },
       {
         question: 'How much energy can I get?',
@@ -829,7 +829,7 @@ export default {
       {
         question: 'How does installation work?',
         answer: 'From system design to commissioning, our team coordinates every stage.',
-        icon: 'settings'
+        icon: 'faq-settings'
       },
       {
         question: 'Are permits required?',

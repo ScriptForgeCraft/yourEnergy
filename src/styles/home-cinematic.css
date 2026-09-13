@@ -1535,6 +1535,30 @@ html[lang='hy'] .page-home .hero-signature {
   }
 }
 
+@media (min-width: 1221px) {
+  .page-home .portfolio-projects__header {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(480px, 600px);
+    gap: clamp(28px, 3.2vw, 54px);
+  }
+
+  .page-home .portfolio-projects__actions {
+    width: 100%;
+    max-width: 600px;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    justify-content: stretch;
+  }
+
+  .page-home .portfolio-projects__button {
+    width: 100%;
+    min-width: 0;
+    gap: 8px;
+    padding-inline: 14px;
+  }
+}
+
 @media (max-width: 1220px) {
   .page-home .portfolio-projects__header {
     align-items: flex-start;
