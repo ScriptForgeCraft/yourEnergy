@@ -287,6 +287,58 @@ html[lang='hy'] .faq-preview__art p {
   letter-spacing: 0.4em;
 }
 
+/* Keep the complete desktop preview in one viewport without reducing it to a cramped layout. */
+@media (min-width: 1000px) and (min-height: 720px) {
+  .faq-preview {
+    block-size: 100svh;
+    max-block-size: 100svh;
+  }
+
+  .faq-preview__inner {
+    min-block-size: 100%;
+    display: grid;
+    align-content: center;
+    padding-block: clamp(32px, 5svh, 70px) clamp(24px, 4svh, 60px);
+  }
+
+  .faq-preview .eyebrow {
+    margin-bottom: clamp(14px, 2svh, 22px);
+  }
+
+  .faq-preview h2 {
+    font-size: clamp(2.65rem, 6.6svh, 5.35rem) !important;
+  }
+
+  .faq-preview__heading > p:last-child {
+    margin-top: clamp(14px, 2svh, 22px);
+  }
+
+  .faq-preview__grid {
+    margin-top: clamp(24px, 3svh, 36px);
+  }
+
+  .faq-preview__card {
+    min-height: clamp(154px, 21svh, 180px);
+    padding-block: clamp(20px, 3svh, 28px) clamp(18px, 2.6svh, 24px);
+  }
+
+  .faq-preview__card-copy {
+    gap: clamp(9px, 1.6svh, 14px);
+  }
+
+  .faq-preview__card small {
+    font-size: clamp(0.84rem, 1.65svh, 0.94rem);
+  }
+
+  .faq-preview__footer {
+    margin-top: clamp(24px, 3.5svh, 38px);
+  }
+
+  .faq-preview__button {
+    min-height: clamp(58px, 8svh, 70px);
+  }
+}
+
 @media (max-width: 1120px) {
   .faq-preview::before {
     background: linear-gradient(
