@@ -14,6 +14,7 @@ const readConfig = (selector = '#page-config, #home-page-config') => {
 
 const config = readConfig();
 const processConfig = readConfig('#process-page-config');
+const contactConfig = readConfig('#contact-page-config');
 
 initNavigation();
 initScrollers();
@@ -74,4 +75,10 @@ if (document.querySelector('[data-professional-calculator]')) {
 
 if (document.querySelector('[data-offer-checker]')) {
   initOfferCheckerWorkspace(config.offerChecker);
+}
+
+if (document.querySelector('[data-contact-form]')) {
+  void import('./ui/contact-form.js').then(({ initContactForm }) =>
+    initContactForm({ config: contactConfig })
+  );
 }

@@ -5,6 +5,7 @@ import { loadEnv } from 'vite';
 import hy from '../src/content/hy.js';
 import ru from '../src/content/ru.js';
 import en from '../src/content/en.js';
+import { contactPageCopy } from '../src/content/contacts.js';
 import toolCopy from '../src/content/tools.js';
 import wizardCopy from '../src/content/calculator-wizard.js';
 import { processStoryCopy } from '../src/content/process-story.js';
@@ -44,6 +45,7 @@ const offerCheckerTemplate = await readFile(
 const faqTemplate = await readFile(resolve(root, 'src/templates/faq.hbs'), 'utf8');
 const supportTemplate = await readFile(resolve(root, 'src/templates/support.hbs'), 'utf8');
 const placeholderTemplate = await readFile(resolve(root, 'src/templates/placeholder.hbs'), 'utf8');
+const contactsTemplate = await readFile(resolve(root, 'src/templates/contacts.hbs'), 'utf8');
 
 Handlebars.registerPartial(
   'site-header',
@@ -67,6 +69,7 @@ const renderOfferChecker = Handlebars.compile(offerCheckerTemplate, { noEscape: 
 const renderFaq = Handlebars.compile(faqTemplate, { noEscape: false });
 const renderSupport = Handlebars.compile(supportTemplate, { noEscape: false });
 const renderPlaceholder = Handlebars.compile(placeholderTemplate, { noEscape: false });
+const renderContacts = Handlebars.compile(contactsTemplate, { noEscape: false });
 const writeGenerated = (file, markup) => writeFile(file, markup.replace(/[ \t]+\n/g, '\n'), 'utf8');
 
 const runtimeLocales = Object.freeze(
@@ -529,6 +532,28 @@ const createPlaceholderContext = (content, { type, title }) => {
   };
 };
 
+const createContactsContext = (content) => {
+  const path = placeholderPath(content.locale, 'contacts');
+  const contactPage = contactPageCopy[content.locale];
+  if (!contactPage) throw new Error(`Missing contact-page content for ${content.locale}.`);
+  return {
+    ...createHomeContext(content, { pageKind: 'contacts' }),
+    path,
+    activeNavigation: createHeaderNavigationState('contacts'),
+    alternateLinks: createPlaceholderAlternateLinks('contacts'),
+    languageLinks: createPlaceholderLanguageLinks(content.locale, 'contacts'),
+    contactPage,
+    contactPageConfig: escapeJsonForHtml({
+      locale: runtimeLocales[content.locale],
+      copy: {
+        invalid: contactPage.invalid,
+        sending: contactPage.sending,
+        unavailable: contactPage.unavailable
+      }
+    })
+  };
+};
+
 const homeContent = { hy, ru, en };
 
 for (const { file, key } of GENERATED_CONTENT_LOCALES) {
@@ -634,7 +659,9 @@ for (const { key } of GENERATED_CONTENT_LOCALES) {
     await mkdir(dirname(output), { recursive: true });
     await writeGenerated(
       output,
-      renderPlaceholder(createPlaceholderContext(content, { type, title: titles[key] }))
+      type === 'contacts'
+        ? renderContacts(createContactsContext(content))
+        : renderPlaceholder(createPlaceholderContext(content, { type, title: titles[key] }))
     );
   }
 }
