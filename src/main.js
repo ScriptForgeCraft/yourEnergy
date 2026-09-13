@@ -83,6 +83,10 @@ if (document.querySelector('[data-contact-form]')) {
   );
 }
 
+if (document.querySelector('[data-about-page]')) {
+  void import('./ui/about-motion.js').then(({ initAboutMotion }) => initAboutMotion());
+}
+
 const projectsVideo = document.querySelector('[data-projects-video]');
 const projectsVideoToggle = document.querySelector('[data-projects-video-toggle]');
 

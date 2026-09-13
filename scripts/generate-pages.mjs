@@ -5,6 +5,7 @@ import { loadEnv } from 'vite';
 import hy from '../src/content/hy.js';
 import ru from '../src/content/ru.js';
 import en from '../src/content/en.js';
+import aboutPageCopy from '../src/content/about.js';
 import { contactPageCopy } from '../src/content/contacts.js';
 import toolCopy from '../src/content/tools.js';
 import wizardCopy from '../src/content/calculator-wizard.js';
@@ -47,6 +48,7 @@ const supportTemplate = await readFile(resolve(root, 'src/templates/support.hbs'
 const placeholderTemplate = await readFile(resolve(root, 'src/templates/placeholder.hbs'), 'utf8');
 const contactsTemplate = await readFile(resolve(root, 'src/templates/contacts.hbs'), 'utf8');
 const projectsTemplate = await readFile(resolve(root, 'src/templates/projects.hbs'), 'utf8');
+const aboutTemplate = await readFile(resolve(root, 'src/templates/about.hbs'), 'utf8');
 
 Handlebars.registerPartial(
   'site-header',
@@ -72,6 +74,7 @@ const renderSupport = Handlebars.compile(supportTemplate, { noEscape: false });
 const renderPlaceholder = Handlebars.compile(placeholderTemplate, { noEscape: false });
 const renderContacts = Handlebars.compile(contactsTemplate, { noEscape: false });
 const renderProjects = Handlebars.compile(projectsTemplate, { noEscape: false });
+const renderAbout = Handlebars.compile(aboutTemplate, { noEscape: false });
 const writeGenerated = (file, markup) => writeFile(file, markup.replace(/[ \t]+\n/g, '\n'), 'utf8');
 
 const runtimeLocales = Object.freeze(
@@ -934,6 +937,21 @@ const createContactsContext = (content) => {
   };
 };
 
+const createAboutContext = (content) => {
+  const aboutPage = aboutPageCopy[content.locale];
+  if (!aboutPage) throw new Error(`Missing About page copy for ${content.locale}.`);
+
+  return {
+    ...createHomeContext(content, { pageKind: 'about' }),
+    path: placeholderPath(content.locale, 'about'),
+    meta: aboutPage.meta,
+    activeNavigation: createHeaderNavigationState('about'),
+    alternateLinks: createPlaceholderAlternateLinks('about'),
+    languageLinks: createPlaceholderLanguageLinks(content.locale, 'about'),
+    aboutPage
+  };
+};
+
 const homeContent = { hy, ru, en };
 
 for (const { file, key } of GENERATED_CONTENT_LOCALES) {
@@ -1020,14 +1038,17 @@ for (const { key } of GENERATED_CONTENT_LOCALES) {
   await writeGenerated(output, renderProjects(createProjectsPageContext(content)));
 }
 
+for (const { key } of GENERATED_CONTENT_LOCALES) {
+  const content = homeContent[key];
+  const output = resolve(root, placeholderFile(key, 'about'));
+  await mkdir(dirname(output), { recursive: true });
+  await writeGenerated(output, renderAbout(createAboutContext(content)));
+}
+
 const placeholderPages = Object.freeze([
   {
     type: 'contacts',
     titles: { hy: 'Կապ', ru: 'Контакты', en: 'Contacts' }
-  },
-  {
-    type: 'about',
-    titles: { hy: 'Մեր մասին', ru: 'О нас', en: 'About us' }
   },
   {
     type: 'blog',

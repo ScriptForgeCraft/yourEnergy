@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang='{{locale}}'>
+  <head>
+    <meta charset='UTF-8' />
+    <meta name='viewport' content='width=device-width, initial-scale=1.0' />
+    <meta name='robots' content='noindex,follow' />
+    <meta name='theme-color' content='#071a2d' />
+    <meta name='color-scheme' content='light' />
+    <title>{{meta.title}}</title>
+    <meta name='description' content='{{meta.description}}' />
+    <meta property='og:type' content='website' />
+    <meta property='og:site_name' content='YOURENERGY' />
+    <meta property='og:locale' content='{{localeCode}}' />
+    <meta property='og:title' content='{{meta.ogTitle}}' />
+    <meta property='og:description' content='{{meta.ogDescription}}' />
+    <meta property='og:url' content='https://yourenergy.am{{path}}' />
+    <meta property='og:image' content='https://yourenergy.am/images/hero-time-20-1600.jpg' />
+    <meta name='twitter:card' content='summary_large_image' />
+    <meta name='twitter:title' content='{{meta.ogTitle}}' />
+    <meta name='twitter:description' content='{{meta.ogDescription}}' />
+    <meta name='twitter:image' content='https://yourenergy.am/images/hero-time-20-1600.jpg' />
+    <link rel='canonical' href='https://yourenergy.am{{path}}' />
+    {{#each alternateLinks}}<link rel='alternate' hreflang='{{hreflang}}' href='{{href}}' />{{/each}}
+    <link rel='icon' href='/favicon.ico' sizes='any' />
+    <link rel='icon' href='/yourenergy-mark.svg' type='image/svg+xml' />
+    <link rel='apple-touch-icon' href='/apple-touch-icon.png' />
+    <link rel='stylesheet' href='/src/styles/about.css' />
+  </head>
+  <body class='page-about' data-about-page>
+    <a class='skip-link' href='#main'>{{aria.skip}}</a>
+    {{> site-header}}
+
+    <main id='main'>
+      <section class='about-hero' aria-labelledby='about-hero-title'>
+        <div class='about-hero__media' aria-hidden='true'>
+          <picture>
+            <source type='image/avif' srcset='/images/hero-time-20-1024.avif 1024w, /images/hero-time-20-1600.avif 1600w' sizes='100vw' />
+            <source type='image/webp' srcset='/images/hero-time-20-1024.webp 1024w, /images/hero-time-20-1600.webp 1600w' sizes='100vw' />
+            <img src='/images/hero-time-20-1600.jpg' width='1600' height='900' alt='' fetchpriority='high' decoding='async' />
+          </picture>
+        </div>
+        <div class='about-hero__veil' aria-hidden='true'></div>
+        <div class='container about-hero__inner'>
+          <div class='about-hero__copy' data-about-reveal>
+            <p class='about-kicker'>{{aboutPage.hero.eyebrow}}</p>
+            <h1 id='about-hero-title'>{{aboutPage.hero.titleLead}}<br /><mark>{{aboutPage.hero.titleAccent}}</mark></h1>
+            <p class='about-hero__intro'>{{aboutPage.hero.copy}}</p>
+            <ul class='about-hero__signals' role='list'>{{#each aboutPage.hero.signals}}<li><svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#{{icon}}'></use></svg><span>{{title}}<small>{{copy}}</small></span></li>{{/each}}</ul>
+          </div>
+          <p class='about-hero__aside' data-about-reveal>{{#each aboutPage.hero.aside}}<span>{{this}}</span>{{/each}}</p>
+          <p class='about-hero__scroll' aria-hidden='true'><span></span>{{aboutPage.hero.scroll}}</p>
+        </div>
+      </section>
+
+      <section class='about-approach section' aria-labelledby='about-approach-title'>
+        <div class='container about-approach__grid'>
+          <div class='about-section-intro' data-about-reveal>
+            <p class='about-kicker about-kicker--dark'>{{aboutPage.approach.eyebrow}}</p>
+            <h2 id='about-approach-title'>{{aboutPage.approach.title}}</h2>
+            <p>{{aboutPage.approach.copy}}</p>
+            <a class='about-text-link' href='{{homeHref}}#process'>{{aboutPage.approach.action}} <svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#arrow-right'></use></svg></a>
+          </div>
+          <div class='about-approach__cards'>{{#each aboutPage.approach.items}}<article class='about-approach__card' data-about-reveal><span class='about-icon-orb'><svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#{{icon}}'></use></svg></span><h3>{{title}}</h3><p>{{copy}}</p></article>{{/each}}</div>
+        </div>
+      </section>
+
+      <section class='about-proof section' aria-labelledby='about-certificates-title'>
+        <div class='container'>
+          <div class='about-proof__head' data-about-reveal>
+            <div class='about-section-intro'>
+              <p class='about-kicker about-kicker--dark'>{{aboutPage.certificates.eyebrow}}</p>
+              <h2 id='about-certificates-title'>{{aboutPage.certificates.title}}</h2>
+              <p>{{aboutPage.certificates.copy}}</p>
+            </div>
+            <span class='about-proof__stamp' aria-hidden='true'>PDF<br />01</span>
+          </div>
+          {{#if aboutPage.certificates.items}}
+            <div class='about-document-rail' aria-label='{{aboutPage.certificates.title}}'>{{#each aboutPage.certificates.items}}<article class='about-document-card' data-about-reveal><div class='about-document-card__preview'>{{#if preview}}<img src='{{preview}}' alt='{{alt}}' loading='lazy' />{{else}}<span>PDF</span><i></i><i></i><i></i>{{/if}}</div><div class='about-document-card__body'><p>{{issuer}}</p><h3>{{title}}</h3><span>{{date}}</span><a href='{{href}}' target='_blank' rel='noopener noreferrer'>{{../aboutPage.certificates.openPdf}} <svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#arrow-right'></use></svg></a></div></article>{{/each}}</div>
+          {{else}}
+            <article class='about-empty-document about-empty-document--certificate' data-about-reveal>
+              <div class='about-empty-document__preview' aria-hidden='true'><span>PDF</span><i></i><i></i><i></i><b></b></div>
+              <div><p class='about-empty-document__eyebrow'>{{aboutPage.certificates.emptyNote}}</p><h3>{{aboutPage.certificates.emptyTitle}}</h3><p>{{aboutPage.certificates.emptyCopy}}</p></div>
+            </article>
+          {{/if}}
+        </div>
+      </section>
+
+      <section class='about-company section section--soft' aria-labelledby='about-company-title'>
+        <div class='container about-company__layout'>
+          <div class='about-company__copy' data-about-reveal>
+            <p class='about-kicker about-kicker--dark'>{{aboutPage.company.eyebrow}}</p>
+            <h2 id='about-company-title'>{{aboutPage.company.title}}</h2>
+            <p>{{aboutPage.company.copy}}</p>
+          </div>
+          <article class='about-company-record' data-about-reveal>
+            <div class='about-company-record__top'><span class='about-company-record__seal' aria-hidden='true'><svg class='inline-icon'><use href='/icons.svg#shield-check'></use></svg></span><p>{{aboutPage.company.recordLabel}}</p></div>
+            <dl>{{#each aboutPage.company.facts}}<div><dt>{{label}}</dt><dd>{{value}}</dd></div>{{/each}}</dl>
+            <div class='about-company-record__address'><span>{{aboutPage.company.addressLabel}}</span><strong>{{aboutPage.company.address}}</strong></div>
+            <footer><span>{{aboutPage.company.source}}</span><span>{{aboutPage.company.verification}}</span></footer>
+          </article>
+        </div>
+        <div class='container about-company__archive' data-about-reveal>
+          <div><p class='about-kicker about-kicker--dark'>{{aboutPage.company.filesTitle}}</p><p>{{aboutPage.company.filesCopy}}</p></div>
+          {{#if aboutPage.company.items}}
+            <div class='about-company__file-list'>{{#each aboutPage.company.items}}<a href='{{href}}' target='_blank' rel='noopener noreferrer'><svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#file'></use></svg><span><strong>{{title}}</strong><small>{{date}}</small></span><svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#arrow-right'></use></svg></a>{{/each}}</div>
+          {{else}}
+            <div class='about-company__file-empty'><svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#file'></use></svg><span><strong>{{aboutPage.company.emptyTitle}}</strong><small>{{aboutPage.company.emptyCopy}}</small></span></div>
+          {{/if}}
+        </div>
+      </section>
+
+      <section class='about-partners' aria-labelledby='about-partners-title'>
+        <div class='about-partners__image' aria-hidden='true'><picture><source type='image/avif' srcset='/images/process-step-installation-1024.avif 1024w, /images/process-step-installation-1600.avif 1600w' sizes='100vw' /><source type='image/webp' srcset='/images/process-step-installation-1024.webp 1024w, /images/process-step-installation-1600.webp 1600w' sizes='100vw' /><img src='/images/process-step-installation-1600.jpg' width='1600' height='900' alt='' loading='lazy' decoding='async' /></picture></div>
+        <div class='about-partners__veil' aria-hidden='true'></div>
+        <div class='container about-partners__layout'>
+          <div class='about-partners__intro' data-about-reveal>
+            <p class='about-kicker'>{{aboutPage.partners.eyebrow}}</p>
+            <h2 id='about-partners-title'>{{aboutPage.partners.title}}</h2>
+            <p>{{aboutPage.partners.copy}}</p>
+          </div>
+          {{#if aboutPage.partners.items}}
+            <div class='about-partner-list' aria-label='{{aboutPage.partners.title}}'>{{#each aboutPage.partners.items}}<article><img src='{{logo}}' alt='{{name}}' loading='lazy' /><span>{{status}}</span></article>{{/each}}</div>
+          {{else}}
+            <article class='about-partners__empty' data-about-reveal><span class='about-partners__empty-mark' aria-hidden='true'>+</span><p>{{aboutPage.partners.emptyNote}}</p><h3>{{aboutPage.partners.emptyTitle}}</h3><p>{{aboutPage.partners.emptyCopy}}</p></article>
+          {{/if}}
+        </div>
+      </section>
+
+      <section class='about-events section' aria-labelledby='about-events-title'>
+        <div class='container about-events__head' data-about-reveal>
+          <div class='about-section-intro'>
+            <p class='about-kicker about-kicker--dark'>{{aboutPage.events.eyebrow}}</p>
+            <h2 id='about-events-title'>{{aboutPage.events.title}}</h2>
+            <p>{{aboutPage.events.copy}}</p>
+          </div>
+          {{#if aboutPage.events.items}}<a class='about-text-link' href='#events-all'>{{aboutPage.events.allEvents}} <svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#arrow-right'></use></svg></a>{{/if}}
+        </div>
+        <div class='about-events__rail container' id='events-all'>
+          {{#if aboutPage.events.items}}
+            {{#each aboutPage.events.items}}<article class='about-event-card' data-about-reveal><img src='{{image}}' alt='{{alt}}' loading='lazy' /><div><span>{{date}}</span><h3>{{title}}</h3><p>{{description}}</p></div></article>{{/each}}
+          {{else}}
+            <article class='about-events__empty' data-about-reveal><div class='about-events__empty-image' aria-hidden='true'><span></span><span></span><span></span><svg class='inline-icon'><use href='/icons.svg#calendar'></use></svg></div><div><p>{{aboutPage.events.emptyMeta}}</p><h3>{{aboutPage.events.emptyTitle}}</h3><p>{{aboutPage.events.emptyCopy}}</p></div></article>
+          {{/if}}
+        </div>
+      </section>
+
+      <section class='about-cta' aria-labelledby='about-cta-title'>
+        <div class='about-cta__media' aria-hidden='true'><picture><source type='image/avif' srcset='/images/hero-time-8-1024.avif 1024w, /images/hero-time-8-1600.avif 1600w' sizes='100vw' /><source type='image/webp' srcset='/images/hero-time-8-1024.webp 1024w, /images/hero-time-8-1600.webp 1600w' sizes='100vw' /><img src='/images/hero-time-8-1600.jpg' width='1600' height='900' alt='' loading='lazy' decoding='async' /></picture></div>
+        <div class='about-cta__veil' aria-hidden='true'></div>
+        <div class='container about-cta__content' data-about-reveal>
+          <div><p class='about-kicker'>{{aboutPage.finalCta.eyebrow}}</p><h2 id='about-cta-title'>{{aboutPage.finalCta.title}}</h2><p>{{aboutPage.finalCta.copy}}</p><div class='about-cta__actions'><a class='button' href='{{calculatorHref}}'>{{aboutPage.finalCta.primary}} <svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#arrow-right'></use></svg></a><a class='button button--outline about-cta__outline' href='{{contactsHref}}'>{{aboutPage.finalCta.secondary}}</a></div></div>
+          <p class='about-cta__note'>{{#each aboutPage.finalCta.note}}<span>{{this}}</span>{{/each}}</p>
+        </div>
+      </section>
+    </main>
+    {{> site-footer}}
+    <script type='module' src='/src/main.js'></script>
+  </body>
+</html>
