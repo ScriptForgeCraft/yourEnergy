@@ -305,7 +305,6 @@
   inset: -10px 0 30px;
   display: grid;
   place-items: center;
-  transform-style: preserve-3d;
   will-change: transform, opacity;
 }
 
@@ -329,18 +328,18 @@
   height: 100%;
   display: grid;
   place-items: center;
-  transform-style: preserve-3d;
-  will-change: transform;
+  isolation: isolate;
 }
 
 .product-visual__image {
+  position: relative;
+  z-index: 1;
   width: min(96%, 490px);
   height: min(65vh, 665px);
   min-height: 480px;
   display: block;
   object-fit: contain;
   filter: drop-shadow(0 38px 38px rgb(0 0 0 / 42%));
-  transform: translateZ(24px);
   animation: equipment-float 6s ease-in-out infinite alternate;
   user-select: none;
   -webkit-user-drag: none;
@@ -349,7 +348,7 @@
 .product-hotspots {
   position: absolute;
   inset: 7% 4% 10%;
-  z-index: 3;
+  z-index: 2;
   pointer-events: none;
 }
 
@@ -1281,11 +1280,11 @@
 
 @keyframes equipment-float {
   from {
-    transform: translate3d(0, -3px, 24px);
+    transform: translateY(-3px);
   }
 
   to {
-    transform: translate3d(0, 7px, 24px);
+    transform: translateY(7px);
   }
 }
 
