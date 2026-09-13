@@ -278,7 +278,6 @@ export const initEquipmentShowroom = ({ data, copy, gsap }) => {
   const productTrack = $('[data-product-track]', root);
   const productViewport = $('[data-product-viewport]', root);
   const productVisual = $('[data-product-visual]', root);
-  const productDepth = $('[data-product-depth]', root);
   const panelContent = $('[data-panel-content]', root);
   const explorer = $('[data-product-explorer]');
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -522,34 +521,6 @@ export const initEquipmentShowroom = ({ data, copy, gsap }) => {
   explorer.addEventListener('click', (event) => {
     if (event.target === explorer) closeExplorer();
   });
-
-  if (animate && window.matchMedia('(min-width: 981px) and (pointer: fine)').matches) {
-    const moveX = gsap.quickTo(productDepth, 'x', { duration: 0.75, ease: 'power3.out' });
-    const moveY = gsap.quickTo(productDepth, 'y', { duration: 0.75, ease: 'power3.out' });
-    const rotateX = gsap.quickTo(productDepth, 'rotationX', {
-      duration: 0.8,
-      ease: 'power3.out'
-    });
-    const rotateY = gsap.quickTo(productDepth, 'rotationY', {
-      duration: 0.8,
-      ease: 'power3.out'
-    });
-    $('[data-viewer]', root).addEventListener('pointermove', (event) => {
-      const bounds = event.currentTarget.getBoundingClientRect();
-      const x = (event.clientX - bounds.left) / bounds.width - 0.5;
-      const y = (event.clientY - bounds.top) / bounds.height - 0.5;
-      moveX(x * 12);
-      moveY(y * 8);
-      rotateX(y * -3.2);
-      rotateY(x * 4.6);
-    });
-    $('[data-viewer]', root).addEventListener('pointerleave', () => {
-      moveX(0);
-      moveY(0);
-      rotateX(0);
-      rotateY(0);
-    });
-  }
 
   renderCategories();
   renderRail();
