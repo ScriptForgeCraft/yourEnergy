@@ -12,11 +12,19 @@ const BLOG_ARTICLE_SLUGS = [
   'how-to-size-solar-system',
   'net-metering-armenia'
 ];
+const PROJECT_CASE_SLUGS = ['modern-home-yerevan'];
 const blogArticleInputs = Object.fromEntries(
   BLOG_ARTICLE_SLUGS.flatMap((slug) => [
     [`blog-hy-${slug}`, resolve(root, `blog/${slug}/index.html`)],
     [`blog-ru-${slug}`, resolve(root, `ru/blog/${slug}/index.html`)],
     [`blog-en-${slug}`, resolve(root, `en/blog/${slug}/index.html`)]
+  ])
+);
+const projectCaseInputs = Object.fromEntries(
+  PROJECT_CASE_SLUGS.flatMap((slug) => [
+    [`project-case-hy-${slug}`, resolve(root, `projects/${slug}/index.html`)],
+    [`project-case-ru-${slug}`, resolve(root, `ru/projects/${slug}/index.html`)],
+    [`project-case-en-${slug}`, resolve(root, `en/projects/${slug}/index.html`)]
   ])
 );
 
@@ -110,7 +118,8 @@ export default defineConfig(({ mode }) => {
           'offer-checker-hy': resolve(root, 'offer-checker/index.html'),
           'offer-checker-ru': resolve(root, 'ru/offer-checker/index.html'),
           'offer-checker-en': resolve(root, 'en/offer-checker/index.html'),
-          ...blogArticleInputs
+          ...blogArticleInputs,
+          ...projectCaseInputs
         }
       }
     }

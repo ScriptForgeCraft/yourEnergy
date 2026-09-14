@@ -22,6 +22,7 @@ import { ARMENIA_TARIFF_DATASET } from '../src/data/tariffs/armenia.js';
 import { GENERATED_CONTENT_LOCALES } from '../src/content/schema.js';
 import { createProcessImageContext } from '../src/config/process-images.js';
 import { BLOG_COPY, getBlogPath, loadBlogArticles } from '../src/content/blog.js';
+import { PROJECT_CASES } from '../src/content/project-cases.js';
 
 const root = resolve(import.meta.dirname, '..');
 const mode = process.argv[2] ?? 'production';
@@ -49,6 +50,7 @@ const supportTemplate = await readFile(resolve(root, 'src/templates/support.hbs'
 const placeholderTemplate = await readFile(resolve(root, 'src/templates/placeholder.hbs'), 'utf8');
 const contactsTemplate = await readFile(resolve(root, 'src/templates/contacts.hbs'), 'utf8');
 const projectsTemplate = await readFile(resolve(root, 'src/templates/projects.hbs'), 'utf8');
+const projectCaseTemplate = await readFile(resolve(root, 'src/templates/project-case.hbs'), 'utf8');
 const aboutTemplate = await readFile(resolve(root, 'src/templates/about.hbs'), 'utf8');
 const blogIndexTemplate = await readFile(resolve(root, 'src/templates/blog-index.hbs'), 'utf8');
 const blogArticleTemplate = await readFile(resolve(root, 'src/templates/blog-article.hbs'), 'utf8');
@@ -77,6 +79,7 @@ const renderSupport = Handlebars.compile(supportTemplate, { noEscape: false });
 const renderPlaceholder = Handlebars.compile(placeholderTemplate, { noEscape: false });
 const renderContacts = Handlebars.compile(contactsTemplate, { noEscape: false });
 const renderProjects = Handlebars.compile(projectsTemplate, { noEscape: false });
+const renderProjectCase = Handlebars.compile(projectCaseTemplate, { noEscape: false });
 const renderAbout = Handlebars.compile(aboutTemplate, { noEscape: false });
 const renderBlogIndex = Handlebars.compile(blogIndexTemplate, { noEscape: false });
 const renderBlogArticle = Handlebars.compile(blogArticleTemplate, { noEscape: false });
@@ -158,6 +161,10 @@ const placeholderFile = (locale, type) =>
 const blogFile = (locale) => (locale === 'hy' ? 'blog/index.html' : `${locale}/blog/index.html`);
 const blogArticleFile = (locale, slug) =>
   locale === 'hy' ? `blog/${slug}/index.html` : `${locale}/blog/${slug}/index.html`;
+const projectCasePath = (locale, slug) =>
+  locale === 'hy' ? `/projects/${slug}/` : `/${locale}/projects/${slug}/`;
+const projectCaseFile = (locale, slug) =>
+  locale === 'hy' ? `projects/${slug}/index.html` : `${locale}/projects/${slug}/index.html`;
 const createToolAlternateLinks = (type) =>
   Object.freeze([
     ...GENERATED_CONTENT_LOCALES.map(({ key }) => ({
@@ -199,6 +206,21 @@ const createBlogAlternateLinks = (slug = null) =>
 const createBlogLanguageLinks = (currentLocale, slug = null) =>
   GENERATED_CONTENT_LOCALES.filter(({ key }) => key !== currentLocale).map(({ key }) => ({
     href: slug ? getBlogPath(key, slug) : placeholderPath(key, 'blog'),
+    hreflang: key,
+    label: languageLabels[key],
+    name: localizedLanguageNames[currentLocale][key]
+  }));
+const createProjectCaseAlternateLinks = (slug) =>
+  Object.freeze([
+    ...GENERATED_CONTENT_LOCALES.map(({ key }) => ({
+      hreflang: key,
+      href: `${origin}${projectCasePath(key, slug)}`
+    })),
+    { hreflang: 'x-default', href: `${origin}${projectCasePath('hy', slug)}` }
+  ]);
+const createProjectCaseLanguageLinks = (currentLocale, slug) =>
+  GENERATED_CONTENT_LOCALES.filter(({ key }) => key !== currentLocale).map(({ key }) => ({
+    href: projectCasePath(key, slug),
     hreflang: key,
     label: languageLabels[key],
     name: localizedLanguageNames[currentLocale][key]
@@ -766,6 +788,8 @@ const projectsPageCopy = Object.freeze({
   }
 });
 
+const FEATURED_PROJECT_CASE_SLUG = 'modern-home-yerevan';
+
 const createProjectsPageContext = (content) => {
   const path = placeholderPath(content.locale, 'projects');
   const base = createHomeContext(content, { pageKind: 'projects' });
@@ -784,10 +808,11 @@ const createProjectsPageContext = (content) => {
       ...copy,
       videoSrc: sameOriginPath(publicEnv.VITE_PROJECTS_HERO_VIDEO, ''),
       contactHref: base.navLinks.contacts,
+      featuredHref: projectCasePath(content.locale, FEATURED_PROJECT_CASE_SLUG),
       items: copy.gallery.map((item, index) => ({
         ...item,
         tagIcon: index === 3 ? 'chart-bars' : index === 5 ? 'leaf' : 'faq-home',
-        action: copy.featured.action,
+        action: copy.cta.secondary,
         imageAlt: `${item.title}, ${item.city}`,
         avifSrcset: `/images/${item.image}-480.avif 480w, /images/${item.image}-800.avif 800w`,
         webpSrcset: `/images/${item.image}-480.webp 480w, /images/${item.image}-800.webp 800w`,
@@ -796,6 +821,27 @@ const createProjectsPageContext = (content) => {
           value
         }))
       }))
+    }
+  };
+};
+
+const createProjectCaseContext = (content, slug) => {
+  const copy = PROJECT_CASES[slug]?.[content.locale];
+  if (!copy) throw new Error(`Missing project case content for ${slug} in ${content.locale}.`);
+  const path = projectCasePath(content.locale, slug);
+  const base = createHomeContext(content, { pageKind: 'projects' });
+
+  return {
+    ...base,
+    path,
+    meta: copy.meta,
+    activeNavigation: createHeaderNavigationState('projects'),
+    alternateLinks: createProjectCaseAlternateLinks(slug),
+    languageLinks: createProjectCaseLanguageLinks(content.locale, slug),
+    projectCase: {
+      ...copy,
+      projectsHref: placeholderPath(content.locale, 'projects'),
+      calculatorHref: toolPath(content.locale, 'calculator')
     }
   };
 };
@@ -1135,6 +1181,15 @@ for (const { key } of GENERATED_CONTENT_LOCALES) {
   const output = resolve(root, placeholderFile(key, 'projects'));
   await mkdir(dirname(output), { recursive: true });
   await writeGenerated(output, renderProjects(createProjectsPageContext(content)));
+}
+
+for (const { key } of GENERATED_CONTENT_LOCALES) {
+  const content = homeContent[key];
+  for (const slug of Object.keys(PROJECT_CASES)) {
+    const output = resolve(root, projectCaseFile(key, slug));
+    await mkdir(dirname(output), { recursive: true });
+    await writeGenerated(output, renderProjectCase(createProjectCaseContext(content, slug)));
+  }
 }
 
 for (const { key } of GENERATED_CONTENT_LOCALES) {

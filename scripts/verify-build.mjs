@@ -31,6 +31,14 @@ const projectsPages = [
   { page: 'ru/projects/index.html', locale: 'ru', type: 'projects' },
   { page: 'en/projects/index.html', locale: 'en', type: 'projects' }
 ];
+const projectCaseSlugs = ['modern-home-yerevan'];
+const projectCasePages = projectCaseSlugs.flatMap((slug) =>
+  ['hy', 'ru', 'en'].map((locale) => ({
+    page: locale === 'hy' ? `projects/${slug}/index.html` : `${locale}/projects/${slug}/index.html`,
+    locale,
+    type: `projects/${slug}`
+  }))
+);
 const blogSlugs = [
   'solar-panels-for-home-armenia',
   'solar-savings-armenia',
@@ -39,9 +47,7 @@ const blogSlugs = [
   'net-metering-armenia'
 ];
 const blogPath = (locale, slug = null) =>
-  locale === 'hy'
-    ? `/blog/${slug ? `${slug}/` : ''}`
-    : `/${locale}/blog/${slug ? `${slug}/` : ''}`;
+  locale === 'hy' ? `/blog/${slug ? `${slug}/` : ''}` : `/${locale}/blog/${slug ? `${slug}/` : ''}`;
 const blogPages = [
   ...['hy', 'ru', 'en'].map((locale) => ({
     page: locale === 'hy' ? 'blog/index.html' : `${locale}/blog/index.html`,
@@ -50,10 +56,7 @@ const blogPages = [
   })),
   ...blogSlugs.flatMap((slug) =>
     ['hy', 'ru', 'en'].map((locale) => ({
-      page:
-        locale === 'hy'
-          ? `blog/${slug}/index.html`
-          : `${locale}/blog/${slug}/index.html`,
+      page: locale === 'hy' ? `blog/${slug}/index.html` : `${locale}/blog/${slug}/index.html`,
       locale,
       slug
     }))
@@ -77,6 +80,7 @@ const expectedPages = [
   'en/privacy/index.html',
   'en/terms/index.html',
   ...projectsPages.map(({ page }) => page),
+  ...projectCasePages.map(({ page }) => page),
   ...blogPages.map(({ page }) => page),
   ...placeholderPages,
   ...faqPages.map(({ page }) => page),
@@ -555,7 +559,7 @@ async function validateSitemap() {
   const toolRoutes = toolPages.map(({ locale, type }) =>
     locale === 'hy' ? `${origin}/${type}/` : `${origin}/${locale}/${type}/`
   );
-  const projectsRoutes = projectsPages.map(({ locale, type }) =>
+  const projectsRoutes = [...projectsPages, ...projectCasePages].map(({ locale, type }) =>
     locale === 'hy' ? `${origin}/${type}/` : `${origin}/${locale}/${type}/`
   );
   const blogRoutes = blogPages.map(({ locale, slug }) => `${origin}${blogPath(locale, slug)}`);
@@ -569,12 +573,15 @@ async function validateSitemap() {
     const matchedBlogRoute = blogPages.find(
       ({ locale, slug }) => location === `${origin}${blogPath(locale, slug)}`
     );
-    const matchedPublicRoute = [...projectsPages, ...faqPages, ...toolPages].find(
-      ({ locale, type }) => {
-        const url = locale === 'hy' ? `${origin}/${type}/` : `${origin}/${locale}/${type}/`;
-        return location === url;
-      }
-    );
+    const matchedPublicRoute = [
+      ...projectsPages,
+      ...projectCasePages,
+      ...faqPages,
+      ...toolPages
+    ].find(({ locale, type }) => {
+      const url = locale === 'hy' ? `${origin}/${type}/` : `${origin}/${locale}/${type}/`;
+      return location === url;
+    });
     const expectedAlternates = matchedBlogRoute
       ? new Map([
           ['hy', `${origin}${blogPath('hy', matchedBlogRoute.slug)}`],
@@ -583,18 +590,18 @@ async function validateSitemap() {
           ['x-default', `${origin}${blogPath('hy', matchedBlogRoute.slug)}`]
         ])
       : matchedPublicRoute
-      ? new Map([
-          ['hy', `${origin}/${matchedPublicRoute.type}/`],
-          ['ru', `${origin}/ru/${matchedPublicRoute.type}/`],
-          ['en', `${origin}/en/${matchedPublicRoute.type}/`],
-          ['x-default', `${origin}/${matchedPublicRoute.type}/`]
-        ])
-      : new Map([
-          ['hy', `${origin}/`],
-          ['ru', `${origin}/ru/`],
-          ['en', `${origin}/en/`],
-          ['x-default', `${origin}/`]
-        ]);
+        ? new Map([
+            ['hy', `${origin}/${matchedPublicRoute.type}/`],
+            ['ru', `${origin}/ru/${matchedPublicRoute.type}/`],
+            ['en', `${origin}/en/${matchedPublicRoute.type}/`],
+            ['x-default', `${origin}/${matchedPublicRoute.type}/`]
+          ])
+        : new Map([
+            ['hy', `${origin}/`],
+            ['ru', `${origin}/ru/`],
+            ['en', `${origin}/en/`],
+            ['x-default', `${origin}/`]
+          ]);
     const alternates = [...entry[1].matchAll(/<xhtml:link\b[^>]*>/giu)].map((match) =>
       attrs(match[0])
     );
@@ -874,11 +881,22 @@ for (const { page, locale, type } of toolPages) {
   await validateToolSeo(pages.get(page), page, canonical, type);
   validateToolLanguageSwitcher(pages.get(page), page, locale, type);
 }
-for (const { page, locale, type } of projectsPages) {
+for (const { page, locale, type } of [...projectsPages, ...projectCasePages]) {
   if (!pages.has(page)) continue;
   const canonical = locale === 'hy' ? `${origin}/${type}/` : `${origin}/${locale}/${type}/`;
   await validateToolSeo(pages.get(page), page, canonical, type);
   validateToolLanguageSwitcher(pages.get(page), page, locale, type);
+}
+for (const { page, locale } of projectsPages) {
+  if (!pages.has(page)) continue;
+  const href =
+    locale === 'hy' ? '/projects/modern-home-yerevan/' : `/${locale}/projects/modern-home-yerevan/`;
+  const primaryLinks = tagAttributes(pages.get(page), 'a').filter((attributes) =>
+    attributes.get('class')?.split(/\s+/u).includes('projects-primary-button')
+  );
+  if (!primaryLinks.some((attributes) => attributes.get('href') === href)) {
+    fail(`${page}: featured-project CTA must point to ${href}`);
+  }
 }
 for (const { page, type } of toolPages) {
   if (!pages.has(page)) continue;
@@ -895,6 +913,7 @@ const publishedPages = new Set([
   'ru/index.html',
   'en/index.html',
   ...projectsPages.map(({ page }) => page),
+  ...projectCasePages.map(({ page }) => page),
   ...blogPages.map(({ page }) => page),
   ...faqPages.map(({ page }) => page),
   ...toolPages.map(({ page }) => page)
