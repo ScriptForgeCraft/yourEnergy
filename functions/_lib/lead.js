@@ -287,7 +287,7 @@ export const createEmailAdapter = (env, { fetchImpl = fetch } = {}) => {
             from,
             subject: 'New YourEnergy lead',
             text: leadText,
-            ...(lead.email ? { replyTo: lead.email } : {})
+            ...(lead.email ? { reply_to: lead.email } : {})
           })
         },
         {
@@ -325,10 +325,10 @@ const deliveryFailure = (results) => {
   // delivery outage after the three in-flight attempts have settled.
   const priority = [
     'REQUEST_ABORTED',
-    'LEAD_DELIVERY_NOT_CONFIGURED',
     'LEAD_DELIVERY_TIMEOUT',
     'LEAD_DELIVERY_UNAVAILABLE',
-    'LEAD_DELIVERY_REJECTED'
+    'LEAD_DELIVERY_REJECTED',
+    'LEAD_DELIVERY_NOT_CONFIGURED'
   ];
   for (const code of priority) {
     const error = errors.find((candidate) => candidate.code === code);

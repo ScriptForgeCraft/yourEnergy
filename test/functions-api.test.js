@@ -551,12 +551,16 @@ test('lead endpoint accepts the documented Cloudflare Email success response wit
     request: postJson('/lead', {
       name: 'Arman Petrosyan',
       phone: '+374 91 095950',
+      email: 'arman@example.test',
       locale: 'en'
     }),
     env: emailOnlyEnv,
-    fetch: async (url) => {
+    fetch: async (url, init) => {
       providerCalls += 1;
       assert.match(String(url), /^https:\/\/api\.cloudflare\.com\/client\/v4\/accounts\//);
+      const payload = JSON.parse(init.body);
+      assert.equal(payload.reply_to, 'arman@example.test');
+      assert.equal('replyTo' in payload, false);
       return emailSuccess();
     }
   });
@@ -569,6 +573,27 @@ test('lead endpoint accepts the documented Cloudflare Email success response wit
     delivery: { telegram: 'failed', email: 'succeeded' },
     turnstile: 'not-configured'
   });
+});
+
+test('an absent Telegram configuration does not mask an Email provider rejection', async () => {
+  const response = await leadOnRequest({
+    request: postJson('/lead', {
+      name: 'Arman Petrosyan',
+      phone: '+374 91 095950',
+      locale: 'en'
+    }),
+    env: {
+      CF_EMAIL_API_TOKEN: 'test-email-token',
+      CF_ACCOUNT_ID: 'account-id-123',
+      CONTACT_EMAIL: 'sales@yourenergy.test',
+      EMAIL_FROM: 'website@yourenergy.am'
+    },
+    fetch: async () => new Response(JSON.stringify({ success: false }), { status: 400 })
+  });
+  const body = await readJson(response);
+
+  assert.equal(response.status, 502);
+  assert.equal(body.error.code, 'LEAD_DELIVERY_REJECTED');
 });
 
 test('lead endpoint sends the same normalized Quick Calculator lead to Telegram and email', async () => {
@@ -630,7 +655,8 @@ test('lead endpoint sends the same normalized Quick Calculator lead to Telegram 
   assert.equal(emailRequest.init.headers.authorization, 'Bearer test-email-token');
   assert.equal(emailRequest.payload.to, 'sales@yourenergy.test');
   assert.equal(emailRequest.payload.from, 'website@yourenergy.am');
-  assert.equal(emailRequest.payload.replyTo, 'arman@example.test');
+  assert.equal(emailRequest.payload.reply_to, 'arman@example.test');
+  assert.equal('replyTo' in emailRequest.payload, false);
   assert.equal(emailRequest.payload.text, telegramRequests[0].payload.text);
   assert.match(emailRequest.payload.text, /Calculator context:/);
   assert.match(emailRequest.payload.text, /Please call after 18:00/);
