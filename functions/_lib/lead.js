@@ -1,16 +1,10 @@
-import {
-  configuredUrl,
-  envBoolean,
-  envString,
-  optionalSecretHeader,
-  providerTimeoutMs
-} from './config.js';
-import { ApiError } from './http.js';
+import { envBoolean, envString, providerTimeoutMs } from './config.js';
+import { ApiError, isApiError } from './http.js';
 import { fetchWithTimeout } from './provider.js';
 
 const SUPPORTED_LOCALES = new Set(['hy', 'ru', 'en']);
 const ANALYSIS_ID = /^[A-Za-z0-9_-]{1,96}$/;
-const CRM_LEAD_ID = /^[A-Za-z0-9._:-]{1,128}$/;
+const TELEGRAM_MESSAGE_LIMIT = 4_096;
 
 const normalizeText = (value) =>
   typeof value === 'string' ? value.replace(/\s+/g, ' ').trim() : '';
@@ -28,7 +22,7 @@ const oneOf = (value, values) => (values.includes(value) ? value : null);
 /**
  * Quick Calculator leads carry only the small, explicit calculation summary an
  * engineer needs. Addresses, coordinates, roof geometry, tariffs, files and
- * arbitrary client fields are deliberately excluded from the CRM payload.
+ * arbitrary client fields are deliberately excluded from delivery payloads.
  */
 const normalizeCalculatorContext = (value, locale) => {
   if (!value || typeof value !== 'object' || Array.isArray(value)) return null;
@@ -175,80 +169,204 @@ export const createTurnstileAdapter = (env, { fetchImpl = fetch } = {}) => {
   };
 };
 
-export const createCrmAdapter = (env, { fetchImpl = fetch } = {}) => {
-  const endpoint = configuredUrl(env, 'CRM_ENDPOINT', 'CRM_NOT_CONFIGURED');
-  const credential = optionalSecretHeader(env, 'CRM');
+const leadDeliveryErrorForResponse = (response) =>
+  new ApiError(
+    response.status === 429 || response.status >= 500
+      ? 'LEAD_DELIVERY_UNAVAILABLE'
+      : 'LEAD_DELIVERY_REJECTED'
+  );
+
+const hasDeliveryRecipient = (result, recipient) =>
+  [result?.delivered, result?.queued].some(
+    (recipients) => Array.isArray(recipients) && recipients.includes(recipient)
+  );
+
+const truncateTelegramMessage = (message) => {
+  const characters = Array.from(message);
+  if (characters.length <= TELEGRAM_MESSAGE_LIMIT) return message;
+  const notice = '\n\n[Message truncated; full text is in the email.]';
+  return `${characters.slice(0, TELEGRAM_MESSAGE_LIMIT - notice.length).join('')}${notice}`;
+};
+
+/**
+ * Produces one shared, plain-text representation for Telegram and email. The
+ * lead was already normalized, so it cannot add headers or arbitrary objects.
+ */
+export const formatLeadMessage = (lead) => {
+  const lines = [
+    'New YourEnergy lead',
+    '',
+    `Name: ${lead.name}`,
+    `Phone: ${lead.phone}`,
+    `Email: ${lead.email ?? 'Not provided'}`,
+    `Locale: ${lead.locale}`
+  ];
+
+  if (lead.analysisId) {
+    lines.push(`Analysis ID: ${lead.analysisId}`);
+  }
+  if (lead.calculatorContext) {
+    lines.push('', 'Calculator context:', JSON.stringify(lead.calculatorContext, null, 2));
+  }
+  if (lead.message) {
+    lines.push('', 'Message:', lead.message);
+  }
+
+  return lines.join('\n');
+};
+
+/** Telegram Bot API adapter. The bot token is never included in a client response. */
+export const createTelegramAdapter = (env, { fetchImpl = fetch } = {}) => {
+  const botToken = envString(env, 'TELEGRAM_BOT_TOKEN');
   const timeoutMs = providerTimeoutMs(env);
 
   return {
-    async submit(lead, { signal } = {}) {
-      const headers = new Headers({
-        accept: 'application/json',
-        'content-type': 'application/json'
-      });
-      if (credential) {
-        headers.set(credential.name, credential.value);
+    async send(leadText, chatId, { signal } = {}) {
+      if (!botToken || !chatId) {
+        throw new ApiError('LEAD_DELIVERY_NOT_CONFIGURED');
       }
-
-      const payload = {
-        type: 'solar-lead',
-        submittedAt: new Date().toISOString(),
-        contact: {
-          name: lead.name,
-          phone: lead.phone,
-          ...(lead.email ? { email: lead.email } : {})
-        },
-        request: {
-          locale: lead.locale,
-          ...(lead.message ? { message: lead.message } : {}),
-          ...(lead.analysisId ? { analysisId: lead.analysisId } : {}),
-          ...(lead.calculatorContext ? { calculatorContext: lead.calculatorContext } : {})
-        }
-      };
 
       const response = await fetchWithTimeout(
         fetchImpl,
-        endpoint,
-        { method: 'POST', headers, body: JSON.stringify(payload) },
+        `https://api.telegram.org/bot${encodeURIComponent(botToken)}/sendMessage`,
+        {
+          method: 'POST',
+          headers: { accept: 'application/json', 'content-type': 'application/json' },
+          body: JSON.stringify({
+            chat_id: chatId,
+            text: truncateTelegramMessage(leadText),
+            disable_web_page_preview: true
+          })
+        },
         {
           signal,
           timeoutMs,
-          timeoutCode: 'CRM_TIMEOUT',
-          unavailableCode: 'CRM_UNAVAILABLE'
+          timeoutCode: 'LEAD_DELIVERY_TIMEOUT',
+          unavailableCode: 'LEAD_DELIVERY_UNAVAILABLE'
         }
       );
 
       if (!response.ok) {
-        throw new ApiError(
-          response.status >= 500 || response.status === 429 ? 'CRM_UNAVAILABLE' : 'CRM_REJECTED'
-        );
-      }
-
-      // A webhook is allowed to return an empty response. We expose an ID only
-      // when the CRM explicitly supplied a safe value; no client-side ID is made up.
-      const contentType = response.headers.get('content-type') ?? '';
-      if (!contentType.toLowerCase().includes('application/json')) {
-        return null;
+        throw leadDeliveryErrorForResponse(response);
       }
 
       try {
-        const result = await response.json();
-        const leadId = normalizeText(result?.leadId ?? result?.id);
-        return CRM_LEAD_ID.test(leadId) ? leadId : null;
-      } catch {
-        return null;
+        if ((await response.json())?.ok !== true) {
+          throw new ApiError('LEAD_DELIVERY_REJECTED');
+        }
+      } catch (error) {
+        if (isApiError(error)) throw error;
+        throw new ApiError('LEAD_DELIVERY_REJECTED');
       }
     }
   };
 };
 
+/** Cloudflare Email Service REST adapter. */
+export const createEmailAdapter = (env, { fetchImpl = fetch } = {}) => {
+  const apiToken = envString(env, 'CF_EMAIL_API_TOKEN');
+  const accountId = envString(env, 'CF_ACCOUNT_ID');
+  const contactEmail = envString(env, 'CONTACT_EMAIL');
+  const from = envString(env, 'EMAIL_FROM');
+  const timeoutMs = providerTimeoutMs(env);
+
+  return {
+    async send(leadText, lead, { signal } = {}) {
+      if (!apiToken || !accountId || !contactEmail || !validEmail(contactEmail) || !from) {
+        throw new ApiError('LEAD_DELIVERY_NOT_CONFIGURED');
+      }
+
+      const response = await fetchWithTimeout(
+        fetchImpl,
+        `https://api.cloudflare.com/client/v4/accounts/${encodeURIComponent(accountId)}/email/sending/send`,
+        {
+          method: 'POST',
+          headers: {
+            accept: 'application/json',
+            authorization: `Bearer ${apiToken}`,
+            'content-type': 'application/json'
+          },
+          body: JSON.stringify({
+            to: contactEmail,
+            from,
+            subject: 'New YourEnergy lead',
+            text: leadText,
+            ...(lead.email ? { replyTo: lead.email } : {})
+          })
+        },
+        {
+          signal,
+          timeoutMs,
+          timeoutCode: 'LEAD_DELIVERY_TIMEOUT',
+          unavailableCode: 'LEAD_DELIVERY_UNAVAILABLE'
+        }
+      );
+
+      if (!response.ok) {
+        throw leadDeliveryErrorForResponse(response);
+      }
+
+      try {
+        const result = await response.json();
+        if (result?.success !== true || !hasDeliveryRecipient(result.result, contactEmail)) {
+          throw new ApiError('LEAD_DELIVERY_REJECTED');
+        }
+      } catch (error) {
+        if (isApiError(error)) throw error;
+        throw new ApiError('LEAD_DELIVERY_REJECTED');
+      }
+    }
+  };
+};
+
+const deliveryFailure = (results) => {
+  const errors = results
+    .filter((result) => result.status === 'rejected')
+    .map((result) => result.reason)
+    .filter(isApiError);
+
+  // Preserve an intentional browser cancellation instead of turning it into a
+  // delivery outage after the three in-flight attempts have settled.
+  const priority = [
+    'REQUEST_ABORTED',
+    'LEAD_DELIVERY_NOT_CONFIGURED',
+    'LEAD_DELIVERY_TIMEOUT',
+    'LEAD_DELIVERY_UNAVAILABLE',
+    'LEAD_DELIVERY_REJECTED'
+  ];
+  for (const code of priority) {
+    const error = errors.find((candidate) => candidate.code === code);
+    if (error) return error;
+  }
+  return new ApiError('LEAD_DELIVERY_UNAVAILABLE');
+};
+
 /**
- * Returns the honest state of the optional Turnstile adapter. A CRM success is
- * never fabricated: this function resolves only after the CRM accepted it.
+ * Attempts every mandatory delivery independently and reports success only
+ * when both Telegram chats and Cloudflare Email Service accepted the lead.
+ */
+export const deliverLead = async (lead, env, { fetchImpl = fetch, signal } = {}) => {
+  const leadText = formatLeadMessage(lead);
+  const telegram = createTelegramAdapter(env, { fetchImpl });
+  const email = createEmailAdapter(env, { fetchImpl });
+  const results = await Promise.allSettled([
+    telegram.send(leadText, envString(env, 'TELEGRAM_CHAT_ID_1'), { signal }),
+    telegram.send(leadText, envString(env, 'TELEGRAM_CHAT_ID_2'), { signal }),
+    email.send(leadText, lead, { signal })
+  ]);
+
+  if (results.some((result) => result.status === 'rejected')) {
+    throw deliveryFailure(results);
+  }
+};
+
+/**
+ * Returns the honest state of the optional Turnstile adapter. Delivery is
+ * never fabricated: this function resolves only after all required channels
+ * have accepted the same normalized lead.
  */
 export const submitLead = async (body, env, { fetchImpl = fetch, signal, remoteIp } = {}) => {
   const lead = validateLeadInput(body);
-  const crm = createCrmAdapter(env, { fetchImpl });
   const turnstile = createTurnstileAdapter(env, { fetchImpl });
   const requiresTurnstile = envBoolean(env, 'LEAD_REQUIRE_TURNSTILE');
 
@@ -260,13 +378,12 @@ export const submitLead = async (body, env, { fetchImpl = fetch, signal, remoteI
     await turnstile.verify(lead.turnstileToken, { signal, remoteIp });
   }
 
-  const leadId = await crm.submit(lead, { signal });
+  await deliverLead(lead, env, { fetchImpl, signal });
   return {
     accepted: true,
-    delivery: 'crm',
-    leadId,
+    delivery: 'telegram-and-email',
     turnstile: turnstile ? 'verified' : 'not-configured'
   };
 };
 
-export const __private__ = Object.freeze({ normalizeCalculatorContext });
+export const __private__ = Object.freeze({ normalizeCalculatorContext, truncateTelegramMessage });

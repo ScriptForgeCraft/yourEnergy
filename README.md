@@ -76,7 +76,7 @@ the same returned `SolarAnalysis`. A tariff entered from the visitor's bill is
 explicitly identified as user-provided. The server selects any temporary
 commercial price book; the client cannot submit a capex value to obtain a quote.
 
-No address is treated as geocoded. An unavailable map, PVGIS adapter or CRM
+No address is treated as geocoded. An unavailable map, PVGIS adapter or lead-delivery channel
 never falls back to a fabricated real result or delivery success. The free
 PVGIS flow is limited to the Armenia service area and reports only
 `preliminary` input-data completeness, never an exact/high roof confidence.
@@ -140,7 +140,8 @@ All endpoints are same-origin POST JSON and use the envelope
   never a roof survey, layout, price or savings claim.
 - `/api/analysis` — PVGIS yield plus server-selected temporary price-book data;
   no fabricated provider result, client capex or contractual quote.
-- `/api/lead` — submits only after a configured CRM accepts it.
+- `/api/lead` — submits only after both Telegram chats and Cloudflare Email
+  Service accept the lead.
 
 Read [functions/README.md](functions/README.md) for adapter shapes and all
 server-side bindings. Copy `functions/.dev.vars.example` to the ignored
@@ -187,7 +188,8 @@ than an unbounded provider call.
 
 `SolarPassportRepository` is a process/page-memory P1 repository. It provides
 no URL and no PDF. The lead form sends no PII to analytics; it requires a name,
-phone and consent, then shows an error until CRM configuration is present.
+phone and consent, then shows an error until all required lead-delivery
+configuration is present.
 Turnstile verification is prepared server-side and is not represented as active
 until both its widget/site key and secret have been configured.
 
@@ -196,7 +198,8 @@ until both its widget/site key and secret have been configured.
 `public/_headers` supplies CSP, no-sniff, frame, referrer and permissions
 headers. The Vite build regenerates `dist/_headers` with the explicit public
 OpenStreetMap (or approved replacement) tile origin. Provider endpoints,
-credentials, CRM credentials and Turnstile secrets are server-side only.
+credentials, Telegram and Cloudflare Email Service credentials, and Turnstile
+secrets are server-side only.
 Functions do not log address,
 coordinates or lead payloads.
 
@@ -230,7 +233,8 @@ local bindings.
 1. Bind Cloudflare KV as `PVGIS_CACHE` and configure the `PVGIS_CACHE_SALT`
    secret before enabling real PVGIS on Pages. Obtain an approved geocoder only
    if address search is deliberately enabled, plus a dated tariff
-   source/revision, CRM and Turnstile credentials. To automate actual roof
+   source/revision, Telegram, Cloudflare Email Service and Turnstile credentials.
+   To automate actual roof
    measurement, also approve an aerial/3D roof-data provider; address lookup
    and OSM alone cannot provide that. Optionally replace the public PVGIS/OSM
    fallbacks with approved server-side PVGIS and public tile providers.

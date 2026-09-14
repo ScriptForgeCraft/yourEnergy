@@ -96,22 +96,22 @@ const ERROR_DEFINITIONS = Object.freeze({
     message: 'Use a measured roof-face area for a very steep roof.',
     retryable: false
   },
-  CRM_NOT_CONFIGURED: {
+  LEAD_DELIVERY_NOT_CONFIGURED: {
     status: 503,
     message: 'Lead delivery is not configured yet.',
     retryable: false
   },
-  CRM_TIMEOUT: {
+  LEAD_DELIVERY_TIMEOUT: {
     status: 504,
     message: 'Lead delivery took too long. Try again.',
     retryable: true
   },
-  CRM_UNAVAILABLE: {
+  LEAD_DELIVERY_UNAVAILABLE: {
     status: 503,
     message: 'Lead delivery is temporarily unavailable.',
     retryable: true
   },
-  CRM_REJECTED: {
+  LEAD_DELIVERY_REJECTED: {
     status: 502,
     message: 'Lead delivery was rejected by the configured service.',
     retryable: false

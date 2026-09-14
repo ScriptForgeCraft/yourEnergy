@@ -3,7 +3,7 @@
 These Cloudflare Pages Functions are an honest server boundary for optional
 address lookup, PVGIS yield data and lead delivery. They do not log request
 payloads, fabricate a location or solar result, or acknowledge a lead before
-the configured CRM accepts it. The browser's production calculator uses a
+both configured Telegram chats and Cloudflare Email Service accept it. The browser's production calculator uses a
 manual point/coordinate flow; `/api/geocode` remains an opt-in future adapter,
 not a fallback that silently interprets an address as a property location.
 
@@ -189,11 +189,19 @@ Request:
 }
 ```
 
-The response contains `{ "data": { "accepted": true, "delivery": "crm",
-"leadId": null | "crm-id" } }` only after the configured CRM has returned a
-successful HTTP status. `leadId` is `null` unless the CRM explicitly returns a
-safe `id` or `leadId`; it is never generated in the function. No submitted
-name, phone, email, message, coordinates or provider URL is echoed back.
+The response contains `{ "data": { "accepted": true, "delivery":
+"telegram-and-email" } }` only after Telegram chat #1, Telegram chat #2 and
+Cloudflare Email Service have each accepted the normalized lead. All three
+attempts start independently and settle before an error is returned; a failure
+in any required channel never yields a false delivery success. No submitted
+name, phone, email, message, calculator context, coordinates or provider URL
+is echoed back.
+
+Each channel receives the same readable plain-text lead containing name, phone,
+email (or `Not provided`), locale, optional message and the strictly normalized
+Quick Calculator context. The email is sent from `EMAIL_FROM` (set this to
+`website@yourenergy.am`) to the confirmed `CONTACT_EMAIL`; a submitted client
+email is used only as `Reply-To`.
 
 ## Cloudflare configuration
 
@@ -230,8 +238,12 @@ Set these in the Cloudflare dashboard / `wrangler secret put`, never in
 | `PVGIS_CACHE`                                                              | `/api/quick-analysis`, `/api/potential`, `/api/analysis` | Cloudflare KV namespace binding. It is mandatory; use exactly this binding name.                                                                    |
 | `PVGIS_CACHE_SALT`                                                         | `/api/quick-analysis`, `/api/potential`, `/api/analysis` | Secret used only to salt cache keys. Never expose it in `VITE_*`, logs or source control.                                                           |
 | `PVGIS_ENDPOINT`                                                           | Optional override                                        | HTTPS PVGIS `PVcalc` endpoint. If absent, the Function uses the documented public PVGIS endpoint server-side; no URL or key is sent by the browser. |
-| `CRM_ENDPOINT`                                                             | `/api/lead`                                              | HTTPS CRM/webhook endpoint. A missing value produces `CRM_NOT_CONFIGURED`, never a false success.                                                   |
-| `CRM_API_KEY`                                                              | Optional                                                 | Sent server-to-server using `CRM_API_KEY_HEADER` / `CRM_API_KEY_PREFIX`.                                                                            |
+| `TELEGRAM_BOT_TOKEN`                                                       | `/api/lead`                                              | Telegram bot token used only by the Function to call `sendMessage`.                                                                                 |
+| `TELEGRAM_CHAT_ID_1` / `TELEGRAM_CHAT_ID_2`                                | `/api/lead`                                              | The two mandatory Telegram chat IDs. The bot must have permission to post in both.                                                                  |
+| `CF_EMAIL_API_TOKEN`                                                       | `/api/lead`                                              | Cloudflare API token with Email Sending permission. Never expose it to the browser.                                                                 |
+| `CF_ACCOUNT_ID`                                                            | `/api/lead`                                              | Cloudflare account ID used with the Email Service REST endpoint.                                                                                    |
+| `CONTACT_EMAIL`                                                            | `/api/lead`                                              | Required, confirmed Email Service destination for lead notifications.                                                                               |
+| `EMAIL_FROM`                                                               | `/api/lead`                                              | Required verified sending address; set to `website@yourenergy.am`.                                                                                  |
 | `TURNSTILE_SECRET_KEY`                                                     | Optional                                                 | Enables server verification. When set, a token is required for each lead.                                                                           |
 | `LEAD_REQUIRE_TURNSTILE`                                                   | Optional                                                 | Set to `true` to reject leads until Turnstile is configured. Default is `false`.                                                                    |
 | `API_FETCH_TIMEOUT_MS`                                                     | Optional                                                 | Server fetch timeout, clamped to 5–20 seconds; default 12 seconds. Values below 5 seconds are raised because a valid PVGIS request can take longer. |
@@ -255,7 +267,8 @@ Potential and analysis: `PVGIS_NOT_CONFIGURED`, `PVGIS_TIMEOUT`,
 `PVGIS_CACHE_NOT_CONFIGURED`, `PVGIS_CACHE_UNAVAILABLE`,
 `OUTSIDE_SERVICE_AREA`, `ROOF_AREA_REQUIRES_MEASURED_PLANE`.
 
-Lead: `CRM_NOT_CONFIGURED`, `CRM_TIMEOUT`, `CRM_UNAVAILABLE`, `CRM_REJECTED`,
+Lead: `LEAD_DELIVERY_NOT_CONFIGURED`, `LEAD_DELIVERY_TIMEOUT`,
+`LEAD_DELIVERY_UNAVAILABLE`, `LEAD_DELIVERY_REJECTED`,
 `TURNSTILE_NOT_CONFIGURED`, `BOT_VERIFICATION_REQUIRED`,
 `BOT_VERIFICATION_FAILED`, `BOT_VERIFICATION_UNAVAILABLE`.
 

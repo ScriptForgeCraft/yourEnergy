@@ -1,7 +1,7 @@
 # YOURENERGY production checklist
 
 Run these checks in the Cloudflare Pages dashboard and on the deployed custom
-domain. Do not put any secret, KV identifier, CRM credential or provider key in
+domain. Do not put any secret, KV identifier, Telegram token, Email Service credential or provider key in
 the repository or a `VITE_*` variable.
 
 ## PVGIS cache
@@ -29,13 +29,18 @@ the repository or a `VITE_*` variable.
 
 ## Optional lead delivery
 
-- [ ] Before enabling the Quick “Get a proposal” form for real leads, configure
-      an HTTPS `CRM_ENDPOINT` and test that it accepts a lead.
+- [ ] Before enabling the Quick “Get a proposal” form for real leads, set
+      `TELEGRAM_BOT_TOKEN`, `TELEGRAM_CHAT_ID_1`, `TELEGRAM_CHAT_ID_2`,
+      `CF_EMAIL_API_TOKEN`, `CF_ACCOUNT_ID`, `CONTACT_EMAIL` and
+      `EMAIL_FROM=website@yourenergy.am` as Pages secrets/variables. Confirm
+      the bot can post to both chats and `CONTACT_EMAIL` is a confirmed
+      Cloudflare Email Service destination.
 - [ ] If Turnstile is required, configure both its public integration and the
       server-side secret before setting `LEAD_REQUIRE_TURNSTILE=true`.
-- [ ] Verify the CRM receives only the lead contact details and the permitted
-      calculation summary; it must not receive an address, coordinates, roof
-      polygon, tariff or uploaded bill file.
+- [ ] Submit one test lead and confirm the same normalized details arrive in
+      both Telegram chats and email. It must contain only lead contact details
+      and the permitted calculation summary—never an address, coordinates,
+      roof polygon, tariff or uploaded bill file.
 
 ## Commercial data renewal
 

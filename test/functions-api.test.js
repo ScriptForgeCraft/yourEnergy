@@ -490,7 +490,32 @@ test('API endpoint wrapper has a single JSON envelope for methods and content ty
   assert.equal(optionsResponse.headers.get('allow'), 'POST, OPTIONS');
 });
 
-test('lead endpoint never reports delivery success without CRM configuration', async () => {
+const leadDeliveryEnv = Object.freeze({
+  TELEGRAM_BOT_TOKEN: 'test-bot-token',
+  TELEGRAM_CHAT_ID_1: '-100000000001',
+  TELEGRAM_CHAT_ID_2: '-100000000002',
+  CF_EMAIL_API_TOKEN: 'test-email-token',
+  CF_ACCOUNT_ID: 'account-id-123',
+  CONTACT_EMAIL: 'sales@yourenergy.test',
+  EMAIL_FROM: 'website@yourenergy.am'
+});
+
+const telegramSuccess = () =>
+  new Response(JSON.stringify({ ok: true, result: { message_id: 42 } }), {
+    headers: { 'content-type': 'application/json' }
+  });
+
+const emailSuccess = () =>
+  new Response(
+    JSON.stringify({
+      success: true,
+      errors: [],
+      result: { delivered: ['sales@yourenergy.test'], queued: [] }
+    }),
+    { headers: { 'content-type': 'application/json' } }
+  );
+
+test('lead endpoint never reports delivery success without all delivery configuration', async () => {
   const response = await leadOnRequest({
     request: postJson('/lead', {
       name: 'Arman Petrosyan',
@@ -506,7 +531,7 @@ test('lead endpoint never reports delivery success without CRM configuration', a
   assert.deepEqual(body, {
     ok: false,
     error: {
-      code: 'CRM_NOT_CONFIGURED',
+      code: 'LEAD_DELIVERY_NOT_CONFIGURED',
       message: 'Lead delivery is not configured yet.',
       retryable: false
     }
@@ -514,12 +539,13 @@ test('lead endpoint never reports delivery success without CRM configuration', a
   assert.equal(body.data, undefined);
 });
 
-test('lead endpoint forwards a strictly limited Quick Calculator summary after CRM acceptance', async () => {
-  let received = null;
+test('lead endpoint sends the same normalized Quick Calculator lead to both Telegram chats and email', async () => {
+  const received = [];
   const response = await leadOnRequest({
     request: postJson('/lead', {
       name: 'Arman Petrosyan',
       phone: '+374 91 095950',
+      email: 'arman@example.test',
       message: 'Please call after 18:00',
       locale: 'ru-RU',
       calculatorContext: {
@@ -536,32 +562,104 @@ test('lead endpoint forwards a strictly limited Quick Calculator summary after C
         tariff: 45
       }
     }),
-    env: { CRM_ENDPOINT: 'https://crm.example/leads' },
-    fetch: async (_url, init) => {
-      received = JSON.parse(init.body);
-      return new Response(JSON.stringify({ id: 'crm-42' }), {
-        headers: { 'content-type': 'application/json' }
-      });
+    env: leadDeliveryEnv,
+    fetch: async (url, init) => {
+      received.push({ url: String(url), init, payload: JSON.parse(init.body) });
+      return String(url).startsWith('https://api.telegram.org/')
+        ? telegramSuccess()
+        : emailSuccess();
     }
   });
   const body = await readJson(response);
 
   assert.equal(response.status, 200);
-  assert.equal(body.data.accepted, true);
-  assert.equal(body.data.leadId, 'crm-42');
-  assert.deepEqual(received.contact, { name: 'Arman Petrosyan', phone: '+374 91 095950' });
-  assert.deepEqual(received.request.calculatorContext, {
-    locale: 'ru',
-    region: 'yerevan',
-    consumption: { mode: 'usage', averageMonthlyKwh: 850, annualKwh: 10_200 },
-    selectedScenario: 'balanced',
-    capacityKwp: 6.96,
-    annualGenerationKwh: 10_440,
-    budgetRangeAmd: { p25: 2_000_000, p50: 2_100_000, p75: 2_200_000 },
-    source: 'PVGIS',
-    scope: 'regional-preliminary'
+  assert.deepEqual(body.data, {
+    accepted: true,
+    delivery: 'telegram-and-email',
+    turnstile: 'not-configured'
   });
-  assert.equal('coordinates' in received.request.calculatorContext, false);
-  assert.equal('roof' in received.request.calculatorContext, false);
-  assert.equal('tariff' in received.request.calculatorContext, false);
+  assert.equal(received.length, 3);
+
+  const telegramRequests = received.filter(({ url }) =>
+    url.startsWith('https://api.telegram.org/')
+  );
+  assert.equal(telegramRequests.length, 2);
+  assert.deepEqual(
+    telegramRequests.map(({ payload }) => payload.chat_id),
+    [leadDeliveryEnv.TELEGRAM_CHAT_ID_1, leadDeliveryEnv.TELEGRAM_CHAT_ID_2]
+  );
+  assert.ok(
+    telegramRequests.every(({ payload }) => payload.text === telegramRequests[0].payload.text)
+  );
+  assert.match(telegramRequests[0].payload.text, /Name: Arman Petrosyan/);
+  assert.match(telegramRequests[0].payload.text, /Phone: \+374 91 095950/);
+  assert.match(telegramRequests[0].payload.text, /Email: arman@example\.test/);
+  assert.match(telegramRequests[0].payload.text, /Locale: ru/);
+
+  const emailRequest = received.find(({ url }) => url.startsWith('https://api.cloudflare.com/'));
+  assert.equal(
+    emailRequest.url,
+    'https://api.cloudflare.com/client/v4/accounts/account-id-123/email/sending/send'
+  );
+  assert.equal(emailRequest.init.headers.authorization, 'Bearer test-email-token');
+  assert.equal(emailRequest.payload.to, 'sales@yourenergy.test');
+  assert.equal(emailRequest.payload.from, 'website@yourenergy.am');
+  assert.equal(emailRequest.payload.replyTo, 'arman@example.test');
+  assert.equal(emailRequest.payload.text, telegramRequests[0].payload.text);
+  assert.match(emailRequest.payload.text, /Calculator context:/);
+  assert.match(emailRequest.payload.text, /Please call after 18:00/);
+  assert.equal(emailRequest.payload.text.includes('coordinates'), false);
+  assert.equal(emailRequest.payload.text.includes('"roof"'), false);
+  assert.equal(emailRequest.payload.text.includes('"tariff"'), false);
+  assert.match(emailRequest.payload.text, /"region": "yerevan"/);
+  assert.match(emailRequest.payload.text, /"annualGenerationKwh": 10440/);
+});
+
+test('lead delivery waits for the other required channels after a Telegram rejection', async () => {
+  const received = [];
+  const pending = [];
+  let responseSettled = false;
+  const responsePromise = leadOnRequest({
+    request: postJson('/lead', {
+      name: 'Arman Petrosyan',
+      phone: '+374 91 095950',
+      locale: 'hy'
+    }),
+    env: leadDeliveryEnv,
+    fetch: (url, init) => {
+      const request = { url: String(url), init, payload: JSON.parse(init.body) };
+      received.push(request);
+      if (request.payload.chat_id === leadDeliveryEnv.TELEGRAM_CHAT_ID_1) {
+        return Promise.resolve(new Response(JSON.stringify({ ok: false }), { status: 400 }));
+      }
+      return new Promise((resolve) => pending.push({ request, resolve }));
+    }
+  });
+  responsePromise.then(() => {
+    responseSettled = true;
+  });
+
+  await new Promise((resolve) => setTimeout(resolve, 0));
+  assert.equal(received.length, 3);
+  assert.equal(responseSettled, false);
+  assert.equal(pending.length, 2);
+
+  for (const { request, resolve } of pending) {
+    resolve(
+      request.url.startsWith('https://api.cloudflare.com/') ? emailSuccess() : telegramSuccess()
+    );
+  }
+
+  const response = await responsePromise;
+  const body = await readJson(response);
+  assert.equal(response.status, 502);
+  assert.deepEqual(body, {
+    ok: false,
+    error: {
+      code: 'LEAD_DELIVERY_REJECTED',
+      message: 'Lead delivery was rejected by the configured service.',
+      retryable: false
+    }
+  });
+  assert.equal(body.data, undefined);
 });

@@ -12,10 +12,15 @@ GEOCODING_API_KEY=
 GEOCODING_API_KEY_HEADER=authorization
 GEOCODING_API_KEY_PREFIX=Bearer 
 PVGIS_ENDPOINT=
-CRM_ENDPOINT=
-CRM_API_KEY=
-CRM_API_KEY_HEADER=authorization
-CRM_API_KEY_PREFIX=Bearer 
+# Required for /api/lead. Keep all values server-side; use an API token with
+# Cloudflare Email Sending permission and a verified CONTACT_EMAIL destination.
+TELEGRAM_BOT_TOKEN=
+TELEGRAM_CHAT_ID_1=
+TELEGRAM_CHAT_ID_2=
+CF_EMAIL_API_TOKEN=
+CF_ACCOUNT_ID=
+CONTACT_EMAIL=
+EMAIL_FROM=website@yourenergy.am
 TURNSTILE_SECRET_KEY=
 LEAD_REQUIRE_TURNSTILE=false
 API_FETCH_TIMEOUT_MS=8000
