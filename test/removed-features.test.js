@@ -51,7 +51,7 @@ test('page generator only emits useful support routes', async () => {
   assert.doesNotMatch(generator, /soon/iu);
 });
 
-test('featured project CTA generates a local project case route', async () => {
+test('every project CTA generates a local project case route', async () => {
   const [generator, projectsTemplate, projectCaseTemplate] = await Promise.all([
     source('scripts/generate-pages.mjs'),
     source('src/templates/projects.hbs'),
@@ -61,9 +61,14 @@ test('featured project CTA generates a local project case route', async () => {
   assert.match(generator, /const FEATURED_PROJECT_CASE_SLUG = 'modern-home-yerevan'/u);
   assert.match(
     generator,
+    /href: projectCasePath\(content\.locale, GALLERY_PROJECT_CASE_SLUGS\[index\]\)/u
+  );
+  assert.match(
+    generator,
     /featuredHref: projectCasePath\(content\.locale, FEATURED_PROJECT_CASE_SLUG\)/u
   );
   assert.match(projectsTemplate, /href='\{\{projectsPage\.featuredHref\}\}'/u);
+  assert.match(projectsTemplate, /href='\{\{href\}\}'/u);
   assert.match(projectCaseTemplate, /\{\{> site-header\}\}/u);
   assert.match(projectCaseTemplate, /\{\{> site-footer\}\}/u);
 });

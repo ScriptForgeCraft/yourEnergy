@@ -160,3 +160,17 @@ const modernHomeYerevan = Object.freeze({
 export const PROJECT_CASES = Object.freeze({
   'modern-home-yerevan': modernHomeYerevan
 });
+
+export const GALLERY_PROJECT_CASE_SLUGS = Object.freeze([
+  'country-house-kotayk',
+  'office-building-yerevan',
+  'education-centre-yerevan',
+  'production-facility-armavir',
+  'mountain-home-dilijan',
+  'agricultural-site-armavir'
+]);
+
+export const PROJECT_CASE_SLUGS = Object.freeze([
+  ...Object.keys(PROJECT_CASES),
+  ...GALLERY_PROJECT_CASE_SLUGS
+]);

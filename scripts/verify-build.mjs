@@ -31,7 +31,15 @@ const projectsPages = [
   { page: 'ru/projects/index.html', locale: 'ru', type: 'projects' },
   { page: 'en/projects/index.html', locale: 'en', type: 'projects' }
 ];
-const projectCaseSlugs = ['modern-home-yerevan'];
+const projectCaseSlugs = [
+  'modern-home-yerevan',
+  'country-house-kotayk',
+  'office-building-yerevan',
+  'education-centre-yerevan',
+  'production-facility-armavir',
+  'mountain-home-dilijan',
+  'agricultural-site-armavir'
+];
 const projectCasePages = projectCaseSlugs.flatMap((slug) =>
   ['hy', 'ru', 'en'].map((locale) => ({
     page: locale === 'hy' ? `projects/${slug}/index.html` : `${locale}/projects/${slug}/index.html`,
@@ -889,13 +897,24 @@ for (const { page, locale, type } of [...projectsPages, ...projectCasePages]) {
 }
 for (const { page, locale } of projectsPages) {
   if (!pages.has(page)) continue;
-  const href =
+  const featuredHref =
     locale === 'hy' ? '/projects/modern-home-yerevan/' : `/${locale}/projects/modern-home-yerevan/`;
   const primaryLinks = tagAttributes(pages.get(page), 'a').filter((attributes) =>
     attributes.get('class')?.split(/\s+/u).includes('projects-primary-button')
   );
-  if (!primaryLinks.some((attributes) => attributes.get('href') === href)) {
-    fail(`${page}: featured-project CTA must point to ${href}`);
+  if (!primaryLinks.some((attributes) => attributes.get('href') === featuredHref)) {
+    fail(`${page}: featured-project CTA must point to ${featuredHref}`);
+  }
+  const expectedGalleryHrefs = projectCaseSlugs
+    .filter((slug) => slug !== 'modern-home-yerevan')
+    .map((slug) => (locale === 'hy' ? `/projects/${slug}/` : `/${locale}/projects/${slug}/`));
+  const galleryLinks = tagAttributes(pages.get(page), 'a').filter((attributes) =>
+    attributes.get('class')?.split(/\s+/u).includes('projects-card__link')
+  );
+  for (const href of expectedGalleryHrefs) {
+    if (!galleryLinks.some((attributes) => attributes.get('href') === href)) {
+      fail(`${page}: project-card link must point to ${href}`);
+    }
   }
 }
 for (const { page, type } of toolPages) {

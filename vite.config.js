@@ -12,7 +12,15 @@ const BLOG_ARTICLE_SLUGS = [
   'how-to-size-solar-system',
   'net-metering-armenia'
 ];
-const PROJECT_CASE_SLUGS = ['modern-home-yerevan'];
+const PROJECT_CASE_SLUGS = [
+  'modern-home-yerevan',
+  'country-house-kotayk',
+  'office-building-yerevan',
+  'education-centre-yerevan',
+  'production-facility-armavir',
+  'mountain-home-dilijan',
+  'agricultural-site-armavir'
+];
 const blogArticleInputs = Object.fromEntries(
   BLOG_ARTICLE_SLUGS.flatMap((slug) => [
     [`blog-hy-${slug}`, resolve(root, `blog/${slug}/index.html`)],

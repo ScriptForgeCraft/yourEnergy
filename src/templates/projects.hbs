@@ -90,7 +90,7 @@
           <div class='projects-card-grid'>{{#each projectsPage.items}}
             <article class='projects-card'>
               <div class='projects-card__media'><picture><source type='image/avif' srcset='{{avifSrcset}}' sizes='(max-width: 640px) 100vw, (max-width: 960px) 50vw, 33vw' /><source type='image/webp' srcset='{{webpSrcset}}' sizes='(max-width: 640px) 100vw, (max-width: 960px) 50vw, 33vw' /><img src='/images/{{image}}-800.jpg' width='800' height='533' alt='{{imageAlt}}' loading='lazy' decoding='async' /></picture><span class='projects-project-tag'><svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#{{tagIcon}}'></use></svg>{{tag}}</span></div>
-              <div class='projects-card__body'><div><h3>{{title}}</h3><p class='projects-location'><svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#map-pin'></use></svg>{{city}}</p></div><a class='projects-card__link' href='{{../projectsPage.contactHref}}' aria-label='{{action}}: {{title}}'><svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#arrow-right'></use></svg></a></div>
+              <div class='projects-card__body'><div><h3>{{title}}</h3><p class='projects-location'><svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#map-pin'></use></svg>{{city}}</p></div><a class='projects-card__link' href='{{href}}' aria-label='{{action}}: {{title}}'><svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#arrow-right'></use></svg></a></div>
               <ul class='projects-card__metrics' role='list'>{{#each metrics}}<li><svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#{{icon}}'></use></svg><b>{{value}}</b></li>{{/each}}</ul>
             </article>
           {{/each}}</div>

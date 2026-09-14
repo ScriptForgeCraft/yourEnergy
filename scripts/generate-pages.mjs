@@ -22,7 +22,11 @@ import { ARMENIA_TARIFF_DATASET } from '../src/data/tariffs/armenia.js';
 import { GENERATED_CONTENT_LOCALES } from '../src/content/schema.js';
 import { createProcessImageContext } from '../src/config/process-images.js';
 import { BLOG_COPY, getBlogPath, loadBlogArticles } from '../src/content/blog.js';
-import { PROJECT_CASES } from '../src/content/project-cases.js';
+import {
+  GALLERY_PROJECT_CASE_SLUGS,
+  PROJECT_CASES,
+  PROJECT_CASE_SLUGS
+} from '../src/content/project-cases.js';
 
 const root = resolve(import.meta.dirname, '..');
 const mode = process.argv[2] ?? 'production';
@@ -789,6 +793,116 @@ const projectsPageCopy = Object.freeze({
 });
 
 const FEATURED_PROJECT_CASE_SLUG = 'modern-home-yerevan';
+const galleryProjectCaseCopy = Object.freeze({
+  ru: {
+    eyebrow: 'РЕАЛИЗОВАННЫЙ ПРОЕКТ',
+    metaDescription: 'Карточка проекта YOURENERGY',
+    intro:
+      'В публичной карточке объекта указаны категория, локация и показатели ниже. Данные о конкретных моделях оборудования в доступном каталоге не опубликованы.',
+    photoCaption: 'Опубликованная фотография объекта',
+    metricsTitle: 'Опубликованные показатели',
+    recordsTitle: 'Техническая карточка объекта',
+    records: [
+      {
+        label: 'Модули и количество',
+        value: 'Не опубликовано',
+        note: 'Марка, модель, номинальная мощность и число панелей в публичной записи не указаны.'
+      },
+      {
+        label: 'Инвертор',
+        value: 'Не опубликовано',
+        note: 'Марка и модель инвертора в публичной записи не указаны.'
+      },
+      {
+        label: 'Год установки',
+        value: 'Не опубликовано',
+        note: 'Дата монтажа и ввода в эксплуатацию в публичной записи не указана.'
+      },
+      {
+        label: 'Источник годовой выработки',
+        value: 'Не опубликовано',
+        note: 'Годовой показатель опубликован в каталоге, но без ссылки на расчёт PVGIS или данные мониторинга.'
+      }
+    ],
+    disclosureTitle: 'О данных проекта',
+    disclosure:
+      'Показатели выше опубликованы в каталоге проектов YOURENERGY. В текущих публичных материалах нет источника и даты их измерения, поэтому годовая выработка не обозначается как PVGIS-расчёт или фактическая генерация.',
+    back: 'Все проекты',
+    calculatorAction: 'Рассчитать свой проект'
+  },
+  hy: {
+    eyebrow: 'ԻՐԱԿԱՆԱՑՎԱԾ ՆԱԽԱԳԻԾ',
+    metaDescription: 'YOURENERGY նախագծի քարտ',
+    intro:
+      'Օբյեկտի հրապարակային քարտում նշված են կատեգորիան, տեղադրությունը և ստորև ներկայացված ցուցանիշները։ Հասանելի կատալոգում սարքավորումների կոնկրետ մոդելները հրապարակված չեն։',
+    photoCaption: 'Օբյեկտի հրապարակված լուսանկարը',
+    metricsTitle: 'Հրապարակված ցուցանիշներ',
+    recordsTitle: 'Օբյեկտի տեխնիկական քարտ',
+    records: [
+      {
+        label: 'Մոդուլներ և քանակ',
+        value: 'Չի հրապարակվել',
+        note: 'Ապրանքանիշը, մոդելը, անվանական հզորությունը և վահանակների քանակը հրապարակային գրառման մեջ նշված չեն։'
+      },
+      {
+        label: 'Ինվերտոր',
+        value: 'Չի հրապարակվել',
+        note: 'Ինվերտորի ապրանքանիշն ու մոդելը հրապարակային գրառման մեջ նշված չեն։'
+      },
+      {
+        label: 'Տեղադրման տարի',
+        value: 'Չի հրապարակվել',
+        note: 'Տեղադրման և շահագործման հանձնման ամսաթիվը հրապարակային գրառման մեջ նշված չէ։'
+      },
+      {
+        label: 'Տարեկան արտադրության աղբյուր',
+        value: 'Չի հրապարակվել',
+        note: 'Տարեկան ցուցանիշը հրապարակված է կատալոգում, բայց առանց PVGIS հաշվարկի կամ մոնիթորինգի տվյալների հղման։'
+      }
+    ],
+    disclosureTitle: 'Նախագծի տվյալների մասին',
+    disclosure:
+      'Վերոնշյալ ցուցանիշները հրապարակված են YOURENERGY նախագծերի կատալոգում։ Ընթացիկ հրապարակային նյութերը չեն պարունակում դրանց չափման աղբյուրն ու ամսաթիվը, ուստի տարեկան արտադրությունը չի ներկայացվում որպես PVGIS հաշվարկ կամ փաստացի գեներացիա։',
+    back: 'Բոլոր նախագծերը',
+    calculatorAction: 'Հաշվարկել իմ նախագիծը'
+  },
+  en: {
+    eyebrow: 'COMPLETED PROJECT',
+    metaDescription: 'YOURENERGY project record',
+    intro:
+      'The public project card provides the category, location and results below. Specific equipment models are not published in the available catalogue.',
+    photoCaption: 'Published photograph of the site',
+    metricsTitle: 'Published results',
+    recordsTitle: 'Technical project record',
+    records: [
+      {
+        label: 'Modules and quantity',
+        value: 'Not published',
+        note: 'The panel brand, model, rated output and quantity are not stated in the public record.'
+      },
+      {
+        label: 'Inverter',
+        value: 'Not published',
+        note: 'The inverter brand and model are not stated in the public record.'
+      },
+      {
+        label: 'Installation year',
+        value: 'Not published',
+        note: 'The installation and commissioning date is not stated in the public record.'
+      },
+      {
+        label: 'Annual-production source',
+        value: 'Not published',
+        note: 'The annual figure is published in the catalogue without a link to a PVGIS calculation or monitoring data.'
+      }
+    ],
+    disclosureTitle: 'About the project data',
+    disclosure:
+      'The figures above are published in the YOURENERGY projects catalogue. The available public material does not provide a source or measurement date, so annual production is not labelled as a PVGIS estimate or measured generation.',
+    back: 'All projects',
+    calculatorAction: 'Estimate my project'
+  }
+});
 
 const createProjectsPageContext = (content) => {
   const path = placeholderPath(content.locale, 'projects');
@@ -812,7 +926,8 @@ const createProjectsPageContext = (content) => {
       items: copy.gallery.map((item, index) => ({
         ...item,
         tagIcon: index === 3 ? 'chart-bars' : index === 5 ? 'leaf' : 'faq-home',
-        action: copy.cta.secondary,
+        action: copy.featured.action,
+        href: projectCasePath(content.locale, GALLERY_PROJECT_CASE_SLUGS[index]),
         imageAlt: `${item.title}, ${item.city}`,
         avifSrcset: `/images/${item.image}-480.avif 480w, /images/${item.image}-800.avif 800w`,
         webpSrcset: `/images/${item.image}-480.webp 480w, /images/${item.image}-800.webp 800w`,
@@ -826,7 +941,33 @@ const createProjectsPageContext = (content) => {
 };
 
 const createProjectCaseContext = (content, slug) => {
-  const copy = PROJECT_CASES[slug]?.[content.locale];
+  const galleryCaseIndex = GALLERY_PROJECT_CASE_SLUGS.indexOf(slug);
+  const galleryItem =
+    galleryCaseIndex === -1 ? null : projectsPageCopy[content.locale]?.gallery[galleryCaseIndex];
+  const galleryCopy = galleryProjectCaseCopy[content.locale];
+  const copy =
+    PROJECT_CASES[slug]?.[content.locale] ??
+    (galleryItem && galleryCopy
+      ? {
+          ...galleryCopy,
+          slug,
+          meta: {
+            title: `${galleryItem.title} | YOURENERGY`,
+            description: `${galleryCopy.metaDescription}: ${galleryItem.title}.`,
+            ogTitle: `${galleryItem.title} | YOURENERGY`,
+            ogDescription: galleryCopy.intro
+          },
+          category: galleryItem.tag,
+          location: galleryItem.city,
+          title: galleryItem.title,
+          image: galleryItem.image,
+          imageAlt: `${galleryItem.title}, ${galleryItem.city}`,
+          metrics: projectsPageCopy[content.locale].featured.metrics.map((metric, index) => ({
+            ...metric,
+            value: galleryItem.metrics[index]
+          }))
+        }
+      : null);
   if (!copy) throw new Error(`Missing project case content for ${slug} in ${content.locale}.`);
   const path = projectCasePath(content.locale, slug);
   const base = createHomeContext(content, { pageKind: 'projects' });
@@ -840,6 +981,9 @@ const createProjectCaseContext = (content, slug) => {
     languageLinks: createProjectCaseLanguageLinks(content.locale, slug),
     projectCase: {
       ...copy,
+      image: copy.image ?? 'project-arabkir',
+      avifSrcset: `/images/${copy.image ?? 'project-arabkir'}-480.avif 480w, /images/${copy.image ?? 'project-arabkir'}-800.avif 800w`,
+      webpSrcset: `/images/${copy.image ?? 'project-arabkir'}-480.webp 480w, /images/${copy.image ?? 'project-arabkir'}-800.webp 800w`,
       projectsHref: placeholderPath(content.locale, 'projects'),
       calculatorHref: toolPath(content.locale, 'calculator')
     }
@@ -1185,7 +1329,7 @@ for (const { key } of GENERATED_CONTENT_LOCALES) {
 
 for (const { key } of GENERATED_CONTENT_LOCALES) {
   const content = homeContent[key];
-  for (const slug of Object.keys(PROJECT_CASES)) {
+  for (const slug of PROJECT_CASE_SLUGS) {
     const output = resolve(root, projectCaseFile(key, slug));
     await mkdir(dirname(output), { recursive: true });
     await writeGenerated(output, renderProjectCase(createProjectCaseContext(content, slug)));
