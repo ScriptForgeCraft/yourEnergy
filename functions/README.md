@@ -189,7 +189,7 @@ Request:
 }
 ```
 
-All three attempts start independently and settle before the endpoint responds.
+Both attempts start independently and settle before the endpoint responds.
 The response is successful when at least one channel accepts the normalized
 lead, preventing a visitor from resubmitting an already received request. Its
 safe, status-only summary identifies completed attempts without exposing a
@@ -200,15 +200,14 @@ provider error, recipient, lead data or secret:
   "data": {
     "accepted": true,
     "delivery": {
-      "telegram1": "succeeded",
-      "telegram2": "failed",
+      "telegram": "succeeded",
       "email": "succeeded"
     }
   }
 }
 ```
 
-The endpoint returns an error only if all three attempts fail. No submitted
+The endpoint returns an error only if both attempts fail. No submitted
 name, phone, email, message, calculator context, coordinates or provider URL
 is echoed back in an error response.
 
@@ -254,7 +253,7 @@ Set these in the Cloudflare dashboard / `wrangler secret put`, never in
 | `PVGIS_CACHE_SALT`                                                         | `/api/quick-analysis`, `/api/potential`, `/api/analysis` | Secret used only to salt cache keys. Never expose it in `VITE_*`, logs or source control.                                                           |
 | `PVGIS_ENDPOINT`                                                           | Optional override                                        | HTTPS PVGIS `PVcalc` endpoint. If absent, the Function uses the documented public PVGIS endpoint server-side; no URL or key is sent by the browser. |
 | `TELEGRAM_BOT_TOKEN`                                                       | `/api/lead`                                              | Telegram bot token used only by the Function to call `sendMessage`.                                                                                 |
-| `TELEGRAM_CHAT_ID_1` / `TELEGRAM_CHAT_ID_2`                                | `/api/lead`                                              | The two mandatory Telegram chat IDs. The bot must have permission to post in both.                                                                  |
+| `TELEGRAM_CHAT_ID`                                                         | `/api/lead`                                              | Mandatory Telegram chat ID for the site owner. The bot must have permission to post there.                                                          |
 | `CF_EMAIL_API_TOKEN`                                                       | `/api/lead`                                              | Cloudflare API token with Email Sending permission. Never expose it to the browser.                                                                 |
 | `CF_ACCOUNT_ID`                                                            | `/api/lead`                                              | Cloudflare account ID used with the Email Service REST endpoint.                                                                                    |
 | `CONTACT_EMAIL`                                                            | `/api/lead`                                              | Required, confirmed Email Service destination for lead notifications.                                                                               |

@@ -5,7 +5,7 @@ import { fetchWithTimeout } from './provider.js';
 const SUPPORTED_LOCALES = new Set(['hy', 'ru', 'en']);
 const ANALYSIS_ID = /^[A-Za-z0-9_-]{1,96}$/;
 const TELEGRAM_MESSAGE_LIMIT = 4_096;
-const DELIVERY_CHANNELS = Object.freeze(['telegram1', 'telegram2', 'email']);
+const DELIVERY_CHANNELS = Object.freeze(['telegram', 'email']);
 
 const normalizeText = (value) =>
   typeof value === 'string' ? value.replace(/\s+/g, ' ').trim() : '';
@@ -360,8 +360,7 @@ export const deliverLead = async (lead, env, { fetchImpl = fetch, signal } = {})
   const telegram = createTelegramAdapter(env, { fetchImpl });
   const email = createEmailAdapter(env, { fetchImpl });
   const results = await Promise.allSettled([
-    telegram.send(leadText, envString(env, 'TELEGRAM_CHAT_ID_1'), { signal }),
-    telegram.send(leadText, envString(env, 'TELEGRAM_CHAT_ID_2'), { signal }),
+    telegram.send(leadText, envString(env, 'TELEGRAM_CHAT_ID'), { signal }),
     email.send(leadText, lead, { signal })
   ]);
 

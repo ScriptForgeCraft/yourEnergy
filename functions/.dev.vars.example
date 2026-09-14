@@ -15,8 +15,7 @@ PVGIS_ENDPOINT=
 # Required for /api/lead. Keep all values server-side; use an API token with
 # Cloudflare Email Sending permission and a verified CONTACT_EMAIL destination.
 TELEGRAM_BOT_TOKEN=
-TELEGRAM_CHAT_ID_1=
-TELEGRAM_CHAT_ID_2=
+TELEGRAM_CHAT_ID=
 CF_EMAIL_API_TOKEN=
 CF_ACCOUNT_ID=
 CONTACT_EMAIL=
