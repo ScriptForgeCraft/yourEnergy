@@ -7,7 +7,7 @@ const validEmail = (value) =>
 
 /**
  * Sends only the fields visitors explicitly submit. The shared lead endpoint
- * reports success only after every required server-side delivery accepts it.
+ * reports success after server-side delivery reaches at least one channel.
  */
 export const initContactForm = ({ config = {} } = {}) => {
   const form = document.querySelector('[data-contact-form]');

@@ -5,6 +5,7 @@ import { fetchWithTimeout } from './provider.js';
 const SUPPORTED_LOCALES = new Set(['hy', 'ru', 'en']);
 const ANALYSIS_ID = /^[A-Za-z0-9_-]{1,96}$/;
 const TELEGRAM_MESSAGE_LIMIT = 4_096;
+const DELIVERY_CHANNELS = Object.freeze(['telegram1', 'telegram2', 'email']);
 
 const normalizeText = (value) =>
   typeof value === 'string' ? value.replace(/\s+/g, ' ').trim() : '';
@@ -341,9 +342,18 @@ const deliveryFailure = (results) => {
   return new ApiError('LEAD_DELIVERY_UNAVAILABLE');
 };
 
+const deliverySummary = (results) =>
+  Object.fromEntries(
+    DELIVERY_CHANNELS.map((channel, index) => [
+      channel,
+      results[index]?.status === 'fulfilled' ? 'succeeded' : 'failed'
+    ])
+  );
+
 /**
- * Attempts every mandatory delivery independently and reports success only
- * when both Telegram chats and Cloudflare Email Service accepted the lead.
+ * Attempts every delivery independently. A lead is accepted as soon as at
+ * least one channel has accepted it, but Promise.allSettled still waits for
+ * every channel so the safe server-side summary is complete.
  */
 export const deliverLead = async (lead, env, { fetchImpl = fetch, signal } = {}) => {
   const leadText = formatLeadMessage(lead);
@@ -355,15 +365,17 @@ export const deliverLead = async (lead, env, { fetchImpl = fetch, signal } = {})
     email.send(leadText, lead, { signal })
   ]);
 
-  if (results.some((result) => result.status === 'rejected')) {
+  const summary = deliverySummary(results);
+  if (!results.some((result) => result.status === 'fulfilled')) {
     throw deliveryFailure(results);
   }
+  return summary;
 };
 
 /**
  * Returns the honest state of the optional Turnstile adapter. Delivery is
- * never fabricated: this function resolves only after all required channels
- * have accepted the same normalized lead.
+ * never fabricated: this function resolves only after at least one delivery
+ * channel has accepted the normalized lead and all attempts have settled.
  */
 export const submitLead = async (body, env, { fetchImpl = fetch, signal, remoteIp } = {}) => {
   const lead = validateLeadInput(body);
@@ -378,10 +390,10 @@ export const submitLead = async (body, env, { fetchImpl = fetch, signal, remoteI
     await turnstile.verify(lead.turnstileToken, { signal, remoteIp });
   }
 
-  await deliverLead(lead, env, { fetchImpl, signal });
+  const delivery = await deliverLead(lead, env, { fetchImpl, signal });
   return {
     accepted: true,
-    delivery: 'telegram-and-email',
+    delivery,
     turnstile: turnstile ? 'verified' : 'not-configured'
   };
 };

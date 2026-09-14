@@ -575,7 +575,7 @@ test('lead endpoint sends the same normalized Quick Calculator lead to both Tele
   assert.equal(response.status, 200);
   assert.deepEqual(body.data, {
     accepted: true,
-    delivery: 'telegram-and-email',
+    delivery: { telegram1: 'succeeded', telegram2: 'succeeded', email: 'succeeded' },
     turnstile: 'not-configured'
   });
   assert.equal(received.length, 3);
@@ -615,7 +615,7 @@ test('lead endpoint sends the same normalized Quick Calculator lead to both Tele
   assert.match(emailRequest.payload.text, /"annualGenerationKwh": 10440/);
 });
 
-test('lead delivery waits for the other required channels after a Telegram rejection', async () => {
+test('lead delivery accepts 2/3 channels and waits for all three attempts to settle', async () => {
   const received = [];
   const pending = [];
   let responseSettled = false;
@@ -652,6 +652,63 @@ test('lead delivery waits for the other required channels after a Telegram rejec
 
   const response = await responsePromise;
   const body = await readJson(response);
+  assert.equal(response.status, 200);
+  assert.deepEqual(body, {
+    ok: true,
+    data: {
+      accepted: true,
+      delivery: { telegram1: 'failed', telegram2: 'succeeded', email: 'succeeded' },
+      turnstile: 'not-configured'
+    }
+  });
+});
+
+test('lead delivery accepts 1/3 successful channels and returns its safe summary', async () => {
+  const received = [];
+  const response = await leadOnRequest({
+    request: postJson('/lead', {
+      name: 'Arman Petrosyan',
+      phone: '+374 91 095950',
+      locale: 'en'
+    }),
+    env: leadDeliveryEnv,
+    fetch: async (url, init) => {
+      const request = { url: String(url), payload: JSON.parse(init.body) };
+      received.push(request);
+      if (request.payload.chat_id === leadDeliveryEnv.TELEGRAM_CHAT_ID_1) {
+        return telegramSuccess();
+      }
+      return new Response(JSON.stringify({ ok: false }), { status: 400 });
+    }
+  });
+  const body = await readJson(response);
+
+  assert.equal(received.length, 3);
+  assert.equal(response.status, 200);
+  assert.deepEqual(body.data, {
+    accepted: true,
+    delivery: { telegram1: 'succeeded', telegram2: 'failed', email: 'failed' },
+    turnstile: 'not-configured'
+  });
+});
+
+test('lead delivery returns an error when no channel succeeds', async () => {
+  const received = [];
+  const response = await leadOnRequest({
+    request: postJson('/lead', {
+      name: 'Arman Petrosyan',
+      phone: '+374 91 095950',
+      locale: 'hy'
+    }),
+    env: leadDeliveryEnv,
+    fetch: async (url, init) => {
+      received.push({ url: String(url), payload: JSON.parse(init.body) });
+      return new Response(JSON.stringify({ ok: false }), { status: 400 });
+    }
+  });
+  const body = await readJson(response);
+
+  assert.equal(received.length, 3);
   assert.equal(response.status, 502);
   assert.deepEqual(body, {
     ok: false,

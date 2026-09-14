@@ -189,13 +189,28 @@ Request:
 }
 ```
 
-The response contains `{ "data": { "accepted": true, "delivery":
-"telegram-and-email" } }` only after Telegram chat #1, Telegram chat #2 and
-Cloudflare Email Service have each accepted the normalized lead. All three
-attempts start independently and settle before an error is returned; a failure
-in any required channel never yields a false delivery success. No submitted
+All three attempts start independently and settle before the endpoint responds.
+The response is successful when at least one channel accepts the normalized
+lead, preventing a visitor from resubmitting an already received request. Its
+safe, status-only summary identifies completed attempts without exposing a
+provider error, recipient, lead data or secret:
+
+```json
+{
+  "data": {
+    "accepted": true,
+    "delivery": {
+      "telegram1": "succeeded",
+      "telegram2": "failed",
+      "email": "succeeded"
+    }
+  }
+}
+```
+
+The endpoint returns an error only if all three attempts fail. No submitted
 name, phone, email, message, calculator context, coordinates or provider URL
-is echoed back.
+is echoed back in an error response.
 
 Each channel receives the same readable plain-text lead containing name, phone,
 email (or `Not provided`), locale, optional message and the strictly normalized

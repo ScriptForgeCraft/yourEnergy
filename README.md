@@ -140,8 +140,8 @@ All endpoints are same-origin POST JSON and use the envelope
   never a roof survey, layout, price or savings claim.
 - `/api/analysis` — PVGIS yield plus server-selected temporary price-book data;
   no fabricated provider result, client capex or contractual quote.
-- `/api/lead` — submits only after both Telegram chats and Cloudflare Email
-  Service accept the lead.
+- `/api/lead` — attempts both Telegram chats and Cloudflare Email Service in
+  parallel; accepts a lead after at least one channel succeeds.
 
 Read [functions/README.md](functions/README.md) for adapter shapes and all
 server-side bindings. Copy `functions/.dev.vars.example` to the ignored
