@@ -177,11 +177,6 @@ const leadDeliveryErrorForResponse = (response) =>
       : 'LEAD_DELIVERY_REJECTED'
   );
 
-const hasDeliveryRecipient = (result, recipient) =>
-  [result?.delivered, result?.queued].some(
-    (recipients) => Array.isArray(recipients) && recipients.includes(recipient)
-  );
-
 const truncateTelegramMessage = (message) => {
   const characters = Array.from(message);
   if (characters.length <= TELEGRAM_MESSAGE_LIMIT) return message;
@@ -309,7 +304,7 @@ export const createEmailAdapter = (env, { fetchImpl = fetch } = {}) => {
 
       try {
         const result = await response.json();
-        if (result?.success !== true || !hasDeliveryRecipient(result.result, contactEmail)) {
+        if (result?.success !== true) {
           throw new ApiError('LEAD_DELIVERY_REJECTED');
         }
       } catch (error) {

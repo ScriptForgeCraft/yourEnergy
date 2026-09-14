@@ -509,7 +509,8 @@ const emailSuccess = () =>
     JSON.stringify({
       success: true,
       errors: [],
-      result: { delivered: ['sales@yourenergy.test'], queued: [] }
+      messages: [],
+      result: { message_id: 'test-message-id' }
     }),
     { headers: { 'content-type': 'application/json' } }
   );
@@ -536,6 +537,38 @@ test('lead endpoint never reports delivery success without all delivery configur
     }
   });
   assert.equal(body.data, undefined);
+});
+
+test('lead endpoint accepts the documented Cloudflare Email success response without Telegram configuration', async () => {
+  const emailOnlyEnv = {
+    CF_EMAIL_API_TOKEN: 'test-email-token',
+    CF_ACCOUNT_ID: 'account-id-123',
+    CONTACT_EMAIL: 'sales@yourenergy.test',
+    EMAIL_FROM: 'website@yourenergy.am'
+  };
+  let providerCalls = 0;
+  const response = await leadOnRequest({
+    request: postJson('/lead', {
+      name: 'Arman Petrosyan',
+      phone: '+374 91 095950',
+      locale: 'en'
+    }),
+    env: emailOnlyEnv,
+    fetch: async (url) => {
+      providerCalls += 1;
+      assert.match(String(url), /^https:\/\/api\.cloudflare\.com\/client\/v4\/accounts\//);
+      return emailSuccess();
+    }
+  });
+  const body = await readJson(response);
+
+  assert.equal(providerCalls, 1);
+  assert.equal(response.status, 200);
+  assert.deepEqual(body.data, {
+    accepted: true,
+    delivery: { telegram: 'failed', email: 'succeeded' },
+    turnstile: 'not-configured'
+  });
 });
 
 test('lead endpoint sends the same normalized Quick Calculator lead to Telegram and email', async () => {
