@@ -31,7 +31,35 @@ const projectsPages = [
   { page: 'ru/projects/index.html', locale: 'ru', type: 'projects' },
   { page: 'en/projects/index.html', locale: 'en', type: 'projects' }
 ];
-const placeholderTypes = ['contacts', 'about', 'blog'];
+const blogSlugs = [
+  'solar-panels-for-home-armenia',
+  'solar-savings-armenia',
+  'do-i-need-solar-battery',
+  'how-to-size-solar-system',
+  'net-metering-armenia'
+];
+const blogPath = (locale, slug = null) =>
+  locale === 'hy'
+    ? `/blog/${slug ? `${slug}/` : ''}`
+    : `/${locale}/blog/${slug ? `${slug}/` : ''}`;
+const blogPages = [
+  ...['hy', 'ru', 'en'].map((locale) => ({
+    page: locale === 'hy' ? 'blog/index.html' : `${locale}/blog/index.html`,
+    locale,
+    slug: null
+  })),
+  ...blogSlugs.flatMap((slug) =>
+    ['hy', 'ru', 'en'].map((locale) => ({
+      page:
+        locale === 'hy'
+          ? `blog/${slug}/index.html`
+          : `${locale}/blog/${slug}/index.html`,
+      locale,
+      slug
+    }))
+  )
+];
+const placeholderTypes = ['contacts', 'about'];
 const placeholderPages = placeholderTypes.flatMap((type) => [
   `${type}/index.html`,
   `ru/${type}/index.html`,
@@ -49,6 +77,7 @@ const expectedPages = [
   'en/privacy/index.html',
   'en/terms/index.html',
   ...projectsPages.map(({ page }) => page),
+  ...blogPages.map(({ page }) => page),
   ...placeholderPages,
   ...faqPages.map(({ page }) => page),
   ...toolPages.map(({ page }) => page),
@@ -423,6 +452,66 @@ function validateToolLanguageSwitcher(html, page, currentLocale, type) {
   }
 }
 
+function validateBlogLocalizedPage(html, page, locale, slug = null) {
+  const canonical = `${origin}${blogPath(locale, slug)}`;
+  const canonicalLink = tagAttributes(html, 'link').find(
+    (attributes) => attributes.get('rel') === 'canonical'
+  );
+  if (canonicalLink?.get('href') !== canonical) fail(`${page}: canonical must be ${canonical}`);
+
+  const robots = findMeta(html, 'name', 'robots')?.get('content')?.toLowerCase() ?? '';
+  if (robots.includes('noindex')) fail(`${page}: published blog route must remain indexable`);
+  if (!findMeta(html, 'name', 'description')?.get('content')) {
+    fail(`${page}: blog route needs a meta description`);
+  }
+
+  const alternates = tagAttributes(html, 'link')
+    .filter((attributes) => attributes.get('rel') === 'alternate')
+    .map((attributes) => [attributes.get('hreflang'), attributes.get('href')]);
+  for (const [language, href] of new Map([
+    ['hy', `${origin}${blogPath('hy', slug)}`],
+    ['ru', `${origin}${blogPath('ru', slug)}`],
+    ['en', `${origin}${blogPath('en', slug)}`],
+    ['x-default', `${origin}${blogPath('hy', slug)}`]
+  ])) {
+    if (
+      !alternates.some(
+        ([actualLanguage, actualHref]) => actualLanguage === language && actualHref === href
+      )
+    ) {
+      fail(`${page}: missing hreflang ${language} => ${href}`);
+    }
+  }
+
+  const languageLinks = tagAttributes(html, 'a').filter((attributes) =>
+    attributes.get('class')?.split(/\s+/u).includes('language-link')
+  );
+  for (const language of ['hy', 'ru', 'en']) {
+    if (language === locale) continue;
+    if (
+      !languageLinks.some(
+        (attributes) =>
+          attributes.get('hreflang') === language &&
+          attributes.get('href') === blogPath(language, slug)
+      )
+    ) {
+      fail(`${page}: language switcher is missing ${language} blog route`);
+    }
+  }
+
+  if (!slug) return;
+  const nodes = getJsonLd(html, page).flatMap(flattenJsonLd);
+  const article = nodes.find((node) => includesType(node, 'Article'));
+  if (
+    !article?.headline ||
+    !article.description ||
+    article.dateModified !== '2026-09-14' ||
+    article.mainEntityOfPage?.['@id'] !== canonical
+  ) {
+    fail(`${page}: Article JSON-LD is incomplete or inconsistent`);
+  }
+}
+
 function validateNoindexLocalizedPage(html, page, locale, type) {
   const robots = findMeta(html, 'name', 'robots')?.get('content')?.toLowerCase() ?? '';
   if (!robots.includes('noindex')) fail(`${page}: noindex route must declare noindex`);
@@ -469,20 +558,31 @@ async function validateSitemap() {
   const projectsRoutes = projectsPages.map(({ locale, type }) =>
     locale === 'hy' ? `${origin}/${type}/` : `${origin}/${locale}/${type}/`
   );
-  const expected = [...homeRoutes, ...projectsRoutes, ...faqRoutes, ...toolRoutes];
+  const blogRoutes = blogPages.map(({ locale, slug }) => `${origin}${blogPath(locale, slug)}`);
+  const expected = [...homeRoutes, ...projectsRoutes, ...faqRoutes, ...toolRoutes, ...blogRoutes];
   if (locations.length !== expected.length || expected.some((url) => !locations.includes(url))) {
     fail(`sitemap must include ${expected.join(', ')}`);
   }
   const entries = [...sitemap.matchAll(/<url>([\s\S]*?)<\/url>/giu)];
   for (const entry of entries) {
     const location = entry[1].match(/<loc>([^<]+)<\/loc>/iu)?.[1]?.trim() ?? 'unknown URL';
+    const matchedBlogRoute = blogPages.find(
+      ({ locale, slug }) => location === `${origin}${blogPath(locale, slug)}`
+    );
     const matchedPublicRoute = [...projectsPages, ...faqPages, ...toolPages].find(
       ({ locale, type }) => {
         const url = locale === 'hy' ? `${origin}/${type}/` : `${origin}/${locale}/${type}/`;
         return location === url;
       }
     );
-    const expectedAlternates = matchedPublicRoute
+    const expectedAlternates = matchedBlogRoute
+      ? new Map([
+          ['hy', `${origin}${blogPath('hy', matchedBlogRoute.slug)}`],
+          ['ru', `${origin}${blogPath('ru', matchedBlogRoute.slug)}`],
+          ['en', `${origin}${blogPath('en', matchedBlogRoute.slug)}`],
+          ['x-default', `${origin}${blogPath('hy', matchedBlogRoute.slug)}`]
+        ])
+      : matchedPublicRoute
       ? new Map([
           ['hy', `${origin}/${matchedPublicRoute.type}/`],
           ['ru', `${origin}/ru/${matchedPublicRoute.type}/`],
@@ -747,6 +847,9 @@ if (pages.has('ru/index.html'))
   validateLanguageSwitcher(pages.get('ru/index.html'), 'ru/index.html', 'ru');
 if (pages.has('en/index.html'))
   validateLanguageSwitcher(pages.get('en/index.html'), 'en/index.html', 'en');
+for (const { page, locale, slug } of blogPages) {
+  if (pages.has(page)) validateBlogLocalizedPage(pages.get(page), page, locale, slug);
+}
 for (const [page, calculatorHref] of [
   ['index.html', '/calculator/'],
   ['ru/index.html', '/ru/calculator/'],
@@ -792,6 +895,7 @@ const publishedPages = new Set([
   'ru/index.html',
   'en/index.html',
   ...projectsPages.map(({ page }) => page),
+  ...blogPages.map(({ page }) => page),
   ...faqPages.map(({ page }) => page),
   ...toolPages.map(({ page }) => page)
 ]);

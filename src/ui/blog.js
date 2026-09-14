@@ -4,13 +4,16 @@ const reveal = () => {
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
   const items = [...document.querySelectorAll('[data-blog-reveal]')];
   if (!items.length) return;
-  gsap.set(items, { autoAlpha: 0, y: 18 });
   const observer = new IntersectionObserver(
     (entries) => {
       entries.forEach((entry) => {
         if (!entry.isIntersecting) return;
         observer.unobserve(entry.target);
-        gsap.to(entry.target, { autoAlpha: 1, y: 0, duration: 0.52, ease: 'power2.out' });
+        gsap.fromTo(
+          entry.target,
+          { autoAlpha: 0, y: 18 },
+          { autoAlpha: 1, y: 0, duration: 0.52, ease: 'power2.out' }
+        );
       });
     },
     { rootMargin: '0px 0px -5%' }

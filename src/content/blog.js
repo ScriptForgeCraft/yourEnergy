@@ -191,7 +191,11 @@ export const getBlogPath = articlePath;
 
 export const loadBlogArticles = async () => {
   const source = await readFile(BLOG_SOURCE_URL, 'utf8');
-  const blocks = [...source.matchAll(/ARTICLE \d+\r?\n=+\r?\n([\s\S]*?)(?=\r?\n=+\r?\nARTICLE \d+\r?\n=+|\s*$)/gu)];
+  const blocks = [
+    ...source.matchAll(
+      /ARTICLE \d+\r?\n=+\r?\n([\s\S]*?)(?=\r?\n=+\r?\n(?:ARTICLE \d+\r?\n=+|VERIFIED FACTS USED IN THE ARTICLES|END OF FILE)|\s*$)/gu
+    )
+  ];
   if (blocks.length !== 5) throw new Error(`Expected 5 blog articles, found ${blocks.length}.`);
 
   return blocks.map((match, articleIndex) => {
