@@ -67,10 +67,6 @@ h3 {
   background: var(--cream);
 }
 
-.eyebrow--dark {
-  color: #aab9c7;
-}
-
 .field-help,
 .hero-disclosure,
 .form-status,
@@ -198,8 +194,8 @@ h3 {
   align-items: center;
 }
 
-.passport-copy > p:not(.eyebrow),
-.engineering-grid > div > p:not(.eyebrow) {
+.passport-copy > p,
+.engineering-grid > div > p {
   max-width: 53ch;
   color: var(--soft-ink);
 }
@@ -580,7 +576,7 @@ h3 {
   margin: 0;
 }
 
-.company-record__heading p:not(.eyebrow) {
+.company-record__heading p {
   max-width: 66ch;
   margin: 12px 0 0;
   color: var(--soft-ink);
@@ -871,10 +867,6 @@ h3 {
   background: #071a2d;
 }
 
-.final-cta .eyebrow--dark {
-  color: #c2d2dd;
-}
-
 .final-cta__inner {
   display: grid;
   grid-template-columns: 1fr auto;
@@ -886,7 +878,7 @@ h3 {
   max-width: 16ch;
 }
 
-.final-cta p:not(.eyebrow) {
+.final-cta p {
   max-width: 53ch;
   color: #b6c6d1;
 }
@@ -1049,10 +1041,6 @@ h3 {
   position: absolute;
   top: 12px;
   right: 12px;
-}
-
-.dialog-content > .eyebrow {
-  margin-right: 52px;
 }
 
 @media (min-width: 1181px) and (max-width: 1280px) {

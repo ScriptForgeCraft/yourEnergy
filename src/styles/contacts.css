@@ -78,26 +78,6 @@
   padding-bottom: 30px;
 }
 
-.contacts-eyebrow {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  margin: 0 0 15px;
-  color: #247b51;
-  font-size: 0.72rem;
-  font-weight: 850;
-  letter-spacing: 0.15em;
-  line-height: 1.2;
-  text-transform: uppercase;
-}
-
-.contacts-eyebrow::before {
-  width: 54px;
-  height: 1px;
-  background: currentcolor;
-  content: '';
-}
-
 .contacts-hero h1 {
   max-width: 8ch;
   color: #102337;
@@ -237,7 +217,7 @@
 }
 
 .contact-section-heading > div > p:last-child,
-.contact-form-copy > p:not(.contacts-eyebrow) {
+.contact-form-copy > p {
   max-width: 38rem;
   margin: 12px 0 0;
   color: #647287;
@@ -811,15 +791,6 @@
   .contacts-hero__copy > p:last-child {
     margin-top: 17px;
     font-size: 0.96rem;
-  }
-
-  .contacts-eyebrow {
-    gap: 11px;
-    font-size: 0.66rem;
-  }
-
-  .contacts-eyebrow::before {
-    width: 38px;
   }
 
   .contacts-channels {

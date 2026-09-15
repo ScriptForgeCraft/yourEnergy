@@ -362,9 +362,6 @@ const createHomeContext = (content, { pageKind = 'home' } = {}) => {
       index,
       image: createProcessImageContext(step.visual),
       headlineLines: step.headline.split('\n'),
-      stepLabel: processCopy.stepLabel
-        .replace('{current}', String(index + 1))
-        .replace('{total}', String(processCopy.steps.length)),
       stateClass: index === 0 ? 'is-active' : '',
       ariaHidden: index === 0 ? 'false' : 'true',
       progressClass: index === 0 ? 'is-active' : 'is-future',

@@ -623,7 +623,6 @@ export default {
     ]
   },
   projects: {
-    eyebrow: 'COMPLETED PROJECTS',
     titleLead: 'Real projects,',
     titleAccent: 'real results',
     copy: 'Explore our completed solar projects and see how we help homes and businesses produce their own energy and reduce electricity costs.',

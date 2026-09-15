@@ -156,14 +156,6 @@
   will-change: opacity, transform;
 }
 
-.page-home .hero-copy .eyebrow {
-  margin-bottom: 24px;
-  color: rgb(255 255 255 / 78%);
-  font-size: clamp(0.68rem, 0.8vw, 0.82rem);
-  font-weight: 800;
-  letter-spacing: 0.3em;
-}
-
 .page-home .hero-copy h1 {
   max-width: 640px;
   color: #fff;
@@ -550,8 +542,7 @@ html[lang='hy'] .page-home .hero-signature {
   align-items: start;
 }
 
-.page-home .passport .eyebrow,
-.page-home .passport-copy > p:not(.eyebrow) {
+.page-home .passport-copy > p {
   color: rgb(238 246 251 / 69%);
 }
 
@@ -659,7 +650,7 @@ html[lang='hy'] .page-home .hero-signature {
 }
 
 .page-home .section-heading > p,
-.page-home .company-record__heading p:not(.eyebrow),
+.page-home .company-record__heading p,
 .page-home .company-record__meta p,
 .page-home .company-record__disclosure,
 .page-home .equipment p,
@@ -748,28 +739,6 @@ html[lang='hy'] .page-home .hero-signature {
 .page-home .portfolio-projects__copy {
   min-width: 0;
   max-width: 745px;
-}
-
-.page-home .portfolio-projects__eyebrow {
-  display: flex;
-  align-items: center;
-  gap: 17px;
-  margin: 0 0 16px;
-  color: rgb(239 247 252 / 87%);
-  font-size: clamp(0.62rem, 0.72vw, 0.76rem);
-  font-weight: 800;
-  letter-spacing: 0.19em;
-  line-height: 1.3;
-}
-
-.page-home .portfolio-projects__eyebrow::before {
-  width: 38px;
-  height: 3px;
-  flex: 0 0 auto;
-  border-radius: 999px;
-  background: var(--cinematic-gold);
-  box-shadow: 0 0 18px rgb(245 189 24 / 42%);
-  content: '';
 }
 
 .page-home .portfolio-projects h2 {
@@ -1219,8 +1188,7 @@ html[lang='hy'] .page-home .hero-signature {
   background: linear-gradient(125deg, #061727, #0c2e46 70%, #092136);
 }
 
-.page-home .engineering .eyebrow,
-.page-home .engineering-grid > div > p:not(.eyebrow) {
+.page-home .engineering-grid > div > p {
   color: rgb(233 242 247 / 66%);
 }
 
@@ -1617,18 +1585,6 @@ html[lang='hy'] .page-home .hero-signature {
     gap: 26px;
   }
 
-  .page-home .portfolio-projects__eyebrow {
-    gap: 13px;
-    margin-bottom: 14px;
-    font-size: 0.62rem;
-    letter-spacing: 0.16em;
-  }
-
-  .page-home .portfolio-projects__eyebrow::before {
-    width: 28px;
-    height: 2px;
-  }
-
   .page-home .portfolio-projects h2 {
     font-size: clamp(2.46rem, 11.8vw, 4.1rem);
     letter-spacing: -0.058em;
@@ -1812,12 +1768,6 @@ html[lang='hy'] .page-home .hero-signature {
     width: min(calc(100% - 32px), var(--container));
     gap: 31px;
     padding-block: 74px 44px;
-  }
-
-  .page-home .hero-copy .eyebrow {
-    margin-bottom: 18px;
-    font-size: 0.62rem;
-    letter-spacing: 0.21em;
   }
 
   .page-home .hero-copy h1 {

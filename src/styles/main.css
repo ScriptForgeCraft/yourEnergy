@@ -460,13 +460,6 @@ textarea {
   align-items: start;
 }
 
-.eyebrow {
-  margin: 0 0 16px;
-  color: #556575;
-  font-size: 0.82rem;
-  font-weight: 750;
-}
-
 h1 {
   margin: 0;
   max-width: 710px;
@@ -593,7 +586,7 @@ h1 mark {
   overflow-wrap: break-word;
 }
 
-.support-shell p:not(.eyebrow) {
+.support-shell p {
   max-width: 60ch;
   margin-bottom: 32px;
   color: var(--color-muted);

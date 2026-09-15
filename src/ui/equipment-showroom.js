@@ -349,7 +349,6 @@ export const initEquipmentShowroom = ({ data, copy, gsap }) => {
   const lastProductByCategory = new Map();
 
   root.style.setProperty('--equipment-background', `url("${data.hero.background}")`);
-  $('[data-page-eyebrow]', root).textContent = copy.page.eyebrow;
   renderTitle(copy.page.title, $('[data-page-title]', root));
   $('[data-page-subtitle]', root).textContent = copy.page.subtitle;
   $('[data-product-popular]', root).textContent = copy.product.popular;

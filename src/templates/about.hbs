@@ -42,7 +42,6 @@
         <div class='about-hero__veil' aria-hidden='true'></div>
         <div class='container about-hero__inner'>
           <div class='about-hero__copy' data-about-reveal>
-            <p class='about-kicker'>{{aboutPage.hero.eyebrow}}</p>
             <h1 id='about-hero-title'>{{aboutPage.hero.titleLead}}<br /><mark>{{aboutPage.hero.titleAccent}}</mark></h1>
             <p class='about-hero__intro'>{{aboutPage.hero.copy}}</p>
             <ul class='about-hero__signals' role='list'>{{#each aboutPage.hero.signals}}<li><svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#{{icon}}'></use></svg><span>{{title}}<small>{{copy}}</small></span></li>{{/each}}</ul>
@@ -55,7 +54,6 @@
       <section class='about-approach section' aria-labelledby='about-approach-title'>
         <div class='container about-approach__grid'>
           <div class='about-section-intro' data-about-reveal>
-            <p class='about-kicker about-kicker--dark'>{{aboutPage.approach.eyebrow}}</p>
             <h2 id='about-approach-title'>{{aboutPage.approach.title}}</h2>
             <p>{{aboutPage.approach.copy}}</p>
             <a class='about-text-link' href='{{homeHref}}#process'>{{aboutPage.approach.action}} <svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#arrow-right'></use></svg></a>
@@ -68,7 +66,6 @@
         <div class='container'>
           <div class='about-proof__head' data-about-reveal>
             <div class='about-section-intro'>
-              <p class='about-kicker about-kicker--dark'>{{aboutPage.certificates.eyebrow}}</p>
               <h2 id='about-certificates-title'>{{aboutPage.certificates.title}}</h2>
               <p>{{aboutPage.certificates.copy}}</p>
             </div>
@@ -79,7 +76,7 @@
           {{else}}
             <article class='about-empty-document about-empty-document--certificate' data-about-reveal>
               <div class='about-empty-document__preview' aria-hidden='true'><span>PDF</span><i></i><i></i><i></i><b></b></div>
-              <div><p class='about-empty-document__eyebrow'>{{aboutPage.certificates.emptyNote}}</p><h3>{{aboutPage.certificates.emptyTitle}}</h3><p>{{aboutPage.certificates.emptyCopy}}</p></div>
+              <div><h3>{{aboutPage.certificates.emptyTitle}}</h3><p>{{aboutPage.certificates.emptyCopy}}</p></div>
             </article>
           {{/if}}
         </div>
@@ -88,7 +85,6 @@
       <section class='about-company section section--soft' aria-labelledby='about-company-title'>
         <div class='container about-company__layout'>
           <div class='about-company__copy' data-about-reveal>
-            <p class='about-kicker about-kicker--dark'>{{aboutPage.company.eyebrow}}</p>
             <h2 id='about-company-title'>{{aboutPage.company.title}}</h2>
             <p>{{aboutPage.company.copy}}</p>
           </div>
@@ -100,7 +96,7 @@
           </article>
         </div>
         <div class='container about-company__archive' data-about-reveal>
-          <div><p class='about-kicker about-kicker--dark'>{{aboutPage.company.filesTitle}}</p><p>{{aboutPage.company.filesCopy}}</p></div>
+          <div><p>{{aboutPage.company.filesTitle}}</p><p>{{aboutPage.company.filesCopy}}</p></div>
           {{#if aboutPage.company.items}}
             <div class='about-company__file-list'>{{#each aboutPage.company.items}}<a href='{{href}}' target='_blank' rel='noopener noreferrer'><svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#file'></use></svg><span><strong>{{title}}</strong><small>{{date}}</small></span><svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#arrow-right'></use></svg></a>{{/each}}</div>
           {{else}}
@@ -114,7 +110,6 @@
         <div class='about-partners__veil' aria-hidden='true'></div>
         <div class='container about-partners__layout'>
           <div class='about-partners__intro' data-about-reveal>
-            <p class='about-kicker'>{{aboutPage.partners.eyebrow}}</p>
             <h2 id='about-partners-title'>{{aboutPage.partners.title}}</h2>
             <p>{{aboutPage.partners.copy}}</p>
           </div>
@@ -129,7 +124,6 @@
       <section class='about-events section' aria-labelledby='about-events-title'>
         <div class='container about-events__head' data-about-reveal>
           <div class='about-section-intro'>
-            <p class='about-kicker about-kicker--dark'>{{aboutPage.events.eyebrow}}</p>
             <h2 id='about-events-title'>{{aboutPage.events.title}}</h2>
             <p>{{aboutPage.events.copy}}</p>
           </div>
@@ -148,7 +142,7 @@
         <div class='about-cta__media' aria-hidden='true'><picture><source type='image/avif' srcset='/images/hero-time-8-1024.avif 1024w, /images/hero-time-8-1600.avif 1600w' sizes='100vw' /><source type='image/webp' srcset='/images/hero-time-8-1024.webp 1024w, /images/hero-time-8-1600.webp 1600w' sizes='100vw' /><img src='/images/hero-time-8-1600.jpg' width='1600' height='900' alt='' loading='lazy' decoding='async' /></picture></div>
         <div class='about-cta__veil' aria-hidden='true'></div>
         <div class='container about-cta__content' data-about-reveal>
-          <div><p class='about-kicker'>{{aboutPage.finalCta.eyebrow}}</p><h2 id='about-cta-title'>{{aboutPage.finalCta.title}}</h2><p>{{aboutPage.finalCta.copy}}</p><div class='about-cta__actions'><a class='button' href='{{calculatorHref}}'>{{aboutPage.finalCta.primary}} <svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#arrow-right'></use></svg></a><a class='button button--outline about-cta__outline' href='{{contactsHref}}'>{{aboutPage.finalCta.secondary}}</a></div></div>
+          <div><h2 id='about-cta-title'>{{aboutPage.finalCta.title}}</h2><p>{{aboutPage.finalCta.copy}}</p><div class='about-cta__actions'><a class='button' href='{{calculatorHref}}'>{{aboutPage.finalCta.primary}} <svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#arrow-right'></use></svg></a><a class='button button--outline about-cta__outline' href='{{contactsHref}}'>{{aboutPage.finalCta.secondary}}</a></div></div>
           <p class='about-cta__note'>{{#each aboutPage.finalCta.note}}<span>{{this}}</span>{{/each}}</p>
         </div>
       </section>

@@ -584,10 +584,6 @@
   }
 }
 
-.tool-result .eyebrow {
-  margin-bottom: 10px;
-}
-
 .tool-workspace {
   background: #fbfcfa;
 }
@@ -676,7 +672,7 @@
   min-height: 260px;
 }
 
-.tool-result > p:not(.eyebrow) {
+.tool-result > p {
   color: var(--color-muted);
 }
 

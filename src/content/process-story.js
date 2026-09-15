@@ -2,7 +2,6 @@ export const processStoryCopy = {
   en: {
     title: 'Your solar journey',
     progressLabel: 'Your solar project journey',
-    stepLabel: 'Step {current} of {total}',
     previousStepLabel: 'Previous step',
     nextStepLabel: 'Next step',
     scrollLabel: 'Scroll to continue',
@@ -266,7 +265,6 @@ export const processStoryCopy = {
   ru: {
     title: 'Ваш путь к солнечной системе',
     progressLabel: 'Этапы проекта солнечной системы',
-    stepLabel: 'Этап {current} из {total}',
     previousStepLabel: 'Предыдущий этап',
     nextStepLabel: 'Следующий этап',
     scrollLabel: 'Листайте дальше',
@@ -535,7 +533,6 @@ export const processStoryCopy = {
   hy: {
     title: 'Ձեր արևային համակարգի ճանապարհը',
     progressLabel: 'Արևային համակարգի նախագծի փուլերը',
-    stepLabel: 'Քայլ {current} / {total}',
     previousStepLabel: 'Նախորդ քայլը',
     nextStepLabel: 'Հաջորդ քայլը',
     scrollLabel: 'Ոլորեք՝ շարունակելու համար',

@@ -23,7 +23,6 @@
           <img src='{{article.image}}' alt='' aria-hidden='true' />
           <div class='container article-hero__content' data-blog-reveal>
             <a class='article-back-link' href='{{blogHref}}'>← {{blogCopy.backToJournal}}</a>
-            <p class='article-kicker'><span>{{article.category}}</span></p>
             <h1>{{article.h1}}</h1>
             <p class='article-hero__intro'>{{article.description}}</p>
             <div class='article-meta article-meta--light'><span>{{blogCopy.verified}} {{article.verifiedDate}}</span><span>{{article.readingTimeLabel}}</span></div>
@@ -41,14 +40,14 @@
               {{#if heading}}<h2 id='{{id}}'>{{heading}}</h2>{{else}}<p class='{{#if lead}}article-lead{{/if}} {{#if callout}}article-callout{{/if}}'>{{paragraph}}</p>{{/if}}
             {{/each}}
             <div class='article-inline-cta'><p>{{article.cta}}</p><a href='{{calculatorHref}}'>{{blogCopy.calculate}} <span aria-hidden='true'>→</span></a></div>
-            <section class='article-sources' aria-labelledby='sources-title'><p class='blog-eyebrow'>{{blogCopy.journal}}</p><h2 id='sources-title'>{{blogCopy.sources}}</h2><ol>{{#each article.sources}}<li><a href='{{this}}' target='_blank' rel='noopener noreferrer'>{{this}}</a></li>{{/each}}</ol></section>
+            <section class='article-sources' aria-labelledby='sources-title'><h2 id='sources-title'>{{blogCopy.sources}}</h2><ol>{{#each article.sources}}<li><a href='{{this}}' target='_blank' rel='noopener noreferrer'>{{this}}</a></li>{{/each}}</ol></section>
           </div>
         </div>
       </article>
 
       <section class='related-section container' aria-labelledby='related-title'>
-        <div class='blog-section-heading'><div><p class='blog-eyebrow'>{{blogCopy.journal}}</p><h2 id='related-title'>{{blogCopy.related}}</h2></div><a class='article-arrow-link' href='{{blogHref}}'>{{blogCopy.backToJournal}} <span aria-hidden='true'>→</span></a></div>
-        <div class='related-grid'>{{#each relatedArticles}}<article class='blog-card' data-blog-reveal><a class='blog-card__image' href='{{path}}' tabindex='-1' aria-hidden='true'><img src='{{image}}' alt='' loading='lazy' /></a><div class='blog-card__content'><p class='article-kicker'>{{category}}</p><h3><a href='{{path}}'>{{h1}}</a></h3><div class='blog-card__bottom'><span>{{../blogCopy.verified}} {{verifiedDate}}</span><a href='{{path}}' aria-label='{{../blogCopy.readArticle}}: {{h1}}'>→</a></div></div></article>{{/each}}</div>
+        <div class='blog-section-heading'><div><h2 id='related-title'>{{blogCopy.related}}</h2></div><a class='article-arrow-link' href='{{blogHref}}'>{{blogCopy.backToJournal}} <span aria-hidden='true'>→</span></a></div>
+        <div class='related-grid'>{{#each relatedArticles}}<article class='blog-card' data-blog-reveal><a class='blog-card__image' href='{{path}}' tabindex='-1' aria-hidden='true'><img src='{{image}}' alt='' loading='lazy' /></a><div class='blog-card__content'><h3><a href='{{path}}'>{{h1}}</a></h3><div class='blog-card__bottom'><span>{{../blogCopy.verified}} {{verifiedDate}}</span><a href='{{path}}' aria-label='{{../blogCopy.readArticle}}: {{h1}}'>→</a></div></div></article>{{/each}}</div>
       </section>
     </main>
     {{> site-footer}}

@@ -69,7 +69,6 @@
         <div class='hero-frame'>
           <div class='container hero-grid'>
             <div class='hero-copy' data-hero-copy>
-            <p class='eyebrow'>{{hero.eyebrow}}</p>
             <h1 id='hero-title'>{{hero.titleLead}}<br />{{hero.titleMiddle}}<br /><mark
               >{{hero.titleAccent}}</mark></h1>
             <p class='hero-intro'>{{hero.homeCopy}}</p>
@@ -146,7 +145,7 @@
               decoding='async'
             /></picture></div>
         <div class='portfolio-projects__header container'>
-          <div class='portfolio-projects__copy'><p class='portfolio-projects__eyebrow'>{{projects.eyebrow}}</p><h2
+          <div class='portfolio-projects__copy'><h2
               id='projects-title'
             ><span>{{projects.titleLead}}</span><mark>{{projects.titleAccent}}</mark></h2><p
               class='portfolio-projects__description'
@@ -273,7 +272,7 @@
           <span class='faq-preview__brand'>YOUR ENERGY<small>BRIGHTER TOMORROW</small></span>
         </aside>
         <div class='container faq-preview__inner'>
-          <header class='faq-preview__heading'><p class='eyebrow'>{{faq.eyebrow}}</p><h2 id='faq-title'>{{faq.homeTitle}}</h2><p>{{faq.intro}}</p></header>
+          <header class='faq-preview__heading'><h2 id='faq-title'>{{faq.homeTitle}}</h2><p>{{faq.intro}}</p></header>
           <div class='faq-preview__grid'>{{#each faq.previewItems}}<a class='faq-preview__card' href='{{../faqHref}}'><span class='faq-preview__icon'><svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#{{icon}}'></use></svg></span><span class='faq-preview__card-copy'><strong>{{question}}</strong><small>{{answer}}</small></span><svg class='faq-preview__arrow inline-icon' aria-hidden='true'><use href='/icons.svg#arrow-right'></use></svg></a>{{/each}}</div>
           <div class='faq-preview__footer'><a class='button faq-preview__button' href='{{faqHref}}'><span>{{faq.allQuestions}}</span><svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#arrow-right'></use></svg></a><p>{{faq.notFound}} <a href='{{contactsHref}}'>{{faq.contactLink}}</a></p></div>
         </div>

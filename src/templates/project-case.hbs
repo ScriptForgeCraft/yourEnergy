@@ -35,7 +35,6 @@
           <a class='project-case__back' href='{{projectCase.projectsHref}}'><svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#arrow-left'></use></svg>{{projectCase.back}}</a>
           <div class='project-case-hero__grid'>
             <div class='project-case-hero__copy'>
-              <p class='projects-kicker projects-kicker--dark'>{{projectCase.eyebrow}}</p>
               <p class='project-case__category'>{{projectCase.category}}</p>
               <p class='projects-location'><svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#map-pin'></use></svg>{{projectCase.location}}</p>
               <h1 id='project-case-title'>{{projectCase.title}}</h1>
@@ -52,7 +51,6 @@
 
       <section class='project-case-results section' aria-labelledby='project-case-results-title'>
         <div class='container'>
-          <p class='projects-kicker projects-kicker--dark'>{{projectCase.metricsTitle}}</p>
           <h2 id='project-case-results-title'>{{projectCase.metricsTitle}}</h2>
           <dl class='project-case__metrics'>{{#each projectCase.metrics}}<div><dt><span><svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#{{icon}}'></use></svg></span>{{label}}</dt><dd>{{value}}</dd></div>{{/each}}</dl>
         </div>
@@ -60,7 +58,7 @@
 
       <section class='project-case-record section' aria-labelledby='project-case-record-title'>
         <div class='container'>
-          <div class='project-case-record__heading'><p class='projects-kicker projects-kicker--dark'>{{projectCase.recordsTitle}}</p><h2 id='project-case-record-title'>{{projectCase.recordsTitle}}</h2></div>
+          <div class='project-case-record__heading'><h2 id='project-case-record-title'>{{projectCase.recordsTitle}}</h2></div>
           <dl class='project-case__record'>{{#each projectCase.records}}<div><dt>{{label}}</dt><dd>{{value}}</dd><p>{{note}}</p></div>{{/each}}</dl>
           <aside class='project-case__disclosure' aria-labelledby='project-case-disclosure-title'><h2 id='project-case-disclosure-title'>{{projectCase.disclosureTitle}}</h2><p>{{projectCase.disclosure}}</p></aside>
         </div>

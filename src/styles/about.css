@@ -24,36 +24,14 @@
   margin-top: 0;
 }
 
-.about-kicker {
-  display: flex;
-  align-items: center;
-  gap: 13px;
-  margin: 0 0 17px;
-  color: rgb(255 255 255 / 76%);
-  font-size: 0.68rem;
-  font-weight: 800;
-  letter-spacing: 0.12em;
-}
-
-.about-kicker::before {
-  width: 34px;
-  height: 1px;
-  background: currentcolor;
-  content: '';
-}
-
-.about-kicker--dark {
-  color: #1a7953;
-}
-
 .about-section-intro > h2,
 .about-company__copy > h2,
 .about-partners__intro h2 {
   color: var(--about-ink);
 }
 
-.about-section-intro > p:not(.about-kicker),
-.about-company__copy > p:not(.about-kicker) {
+.about-section-intro > p,
+.about-company__copy > p {
   max-width: 47ch;
   margin: 22px 0 0;
   color: var(--about-muted);
@@ -508,15 +486,6 @@
   border-radius: 50%;
 }
 
-.about-empty-document__eyebrow {
-  margin: 0 0 12px;
-  color: #238054;
-  font-size: 0.7rem;
-  font-weight: 800;
-  letter-spacing: 0.09em;
-  text-transform: uppercase;
-}
-
 .about-empty-document h3 {
   max-width: 21ch;
   margin: 0;
@@ -753,7 +722,7 @@
   color: #fff;
 }
 
-.about-partners__intro > p:not(.about-kicker) {
+.about-partners__intro > p {
   max-width: 41ch;
   margin: 21px 0 0;
   color: rgb(255 255 255 / 76%);
@@ -1062,7 +1031,7 @@
   font-size: clamp(2rem, 3.7vw, 4rem) !important;
 }
 
-.about-cta__content > div > p:not(.about-kicker) {
+.about-cta__content > div > p {
   max-width: 48ch;
   margin: 18px 0 0;
   color: rgb(255 255 255 / 82%);
@@ -1198,7 +1167,7 @@ html.js .about-approach__card:nth-child(3) {
     gap: 28px;
   }
 
-  .about-company__copy > p:not(.about-kicker) {
+  .about-company__copy > p {
     max-width: 56ch;
   }
 
@@ -1206,7 +1175,7 @@ html.js .about-approach__card:nth-child(3) {
     gap: 36px;
   }
 
-  .about-partners__intro > p:not(.about-kicker) {
+  .about-partners__intro > p {
     max-width: 56ch;
   }
 
@@ -1224,16 +1193,6 @@ html.js .about-approach__card:nth-child(3) {
 }
 
 @media (max-width: 620px) {
-  .about-kicker {
-    gap: 10px;
-    margin-bottom: 14px;
-    font-size: 0.61rem;
-  }
-
-  .about-kicker::before {
-    width: 25px;
-  }
-
   .about-hero {
     min-height: 690px;
   }

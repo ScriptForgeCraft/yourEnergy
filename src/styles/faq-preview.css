@@ -62,24 +62,6 @@
   max-width: 45rem;
 }
 
-.faq-preview .eyebrow {
-  display: flex;
-  align-items: center;
-  gap: 18px;
-  margin-bottom: 28px;
-  color: #c58700;
-  font-weight: 850;
-  letter-spacing: 0.13em;
-  text-transform: uppercase;
-}
-
-.faq-preview .eyebrow::after {
-  width: 64px;
-  height: 1px;
-  background: currentcolor;
-  content: '';
-}
-
 .faq-preview h2 {
   max-width: 15ch;
   margin: 0;
@@ -301,10 +283,6 @@ html[lang='hy'] .faq-preview__art p {
     padding-block: clamp(32px, 5svh, 70px) clamp(24px, 4svh, 60px);
   }
 
-  .faq-preview .eyebrow {
-    margin-bottom: clamp(14px, 2svh, 22px);
-  }
-
   .faq-preview h2 {
     font-size: clamp(2.65rem, 6.6svh, 5.35rem) !important;
   }
@@ -383,14 +361,6 @@ html[lang='hy'] .faq-preview__art p {
 @media (max-width: 680px) {
   .faq-preview__inner {
     padding-block: 54px;
-  }
-
-  .faq-preview .eyebrow {
-    margin-bottom: 20px;
-  }
-
-  .faq-preview .eyebrow::after {
-    width: 46px;
   }
 
   .faq-preview h2 {

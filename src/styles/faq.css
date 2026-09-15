@@ -69,27 +69,6 @@
   padding-top: clamp(20px, 5vw, 80px);
 }
 
-.faq-preview .eyebrow,
-.faq-page-hero .eyebrow,
-.faq-answers .eyebrow {
-  display: flex;
-  align-items: center;
-  gap: 18px;
-  color: #c58700;
-  font-weight: 850;
-  letter-spacing: 0.13em;
-  text-transform: uppercase;
-}
-
-.faq-preview .eyebrow::after,
-.faq-page-hero .eyebrow::after,
-.faq-answers .eyebrow::after {
-  width: 54px;
-  height: 1px;
-  background: currentcolor;
-  content: '';
-}
-
 .faq-preview h2,
 .faq-page-hero h1 {
   max-width: 9ch;
@@ -280,7 +259,7 @@
   color: #09233a;
 }
 
-.faq-answers__heading > p:not(.eyebrow) {
+.faq-answers__heading > p {
   max-width: 31rem;
   color: #687583;
   font-size: 1.04rem;
