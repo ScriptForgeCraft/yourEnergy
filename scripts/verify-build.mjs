@@ -9,9 +9,6 @@ const toolPages = [
   { page: 'calculator/index.html', locale: 'hy', type: 'calculator' },
   { page: 'ru/calculator/index.html', locale: 'ru', type: 'calculator' },
   { page: 'en/calculator/index.html', locale: 'en', type: 'calculator' },
-  { page: 'offer-checker/index.html', locale: 'hy', type: 'offer-checker' },
-  { page: 'ru/offer-checker/index.html', locale: 'ru', type: 'offer-checker' },
-  { page: 'en/offer-checker/index.html', locale: 'en', type: 'offer-checker' }
 ];
 const faqPages = [
   { page: 'faq/index.html', locale: 'hy', type: 'faq' },
@@ -404,22 +401,6 @@ async function validateToolSeo(html, page, canonical, type) {
   }
 }
 
-function validateOfferCheckerPriceBookFallback(html, page) {
-  const reference = html.match(
-    /<strong\b[^>]*\bdata-pricebook-reference(?:\s|=|>)[^>]*>([\s\S]*?)<\/strong>/iu
-  );
-  if (!reference) {
-    fail(`${page}: Offer Checker is missing the runtime PriceBook reference`);
-    return;
-  }
-  if (!html.includes('data-pricebook-version')) {
-    fail(`${page}: Offer Checker is missing the runtime PriceBook version label`);
-  }
-  if (/\b(?:232|247|264)\b/u.test(reference[1])) {
-    fail(`${page}: Offer Checker must not show an unchecked static price range`);
-  }
-}
-
 function validateLanguageSwitcher(html, page, currentLocale) {
   const expected = new Map([
     ['hy', '/'],
@@ -727,13 +708,6 @@ async function validateRemovedFeatures(pages) {
   }
 }
 
-function validateOfferCheckerMarkup(html, page) {
-  for (const marker of ['data-offer-checker', 'data-offer-result', 'data-pricebook-reference']) {
-    if (!html.includes(marker)) fail(`${page}: missing Offer Checker marker ${marker}`);
-  }
-  validateOfferCheckerPriceBookFallback(html, page);
-}
-
 function validateHomeCalculatorSeparation(html, page, calculatorHref) {
   for (const marker of [
     'data-address-form',
@@ -752,9 +726,6 @@ function validateHomeCalculatorSeparation(html, page, calculatorHref) {
 
   if (!html.includes(`href='${calculatorHref}'`)) {
     fail(`${page}: homepage needs a direct link to ${calculatorHref}`);
-  }
-  if (html.includes('/offer-checker/')) {
-    fail(`${page}: homepage must not link to a separate Offer Checker route`);
   }
 }
 
@@ -920,7 +891,6 @@ for (const { page, locale } of projectsPages) {
 for (const { page, type } of toolPages) {
   if (!pages.has(page)) continue;
   if (type === 'calculator') validateQuickCalculatorMarkup(pages.get(page), page);
-  if (type === 'offer-checker') validateOfferCheckerMarkup(pages.get(page), page);
 }
 for (const { page, locale, type } of privateCalculatorPages) {
   if (!pages.has(page)) continue;

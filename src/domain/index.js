@@ -15,10 +15,8 @@ export {
 export {
   PRICEBOOK_STATUS,
   PRICEBOOK_SYSTEM_TYPE,
-  REQUIRED_OFFER_SCOPE,
   PriceBookRepository,
   buildCommercialEstimate,
-  compareOffer,
   isPriceBookActive,
   normalizePriceBook
 } from './pricebook.js';

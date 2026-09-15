@@ -6,21 +6,12 @@ import {
   TEMPORARY_YOURENERGY_PRICEBOOK,
   buildCommercialEstimate,
   buildSolarAnalysis,
-  compareOffer,
   createUserTariffSelection,
   getUsableTariffRate,
   normalizeConsumption
 } from '../src/domain/index.js';
 
 const ACTIVE_DATE = '2026-08-31';
-
-const STANDARD_SCOPE = Object.freeze({
-  panels: true,
-  inverter: true,
-  mounting: true,
-  'standard-installation': true,
-  'basic-grid-connection': true
-});
 
 const assertFiniteTree = (value, path = 'value', seen = new WeakSet()) => {
   if (typeof value === 'number') {
@@ -59,7 +50,6 @@ const realAnalysisInputs = Object.freeze({
   system: { panelWatts: 580, panelAreaSqm: 2 },
   priceBook: TEMPORARY_YOURENERGY_PRICEBOOK
 });
-
 test('temporary price book produces rounded P25/P50/P75 commercial planning estimates', () => {
   const repository = new PriceBookRepository({
     records: [TEMPORARY_YOURENERGY_PRICEBOOK],
@@ -85,7 +75,6 @@ test('temporary price book produces rounded P25/P50/P75 commercial planning esti
   assert.equal(estimate.validUntil, '2026-09-28');
   assertFiniteTree(estimate);
 });
-
 test('the 10.4 kWp preliminary example never exceeds the client-approved 2.15M AMD ceiling', () => {
   const estimate = buildCommercialEstimate({
     capacityKwp: 10.4,
@@ -175,55 +164,4 @@ test('an expired price book hides the preliminary price and payback even with a 
   assert.equal(scenario.financial.paybackYears, null);
   assert.deepEqual(scenario.financial.timeline, []);
   assertFiniteTree(analysis);
-});
-
-test('Offer Checker only compares a complete standard scope and returns P1 range statuses', () => {
-  const shared = {
-    capacityKwp: 6,
-    systemType: 'residential-grid-tied',
-    inclusions: STANDARD_SCOPE,
-    priceBook: TEMPORARY_YOURENERGY_PRICEBOOK,
-    at: ACTIVE_DATE
-  };
-  const below = compareOffer({ ...shared, totalAmd: 1_080_000 });
-  const within = compareOffer({ ...shared, totalAmd: 1_164_000 });
-  const above = compareOffer({ ...shared, totalAmd: 1_242_000 });
-
-  assert.equal(below.status, 'below-range');
-  assert.equal(within.status, 'within-range');
-  assert.equal(above.status, 'above-range');
-  assert.equal(within.amdPerWp, 194);
-  assert.deepEqual(within.questionKeys, ['equipmentTerms']);
-  assertFiniteTree(below);
-  assertFiniteTree(within);
-  assertFiniteTree(above);
-});
-
-test('Offer Checker refuses a price verdict for battery or incomplete scope', () => {
-  const shared = {
-    totalAmd: 1_482_000,
-    capacityKwp: 6,
-    systemType: 'residential-grid-tied',
-    priceBook: TEMPORARY_YOURENERGY_PRICEBOOK,
-    at: ACTIVE_DATE
-  };
-  const battery = compareOffer({
-    ...shared,
-    inclusions: { ...STANDARD_SCOPE, battery: true }
-  });
-  const incomplete = compareOffer({
-    ...shared,
-    inclusions: { ...STANDARD_SCOPE, inverter: false }
-  });
-
-  assert.equal(battery.status, 'not-comparable');
-  assert.equal(battery.comparable, false);
-  assert.ok(battery.reasons.includes('BATTERY_SCOPE_UNSUPPORTED'));
-  assert.equal(incomplete.status, 'not-comparable');
-  assert.equal(incomplete.comparable, false);
-  assert.ok(incomplete.reasons.includes('CORE_SCOPE_INCOMPLETE'));
-  assert.deepEqual(incomplete.missingInclusions, ['inverter']);
-  assert.deepEqual(incomplete.questionKeys, ['standardScope', 'commercialTerms']);
-  assertFiniteTree(battery);
-  assertFiniteTree(incomplete);
 });

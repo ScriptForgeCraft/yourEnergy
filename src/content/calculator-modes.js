@@ -113,7 +113,6 @@ const common = {
       refine: 'Ճշգրտել իմ տանիքով',
       contact: 'Ստանալ առաջարկ',
       phone: 'Զանգել ինժեներին',
-      offer: 'Ստուգել այլ առաջարկ',
       lead: {
         eyebrow: 'Ձեր նախնական արդյունքը',
         title: 'Ստացեք առաջարկ',
@@ -254,7 +253,6 @@ const common = {
       refine: 'Уточнить по моей крыше',
       contact: 'Получить предложение',
       phone: 'Позвонить инженеру',
-      offer: 'Проверить другое предложение',
       lead: {
         eyebrow: 'Ваш предварительный результат',
         title: 'Получить предложение',
@@ -398,7 +396,6 @@ const common = {
       refine: 'Refine with my roof',
       contact: 'Get a proposal',
       phone: 'Call an engineer',
-      offer: 'Check another proposal',
       lead: {
         eyebrow: 'Your preliminary result',
         title: 'Get a proposal',

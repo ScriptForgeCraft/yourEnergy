@@ -3,11 +3,11 @@
 Static, multilingual Vite site for `yourenergy.am` with an honest P1
 real-analysis flow. Homepages are Armenian (`/`), Russian (`/ru/`) and English
 (`/en/`). Each locale has an indexable consumer `/calculator/` Quick Calculator,
-a standalone indexable `/offer-checker/`, plus noindex `/calculator/refine/` and
+plus noindex `/calculator/refine/` and
 `/calculator/pro/` routes. It is not a SPA and does not deploy anything itself.
 
 The same site header and footer are rendered from shared Handlebars partials on
-home, calculator, offer-checker and support documents. Calculator navigation
+home, calculator and support documents. Calculator navigation
 preserves the full site context while the wizard keeps the primary analysis
 workflow in one place.
 
@@ -207,8 +207,8 @@ coordinates or lead payloads.
 
 Primary HTML exists before JavaScript, including canonical URLs, reciprocal
 HY/RU/EN hreflang, localized metadata and FAQ JSON-LD where applicable.
-Support pages are `noindex`; sitemap includes the localized home, calculator and
-Offer Checker routes. The page has landmarks, a skip link, one H1,
+Support pages are `noindex`; sitemap includes the localized home and calculator
+routes. The page has landmarks, a skip link, one H1,
 keyboard controls, `aria-live` status messages, native `details`/`dialog`, chart
 tables and reduced-motion styles.
 

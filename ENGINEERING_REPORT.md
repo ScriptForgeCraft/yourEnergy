@@ -6,16 +6,14 @@ Verification date: 7 September 2026
 
 This iteration restructures calculator entry and progression only. It does not
 change domain formulas, PVGIS normalisation, tariff rules, roof geometry,
-PriceBook maths, Offer Checker maths or homepage calculation claims.
+PriceBook maths or homepage calculation claims.
 
 ## 2. Public calculator routes
 
 - `/calculator/`, `/ru/calculator/`, `/en/calculator/` — indexable Quick Calculator.
 - `/calculator/refine/`, `/ru/calculator/refine/`, `/en/calculator/refine/` — consumer roof refinement, `noindex,follow`.
 - `/calculator/pro/`, `/ru/calculator/pro/`, `/en/calculator/pro/` — detailed professional calculator, `noindex,follow`.
-- `/offer-checker/` and its locale variants remain separate, indexable tools.
-
-Only Quick Calculator and Offer Checker are sitemap entries. Refinement and Pro
+Only Quick Calculator is a sitemap entry. Refinement and Pro
 have self-canonical URLs and reciprocal hreflang but are intentionally not in
 the sitemap.
 
@@ -115,8 +113,8 @@ creates a demo substitute.
 
 No calculation-engine code was changed. `test/calculation-parity.test.js` still
 asserts PVGIS yield/profile, 7.54 kWp, 13 panels, roof area/constraints,
-P25/P50/P75, annual generation, annual savings, payback, timeline, Passport
-values and Offer Checker output. New Quick coverage compares its selected
+P25/P50/P75, annual generation, annual savings, payback, timeline and Passport
+values. New Quick coverage compares its selected
 scenario directly to `buildSolarAnalysis` with identical inputs, proving it is a
 scope/presentation wrapper rather than duplicate formula code.
 
@@ -126,14 +124,7 @@ Solar Passport remains a result-only current-session snapshot. Refinement create
 it after successful `/api/analysis`; Pro displays it through its native dialog.
 No PDF, permanent URL, account history or cloud storage is claimed.
 
-## 15. Offer Checker
-
-Offer Checker remains standalone and retains its safety rules: AMD/Wp comparison
-only for complete standard grid-tied scope; battery, incomplete scope, another
-system type or expired PriceBook return “not comparable”. Its calculation code
-was not changed.
-
-## 16. Homepage, demo content and shared chrome
+## 15. Homepage, demo content and shared chrome
 
 The homepage now has an original cinematic presentation while keeping its
 consumer-first information architecture. The full-bleed Armenian solar-home
@@ -165,9 +156,9 @@ Quick Calculator routes. The homepage does not initialize calculator or map
 tools; it only reads the session snapshot and listens for an in-page analysis
 update event.
 Shared Handlebars header/footer partials serve home, Quick, refinement, Pro,
-Offer Checker, Privacy and Terms.
+Privacy and Terms.
 
-## 17. Removed/dead functionality
+## 16. Removed/dead functionality
 
 No removed feature was restored. Existing removal guarantees remain:
 testimonials, MyEnergy, `/soon/`, old calculator workspace selectors and their

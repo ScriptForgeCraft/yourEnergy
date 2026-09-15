@@ -123,9 +123,6 @@ export default defineConfig(({ mode }) => {
           'calculator-pro-hy': resolve(root, 'calculator/pro/index.html'),
           'calculator-pro-ru': resolve(root, 'ru/calculator/pro/index.html'),
           'calculator-pro-en': resolve(root, 'en/calculator/pro/index.html'),
-          'offer-checker-hy': resolve(root, 'offer-checker/index.html'),
-          'offer-checker-ru': resolve(root, 'ru/offer-checker/index.html'),
-          'offer-checker-en': resolve(root, 'en/offer-checker/index.html'),
           ...blogArticleInputs,
           ...projectCaseInputs
         }

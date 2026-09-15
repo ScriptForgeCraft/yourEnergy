@@ -8,14 +8,6 @@ export const PRICEBOOK_STATUS = Object.freeze({
 });
 
 const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/u;
-const REQUIRED_SCOPE = Object.freeze([
-  'panels',
-  'inverter',
-  'mounting',
-  'standard-installation',
-  'basic-grid-connection'
-]);
-
 const toIsoDate = (value) => {
   if (typeof value === 'string' && ISO_DATE.test(value)) {
     const date = new Date(`${value}T00:00:00.000Z`);
@@ -166,76 +158,3 @@ export const buildCommercialEstimate = ({ capacityKwp, priceBook, at = new Date(
     validUntil: normalized.validUntil
   });
 };
-
-const inclusionValue = (inclusions, key) => inclusions?.[key] === true;
-
-/**
- * Compares a supplied third-party offer only when its scope is comparable to
- * the active standard grid-tied price book. It intentionally refuses a price
- * verdict for batteries or missing core line items.
- */
-export const compareOffer = ({
-  totalAmd,
-  capacityKwp,
-  systemType = PRICEBOOK_SYSTEM_TYPE,
-  inclusions = {},
-  priceBook,
-  at = new Date()
-} = {}) => {
-  const total = toPositiveNumberOrNull(totalAmd);
-  const capacity = toPositiveNumberOrNull(capacityKwp);
-  const normalized = normalizePriceBook(priceBook);
-  const missingInclusions = REQUIRED_SCOPE.filter((key) => !inclusionValue(inclusions, key));
-  const reasons = [];
-
-  if (total === null || capacity === null) reasons.push('OFFER_PRICE_AND_CAPACITY_REQUIRED');
-  if (!normalized) reasons.push('PRICEBOOK_UNAVAILABLE');
-  else if (!isPriceBookActive(normalized, at)) reasons.push('PRICEBOOK_EXPIRED');
-  if (
-    (cleanString(systemType) ?? PRICEBOOK_SYSTEM_TYPE) !==
-    (normalized?.systemType ?? PRICEBOOK_SYSTEM_TYPE)
-  ) {
-    reasons.push('UNSUPPORTED_SYSTEM_TYPE');
-  }
-  if (inclusionValue(inclusions, 'battery')) reasons.push('BATTERY_SCOPE_UNSUPPORTED');
-  if (missingInclusions.length) reasons.push('CORE_SCOPE_INCOMPLETE');
-
-  const estimate = buildCommercialEstimate({ capacityKwp: capacity, priceBook: normalized, at });
-  if (reasons.length || !estimate.available) {
-    return deepFreeze({
-      status: 'not-comparable',
-      comparable: false,
-      totalAmd: total,
-      capacityKwp: capacity,
-      amdPerWp: null,
-      reasons: deepFreeze([
-        ...new Set([...reasons, ...(estimate.available ? [] : [estimate.reason])])
-      ]),
-      missingInclusions: deepFreeze(missingInclusions),
-      estimate,
-      questionKeys: deepFreeze(['standardScope', 'commercialTerms'])
-    });
-  }
-
-  const amdPerWp = total / (capacity * 1_000);
-  const status =
-    amdPerWp < normalized.ratesAmdPerWp.p25
-      ? 'below-range'
-      : amdPerWp > normalized.ratesAmdPerWp.p75
-        ? 'above-range'
-        : 'within-range';
-
-  return deepFreeze({
-    status,
-    comparable: true,
-    totalAmd: total,
-    capacityKwp: capacity,
-    amdPerWp,
-    reasons: deepFreeze([]),
-    missingInclusions: deepFreeze([]),
-    estimate,
-    questionKeys: deepFreeze(['equipmentTerms'])
-  });
-};
-
-export const REQUIRED_OFFER_SCOPE = REQUIRED_SCOPE;

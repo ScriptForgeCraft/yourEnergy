@@ -17,7 +17,6 @@ import {
   buildEnvironmentalImpact
 } from '../src/domain/index.js';
 import { ARMENIA_REGIONAL_BENCHMARKS } from '../src/data/regions/armenia.js';
-import { TEMPORARY_YOURENERGY_PRICEBOOK } from '../src/data/pricebooks/armenia.js';
 import { ARMENIA_TARIFF_DATASET } from '../src/data/tariffs/armenia.js';
 import { GENERATED_CONTENT_LOCALES } from '../src/content/schema.js';
 import { createProcessImageContext } from '../src/config/process-images.js';
@@ -43,10 +42,6 @@ const quickCalculatorTemplate = await readFile(
 );
 const refineCalculatorTemplate = await readFile(
   resolve(root, 'src/templates/calculator-refine.hbs'),
-  'utf8'
-);
-const offerCheckerTemplate = await readFile(
-  resolve(root, 'src/templates/offer-checker.hbs'),
   'utf8'
 );
 const faqTemplate = await readFile(resolve(root, 'src/templates/faq.hbs'), 'utf8');
@@ -77,7 +72,6 @@ const render = Handlebars.compile(template, { noEscape: false });
 const renderCalculator = Handlebars.compile(calculatorTemplate, { noEscape: false });
 const renderQuickCalculator = Handlebars.compile(quickCalculatorTemplate, { noEscape: false });
 const renderRefineCalculator = Handlebars.compile(refineCalculatorTemplate, { noEscape: false });
-const renderOfferChecker = Handlebars.compile(offerCheckerTemplate, { noEscape: false });
 const renderFaq = Handlebars.compile(faqTemplate, { noEscape: false });
 const renderSupport = Handlebars.compile(supportTemplate, { noEscape: false });
 const renderPlaceholder = Handlebars.compile(placeholderTemplate, { noEscape: false });
@@ -344,7 +338,7 @@ const createHomeContext = (content, { pageKind = 'home' } = {}) => {
   const activeNavigation = createHeaderNavigationState(
     pageKind === 'home'
       ? 'home'
-      : pageKind === 'calculator' || pageKind === 'offer-checker'
+      : pageKind === 'calculator'
         ? 'calculator'
         : null
   );
@@ -396,7 +390,6 @@ const createHomeContext = (content, { pageKind = 'home' } = {}) => {
       about: placeholderPath(content.locale, 'about'),
       blog: placeholderPath(content.locale, 'blog')
     },
-    offerCheckerHref: toolPath(content.locale, 'offer-checker'),
     alternateLinks: publishedAlternateLinks,
     languageLinks: createLanguageLinks(content.locale),
     processStory,
@@ -1015,7 +1008,6 @@ const createProfessionalCalculatorContext = (content) => {
     path,
     meta: modeCopy.proMeta ?? calculatorMeta,
     wizard: { ...wizard, ...modeCopy.pro },
-    offerCheckerHref: toolPath(content.locale, 'offer-checker'),
     alternateLinks: createToolAlternateLinks('calculator/pro'),
     languageLinks: createToolLanguageLinks(content.locale, 'calculator/pro'),
     toolShared: toolCopy[content.locale].shared,
@@ -1046,7 +1038,6 @@ const createQuickCalculatorContext = (content) => {
     })),
     refineHref: toolPath(content.locale, 'calculator/refine'),
     proHref: toolPath(content.locale, 'calculator/pro'),
-    offerCheckerHref: toolPath(content.locale, 'offer-checker'),
     alternateLinks: createToolAlternateLinks('calculator'),
     languageLinks: createToolLanguageLinks(content.locale, 'calculator'),
     toolShared: toolCopy[content.locale].shared,
@@ -1091,27 +1082,6 @@ const createRefineCalculatorContext = (content) => {
       createPageConfig(content, { quick: modeCopy.quick, refine: modeCopy.refine })
     ),
     jsonLd: escapeJsonForHtml(createJsonLd({ ...content, path }, { includeFaq: false }))
-  };
-};
-
-const createOfferCheckerContext = (content) => {
-  const offerChecker = toolCopy[content.locale]?.offerChecker;
-  if (!offerChecker) throw new Error(`Missing offer checker copy for ${content.locale}.`);
-  const path = toolPath(content.locale, 'offer-checker');
-  const base = createHomeContext(content, { pageKind: 'offer-checker' });
-  return {
-    ...base,
-    path,
-    meta: offerChecker.meta,
-    offerChecker,
-    offerCheckerScopeItems: scopeItems(offerChecker),
-    alternateLinks: createToolAlternateLinks('offer-checker'),
-    languageLinks: createToolLanguageLinks(content.locale, 'offer-checker'),
-    headerCtaHref: toolPath(content.locale, 'calculator'),
-    toolShared: toolCopy[content.locale].shared,
-    pageConfig: escapeJsonForHtml(
-      createPageConfig(content, { offerChecker: createOfferCheckerRuntime(content, offerChecker) })
-    )
   };
 };
 
@@ -1257,40 +1227,6 @@ for (const { key } of GENERATED_CONTENT_LOCALES) {
   await writeGenerated(output, renderFaq(createFaqContext(content)));
 }
 
-const scopeItems = (tool) => [
-  { key: 'panels', name: 'scope-panels', label: tool.scope.panels },
-  { key: 'inverter', name: 'scope-inverter', label: tool.scope.inverter },
-  { key: 'mounting', name: 'scope-mounting', label: tool.scope.mounting },
-  {
-    key: 'standard-installation',
-    name: 'scope-standard-installation',
-    label: tool.scope.installation
-  },
-  {
-    key: 'basic-grid-connection',
-    name: 'scope-basic-grid-connection',
-    label: tool.scope.grid
-  },
-  { key: 'battery', name: 'scope-battery', label: tool.scope.battery }
-];
-
-const createOfferCheckerRuntime = (content, tool) => ({
-  toolType: 'offer-checker',
-  locale: runtimeLocales[content.locale],
-  priceBook: TEMPORARY_YOURENERGY_PRICEBOOK,
-  strings: {
-    invalid: tool.invalid,
-    resultAwaiting: tool.resultAwaiting,
-    notComparable: tool.notComparable,
-    expiry: tool.expiry,
-    status: tool.status,
-    scope: Object.fromEntries(scopeItems(tool).map(({ key, label }) => [key, label])),
-    scopeIncomplete: tool.scopeIncomplete,
-    reason: tool.reason,
-    questions: tool.questions
-  }
-});
-
 for (const { key } of GENERATED_CONTENT_LOCALES) {
   const content = homeContent[key];
   const quickOutput = resolve(root, toolFile(key, 'calculator'));
@@ -1308,13 +1244,6 @@ for (const { key } of GENERATED_CONTENT_LOCALES) {
     refineOutput,
     renderRefineCalculator(createRefineCalculatorContext(content))
   );
-}
-
-for (const { key } of GENERATED_CONTENT_LOCALES) {
-  const content = homeContent[key];
-  const output = resolve(root, toolFile(key, 'offer-checker'));
-  await mkdir(dirname(output), { recursive: true });
-  await writeGenerated(output, renderOfferChecker(createOfferCheckerContext(content)));
 }
 
 for (const { key } of GENERATED_CONTENT_LOCALES) {

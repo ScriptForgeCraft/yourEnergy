@@ -80,7 +80,6 @@ test('every published page composes the shared cinematic header and footer', asy
       'src/templates/calculator-quick.hbs',
       'src/templates/calculator-refine.hbs',
       'src/templates/calculator.hbs',
-      'src/templates/offer-checker.hbs',
       'src/templates/support.hbs',
       'src/templates/placeholder.hbs'
     ].map(async (path) => [path, await source(path)])

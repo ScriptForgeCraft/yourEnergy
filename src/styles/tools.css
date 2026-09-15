@@ -680,48 +680,8 @@
   font-size: 0.86rem;
 }
 
-.tool-result.is-below-range {
-  border-color: #e4b93e;
-}
-
-.tool-result.is-within-range {
-  border-color: #55a272;
-}
-
-.tool-result.is-above-range,
-.tool-result.is-not-comparable {
-  border-color: #cf8d50;
-}
-
 .tool-result .button {
   margin-top: 24px;
-}
-
-.pricebook-reference {
-  margin-top: 1.5rem;
-  border-top: 1px solid var(--color-border);
-  padding-top: 1.25rem;
-  color: var(--color-muted);
-}
-
-.pricebook-reference h3,
-.pricebook-reference p {
-  margin: 0;
-}
-
-.pricebook-reference p + p,
-.pricebook-reference h3 + p,
-.pricebook-reference strong + small {
-  margin-top: 0.65rem;
-}
-
-.pricebook-reference strong,
-.pricebook-reference small {
-  display: block;
-}
-
-.pricebook-reference strong {
-  color: var(--color-navy);
 }
 
 @media (max-width: 860px) {
