@@ -94,6 +94,10 @@
               data-category-list
               aria-label="Категории оборудования"
             ></div>
+            <div class="equipment-model-picker">
+              <label for="equipment-model">Модель в категории <span data-category-product-count></span></label>
+              <select id="equipment-model" data-product-select></select>
+            </div>
           </section>
 
           <section class="product-viewer" aria-label="Интерактивный обзор продукта" data-viewer>
@@ -108,6 +112,7 @@
                   decoding="async"
                 />
                 <div class="product-hotspots" data-hotspots></div>
+                <p class="product-image-missing" data-product-image-missing hidden>Изображение будет добавлено.<br />Характеристики и документы доступны справа.</p>
               </div>
             </div>
             <p class="product-viewer__hint" data-rotate-hint>
@@ -115,6 +120,7 @@
               <span data-rotate-hint-text></span>
             </p>
             <p class="sr-status" data-product-status aria-live="polite"></p>
+            <p class="product-viewer__image-note" data-product-image-note hidden></p>
           </section>
 
           <aside class="product-panel" data-product-panel aria-label="Информация о продукте">
@@ -300,8 +306,10 @@
         <section class="product-explorer__visual" aria-label="Продукт и интерактивные точки">
           <div class="product-explorer__image-wrap">
             <img data-explorer-image alt="" />
+            <p class="product-image-missing" data-explorer-image-missing hidden>Изображение будет добавлено.<br />Смотрите характеристики и документы.</p>
             <div class="product-hotspots product-hotspots--explorer" data-explorer-hotspots></div>
           </div>
+          <p class="product-explorer__image-note" data-explorer-image-note hidden></p>
         </section>
         <section class="product-explorer__details">
           <p class="product-explorer__brand" data-explorer-brand></p>

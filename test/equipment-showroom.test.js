@@ -1,0 +1,55 @@
+import assert from 'node:assert/strict';
+import { readFile, stat } from 'node:fs/promises';
+import test from 'node:test';
+
+const data = JSON.parse(
+  await readFile(new URL('../src/data/equipment/equipment-data.json', import.meta.url), 'utf8')
+);
+const localAsset = (path) => new URL(`../public${path}`, import.meta.url);
+
+test('equipment products have unique ids and complete interactive content', () => {
+  assert.equal(new Set(data.products.map(({ id }) => id)).size, data.products.length);
+  for (const product of data.products) {
+    assert.ok(data.categories.some(({ id, enabled }) => id === product.category && enabled));
+    assert.equal(product.hotspots.length, 5);
+    assert.equal(new Set(product.hotspots.map(({ id }) => id)).size, 5);
+    assert.ok(product.hotspots.every(({ label, text }) => label && text));
+    assert.ok(product.highlights.length && Object.keys(product.specs).length);
+    assert.ok(product.documents.some(({ url }) => url === product.datasheetPdf));
+  }
+});
+
+test('equipment images and customer-named PDF downloads exist and fit the static asset budget', async () => {
+  for (const product of data.products) {
+    assert.ok((await stat(localAsset(product.image))).size > 0);
+    for (const document of product.documents) {
+      assert.match(document.url.split('/').pop(), /^[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*\.pdf$/u);
+      assert.ok(document.pages > 0 && document.language && document.sizeLabel);
+      const file = await readFile(localAsset(document.url));
+      assert.equal(file.subarray(0, 5).toString(), '%PDF-');
+      assert.ok(file.length < 25 * 1024 * 1024, document.url);
+    }
+  }
+});
+
+test('new products use sourced data and do not invent mounting warranty or current prices', () => {
+  const panel = data.products.find(({ id }) => id === 'znshine-zxnr-bd132');
+  assert.equal(panel.powerRange, '620–650 Вт');
+  assert.equal(panel.specs.dimensions, '2382 × 1134 × 30 мм');
+  assert.equal(panel.specs.maxEfficiency, '24,1% (650 Вт, STC)');
+  const mounting = data.products.find(({ id }) => id === 'gck-triangle-2200');
+  assert.ok(mounting.warrantyNote && mounting.documentsNote && mounting.imageNote);
+  assert.equal(mounting.specs.warranty, undefined);
+  assert.equal(mounting.price, undefined);
+  assert.equal(data.products.filter(({ model }) => model === 'LR8-66HVD').length, 1);
+});
+
+test('equipment keeps a flat interactive hotspot layer and no pointer-follow parallax', async () => {
+  const css = await readFile(new URL('../src/styles/equipment.css', import.meta.url), 'utf8');
+  const js = await readFile(new URL('../src/ui/equipment-showroom.js', import.meta.url), 'utf8');
+  assert.doesNotMatch(js, /addEventListener\(['"](?:mousemove|pointermove)/u);
+  assert.doesNotMatch(css, /preserve-3d|translateZ/u);
+  assert.match(css, /\.product-hotspots\s*\{[^}]*z-index:\s*2;/u);
+  assert.match(css, /\.product-hotspot\s*\{[^}]*pointer-events:\s*auto;/u);
+  assert.match(js, /link\.download = url\.split/u);
+});

@@ -1,9 +1,17 @@
+import { productsInCategory } from '../data/equipment/catalog.js';
+
 const CATEGORY_ICONS = Object.freeze({
   'solar-panels': 'sun',
   inverters: 'zap',
   batteries: 'cycle',
-  mounting: 'support',
+  mounting: 'solar-mount',
   monitoring: 'satellite'
+  ,'grid-inverters': 'zap',
+  microinverters: 'zap',
+  'home-ess': 'faq-home',
+  'commercial-ess': 'chart-bars',
+  'ev-chargers': 'zap',
+  'system-components': 'faq-settings'
 });
 
 const HIGHLIGHT_ICONS = Object.freeze(['zap', 'shield-check', 'cycle', 'sun']);
@@ -35,7 +43,15 @@ const SPEC_LABELS = Object.freeze({
   nominalVoltage: 'Номинальное напряжение',
   operatingVoltageRange: 'Рабочий диапазон напряжения',
   communication: 'Связь',
-  cycleLife: 'Ресурс циклов'
+  cycleLife: 'Ресурс циклов',
+  cellType: 'Тип ячеек',
+  annualDegradation: 'Снижение мощности',
+  material: 'Материал',
+  inclination: 'Угол наклона',
+  kitLength: 'Длина комплекта',
+  railLength: 'Длина профиля',
+  supplier: 'Поставщик',
+  configuration: 'Комплектация'
 });
 
 const $ = (selector, root = document) => root.querySelector(selector);
@@ -56,6 +72,23 @@ const createIcon = (icon) => {
   use.setAttribute('href', `/icons.svg#${icon}`);
   svg.append(use);
   return svg;
+};
+
+const setProductImage = (image, placeholder, product) => {
+  const showMissing = () => {
+    image.hidden = true;
+    placeholder.hidden = false;
+  };
+  image.onerror = showMissing;
+  image.alt = `${product.brand} ${product.name}`;
+  if (!product.image) {
+    image.removeAttribute('src');
+    showMissing();
+    return;
+  }
+  image.hidden = false;
+  placeholder.hidden = true;
+  image.src = product.image;
 };
 
 const humanizeSpec = (key) =>
@@ -106,6 +139,10 @@ const renderHotspots = (product, target) => {
     const button = createElement('button', 'product-hotspot');
     button.type = 'button';
     button.dataset.hotspot = hotspot.id;
+    if (hotspot.position) {
+      button.style.setProperty('--hotspot-x', `${hotspot.position.x}%`);
+      button.style.setProperty('--hotspot-y', `${hotspot.position.y}%`);
+    }
     button.setAttribute('aria-expanded', 'false');
     button.setAttribute('aria-label', `${hotspot.label}: ${hotspot.text}`);
 
@@ -139,7 +176,7 @@ const renderHotspots = (product, target) => {
 
 const renderBenefits = (product, target) => {
   const list = createElement('ul', 'equipment-benefit-list');
-  product.hotspots.forEach(({ label, text }) => {
+  (product.benefits ?? product.hotspots).forEach(({ label, text }) => {
     const item = createElement('li');
     item.append(createElement('strong', '', label), createElement('span', '', text));
     list.append(item);
@@ -161,18 +198,40 @@ const renderSpecs = (product, target, className = 'equipment-spec-list') => {
 
 const renderDocuments = (product, target, className = 'equipment-document-list') => {
   const list = createElement('div', className);
-  product.documents.forEach(({ label, url }) => {
+  product.documents.forEach(({ label, url, language, pages, sizeLabel }) => {
     const link = createElement('a');
     link.href = url;
+    link.download = url.split('/').pop();
     link.target = '_blank';
     link.rel = 'noopener noreferrer';
-    link.append(createIcon('file'), createElement('span', '', label), createIcon('arrow-right'));
+    const copy = createElement('span', 'equipment-document-copy');
+    copy.append(createElement('strong', '', label));
+    copy.append(
+      createElement(
+        'small',
+        '',
+        ['PDF', language, pages && `${pages} стр.`, sizeLabel].filter(Boolean).join(' · ')
+      )
+    );
+    link.append(createIcon('file'), copy, createIcon('download'));
     list.append(link);
   });
+  if (product.documentsNote)
+    list.append(createElement('p', 'equipment-document-note', product.documentsNote));
   target.replaceChildren(list);
 };
 
 const renderWarranty = (product, target, className = 'equipment-warranty-list') => {
+  if (!getWarrantyItems(product).length) {
+    target.replaceChildren(
+      createElement(
+        'p',
+        'equipment-document-note',
+        product.warrantyNote ?? 'Условия гарантии уточняются при подборе оборудования.'
+      )
+    );
+    return;
+  }
   const list = createElement('dl', className);
   getWarrantyItems(product).forEach(({ label, value }) => {
     const row = createElement('div');
@@ -240,12 +299,13 @@ const setAccordionCopy = (copy) => {
 };
 
 const renderExplorer = (product, copy, explorer) => {
-  $('[data-explorer-image]', explorer).src = product.image;
-  $('[data-explorer-image]', explorer).alt = `${product.brand} ${product.name}`;
+  setProductImage($('[data-explorer-image]', explorer), $('[data-explorer-image-missing]', explorer), product);
   $('[data-explorer-brand]', explorer).textContent = product.brand;
   $('[data-explorer-name]', explorer).textContent = product.name;
   $('[data-explorer-model]', explorer).textContent = `${product.model} · ${product.powerRange}`;
   $('[data-explorer-description]', explorer).textContent = product.shortDescription;
+  $('[data-explorer-image-note]', explorer).textContent = product.imageNote ?? '';
+  $('[data-explorer-image-note]', explorer).hidden = !product.imageNote;
   $('[data-explorer-specs-title]', explorer).textContent = copy.product.technicalSpecs;
   $('[data-explorer-warranty-title]', explorer).textContent = copy.product.warranty;
   renderHotspots(product, $('[data-explorer-hotspots]', explorer));
@@ -260,7 +320,7 @@ const renderExplorer = (product, copy, explorer) => {
 };
 
 const preloadProducts = (products) => {
-  products.forEach(({ image }) => {
+  products.filter(({ image }) => image).slice(0, 3).forEach(({ image }) => {
     const preload = new Image();
     preload.src = image;
   });
@@ -270,13 +330,14 @@ export const initEquipmentShowroom = ({ data, copy, gsap }) => {
   const root = $('[data-equipment-showroom]');
   if (!root || !data?.products?.length) return;
 
-  const products = data.products.filter((product) => product?.id && product?.image);
+  const products = data.products.filter((product) => product?.id);
   const categories = data.categories ?? [];
   const productById = new Map(products.map((product) => [product.id, product]));
   const categoryList = $('[data-category-list]', root);
   const railCategories = $('[data-rail-categories]', root);
   const productTrack = $('[data-product-track]', root);
   const productViewport = $('[data-product-viewport]', root);
+  const productSelect = $('[data-product-select]', root);
   const productVisual = $('[data-product-visual]', root);
   const panelContent = $('[data-panel-content]', root);
   const explorer = $('[data-product-explorer]');
@@ -284,6 +345,8 @@ export const initEquipmentShowroom = ({ data, copy, gsap }) => {
   const animate = !reducedMotion;
   let selectedProduct = products[0];
   let switching = false;
+  let renderedCategory = null;
+  const lastProductByCategory = new Map();
 
   root.style.setProperty('--equipment-background', `url("${data.hero.background}")`);
   $('[data-page-eyebrow]', root).textContent = copy.page.eyebrow;
@@ -298,7 +361,7 @@ export const initEquipmentShowroom = ({ data, copy, gsap }) => {
   setAccordionCopy(copy);
 
   const selectCategory = (categoryId) => {
-    const categoryProduct = products.find((product) => product.category === categoryId);
+    const categoryProduct = productById.get(lastProductByCategory.get(categoryId)) ?? products.find((product) => product.category === categoryId);
     if (categoryProduct) selectProduct(categoryProduct.id);
   };
 
@@ -306,7 +369,7 @@ export const initEquipmentShowroom = ({ data, copy, gsap }) => {
     categoryList.replaceChildren();
     railCategories.replaceChildren();
     categories.forEach((category) => {
-      const categoryProducts = products.filter((product) => product.category === category.id);
+      const categoryProducts = productsInCategory(products, category.id);
       const button = createElement('button', 'equipment-category');
       button.type = 'button';
       button.dataset.category = category.id;
@@ -340,7 +403,12 @@ export const initEquipmentShowroom = ({ data, copy, gsap }) => {
 
   const renderRail = () => {
     productTrack.replaceChildren();
-    products.forEach((product) => {
+    productSelect.replaceChildren();
+    const categoryProducts = productsInCategory(products, selectedProduct.category);
+    categoryProducts.forEach((product) => {
+      const option = createElement('option', '', `${product.brand} ${product.name} · ${product.powerRange}`);
+      option.value = product.id;
+      productSelect.append(option);
       const card = createElement('button', 'product-card');
       card.type = 'button';
       card.dataset.productId = product.id;
@@ -348,12 +416,14 @@ export const initEquipmentShowroom = ({ data, copy, gsap }) => {
       card.setAttribute('aria-label', `${product.brand} ${product.name}, ${product.powerRange}`);
 
       const imageWrap = createElement('span', 'product-card__image');
-      const image = document.createElement('img');
-      image.src = product.image;
-      image.alt = '';
-      image.loading = product.id === selectedProduct.id ? 'eager' : 'lazy';
-      image.decoding = 'async';
-      imageWrap.append(image);
+      if (product.image) {
+        const image = document.createElement('img');
+        image.src = product.image;
+        image.alt = '';
+        image.loading = product.id === selectedProduct.id ? 'eager' : 'lazy';
+        image.decoding = 'async';
+        imageWrap.append(image);
+      } else imageWrap.append(createElement('span', 'product-card__no-image', 'Фото позже'));
 
       const copyWrap = createElement('span', 'product-card__copy');
       copyWrap.append(
@@ -367,9 +437,17 @@ export const initEquipmentShowroom = ({ data, copy, gsap }) => {
       card.addEventListener('click', () => selectProduct(product.id));
       productTrack.append(card);
     });
+    renderedCategory = selectedProduct.category;
+    preloadProducts(categoryProducts);
+    const single = categoryProducts.length < 2;
+    $('[data-product-previous]', root).disabled = single;
+    $('[data-product-next]', root).disabled = single;
   };
 
   const syncNavigationState = () => {
+    productSelect.value = selectedProduct.id;
+    const categoryProducts = productsInCategory(products, selectedProduct.category);
+    $('[data-category-product-count]', root).textContent = `${categoryProducts.findIndex(({ id }) => id === selectedProduct.id) + 1} / ${categoryProducts.length}`;
     $$('[data-category]', root).forEach((button) => {
       button.setAttribute(
         'aria-pressed',
@@ -398,9 +476,13 @@ export const initEquipmentShowroom = ({ data, copy, gsap }) => {
 
   const renderProduct = () => {
     const product = selectedProduct;
+    lastProductByCategory.set(product.category, product.id);
+    if (renderedCategory !== product.category) renderRail();
     const image = $('[data-product-image]', root);
-    image.src = product.image;
-    image.alt = `${product.brand} ${product.name}`;
+    setProductImage(image, $('[data-product-image-missing]', root), product);
+    $('[data-product-image-note]', root).textContent = product.imageNote ?? '';
+    $('[data-product-image-note]', root).hidden = !product.imageNote;
+    $('[data-product-popular]', root).textContent = product.badge ?? copy.product.popular;
     $('[data-product-brand]', root).textContent = product.brand;
     $('[data-product-brand]', root).dataset.brand = product.brand.toLowerCase();
     $('[data-product-name]', root).textContent = product.name;
@@ -408,6 +490,8 @@ export const initEquipmentShowroom = ({ data, copy, gsap }) => {
     $('[data-product-power]', root).textContent = product.powerRange;
     $('[data-product-description]', root).textContent = product.shortDescription;
     $('[data-pdf-link]', root).href = product.datasheetPdf;
+    $('[data-pdf-link]', root).download = product.datasheetPdf.split('/').pop();
+    $('[data-download-pdf]', root).textContent = product.downloadLabel ?? copy.product.downloadPdf;
     $('[data-document-count]', root).textContent = `${product.documents.length} PDF`;
     renderHighlights(product, $('[data-product-highlights]', root));
     renderHotspots(product, $('[data-hotspots]', root));
@@ -484,13 +568,17 @@ export const initEquipmentShowroom = ({ data, copy, gsap }) => {
   }
 
   const stepProduct = (direction) => {
-    const index = products.findIndex(({ id }) => id === selectedProduct.id);
-    selectProduct(products[(index + direction + products.length) % products.length].id);
+    const categoryProducts = productsInCategory(products, selectedProduct.category);
+    const index = categoryProducts.findIndex(({ id }) => id === selectedProduct.id);
+    selectProduct(categoryProducts[(index + direction + categoryProducts.length) % categoryProducts.length].id);
   };
+
+  productSelect.addEventListener('change', () => selectProduct(productSelect.value));
 
   $('[data-product-previous]', root).addEventListener('click', () => stepProduct(-1));
   $('[data-product-next]', root).addEventListener('click', () => stepProduct(1));
   productViewport.addEventListener('keydown', (event) => {
+    if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') event.preventDefault();
     if (event.key === 'ArrowLeft') stepProduct(-1);
     if (event.key === 'ArrowRight') stepProduct(1);
   });
@@ -523,9 +611,7 @@ export const initEquipmentShowroom = ({ data, copy, gsap }) => {
   });
 
   renderCategories();
-  renderRail();
   renderProduct();
-  preloadProducts(products);
   initAccordions(root, gsap, animate);
   root.setAttribute('aria-busy', 'false');
 

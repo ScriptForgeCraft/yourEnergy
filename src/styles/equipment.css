@@ -432,6 +432,7 @@
   pointer-events: none;
 }
 
+.product-hotspot:nth-child(1) .product-hotspot__card,
 .product-hotspot:nth-child(3) .product-hotspot__card,
 .product-hotspot:nth-child(5) .product-hotspot__card {
   right: 42px;
@@ -440,15 +441,15 @@
 }
 
 .product-hotspot__card strong {
-  font-size: 0.73rem;
+  font-size: 0.8rem;
   line-height: 1.2;
 }
 
 .product-hotspot__card > span {
   margin-top: 3px;
   color: rgb(255 255 255 / 67%);
-  font-size: 0.64rem;
-  line-height: 1.28;
+  font-size: 0.75rem;
+  line-height: 1.4;
 }
 
 .product-hotspot:hover .product-hotspot__marker,
@@ -464,6 +465,59 @@
 .product-hotspot[aria-expanded='true'] .product-hotspot__card {
   opacity: 1;
   transform: translateX(0);
+}
+
+.product-hotspot:hover,
+.product-hotspot:focus-visible,
+.product-hotspot[aria-expanded='true'] {
+  z-index: 5;
+}
+
+.equipment-document-copy {
+  min-width: 0;
+  display: grid;
+  gap: 4px;
+}
+
+.equipment-document-copy strong {
+  font-size: 0.82rem;
+  font-weight: 550;
+}
+
+.equipment-document-copy small {
+  color: rgb(255 255 255 / 55%);
+  font-size: 0.7rem;
+}
+
+.equipment-document-note {
+  margin: 10px 0 4px;
+  color: rgb(255 255 255 / 65%);
+  font-size: 0.78rem;
+  line-height: 1.5;
+}
+
+.product-viewer__image-note {
+  position: absolute;
+  bottom: -17px;
+  width: 100%;
+  margin: 0;
+  color: rgb(255 255 255 / 46%);
+  font-size: 0.61rem;
+  line-height: 1.35;
+  text-align: center;
+}
+
+.product-explorer__image-note {
+  position: absolute;
+  z-index: 2;
+  bottom: 12px;
+  padding-inline: 12px;
+  max-width: 420px;
+  margin: 0 auto;
+  color: rgb(255 255 255 / 55%);
+  font-size: 0.72rem;
+  line-height: 1.5;
+  text-align: center;
 }
 
 .product-viewer__hint {
@@ -1498,6 +1552,7 @@
     width: min(210px, 50vw);
   }
 
+  .product-hotspot:nth-child(1) .product-hotspot__card,
   .product-hotspot:nth-child(3) .product-hotspot__card,
   .product-hotspot:nth-child(5) .product-hotspot__card {
     right: 46px;
@@ -1647,20 +1702,18 @@
   }
 
   .product-hotspot__card {
-    position: fixed;
-    top: auto;
-    right: 14px !important;
-    bottom: 60px;
-    left: 14px !important;
-    width: auto;
+    position: absolute;
+    top: 50%;
+    bottom: auto;
+    width: min(220px, 58vw);
     min-height: 64px;
-    transform: translateY(8px);
+    transform: translateY(-50%);
   }
 
   .product-hotspot:hover .product-hotspot__card,
   .product-hotspot:focus-visible .product-hotspot__card,
   .product-hotspot[aria-expanded='true'] .product-hotspot__card {
-    transform: translateY(0);
+    transform: translateY(-50%);
   }
 
   .product-panel__content {
