@@ -265,40 +265,6 @@
   font-size: 1.04rem;
 }
 
-.faq-answers__calculator-link {
-  display: grid;
-  grid-template-columns: auto 1fr auto auto;
-  gap: 10px;
-  align-items: center;
-  max-width: 29rem;
-  margin-top: 30px;
-  padding: 16px 18px;
-  border: 1px solid #f0dca6;
-  border-radius: 14px;
-  color: #253a4b;
-  background: #fff8e8;
-  font-size: 0.9rem;
-  line-height: 1.35;
-}
-
-.faq-answers__calculator-link > :first-child {
-  width: 21px;
-  height: 21px;
-  color: #b77d00;
-}
-
-.faq-answers__calculator-link strong {
-  color: #b77d00;
-  font-size: 0.82rem;
-  white-space: nowrap;
-}
-
-.faq-answers__calculator-link > :last-child {
-  width: 17px;
-  height: 17px;
-  color: #b77d00;
-}
-
 .faq-answers__list {
   border-top: 1px solid #d9dfdf;
 }
@@ -465,14 +431,6 @@
       rgb(249 247 241 / 86%) 64%,
       rgb(249 247 241 / 42%) 100%
     );
-  }
-
-  .faq-answers__calculator-link {
-    grid-template-columns: auto 1fr auto;
-  }
-
-  .faq-answers__calculator-link > :last-child {
-    display: none;
   }
 
   .faq-answer summary {

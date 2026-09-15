@@ -811,9 +811,6 @@ export default {
     allQuestions: 'All questions',
     notFound: 'Didn’t find an answer?',
     contactLink: 'Contact us',
-    calculatorPrompt: 'Questions about the calculation?',
-    calculatorFaqLink: 'Open FAQ',
-    faqCalculatorLink: 'Open calculator',
     previewItems: [
       {
         question: 'How much does a solar system cost?',

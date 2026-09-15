@@ -44,7 +44,7 @@
       </section>
       <section class='faq-answers section' aria-labelledby='faq-answers-title'>
         <div class='container faq-answers__layout'>
-          <header class='faq-answers__heading'><h2 id='faq-answers-title'>{{faq.answersTitle}}</h2><p>{{faq.answersIntro}}</p><a class='faq-answers__calculator-link' href='{{calculatorHref}}'><svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#calculator'></use></svg><span>{{faq.calculatorPrompt}}</span><strong>{{faq.faqCalculatorLink}}</strong><svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#arrow-right'></use></svg></a></header>
+          <header class='faq-answers__heading'><h2 id='faq-answers-title'>{{faq.answersTitle}}</h2><p>{{faq.answersIntro}}</p></header>
           <div class='faq-answers__list'>{{#each faq.items}}<details id='faq-{{add @index 1}}' class='faq-answer'><summary><span class='faq-answer__number'>{{add @index 1}}</span><span>{{question}}</span><span class='faq-answer__toggle' aria-hidden='true'>+</span></summary><div class='faq-answer__body'><p>{{answer}}</p></div></details>{{/each}}</div>
         </div>
       </section>

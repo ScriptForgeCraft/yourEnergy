@@ -832,9 +832,6 @@ export default {
     allQuestions: 'Բոլոր հարցերը',
     notFound: 'Չե՞ք գտել պատասխանը։',
     contactLink: 'Կապվեք մեզ հետ',
-    calculatorPrompt: 'Հաշվարկի վերաբերյալ հարցե՞ր ունեք։',
-    calculatorFaqLink: 'Բացել FAQ-ը',
-    faqCalculatorLink: 'Բացել հաշվիչը',
     previewItems: [
       {
         question: 'Որքա՞ն արժե արևային կայանը։',

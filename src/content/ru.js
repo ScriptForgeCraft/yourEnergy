@@ -813,9 +813,6 @@ export default {
     allQuestions: 'Все вопросы',
     notFound: 'Не нашли ответ?',
     contactLink: 'Свяжитесь с нами',
-    calculatorPrompt: 'Есть вопросы по расчёту?',
-    calculatorFaqLink: 'Открыть FAQ',
-    faqCalculatorLink: 'Открыть калькулятор',
     previewItems: [
       {
         question: 'Сколько стоит солнечная станция?',
