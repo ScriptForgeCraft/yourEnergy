@@ -446,7 +446,7 @@ export default {
     chartMonths: ['Я', 'Ф', 'М', 'А', 'М', 'И', 'И', 'А', 'С', 'О', 'Н', 'Д'],
     steps: [
       {
-        number: '01',
+        number: '1',
         nav: 'Ваш дом',
         visual: 'home',
         visualLabel: 'Заполнитель визуала дома',
@@ -479,7 +479,7 @@ export default {
         ]
       },
       {
-        number: '02',
+        number: '2',
         nav: 'Параметры крыши',
         visual: 'roof',
         visualLabel: 'Заполнитель контура крыши',
@@ -516,7 +516,7 @@ export default {
         ]
       },
       {
-        number: '03',
+        number: '3',
         nav: 'Проект системы',
         visual: 'system',
         visualLabel: 'Заполнитель визуала солнечной системы',
@@ -556,7 +556,7 @@ export default {
         ]
       },
       {
-        number: '04',
+        number: '4',
         nav: 'Осмотр специалиста',
         visual: 'inspection',
         visualLabel: 'Инженерный осмотр объекта',
@@ -585,7 +585,7 @@ export default {
         ]
       },
       {
-        number: '05',
+        number: '5',
         nav: 'Установка',
         visual: 'installation',
         visualLabel: 'Заполнитель визуала установки',
@@ -597,15 +597,15 @@ export default {
           { icon: 'sun', label: 'Подготовка оборудования', value: 'Подтверждается для проекта' }
         ],
         timeline: [
-          { number: '01', label: 'Осмотр объекта' },
-          { number: '02', label: 'Финальный проект' },
-          { number: '03', label: 'Подготовка оборудования' },
-          { number: '04', label: 'Монтаж' },
-          { number: '05', label: 'Ввод в эксплуатацию' }
+          { number: '1', label: 'Осмотр объекта' },
+          { number: '2', label: 'Финальный проект' },
+          { number: '3', label: 'Подготовка оборудования' },
+          { number: '4', label: 'Монтаж' },
+          { number: '5', label: 'Ввод в эксплуатацию' }
         ]
       },
       {
-        number: '06',
+        number: '6',
         nav: 'Поддержка на весь срок',
         visual: 'support',
         visualLabel: 'Заполнитель визуала поддержки',

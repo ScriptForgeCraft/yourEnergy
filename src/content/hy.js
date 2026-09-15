@@ -456,7 +456,7 @@ export default {
     chartMonths: ['Հ', 'Փ', 'Մ', 'Ա', 'Մ', 'Հ', 'Հ', 'Օ', 'Ս', 'Հ', 'Ն', 'Դ'],
     steps: [
       {
-        number: '01',
+        number: '1',
         nav: 'Ձեր տունը',
         visual: 'home',
         visualLabel: 'Տան տեսողական տեղապահ',
@@ -493,7 +493,7 @@ export default {
         ]
       },
       {
-        number: '02',
+        number: '2',
         nav: 'Տանիքի տվյալները',
         visual: 'roof',
         visualLabel: 'Տանիքի ուրվագծի տեղապահ',
@@ -530,7 +530,7 @@ export default {
         ]
       },
       {
-        number: '03',
+        number: '3',
         nav: 'Համակարգի նախագիծ',
         visual: 'system',
         visualLabel: 'Արևային համակարգի տեղապահ',
@@ -570,7 +570,7 @@ export default {
         ]
       },
       {
-        number: '04',
+        number: '4',
         nav: 'Մասնագետի զննում',
         visual: 'inspection',
         visualLabel: 'Տեղում ինժեներական զննում',
@@ -599,7 +599,7 @@ export default {
         ]
       },
       {
-        number: '05',
+        number: '5',
         nav: 'Տեղադրում',
         visual: 'installation',
         visualLabel: 'Տեղադրման տեսողական տեղապահ',
@@ -611,15 +611,15 @@ export default {
           { icon: 'sun', label: 'Սարքավորումների պատրաստում', value: 'Հաստատվում է նախագծի համար' }
         ],
         timeline: [
-          { number: '01', label: 'Տեղազննում' },
-          { number: '02', label: 'Վերջնական նախագիծ' },
-          { number: '03', label: 'Սարքավորումների պատրաստում' },
-          { number: '04', label: 'Տեղադրում' },
-          { number: '05', label: 'Գործարկում' }
+          { number: '1', label: 'Տեղազննում' },
+          { number: '2', label: 'Վերջնական նախագիծ' },
+          { number: '3', label: 'Սարքավորումների պատրաստում' },
+          { number: '4', label: 'Տեղադրում' },
+          { number: '5', label: 'Գործարկում' }
         ]
       },
       {
-        number: '06',
+        number: '6',
         nav: 'Երկարաժամկետ աջակցություն',
         visual: 'support',
         visualLabel: 'Աջակցության տեսողական տեղապահ',

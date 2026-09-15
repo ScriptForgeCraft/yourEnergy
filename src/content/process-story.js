@@ -36,7 +36,7 @@ export const processStoryCopy = {
     },
     steps: [
       {
-        number: '01',
+        number: '1',
         nav: 'Your Solar Analysis',
         visual: 'analysis',
         visualLabel: 'Solar analysis visual placeholder',
@@ -77,7 +77,7 @@ export const processStoryCopy = {
         cta: 'Start my analysis'
       },
       {
-        number: '02',
+        number: '2',
         nav: 'Engineer Site Visit',
         visual: 'inspection',
         visualLabel: 'On-site engineering inspection placeholder',
@@ -117,7 +117,7 @@ export const processStoryCopy = {
         ]
       },
       {
-        number: '03',
+        number: '3',
         nav: 'Final System Design',
         visual: 'design',
         visualLabel: 'Final solar system design placeholder',
@@ -157,7 +157,7 @@ export const processStoryCopy = {
         ]
       },
       {
-        number: '04',
+        number: '4',
         nav: 'Clear Proposal & Agreement',
         visual: 'proposal',
         visualLabel: 'Proposal and agreement placeholder',
@@ -198,23 +198,23 @@ export const processStoryCopy = {
         ]
       },
       {
-        number: '05',
+        number: '5',
         nav: 'Installation & Commissioning',
         visual: 'installation',
         visualLabel: 'Installation and commissioning placeholder',
         headline: 'We build it.\nTest it.\nTurn it on.',
         copy: 'The system is installed according to the approved design, checked and commissioned for operation.',
         timeline: [
-          { number: '01', label: 'Site preparation' },
-          { number: '02', label: 'Mounting' },
-          { number: '03', label: 'Panels' },
-          { number: '04', label: 'Inverter & electrical' },
-          { number: '05', label: 'Testing' },
-          { number: '06', label: 'System online' }
+          { number: '1', label: 'Site preparation' },
+          { number: '2', label: 'Mounting' },
+          { number: '3', label: 'Panels' },
+          { number: '4', label: 'Inverter & electrical' },
+          { number: '5', label: 'Testing' },
+          { number: '6', label: 'System online' }
         ]
       },
       {
-        number: '06',
+        number: '6',
         nav: 'Solar Passport & Support',
         visual: 'support',
         visualLabel: 'Solar Passport and support placeholder',
@@ -299,7 +299,7 @@ export const processStoryCopy = {
     },
     steps: [
       {
-        number: '01',
+        number: '1',
         nav: 'Анализ вашей системы',
         visual: 'analysis',
         visualLabel: 'Визуализация анализа солнечной системы',
@@ -340,7 +340,7 @@ export const processStoryCopy = {
         cta: 'Начать мой анализ'
       },
       {
-        number: '02',
+        number: '2',
         nav: 'Выезд инженера',
         visual: 'inspection',
         visualLabel: 'Визуализация инженерного осмотра объекта',
@@ -380,7 +380,7 @@ export const processStoryCopy = {
         ]
       },
       {
-        number: '03',
+        number: '3',
         nav: 'Финальный проект системы',
         visual: 'design',
         visualLabel: 'Визуализация финального проекта солнечной системы',
@@ -420,7 +420,7 @@ export const processStoryCopy = {
         ]
       },
       {
-        number: '04',
+        number: '4',
         nav: 'Понятное предложение и договор',
         visual: 'proposal',
         visualLabel: 'Визуализация предложения и договора',
@@ -466,23 +466,23 @@ export const processStoryCopy = {
         ]
       },
       {
-        number: '05',
+        number: '5',
         nav: 'Монтаж и ввод в эксплуатацию',
         visual: 'installation',
         visualLabel: 'Визуализация монтажа и ввода в эксплуатацию',
         headline: 'Монтируем.\nПроверяем.\nЗапускаем.',
         copy: 'Систему монтируют по утверждённому проекту, затем проверяют и вводят в эксплуатацию.',
         timeline: [
-          { number: '01', label: 'Подготовка объекта' },
-          { number: '02', label: 'Монтаж конструкций' },
-          { number: '03', label: 'Панели' },
-          { number: '04', label: 'Инвертор и электрика' },
-          { number: '05', label: 'Проверка' },
-          { number: '06', label: 'Система запущена' }
+          { number: '1', label: 'Подготовка объекта' },
+          { number: '2', label: 'Монтаж конструкций' },
+          { number: '3', label: 'Панели' },
+          { number: '4', label: 'Инвертор и электрика' },
+          { number: '5', label: 'Проверка' },
+          { number: '6', label: 'Система запущена' }
         ]
       },
       {
-        number: '06',
+        number: '6',
         nav: 'Solar Passport и поддержка',
         visual: 'support',
         visualLabel: 'Визуализация Solar Passport и поддержки',
@@ -567,7 +567,7 @@ export const processStoryCopy = {
     },
     steps: [
       {
-        number: '01',
+        number: '1',
         nav: 'Ձեր արևային վերլուծությունը',
         visual: 'analysis',
         visualLabel: 'Արևային համակարգի վերլուծության տեսապատկեր',
@@ -608,7 +608,7 @@ export const processStoryCopy = {
         cta: 'Սկսել իմ վերլուծությունը'
       },
       {
-        number: '02',
+        number: '2',
         nav: 'Ինժեների այց և տեղազննում',
         visual: 'inspection',
         visualLabel: 'Օբյեկտի ինժեներական տեղազննման տեսապատկեր',
@@ -648,7 +648,7 @@ export const processStoryCopy = {
         ]
       },
       {
-        number: '03',
+        number: '3',
         nav: 'Համակարգի վերջնական նախագիծ',
         visual: 'design',
         visualLabel: 'Արևային համակարգի վերջնական նախագծի տեսապատկեր',
@@ -688,7 +688,7 @@ export const processStoryCopy = {
         ]
       },
       {
-        number: '04',
+        number: '4',
         nav: 'Հստակ առաջարկ և պայմանագիր',
         visual: 'proposal',
         visualLabel: 'Առաջարկի և պայմանագրի տեսապատկեր',
@@ -734,23 +734,23 @@ export const processStoryCopy = {
         ]
       },
       {
-        number: '05',
+        number: '5',
         nav: 'Տեղադրում և գործարկում',
         visual: 'installation',
         visualLabel: 'Տեղադրման և գործարկման տեսապատկեր',
         headline: 'Տեղադրում ենք։\nՓորձարկում ենք։\nԳործարկում ենք։',
         copy: 'Համակարգը տեղադրվում է հաստատված նախագծի համաձայն, ստուգվում և հանձնվում շահագործման։',
         timeline: [
-          { number: '01', label: 'Օբյեկտի նախապատրաստում' },
-          { number: '02', label: 'Կրող համակարգի մոնտաժ' },
-          { number: '03', label: 'Վահանակներ' },
-          { number: '04', label: 'Ինվերտոր և էլեկտրական աշխատանքներ' },
-          { number: '05', label: 'Փորձարկում' },
-          { number: '06', label: 'Համակարգը գործարկված է' }
+          { number: '1', label: 'Օբյեկտի նախապատրաստում' },
+          { number: '2', label: 'Կրող համակարգի մոնտաժ' },
+          { number: '3', label: 'Վահանակներ' },
+          { number: '4', label: 'Ինվերտոր և էլեկտրական աշխատանքներ' },
+          { number: '5', label: 'Փորձարկում' },
+          { number: '6', label: 'Համակարգը գործարկված է' }
         ]
       },
       {
-        number: '06',
+        number: '6',
         nav: 'Solar Passport և աջակցություն',
         visual: 'support',
         visualLabel: 'Solar Passport-ի և աջակցության տեսապատկեր',

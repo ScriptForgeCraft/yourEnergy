@@ -500,13 +500,13 @@ const projectsPageCopy = Object.freeze({
       note: 'Комплексный подход к каждому проекту',
       steps: [
         {
-          number: '01',
+          number: '1',
           title: 'Анализ и расчёт',
           copy: 'Подбираем оптимальное решение под ваши задачи'
         },
-        { number: '02', title: 'Проектирование', copy: 'Разрабатываем техническое решение' },
-        { number: '03', title: 'Монтаж', copy: 'Профессиональная установка и запуск' },
-        { number: '04', title: 'Стабильная генерация', copy: 'Чистая энергия на долгие годы' }
+        { number: '2', title: 'Проектирование', copy: 'Разрабатываем техническое решение' },
+        { number: '3', title: 'Монтаж', copy: 'Профессиональная установка и запуск' },
+        { number: '4', title: 'Стабильная генерация', copy: 'Чистая энергия на долгие годы' }
       ]
     },
     cta: {
@@ -614,10 +614,10 @@ const projectsPageCopy = Object.freeze({
       title: 'Գաղափարից մինչև արդյունք',
       note: 'Համապարփակ մոտեցում յուրաքանչյուր նախագծի համար',
       steps: [
-        { number: '01', title: 'Վերլուծություն և հաշվարկ', copy: 'Ընտրում ենք օպտիմալ լուծումը' },
-        { number: '02', title: 'Նախագծում', copy: 'Մշակում ենք տեխնիկական լուծումը' },
-        { number: '03', title: 'Տեղադրում', copy: 'Մասնագիտական տեղադրում և գործարկում' },
-        { number: '04', title: 'Կայուն արտադրություն', copy: 'Մաքուր էներգիա երկար տարիներ' }
+        { number: '1', title: 'Վերլուծություն և հաշվարկ', copy: 'Ընտրում ենք օպտիմալ լուծումը' },
+        { number: '2', title: 'Նախագծում', copy: 'Մշակում ենք տեխնիկական լուծումը' },
+        { number: '3', title: 'Տեղադրում', copy: 'Մասնագիտական տեղադրում և գործարկում' },
+        { number: '4', title: 'Կայուն արտադրություն', copy: 'Մաքուր էներգիա երկար տարիներ' }
       ]
     },
     cta: {
@@ -726,13 +726,13 @@ const projectsPageCopy = Object.freeze({
       note: 'A comprehensive approach to every project',
       steps: [
         {
-          number: '01',
+          number: '1',
           title: 'Analysis and estimate',
           copy: 'We select the right solution for your needs'
         },
-        { number: '02', title: 'Engineering', copy: 'We develop the technical solution' },
-        { number: '03', title: 'Installation', copy: 'Professional installation and start-up' },
-        { number: '04', title: 'Reliable generation', copy: 'Clean energy for years to come' }
+        { number: '2', title: 'Engineering', copy: 'We develop the technical solution' },
+        { number: '3', title: 'Installation', copy: 'Professional installation and start-up' },
+        { number: '4', title: 'Reliable generation', copy: 'Clean energy for years to come' }
       ]
     },
     cta: {
@@ -1182,7 +1182,7 @@ const createBlogArticleJsonLd = (article, content) =>
 const createBlogIndexContext = (content, articles) => {
   const localeArticles = articles.map((article, index) => ({
     ...article[content.locale],
-    number: String(index + 1).padStart(2, '0')
+    number: String(index + 1)
   }));
   const categories = localeArticles.map((article) => ({
     key: article.categoryKey,

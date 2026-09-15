@@ -457,7 +457,7 @@ export default {
     chartMonths: ['J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'],
     steps: [
       {
-        number: '01',
+        number: '1',
         nav: 'Your Home',
         visual: 'home',
         visualLabel: 'Home visual placeholder',
@@ -490,7 +490,7 @@ export default {
         ]
       },
       {
-        number: '02',
+        number: '2',
         nav: 'Roof Details',
         visual: 'roof',
         visualLabel: 'Roof outline visual placeholder',
@@ -523,7 +523,7 @@ export default {
         ]
       },
       {
-        number: '03',
+        number: '3',
         nav: 'System Design',
         visual: 'system',
         visualLabel: 'Solar system visual placeholder',
@@ -553,7 +553,7 @@ export default {
         ]
       },
       {
-        number: '04',
+        number: '4',
         nav: 'Engineer Site Survey',
         visual: 'inspection',
         visualLabel: 'On-site engineering survey',
@@ -582,7 +582,7 @@ export default {
         ]
       },
       {
-        number: '05',
+        number: '5',
         nav: 'Installation',
         visual: 'installation',
         visualLabel: 'Installation visual placeholder',
@@ -594,15 +594,15 @@ export default {
           { icon: 'sun', label: 'Equipment preparation', value: 'Confirmed for the project' }
         ],
         timeline: [
-          { number: '01', label: 'Site review' },
-          { number: '02', label: 'Final design' },
-          { number: '03', label: 'Equipment preparation' },
-          { number: '04', label: 'Installation' },
-          { number: '05', label: 'Commissioning' }
+          { number: '1', label: 'Site review' },
+          { number: '2', label: 'Final design' },
+          { number: '3', label: 'Equipment preparation' },
+          { number: '4', label: 'Installation' },
+          { number: '5', label: 'Commissioning' }
         ]
       },
       {
-        number: '06',
+        number: '6',
         nav: 'Lifetime Support',
         visual: 'support',
         visualLabel: 'Support visual placeholder',
