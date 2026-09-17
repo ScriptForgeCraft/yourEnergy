@@ -353,8 +353,8 @@
 .process-visual {
   position: relative;
   width: 100%;
-  height: min(69svh, 680px);
-  min-height: 470px;
+  height: min(72svh, 680px);
+  min-height: 480px;
   transform-style: preserve-3d;
   will-change: transform, opacity;
 }
@@ -362,9 +362,9 @@
 .process-metrics {
   position: absolute;
   z-index: 5;
-  right: 3%;
-  bottom: 1%;
-  left: 3%;
+  right: 0;
+  bottom: 14px;
+  left: 0;
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 8px;
@@ -377,22 +377,32 @@
 .process-metric {
   position: relative;
   min-width: 0;
-  min-height: 82px;
-  padding: 14px 12px 12px 42px;
-  border: 1px solid #ffffff1f;
-  border-radius: 14px;
-  background: linear-gradient(145deg, #172832e8, #07131bea);
-  box-shadow: 0 14px 30px #0003;
+  min-height: 76px;
+  padding: 12px 10px 10px 38px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 13px;
+  background: linear-gradient(145deg, rgba(14, 30, 40, 0.82), rgba(6, 17, 24, 0.88));
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.45);
   backdrop-filter: blur(14px);
   transform-style: preserve-3d;
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    background 0.2s ease;
+}
+
+.process-metric:hover {
+  transform: translateY(-2px);
+  border-color: rgba(241, 199, 91, 0.45);
+  background: linear-gradient(145deg, rgba(20, 42, 56, 0.9), rgba(8, 23, 33, 0.94));
 }
 
 .process-metric > .inline-icon {
   position: absolute;
-  top: 15px;
-  left: 13px;
-  width: 19px;
-  height: 19px;
+  top: 13px;
+  left: 11px;
+  width: 18px;
+  height: 18px;
   color: var(--process-gold);
 }
 
@@ -408,7 +418,7 @@
 
 .process-metric > strong {
   display: block;
-  margin-top: 5px;
+  margin-top: 4px;
   overflow-wrap: break-word;
   color: #f7f8f9;
   font-size: clamp(11px, 0.87vw, 14px);
@@ -422,7 +432,7 @@
   color: #d6b65f;
 }
 
-/* 01–06 — full-bleed photographic process worlds */
+/* 01–06 — full-bleed cinematic photographic backgrounds */
 .process-state--photo {
   isolation: isolate;
 }
@@ -440,76 +450,51 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: center center;
 }
 
-/* Keep the subject of each supplied scene in the useful centre/right area. */
+/* Specific framing per scene — natural, expansive focal points without extreme zoom */
 .process-state--analysis .process-state__media img {
-  object-position: 50% 52%;
+  object-position: center 40%;
 }
 
 .process-state--inspection .process-state__media img {
-  object-position: 52% 50%;
+  object-position: 56% 50%;
 }
 
 .process-state--design .process-state__media img {
-  object-position: 54% 50%;
+  object-position: 56% 50%;
 }
 
 .process-state--proposal .process-state__media img {
-  object-position: 51% 52%;
+  object-position: 65% 50%;
 }
 
 .process-state--installation .process-state__media img {
-  object-position: 50% 50%;
+  object-position: 58% 50%;
 }
 
 .process-state--support .process-state__media img {
-  object-position: 50% 50%;
+  object-position: 60% 50%;
 }
 
-.process-state--photo::before,
-.process-state--photo::after {
+/* Smooth readability gradient on the left copy side — zero blur mask or gray border frame */
+.process-state--photo::before {
   content: '';
   position: absolute;
   inset: 0;
   z-index: 1;
   pointer-events: none;
-}
-
-/* Darken the copy side and both outer edges while leaving the visual centre readable. */
-.process-state--photo::before {
   background:
     linear-gradient(
       90deg,
-      #020c14f4 0%,
-      #020c14df 21%,
-      #020c1494 35%,
-      #020c1430 49%,
-      transparent 62%,
-      #020b1242 80%,
-      #020b129e 100%
+      rgba(2, 12, 20, 0.94) 0%,
+      rgba(2, 12, 20, 0.86) 24%,
+      rgba(2, 12, 20, 0.5) 42%,
+      rgba(2, 12, 20, 0.12) 58%,
+      transparent 72%
     ),
-    linear-gradient(180deg, #020a115c 0%, transparent 27%, transparent 62%, #020a11d1 100%);
-}
-
-/* Edge-only blur: the centre/subject remains sharp. */
-.process-state--photo::after {
-  -webkit-backdrop-filter: blur(13px);
-  backdrop-filter: blur(13px);
-  -webkit-mask-image: radial-gradient(
-    ellipse 55% 72% at 54% 49%,
-    transparent 0%,
-    transparent 53%,
-    rgb(0 0 0 / 0.22) 69%,
-    #000 100%
-  );
-  mask-image: radial-gradient(
-    ellipse 55% 72% at 54% 49%,
-    transparent 0%,
-    transparent 53%,
-    rgb(0 0 0 / 0.22) 69%,
-    #000 100%
-  );
+    linear-gradient(0deg, rgba(2, 11, 18, 0.72) 0%, rgba(2, 11, 18, 0.2) 22%, transparent 42%);
 }
 
 .process-analysis-orientation {
@@ -539,20 +524,25 @@
 .process-installation-timeline {
   position: absolute;
   z-index: 5;
-  right: 3%;
-  bottom: 4%;
-  left: 3%;
+  right: 0;
+  bottom: 14px;
+  left: 0;
   display: grid;
   grid-template-columns: repeat(6, minmax(0, 1fr));
   margin: 0;
-  padding: 0;
+  padding: 16px 10px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 16px;
+  background: linear-gradient(145deg, rgba(14, 30, 40, 0.82), rgba(6, 17, 24, 0.88));
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(14px);
   list-style: none;
 }
 
 .process-installation-timeline::before {
   content: '';
   position: absolute;
-  top: 17px;
+  top: 33px;
   right: 6%;
   left: 6%;
   height: 1px;
@@ -854,6 +844,15 @@
   .process-state + .process-state {
     border-top: 1px solid #ffffff12;
   }
+  .process-state--photo::before {
+    background: linear-gradient(
+      180deg,
+      rgba(2, 12, 20, 0.92) 0%,
+      rgba(2, 12, 20, 0.65) 30%,
+      rgba(2, 12, 20, 0.78) 65%,
+      rgba(2, 12, 20, 0.95) 100%
+    );
+  }
   .process-state__copy {
     max-width: 620px;
     margin: 0 auto;
@@ -869,9 +868,34 @@
   }
   .process-visual {
     width: min(100%, 620px);
-    height: 520px;
+    height: auto;
     min-height: 0;
     margin: 0 auto;
+    padding: 0;
+  }
+  .process-metrics {
+    position: relative;
+    top: auto;
+    right: auto;
+    bottom: auto;
+    left: auto;
+    margin-top: 16px;
+    padding: 0;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .process-installation-timeline {
+    position: relative;
+    top: auto;
+    right: auto;
+    bottom: auto;
+    left: auto;
+    margin-top: 16px;
+    padding: 12px 6px;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px 4px;
+  }
+  .process-installation-timeline::before {
+    display: none;
   }
   .process-progress {
     position: sticky;
@@ -944,24 +968,26 @@
     grid-row: auto;
   }
   .process-visual {
-    height: 590px;
+    height: auto;
+    padding: 0;
   }
   .process-metrics {
-    top: 340px;
-    right: 0;
+    top: auto;
+    right: auto;
     bottom: auto;
-    left: 0;
+    left: auto;
+    margin-top: 14px;
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
   .process-metric {
-    min-height: 74px;
-    padding: 11px 9px 10px 36px;
+    min-height: 70px;
+    padding: 10px 8px 8px 34px;
   }
   .process-metric > .inline-icon {
-    top: 12px;
-    left: 10px;
-    width: 17px;
-    height: 17px;
+    top: 11px;
+    left: 9px;
+    width: 16px;
+    height: 16px;
   }
   .process-metric > strong {
     font-size: 11px;
@@ -971,12 +997,14 @@
     font-size: 8px;
   }
   .process-installation-timeline {
-    top: 352px;
-    right: 2%;
+    top: auto;
+    right: auto;
     bottom: auto;
-    left: 2%;
+    left: auto;
+    margin-top: 14px;
+    padding: 10px 6px;
     grid-template-columns: repeat(3, 1fr);
-    gap: 14px 4px;
+    gap: 10px 4px;
   }
   .process-installation-timeline::before {
     display: none;
@@ -991,7 +1019,7 @@
     font-size: 32px;
   }
   .process-visual {
-    height: 640px;
+    height: auto;
   }
   .process-metrics {
     grid-template-columns: 1fr;

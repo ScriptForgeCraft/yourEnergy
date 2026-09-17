@@ -8,7 +8,7 @@ const origin = 'https://yourenergy.am';
 const toolPages = [
   { page: 'calculator/index.html', locale: 'hy', type: 'calculator' },
   { page: 'ru/calculator/index.html', locale: 'ru', type: 'calculator' },
-  { page: 'en/calculator/index.html', locale: 'en', type: 'calculator' },
+  { page: 'en/calculator/index.html', locale: 'en', type: 'calculator' }
 ];
 const faqPages = [
   { page: 'faq/index.html', locale: 'hy', type: 'faq' },

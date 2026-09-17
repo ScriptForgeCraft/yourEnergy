@@ -13,9 +13,9 @@ PriceBook maths or homepage calculation claims.
 - `/calculator/`, `/ru/calculator/`, `/en/calculator/` — indexable Quick Calculator.
 - `/calculator/refine/`, `/ru/calculator/refine/`, `/en/calculator/refine/` — consumer roof refinement, `noindex,follow`.
 - `/calculator/pro/`, `/ru/calculator/pro/`, `/en/calculator/pro/` — detailed professional calculator, `noindex,follow`.
-Only Quick Calculator is a sitemap entry. Refinement and Pro
-have self-canonical URLs and reciprocal hreflang but are intentionally not in
-the sitemap.
+  Only Quick Calculator is a sitemap entry. Refinement and Pro
+  have self-canonical URLs and reciprocal hreflang but are intentionally not in
+  the sitemap.
 
 ## 3. Quick Calculator UX
 

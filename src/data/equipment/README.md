@@ -4,12 +4,12 @@ The showroom reads `equipment-data.json`. Text, documents, highlights and A–E 
 
 ## September 2026 additions
 
-| Source supplied in Desktop/files | Use on the site |
-| --- | --- |
-| `1_ZXNR-BD132 182.2×210_2382×1134(30×32NH)_620-650W_350mm_20250723_E(6).pdf` | New ZNShine ZXNR-BD132 card; specifications from pp. 1–2, revision 2507.E. |
-| `Energy Stock LLC, Price list for Aluminium.pdf` | New GCK Triangle 2200 mounting-system card; 20°/30° variants and AL6005-T5 from p. 1. Related rails and clamps from pp. 1–3. This is a supplier price list, not a manufacturer datasheet. |
-| `Longi 650 w.pdf` | Exact duplicate of the existing Scientist LR8-66HVD datasheet (SHA-256 `9bfbf08cd392abfcdd63ce76773bf01bd5c1fe264f0a5ffac8fac50670afc41c`). No duplicate product created. |
-| `Снимок экрана 2025—12—09 в 11.26.23.pdf` | 68-page SolaX product catalog, attached to both existing SolaX cards. It contains X1-Lite-LV on pp. 27–28 and D53 on pp. 31–32, plus other product families. The catalog is not a statement of local availability. |
+| Source supplied in Desktop/files                                             | Use on the site                                                                                                                                                                                                    |
+| ---------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `1_ZXNR-BD132 182.2×210_2382×1134(30×32NH)_620-650W_350mm_20250723_E(6).pdf` | New ZNShine ZXNR-BD132 card; specifications from pp. 1–2, revision 2507.E.                                                                                                                                         |
+| `Energy Stock LLC, Price list for Aluminium.pdf`                             | New GCK Triangle 2200 mounting-system card; 20°/30° variants and AL6005-T5 from p. 1. Related rails and clamps from pp. 1–3. This is a supplier price list, not a manufacturer datasheet.                          |
+| `Longi 650 w.pdf`                                                            | Exact duplicate of the existing Scientist LR8-66HVD datasheet (SHA-256 `9bfbf08cd392abfcdd63ce76773bf01bd5c1fe264f0a5ffac8fac50670afc41c`). No duplicate product created.                                          |
+| `Снимок экрана 2025—12—09 в 11.26.23.pdf`                                    | 68-page SolaX product catalog, attached to both existing SolaX cards. It contains X1-Lite-LV on pp. 27–28 and D53 on pp. 31–32, plus other product families. The catalog is not a statement of local availability. |
 
 Existing model specifications remain authoritative from their separate datasheets. The catalog contains older/preliminary revisions, so its figures must not silently replace the current card's specification.
 

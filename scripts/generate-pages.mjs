@@ -336,11 +336,7 @@ const createHomeContext = (content, { pageKind = 'home' } = {}) => {
   const contactsHref = placeholderPath(content.locale, 'contacts');
   const isHome = pageKind === 'home';
   const activeNavigation = createHeaderNavigationState(
-    pageKind === 'home'
-      ? 'home'
-      : pageKind === 'calculator'
-        ? 'calculator'
-        : null
+    pageKind === 'home' ? 'home' : pageKind === 'calculator' ? 'calculator' : null
   );
   const homeSectionHref = (href) =>
     !isHome && href.startsWith('#') ? `${content.homeHref}${href}` : href;

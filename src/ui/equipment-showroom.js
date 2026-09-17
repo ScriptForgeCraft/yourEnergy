@@ -5,8 +5,8 @@ const CATEGORY_ICONS = Object.freeze({
   inverters: 'zap',
   batteries: 'cycle',
   mounting: 'solar-mount',
-  monitoring: 'satellite'
-  ,'grid-inverters': 'zap',
+  monitoring: 'satellite',
+  'grid-inverters': 'zap',
   microinverters: 'zap',
   'home-ess': 'faq-home',
   'commercial-ess': 'chart-bars',
@@ -299,7 +299,11 @@ const setAccordionCopy = (copy) => {
 };
 
 const renderExplorer = (product, copy, explorer) => {
-  setProductImage($('[data-explorer-image]', explorer), $('[data-explorer-image-missing]', explorer), product);
+  setProductImage(
+    $('[data-explorer-image]', explorer),
+    $('[data-explorer-image-missing]', explorer),
+    product
+  );
   $('[data-explorer-brand]', explorer).textContent = product.brand;
   $('[data-explorer-name]', explorer).textContent = product.name;
   $('[data-explorer-model]', explorer).textContent = `${product.model} · ${product.powerRange}`;
@@ -320,10 +324,13 @@ const renderExplorer = (product, copy, explorer) => {
 };
 
 const preloadProducts = (products) => {
-  products.filter(({ image }) => image).slice(0, 3).forEach(({ image }) => {
-    const preload = new Image();
-    preload.src = image;
-  });
+  products
+    .filter(({ image }) => image)
+    .slice(0, 3)
+    .forEach(({ image }) => {
+      const preload = new Image();
+      preload.src = image;
+    });
 };
 
 export const initEquipmentShowroom = ({ data, copy, gsap }) => {
@@ -360,7 +367,9 @@ export const initEquipmentShowroom = ({ data, copy, gsap }) => {
   setAccordionCopy(copy);
 
   const selectCategory = (categoryId) => {
-    const categoryProduct = productById.get(lastProductByCategory.get(categoryId)) ?? products.find((product) => product.category === categoryId);
+    const categoryProduct =
+      productById.get(lastProductByCategory.get(categoryId)) ??
+      products.find((product) => product.category === categoryId);
     if (categoryProduct) selectProduct(categoryProduct.id);
   };
 
@@ -405,7 +414,11 @@ export const initEquipmentShowroom = ({ data, copy, gsap }) => {
     productSelect.replaceChildren();
     const categoryProducts = productsInCategory(products, selectedProduct.category);
     categoryProducts.forEach((product) => {
-      const option = createElement('option', '', `${product.brand} ${product.name} · ${product.powerRange}`);
+      const option = createElement(
+        'option',
+        '',
+        `${product.brand} ${product.name} · ${product.powerRange}`
+      );
       option.value = product.id;
       productSelect.append(option);
       const card = createElement('button', 'product-card');
@@ -446,7 +459,8 @@ export const initEquipmentShowroom = ({ data, copy, gsap }) => {
   const syncNavigationState = () => {
     productSelect.value = selectedProduct.id;
     const categoryProducts = productsInCategory(products, selectedProduct.category);
-    $('[data-category-product-count]', root).textContent = `${categoryProducts.findIndex(({ id }) => id === selectedProduct.id) + 1} / ${categoryProducts.length}`;
+    $('[data-category-product-count]', root).textContent =
+      `${categoryProducts.findIndex(({ id }) => id === selectedProduct.id) + 1} / ${categoryProducts.length}`;
     $$('[data-category]', root).forEach((button) => {
       button.setAttribute(
         'aria-pressed',
@@ -569,7 +583,9 @@ export const initEquipmentShowroom = ({ data, copy, gsap }) => {
   const stepProduct = (direction) => {
     const categoryProducts = productsInCategory(products, selectedProduct.category);
     const index = categoryProducts.findIndex(({ id }) => id === selectedProduct.id);
-    selectProduct(categoryProducts[(index + direction + categoryProducts.length) % categoryProducts.length].id);
+    selectProduct(
+      categoryProducts[(index + direction + categoryProducts.length) % categoryProducts.length].id
+    );
   };
 
   productSelect.addEventListener('change', () => selectProduct(productSelect.value));

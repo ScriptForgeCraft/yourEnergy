@@ -26,7 +26,8 @@ export const BLOG_COPY = Object.freeze({
     sources: 'Источники',
     related: 'Читайте также',
     calculate: 'Рассчитать систему',
-    editorialNote: 'Материалы проверены по указанным источникам. Для решений по конкретному объекту нужен инженерный расчёт.',
+    editorialNote:
+      'Материалы проверены по указанным источникам. Для решений по конкретному объекту нужен инженерный расчёт.',
     ctaTitle: 'Планируете солнечную систему?',
     ctaText: 'Начните с предварительного расчёта для вашего дома или бизнеса.',
     backToJournal: 'Все статьи',
@@ -107,7 +108,8 @@ const articleImages = Object.freeze({
 });
 
 const localeIndex = Object.freeze({ en: 0, ru: 1, hy: 2 });
-const languageMarker = /-{70}\r?\n(RU|EN|HY)\r?\n-{70}\r?\n([\s\S]*?)(?=\r?\n-{70}\r?\n(?:RU|EN|HY)\r?\n-{70}|\s*$)/g;
+const languageMarker =
+  /-{70}\r?\n(RU|EN|HY)\r?\n-{70}\r?\n([\s\S]*?)(?=\r?\n-{70}\r?\n(?:RU|EN|HY)\r?\n-{70}|\s*$)/g;
 
 const required = (value, name) => {
   if (!value?.trim()) throw new Error(`Blog source is missing ${name}.`);
@@ -150,8 +152,11 @@ const toContentBlocks = (body) => {
 const parseLocalizedArticle = (block, locale, metadata) => {
   const seoTitle = field(block, 'SEO TITLE', 'META DESCRIPTION');
   const description = field(block, 'META DESCRIPTION', 'H1');
-  const h1Match = block.match(/H1:\r?\n([^\r\n]+)\r?\n\r?\n([\s\S]*?)\r?\n\r?\nCTA:\r?\n([^\r\n]+)\r?\n\r?\nSOURCES:\r?\n([\s\S]*?)\s*$/u);
-  if (!h1Match) throw new Error(`Blog source has malformed ${locale.toUpperCase()} article content.`);
+  const h1Match = block.match(
+    /H1:\r?\n([^\r\n]+)\r?\n\r?\n([\s\S]*?)\r?\n\r?\nCTA:\r?\n([^\r\n]+)\r?\n\r?\nSOURCES:\r?\n([\s\S]*?)\s*$/u
+  );
+  if (!h1Match)
+    throw new Error(`Blog source has malformed ${locale.toUpperCase()} article content.`);
 
   const [, h1, body, cta, sourceText] = h1Match;
   const blocks = toContentBlocks(body);
