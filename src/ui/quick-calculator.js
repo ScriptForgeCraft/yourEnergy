@@ -243,6 +243,9 @@ export const initQuickCalculator = ({ config = {} } = {}) => {
   const tariffSuggestion = root.querySelector('[data-quick-tariff-suggestion]');
   const submit = root.querySelector('[data-quick-submit]');
   const status = root.querySelector('[data-quick-status]');
+  const result = root.querySelector('[data-quick-result]');
+  const resultLoading = root.querySelector('[data-quick-result-loading]');
+  const resultContent = root.querySelector('[data-quick-result-content]');
   const resultTitle = root.querySelector('#quick-result-title');
   const resultCopy = root.querySelector('[data-quick-result-copy]');
   const resultValues = root.querySelector('[data-quick-result-values]');
@@ -282,6 +285,13 @@ export const initQuickCalculator = ({ config = {} } = {}) => {
     if (!leadStatus) return;
     leadStatus.textContent = message ?? '';
     leadStatus.classList.toggle('is-error', invalid);
+  };
+  const setResultState = (state) => {
+    const loading = state === 'loading';
+    const visible = state === 'complete' || state === 'error';
+    resultLoading.hidden = !loading;
+    resultContent.hidden = !visible;
+    result.setAttribute('aria-busy', String(loading));
   };
   const registryRecords = config.tariffRegistry?.records ?? [];
   let tariffOptions = [];
@@ -373,6 +383,7 @@ export const initQuickCalculator = ({ config = {} } = {}) => {
     resultValues.replaceChildren();
     resultTitle.textContent = copy.resultsTitle ?? copy.waiting;
     resultCopy.textContent = copy.waiting;
+    setResultState('loading');
     if (leadDialog?.open) leadDialog.close();
   };
   const input = () => {
@@ -489,6 +500,7 @@ export const initQuickCalculator = ({ config = {} } = {}) => {
     resultValues.replaceChildren(values, ...(chart ? [chart] : []));
     resultValues.hidden = false;
     resultActions.hidden = false;
+    setResultState('complete');
   };
 
   root.querySelectorAll('input[name="quick-consumption-mode"]').forEach((control) =>
@@ -537,6 +549,10 @@ export const initQuickCalculator = ({ config = {} } = {}) => {
     });
     submit.disabled = true;
     submit.setAttribute('aria-busy', 'true');
+    resultValues.hidden = true;
+    resultActions.hidden = true;
+    resultValues.replaceChildren();
+    setResultState('loading');
     setStatus(copy.loading);
     try {
       const response = await api.quickAnalyze(current.payload, { signal: request.signal });
@@ -558,6 +574,7 @@ export const initQuickCalculator = ({ config = {} } = {}) => {
       resultCopy.textContent = errorMessage(error, copy);
       resultValues.hidden = true;
       resultActions.hidden = true;
+      setResultState('error');
       session.write({ analysis: null, quickAnalysis: null, analysisStatus: 'unavailable' });
       setStatus(errorMessage(error, copy), true);
       const retry = document.createElement('button');
