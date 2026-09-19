@@ -66,7 +66,7 @@ const common = {
       title: 'Պարզեք՝ ինչ արևային համակարգ կարող է համապատասխանել ձեր տանը',
       heroTitle: 'Արևային հաշվիչ',
       intro:
-        'Ընտրեք տարածաշրջանը և գրեք միջին սպառումը։ Մենք PVGIS-ով հաշվարկում ենք տարածաշրջանային արևային ռեսուրսը՝ առանց ձեր տան տանիքը ենթադրելու։',
+        'Ընտրեք ռեժիմը, նշեք տարածաշրջանն ու միջին սպառումը և ստացեք PVGIS-ի հիման վրա նախնական գնահատում։',
       locationTitle: 'Տարածաշրջան',
       locationCopy: 'Ընտրեք տարածաշրջանը՝ արևային ճշգրիտ տվյալների համար',
       consumptionTitle: 'Էլեկտրաէներգիայի սպառում',
@@ -97,6 +97,9 @@ const common = {
       },
       submit: 'Ստանալ նախնական գնահատում',
       pro: 'Բացել պրոֆեսիոնալ հաշվիչը',
+      proTitle: 'Ցանկանո՞ւմ եք ավելի մանրամասն վերլուծություն',
+      proCopy: 'Բացեք պրոֆեսիոնալ ռեժիմը տանիքի քարտեզագրման և խորացված վերլուծության համար։',
+      proAction: 'Անցնել պրոֆեսիոնալ ռեժիմ',
       waiting: 'Լրացրեք տարածաշրջանն ու սպառումը։',
       loading: 'PVGIS-ից ստանում ենք տարածաշրջանային արևային տվյալները…',
       unavailable:
@@ -143,6 +146,26 @@ const common = {
         'Խնայողության և հետգնման համար ավելացրեք սակագինը կամ օգտագործեք ձեր հաշվի տվյալները։',
       priceUnavailable:
         'Նախնական գների միջակայքն այժմ հասանելի չէ։ Հարցրեք ինժեներական զննում՝ ընթացիկ արժեքը հաստատելու համար։',
+      benefitsLabel: 'Արևային էներգիայի առավելությունները',
+      benefits: [
+        { icon: 'leaf', title: 'Ավելի ցածր հաշիվներ', copy: 'Օգտագործեք մաքուր արևային էներգիա' },
+        {
+          icon: 'faq-settings',
+          title: 'CO₂ արտանետումների կրճատում',
+          copy: 'Ավելի մաքուր միջավայր ապագա սերունդների համար'
+        },
+        {
+          icon: 'shield-check',
+          title: 'Էներգետիկ անկախություն',
+          copy: 'Ավելի քիչ կախվածություն ցանցից'
+        },
+        {
+          icon: 'support',
+          title: 'Մասնագիտական աջակցություն',
+          copy: 'Ձեզ հետ ենք ամբողջ ճանապարհին'
+        }
+      ],
+      signature: 'Մաքուր էներգիա։ Ավելի պայծառ վաղվա համար։',
       noJs: 'JavaScript-ի բացակայության դեպքում զանգահարեք ինժեներին՝ նախնական խորհրդատվության համար։'
     },
     refine: {
@@ -218,7 +241,7 @@ const common = {
       title: 'Узнайте, какая солнечная система может подойти вашему дому',
       heroTitle: 'Солнечный калькулятор',
       intro:
-        'Выберите регион и укажите среднее потребление. Мы используем PVGIS для регионального солнечного потенциала — без предположений о вашей крыше.',
+        'Выберите режим, регион и среднее потребление, чтобы получить предварительную оценку на основе PVGIS.',
       locationTitle: 'Местоположение',
       locationCopy: 'Выберите регион для точных солнечных данных',
       consumptionTitle: 'Потребление электроэнергии',
@@ -249,6 +272,10 @@ const common = {
       },
       submit: 'Получить предварительную оценку',
       pro: 'Открыть профессиональный калькулятор',
+      proTitle: 'Нужен более подробный анализ?',
+      proCopy:
+        'Откройте профессиональный режим для карты крыши и расширенного финансового анализа.',
+      proAction: 'Перейти в Professional',
       waiting: 'Выберите регион и введите потребление.',
       loading: 'Получаем региональные солнечные данные из PVGIS…',
       unavailable: 'PVGIS сейчас недоступен. Мы не подставили примерные цифры. Попробуйте снова.',
@@ -294,6 +321,26 @@ const common = {
         'Добавьте тариф, чтобы увидеть экономию и окупаемость, или используйте данные из счёта.',
       priceUnavailable:
         'Предварительный ценовой диапазон сейчас недоступен. Запросите инженерное обследование для актуальной стоимости.',
+      benefitsLabel: 'Преимущества солнечной энергии',
+      benefits: [
+        {
+          icon: 'leaf',
+          title: 'Ниже счета за электричество',
+          copy: 'Используйте чистую солнечную энергию'
+        },
+        {
+          icon: 'faq-settings',
+          title: 'Меньше выбросов CO₂',
+          copy: 'Более чистая среда для будущих поколений'
+        },
+        {
+          icon: 'shield-check',
+          title: 'Энергетическая независимость',
+          copy: 'Меньше зависимости от сети'
+        },
+        { icon: 'support', title: 'Поддержка экспертов', copy: 'Мы рядом на каждом этапе' }
+      ],
+      signature: 'Чистая энергия. Более светлое завтра.',
       noJs: 'Если JavaScript отключён, позвоните инженеру для предварительной консультации.'
     },
     refine: {
@@ -370,7 +417,7 @@ const common = {
       title: 'See what solar system may suit your home',
       heroTitle: 'Solar Calculator',
       intro:
-        'Choose a region and enter average consumption. We use PVGIS for regional solar yield without assuming anything about your roof.',
+        'Choose a mode, region and average consumption to get a preliminary PVGIS-based estimate.',
       locationTitle: 'Location',
       locationCopy: 'Select a region for accurate solar data',
       consumptionTitle: 'Electricity consumption',
@@ -400,6 +447,9 @@ const common = {
       },
       submit: 'Get preliminary estimate',
       pro: 'Open professional calculator',
+      proTitle: 'Want a more detailed analysis?',
+      proCopy: 'Open Professional mode for roof mapping and advanced financial analysis.',
+      proAction: 'Switch to Professional',
       waiting: 'Choose a region and enter consumption.',
       loading: 'Getting regional solar data from PVGIS…',
       unavailable:
@@ -445,6 +495,18 @@ const common = {
       noTariff: 'Add your tariff to see savings and payback, or use bill details.',
       priceUnavailable:
         'The preliminary price range is temporarily unavailable. Request an engineering survey for current pricing.',
+      benefitsLabel: 'Solar energy benefits',
+      benefits: [
+        { icon: 'leaf', title: 'Lower electricity bills', copy: 'Use clean solar energy' },
+        {
+          icon: 'faq-settings',
+          title: 'Reduce CO₂ emissions',
+          copy: 'A cleaner environment for future generations'
+        },
+        { icon: 'shield-check', title: 'Energy independence', copy: 'Less reliance on the grid' },
+        { icon: 'support', title: 'Expert support', copy: 'We are here at every step' }
+      ],
+      signature: 'Clean energy. A brighter tomorrow.',
       noJs: 'With JavaScript disabled, call an engineer for a preliminary consultation.'
     },
     refine: {

@@ -135,13 +135,24 @@ const format = (value, locale, options = {}) =>
     ? new Intl.NumberFormat(locale, { maximumFractionDigits: 0, ...options }).format(Number(value))
     : '—';
 
-const metric = (label, value, { icon = 'sun', tone = 'sky' } = {}) => {
+const createIcon = (name) => {
+  const iconName = { bolt: 'zap', coin: 'calculator', panel: 'chart-bars' }[name] ?? name;
+  const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  svg.classList.add('inline-icon');
+  svg.setAttribute('aria-hidden', 'true');
+  const use = document.createElementNS('http://www.w3.org/2000/svg', 'use');
+  use.setAttribute('href', `/icons.svg#${iconName}`);
+  svg.append(use);
+  return svg;
+};
+
+const metric = (label, value, { icon: iconName = 'sun', tone = 'sky' } = {}) => {
   const wrap = document.createElement('div');
   wrap.className = `quick-result__metric quick-result__metric--${tone}`;
   const symbol = document.createElement('span');
   symbol.className = 'quick-result__metric-icon';
   symbol.setAttribute('aria-hidden', 'true');
-  symbol.dataset.icon = icon;
+  symbol.append(createIcon(iconName));
   const content = document.createElement('div');
   const term = document.createElement('dt');
   term.textContent = label;
@@ -160,8 +171,13 @@ const monthlyProductionChart = ({ production, months, label, locale }) => {
 
   const chart = document.createElement('figure');
   chart.className = 'quick-production';
+  const heading = document.createElement('div');
+  heading.className = 'quick-production__heading';
   const caption = document.createElement('figcaption');
   caption.textContent = label;
+  const unit = document.createElement('span');
+  unit.className = 'quick-production__unit';
+  unit.textContent = 'kWh';
   const bars = document.createElement('div');
   bars.className = 'quick-production__bars';
   bars.setAttribute('role', 'list');
@@ -183,7 +199,8 @@ const monthlyProductionChart = ({ production, months, label, locale }) => {
     bars.append(item);
   });
 
-  chart.append(caption, bars);
+  heading.append(caption, unit);
+  chart.append(heading, bars);
   return chart;
 };
 
@@ -230,7 +247,6 @@ export const initQuickCalculator = ({ config = {} } = {}) => {
   const resultCopy = root.querySelector('[data-quick-result-copy]');
   const resultValues = root.querySelector('[data-quick-result-values]');
   const resultActions = root.querySelector('[data-quick-result-actions]');
-  const resultLinks = root.querySelector('[data-quick-result-links]');
   const leadOpen = root.querySelector('[data-quick-lead-open]');
   const leadDialog = root.querySelector('[data-quick-lead-dialog]');
   const leadForm = root.querySelector('[data-quick-lead-form]');
@@ -354,7 +370,6 @@ export const initQuickCalculator = ({ config = {} } = {}) => {
     });
     resultValues.hidden = true;
     resultActions.hidden = true;
-    resultLinks.hidden = true;
     resultValues.replaceChildren();
     resultTitle.textContent = copy.resultsTitle ?? copy.waiting;
     resultCopy.textContent = copy.waiting;
@@ -474,7 +489,6 @@ export const initQuickCalculator = ({ config = {} } = {}) => {
     resultValues.replaceChildren(values, ...(chart ? [chart] : []));
     resultValues.hidden = false;
     resultActions.hidden = false;
-    resultLinks.hidden = false;
   };
 
   root.querySelectorAll('input[name="quick-consumption-mode"]').forEach((control) =>
@@ -544,7 +558,6 @@ export const initQuickCalculator = ({ config = {} } = {}) => {
       resultCopy.textContent = errorMessage(error, copy);
       resultValues.hidden = true;
       resultActions.hidden = true;
-      resultLinks.hidden = true;
       session.write({ analysis: null, quickAnalysis: null, analysisStatus: 'unavailable' });
       setStatus(errorMessage(error, copy), true);
       const retry = document.createElement('button');
