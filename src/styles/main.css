@@ -74,8 +74,8 @@ textarea {
 }
 
 :focus-visible {
-  outline: 3px solid #1676d2;
-  outline-offset: 3px;
+  outline: none !important;
+  box-shadow: none !important;
 }
 
 .container {
