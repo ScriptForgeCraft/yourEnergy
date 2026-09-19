@@ -253,10 +253,21 @@ export const createPropertyMap = async ({
   map.on('click', (event) => {
     if (mode === 'roof') {
       if (roofFinished) return;
+      // Leaflet emits a click for each half of a double-click. The second
+      // click is the user's finish gesture, not another roof vertex.
+      if (event.originalEvent?.detail > 1) return;
       addRoofPoint(event.latlng);
       return;
     }
     setLocation(event.latlng);
+  });
+
+  map.on('dblclick', (event) => {
+    if (mode !== 'roof' || roofFinished || roofPoints.length < 3) return;
+    event.originalEvent?.preventDefault();
+    event.originalEvent?.stopPropagation();
+    roofFinished = true;
+    emitRoof();
   });
 
   return {
@@ -284,6 +295,8 @@ export const createPropertyMap = async ({
     setMode(nextMode) {
       mode = nextMode === 'roof' ? 'roof' : 'location';
       container.dataset.mode = mode;
+      if (mode === 'roof') map.doubleClickZoom.disable();
+      else map.doubleClickZoom.enable();
     },
     setRoofPoints,
     setLocationAtCenter() {

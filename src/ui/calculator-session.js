@@ -12,6 +12,7 @@ const cloneSafe = (value) => {
 
 const emptyState = () => ({
   version: SESSION_VERSION,
+  currentStep: 0,
   regionId: null,
   consumption: null,
   userTariff: null,
@@ -86,5 +87,16 @@ export const createCalculatorSession = ({ storage } = {}) => {
   const clearAnalysis = () =>
     write({ analysis: null, analysisStatus: 'idle', solarPassport: null });
 
-  return Object.freeze({ key: SESSION_KEY, read, write, clearAnalysis });
+  const clear = () => {
+    const next = emptyState();
+    try {
+      activeStorage?.setItem(SESSION_KEY, JSON.stringify(next));
+    } catch {
+      // The active page still resets when storage is unavailable.
+    }
+    publishAnalysisUpdate(next);
+    return next;
+  };
+
+  return Object.freeze({ key: SESSION_KEY, read, write, clearAnalysis, clear });
 };

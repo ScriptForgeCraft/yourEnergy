@@ -39,7 +39,10 @@ test('Professional has exactly four customer steps and retains every engineering
   ]) {
     assert.match(professional, new RegExp(marker, 'u'));
   }
-  assert.match(professional, /class='professional-panel'/u);
+  assert.match(professional, /professional-roof-parameters/u);
+  assert.match(professional, /data-wizard-restart/u);
+  assert.match(professional, /wizard\.results\.calculationTitle/u);
+  assert.match(professional, /wizard\.results\.benefits/u);
 });
 
 test('one calculator exposes two modes and migrates historic routes safely', async () => {
@@ -52,7 +55,9 @@ test('one calculator exposes two modes and migrates historic routes safely', asy
   assert.match(quick, /data-calculator-mode-stage/u);
   assert.equal((quick.match(/data-calculator-mode=/gu) ?? []).length >= 2, true);
   assert.match(controller, /professionalSource/u);
+  assert.match(controller, /syncLanguageLinks/u);
+  assert.match(controller, /searchParams\.set\('mode', 'pro'\)/u);
   assert.match(migration, /http-equiv='refresh'/u);
-  assert.match(generator, /professionalShellFile|professionalHref/u);
+  assert.match(generator, /createProfessionalCalculatorLanguageLinks/u);
   assert.doesNotMatch(generator, /renderRefineCalculator|roof-refinement/u);
 });

@@ -47,6 +47,14 @@ test('all locale dictionaries have the same template data shape', () => {
   assert.deepEqual(contentShape(en), contentShape(ru));
   assert.deepEqual(contentShape(calculatorModes.en.quick), contentShape(calculatorModes.hy.quick));
   assert.deepEqual(contentShape(calculatorModes.en.quick), contentShape(calculatorModes.ru.quick));
+  assert.deepEqual(
+    contentShape(calculatorModes.en.pro.results),
+    contentShape(calculatorModes.hy.pro.results)
+  );
+  assert.deepEqual(
+    contentShape(calculatorModes.en.pro.results),
+    contentShape(calculatorModes.ru.pro.results)
+  );
 });
 
 test('bill upload validation permits supported files through 10 MiB only', () => {

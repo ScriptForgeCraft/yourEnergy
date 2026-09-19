@@ -245,6 +245,13 @@ const createToolLanguageLinks = (currentLocale, type) =>
     label: languageLabels[key],
     name: localizedLanguageNames[currentLocale][key]
   }));
+const createProfessionalCalculatorLanguageLinks = (currentLocale) =>
+  GENERATED_CONTENT_LOCALES.filter(({ key }) => key !== currentLocale).map(({ key }) => ({
+    href: `${toolPath(key, 'calculator')}?mode=pro`,
+    hreflang: key,
+    label: languageLabels[key],
+    name: localizedLanguageNames[currentLocale][key]
+  }));
 const createPlaceholderAlternateLinks = (type) =>
   Object.freeze([
     ...GENERATED_CONTENT_LOCALES.map(({ key }) => ({
@@ -1078,7 +1085,7 @@ const createProfessionalCalculatorContext = (content) => {
     modeControl: calculatorModeControl[content.locale],
     professionalHref: `${toolPath(content.locale, 'calculator')}?mode=pro`,
     alternateLinks: createToolAlternateLinks('calculator/pro'),
-    languageLinks: createToolLanguageLinks(content.locale, 'calculator/pro'),
+    languageLinks: createProfessionalCalculatorLanguageLinks(content.locale),
     toolShared: toolCopy[content.locale].shared,
     calculatorHref: toolPath(content.locale, 'calculator'),
     pageConfig: escapeJsonForHtml(

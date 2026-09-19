@@ -222,6 +222,62 @@ const common = {
         trees: 'Ծառերի CO₂ կլանման համարժեք',
         historical: 'Վերջին միացված ստուգված պատմական գործոն'
       },
+      results: {
+        title: 'Ձեր արևային արդյունքները',
+        intro: 'Ահա՝ ինչ կարող է ապահովել արևային էներգիան ձեր տանիքի համար։',
+        restart: 'Սկսել նորից',
+        potential: 'Ձեր արևային ներուժը',
+        heroLines: ['Ավելի մաքուր,', 'ավելի պայծառ ապագան', 'սկսվում է այստեղ'],
+        heroCopy: 'Փոխեք ձեր տանիքը մաքուր էներգիայի և սկսեք խնայել հենց այսօր։',
+        monthlyProduction: 'Ամսական արտադրություն',
+        impactTitle: 'Ձեր բնապահպանական ազդեցությունը',
+        calculationTitle: 'Ինչպե՞ս ենք հաշվարկել սա',
+        calculationCopy:
+          'Մենք օգտագործել ենք PVGIS-ի իրական արևային տվյալները, ձեր տեղադրությունը, էլեկտրաէներգիայի սպառումը և տանիքի բնութագրերը՝ արևային ներուժը գնահատելու համար։',
+        nextTitle: 'Ի՞նչ է հաջորդը',
+        nextSteps: [
+          {
+            title: 'Ստացեք մանրամասն առաջարկ',
+            copy: 'Ստացեք անհատական առաջարկ՝ սարքավորումներով, գնով և հետգնման հաշվարկով։'
+          },
+          {
+            title: 'Խոսեք մեր մասնագետի հետ',
+            copy: 'Կվերանայենք արդյունքները և կպատասխանենք ձեր բոլոր հարցերին։'
+          },
+          { title: 'Սկսեք խնայել', copy: 'Փոխեք արևի լույսը իրական խնայողության։' }
+        ],
+        offer: 'Ստանալ մանրամասն առաջարկ',
+        metrics: {
+          annualProduction: 'Տարեկան արտադրություն',
+          selfConsumption: 'Սեփական սպառում',
+          annualSavings: 'Տարեկան խնայողություն',
+          co2Reduction: 'CO₂ կրճատում տարեկան'
+        },
+        impact: { co2: 'CO₂ կրճատում տարեկան', trees: 'Ծառերի համարժեք' },
+        benefitsLabel: 'Արևային հաշվիչի առավելությունները',
+        benefits: [
+          {
+            icon: 'shield-check',
+            title: 'Հուսալի տվյալներ',
+            copy: 'Հիմնված է PVGIS-ի իրական տվյալների վրա'
+          },
+          {
+            icon: 'chart-bars',
+            title: 'Ճշգրիտ արդյունքներ',
+            copy: 'Հարմարեցված է ձեր տեղադրությանն ու տանիքին'
+          },
+          {
+            icon: 'leaf',
+            title: 'Անձնական տվյալներ չենք պահում',
+            copy: 'Ձեր գաղտնիությունը մեզ համար կարևոր է'
+          },
+          {
+            icon: 'support',
+            title: 'Մասնագիտական աջակցություն',
+            copy: 'Ձեզ հետ ենք յուրաքանչյուր քայլում'
+          }
+        ]
+      },
       quick: 'Վերադառնալ արագ հաշվիչ'
     }
   },
@@ -408,6 +464,58 @@ const common = {
         trees: 'Эквивалент поглощения CO₂ деревьями',
         historical: 'Последний подключённый подтверждённый исторический коэффициент'
       },
+      results: {
+        title: 'Ваши результаты по солнечной энергии',
+        intro: 'Вот чего вы можете достичь с солнечной системой на своей крыше.',
+        restart: 'Начать заново',
+        potential: 'Ваш солнечный потенциал',
+        heroLines: ['Более чистое,', 'более светлое будущее', 'начинается здесь'],
+        heroCopy: 'Превратите крышу в источник чистой энергии и начните экономить уже сегодня.',
+        monthlyProduction: 'Выработка по месяцам',
+        impactTitle: 'Ваш вклад в окружающую среду',
+        calculationTitle: 'Как мы это рассчитали?',
+        calculationCopy:
+          'Мы использовали реальные солнечные данные PVGIS, вашу локацию, потребление электроэнергии и характеристики крыши, чтобы оценить солнечный потенциал.',
+        nextTitle: 'Что дальше?',
+        nextSteps: [
+          {
+            title: 'Получите подробное предложение',
+            copy: 'Получите персональное предложение с оборудованием, стоимостью и сроком окупаемости.'
+          },
+          {
+            title: 'Поговорите со специалистом',
+            copy: 'Мы проверим результаты и ответим на все ваши вопросы.'
+          },
+          { title: 'Начните экономить', copy: 'Превратите солнечный свет в реальную экономию!' }
+        ],
+        offer: 'Получить подробное предложение',
+        metrics: {
+          annualProduction: 'Годовая выработка',
+          selfConsumption: 'Самопотребление',
+          annualSavings: 'Расчётная экономия в год',
+          co2Reduction: 'Снижение CO₂ в год'
+        },
+        impact: { co2: 'Снижение CO₂ в год', trees: 'Эквивалент деревьев' },
+        benefitsLabel: 'Преимущества калькулятора',
+        benefits: [
+          {
+            icon: 'shield-check',
+            title: 'Надёжные данные',
+            copy: 'На основе реальных данных PVGIS'
+          },
+          {
+            icon: 'chart-bars',
+            title: 'Точные результаты',
+            copy: 'С учётом вашей локации и крыши'
+          },
+          {
+            icon: 'leaf',
+            title: 'Личные данные не хранятся',
+            copy: 'Ваша конфиденциальность важна для нас'
+          },
+          { icon: 'support', title: 'Поддержка экспертов', copy: 'Мы рядом на каждом этапе' }
+        ]
+      },
       quick: 'Вернуться к быстрому калькулятору'
     }
   },
@@ -581,6 +689,58 @@ const common = {
         co2: 'Avoided CO₂ emissions',
         trees: 'Tree CO₂ absorption equivalent',
         historical: 'Latest connected verified historical factor'
+      },
+      results: {
+        title: 'Your Solar Results',
+        intro: 'Here is what you can achieve with solar on your roof.',
+        restart: 'Start over',
+        potential: 'Your solar potential',
+        heroLines: ['A cleaner,', 'brighter future', 'starts here'],
+        heroCopy: 'Turn your roof into clean energy and start saving from day one.',
+        monthlyProduction: 'Monthly production',
+        impactTitle: 'Your environmental impact',
+        calculationTitle: 'How we calculated this?',
+        calculationCopy:
+          'We used real solar data (PVGIS), your location, electricity consumption and roof characteristics to estimate your solar potential.',
+        nextTitle: 'What’s next?',
+        nextSteps: [
+          {
+            title: 'Get a detailed offer',
+            copy: 'Receive a personalized proposal with equipment, pricing and payback period.'
+          },
+          {
+            title: 'Talk to our specialist',
+            copy: 'We’ll review the results and answer all your questions.'
+          },
+          { title: 'Start saving', copy: 'Turn sunlight into real savings!' }
+        ],
+        offer: 'Get a detailed offer',
+        metrics: {
+          annualProduction: 'Annual production',
+          selfConsumption: 'Self-consumption',
+          annualSavings: 'Estimated annual savings',
+          co2Reduction: 'CO₂ reduction per year'
+        },
+        impact: { co2: 'CO₂ reduction per year', trees: 'Trees equivalent' },
+        benefitsLabel: 'Calculator benefits',
+        benefits: [
+          {
+            icon: 'shield-check',
+            title: 'Reliable data',
+            copy: 'Based on real solar data (PVGIS)'
+          },
+          {
+            icon: 'chart-bars',
+            title: 'Accurate results',
+            copy: 'Tailored to your location and roof'
+          },
+          {
+            icon: 'leaf',
+            title: 'No personal data stored',
+            copy: 'Your privacy is important to us'
+          },
+          { icon: 'support', title: 'Expert support', copy: 'We’re here to help at every step' }
+        ]
       },
       quick: 'Back to quick calculator'
     }

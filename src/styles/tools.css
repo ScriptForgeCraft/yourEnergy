@@ -2288,8 +2288,12 @@
   }
 
   .calculator-page--professional .wizard-step[data-wizard-step='1'] > .wizard-step__heading,
-  .calculator-page--professional .wizard-step[data-wizard-step='1'] > .professional-consumption-form,
-  .calculator-page--professional .wizard-step[data-wizard-step='1'] > .professional-consumption-aside {
+  .calculator-page--professional
+    .wizard-step[data-wizard-step='1']
+    > .professional-consumption-form,
+  .calculator-page--professional
+    .wizard-step[data-wizard-step='1']
+    > .professional-consumption-aside {
     position: relative;
     z-index: 1;
   }
@@ -2301,13 +2305,17 @@
     padding: 1.12rem 1.3rem 0;
   }
 
-  .calculator-page--professional .wizard-step[data-wizard-step='1'] > .professional-consumption-form {
+  .calculator-page--professional
+    .wizard-step[data-wizard-step='1']
+    > .professional-consumption-form {
     grid-column: 1;
     grid-row: 2;
     padding: 0 1.3rem 1.1rem;
   }
 
-  .calculator-page--professional .wizard-step[data-wizard-step='1'] > .professional-consumption-aside {
+  .calculator-page--professional
+    .wizard-step[data-wizard-step='1']
+    > .professional-consumption-aside {
     grid-column: 2;
     grid-row: 1 / span 2;
   }
@@ -2384,7 +2392,11 @@
   box-shadow: 0 4px 12px rgb(20 105 220 / 7%);
 }
 
-.calculator-page--professional .consumption-inputs fieldset > label:has(input:checked) .consumption-mode-icon {
+.calculator-page--professional
+  .consumption-inputs
+  fieldset
+  > label:has(input:checked)
+  .consumption-mode-icon {
   color: #0877ef;
 }
 
@@ -2465,7 +2477,10 @@
 }
 
 .calculator-page--professional .consumption-panel .input-with-unit,
-.calculator-page--professional .consumption-inputs > label:has([data-consumption-tariff]) .input-with-unit {
+.calculator-page--professional
+  .consumption-inputs
+  > label:has([data-consumption-tariff])
+  .input-with-unit {
   min-height: 3.1rem;
   margin-top: 0.34rem;
   border: 1px solid #d2dfec;
@@ -2486,7 +2501,11 @@
 }
 
 .calculator-page--professional .consumption-panel .input-with-unit span,
-.calculator-page--professional .consumption-inputs > label:has([data-consumption-tariff]) .input-with-unit span {
+.calculator-page--professional
+  .consumption-inputs
+  > label:has([data-consumption-tariff])
+  .input-with-unit
+  span {
   min-height: 3rem;
   display: inline-flex;
   align-items: center;
@@ -2514,17 +2533,27 @@
   color: #0877ef;
 }
 
-.calculator-page--professional .consumption-inputs > label:has([data-consumption-tariff]) .input-with-unit {
+.calculator-page--professional
+  .consumption-inputs
+  > label:has([data-consumption-tariff])
+  .input-with-unit {
   position: relative;
   display: flex;
   padding-right: 2.15rem;
 }
 
-.calculator-page--professional .consumption-inputs > label:has([data-consumption-tariff]) .input-with-unit span {
+.calculator-page--professional
+  .consumption-inputs
+  > label:has([data-consumption-tariff])
+  .input-with-unit
+  span {
   display: none;
 }
 
-.calculator-page--professional .consumption-inputs > label:has([data-consumption-tariff]) .input-with-unit::after {
+.calculator-page--professional
+  .consumption-inputs
+  > label:has([data-consumption-tariff])
+  .input-with-unit::after {
   position: absolute;
   right: 0.9rem;
   top: 50%;
@@ -2970,18 +2999,46 @@
     box-shadow: none;
   }
 
+  .calculator-page--professional .wizard-step[data-wizard-step='2']::before {
+    position: absolute;
+    z-index: 0;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: calc(45% - 0.38rem);
+    border: 1px solid #dceaf5;
+    border-radius: 0.85rem;
+    background: rgb(255 255 255 / 96%);
+    box-shadow: 0 13px 34px rgb(23 82 122 / 7%);
+    content: '';
+  }
+
   .calculator-page--professional .wizard-step[data-wizard-step='2'] > .wizard-step__heading {
-    grid-column: 1 / -1;
-    margin: 0 0 0.85rem;
+    position: relative;
+    z-index: 1;
+    grid-column: 1;
+    grid-row: 1;
+    margin: 0;
+    padding: 1.12rem 1.3rem 0;
   }
 
   .calculator-page--professional .professional-roof-form {
+    position: relative;
+    z-index: 1;
     grid-column: 1;
+    grid-row: 2;
+    border: 0;
+    border-radius: 0;
+    padding: 0.95rem 1.3rem 1rem;
+    background: transparent;
+    box-shadow: none;
   }
 
   .calculator-page--professional .professional-roof-map {
+    position: relative;
+    z-index: 1;
     grid-column: 2;
-    grid-row: 2;
+    grid-row: 1 / span 2;
   }
 
   .calculator-page--professional .wizard-step[data-wizard-step='3'] {
@@ -3109,6 +3166,14 @@
   justify-content: flex-end;
   gap: 0.35rem;
   margin: 0.58rem 0 0;
+}
+
+@media (min-width: 961px) {
+  /* The reference flow finishes a polygon directly on the map with a double
+     click, leaving only the clear action in the detected-area card. */
+  .professional-roof-form .roof-controls {
+    display: none;
+  }
 }
 
 .professional-roof-form .roof-controls .button {
@@ -3496,7 +3561,31 @@
 .professional-results-grid {
   display: grid;
   grid-template-columns: minmax(0, 1.28fr) minmax(23rem, 0.92fr);
-  gap: 0.8rem;
+  gap: 0.82rem;
+}
+
+.calculator-page--professional .wizard-step[data-wizard-step='3'] {
+  position: relative;
+}
+
+.calculator-page--professional .wizard-step[data-wizard-step='3'] > .wizard-step__heading > span {
+  display: none;
+}
+
+.professional-results-restart {
+  position: absolute;
+  top: 0;
+  right: 0;
+  min-height: 2.65rem;
+  gap: 0.48rem;
+  padding-inline: 1rem;
+  color: #0877ef;
+  font-size: 0.72rem;
+}
+
+.professional-results-restart svg {
+  width: 1.12rem;
+  height: 1.12rem;
 }
 
 .professional-results-hero {
@@ -3508,7 +3597,7 @@
   color: #fff;
   background:
     linear-gradient(90deg, rgb(3 23 48 / 86%) 0%, rgb(4 30 55 / 56%) 51%, rgb(4 33 58 / 11%) 100%),
-    url('/images/roof-scan-1536.webp') center / cover;
+    url('/images/professional-results-house.png') center / cover;
   box-shadow: 0 13px 34px rgb(23 82 122 / 10%);
 }
 
@@ -3548,10 +3637,10 @@
 .professional-results-grid .result-kpis {
   grid-column: 1;
   display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
-  gap: 0.38rem;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.42rem;
   margin: -0.25rem 0 0;
-  padding: 0.72rem;
+  padding: 0.68rem 0.78rem 0.78rem;
   border: 1px solid #e0ebf4;
   border-radius: 0 0 0.82rem 0.82rem;
   background: #fff;
@@ -3559,23 +3648,54 @@
 }
 
 .professional-results-grid .result-kpis > div {
+  display: grid;
+  grid-template-columns: 1.78rem minmax(0, 1fr);
+  align-items: center;
   min-width: 0;
   border-radius: 0.55rem;
-  padding: 0.55rem 0.42rem;
+  padding: 0.55rem 0.45rem;
   background: linear-gradient(135deg, #f2f9ff, #f8fcff);
-  text-align: center;
+  text-align: left;
+}
+
+.professional-results-grid .result-kpis > div::before {
+  display: grid;
+  width: 1.6rem;
+  height: 1.6rem;
+  place-items: center;
+  border-radius: 50%;
+  color: #09ad4b;
+  background: #def9e7;
+  font-size: 1.05rem;
+  font-weight: 900;
+  content: '⚡';
+}
+
+.professional-results-grid .result-kpis > .result-metric--consumption::before {
+  content: '⌂';
+}
+
+.professional-results-grid .result-kpis > .result-metric--savings::before {
+  color: #0a8a57;
+  content: '◉';
+}
+
+.professional-results-grid .result-kpis > .result-metric--co2::before {
+  color: #0b9d48;
+  content: '⌁';
 }
 
 .professional-results-grid .result-kpis dt {
   color: #506c8b;
-  font-size: 0.55rem;
+  font-size: 0.54rem;
   line-height: 1.18;
 }
 
 .professional-results-grid .result-kpis dd {
-  margin-top: 0.25rem;
+  margin-top: 0.14rem;
   color: #10284d;
-  font-size: 0.72rem;
+  font-size: 0.76rem;
+  font-weight: 800;
   line-height: 1.2;
   overflow-wrap: anywhere;
 }
@@ -3594,7 +3714,8 @@
 
 .professional-results-grid .result-dashboard > .wizard-chart figcaption {
   color: #10274c;
-  font-size: 0.9rem;
+  font-size: 0.94rem;
+  font-weight: 800;
 }
 
 .professional-results-grid .result-dashboard > .wizard-chart .chart-bars {
@@ -3633,7 +3754,7 @@
 .professional-results-grid .result-environmental h3 {
   margin: 0 0 0.7rem;
   color: #10274c;
-  font-size: 0.83rem;
+  font-size: 0.88rem;
 }
 
 .professional-results-grid .result-environmental .wizard-kpis {
@@ -3673,7 +3794,7 @@
 
 .professional-results-explainer {
   grid-column: 1;
-  min-height: 9.2rem;
+  min-height: 10rem;
 }
 
 .professional-results-explainer h3 {
@@ -3711,6 +3832,7 @@
 .professional-next-steps {
   grid-column: 2;
   grid-row: span 2;
+  min-height: 10rem;
 }
 
 .professional-next-steps h3 {
@@ -3861,6 +3983,13 @@
 }
 
 @media (max-width: 620px) {
+  .professional-results-restart {
+    position: static;
+    width: 100%;
+    justify-content: center;
+    margin: 0 0 0.9rem;
+  }
+
   .professional-roof-form {
     padding: 0.9rem;
   }

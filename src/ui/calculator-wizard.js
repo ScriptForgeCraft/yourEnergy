@@ -141,13 +141,17 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
   ].forEach(([selector, label]) => {
     if (!label) return;
     const field = root.querySelector(selector)?.closest('label');
-    const textNode = [...(field?.childNodes ?? [])].find((node) => node.nodeType === Node.TEXT_NODE);
+    const textNode = [...(field?.childNodes ?? [])].find(
+      (node) => node.nodeType === Node.TEXT_NODE
+    );
     if (textNode) textNode.nodeValue = label;
   });
   const setButtonLabel = (selector, label) => {
     if (!label) return;
     const button = root.querySelector(selector);
-    const textNode = [...(button?.childNodes ?? [])].find((node) => node.nodeType === Node.TEXT_NODE);
+    const textNode = [...(button?.childNodes ?? [])].find(
+      (node) => node.nodeType === Node.TEXT_NODE
+    );
     if (textNode) textNode.nodeValue = label;
   };
   setButtonLabel('[data-open-location-map]', wizard.searchAddress);
@@ -181,6 +185,7 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
 
   const persistSession = () =>
     session.write({
+      currentStep: state.currentStep,
       addressNote: state.addressNote,
       property: state.confirmedProperty
         ? {
@@ -299,7 +304,7 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
     state.analysisStatus = WIZARD_STEP_STATUSES.LOCKED;
     state.solarPassport = null;
     resultDashboard?.replaceChildren();
-    if (resultSummary) resultSummary.textContent = '';
+    if (resultSummary) resultSummary.textContent = wizard.results?.intro ?? '';
     if (financeEmpty) financeEmpty.hidden = true;
     if (financeResult) financeResult.hidden = true;
   };
@@ -581,8 +586,8 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
     updateProgress();
   };
 
-  const dashboardMetric = (label, value) => {
-    const wrapper = element('div', 'result-metric');
+  const dashboardMetric = (label, value, kind = '') => {
+    const wrapper = element('div', `result-metric${kind ? ` result-metric--${kind}` : ''}`);
     wrapper.append(element('dt', '', label), element('dd', '', value));
     return wrapper;
   };
@@ -591,29 +596,32 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
     const scenario = analysis.selectedScenario;
     if (!scenario || !resultDashboard) return;
     const monthly = scenario.generation?.monthlyKwh ?? [];
-    const estimate = scenario.commercialEstimate ?? analysis.commercialEstimate;
+    const annualSavings = scenario.financial?.annualSavingsAmd;
+    const avoidedCo2 = analysis.environmental?.avoidedCo2Tons;
     resultDashboard.replaceChildren();
     const metrics = element('dl', 'wizard-kpis result-kpis');
     metrics.append(
       dashboardMetric(
-        wizard.metrics?.annualGeneration ?? 'kWh/year',
-        `${format(scenario.generation?.annualKwh, locale)} kWh`
+        wizard.results?.metrics?.annualProduction ?? wizard.metrics?.annualGeneration ?? 'kWh/year',
+        `${format(scenario.generation?.annualKwh, locale)} kWh`,
+        'production'
       ),
       dashboardMetric(
-        wizard.metrics?.coverage ?? 'Coverage',
-        `${format(scenario.coveragePercent, locale, { maximumFractionDigits: 0 })}%`
+        wizard.results?.metrics?.selfConsumption ?? wizard.metrics?.coverage ?? 'Coverage',
+        `≈ ${format(scenario.coveragePercent, locale, { maximumFractionDigits: 0 })}%`,
+        'consumption'
       ),
       dashboardMetric(
-        product.roof?.planeAreaSummary ?? 'Roof area',
-        `${format(analysis.roof?.areaSqm, locale, { maximumFractionDigits: 1 })} m²`
+        wizard.results?.metrics?.annualSavings ?? wizard.metrics?.annualSavings ?? 'Annual savings',
+        Number.isFinite(Number(annualSavings)) ? `≈ ${format(annualSavings, locale)} ֏` : '—',
+        'savings'
       ),
       dashboardMetric(
-        'kWp',
-        `${format(scenario.system?.capacityKwp, locale, { maximumFractionDigits: 2 })} kWp`
-      ),
-      dashboardMetric(
-        wizard.metrics?.panels ?? 'Panels',
-        `${format(scenario.system?.panelCount, locale)} × ${format(scenario.system?.panelWatts, locale)} W`
+        wizard.results?.metrics?.co2Reduction ?? wizard.environmental?.co2 ?? 'CO₂ reduction',
+        Number.isFinite(Number(avoidedCo2))
+          ? `≈ ${format(avoidedCo2, locale, { maximumFractionDigits: 1 })} t`
+          : '—',
+        'co2'
       )
     );
     resultDashboard.append(metrics);
@@ -624,40 +632,29 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
       );
       resultDashboard.append(limit);
     }
-    if (estimate?.available) {
-      const budget = element('section', 'result-budget');
-      budget.append(element('h3', '', wizard.budget));
-      budget.append(
-        element(
-          'p',
-          '',
-          `P25 ${format(estimate.rangeAmd?.p25, locale)} ֏ · P50 ${format(estimate.primaryAmd, locale)} ֏ · P75 ${format(estimate.rangeAmd?.p75, locale)} ֏`
-        )
-      );
-      budget.append(
-        element(
-          'small',
-          '',
-          `${estimate.priceBook?.version ?? ''} · ${estimate.validUntil ?? ''} · ${product.result?.commercialEstimate ?? ''}`
-        )
-      );
-      resultDashboard.append(budget);
-    }
     const environmental = analysis.environmental;
     if (Number.isFinite(Number(environmental?.avoidedCo2Tons))) {
       const impact = element('section', 'result-environmental');
-      impact.append(element('h3', '', wizard.environmental?.co2 ?? 'Environmental impact'));
+      impact.append(
+        element(
+          'h3',
+          '',
+          wizard.results?.impactTitle ?? wizard.environmental?.co2 ?? 'Environmental impact'
+        )
+      );
       const values = element('dl', 'wizard-kpis');
       values.append(
         dashboardMetric(
-          wizard.environmental?.co2 ?? 'Avoided CO₂ emissions',
+          wizard.results?.impact?.co2 ?? wizard.environmental?.co2 ?? 'Avoided CO₂ emissions',
           `${format(environmental.avoidedCo2Tons, locale, { maximumFractionDigits: 2 })} t CO₂`
         )
       );
       if (Number.isFinite(Number(environmental.treeEquivalent))) {
         values.append(
           dashboardMetric(
-            wizard.environmental?.trees ?? 'Tree CO₂ absorption equivalent',
+            wizard.results?.impact?.trees ??
+              wizard.environmental?.trees ??
+              'Tree CO₂ absorption equivalent',
             `≈ ${format(environmental.treeEquivalent, locale)}`
           )
         );
@@ -666,27 +663,16 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
       resultDashboard.append(impact);
     }
     const chart = element('figure', 'wizard-chart');
-    chart.append(element('figcaption', '', wizard.production));
+    chart.append(element('figcaption', '', wizard.results?.monthlyProduction ?? wizard.production));
     const bars = element('div', 'chart-bars');
     renderBars(bars, monthly, product.passport?.months ?? [], 'kWh');
     chart.append(bars);
     resultDashboard.append(chart);
-    if (resultSummary) resultSummary.textContent = product.result?.ready ?? '';
-    const hasTariff = Number.isFinite(Number(analysis.financial?.tariff?.rateAmdPerKwh));
-    if (financeEmpty) financeEmpty.hidden = hasTariff;
-    if (financeResult) financeResult.hidden = !hasTariff;
-    if (hasTariff && financeValues) {
-      financeValues.replaceChildren(
-        dashboardMetric(
-          wizard.metrics?.annualSavings ?? 'Annual savings',
-          `${format(scenario.financial?.annualSavingsAmd, locale)} ֏`
-        ),
-        dashboardMetric(
-          wizard.metrics?.payback ?? 'Payback',
-          `≈ ${format(scenario.financial?.paybackYears, locale, { maximumFractionDigits: 1 })}`
-        )
-      );
-    }
+    if (resultSummary)
+      resultSummary.textContent = wizard.results?.intro ?? product.result?.ready ?? '';
+    if (financeEmpty) financeEmpty.hidden = true;
+    if (financeResult) financeResult.hidden = true;
+    financeValues?.replaceChildren();
   };
 
   const buildPayload = () => {
@@ -964,20 +950,31 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
     state.userTariff = consumption.tariff;
     setStep(2);
   });
+  const useRoofMap = (action) => {
+    void mountMap('roof').then((controller) => {
+      if (controller) action(controller);
+    });
+  };
   root
     .querySelector('[data-roof-add-center]')
-    ?.addEventListener('click', () => mapController?.addPointAtCenter());
-  root.querySelector('[data-roof-undo]')?.addEventListener('click', () => mapController?.undo());
+    ?.addEventListener('click', () => useRoofMap((map) => map.addPointAtCenter()));
+  root
+    .querySelector('[data-roof-undo]')
+    ?.addEventListener('click', () => useRoofMap((map) => map.undo()));
   root
     .querySelectorAll('[data-roof-reset]')
-    .forEach((button) => button.addEventListener('click', () => mapController?.resetRoof()));
-  root.querySelector('[data-roof-finish]')?.addEventListener('click', () => {
-    if (!mapController?.finishRoof()) {
-      writeStatus(product.roof?.minimumPoints, true);
-      return;
-    }
-    writeStatus(product.roof?.finishHelp);
-  });
+    .forEach((button) =>
+      button.addEventListener('click', () => useRoofMap((map) => map.resetRoof()))
+    );
+  root.querySelector('[data-roof-finish]')?.addEventListener('click', () =>
+    useRoofMap((map) => {
+      if (!map.finishRoof()) {
+        writeStatus(product.roof?.minimumPoints, true);
+        return;
+      }
+      writeStatus(product.roof?.finishHelp);
+    })
+  );
   root
     .querySelectorAll(
       '[data-roof-area-method], [data-roof-mounting-mode], [data-roof-tilt], [data-roof-plane-area], [data-roof-orientation], [data-roof-orientation-custom-input]'
@@ -990,6 +987,10 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
   root.querySelector('[data-add-tariff]')?.addEventListener('click', () => {
     setStep(1);
     requestAnimationFrame(() => root.querySelector('[data-consumption-tariff]')?.focus());
+  });
+  root.querySelector('[data-wizard-restart]')?.addEventListener('click', () => {
+    session.clear();
+    window.location.reload();
   });
   root.querySelector('[data-open-passport]')?.addEventListener('click', (event) => {
     if (!passportDialog || typeof passportDialog.showModal !== 'function') return;
@@ -1008,7 +1009,9 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
   );
 
   syncRoofControls();
-  updateProgress();
+  if (state.analysis) renderResult(state.analysis);
+  const restoredStep = Number.isInteger(savedSession.currentStep) ? savedSession.currentStep : 0;
+  setStep(restoredStep, { focus: false });
   void mountMap('location').then((map) => {
     if (!map || state.confirmedProperty || state.pendingLocation) return;
     const lat = number(latitudeInput?.value, -90, 90);

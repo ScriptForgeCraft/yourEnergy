@@ -243,6 +243,11 @@ test('one temporary session carries quick values to refinement and professional 
   assert.equal(restored.consumption.averageMonthlyKwh, 850);
   assert.deepEqual(restored.property.coordinates, { lat: 40.27, lng: 44.63 });
   assert.equal('selectedBillFile' in restored, false);
+  session.write({ currentStep: 3 });
+  assert.equal(session.read().currentStep, 3);
+  session.clear();
+  assert.equal(session.read().currentStep, 0);
+  assert.equal(session.read().analysis, null);
 });
 
 test('a detailed roof result preserves its compatible quick result for a simple comparison', () => {

@@ -7,6 +7,18 @@ const setModeUrl = (mode) => {
   return url;
 };
 
+const syncLanguageLinks = (mode) => {
+  document.querySelectorAll('.language-link').forEach((link) => {
+    const url = new URL(link.getAttribute('href') ?? '', window.location.href);
+    // Calculator language links are rendered in the document header, outside
+    // the mode stage. Keep the selected mode when the header stays mounted.
+    if (!/\/calculator\/?$/u.test(url.pathname)) return;
+    if (mode === 'professional') url.searchParams.set('mode', 'pro');
+    else url.searchParams.delete('mode');
+    link.href = `${url.pathname}${url.search}${url.hash}`;
+  });
+};
+
 const errorView = (message, quickHref, quickLabel) => {
   const section = document.createElement('section');
   section.className = 'section calculator-mode-error';
@@ -80,6 +92,7 @@ export const initCalculatorMode = async ({ config = {} } = {}) => {
     stage.setAttribute('aria-busy', 'true');
     document.body.classList.toggle('calculator-page--professional', mode === 'professional');
     document.body.classList.toggle('calculator-page--quick', mode !== 'professional');
+    syncLanguageLinks(mode);
     try {
       if (mode !== 'professional') {
         await initializeQuick(render, { replace: true });
