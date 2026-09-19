@@ -65,8 +65,6 @@ const common = {
       eyebrow: 'Արագ նախնական գնահատում',
       title: 'Պարզեք՝ ինչ արևային համակարգ կարող է համապատասխանել ձեր տանը',
       heroTitle: 'Արևային հաշվիչ',
-      intro:
-        'Ընտրեք ռեժիմը, նշեք տարածաշրջանն ու միջին սպառումը և ստացեք PVGIS-ի հիման վրա նախնական գնահատում։',
       locationTitle: 'Տարածաշրջան',
       locationCopy: 'Ընտրեք տարածաշրջանը՝ արևային ճշգրիտ տվյալների համար',
       consumptionTitle: 'Էլեկտրաէներգիայի սպառում',
@@ -240,8 +238,6 @@ const common = {
       eyebrow: 'Быстрая предварительная оценка',
       title: 'Узнайте, какая солнечная система может подойти вашему дому',
       heroTitle: 'Солнечный калькулятор',
-      intro:
-        'Выберите режим, регион и среднее потребление, чтобы получить предварительную оценку на основе PVGIS.',
       locationTitle: 'Местоположение',
       locationCopy: 'Выберите регион для точных солнечных данных',
       consumptionTitle: 'Потребление электроэнергии',
@@ -416,8 +412,6 @@ const common = {
       eyebrow: 'Quick preliminary estimate',
       title: 'See what solar system may suit your home',
       heroTitle: 'Solar Calculator',
-      intro:
-        'Choose a mode, region and average consumption to get a preliminary PVGIS-based estimate.',
       locationTitle: 'Location',
       locationCopy: 'Select a region for accurate solar data',
       consumptionTitle: 'Electricity consumption',
