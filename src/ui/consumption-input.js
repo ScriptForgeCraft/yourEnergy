@@ -8,6 +8,8 @@ const nonNegativeNumber = (value) => {
   return Number.isFinite(number) && number >= 0 ? number : null;
 };
 
+const demoMonthlyProfile = [320, 280, 310, 380, 450, 520, 600, 580, 470, 390, 330, 290];
+
 const togglePanel = (panel, active) => {
   panel.hidden = !active;
   panel.setAttribute('aria-hidden', String(!active));
@@ -42,6 +44,7 @@ export const getTariffSemantics = (mode, strings = {}) => {
  */
 export const initConsumptionInput = ({ root, strings, onChange = () => {} } = {}) => {
   if (!root) return null;
+  const wizardRoot = root.closest('[data-calculator-wizard]') ?? root;
 
   const modeInputs = [...root.querySelectorAll('input[name="consumption-mode"]')];
   const panels = [...root.querySelectorAll('[data-consumption-panel]')];
@@ -49,10 +52,12 @@ export const initConsumptionInput = ({ root, strings, onChange = () => {} } = {}
   const tariffInput = root.querySelector('[data-consumption-tariff]');
   const tariffLabel = root.querySelector('[data-consumption-tariff-label]');
   const tariffHelp = root.querySelector('[data-consumption-tariff-help]');
+  const chartItems = [...wizardRoot.querySelectorAll('[data-consumption-chart] .consumption-profile-chart__item')];
+  const fillAverageButton = wizardRoot.querySelector('[data-consumption-fill-average]');
 
   const activeMode = () => modeInputs.find((input) => input.checked)?.value ?? 'bill';
 
-  const updateAnnualOutput = () => {
+  const getValues = () => {
     const mode = activeMode();
     const usage = positiveNumber(root.querySelector('[data-consumption-usage]')?.value);
     const tariff = positiveNumber(tariffInput?.value);
@@ -66,7 +71,33 @@ export const initConsumptionInput = ({ root, strings, onChange = () => {} } = {}
     if (mode === 'monthly' && monthly.length === 12 && monthly.every((value) => value !== null)) {
       annual = monthly.reduce((total, value) => total + value, 0);
     }
+    return { annual, bill, monthly, mode, tariff, usage };
+  };
+
+  const updateChart = ({ annual, mode, monthly }) => {
+    if (!chartItems.length) return;
+    const hasMonthlyProfile = mode === 'monthly' && monthly.length === 12 && monthly.every((value) => value !== null);
+    const values = hasMonthlyProfile
+      ? monthly
+      : annual === null
+        ? demoMonthlyProfile
+        : demoMonthlyProfile.map((value) => Math.round((value / 4920) * annual));
+    const maximum = Math.max(...values, 1);
+    chartItems.forEach((item, index) => {
+      const value = values[index] ?? 0;
+      item.querySelector('[data-consumption-chart-value]')?.replaceChildren(String(Math.round(value)));
+      item.querySelector('.consumption-profile-chart__bar')?.style.setProperty(
+        '--chart-height',
+        `${Math.max(8, (value / maximum) * 100)}%`
+      );
+    });
+  };
+
+  const updateAnnualOutput = () => {
+    const values = getValues();
+    const { annual } = values;
     if (annualOutput) annualOutput.textContent = annual === null ? '—' : String(Math.round(annual));
+    updateChart(values);
   };
 
   const updateTariffSemantics = (mode) => {
@@ -94,6 +125,20 @@ export const initConsumptionInput = ({ root, strings, onChange = () => {} } = {}
       updateAnnualOutput();
       onChange();
     });
+  });
+  fillAverageButton?.addEventListener('click', () => {
+    const values = getValues();
+    const monthlyInputs = [...root.querySelectorAll('[data-consumption-month]')];
+    const annual = values.annual ?? (values.usage === null ? null : values.usage * 12);
+    if (annual === null || monthlyInputs.length !== 12) return;
+
+    const monthlyMode = modeInputs.find((input) => input.value === 'monthly');
+    if (monthlyMode) monthlyMode.checked = true;
+    const average = annual / 12;
+    monthlyInputs.forEach((input, index) => {
+      input.value = String(Math.round((demoMonthlyProfile[index] / 4920) * average * 12));
+    });
+    updateMode();
   });
   updateMode({ notify: false });
 

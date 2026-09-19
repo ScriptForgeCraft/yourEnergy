@@ -116,6 +116,9 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
   const potentialTable = root.querySelector('[data-potential-table]');
   const roofArea = root.querySelector('[data-roof-area]');
   const roofAreaLabel = root.querySelector('[data-roof-area-label]');
+  const roofMapArea = root.querySelector('[data-roof-map-area]');
+  const roofMapOrientation = root.querySelector('[data-roof-map-orientation]');
+  const roofMapTilt = root.querySelector('[data-roof-map-tilt]');
   const roofPoints = root.querySelector('[data-roof-points]');
   const roofPlaneWrap = root.querySelector('[data-roof-plane-area-wrap]');
   const roofPlaneArea = root.querySelector('[data-roof-plane-area]');
@@ -350,6 +353,17 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
           ? '—'
           : `${format(roof.effectiveAreaSqm, locale, { maximumFractionDigits: 1 })} m²`;
     }
+    if (roofMapArea)
+      roofMapArea.textContent =
+        roof.effectiveAreaSqm === null
+          ? '—'
+          : `${format(roof.effectiveAreaSqm, locale, { maximumFractionDigits: 1 })} m²`;
+    if (roofMapOrientation && roof.azimuthDegrees !== null) {
+      roofMapOrientation.textContent =
+        roof.azimuthDegrees === 180 ? 'South (180°)' : `${format(roof.azimuthDegrees, locale)}°`;
+    }
+    if (roofMapTilt && roof.tiltDegrees !== null)
+      roofMapTilt.textContent = `${format(roof.tiltDegrees, locale)}°`;
   };
 
   const mountMap = async (mode) => {
@@ -372,6 +386,11 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
       }
       mapController?.mount(host);
       mapController?.setMode(mode);
+      if (mode === 'roof') {
+        root
+          .querySelectorAll('.professional-roof-map__layers button')
+          .forEach((button, index) => button.classList.toggle('is-active', index === 1));
+      }
       if (state.confirmedProperty)
         mapController?.setLocation(state.confirmedProperty, { notify: false });
       if (state.confirmedProperty) syncLocationCoordinates(state.confirmedProperty);
@@ -922,6 +941,17 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
       });
     })
   );
+  root.querySelectorAll('.professional-roof-map__layers button').forEach((button, index) =>
+    button.addEventListener('click', () => {
+      const layer = index === 0 ? 'map' : 'satellite';
+      void mountMap('roof').then((map) => {
+        if (!map?.setLayer(layer)) return;
+        root
+          .querySelectorAll('.professional-roof-map__layers button')
+          .forEach((item) => item.classList.toggle('is-active', item === button));
+      });
+    })
+  );
   potentialSkip?.addEventListener('click', () => setStep(1));
   potentialRetry?.addEventListener('click', () => void requestPotential({ force: true }));
   root.querySelector('[data-consumption-continue]')?.addEventListener('click', () => {
@@ -939,8 +969,8 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
     ?.addEventListener('click', () => mapController?.addPointAtCenter());
   root.querySelector('[data-roof-undo]')?.addEventListener('click', () => mapController?.undo());
   root
-    .querySelector('[data-roof-reset]')
-    ?.addEventListener('click', () => mapController?.resetRoof());
+    .querySelectorAll('[data-roof-reset]')
+    .forEach((button) => button.addEventListener('click', () => mapController?.resetRoof()));
   root.querySelector('[data-roof-finish]')?.addEventListener('click', () => {
     if (!mapController?.finishRoof()) {
       writeStatus(product.roof?.minimumPoints, true);

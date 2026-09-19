@@ -2260,6 +2260,1673 @@
   }
 }
 
+/* Professional calculator — consumption step ------------------------------- */
+@media (min-width: 961px) {
+  .calculator-page--professional .wizard-step[data-wizard-step='1'] {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1.18fr) minmax(25rem, 0.82fr);
+    column-gap: clamp(1rem, 1.45vw, 1.45rem);
+    max-width: none;
+    border: 0;
+    border-radius: 0;
+    padding: 0;
+    background: transparent;
+    box-shadow: none;
+  }
+
+  .calculator-page--professional .wizard-step[data-wizard-step='1']::before {
+    position: absolute;
+    z-index: 0;
+    inset: 0 auto 0 0;
+    width: calc(58.5% - 0.35rem);
+    border: 1px solid #dceaf5;
+    border-radius: 0.85rem;
+    background: rgb(255 255 255 / 96%);
+    box-shadow: 0 13px 34px rgb(23 82 122 / 7%);
+    content: '';
+  }
+
+  .calculator-page--professional .wizard-step[data-wizard-step='1'] > .wizard-step__heading,
+  .calculator-page--professional .wizard-step[data-wizard-step='1'] > .professional-consumption-form,
+  .calculator-page--professional .wizard-step[data-wizard-step='1'] > .professional-consumption-aside {
+    position: relative;
+    z-index: 1;
+  }
+
+  .calculator-page--professional .wizard-step[data-wizard-step='1'] > .wizard-step__heading {
+    grid-column: 1;
+    grid-row: 1;
+    margin: 0;
+    padding: 1.12rem 1.3rem 0;
+  }
+
+  .calculator-page--professional .wizard-step[data-wizard-step='1'] > .professional-consumption-form {
+    grid-column: 1;
+    grid-row: 2;
+    padding: 0 1.3rem 1.1rem;
+  }
+
+  .calculator-page--professional .wizard-step[data-wizard-step='1'] > .professional-consumption-aside {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+  }
+}
+
+.professional-consumption-form {
+  position: relative;
+  display: grid;
+  align-content: start;
+}
+
+.calculator-page--professional .consumption-inputs {
+  display: grid;
+  grid-template-columns: minmax(0, 0.98fr) minmax(0, 1.02fr);
+  column-gap: 1.35rem;
+  row-gap: 0;
+}
+
+.calculator-page--professional .consumption-inputs fieldset {
+  display: grid;
+  grid-column: 1 / -1;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.08rem;
+  margin: 0;
+  border: 0;
+  border-radius: 0.62rem;
+  padding: 0;
+  padding-right: 25%;
+  background: #f4f7fb;
+}
+
+.calculator-page--professional .consumption-inputs fieldset legend {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.calculator-page--professional .consumption-inputs fieldset > label,
+.professional-upload-tab {
+  position: relative;
+  display: flex !important;
+  min-height: 3.68rem;
+  align-items: center;
+  justify-content: center;
+  gap: 0.52rem;
+  margin: 0;
+  border: 1px solid transparent;
+  border-radius: 0.58rem;
+  padding: 0.55rem 0.6rem;
+  color: #4d6685;
+  background: transparent;
+  cursor: pointer;
+  font-size: 0.74rem;
+  font-weight: 760;
+  white-space: nowrap;
+}
+
+.calculator-page--professional .consumption-mode-icon {
+  width: 1.28rem;
+  height: 1.28rem;
+  flex: 0 0 auto;
+  color: #58718f;
+}
+
+.calculator-page--professional .consumption-inputs fieldset > label:has(input:checked) {
+  z-index: 1;
+  border-color: #167af3;
+  color: #076deb;
+  background: #fff;
+  box-shadow: 0 4px 12px rgb(20 105 220 / 7%);
+}
+
+.calculator-page--professional .consumption-inputs fieldset > label:has(input:checked) .consumption-mode-icon {
+  color: #0877ef;
+}
+
+.calculator-page--professional .consumption-inputs fieldset input[type='radio'] {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+}
+
+.professional-upload-tab {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: calc(25% - 0.08rem);
+  color: #4d6685;
+  background: #f4f7fb;
+}
+
+.professional-upload-tab > svg {
+  width: 1.3rem;
+  height: 1.3rem;
+  color: #58718f;
+}
+
+.professional-upload-tab::before {
+  display: none;
+}
+
+.calculator-page--professional .consumption-panel {
+  grid-column: 1;
+  margin-top: 1.12rem;
+}
+
+.calculator-page--professional .consumption-panel--months {
+  grid-column: 1 / -1;
+}
+
+.calculator-page--professional .month-inputs {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 0.58rem;
+}
+
+.calculator-page--professional .month-inputs label {
+  display: grid;
+  gap: 0.22rem;
+  margin: 0;
+  color: #59718e;
+  font-size: 0.66rem;
+  font-weight: 720;
+}
+
+.calculator-page--professional .month-inputs input {
+  width: 100%;
+  min-width: 0;
+  min-height: 2.72rem;
+  border: 1px solid #d2dfec;
+  border-radius: 0.48rem;
+  padding: 0 0.55rem;
+  background: #fff;
+  font-size: 0.78rem;
+}
+
+.calculator-page--professional .consumption-panel > label,
+.calculator-page--professional .consumption-inputs > label:has([data-consumption-tariff]) {
+  margin: 0;
+  color: #162b50;
+  font-size: 0.77rem;
+  font-weight: 780;
+}
+
+.calculator-page--professional .consumption-inputs > label:has([data-consumption-tariff]) {
+  grid-column: 2;
+  margin-top: 1.12rem;
+}
+
+.calculator-page--professional .consumption-panel .input-with-unit,
+.calculator-page--professional .consumption-inputs > label:has([data-consumption-tariff]) .input-with-unit {
+  min-height: 3.1rem;
+  margin-top: 0.34rem;
+  border: 1px solid #d2dfec;
+  border-radius: 0.56rem;
+  background: #fff;
+}
+
+.calculator-page--professional .consumption-panel input,
+.calculator-page--professional .consumption-inputs > label:has([data-consumption-tariff]) input {
+  min-height: 3rem;
+  margin: 0;
+  border: 0;
+  padding: 0 0.82rem;
+  color: #10284d;
+  background: transparent;
+  font-size: 0.9rem;
+  font-weight: 800;
+}
+
+.calculator-page--professional .consumption-panel .input-with-unit span,
+.calculator-page--professional .consumption-inputs > label:has([data-consumption-tariff]) .input-with-unit span {
+  min-height: 3rem;
+  display: inline-flex;
+  align-items: center;
+  border-left: 1px solid #dce6ee;
+  padding: 0 0.8rem;
+  color: #1e385d;
+  font-size: 0.7rem;
+  font-weight: 800;
+}
+
+.calculator-page--professional .consumption-field-note {
+  display: flex;
+  align-items: start;
+  gap: 0.42rem;
+  margin: 0.7rem 0 0;
+  color: #58718f;
+  font-size: 0.67rem;
+  line-height: 1.42;
+}
+
+.calculator-page--professional .consumption-field-note svg {
+  width: 1.1rem;
+  height: 1.1rem;
+  flex: 0 0 auto;
+  color: #0877ef;
+}
+
+.calculator-page--professional .consumption-inputs > label:has([data-consumption-tariff]) .input-with-unit {
+  position: relative;
+  display: flex;
+  padding-right: 2.15rem;
+}
+
+.calculator-page--professional .consumption-inputs > label:has([data-consumption-tariff]) .input-with-unit span {
+  display: none;
+}
+
+.calculator-page--professional .consumption-inputs > label:has([data-consumption-tariff]) .input-with-unit::after {
+  position: absolute;
+  right: 0.9rem;
+  top: 50%;
+  width: 0.52rem;
+  height: 0.52rem;
+  border-right: 2px solid #14305a;
+  border-bottom: 2px solid #14305a;
+  content: '';
+  transform: translateY(-65%) rotate(45deg);
+}
+
+.calculator-page--professional .consumption-inputs > .input-help {
+  grid-column: 2;
+  margin: 0.5rem 0 0;
+  color: #5c7491;
+  font-size: 0.67rem;
+  line-height: 1.4;
+}
+
+.calculator-page--professional .consumption-inputs > p:has([data-consumption-annual]) {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: 3.6rem minmax(0, 1fr) auto;
+  gap: 0.75rem;
+  align-items: center;
+  min-height: 6.65rem;
+  margin: 1.35rem 0 0;
+  border-radius: 0.65rem;
+  padding: 0.78rem 0.92rem;
+  color: #18325a;
+  background: linear-gradient(115deg, #f1f9ff, #edf7ff);
+  font-size: 0;
+}
+
+.calculator-page--professional .consumption-inputs > p:has([data-consumption-annual])::before {
+  display: grid;
+  width: 3.6rem;
+  height: 3.6rem;
+  place-items: center;
+  border-radius: 50%;
+  color: #08bd4b;
+  background: #ddf9e8;
+  content: 'ϟ';
+  font-size: 2.5rem;
+  font-weight: 800;
+}
+
+.calculator-page--professional .consumption-inputs > p:has([data-consumption-annual])::after {
+  max-width: 13rem;
+  border-radius: 0.48rem;
+  padding: 0.58rem 0.72rem;
+  color: #17843d;
+  background: #dcf9e5;
+  content: 'This is an estimate.';
+  font-size: 0.67rem;
+  font-weight: 780;
+  text-align: center;
+}
+
+.calculator-page--professional [data-consumption-annual] {
+  display: grid;
+  gap: 0.22rem;
+  color: #10264c;
+  font-size: 1.38rem;
+  font-weight: 850;
+  line-height: 1;
+}
+
+.calculator-page--professional [data-consumption-annual]::before {
+  color: #142a50;
+  content: 'Estimated annual consumption';
+  font-size: 0.76rem;
+  font-weight: 760;
+}
+
+.calculator-page--professional .professional-consumption-form .file-upload {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.professional-consumption-advanced {
+  margin-top: 1.28rem;
+  border: 1px solid #d7e3ee;
+  border-radius: 0.55rem;
+  background: #fff;
+}
+
+.professional-consumption-advanced summary {
+  display: flex;
+  min-height: 3.15rem;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 0.9rem;
+  color: #183157;
+  cursor: pointer;
+  font-size: 0.78rem;
+  font-weight: 760;
+  list-style: none;
+}
+
+.professional-consumption-advanced summary::-webkit-details-marker {
+  display: none;
+}
+
+.professional-consumption-advanced summary svg {
+  width: 1rem;
+  height: 1rem;
+  color: #58718f;
+  transition: transform 160ms ease;
+}
+
+.professional-consumption-advanced[open] summary svg {
+  transform: rotate(180deg);
+}
+
+.professional-consumption-actions {
+  justify-content: space-between;
+  margin-top: 1.9rem;
+}
+
+.professional-consumption-actions .button {
+  gap: 0.52rem;
+  min-height: 3.05rem;
+  padding: 0.55rem 0.9rem;
+  font-size: 0.8rem;
+}
+
+.professional-consumption-actions .button svg {
+  width: 1.15rem;
+  height: 1.15rem;
+}
+
+.professional-consumption-actions .button--outline {
+  min-width: 7rem;
+  border-color: #d4e0eb;
+  color: #10294e;
+  background: #fff;
+  box-shadow: none;
+}
+
+.professional-consumption-actions .button:not(.button--outline) {
+  min-width: min(13rem, 46%);
+  color: #fff;
+  background: linear-gradient(135deg, #087af4, #0069ef);
+  box-shadow: 0 10px 20px rgb(0 104 237 / 22%);
+}
+
+.professional-consumption-aside {
+  display: grid;
+  align-content: start;
+  gap: 1rem;
+}
+
+.consumption-chart-card,
+.consumption-tips {
+  border: 1px solid #dceaf5;
+  border-radius: 0.82rem;
+  padding: 1.12rem 1.32rem;
+  background: rgb(255 255 255 / 96%);
+  box-shadow: 0 13px 34px rgb(23 82 122 / 7%);
+}
+
+.consumption-chart-card__heading {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 0.7rem;
+  padding-bottom: 0.85rem;
+  border-bottom: 1px solid #e8eff5;
+}
+
+.consumption-chart-card h3,
+.consumption-tips h3 {
+  margin: 0;
+  color: #10264b;
+  font-size: 0.95rem;
+  letter-spacing: -0.025em;
+}
+
+.consumption-chart-card h3 span {
+  color: #5d7693;
+  font-weight: 600;
+}
+
+.consumption-chart-card__heading p {
+  margin: 0.22rem 0 0;
+  color: #526c8b;
+  font-size: 0.68rem;
+}
+
+.chart-unit-toggle {
+  display: inline-flex;
+  overflow: hidden;
+  flex: 0 0 auto;
+  border: 1px solid #dbe5ef;
+  border-radius: 0.45rem;
+  background: #f7f9fc;
+}
+
+.chart-unit-toggle button {
+  min-height: 2.25rem;
+  min-width: 3.25rem;
+  border: 0;
+  padding: 0 0.55rem;
+  color: #3e5777;
+  background: transparent;
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.68rem;
+  font-weight: 750;
+}
+
+.chart-unit-toggle button.is-active {
+  margin: 0.16rem;
+  border-radius: 0.3rem;
+  color: #fff;
+  background: #0877ef;
+  box-shadow: 0 4px 9px rgb(1 102 235 / 23%);
+}
+
+.consumption-profile-chart {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 0.28rem;
+  height: 12.4rem;
+  align-items: end;
+  padding: 1rem 0.18rem 0;
+  border-bottom: 1px solid #dce8f1;
+}
+
+.consumption-profile-chart__item {
+  display: grid;
+  grid-template-rows: 1rem 1fr 1rem;
+  height: 100%;
+  align-items: end;
+  gap: 0.22rem;
+  text-align: center;
+}
+
+.consumption-profile-chart__item output {
+  color: #162e54;
+  font-size: 0.58rem;
+  font-weight: 800;
+}
+
+.consumption-profile-chart__bar {
+  min-height: 0.15rem;
+  align-self: end;
+  border-radius: 0.24rem 0.24rem 0 0;
+  background: linear-gradient(180deg, #84c0fb, #4f9ef1);
+  height: var(--chart-height);
+  transition: height 180ms ease;
+}
+
+.consumption-profile-chart__item small {
+  color: #526c8c;
+  font-size: 0.58rem;
+}
+
+.consumption-fill-average {
+  display: flex;
+  width: 100%;
+  min-height: 2.65rem;
+  align-items: center;
+  justify-content: center;
+  gap: 0.48rem;
+  margin-top: 0.9rem;
+  border: 1px solid #d5e1ec;
+  border-radius: 0.45rem;
+  color: #066fe9;
+  background: #fff;
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.72rem;
+  font-weight: 800;
+}
+
+.consumption-fill-average svg {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.consumption-tips h3 {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.8rem;
+}
+
+.consumption-tips h3 svg {
+  width: 1.5rem;
+  height: 1.5rem;
+  color: #f5b700;
+}
+
+.consumption-tips > div {
+  display: grid;
+  grid-template-columns: 2.55rem minmax(0, 1fr);
+  gap: 0.62rem;
+  align-items: center;
+  border-radius: 0.58rem;
+  padding: 0.54rem;
+  background: linear-gradient(100deg, #f7fbff, #f2f8fe);
+}
+
+.consumption-tips > div + div {
+  margin-top: 0.46rem;
+}
+
+.consumption-tips > div > span {
+  display: grid;
+  width: 2.55rem;
+  height: 2.55rem;
+  place-items: center;
+  border-radius: 50%;
+  color: #087af2;
+  background: #e6f2ff;
+}
+
+.consumption-tips svg {
+  width: 1.35rem;
+  height: 1.35rem;
+}
+
+.consumption-tips p {
+  display: grid;
+  gap: 0.12rem;
+  margin: 0;
+}
+
+.consumption-tips strong {
+  color: #14294b;
+  font-size: 0.7rem;
+}
+
+.consumption-tips small {
+  color: #607895;
+  font-size: 0.62rem;
+  line-height: 1.32;
+}
+
+@media (max-width: 960px) {
+  .calculator-page--professional .wizard-step[data-wizard-step='1'] {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .professional-consumption-form,
+  .professional-consumption-aside {
+    border: 1px solid #dceaf5;
+    border-radius: 0.82rem;
+    padding: 1rem;
+    background: rgb(255 255 255 / 96%);
+    box-shadow: 0 13px 34px rgb(23 82 122 / 7%);
+  }
+
+  .calculator-page--professional .wizard-step[data-wizard-step='1'] > .wizard-step__heading {
+    margin-bottom: -0.3rem;
+  }
+}
+
+@media (max-width: 620px) {
+  .calculator-page--professional .consumption-inputs {
+    grid-template-columns: 1fr;
+  }
+
+  .calculator-page--professional .consumption-inputs fieldset {
+    grid-template-columns: 1fr;
+    padding-right: 0;
+  }
+
+  .professional-upload-tab {
+    position: static;
+    width: 100%;
+    margin-top: 0.3rem;
+  }
+
+  .calculator-page--professional .consumption-panel,
+  .calculator-page--professional .consumption-inputs > label:has([data-consumption-tariff]),
+  .calculator-page--professional .consumption-inputs > .input-help {
+    grid-column: 1;
+  }
+
+  .calculator-page--professional .consumption-panel--months {
+    grid-column: 1;
+  }
+
+  .calculator-page--professional .month-inputs {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .calculator-page--professional .consumption-inputs > label:has([data-consumption-tariff]) {
+    margin-top: 0.85rem;
+  }
+
+  .calculator-page--professional .consumption-inputs > p:has([data-consumption-annual]) {
+    grid-template-columns: 3rem minmax(0, 1fr);
+  }
+
+  .calculator-page--professional .consumption-inputs > p:has([data-consumption-annual])::after {
+    grid-column: 1 / -1;
+  }
+
+  .professional-consumption-actions .button {
+    flex: 1 1 auto;
+  }
+
+  .consumption-chart-card,
+  .consumption-tips {
+    padding: 0.92rem;
+  }
+
+  .consumption-chart-card__heading {
+    display: grid;
+  }
+
+  .consumption-profile-chart {
+    gap: 0.13rem;
+  }
+}
+
+/* Professional calculator — roof and results --------------------------------
+   Both steps share the same airy white-card canvas as the consumption screen,
+   while keeping the existing polygon and analysis controls fully usable. */
+@media (min-width: 961px) {
+  .calculator-page--professional .wizard-step[data-wizard-step='2'] {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(27rem, 0.9fr) minmax(34rem, 1.1fr);
+    column-gap: clamp(0.85rem, 1.4vw, 1.3rem);
+    align-items: stretch;
+    max-width: none;
+    margin: 0;
+    border: 0;
+    padding: 0;
+    background: transparent;
+    box-shadow: none;
+  }
+
+  .calculator-page--professional .wizard-step[data-wizard-step='2'] > .wizard-step__heading {
+    grid-column: 1 / -1;
+    margin: 0 0 0.85rem;
+  }
+
+  .calculator-page--professional .professional-roof-form {
+    grid-column: 1;
+  }
+
+  .calculator-page--professional .professional-roof-map {
+    grid-column: 2;
+    grid-row: 2;
+  }
+
+  .calculator-page--professional .wizard-step[data-wizard-step='3'] {
+    max-width: none;
+    margin: 0;
+    border: 0;
+    padding: 0;
+    background: transparent;
+    box-shadow: none;
+  }
+}
+
+.professional-roof-form {
+  display: grid;
+  align-content: start;
+  border: 1px solid #dceaf5;
+  border-radius: 0.85rem;
+  padding: 1.12rem 1.3rem 1rem;
+  background: rgb(255 255 255 / 96%);
+  box-shadow: 0 13px 34px rgb(23 82 122 / 7%);
+}
+
+.professional-roof-methods {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.06rem;
+  margin: 0;
+  border: 0;
+  border-radius: 0.58rem;
+  padding: 0;
+  background: #f4f7fb;
+}
+
+.professional-roof-methods legend {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.professional-roof-methods > label,
+.professional-roof-methods > button {
+  position: relative;
+  display: flex;
+  min-height: 3.3rem;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  margin: 0;
+  border: 1px solid transparent;
+  border-radius: 0.54rem;
+  padding: 0.45rem;
+  color: #4d6685;
+  background: transparent;
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.69rem;
+  font-weight: 760;
+  text-align: center;
+}
+
+.professional-roof-methods input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+}
+
+.professional-roof-methods svg {
+  width: 1.2rem;
+  height: 1.2rem;
+  flex: 0 0 auto;
+  color: #55718f;
+}
+
+.professional-roof-methods label:has(input:checked) {
+  z-index: 1;
+  border-color: #167af3;
+  color: #076deb;
+  background: #fff;
+  box-shadow: 0 4px 12px rgb(20 105 220 / 7%);
+}
+
+.professional-roof-methods label:has(input:checked) svg {
+  color: #0877ef;
+}
+
+.professional-roof-notice {
+  display: grid;
+  grid-template-columns: 1.38rem minmax(0, 1fr);
+  gap: 0.52rem;
+  align-items: start;
+  margin-top: 0.75rem;
+  border-radius: 0.56rem;
+  padding: 0.7rem 0.78rem;
+  color: #173259;
+  background: linear-gradient(105deg, #edf7ff, #f4f9ff);
+}
+
+.professional-roof-notice > svg {
+  width: 1.28rem;
+  height: 1.28rem;
+  color: #0877ef;
+}
+
+.professional-roof-notice p,
+.professional-roof-notice small {
+  display: block;
+  margin: 0;
+  font-size: 0.7rem;
+  line-height: 1.35;
+}
+
+.professional-roof-notice small {
+  margin-top: 0.16rem;
+  color: #5b7390;
+}
+
+.professional-roof-form .roof-controls {
+  justify-content: flex-end;
+  gap: 0.35rem;
+  margin: 0.58rem 0 0;
+}
+
+.professional-roof-form .roof-controls .button {
+  min-height: 2.25rem;
+  padding: 0.35rem 0.58rem;
+  font-size: 0.62rem;
+  box-shadow: none;
+}
+
+.professional-roof-area {
+  display: grid;
+  grid-template-columns: 3.35rem minmax(0, 1fr) auto;
+  gap: 0.65rem;
+  align-items: center;
+  margin-top: 0.85rem;
+  border-radius: 0.62rem;
+  padding: 0.68rem 0.8rem;
+  background: linear-gradient(115deg, #f4f9ff, #eef7ff);
+}
+
+.professional-roof-area > span {
+  display: grid;
+  width: 3.35rem;
+  height: 3.35rem;
+  place-items: center;
+  border-radius: 50%;
+  color: #0875ed;
+  background: #e3f1ff;
+}
+
+.professional-roof-area > span svg {
+  width: 1.7rem;
+  height: 1.7rem;
+}
+
+.professional-roof-area div {
+  display: grid;
+  gap: 0.18rem;
+}
+
+.professional-roof-area small {
+  color: #213a60;
+  font-size: 0.69rem;
+  font-weight: 700;
+}
+
+.professional-roof-area strong {
+  color: #112a50;
+  font-size: 1.4rem;
+  letter-spacing: -0.03em;
+}
+
+.professional-roof-area .button {
+  min-height: 2.35rem;
+  border-color: #d4e0eb;
+  padding: 0.35rem 0.58rem;
+  color: #263e60;
+  background: #fff;
+  box-shadow: none;
+  font-size: 0.65rem;
+}
+
+.professional-roof-plane-input {
+  margin-top: 0.85rem;
+  color: #173259;
+  font-size: 0.72rem;
+  font-weight: 760;
+}
+
+.professional-roof-plane-input .input-with-unit {
+  min-height: 2.85rem;
+  margin-top: 0.32rem;
+  border: 1px solid #d2dfec;
+  border-radius: 0.52rem;
+  background: #fff;
+}
+
+.professional-roof-plane-input input {
+  min-height: 2.75rem;
+  border: 0;
+  padding-inline: 0.75rem;
+  background: transparent;
+}
+
+.professional-roof-parameters {
+  margin-top: 0;
+}
+
+.professional-roof-parameters h3 {
+  margin: 0 0 0.55rem;
+  color: #11294e;
+  font-size: 0.8rem;
+}
+
+.calculator-page--professional .professional-roof-parameters .wizard-form-grid {
+  gap: 0.65rem;
+}
+
+.calculator-page--professional .professional-roof-parameters label {
+  margin: 0;
+  color: #536c8a;
+  font-size: 0.69rem;
+  font-weight: 720;
+}
+
+.calculator-page--professional .professional-roof-parameters select,
+.calculator-page--professional .professional-roof-parameters .input-with-unit {
+  min-height: 2.88rem;
+  margin-top: 0.3rem;
+  border: 1px solid #d2dfec;
+  border-radius: 0.52rem;
+  background: #fff;
+}
+
+.calculator-page--professional .professional-roof-parameters select {
+  padding-inline: 0.7rem 2rem;
+  color: #172d52;
+  font-size: 0.74rem;
+  font-weight: 760;
+}
+
+.calculator-page--professional .professional-roof-parameters input {
+  min-height: 2.75rem;
+  border: 0;
+  padding-inline: 0.72rem;
+  color: #172d52;
+  background: transparent;
+  font-size: 0.75rem;
+  font-weight: 760;
+}
+
+.calculator-page--professional .professional-roof-parameters .mounting-cards {
+  grid-template-columns: 1fr;
+  gap: 0;
+  margin: 0.75rem 0 0;
+}
+
+.calculator-page--professional .professional-roof-parameters .mounting-cards legend {
+  margin-bottom: 0.33rem;
+  color: #536c8a;
+  font-size: 0.69rem;
+  font-weight: 720;
+}
+
+.calculator-page--professional .professional-roof-parameters .mounting-cards > label + label {
+  display: none;
+}
+
+.calculator-page--professional .professional-roof-parameters .mounting-cards span {
+  min-height: 2.88rem;
+  grid-template-columns: 1.4rem minmax(0, 1fr);
+  align-items: center;
+  gap: 0.4rem;
+  border: 1px solid #d2dfec;
+  border-radius: 0.52rem;
+  padding: 0.45rem 0.72rem;
+  color: #172d52;
+  background: #fff;
+}
+
+.calculator-page--professional .professional-roof-parameters .mounting-cards span::before {
+  color: #607895;
+  content: '⌁';
+  font-size: 1.45rem;
+}
+
+.calculator-page--professional .professional-roof-parameters .mounting-cards small {
+  display: none;
+}
+
+.professional-roof-advanced {
+  margin-top: 0.9rem;
+  border: 1px solid #d7e3ee;
+  border-radius: 0.55rem;
+}
+
+.professional-roof-advanced summary {
+  display: flex;
+  min-height: 2.85rem;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 0.8rem;
+  color: #183157;
+  cursor: pointer;
+  font-size: 0.72rem;
+  font-weight: 760;
+  list-style: none;
+}
+
+.professional-roof-advanced summary::-webkit-details-marker {
+  display: none;
+}
+
+.professional-roof-advanced summary svg {
+  width: 0.9rem;
+  height: 0.9rem;
+  color: #58718f;
+}
+
+.professional-roof-actions {
+  justify-content: space-between;
+  margin-top: 1rem;
+}
+
+.professional-roof-actions .button {
+  min-height: 3rem;
+  gap: 0.48rem;
+  padding-inline: 0.85rem;
+  font-size: 0.76rem;
+}
+
+.professional-roof-actions .button svg {
+  width: 1.05rem;
+  height: 1.05rem;
+}
+
+.professional-roof-actions .button--outline {
+  border-color: #d4e0eb;
+  color: #10294e;
+  background: #fff;
+  box-shadow: none;
+}
+
+.professional-roof-actions .button:not(.button--outline) {
+  color: #fff;
+  background: linear-gradient(135deg, #087af4, #0069ef);
+  box-shadow: 0 10px 20px rgb(0 104 237 / 22%);
+}
+
+.professional-roof-map {
+  position: relative;
+  min-height: 38rem;
+  margin: 0;
+  overflow: hidden;
+  border: 1px solid #e0ebf4;
+  border-radius: 0.85rem;
+  background: #dfe8ed;
+  box-shadow: 0 13px 34px rgb(23 82 122 / 8%);
+}
+
+.professional-roof-map [data-roof-map-host] {
+  position: absolute;
+  inset: 0;
+  min-height: 0;
+}
+
+.professional-roof-map .wizard-map.property-map {
+  height: 100%;
+  min-height: 0;
+}
+
+.professional-roof-map__layers,
+.professional-roof-map__analysis,
+.professional-roof-map__tip {
+  position: absolute;
+  z-index: 3;
+}
+
+.professional-roof-map__layers {
+  top: 1rem;
+  left: 1rem;
+  display: inline-flex;
+  overflow: hidden;
+  border: 1px solid #dde6ef;
+  border-radius: 0.52rem;
+  background: rgb(255 255 255 / 94%);
+  box-shadow: 0 6px 16px rgb(13 43 74 / 16%);
+}
+
+.professional-roof-map__layers button {
+  min-height: 2.35rem;
+  border: 0;
+  padding: 0 0.75rem;
+  color: #344c6a;
+  background: transparent;
+  font: inherit;
+  font-size: 0.7rem;
+  font-weight: 750;
+}
+
+.professional-roof-map__layers .is-active {
+  color: #096fe9;
+  background: #fff;
+}
+
+.professional-roof-map__analysis {
+  top: 1rem;
+  right: 1rem;
+  width: min(14.6rem, calc(100% - 2rem));
+  overflow: hidden;
+  border-radius: 0.72rem;
+  padding: 0.78rem 0.88rem;
+  background: rgb(255 255 255 / 94%);
+  box-shadow: 0 10px 25px rgb(12 39 69 / 21%);
+}
+
+.professional-roof-map__analysis header {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin-bottom: 0.72rem;
+  color: #183054;
+  font-size: 0.73rem;
+}
+
+.professional-roof-map__analysis header svg {
+  width: 1.16rem;
+  height: 1.16rem;
+  color: #0877ef;
+}
+
+.professional-roof-map__analysis > div {
+  display: grid;
+  grid-template-columns: 2.25rem minmax(0, 1fr);
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.professional-roof-map__analysis > div + div {
+  margin-top: 0.64rem;
+}
+
+.professional-roof-map__analysis > div > span {
+  display: grid;
+  width: 2.25rem;
+  height: 2.25rem;
+  place-items: center;
+  border-radius: 0.48rem;
+  color: #0877ef;
+  background: #eaf4ff;
+  font-size: 1.25rem;
+}
+
+.professional-roof-map__analysis > div:nth-of-type(2) > span {
+  color: #f0ac00;
+  background: #fff4d8;
+}
+
+.professional-roof-map__analysis p {
+  display: grid;
+  gap: 0.08rem;
+  margin: 0;
+}
+
+.professional-roof-map__analysis strong {
+  color: #112c52;
+  font-size: 0.76rem;
+}
+
+.professional-roof-map__analysis small {
+  color: #5b7390;
+  font-size: 0.63rem;
+}
+
+.professional-roof-map__analysis svg {
+  width: 1.22rem;
+  height: 1.22rem;
+}
+
+.professional-roof-map__tip {
+  right: 0.7rem;
+  bottom: 0.7rem;
+  left: 0.7rem;
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  border-radius: 0.58rem;
+  padding: 0.64rem 0.75rem;
+  color: #345270;
+  background: rgb(244 250 255 / 94%);
+  font-size: 0.63rem;
+}
+
+.professional-roof-map__tip svg {
+  width: 1.25rem;
+  height: 1.25rem;
+  flex: 0 0 auto;
+  color: #0877ef;
+}
+
+.professional-roof-map__tip strong {
+  color: #173258;
+}
+
+.professional-results-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.28fr) minmax(23rem, 0.92fr);
+  gap: 0.8rem;
+}
+
+.professional-results-hero {
+  position: relative;
+  min-height: 18.9rem;
+  overflow: hidden;
+  border-radius: 0.82rem;
+  padding: 2rem 1.8rem;
+  color: #fff;
+  background:
+    linear-gradient(90deg, rgb(3 23 48 / 86%) 0%, rgb(4 30 55 / 56%) 51%, rgb(4 33 58 / 11%) 100%),
+    url('/images/roof-scan-1536.webp') center / cover;
+  box-shadow: 0 13px 34px rgb(23 82 122 / 10%);
+}
+
+.professional-results-hero > div {
+  position: relative;
+  z-index: 1;
+  max-width: 17rem;
+}
+
+.professional-results-hero small {
+  color: #dce8f4;
+  font-size: 0.66rem;
+  font-weight: 760;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.professional-results-hero h3 {
+  margin: 0.85rem 0 0.85rem;
+  color: #fff;
+  font-size: clamp(1.65rem, 2.5vw, 2.35rem);
+  letter-spacing: -0.048em;
+  line-height: 1.03;
+}
+
+.professional-results-hero p {
+  margin: 0;
+  color: #f1f7fd;
+  font-size: 0.83rem;
+  line-height: 1.45;
+}
+
+.professional-results-grid > .result-dashboard {
+  display: contents;
+}
+
+.professional-results-grid .result-kpis {
+  grid-column: 1;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 0.38rem;
+  margin: -0.25rem 0 0;
+  padding: 0.72rem;
+  border: 1px solid #e0ebf4;
+  border-radius: 0 0 0.82rem 0.82rem;
+  background: #fff;
+  box-shadow: 0 13px 34px rgb(23 82 122 / 7%);
+}
+
+.professional-results-grid .result-kpis > div {
+  min-width: 0;
+  border-radius: 0.55rem;
+  padding: 0.55rem 0.42rem;
+  background: linear-gradient(135deg, #f2f9ff, #f8fcff);
+  text-align: center;
+}
+
+.professional-results-grid .result-kpis dt {
+  color: #506c8b;
+  font-size: 0.55rem;
+  line-height: 1.18;
+}
+
+.professional-results-grid .result-kpis dd {
+  margin-top: 0.25rem;
+  color: #10284d;
+  font-size: 0.72rem;
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+}
+
+.professional-results-grid .result-dashboard > .wizard-chart {
+  grid-column: 2;
+  grid-row: 1;
+  min-height: 16.15rem;
+  margin: 0;
+  border: 1px solid #dceaf5;
+  border-radius: 0.82rem;
+  padding: 1rem 1.12rem;
+  background: #fff;
+  box-shadow: 0 13px 34px rgb(23 82 122 / 7%);
+}
+
+.professional-results-grid .result-dashboard > .wizard-chart figcaption {
+  color: #10274c;
+  font-size: 0.9rem;
+}
+
+.professional-results-grid .result-dashboard > .wizard-chart .chart-bars {
+  min-height: 11.2rem;
+  gap: 0.22rem;
+  padding-top: 0.8rem;
+}
+
+.professional-results-grid .result-dashboard > .wizard-chart .chart-bar {
+  min-width: 0;
+  background: linear-gradient(to top, #56a3f2 0 var(--bar-height), transparent var(--bar-height));
+}
+
+.professional-results-grid .result-dashboard > .wizard-chart .chart-bar__value {
+  color: #173056;
+  font-size: 0.55rem;
+  transform: none;
+}
+
+.professional-results-grid .result-dashboard > .wizard-chart .chart-bar__label {
+  color: #506b8a;
+  font-size: 0.54rem;
+}
+
+.professional-results-grid .result-environmental {
+  grid-column: 2;
+  min-height: 7.8rem;
+  margin: 0;
+  border: 1px solid #e0ebf4;
+  border-radius: 0.82rem;
+  padding: 0.9rem 1.12rem;
+  background: #fff;
+  box-shadow: 0 13px 34px rgb(23 82 122 / 7%);
+}
+
+.professional-results-grid .result-environmental h3 {
+  margin: 0 0 0.7rem;
+  color: #10274c;
+  font-size: 0.83rem;
+}
+
+.professional-results-grid .result-environmental .wizard-kpis {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.5rem;
+}
+
+.professional-results-grid .result-environmental .wizard-kpis > div {
+  padding: 0;
+  background: transparent;
+}
+
+.professional-results-grid .result-environmental dt {
+  color: #5a7390;
+  font-size: 0.6rem;
+}
+
+.professional-results-grid .result-environmental dd {
+  color: #153058;
+  font-size: 0.82rem;
+}
+
+.professional-results-grid .result-budget,
+.professional-results-grid .result-notice {
+  grid-column: 1;
+  margin: 0;
+}
+
+.professional-results-explainer,
+.professional-next-steps {
+  border: 1px solid #e0ebf4;
+  border-radius: 0.82rem;
+  padding: 1rem 1.15rem;
+  background: rgb(255 255 255 / 96%);
+  box-shadow: 0 13px 34px rgb(23 82 122 / 7%);
+}
+
+.professional-results-explainer {
+  grid-column: 1;
+  min-height: 9.2rem;
+}
+
+.professional-results-explainer h3 {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0;
+  color: #10274c;
+  font-size: 0.85rem;
+}
+
+.professional-results-explainer h3 span {
+  display: grid;
+  width: 2.2rem;
+  height: 2.2rem;
+  place-items: center;
+  border-radius: 50%;
+  color: #0877ef;
+  background: #e8f3ff;
+}
+
+.professional-results-explainer h3 svg {
+  width: 1.18rem;
+  height: 1.18rem;
+}
+
+.professional-results-explainer p {
+  max-width: 35rem;
+  margin: 0.82rem 0 0;
+  color: #516b89;
+  font-size: 0.73rem;
+  line-height: 1.55;
+}
+
+.professional-next-steps {
+  grid-column: 2;
+  grid-row: span 2;
+}
+
+.professional-next-steps h3 {
+  margin: 0 0 0.55rem;
+  color: #10274c;
+  font-size: 0.87rem;
+}
+
+.professional-next-steps ol {
+  display: grid;
+  gap: 0.36rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.professional-next-steps li {
+  display: grid;
+  grid-template-columns: 1.8rem minmax(0, 1fr);
+  gap: 0.52rem;
+  align-items: start;
+}
+
+.professional-next-steps li > span {
+  display: grid;
+  width: 1.75rem;
+  height: 1.75rem;
+  place-items: center;
+  border-radius: 50%;
+  color: #0877ef;
+  background: #e5f1ff;
+  font-size: 0.72rem;
+  font-weight: 800;
+}
+
+.professional-next-steps p {
+  display: grid;
+  gap: 0.08rem;
+  margin: 0;
+}
+
+.professional-next-steps strong {
+  color: #173057;
+  font-size: 0.69rem;
+}
+
+.professional-next-steps small {
+  color: #5a7390;
+  font-size: 0.59rem;
+  line-height: 1.35;
+}
+
+.professional-next-steps .button {
+  float: right;
+  min-height: 2.7rem;
+  gap: 0.42rem;
+  margin-top: 0.72rem;
+  padding: 0.45rem 0.74rem;
+  color: #142a4c;
+  background: linear-gradient(135deg, #ffcc17, #f6b900);
+  box-shadow: none;
+  font-size: 0.69rem;
+}
+
+.professional-next-steps .button svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+.professional-finance {
+  margin-top: 0.8rem;
+  border: 1px solid #dceaf5;
+  border-radius: 0.82rem;
+  padding: 1rem 1.12rem;
+  background: #fff;
+  box-shadow: 0 13px 34px rgb(23 82 122 / 7%);
+}
+
+.professional-finance h3 {
+  margin: 0 0 0.6rem;
+  color: #10274c;
+  font-size: 0.9rem;
+}
+
+.professional-finance dl {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.5rem;
+  margin: 0;
+}
+
+.professional-finance dl > div {
+  border-radius: 0.55rem;
+  padding: 0.65rem;
+  background: #f4f9ff;
+}
+
+.professional-results-actions {
+  justify-content: flex-start;
+  margin-top: 0.8rem;
+}
+
+.professional-results-actions .button {
+  min-height: 2.75rem;
+  gap: 0.46rem;
+  font-size: 0.7rem;
+}
+
+.professional-results-actions .button--outline {
+  border-color: #d3e0ec;
+  color: #173056;
+  background: #fff;
+  box-shadow: none;
+}
+
+@media (max-width: 960px) {
+  .calculator-page--professional .wizard-step[data-wizard-step='2'] {
+    display: grid;
+    gap: 1rem;
+    border: 0;
+    padding: 0;
+    background: transparent;
+    box-shadow: none;
+  }
+
+  .professional-roof-map {
+    min-height: 31rem;
+  }
+
+  .professional-results-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .professional-results-grid .result-kpis,
+  .professional-results-grid .result-dashboard > .wizard-chart,
+  .professional-results-grid .result-environmental,
+  .professional-results-grid .result-budget,
+  .professional-results-grid .result-notice,
+  .professional-results-explainer,
+  .professional-next-steps {
+    grid-column: 1;
+    grid-row: auto;
+  }
+
+  .professional-next-steps {
+    min-height: 0;
+  }
+}
+
+@media (max-width: 620px) {
+  .professional-roof-form {
+    padding: 0.9rem;
+  }
+
+  .professional-roof-methods {
+    grid-template-columns: 1fr;
+  }
+
+  .professional-roof-area {
+    grid-template-columns: 2.9rem minmax(0, 1fr);
+  }
+
+  .professional-roof-area > span {
+    width: 2.9rem;
+    height: 2.9rem;
+  }
+
+  .professional-roof-area .button {
+    grid-column: 1 / -1;
+  }
+
+  .calculator-page--professional .professional-roof-parameters .wizard-form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .professional-roof-map {
+    min-height: 28rem;
+  }
+
+  .professional-roof-map__analysis {
+    top: auto;
+    bottom: 3.65rem;
+    left: 0.7rem;
+    width: calc(100% - 1.4rem);
+  }
+
+  .professional-roof-map__analysis > div {
+    display: none;
+  }
+
+  .professional-roof-map__analysis > div:first-of-type {
+    display: grid;
+  }
+
+  .professional-roof-map__tip span {
+    display: none;
+  }
+
+  .professional-results-hero {
+    min-height: 16rem;
+    padding: 1.4rem;
+  }
+
+  .professional-results-grid .result-kpis {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .professional-results-grid .result-dashboard > .wizard-chart {
+    padding: 0.85rem;
+  }
+
+  .professional-finance dl {
+    grid-template-columns: 1fr;
+  }
+}
+
 /* Professional calculator — location step ----------------------------------
    This is intentionally self-contained so the visual language of the public
    estimate stays compact while the professional workspace can expose all of
