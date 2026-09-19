@@ -24,12 +24,10 @@ test('Quick keeps maps and professional fields out of its initial markup', async
   assert.match(quick, /id='quick-calculator'/u);
 });
 
-test('Refine uses internal roof defaults while Pro exposes every engineering input', async () => {
-  const [refine, professional] = await Promise.all([
-    source('src/templates/calculator-refine.hbs'),
-    source('src/templates/calculator.hbs')
-  ]);
-  assert.doesNotMatch(refine, /data-refine-(?:tilt|azimuth)/u);
+test('Professional has exactly four customer steps and retains every engineering input', async () => {
+  const professional = await source('src/templates/calculator.hbs');
+  assert.equal((professional.match(/data-wizard-step='/gu) ?? []).length, 4);
+  assert.doesNotMatch(professional, /System configuration|Best choice|Most popular/u);
   for (const marker of [
     'data-location-latitude',
     'data-location-longitude',
@@ -42,4 +40,19 @@ test('Refine uses internal roof defaults while Pro exposes every engineering inp
     assert.match(professional, new RegExp(marker, 'u'));
   }
   assert.match(professional, /class='professional-panel'/u);
+});
+
+test('one calculator exposes two modes and migrates historic routes safely', async () => {
+  const [quick, migration, controller, generator] = await Promise.all([
+    source('src/templates/calculator-quick.hbs'),
+    source('src/templates/calculator-migration.hbs'),
+    source('src/ui/calculator-mode.js'),
+    source('scripts/generate-pages.mjs')
+  ]);
+  assert.match(quick, /data-calculator-mode-stage/u);
+  assert.equal((quick.match(/data-calculator-mode=/gu) ?? []).length >= 2, true);
+  assert.match(controller, /professionalSource/u);
+  assert.match(migration, /http-equiv='refresh'/u);
+  assert.match(generator, /professionalShellFile|professionalHref/u);
+  assert.doesNotMatch(generator, /renderRefineCalculator|roof-refinement/u);
 });

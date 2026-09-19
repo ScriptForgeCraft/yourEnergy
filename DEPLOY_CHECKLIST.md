@@ -21,11 +21,12 @@ the repository or a `VITE_*` variable.
       regional preliminary result.
 - [ ] If the cache binding or salt is absent, confirm the page says analysis is
       unavailable and does not show example PVGIS figures.
-- [ ] Continue to `/calculator/refine/`, select a point or enter coordinates,
-      set an outlined or measured roof area, and confirm the roof-specific request
-      works.
-- [ ] Check `/calculator/pro/` with the same session values and confirm its
-      result remains preliminary rather than claiming an automatic roof survey.
+- [ ] Switch to Professional on `/calculator/?mode=pro`, select a point or
+      enter coordinates, set an outlined or measured roof area, and confirm the
+      roof-specific request works.
+- [ ] Open historic `/calculator/refine/` and `/calculator/pro/` URLs and
+      confirm both migrate to the unified Professional mode without losing the
+      compatible session values.
 
 ## Optional lead delivery
 

@@ -54,15 +54,13 @@ if (processStory) {
   }
 }
 
-if (document.querySelector('[data-quick-calculator]')) {
+if (document.querySelector('[data-calculator-mode-stage]')) {
+  void import('./ui/calculator-mode.js').then(({ initCalculatorMode }) =>
+    initCalculatorMode({ config })
+  );
+} else if (document.querySelector('[data-quick-calculator]')) {
   void import('./ui/quick-calculator.js').then(({ initQuickCalculator }) =>
     initQuickCalculator({ config })
-  );
-}
-
-if (document.querySelector('[data-roof-refinement]')) {
-  void import('./ui/roof-refinement.js').then(({ initRoofRefinement }) =>
-    initRoofRefinement({ config })
   );
 }
 

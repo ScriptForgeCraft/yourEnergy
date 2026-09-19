@@ -214,6 +214,9 @@
   align-items: start;
   margin-bottom: 1.4rem;
 }
+.wizard-step__heading > div {
+  min-width: 0;
+}
 .wizard-step__heading > span {
   display: grid;
   place-items: center;
@@ -271,6 +274,7 @@
   width: 100%;
   height: clamp(320px, 42vw, 500px);
   min-height: 320px;
+  z-index: 1;
 }
 [data-roof-map-host] {
   min-height: clamp(320px, 42vw, 500px);
@@ -725,5 +729,391 @@
     scroll-behavior: auto !important;
     transition-duration: 0.01ms !important;
     animation-duration: 0.01ms !important;
+  }
+}
+
+/* Unified calculator redesign ------------------------------------------------
+   Quick is deliberately compact; the professional shell reuses the same
+   visual system but only loads its map and engineering controls on demand. */
+.calculator-page {
+  background:
+    radial-gradient(circle at 88% 8%, rgb(179 221 255 / 46%), transparent 23rem),
+    linear-gradient(180deg, #f5faff 0, #fff 38rem);
+}
+
+.calculator-hero.section {
+  padding: calc(var(--header-height) + clamp(2.35rem, 5vw, 4.8rem)) 0 2.3rem;
+  color: var(--color-navy);
+}
+
+.calculator-hero__inner {
+  max-width: 74rem;
+}
+
+.calculator-hero__eyebrow,
+.result-kicker {
+  margin: 0 0 0.7rem;
+  color: #52708b;
+  font-size: 0.76rem;
+  font-weight: 850;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.calculator-hero h1 {
+  max-width: 18ch;
+  margin: 0;
+  font-size: clamp(2.45rem, 5vw, 4.75rem);
+  letter-spacing: -0.055em;
+  line-height: 0.98;
+}
+
+.calculator-hero h1 + p {
+  max-width: 42rem;
+  margin: 1rem 0 0;
+  color: #45617d;
+  font-size: clamp(1rem, 1.7vw, 1.18rem);
+}
+
+.calculator-mode-switch {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  width: min(100%, 47rem);
+  gap: 0.7rem;
+  margin-top: 2rem;
+}
+
+.calculator-mode-switch a {
+  display: grid;
+  gap: 0.18rem;
+  min-height: 76px;
+  border: 1px solid #d6e5f2;
+  border-radius: 1rem;
+  padding: 1rem 1.15rem;
+  color: #26445f;
+  background: rgb(255 255 255 / 82%);
+  box-shadow: 0 10px 28px rgb(32 91 133 / 7%);
+  text-decoration: none;
+}
+
+.calculator-mode-switch a:hover,
+.calculator-mode-switch a:focus-visible {
+  border-color: #1677f0;
+  box-shadow: 0 0 0 4px rgb(22 119 240 / 14%);
+}
+
+.calculator-mode-switch a.is-active {
+  border-color: #1677f0;
+  color: #062e68;
+  background: linear-gradient(135deg, #fff 0%, #edf7ff 100%);
+}
+
+.calculator-mode-switch strong {
+  font-size: 1.04rem;
+}
+
+.calculator-mode-switch span {
+  color: #56708a;
+  font-size: 0.86rem;
+  line-height: 1.35;
+}
+
+.quick-calculator.section {
+  padding-top: 0;
+  padding-bottom: clamp(46px, 6vw, 86px);
+  background: transparent;
+}
+
+.quick-calculator__grid {
+  gap: clamp(1.25rem, 3vw, 2.25rem);
+}
+
+.quick-calculator .tool-form,
+.quick-result,
+.wizard-step {
+  border-color: #dceaf5;
+  border-radius: 1.15rem;
+  box-shadow: 0 18px 55px rgb(23 82 122 / 8%);
+}
+
+.quick-calculator .tool-form {
+  gap: 0.85rem;
+}
+
+.quick-calculator .tool-form fieldset > label {
+  transition:
+    border-color 160ms ease,
+    background 160ms ease;
+}
+
+.quick-calculator .tool-form fieldset > label:has(input:checked) {
+  border-color: #1677f0;
+  background: #f1f8ff;
+}
+
+.quick-calculator .button,
+.wizard .button:not(.button--outline) {
+  min-height: 50px;
+  border: 0;
+  color: #062143;
+  background: linear-gradient(135deg, #ffd647, #f7b900);
+  box-shadow: 0 11px 20px rgb(247 185 0 / 22%);
+}
+
+.quick-calculator .button:hover,
+.wizard .button:not(.button--outline):hover {
+  background: linear-gradient(135deg, #ffe171, #ffc510);
+}
+
+.quick-result {
+  min-height: 100%;
+  background: rgb(255 255 255 / 91%);
+}
+
+.quick-result__metrics > div,
+.wizard-kpis > div,
+.result-metric {
+  border: 1px solid #edf3f7;
+  background: linear-gradient(145deg, #fff, #f3f9ff);
+}
+
+.quick-result__actions .button {
+  margin-top: 0;
+}
+
+.calculator-hero--professional.section {
+  padding-bottom: 1.5rem;
+}
+
+.wizard.section {
+  padding-top: 0.5rem;
+  padding-bottom: clamp(46px, 6vw, 86px);
+}
+
+.wizard__container {
+  max-width: 88rem;
+}
+
+.wizard-progress {
+  position: relative;
+  max-width: 48rem;
+  margin: 0 auto 1.4rem;
+  border: 0;
+  background: transparent;
+}
+
+.wizard-progress::before {
+  position: absolute;
+  top: 1.35rem;
+  right: 13%;
+  left: 13%;
+  height: 2px;
+  background: #d6e4ef;
+  content: '';
+}
+
+.wizard-progress button {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  justify-items: center;
+  gap: 0.3rem;
+  min-height: 64px;
+  text-align: center;
+}
+
+.wizard-progress button span {
+  width: 2.7rem;
+  height: 2.7rem;
+  margin: 0;
+  border: 3px solid #f2f7fc;
+  background: #eaf2fa;
+  font-size: 0.9rem;
+}
+
+.wizard-progress button[aria-current='step'] {
+  background: transparent;
+  color: #0875ed;
+}
+
+.wizard-progress button[aria-current='step'] span {
+  color: #fff;
+  background: #1677f0;
+}
+
+.wizard-progress button[data-step-state='complete'] span {
+  color: #fff;
+  background: #1677f0;
+}
+
+.wizard-step {
+  background: rgb(255 255 255 / 94%);
+}
+
+.wizard-step__heading > span {
+  border-radius: 50%;
+  background: #1677f0;
+  color: #fff;
+}
+
+.wizard-step__heading h2 {
+  font-size: clamp(1.7rem, 2.6vw, 2.35rem);
+  letter-spacing: -0.04em;
+  overflow-wrap: anywhere;
+}
+
+.wizard-step__heading p {
+  margin: 0;
+  color: #4d6982;
+  overflow-wrap: anywhere;
+}
+
+.professional-panel,
+.file-upload,
+.wizard-chart,
+.finance-empty,
+.result-notice {
+  border-color: #dceaf5;
+  background: linear-gradient(135deg, #f7fbff, #eef7ff);
+}
+
+.wizard-map-wrap {
+  border-color: #d6e5f2;
+  box-shadow: 0 12px 28px rgb(23 82 122 / 9%);
+}
+
+.wizard-map.property-map {
+  height: clamp(350px, 35vw, 520px);
+}
+
+.result-budget {
+  border: 1px solid #113a67;
+  background: linear-gradient(135deg, #07284a, #0b3f6e);
+}
+
+.result-environmental {
+  margin-top: 1.25rem;
+  padding: 1rem;
+  border: 1px solid #d7f0dc;
+  border-radius: 0.85rem;
+  background: linear-gradient(135deg, #f5fff7, #edfbf1);
+}
+
+.result-environmental h3 {
+  margin: 0 0 0.8rem;
+  color: #155d35;
+}
+
+.result-dashboard > .wizard-chart {
+  margin-top: 1.25rem;
+}
+
+.migration-page {
+  display: grid;
+  min-height: 100vh;
+  place-items: center;
+}
+
+.migration-page__card,
+.calculator-mode-error__card {
+  max-width: 38rem;
+  border: 1px solid #dceaf5;
+  border-radius: 1.15rem;
+  padding: clamp(1.5rem, 5vw, 3rem);
+  background: #fff;
+  box-shadow: 0 18px 55px rgb(23 82 122 / 10%);
+}
+
+.calculator-mode-error__card h1 {
+  margin-top: 0;
+}
+
+@media (min-width: 960px) {
+  .wizard-step[data-wizard-step='0'],
+  .wizard-step[data-wizard-step='2'] {
+    display: grid;
+    grid-template-columns: minmax(0, 0.91fr) minmax(26rem, 1.09fr);
+    column-gap: clamp(1.4rem, 3vw, 2.5rem);
+    align-items: start;
+  }
+
+  .wizard-step[data-wizard-step='0'] .wizard-step__heading,
+  .wizard-step[data-wizard-step='2'] .wizard-step__heading {
+    grid-column: 1 / -1;
+  }
+
+  .wizard-step[data-wizard-step='0'] .wizard-map-wrap,
+  .wizard-step[data-wizard-step='2'] .wizard-map-wrap {
+    grid-column: 2;
+    grid-row: 2 / span 8;
+    margin-top: 0;
+  }
+
+  .wizard-step[data-wizard-step='0'] > :not(.wizard-step__heading):not(.wizard-map-wrap),
+  .wizard-step[data-wizard-step='2'] > :not(.wizard-step__heading):not(.wizard-map-wrap) {
+    grid-column: 1;
+  }
+
+  .wizard-step[data-wizard-step='0'] .flow-actions,
+  .wizard-step[data-wizard-step='2'] .flow-actions {
+    align-self: end;
+  }
+
+  .wizard-step[data-wizard-step='1'] {
+    max-width: 72rem;
+    margin-inline: auto;
+  }
+
+  .wizard-step[data-wizard-step='3'] {
+    max-width: 82rem;
+    margin-inline: auto;
+  }
+}
+
+@media (max-width: 780px) {
+  .calculator-hero {
+    padding-top: calc(var(--header-height) + 1.8rem);
+  }
+
+  .calculator-hero h1 {
+    font-size: clamp(2.25rem, 11vw, 3.2rem);
+  }
+
+  .calculator-mode-switch {
+    gap: 0.5rem;
+  }
+
+  .calculator-mode-switch a {
+    min-height: 88px;
+    padding: 0.8rem;
+  }
+
+  .calculator-mode-switch span {
+    font-size: 0.78rem;
+  }
+
+  .wizard-progress {
+    display: none;
+  }
+}
+
+@media (max-width: 860px) {
+  .quick-calculator__grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .quick-calculator__form,
+  .quick-result {
+    min-width: 0;
+  }
+}
+
+@media (max-width: 380px) {
+  .calculator-mode-switch {
+    grid-template-columns: 1fr;
+  }
+
+  .calculator-mode-switch a {
+    min-height: 58px;
   }
 }

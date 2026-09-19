@@ -23,6 +23,11 @@ const privateCalculatorPages = [
   { page: 'ru/calculator/pro/index.html', locale: 'ru', type: 'calculator/pro' },
   { page: 'en/calculator/pro/index.html', locale: 'en', type: 'calculator/pro' }
 ];
+const professionalShellPages = [
+  'calculator/pro/shell.html',
+  'ru/calculator/pro/shell.html',
+  'en/calculator/pro/shell.html'
+];
 const projectsPages = [
   { page: 'projects/index.html', locale: 'hy', type: 'projects' },
   { page: 'ru/projects/index.html', locale: 'ru', type: 'projects' },
@@ -90,7 +95,8 @@ const expectedPages = [
   ...placeholderPages,
   ...faqPages.map(({ page }) => page),
   ...toolPages.map(({ page }) => page),
-  ...privateCalculatorPages.map(({ page }) => page)
+  ...privateCalculatorPages.map(({ page }) => page),
+  ...professionalShellPages
 ];
 
 const failures = [];
@@ -668,11 +674,14 @@ function validateHomePublicSeoCopy(html, page) {
 function validatePrivateCalculatorMarkup(html, page, type) {
   const robots = findMeta(html, 'name', 'robots')?.get('content')?.toLowerCase() ?? '';
   if (!robots.includes('noindex')) fail(`${page}: private calculator route must be noindex`);
-  if (type === 'calculator/pro' && !html.includes('data-professional-calculator')) {
-    fail(`${page}: professional calculator marker is missing`);
+  const refresh = tagAttributes(html, 'meta').find(
+    (attributes) => attributes.get('http-equiv')?.toLowerCase() === 'refresh'
+  );
+  if (!refresh?.get('content')?.includes('?mode=pro')) {
+    fail(`${page}: legacy ${type} route must migrate to unified Professional mode`);
   }
-  if (type === 'calculator/refine' && !html.includes('data-roof-refinement')) {
-    fail(`${page}: roof refinement marker is missing`);
+  for (const marker of ['data-professional-calculator', 'data-roof-refinement']) {
+    if (html.includes(marker)) fail(`${page}: legacy route must not carry ${marker}`);
   }
 }
 
@@ -892,10 +901,9 @@ for (const { page, type } of toolPages) {
   if (!pages.has(page)) continue;
   if (type === 'calculator') validateQuickCalculatorMarkup(pages.get(page), page);
 }
-for (const { page, locale, type } of privateCalculatorPages) {
+for (const { page, type } of privateCalculatorPages) {
   if (!pages.has(page)) continue;
   validatePrivateCalculatorMarkup(pages.get(page), page, type);
-  validateNoindexLocalizedPage(pages.get(page), page, locale, type);
 }
 const publishedPages = new Set([
   'index.html',

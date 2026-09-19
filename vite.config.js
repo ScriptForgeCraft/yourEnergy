@@ -123,6 +123,9 @@ export default defineConfig(({ mode }) => {
           'calculator-pro-hy': resolve(root, 'calculator/pro/index.html'),
           'calculator-pro-ru': resolve(root, 'ru/calculator/pro/index.html'),
           'calculator-pro-en': resolve(root, 'en/calculator/pro/index.html'),
+          'calculator-shell-hy': resolve(root, 'calculator/pro/shell.html'),
+          'calculator-shell-ru': resolve(root, 'ru/calculator/pro/shell.html'),
+          'calculator-shell-en': resolve(root, 'en/calculator/pro/shell.html'),
           ...blogArticleInputs,
           ...projectCaseInputs
         }

@@ -537,14 +537,6 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
     const metrics = element('dl', 'wizard-kpis result-kpis');
     metrics.append(
       dashboardMetric(
-        'kWp',
-        `${format(scenario.system?.capacityKwp, locale, { maximumFractionDigits: 2 })} kWp`
-      ),
-      dashboardMetric(
-        wizard.metrics?.panels ?? 'Panels',
-        `${format(scenario.system?.panelCount, locale)} × ${format(scenario.system?.panelWatts, locale)} W`
-      ),
-      dashboardMetric(
         wizard.metrics?.annualGeneration ?? 'kWh/year',
         `${format(scenario.generation?.annualKwh, locale)} kWh`
       ),
@@ -555,6 +547,14 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
       dashboardMetric(
         product.roof?.planeAreaSummary ?? 'Roof area',
         `${format(analysis.roof?.areaSqm, locale, { maximumFractionDigits: 1 })} m²`
+      ),
+      dashboardMetric(
+        'kWp',
+        `${format(scenario.system?.capacityKwp, locale, { maximumFractionDigits: 2 })} kWp`
+      ),
+      dashboardMetric(
+        wizard.metrics?.panels ?? 'Panels',
+        `${format(scenario.system?.panelCount, locale)} × ${format(scenario.system?.panelWatts, locale)} W`
       )
     );
     resultDashboard.append(metrics);
@@ -583,6 +583,28 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
         )
       );
       resultDashboard.append(budget);
+    }
+    const environmental = analysis.environmental;
+    if (Number.isFinite(Number(environmental?.avoidedCo2Tons))) {
+      const impact = element('section', 'result-environmental');
+      impact.append(element('h3', '', wizard.environmental?.co2 ?? 'Environmental impact'));
+      const values = element('dl', 'wizard-kpis');
+      values.append(
+        dashboardMetric(
+          wizard.environmental?.co2 ?? 'Avoided CO₂ emissions',
+          `${format(environmental.avoidedCo2Tons, locale, { maximumFractionDigits: 2 })} t CO₂`
+        )
+      );
+      if (Number.isFinite(Number(environmental.treeEquivalent))) {
+        values.append(
+          dashboardMetric(
+            wizard.environmental?.trees ?? 'Tree CO₂ absorption equivalent',
+            `≈ ${format(environmental.treeEquivalent, locale)}`
+          )
+        );
+      }
+      impact.append(values);
+      resultDashboard.append(impact);
     }
     const chart = element('figure', 'wizard-chart');
     chart.append(element('figcaption', '', wizard.production));

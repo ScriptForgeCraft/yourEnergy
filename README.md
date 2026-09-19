@@ -2,9 +2,10 @@
 
 Static, multilingual Vite site for `yourenergy.am` with an honest P1
 real-analysis flow. Homepages are Armenian (`/`), Russian (`/ru/`) and English
-(`/en/`). Each locale has an indexable consumer `/calculator/` Quick Calculator,
-plus noindex `/calculator/refine/` and
-`/calculator/pro/` routes. It is not a SPA and does not deploy anything itself.
+(`/en/`). Each locale has one indexable consumer `/calculator/` with Quick &
+Easy and Professional modes. Historic `/calculator/refine/` and
+`/calculator/pro/` URLs safely migrate to Professional mode. It is not a SPA
+and does not deploy anything itself.
 
 The same site header and footer are rendered from shared Handlebars partials on
 home, calculator and support documents. Calculator navigation
@@ -31,19 +32,19 @@ Prettier are development dependencies. There are no browser API keys.
 
 ## 3. Calculator modes and real-analysis flow
 
-`/calculator/` is the consumer entry point: region plus either average bill
+`/calculator/` is the consumer entry point. Quick & Easy opens first: region plus either average bill
 (which progressively reveals the explicit tariff required for conversion), or
 average kWh. It has no map, coordinate, roof editor or tariff field in its kWh
 initial flow. `POST /api/quick-analysis` uses a versioned,
 representative regional PVGIS point and returns only a `regional-preliminary`
 estimate, never a result for the visitor's home.
 
-`/calculator/refine/` preserves that temporary browser session, then asks for a
-manual point and an outline or measured roof-plane area while applying
-preliminary roof defaults internally. `/calculator/pro/` retains the full
-professional workspace: coordinates, map/polygon controls,
-PVGIS diagnostic/retry, orientation, tilt, mounting, monthly consumption,
-tariff and in-memory bill upload.
+Professional mode (`/calculator/?mode=pro`) uses the same temporary browser
+session and has exactly four customer steps: Location, Consumption, Roof and
+Results. It retains coordinates, map/polygon controls, PVGIS diagnostic/retry,
+orientation, tilt, mounting, monthly consumption, tariff and in-memory bill
+upload. Professional markup is fetched only after the user chooses that mode,
+so Quick still starts without a map or engineering controls.
 
 1. Quick Calculator gets its regional PVGIS result only after a visitor
    deliberately submits consumption. A regional point is never shown as their
@@ -154,9 +155,9 @@ The homepage preserves the visual Roof Scan and static, clearly labelled example
 without loading calculator state, Leaflet or a file input. Its every calculation
 CTA points to the same-locale `/calculator/` Quick Calculator. Quick Calculator
 has a consumer-first regional estimate and hands the same temporary session to
-the roof-refinement or professional route; it has no hidden map controls or
-technical terms in its first view. Proposal Checker stays a separate tool.
-After a real/manual location action in refinement or professional mode, Leaflet is lazy-loaded using geographic
+Professional mode; it has no hidden map controls or technical terms in its
+first view. Proposal Checker stays a separate tool. After a real/manual
+location action in Professional mode, Leaflet is lazy-loaded using geographic
 coordinates; `CRS.Simple` is not part of the production analysis flow. The
 polygon supports click-to-add, marker drag, point selection, keyboard-accessible
 nudge, undo, reset and finish. A map outline is top-view area, not measured roof

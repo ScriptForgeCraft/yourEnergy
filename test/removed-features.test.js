@@ -11,6 +11,7 @@ test('obsolete public sections, routes and selectors are absent from the active 
     [
       'src/templates/home.hbs',
       'src/templates/calculator.hbs',
+      'src/templates/calculator-migration.hbs',
       'src/templates/support.hbs',
       'src/templates/partials/site-header.hbs',
       'src/templates/partials/site-footer.hbs',
@@ -78,7 +79,6 @@ test('every published page composes the shared cinematic header and footer', asy
     [
       'src/templates/home.hbs',
       'src/templates/calculator-quick.hbs',
-      'src/templates/calculator-refine.hbs',
       'src/templates/calculator.hbs',
       'src/templates/support.hbs',
       'src/templates/placeholder.hbs'

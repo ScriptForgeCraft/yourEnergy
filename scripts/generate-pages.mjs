@@ -40,8 +40,8 @@ const quickCalculatorTemplate = await readFile(
   resolve(root, 'src/templates/calculator-quick.hbs'),
   'utf8'
 );
-const refineCalculatorTemplate = await readFile(
-  resolve(root, 'src/templates/calculator-refine.hbs'),
+const calculatorMigrationTemplate = await readFile(
+  resolve(root, 'src/templates/calculator-migration.hbs'),
   'utf8'
 );
 const faqTemplate = await readFile(resolve(root, 'src/templates/faq.hbs'), 'utf8');
@@ -71,7 +71,9 @@ Handlebars.registerHelper('add', (left, right) => Number(left) + Number(right));
 const render = Handlebars.compile(template, { noEscape: false });
 const renderCalculator = Handlebars.compile(calculatorTemplate, { noEscape: false });
 const renderQuickCalculator = Handlebars.compile(quickCalculatorTemplate, { noEscape: false });
-const renderRefineCalculator = Handlebars.compile(refineCalculatorTemplate, { noEscape: false });
+const renderCalculatorMigration = Handlebars.compile(calculatorMigrationTemplate, {
+  noEscape: false
+});
 const renderFaq = Handlebars.compile(faqTemplate, { noEscape: false });
 const renderSupport = Handlebars.compile(supportTemplate, { noEscape: false });
 const renderPlaceholder = Handlebars.compile(placeholderTemplate, { noEscape: false });
@@ -103,6 +105,53 @@ const publishedAlternateLinks = Object.freeze([
 ]);
 
 const languageLabels = Object.freeze({ hy: 'AM', ru: 'RU', en: 'EN' });
+const calculatorModeControl = Object.freeze({
+  hy: {
+    eyebrow: 'Արևային հաշվիչ',
+    title: 'Պարզեք ձեր արևային ներուժը',
+    label: 'Հաշվիչի ռեժիմ',
+    quick: 'Արագ և պարզ',
+    quickCopy: 'Արագ նախնական գնահատում',
+    professional: 'Պրոֆեսիոնալ',
+    professionalCopy: 'Կետ, տանիք և մանրամասն վերլուծություն',
+    unavailable: 'Պրոֆեսիոնալ ռեժիմը հիմա հասանելի չէ։',
+    migration: {
+      title: 'Հաշվիչը տեղափոխվել է',
+      copy: 'Բացվում է YOURENERGY-ի միավորված պրոֆեսիոնալ հաշվիչը։',
+      action: 'Բացել պրոֆեսիոնալ ռեժիմը'
+    }
+  },
+  ru: {
+    eyebrow: 'Солнечный калькулятор',
+    title: 'Узнайте потенциал солнечной энергии',
+    label: 'Режим калькулятора',
+    quick: 'Быстро и просто',
+    quickCopy: 'Быстрая предварительная оценка',
+    professional: 'Профессиональный',
+    professionalCopy: 'Точка, крыша и подробный анализ',
+    unavailable: 'Профессиональный режим сейчас недоступен.',
+    migration: {
+      title: 'Калькулятор переехал',
+      copy: 'Открываем единый профессиональный калькулятор YOURENERGY.',
+      action: 'Открыть профессиональный режим'
+    }
+  },
+  en: {
+    eyebrow: 'Solar calculator',
+    title: 'See your solar potential',
+    label: 'Calculator mode',
+    quick: 'Quick & Easy',
+    quickCopy: 'Fast preliminary estimate',
+    professional: 'Professional',
+    professionalCopy: 'Property, roof and detailed analysis',
+    unavailable: 'Professional mode is temporarily unavailable.',
+    migration: {
+      title: 'The calculator has moved',
+      copy: 'Opening the unified YOURENERGY Professional calculator.',
+      action: 'Open Professional mode'
+    }
+  }
+});
 const localizedLanguageNames = Object.freeze({
   hy: Object.freeze({ hy: 'Հայերեն', ru: 'Ռուսերեն', en: 'Անգլերեն' }),
   ru: Object.freeze({ hy: 'Армянский', ru: 'Русский', en: 'Английский' }),
@@ -151,6 +200,10 @@ const createLanguageLinks = (currentLocale) =>
 const toolPath = (locale, type) => (locale === 'hy' ? `/${type}/` : `/${locale}/${type}/`);
 const toolFile = (locale, type) =>
   locale === 'hy' ? `${type}/index.html` : `${locale}/${type}/index.html`;
+const professionalShellFile = (locale) =>
+  locale === 'hy' ? 'calculator/pro/shell.html' : `${locale}/calculator/pro/shell.html`;
+const professionalShellPath = (locale) =>
+  locale === 'hy' ? '/calculator/pro/shell.html' : `/${locale}/calculator/pro/shell.html`;
 const faqPath = (locale) => toolPath(locale, 'faq');
 const faqFile = (locale) => toolFile(locale, 'faq');
 const placeholderPath = (locale, type) => (locale === 'hy' ? `/${type}/` : `/${locale}/${type}/`);
@@ -1004,6 +1057,9 @@ const createProfessionalCalculatorContext = (content) => {
     path,
     meta: modeCopy.proMeta ?? calculatorMeta,
     wizard: { ...wizard, ...modeCopy.pro },
+    quick: modeCopy.quick,
+    modeControl: calculatorModeControl[content.locale],
+    professionalHref: `${toolPath(content.locale, 'calculator')}?mode=pro`,
     alternateLinks: createToolAlternateLinks('calculator/pro'),
     languageLinks: createToolLanguageLinks(content.locale, 'calculator/pro'),
     toolShared: toolCopy[content.locale].shared,
@@ -1017,6 +1073,7 @@ const createProfessionalCalculatorContext = (content) => {
 
 const createQuickCalculatorContext = (content) => {
   const modeCopy = calculatorModes[content.locale];
+  const wizard = wizardCopy[content.locale];
   const path = toolPath(content.locale, 'calculator');
   const base = createHomeContext(content, { pageKind: 'calculator' });
   return {
@@ -1024,6 +1081,7 @@ const createQuickCalculatorContext = (content) => {
     path,
     meta: modeCopy.quickMeta,
     quick: modeCopy.quick,
+    modeControl: calculatorModeControl[content.locale],
     // Visitors are already at the calculator, so the header CTA should move
     // them forward to a conversation instead of pointing back to this page.
     headerCtaHref: base.navLinks.contacts,
@@ -1032,14 +1090,16 @@ const createQuickCalculatorContext = (content) => {
       id: region.id,
       label: regionLabels[content.locale][region.id]
     })),
-    refineHref: toolPath(content.locale, 'calculator/refine'),
-    proHref: toolPath(content.locale, 'calculator/pro'),
+    professionalHref: `${toolPath(content.locale, 'calculator')}?mode=pro`,
+    professionalShellHref: professionalShellPath(content.locale),
     alternateLinks: createToolAlternateLinks('calculator'),
     languageLinks: createToolLanguageLinks(content.locale, 'calculator'),
     toolShared: toolCopy[content.locale].shared,
     pageConfig: escapeJsonForHtml(
       createPageConfig(content, {
         quick: modeCopy.quick,
+        wizard: { ...wizard, ...modeCopy.pro },
+        modeControl: calculatorModeControl[content.locale],
         tariffRegistry: {
           revision: ARMENIA_TARIFF_DATASET.revision,
           records: ARMENIA_TARIFF_DATASET.records.map(
@@ -1060,24 +1120,30 @@ const createQuickCalculatorContext = (content) => {
 };
 
 const createRefineCalculatorContext = (content) => {
-  const modeCopy = calculatorModes[content.locale];
+  const modeControl = calculatorModeControl[content.locale];
   const path = toolPath(content.locale, 'calculator/refine');
   const base = createHomeContext(content, { pageKind: 'calculator' });
   return {
     ...base,
     path,
-    meta: modeCopy.refineMeta,
-    quick: modeCopy.quick,
-    refine: modeCopy.refine,
+    meta: { title: modeControl.migration.title, description: modeControl.migration.copy },
+    migration: modeControl.migration,
     calculatorHref: toolPath(content.locale, 'calculator'),
-    proHref: toolPath(content.locale, 'calculator/pro'),
-    alternateLinks: createToolAlternateLinks('calculator/refine'),
-    languageLinks: createToolLanguageLinks(content.locale, 'calculator/refine'),
-    toolShared: toolCopy[content.locale].shared,
-    pageConfig: escapeJsonForHtml(
-      createPageConfig(content, { quick: modeCopy.quick, refine: modeCopy.refine })
-    ),
-    jsonLd: escapeJsonForHtml(createJsonLd({ ...content, path }, { includeFaq: false }))
+    professionalHref: `${toolPath(content.locale, 'calculator')}?mode=pro`,
+    redirectHref: `${toolPath(content.locale, 'calculator')}?mode=pro`
+  };
+};
+
+const createProfessionalMigrationContext = (content) => {
+  const modeControl = calculatorModeControl[content.locale];
+  const base = createHomeContext(content, { pageKind: 'calculator' });
+  return {
+    ...base,
+    path: toolPath(content.locale, 'calculator/pro'),
+    migration: modeControl.migration,
+    calculatorHref: toolPath(content.locale, 'calculator'),
+    professionalHref: `${toolPath(content.locale, 'calculator')}?mode=pro`,
+    redirectHref: `${toolPath(content.locale, 'calculator')}?mode=pro`
   };
 };
 
@@ -1228,17 +1294,23 @@ for (const { key } of GENERATED_CONTENT_LOCALES) {
   const quickOutput = resolve(root, toolFile(key, 'calculator'));
   await mkdir(dirname(quickOutput), { recursive: true });
   await writeGenerated(quickOutput, renderQuickCalculator(createQuickCalculatorContext(content)));
+  const professionalShellOutput = resolve(root, professionalShellFile(key));
+  await mkdir(dirname(professionalShellOutput), { recursive: true });
+  await writeGenerated(
+    professionalShellOutput,
+    renderCalculator(createProfessionalCalculatorContext(content))
+  );
   const professionalOutput = resolve(root, toolFile(key, 'calculator/pro'));
   await mkdir(dirname(professionalOutput), { recursive: true });
   await writeGenerated(
     professionalOutput,
-    renderCalculator(createProfessionalCalculatorContext(content))
+    renderCalculatorMigration(createProfessionalMigrationContext(content))
   );
   const refineOutput = resolve(root, toolFile(key, 'calculator/refine'));
   await mkdir(dirname(refineOutput), { recursive: true });
   await writeGenerated(
     refineOutput,
-    renderRefineCalculator(createRefineCalculatorContext(content))
+    renderCalculatorMigration(createRefineCalculatorContext(content))
   );
 }
 

@@ -215,47 +215,47 @@ export const processStoryCopy = {
       },
       {
         number: '6',
-        nav: 'Solar Passport & Support',
+        nav: 'Monitoring & Service',
         visual: 'support',
-        visualLabel: 'Solar Passport and support placeholder',
-        headline: 'Installation is only the beginning.',
-        copy: 'Your system information, documents, warranties and support stay together after launch.',
+        visualLabel: 'Monitoring and service placeholder',
+        headline: 'Your system is live.\nWe stay with you.',
+        copy: 'After commissioning, you get access to the monitoring app for your installed equipment to follow generation and system status. We help with setup, diagnostics and ongoing service.',
         cards: [
           {
-            icon: 'file',
-            label: 'Solar Passport',
-            value: 'Your system record',
-            data: 'solar-passport'
-          },
-          {
-            icon: 'shield-check',
-            label: 'System information',
-            value: 'Kept with the project record',
-            data: 'system-information'
-          },
-          {
-            icon: 'file',
-            label: 'Documents',
-            value: 'Kept with the project record',
-            data: 'documents'
-          },
-          {
-            icon: 'shield',
-            label: 'Warranties',
-            value: 'Kept with the project record',
-            data: 'warranties'
+            icon: 'support',
+            label: 'Monitoring app',
+            value: 'Set up for your installed equipment',
+            data: 'monitoring-app'
           },
           {
             icon: 'cycle',
-            label: 'Production context',
-            value: 'Based on available analysis data',
-            data: 'production-context'
+            label: 'Generation',
+            value: 'Current and historical data',
+            data: 'generation'
           },
           {
-            icon: 'support',
-            label: 'Support',
-            value: 'Contact and service information',
-            data: 'support'
+            icon: 'shield-check',
+            label: 'System status',
+            value: 'Track inverter and system operation',
+            data: 'system-status'
+          },
+          {
+            icon: 'bell',
+            label: 'Notifications',
+            value: 'Alerts supported by the equipment',
+            data: 'notifications'
+          },
+          {
+            icon: 'satellite',
+            label: 'Remote diagnostics',
+            value: 'Available where supported by the equipment',
+            data: 'remote-diagnostics'
+          },
+          {
+            icon: 'shield',
+            label: 'Service',
+            value: 'YOURENERGY technical support and maintenance',
+            data: 'service'
           }
         ],
         cta: 'Start my solar analysis'
@@ -483,50 +483,50 @@ export const processStoryCopy = {
       },
       {
         number: '6',
-        nav: 'Solar Passport и поддержка',
+        nav: 'Мониторинг и обслуживание',
         visual: 'support',
-        visualLabel: 'Визуализация Solar Passport и поддержки',
-        headline: 'Установка — это только начало.',
-        copy: 'После запуска сведения о системе, документы, гарантии и информация о поддержке остаются в одном месте.',
+        visualLabel: 'Визуализация мониторинга и обслуживания',
+        headline: 'Система запущена.\nМы остаёмся на связи.',
+        copy: 'После запуска вы получаете доступ к приложению мониторинга установленного оборудования, чтобы видеть генерацию и состояние системы. Мы помогаем с настройкой, диагностикой и дальнейшим обслуживанием.',
         cards: [
           {
-            icon: 'file',
-            label: 'Solar Passport',
-            value: 'Паспорт вашей системы',
-            data: 'solar-passport'
-          },
-          {
-            icon: 'shield-check',
-            label: 'Сведения о системе',
-            value: 'Хранятся с материалами проекта',
-            data: 'system-information'
-          },
-          {
-            icon: 'file',
-            label: 'Документы',
-            value: 'Хранятся с материалами проекта',
-            data: 'documents'
-          },
-          {
-            icon: 'shield',
-            label: 'Гарантии',
-            value: 'Хранятся с материалами проекта',
-            data: 'warranties'
+            icon: 'support',
+            label: 'Приложение мониторинга',
+            value: 'Настраивается для установленного оборудования',
+            data: 'monitoring-app'
           },
           {
             icon: 'cycle',
-            label: 'Контекст генерации',
-            value: 'На основе доступных данных анализа',
-            data: 'production-context'
+            label: 'Генерация',
+            value: 'Текущие и исторические данные',
+            data: 'generation'
           },
           {
-            icon: 'support',
-            label: 'Поддержка',
-            value: 'Контакты и сервисная информация',
-            data: 'support'
+            icon: 'shield-check',
+            label: 'Состояние системы',
+            value: 'Контроль работы инвертора и системы',
+            data: 'system-status'
+          },
+          {
+            icon: 'bell',
+            label: 'Уведомления',
+            value: 'Оповещения, поддерживаемые оборудованием',
+            data: 'notifications'
+          },
+          {
+            icon: 'satellite',
+            label: 'Удалённая диагностика',
+            value: 'Доступна для поддерживаемого оборудования',
+            data: 'remote-diagnostics'
+          },
+          {
+            icon: 'shield',
+            label: 'Обслуживание',
+            value: 'Техническая поддержка и сервис YOURENERGY',
+            data: 'service'
           }
         ],
-        cta: 'Начать анализ солнечной системы'
+        cta: 'Начать мой солнечный анализ'
       }
     ]
   },
@@ -751,47 +751,47 @@ export const processStoryCopy = {
       },
       {
         number: '6',
-        nav: 'Solar Passport և աջակցություն',
+        nav: 'Մոնիտորինգ և սպասարկում',
         visual: 'support',
-        visualLabel: 'Solar Passport-ի և աջակցության տեսապատկեր',
-        headline: 'Տեղադրումը միայն սկիզբն է։',
-        copy: 'Գործարկումից հետո ձեր համակարգի տվյալները, փաստաթղթերը, երաշխիքները և աջակցության տեղեկությունները մնում են մեկ տեղում։',
+        visualLabel: 'Մոնիտորինգի և սպասարկման տեսապատկեր',
+        headline: 'Համակարգը գործարկված է։\nՄենք մնում ենք կապի մեջ։',
+        copy: 'Գործարկումից հետո ստանում եք հասանելիություն տեղադրված սարքավորման մոնիտորինգի հավելվածին՝ արտադրությունն ու համակարգի վիճակը վերահսկելու համար։ Մենք օգնում ենք կարգավորմանը, ախտորոշմանը և հետագա սպասարկմանը։',
         cards: [
           {
-            icon: 'file',
-            label: 'Solar Passport',
-            value: 'Ձեր համակարգի անձնագիրը',
-            data: 'solar-passport'
-          },
-          {
-            icon: 'shield-check',
-            label: 'Համակարգի տեղեկություններ',
-            value: 'Պահվում են նախագծի նյութերի հետ',
-            data: 'system-information'
-          },
-          {
-            icon: 'file',
-            label: 'Փաստաթղթեր',
-            value: 'Պահվում են նախագծի նյութերի հետ',
-            data: 'documents'
-          },
-          {
-            icon: 'shield',
-            label: 'Երաշխիքներ',
-            value: 'Պահվում են նախագծի նյութերի հետ',
-            data: 'warranties'
+            icon: 'support',
+            label: 'Մոնիտորինգի հավելված',
+            value: 'Կարգավորվում է տեղադրված սարքավորման համար',
+            data: 'monitoring-app'
           },
           {
             icon: 'cycle',
-            label: 'Արտադրության համատեքստ',
-            value: 'Վերլուծության հասանելի տվյալների հիման վրա',
-            data: 'production-context'
+            label: 'Արտադրություն',
+            value: 'Ընթացիկ և պատմական տվյալներ',
+            data: 'generation'
           },
           {
-            icon: 'support',
-            label: 'Աջակցություն',
-            value: 'Կապի և սպասարկման տեղեկություններ',
-            data: 'support'
+            icon: 'shield-check',
+            label: 'Համակարգի վիճակ',
+            value: 'Ինվերտորի և համակարգի աշխատանքի վերահսկում',
+            data: 'system-status'
+          },
+          {
+            icon: 'bell',
+            label: 'Ծանուցումներ',
+            value: 'Սարքավորման կողմից աջակցվող ահազանգեր',
+            data: 'notifications'
+          },
+          {
+            icon: 'satellite',
+            label: 'Հեռավար ախտորոշում',
+            value: 'Հասանելի է աջակցվող սարքավորումների դեպքում',
+            data: 'remote-diagnostics'
+          },
+          {
+            icon: 'shield',
+            label: 'Սպասարկում',
+            value: 'YOURENERGY-ի տեխնիկական աջակցություն և սպասարկում',
+            data: 'service'
           }
         ],
         cta: 'Սկսել իմ արևային վերլուծությունը'
