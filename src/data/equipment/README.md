@@ -15,6 +15,8 @@ Existing model specifications remain authoritative from their separate datasheet
 
 The mounting supplier's price list gives neither an explicit validity date nor warranty period. The page does not present its prices/stock counts as live values or invent warranty terms. System layout, loads, compatibility and final bill of materials require project-specific selection. The GCK visualization depicts a system, not a guaranteed single-kit bill of materials.
 
+The 12 SolaX ecosystem references that appear only in system diagrams are retained in `solax-source.json` as provenance. They have no separate datasheet or unambiguous product visual, so they are deliberately excluded from the browser bundle rather than presented as product cards.
+
 ## Assets and downloads
 
 All runtime paths are local to this project:

@@ -1,5 +1,7 @@
 import assert from 'node:assert/strict';
-import { readFile, stat } from 'node:fs/promises';
+import { readdir, readFile, stat } from 'node:fs/promises';
+import { relative } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import test from 'node:test';
 
 const existingData = JSON.parse(
@@ -8,17 +10,34 @@ const existingData = JSON.parse(
 const solaxData = JSON.parse(
   await readFile(new URL('../src/data/equipment/solax-products.json', import.meta.url), 'utf8')
 );
+const solaxSource = JSON.parse(
+  await readFile(new URL('../src/data/equipment/solax-source.json', import.meta.url), 'utf8')
+);
 const data = {
   ...existingData,
   categories: solaxData.categories,
   products: [...existingData.products, ...solaxData.products]
 };
 const localAsset = (path) => new URL(`../public${path}`, import.meta.url);
+const publicRoot = new URL('../public/', import.meta.url);
 const documentContents = new Map();
 const loadDocument = (url) => {
   if (!documentContents.has(url)) documentContents.set(url, readFile(localAsset(url)));
   return documentContents.get(url);
 };
+const listFiles = async (directory) => {
+  const entries = await readdir(directory, { withFileTypes: true });
+  return (
+    await Promise.all(
+      entries.map((entry) => {
+        const path = new URL(`${entry.name}${entry.isDirectory() ? '/' : ''}`, directory);
+        return entry.isDirectory() ? listFiles(path) : [path];
+      })
+    )
+  ).flat();
+};
+const publicPath = (file) =>
+  `/${relative(fileURLToPath(publicRoot), fileURLToPath(file)).replaceAll('\\', '/')}`;
 
 test('equipment products have unique ids and complete interactive content', () => {
   assert.equal(new Set(data.products.map(({ id }) => id)).size, data.products.length);
@@ -32,6 +51,16 @@ test('equipment products have unique ids and complete interactive content', () =
   }
 });
 
+test('every primary SolaX catalog series has a published equipment card', () => {
+  const publishedSourceIds = new Set([
+    'x1-lite-lv',
+    'tbat-lv-d53',
+    ...solaxData.products.map(({ source }) => source.packId)
+  ]);
+  assert.deepEqual(publishedSourceIds, new Set(solaxSource.primary_products.map(({ id }) => id)));
+  assert.equal(solaxSource.ecosystem_components.length, 12);
+});
+
 test('equipment images and customer-named PDF downloads exist and fit the static asset budget', async () => {
   for (const product of data.products) {
     assert.ok((await stat(localAsset(product.image))).size > 0);
@@ -43,6 +72,23 @@ test('equipment images and customer-named PDF downloads exist and fit the static
       assert.ok(file.length < 25 * 1024 * 1024, document.url);
     }
   }
+});
+
+test('every public equipment asset is referenced by a published showroom card', async () => {
+  const publicAssets = await listFiles(new URL('assets/equipment/', publicRoot));
+  const referencedAssets = new Set([
+    data.hero.background,
+    ...data.products.flatMap((product) => [
+      product.image,
+      product.datasheetPdf,
+      ...product.documents.map(({ url }) => url)
+    ])
+  ]);
+  assert.deepEqual(
+    new Set(publicAssets.map(publicPath)),
+    referencedAssets,
+    'remove an unused public asset or add it to an explicitly published showroom card'
+  );
 });
 
 test('new products use sourced data and do not invent mounting warranty or current prices', () => {

@@ -5,8 +5,7 @@ import solax from './solax-products.json';
 export const equipmentCatalog = {
   ...existing,
   categories: solax.categories,
-  products: [...existing.products, ...solax.products],
-  ecosystemComponents: solax.ecosystemComponents
+  products: [...existing.products, ...solax.products]
 };
 
 export const productsInCategory = (products, categoryId) =>
