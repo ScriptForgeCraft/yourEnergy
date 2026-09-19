@@ -166,6 +166,8 @@ const renderHotspots = (product, target) => {
     });
     button.addEventListener('keydown', (event) => {
       if (event.key === 'Escape') {
+        event.preventDefault();
+        event.stopPropagation();
         button.setAttribute('aria-expanded', 'false');
         button.focus();
       }
@@ -620,7 +622,16 @@ export const initEquipmentShowroom = ({ data, copy, gsap }) => {
 
   $('[data-fullscreen-open]', root).addEventListener('click', openExplorer);
   $('[data-fullscreen-close]', explorer).addEventListener('click', closeExplorer);
-  explorer.addEventListener('cancel', () => document.body.classList.remove('has-product-explorer'));
+  explorer.addEventListener('cancel', (event) => {
+    if (
+      explorer.contains(document.activeElement) &&
+      document.activeElement.matches('.product-hotspot')
+    ) {
+      event.preventDefault();
+      return;
+    }
+    document.body.classList.remove('has-product-explorer');
+  });
   explorer.addEventListener('click', (event) => {
     if (event.target === explorer) closeExplorer();
   });

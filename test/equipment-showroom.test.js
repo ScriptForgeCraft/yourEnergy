@@ -2,10 +2,23 @@ import assert from 'node:assert/strict';
 import { readFile, stat } from 'node:fs/promises';
 import test from 'node:test';
 
-const data = JSON.parse(
+const existingData = JSON.parse(
   await readFile(new URL('../src/data/equipment/equipment-data.json', import.meta.url), 'utf8')
 );
+const solaxData = JSON.parse(
+  await readFile(new URL('../src/data/equipment/solax-products.json', import.meta.url), 'utf8')
+);
+const data = {
+  ...existingData,
+  categories: solaxData.categories,
+  products: [...existingData.products, ...solaxData.products]
+};
 const localAsset = (path) => new URL(`../public${path}`, import.meta.url);
+const documentContents = new Map();
+const loadDocument = (url) => {
+  if (!documentContents.has(url)) documentContents.set(url, readFile(localAsset(url)));
+  return documentContents.get(url);
+};
 
 test('equipment products have unique ids and complete interactive content', () => {
   assert.equal(new Set(data.products.map(({ id }) => id)).size, data.products.length);
@@ -25,7 +38,7 @@ test('equipment images and customer-named PDF downloads exist and fit the static
     for (const document of product.documents) {
       assert.match(document.url.split('/').pop(), /^[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*\.pdf$/u);
       assert.ok(document.pages > 0 && document.language && document.sizeLabel);
-      const file = await readFile(localAsset(document.url));
+      const file = await loadDocument(document.url);
       assert.equal(file.subarray(0, 5).toString(), '%PDF-');
       assert.ok(file.length < 25 * 1024 * 1024, document.url);
     }

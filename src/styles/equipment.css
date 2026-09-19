@@ -137,6 +137,7 @@
   width: min(calc(100% - clamp(48px, 7vw, 128px)), 1740px);
   min-height: max(100svh, 870px);
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   grid-template-rows: minmax(600px, 1fr) auto;
   margin-inline: auto;
   padding-top: 104px;
