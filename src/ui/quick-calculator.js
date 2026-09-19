@@ -135,14 +135,56 @@ const format = (value, locale, options = {}) =>
     ? new Intl.NumberFormat(locale, { maximumFractionDigits: 0, ...options }).format(Number(value))
     : '—';
 
-const metric = (label, value) => {
+const metric = (label, value, { icon = 'sun', tone = 'sky' } = {}) => {
   const wrap = document.createElement('div');
+  wrap.className = `quick-result__metric quick-result__metric--${tone}`;
+  const symbol = document.createElement('span');
+  symbol.className = 'quick-result__metric-icon';
+  symbol.setAttribute('aria-hidden', 'true');
+  symbol.dataset.icon = icon;
+  const content = document.createElement('div');
   const term = document.createElement('dt');
   term.textContent = label;
   const description = document.createElement('dd');
   description.textContent = value;
-  wrap.append(term, description);
+  content.append(description, term);
+  wrap.append(symbol, content);
   return wrap;
+};
+
+const monthlyProductionChart = ({ production, months, label, locale }) => {
+  const values = Array.isArray(production) ? production.slice(0, 12).map(finite) : [];
+  if (values.length !== 12 || values.some((value) => value === null || value < 0)) return null;
+  const peak = Math.max(...values);
+  if (peak <= 0) return null;
+
+  const chart = document.createElement('figure');
+  chart.className = 'quick-production';
+  const caption = document.createElement('figcaption');
+  caption.textContent = label;
+  const bars = document.createElement('div');
+  bars.className = 'quick-production__bars';
+  bars.setAttribute('role', 'list');
+
+  values.forEach((value, index) => {
+    const month = months[index] ?? {};
+    const item = document.createElement('div');
+    item.className = 'quick-production__item';
+    item.setAttribute('role', 'listitem');
+    item.title = `${month.name ?? month.short ?? index + 1}: ${format(value, locale)} kWh`;
+    const bar = document.createElement('span');
+    bar.className = 'quick-production__bar';
+    bar.style.setProperty('--production-height', `${Math.max(6, (value / peak) * 100)}%`);
+    bar.setAttribute('aria-hidden', 'true');
+    const monthLabel = document.createElement('span');
+    monthLabel.className = 'quick-production__month';
+    monthLabel.textContent = month.short ?? String(index + 1);
+    item.append(bar, monthLabel);
+    bars.append(item);
+  });
+
+  chart.append(caption, bars);
+  return chart;
 };
 
 const errorMessage = (error, copy) => {
@@ -166,6 +208,7 @@ export const initQuickCalculator = ({ config = {} } = {}) => {
   if (!root) return null;
   const copy = config.quick ?? {};
   const locale = config.locale ?? 'en-US';
+  const months = config.product?.passport?.months ?? [];
   const session = createCalculatorSession();
   const api = new ProductApiClient({ endpoints: config.endpoints ?? {} });
   const form = root.querySelector('[data-quick-form]');
@@ -313,8 +356,8 @@ export const initQuickCalculator = ({ config = {} } = {}) => {
     resultActions.hidden = true;
     resultLinks.hidden = true;
     resultValues.replaceChildren();
-    resultTitle.textContent = copy.waiting;
-    resultCopy.textContent = copy.regionalCopy;
+    resultTitle.textContent = copy.resultsTitle ?? copy.waiting;
+    resultCopy.textContent = copy.waiting;
     if (leadDialog?.open) leadDialog.close();
   };
   const input = () => {
@@ -366,44 +409,69 @@ export const initQuickCalculator = ({ config = {} } = {}) => {
     const estimate = analysis.commercialEstimate;
     const values = document.createElement('dl');
     values.className = 'quick-result__metrics';
-    values.append(
-      metric(
-        copy.capacity,
-        `${format(scenario.system?.capacityKwp, locale, { maximumFractionDigits: 2 })} kWp`
-      ),
-      metric(copy.panels, format(scenario.system?.panelCount, locale)),
-      metric(copy.generation, `${format(scenario.generation?.annualKwh, locale)} kWh`)
-    );
+    const environmental = analysis.environmental ?? {};
+    const avoidedCo2Tons = finite(environmental.avoidedCo2Tons);
+    const treeEquivalent = finite(environmental.treeEquivalent);
+    const annualSavingsAmd = finite(scenario.financial?.annualSavingsAmd);
     const budgetRange = formatConsumerCommercialRange(estimate, locale);
-    if (budgetRange) {
-      values.append(metric(copy.budget, budgetRange));
-    } else if (
-      estimate?.reason === 'PRICEBOOK_EXPIRED' ||
-      estimate?.reason === 'PRICEBOOK_UNAVAILABLE'
-    ) {
+    const summaryMetrics = [
+      metric(copy.generation, `${format(scenario.generation?.annualKwh, locale)} kWh`, {
+        icon: 'sun',
+        tone: 'sun'
+      }),
+      avoidedCo2Tons !== null
+        ? metric(
+            copy.co2,
+            `${format(avoidedCo2Tons, locale, { maximumFractionDigits: 1 })} t/year`,
+            {
+              icon: 'leaf',
+              tone: 'green'
+            }
+          )
+        : metric(
+            copy.capacity,
+            `${format(scenario.system?.capacityKwp, locale, { maximumFractionDigits: 2 })} kWp`,
+            { icon: 'bolt', tone: 'sky' }
+          ),
+      treeEquivalent !== null
+        ? metric(copy.trees, format(treeEquivalent, locale), { icon: 'tree', tone: 'green' })
+        : metric(copy.panels, format(scenario.system?.panelCount, locale), {
+            icon: 'panel',
+            tone: 'sky'
+          })
+    ];
+    if (annualSavingsAmd !== null) {
+      summaryMetrics.push(
+        metric(copy.savings, `${format(annualSavingsAmd, locale)} ֏`, {
+          icon: 'coin',
+          tone: 'gold'
+        })
+      );
+    } else if (budgetRange) {
+      summaryMetrics.push(metric(copy.budget, budgetRange, { icon: 'coin', tone: 'gold' }));
+    }
+    values.append(...summaryMetrics);
+    if (estimate?.reason === 'PRICEBOOK_EXPIRED' || estimate?.reason === 'PRICEBOOK_UNAVAILABLE') {
       const note = document.createElement('p');
       note.className = 'input-help';
       note.textContent = copy.priceUnavailable;
       values.append(note);
     }
-    const annualSavingsAmd = finite(scenario.financial?.annualSavingsAmd);
-    const paybackYears = finite(scenario.financial?.paybackYears);
-    if (annualSavingsAmd !== null) {
-      values.append(metric(copy.savings, `${format(annualSavingsAmd, locale)} ֏`));
-      if (paybackYears !== null) {
-        values.append(
-          metric(copy.payback, `≈ ${format(paybackYears, locale, { maximumFractionDigits: 1 })}`)
-        );
-      }
-    } else {
+    if (annualSavingsAmd === null) {
       const note = document.createElement('p');
       note.className = 'input-help';
       note.textContent = copy.noTariff;
       values.append(note);
     }
-    resultTitle.textContent = copy.regional;
-    resultCopy.textContent = copy.regionalCopy;
-    resultValues.replaceChildren(values);
+    const chart = monthlyProductionChart({
+      production: scenario.generation?.monthlyKwh,
+      months,
+      label: copy.monthlyProduction,
+      locale
+    });
+    resultTitle.textContent = copy.resultsTitle ?? copy.regional;
+    resultCopy.textContent = copy.resultsCopy ?? copy.regionalCopy;
+    resultValues.replaceChildren(values, ...(chart ? [chart] : []));
     resultValues.hidden = false;
     resultActions.hidden = false;
     resultLinks.hidden = false;
