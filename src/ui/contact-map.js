@@ -1,5 +1,6 @@
 const GOOGLE_MAPS_SCRIPT_ID = 'yourenergy-google-maps';
 const DEFAULT_CENTER = Object.freeze({ lat: 40.1872, lng: 44.5152 });
+const GOOGLE_MAPS_API_KEY = String(import.meta.env.VITE_GOOGLE_MAPS_API_KEY || '').trim();
 
 let googleMapsPromise = null;
 
@@ -40,7 +41,6 @@ const loadGoogleMaps = ({ apiKey, locale }) => {
       libraries: 'geocoding',
       language: browserLanguage(locale),
       region: 'AM',
-      auth_referrer_policy: 'origin',
       v: 'weekly'
     });
     const script = document.createElement('script');
@@ -68,7 +68,7 @@ const geocodeOffice = async (geocoder, office) => {
 };
 
 const renderOfficeMap = async ({ root, canvas, config }) => {
-  const apiKey = String(config.googleMapsApiKey || '').trim();
+  const apiKey = GOOGLE_MAPS_API_KEY;
   const offices = Array.isArray(config.offices) ? config.offices : [];
 
   if (!apiKey || !offices.length) {
@@ -122,8 +122,9 @@ const renderOfficeMap = async ({ root, canvas, config }) => {
     }
 
     root.dataset.mapStatus = markerCount ? 'ready' : 'unavailable';
-  } catch {
+  } catch (error) {
     root.dataset.mapStatus = 'unavailable';
+    console.error('YOURENERGY office map failed to initialize.', error);
   }
 };
 

@@ -73,6 +73,7 @@ const blogPages = [
   )
 ];
 const placeholderTypes = ['contacts', 'about'];
+const contactPages = ['contacts/index.html', 'ru/contacts/index.html', 'en/contacts/index.html'];
 const placeholderPages = placeholderTypes.flatMap((type) => [
   `${type}/index.html`,
   `ru/${type}/index.html`,
@@ -628,6 +629,9 @@ async function validateHeaders() {
     fail('_headers must allow the Cloudflare Web Analytics beacon script');
   }
   if (!csp.includes("connect-src 'self'")) fail('_headers must keep API connections same-origin');
+  if (!csp.includes('https://*.googleapis.com') || !csp.includes('https://*.gstatic.com')) {
+    fail('_headers CSP must allow Google Maps JavaScript resources');
+  }
   if (/\*\s*;|\*$/u.test(csp)) fail('_headers CSP must not use a wildcard source');
 }
 
@@ -682,6 +686,37 @@ function validatePrivateCalculatorMarkup(html, page, type) {
   }
   for (const marker of ['data-professional-calculator', 'data-roof-refinement']) {
     if (html.includes(marker)) fail(`${page}: legacy route must not carry ${marker}`);
+  }
+}
+
+function validateContactMapMarkup(html, page) {
+  for (const marker of ['data-office-map', 'data-office-map-canvas', "id='contact-page-config'"]) {
+    if (!html.includes(marker)) fail(`${page}: Google office map is missing ${marker}`);
+  }
+
+  for (const legacy of ['office-map__roads', 'office-map__district', 'office-map__pin']) {
+    if (html.includes(legacy)) fail(`${page}: legacy decorative office map token ${legacy} is present`);
+  }
+
+  const configMatch = html.match(
+    /<script\b[^>]*\bid=(?:"contact-page-config"|'contact-page-config')[^>]*>([\s\S]*?)<\/script>/iu
+  );
+  if (!configMatch) return;
+
+  try {
+    const config = JSON.parse(configMatch[1].trim());
+    if (!Array.isArray(config.offices) || config.offices.length !== 2) {
+      fail(`${page}: contact-page-config must contain both office locations`);
+      return;
+    }
+    if (config.offices.some((office) => !office?.title || !office?.mapQuery || !office?.href)) {
+      fail(`${page}: every office map entry needs title, mapQuery and href`);
+    }
+    if ('googleMapsApiKey' in config) {
+      fail(`${page}: Google Maps API key must come from the Vite environment, not generated HTML`);
+    }
+  } catch (error) {
+    fail(`${page}: invalid contact-page-config JSON (${error.message})`);
   }
 }
 
@@ -900,6 +935,9 @@ for (const { page, locale } of projectsPages) {
 for (const { page, type } of toolPages) {
   if (!pages.has(page)) continue;
   if (type === 'calculator') validateQuickCalculatorMarkup(pages.get(page), page);
+}
+for (const page of contactPages) {
+  if (pages.has(page)) validateContactMapMarkup(pages.get(page), page);
 }
 for (const { page, type } of privateCalculatorPages) {
   if (!pages.has(page)) continue;
