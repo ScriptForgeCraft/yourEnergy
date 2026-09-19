@@ -1854,8 +1854,8 @@
 }
 
 .quick-result h2 {
-  font-size: clamp(1.18rem, 1.65vw, 1.45rem);
-  line-height: 1.13;
+  font-size: clamp(1.18rem, 1.65vw, 1.45rem) !important;
+  line-height: 1.13 !important;
 }
 
 .quick-result__heading p:not(.result-kicker) {
