@@ -4,6 +4,8 @@ import { defineConfig, loadEnv } from 'vite';
 
 const root = process.cwd();
 const DEFAULT_OSM_TILE_URL = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
+const DEFAULT_SATELLITE_TILE_URL =
+  'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}';
 const CLOUDFLARE_INSIGHTS_SCRIPT_ORIGIN = 'https://static.cloudflareinsights.com';
 const BLOG_ARTICLE_SLUGS = [
   'solar-panels-for-home-armenia',
@@ -46,8 +48,8 @@ const trustedMapOrigin = (tileUrl) => {
   }
 };
 
-const createHeaders = (mapOrigin) => `/*
-  Content-Security-Policy: default-src 'self'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; object-src 'none'; script-src 'self' ${CLOUDFLARE_INSIGHTS_SCRIPT_ORIGIN}; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:${mapOrigin ? ` ${mapOrigin}` : ''}; font-src 'self' data:; connect-src 'self'; frame-src https://*.google.com; manifest-src 'self'; worker-src 'self'
+const createHeaders = (mapOrigins) => `/*
+  Content-Security-Policy: default-src 'self'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; object-src 'none'; script-src 'self' ${CLOUDFLARE_INSIGHTS_SCRIPT_ORIGIN}; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:${mapOrigins.map((value) => ` ${value}`).join('')}; font-src 'self' data:; connect-src 'self'; frame-src https://*.google.com; manifest-src 'self'; worker-src 'self'
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: accelerometer=(), camera=(), geolocation=(), gyroscope=(), microphone=(), payment=(), usb=()
   X-Content-Type-Options: nosniff
@@ -60,14 +62,17 @@ const createHeaders = (mapOrigin) => `/*
 export default defineConfig(({ mode }) => {
   const publicEnv = loadEnv(mode, root, 'VITE_');
   const mapTileUrl = publicEnv.VITE_MAP_TILE_URL?.trim() || DEFAULT_OSM_TILE_URL;
-  const mapOrigin = trustedMapOrigin(mapTileUrl);
+  const imageryTileUrl = publicEnv.VITE_MAP_IMAGERY_TILE_URL?.trim() || DEFAULT_SATELLITE_TILE_URL;
+  const mapOrigins = [
+    ...new Set([trustedMapOrigin(mapTileUrl), trustedMapOrigin(imageryTileUrl)])
+  ].filter(Boolean);
 
   return {
     plugins: [
       {
         name: 'yourenergy-csp-allowlist',
         async closeBundle() {
-          await writeFile(resolve(root, 'dist/_headers'), createHeaders(mapOrigin));
+          await writeFile(resolve(root, 'dist/_headers'), createHeaders(mapOrigins));
         }
       }
     ],

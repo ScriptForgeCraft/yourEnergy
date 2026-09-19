@@ -78,6 +78,8 @@ export const initCalculatorMode = async ({ config = {} } = {}) => {
 
   const render = async (mode) => {
     stage.setAttribute('aria-busy', 'true');
+    document.body.classList.toggle('calculator-page--professional', mode === 'professional');
+    document.body.classList.toggle('calculator-page--quick', mode !== 'professional');
     try {
       if (mode !== 'professional') {
         await initializeQuick(render, { replace: true });

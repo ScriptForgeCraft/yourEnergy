@@ -92,6 +92,9 @@ const runtimeLocales = Object.freeze(
 const origin = 'https://yourenergy.am';
 const DEFAULT_OSM_TILE_URL = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
 const DEFAULT_OSM_TILE_ATTRIBUTION = '© OpenStreetMap contributors';
+const DEFAULT_SATELLITE_TILE_URL =
+  'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}';
+const DEFAULT_SATELLITE_TILE_ATTRIBUTION = 'Tiles © Esri';
 const createNoKeyGoogleMapsEmbedUrl = (query, locale = 'en') => {
   const params = new URLSearchParams({
     hl: locale,
@@ -365,7 +368,10 @@ const createPageConfig = (content, extra = {}) => ({
   map: {
     image: '/images/roof-scan-768.webp',
     tileUrl: publicEnv.VITE_MAP_TILE_URL?.trim() || DEFAULT_OSM_TILE_URL,
-    tileAttribution: publicEnv.VITE_MAP_ATTRIBUTION?.trim() || DEFAULT_OSM_TILE_ATTRIBUTION
+    tileAttribution: publicEnv.VITE_MAP_ATTRIBUTION?.trim() || DEFAULT_OSM_TILE_ATTRIBUTION,
+    imageryTileUrl: publicEnv.VITE_MAP_IMAGERY_TILE_URL?.trim() || DEFAULT_SATELLITE_TILE_URL,
+    imageryTileAttribution:
+      publicEnv.VITE_MAP_IMAGERY_ATTRIBUTION?.trim() || DEFAULT_SATELLITE_TILE_ATTRIBUTION
   },
   endpoints: {
     geocode: sameOriginPath(publicEnv.VITE_GEOCODING_ENDPOINT, '/api/geocode'),

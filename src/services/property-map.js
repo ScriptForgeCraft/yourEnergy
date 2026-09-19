@@ -64,6 +64,8 @@ export const createPropertyMap = async ({
   container,
   tileUrl = '',
   tileAttribution = '',
+  imageryTileUrl = '',
+  imageryTileAttribution = '',
   locationPointLabel = 'Selected property point',
   roofPointLabel = (index) => `Roof point ${index + 1}`,
   onLocationChange = () => {},
@@ -125,13 +127,31 @@ export const createPropertyMap = async ({
   }
   map.whenReady(invalidateSizeAfterLayout);
 
+  const tileLayers = {};
+  let activeTileLayer = null;
   if (tileUrl) {
-    L.tileLayer(tileUrl, {
+    tileLayers.map = L.tileLayer(tileUrl, {
       attribution: tileAttribution,
       maxZoom: ROOF_EDIT_ZOOM,
       crossOrigin: true
-    }).addTo(map);
+    });
   }
+  if (imageryTileUrl) {
+    tileLayers.satellite = L.tileLayer(imageryTileUrl, {
+      attribution: imageryTileAttribution,
+      maxZoom: ROOF_EDIT_ZOOM,
+      crossOrigin: true
+    });
+  }
+  const setLayer = (nextLayer) => {
+    const next = tileLayers[nextLayer] ?? tileLayers.map ?? tileLayers.satellite;
+    if (!next) return false;
+    if (activeTileLayer && activeTileLayer !== next) map.removeLayer(activeTileLayer);
+    if (!map.hasLayer(next)) next.addTo(map);
+    activeTileLayer = next;
+    return true;
+  };
+  setLayer('satellite');
 
   const emitRoof = () => {
     const points = roofPoints.map(normalizePoint);
@@ -241,7 +261,8 @@ export const createPropertyMap = async ({
 
   return {
     map,
-    hasTiles: Boolean(tileUrl),
+    hasTiles: Boolean(tileUrl || imageryTileUrl),
+    setLayer,
     /**
      * The wizard has a location map and a roof map in different steps. Moving
      * the same Leaflet element keeps the selected point and lazy-loaded tiles

@@ -98,6 +98,10 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
   const mobileProgress = root.querySelector('[data-wizard-mobile-progress]');
   const status = root.querySelector('[data-wizard-status]');
   const address = root.querySelector('[data-wizard-address]');
+  const latitudeInput = root.querySelector('[data-location-latitude]');
+  const longitudeInput = root.querySelector('[data-location-longitude]');
+  const mapLatitude = root.querySelector('[data-map-latitude]');
+  const mapLongitude = root.querySelector('[data-map-longitude]');
   const mapElement = root.querySelector('[data-property-map]');
   const locationMapWrap = root.querySelector('[data-location-map-wrap]');
   const roofMapHost = root.querySelector('[data-roof-map-host]');
@@ -126,6 +130,26 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
   const financeValues = root.querySelector('[data-finance-values]');
   const passportDialog = document.querySelector('[data-passport-dialog]');
   const passportContent = document.querySelector('[data-passport-dialog-content]');
+
+  [
+    ['[data-location-region]', wizard.region],
+    ['[data-location-city]', wizard.city],
+    ['[data-location-district]', wizard.district]
+  ].forEach(([selector, label]) => {
+    if (!label) return;
+    const field = root.querySelector(selector)?.closest('label');
+    const textNode = [...(field?.childNodes ?? [])].find((node) => node.nodeType === Node.TEXT_NODE);
+    if (textNode) textNode.nodeValue = label;
+  });
+  const setButtonLabel = (selector, label) => {
+    if (!label) return;
+    const button = root.querySelector(selector);
+    const textNode = [...(button?.childNodes ?? [])].find((node) => node.nodeType === Node.TEXT_NODE);
+    if (textNode) textNode.nodeValue = label;
+  };
+  setButtonLabel('[data-open-location-map]', wizard.searchAddress);
+  setButtonLabel('[data-use-current-location]', wizard.useCurrentLocation);
+  setButtonLabel('[data-use-map-coordinates]', wizard.useFromMap);
 
   const session = createCalculatorSession();
   const savedSession = session.read();
@@ -175,6 +199,18 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
     if (!status) return;
     status.textContent = message ?? '';
     status.classList.toggle('is-error', Boolean(error));
+  };
+
+  const syncLocationCoordinates = (coordinates) => {
+    const lat = number(coordinates?.lat, -90, 90);
+    const lng = number(coordinates?.lng, -180, 180);
+    if (lat === null || lng === null) return;
+    const latValue = String(lat.toFixed(5));
+    const lngValue = String(lng.toFixed(5));
+    if (latitudeInput) latitudeInput.value = latValue;
+    if (longitudeInput) longitudeInput.value = lngValue;
+    if (mapLatitude) mapLatitude.textContent = latValue;
+    if (mapLongitude) mapLongitude.textContent = lngValue;
   };
 
   const stepStates = () =>
@@ -281,6 +317,7 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
     const lng = number(coordinates?.lng, -180, 180);
     if (lat === null || lng === null) return false;
     state.pendingLocation = { lat, lng };
+    syncLocationCoordinates({ lat, lng });
     state.confirmedProperty = null;
     clearPotentialAndBelow();
     if (pendingCoordinates)
@@ -325,6 +362,8 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
           container: mapElement,
           tileUrl: config.map?.tileUrl,
           tileAttribution: config.map?.tileAttribution,
+          imageryTileUrl: config.map?.imageryTileUrl,
+          imageryTileAttribution: config.map?.imageryTileAttribution,
           locationPointLabel: product.location?.resultLabel,
           roofPointLabel: (index) => text(product.roof?.pointSelectLabel, { index: index + 1 }),
           onLocationChange: setPendingLocation,
@@ -335,6 +374,7 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
       mapController?.setMode(mode);
       if (state.confirmedProperty)
         mapController?.setLocation(state.confirmedProperty, { notify: false });
+      if (state.confirmedProperty) syncLocationCoordinates(state.confirmedProperty);
       if (mode === 'roof' && state.roof?.points?.length) {
         mapController?.setRoofPoints(state.roof.points, { complete: state.roof.complete });
       }
@@ -842,16 +882,46 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
   root
     .querySelector('[data-confirm-location]')
     ?.addEventListener('click', () => void confirmLocation());
-  root.querySelector('[data-location-coordinates-submit]')?.addEventListener('click', () => {
-    const lat = number(root.querySelector('[data-location-latitude]')?.value, -90, 90);
-    const lng = number(root.querySelector('[data-location-longitude]')?.value, -180, 180);
+  const selectCoordinates = () => {
+    const lat = number(latitudeInput?.value, -90, 90);
+    const lng = number(longitudeInput?.value, -180, 180);
     if (lat === null || lng === null) {
       writeStatus(product.location?.invalidCoordinates, true);
       return;
     }
     setPendingLocation({ lat, lng });
     void mountMap('location').then((map) => map?.setLocation({ lat, lng }, { notify: false }));
+  };
+  root
+    .querySelector('[data-location-coordinates-submit]')
+    ?.addEventListener('click', selectCoordinates);
+  root.querySelector('[data-use-map-coordinates]')?.addEventListener('click', selectCoordinates);
+  root.querySelector('[data-map-focus-location]')?.addEventListener('click', selectCoordinates);
+  root.querySelector('[data-use-current-location]')?.addEventListener('click', () => {
+    void mountMap('location').then((map) => map?.setLocationAtCenter());
   });
+  root.querySelector('[data-location-continue]')?.addEventListener('click', () => {
+    const lat = number(latitudeInput?.value, -90, 90);
+    const lng = number(longitudeInput?.value, -180, 180);
+    if (lat === null || lng === null) {
+      writeStatus(product.location?.invalidCoordinates, true);
+      return;
+    }
+    setPendingLocation({ lat, lng });
+    void confirmLocation();
+  });
+  root.querySelectorAll('[data-map-layer]').forEach((button) =>
+    button.addEventListener('click', () => {
+      const layer = button.dataset.mapLayer;
+      if (!layer) return;
+      void mountMap('location').then((map) => {
+        if (!map?.setLayer(layer)) return;
+        root.querySelectorAll('[data-map-layer]').forEach((item) => {
+          item.classList.toggle('is-active', item.dataset.mapLayer === layer);
+        });
+      });
+    })
+  );
   potentialSkip?.addEventListener('click', () => setStep(1));
   potentialRetry?.addEventListener('click', () => void requestPotential({ force: true }));
   root.querySelector('[data-consumption-continue]')?.addEventListener('click', () => {
@@ -909,5 +979,14 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
 
   syncRoofControls();
   updateProgress();
+  void mountMap('location').then((map) => {
+    if (!map || state.confirmedProperty || state.pendingLocation) return;
+    const lat = number(latitudeInput?.value, -90, 90);
+    const lng = number(longitudeInput?.value, -180, 180);
+    if (lat !== null && lng !== null) {
+      map.setLocation({ lat, lng }, { notify: false });
+      syncLocationCoordinates({ lat, lng });
+    }
+  });
   return { state, getSelectedBillFile: () => fileUpload.getFile() };
 };
