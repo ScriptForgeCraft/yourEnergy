@@ -35,10 +35,14 @@ const resolveSessionStorage = () => {
     // Resolve lazily in the document realm. Some embedded browser contexts do
     // not expose Storage through an imported module's global object, although
     // the page's Window still provides the normal session-scoped store.
-    return window.sessionStorage;
+    const storage = window.sessionStorage;
+    if (storage && typeof storage.getItem === 'function' && typeof storage.setItem === 'function') {
+      return storage;
+    }
   } catch {
-    return null;
+    // Some embedded or privacy-restricted contexts deny sessionStorage.
   }
+  return null;
 };
 
 const publishAnalysisUpdate = (state) => {

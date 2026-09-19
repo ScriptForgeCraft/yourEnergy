@@ -77,7 +77,9 @@ const activeAreaMethod = (root) =>
   root.querySelector('[data-roof-area-method]:checked')?.value ?? 'map-projected';
 
 const activeMountingMode = (root) =>
-  root.querySelector('[data-roof-mounting-mode]:checked')?.value ?? 'roof-parallel';
+  root.querySelector('select[data-roof-mounting-mode]')?.value ??
+  root.querySelector('[data-roof-mounting-mode]:checked')?.value ??
+  'roof-parallel';
 
 /**
  * The calculator has one state source and explicitly serializes only the
@@ -364,8 +366,11 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
           ? '—'
           : `${format(roof.effectiveAreaSqm, locale, { maximumFractionDigits: 1 })} m²`;
     if (roofMapOrientation && roof.azimuthDegrees !== null) {
+      const selectedOrientation = roofOrientation?.selectedOptions?.[0]?.textContent?.trim();
       roofMapOrientation.textContent =
-        roof.azimuthDegrees === 180 ? 'South (180°)' : `${format(roof.azimuthDegrees, locale)}°`;
+        selectedOrientation && roof.azimuthDegrees !== null
+          ? `${selectedOrientation} (${format(roof.azimuthDegrees, locale)}°)`
+          : `${format(roof.azimuthDegrees, locale)}°`;
     }
     if (roofMapTilt && roof.tiltDegrees !== null)
       roofMapTilt.textContent = `${format(roof.tiltDegrees, locale)}°`;
@@ -581,6 +586,16 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
     if (roofPlaneWrap) roofPlaneWrap.hidden = !measured;
     if (roofPlaneArea) roofPlaneArea.disabled = !measured;
     if (roofOrientationCustom) roofOrientationCustom.hidden = roofOrientation?.value !== 'custom';
+    const roof = roofGeometry();
+    state.roof = {
+      ...(state.roof ?? {}),
+      areaMethod: roof.areaMethod,
+      mountingMode: roof.mountingMode,
+      projectedAreaSqm: roof.projectedAreaSqm,
+      planeAreaSqm: roof.planeAreaSqm,
+      tiltDegrees: roof.tiltDegrees,
+      orientationDegrees: roof.azimuthDegrees
+    };
     updateRoofAreaSummary();
     clearAnalysis();
     updateProgress();
@@ -856,10 +871,8 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
       if (roofOrientationCustomInput && !known)
         roofOrientationCustomInput.value = state.roof.orientationDegrees;
     }
-    const mount = root.querySelector(
-      `[data-roof-mounting-mode][value="${state.roof.mountingMode}"]`
-    );
-    if (mount) mount.checked = true;
+    const mountingMode = root.querySelector('select[data-roof-mounting-mode]');
+    if (mountingMode && state.roof.mountingMode) mountingMode.value = state.roof.mountingMode;
   }
 
   const consumptionInput = initConsumptionInput({
@@ -983,6 +996,14 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
   root
     .querySelectorAll('[data-roof-area-method], [data-roof-mounting-mode], [data-roof-orientation]')
     .forEach((input) => input.addEventListener('change', syncRoofControls));
+  root.querySelectorAll('[data-roof-enter-area]').forEach((button) =>
+    button.addEventListener('click', () => {
+      const manualMethod = root.querySelector('[data-roof-area-method][value="measured-plane"]');
+      if (manualMethod) manualMethod.checked = true;
+      syncRoofControls();
+      requestAnimationFrame(() => roofPlaneArea?.focus({ preventScroll: false }));
+    })
+  );
   root.querySelector('[data-run-analysis]')?.addEventListener('click', () => void runAnalysis());
   root.querySelector('[data-add-tariff]')?.addEventListener('click', () => {
     setStep(1);

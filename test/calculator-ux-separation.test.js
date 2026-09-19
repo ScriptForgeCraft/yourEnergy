@@ -35,7 +35,11 @@ test('Professional has exactly four customer steps and retains every engineering
     'data-roof-tilt',
     'data-roof-orientation',
     'data-roof-mounting-mode',
-    'data-optional-upload'
+    'data-optional-upload',
+    'data-consumption-switch-monthly',
+    "data-consumption-unit='amd'",
+    'data-roof-enter-area',
+    'professional-roof-mounting-select'
   ]) {
     assert.match(professional, new RegExp(marker, 'u'));
   }
@@ -43,6 +47,8 @@ test('Professional has exactly four customer steps and retains every engineering
   assert.match(professional, /data-wizard-restart/u);
   assert.match(professional, /wizard\.results\.calculationTitle/u);
   assert.match(professional, /wizard\.results\.benefits/u);
+  assert.match(professional, /<select data-roof-mounting-mode>/u);
+  assert.doesNotMatch(professional, /data-roof-add-center/u);
 });
 
 test('one calculator exposes two modes and migrates historic routes safely', async () => {

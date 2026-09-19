@@ -4,6 +4,7 @@ const positiveNumber = (value) => {
 };
 
 const nonNegativeNumber = (value) => {
+  if (value === '' || value === null || value === undefined) return null;
   const number = Number(value);
   return Number.isFinite(number) && number >= 0 ? number : null;
 };
@@ -52,8 +53,13 @@ export const initConsumptionInput = ({ root, strings, onChange = () => {} } = {}
   const tariffInput = root.querySelector('[data-consumption-tariff]');
   const tariffLabel = root.querySelector('[data-consumption-tariff-label]');
   const tariffHelp = root.querySelector('[data-consumption-tariff-help]');
-  const chartItems = [...wizardRoot.querySelectorAll('[data-consumption-chart] .consumption-profile-chart__item')];
+  const chartItems = [
+    ...wizardRoot.querySelectorAll('[data-consumption-chart] .consumption-profile-chart__item')
+  ];
   const fillAverageButton = wizardRoot.querySelector('[data-consumption-fill-average]');
+  const unitButtons = [...wizardRoot.querySelectorAll('[data-consumption-unit]')];
+  const monthlyProfileButton = wizardRoot.querySelector('[data-consumption-switch-monthly]');
+  let chartUnit = 'kwh';
 
   const activeMode = () => modeInputs.find((input) => input.checked)?.value ?? 'bill';
 
@@ -74,22 +80,26 @@ export const initConsumptionInput = ({ root, strings, onChange = () => {} } = {}
     return { annual, bill, monthly, mode, tariff, usage };
   };
 
-  const updateChart = ({ annual, mode, monthly }) => {
+  const updateChart = ({ annual, mode, monthly, tariff }) => {
     if (!chartItems.length) return;
-    const hasMonthlyProfile = mode === 'monthly' && monthly.length === 12 && monthly.every((value) => value !== null);
-    const values = hasMonthlyProfile
+    const hasMonthlyProfile =
+      mode === 'monthly' && monthly.length === 12 && monthly.every((value) => value !== null);
+    const kwhValues = hasMonthlyProfile
       ? monthly
       : annual === null
         ? demoMonthlyProfile
         : demoMonthlyProfile.map((value) => Math.round((value / 4920) * annual));
+    const useAmd = chartUnit === 'amd' && tariff !== null;
+    const values = useAmd ? kwhValues.map((value) => value * tariff) : kwhValues;
     const maximum = Math.max(...values, 1);
     chartItems.forEach((item, index) => {
       const value = values[index] ?? 0;
-      item.querySelector('[data-consumption-chart-value]')?.replaceChildren(String(Math.round(value)));
-      item.querySelector('.consumption-profile-chart__bar')?.style.setProperty(
-        '--chart-height',
-        `${Math.max(8, (value / maximum) * 100)}%`
-      );
+      item
+        .querySelector('[data-consumption-chart-value]')
+        ?.replaceChildren(useAmd ? `${Math.round(value)} ֏` : String(Math.round(value)));
+      item
+        .querySelector('.consumption-profile-chart__bar')
+        ?.style.setProperty('--chart-height', `${Math.max(8, (value / maximum) * 100)}%`);
     });
   };
 
@@ -97,6 +107,14 @@ export const initConsumptionInput = ({ root, strings, onChange = () => {} } = {}
     const values = getValues();
     const { annual } = values;
     if (annualOutput) annualOutput.textContent = annual === null ? '—' : String(Math.round(annual));
+    if (chartUnit === 'amd' && values.tariff === null) chartUnit = 'kwh';
+    unitButtons.forEach((button) => {
+      const selected = button.dataset.consumptionUnit === chartUnit;
+      const requiresTariff = button.dataset.consumptionUnit === 'amd';
+      button.disabled = requiresTariff && values.tariff === null;
+      button.classList.toggle('is-active', selected);
+      button.setAttribute('aria-pressed', String(selected));
+    });
     updateChart(values);
   };
 
@@ -129,8 +147,12 @@ export const initConsumptionInput = ({ root, strings, onChange = () => {} } = {}
   fillAverageButton?.addEventListener('click', () => {
     const values = getValues();
     const monthlyInputs = [...root.querySelectorAll('[data-consumption-month]')];
-    const annual = values.annual ?? (values.usage === null ? null : values.usage * 12);
-    if (annual === null || monthlyInputs.length !== 12) return;
+    const annual =
+      values.annual ??
+      (values.usage === null
+        ? demoMonthlyProfile.reduce((sum, value) => sum + value, 0)
+        : values.usage * 12);
+    if (monthlyInputs.length !== 12) return;
 
     const monthlyMode = modeInputs.find((input) => input.value === 'monthly');
     if (monthlyMode) monthlyMode.checked = true;
@@ -139,6 +161,21 @@ export const initConsumptionInput = ({ root, strings, onChange = () => {} } = {}
       input.value = String(Math.round((demoMonthlyProfile[index] / 4920) * average * 12));
     });
     updateMode();
+  });
+  unitButtons.forEach((button) =>
+    button.addEventListener('click', () => {
+      const nextUnit = button.dataset.consumptionUnit;
+      if ((nextUnit !== 'kwh' && nextUnit !== 'amd') || button.disabled) return;
+      chartUnit = nextUnit;
+      updateAnnualOutput();
+    })
+  );
+  monthlyProfileButton?.addEventListener('click', () => {
+    const monthlyMode = modeInputs.find((input) => input.value === 'monthly');
+    if (!monthlyMode) return;
+    monthlyMode.checked = true;
+    updateMode();
+    root.querySelector('[data-consumption-month]')?.focus();
   });
   updateMode({ notify: false });
 

@@ -46,7 +46,56 @@ const copy = {
     passportCopy: 'Այս session-ի նախնական տվյալները, աղբյուրները և սահմանափակումները։',
     stepMobile: 'Քայլ {step} 4-ից · {title}',
     mapApproximate:
-      'Քարտեզի ուրվագիծը մոտավոր է։ Տեղային ստվերը և կոնստրուկցիան հաստատում է ինժեները։'
+      'Քարտեզի ուրվագիծը մոտավոր է։ Տեղային ստվերը և կոնստրուկցիան հաստատում է ինժեները։',
+    ui: {
+      location: {
+        map: 'Քարտեզ',
+        satellite: 'Արբանյակ',
+        dataTitle: 'Տեղադրության տվյալներ',
+        irradiation: 'Տարեկան ճառագայթում',
+        dailyAverage: 'Օրական միջին',
+        vsEu: 'ԵՄ միջինի համեմատ',
+        higherPotential: 'Ավելի բարձր արևային ներուժ',
+        place: 'Երևան, Հայաստան',
+        latitude: 'Լայն.',
+        longitude: 'Երկ.',
+        annualIrradiation: 'Տարեկան արևային ճառագայթում'
+      },
+      uploadBill: 'Վերբեռնել հաշիվը',
+      advancedOptions: 'Լրացուցիչ կարգավորումներ',
+      estimateTitle: 'Գնահատվող տարեկան սպառում',
+      estimateBadge: 'Սա գնահատական է։',
+      consumption: {
+        monthlyTitle: 'Ամսական սպառում',
+        optional: 'ընտրովի',
+        monthlyCopy: 'Ավելի բարձր ճշգրտության համար մուտքագրեք փաստացի ամսական սպառումը։',
+        kwh: 'kWh',
+        amd: 'AMD',
+        fillAverage: 'Լրացնել միջին արժեքներով',
+        tipsTitle: 'Արագ խորհուրդներ',
+        tipBillTitle: 'Ստուգեք էլեկտրաէներգիայի հաշիվը',
+        tipBillCopy: 'Միջին ամսական գումարը կարող եք գտնել կոմունալ վճարման հաշվում։',
+        tipMonthlyTitle: 'Օգտագործեք ամսական տվյալներ, եթե կան',
+        tipMonthlyCopy: 'Ավելի մանրամասն պրոֆիլը բարձրացնում է արդյունքի ճշգրտությունը։',
+        tipTariffTitle: 'Սակագինը կարևոր է',
+        tipTariffCopy: 'Սակագները փոխում են ֆինանսական գնահատումն ու հետգնման ժամկետը։',
+        advancedCopy: 'Ամսական պրոֆիլն ու ձեր նշած սակագինը պահպանվում են հաշվարկում։',
+        profileAction: 'Մուտքագրել ամսական պրոֆիլ',
+        manualAreaAction: 'Մուտքագրել տանիքի մակերեսը'
+      },
+      roof: {
+        map: 'Քարտեզ',
+        satellite: 'Արբանյակ',
+        analysis: 'Տանիքի վերլուծություն',
+        area: 'Տանիքի մակերես',
+        potential: 'Արևային ներուժ (PVGIS)',
+        orientation: 'Կողմնորոշում',
+        tilt: 'Թեքության անկյուն',
+        tipsTitle: 'Լավագույն արդյունքի խորհուրդներ',
+        tipsCopy: 'Ուրվագծեք միայն մեկ տանիքի մակերես · մոտեցրեք քարտեզը բարձր ճշգրտության համար',
+        advancedCopy: 'Տեղադրման եղանակը և թեքության պարամետրերը կիրառվում են հաջորդ հաշվարկի մեջ։'
+      }
+    }
   },
   ru: {
     eyebrow: 'Бесплатный предварительный расчёт',
@@ -94,7 +143,57 @@ const copy = {
     passportCopy: 'Предварительные данные этой сессии, источники и ограничения.',
     stepMobile: 'Шаг {step} из 4 · {title}',
     mapApproximate:
-      'Контур на карте приблизительный. Локальное затенение и конструкцию подтвердит инженер.'
+      'Контур на карте приблизительный. Локальное затенение и конструкцию подтвердит инженер.',
+    ui: {
+      location: {
+        map: 'Карта',
+        satellite: 'Спутник',
+        dataTitle: 'Данные локации',
+        irradiation: 'Годовая инсоляция',
+        dailyAverage: 'Среднее в день',
+        vsEu: 'к среднему по ЕС',
+        higherPotential: 'Более высокий солнечный потенциал',
+        place: 'Ереван, Армения',
+        latitude: 'Шир.',
+        longitude: 'Долг.',
+        annualIrradiation: 'Годовая солнечная инсоляция'
+      },
+      uploadBill: 'Загрузить счёт',
+      advancedOptions: 'Дополнительные параметры',
+      estimateTitle: 'Расчётное годовое потребление',
+      estimateBadge: 'Это предварительная оценка.',
+      consumption: {
+        monthlyTitle: 'Потребление по месяцам',
+        optional: 'необязательно',
+        monthlyCopy: 'Введите фактическое потребление по месяцам для более точного расчёта.',
+        kwh: 'кВт·ч',
+        amd: 'AMD',
+        fillAverage: 'Заполнить средними значениями',
+        tipsTitle: 'Полезные советы',
+        tipBillTitle: 'Проверьте счёт за электроэнергию',
+        tipBillCopy: 'Среднюю сумму за месяц можно найти в коммунальном счёте.',
+        tipMonthlyTitle: 'Используйте помесячные данные, если они есть',
+        tipMonthlyCopy: 'Более подробный профиль повышает точность результата.',
+        tipTariffTitle: 'Тариф имеет значение',
+        tipTariffCopy: 'Разные тарифы влияют на финансовую оценку и срок окупаемости.',
+        advancedCopy: 'Помесячный профиль и введённый тариф сохраняются для следующего расчёта.',
+        profileAction: 'Перейти к помесячному профилю',
+        manualAreaAction: 'Ввести площадь крыши вручную'
+      },
+      roof: {
+        map: 'Карта',
+        satellite: 'Спутник',
+        analysis: 'Анализ крыши',
+        area: 'Площадь крыши',
+        potential: 'Солнечный потенциал (PVGIS)',
+        orientation: 'Ориентация',
+        tilt: 'Угол наклона',
+        tipsTitle: 'Советы для лучшего результата',
+        tipsCopy:
+          'Обведите только одну поверхность крыши · увеличьте масштаб для более высокой точности',
+        advancedCopy: 'Способ установки и параметры наклона применяются в следующем расчёте.'
+      }
+    }
   },
   en: {
     eyebrow: 'Free preliminary calculation',
@@ -142,7 +241,58 @@ const copy = {
     passportCopy: 'This session’s preliminary inputs, sources and limitations.',
     stepMobile: 'Step {step} of 4 · {title}',
     mapApproximate:
-      'The map outline is approximate. An engineer confirms local shading and structure.'
+      'The map outline is approximate. An engineer confirms local shading and structure.',
+    ui: {
+      location: {
+        map: 'Map',
+        satellite: 'Satellite',
+        dataTitle: 'Location data',
+        irradiation: 'Annual irradiation',
+        dailyAverage: 'Daily average',
+        vsEu: 'vs. EU average',
+        higherPotential: 'Higher solar potential',
+        place: 'Yerevan, Armenia',
+        latitude: 'Lat:',
+        longitude: 'Lon:',
+        annualIrradiation: 'Annual solar irradiation'
+      },
+      uploadBill: 'Upload bill',
+      advancedOptions: 'Advanced options',
+      estimateTitle: 'Estimated annual consumption',
+      estimateBadge: 'This is an estimate.',
+      consumption: {
+        monthlyTitle: 'Monthly consumption',
+        optional: 'optional',
+        monthlyCopy: 'Enter your actual monthly consumption for higher accuracy.',
+        kwh: 'kWh',
+        amd: 'AMD',
+        fillAverage: 'Fill with average values',
+        tipsTitle: 'Quick tips',
+        tipBillTitle: 'Check your electricity bill',
+        tipBillCopy: 'You can find the average monthly amount on your utility bill.',
+        tipMonthlyTitle: 'Use monthly data if available',
+        tipMonthlyCopy: 'A more detailed profile improves the accuracy of the results.',
+        tipTariffTitle: 'Tariff matters',
+        tipTariffCopy: 'Different tariffs affect the financial analysis and payback period.',
+        advancedCopy:
+          'The monthly profile and entered tariff are retained for the next calculation.',
+        profileAction: 'Enter monthly profile',
+        manualAreaAction: 'Enter roof area manually'
+      },
+      roof: {
+        map: 'Map',
+        satellite: 'Satellite',
+        analysis: 'Roof analysis',
+        area: 'Roof area',
+        potential: 'Solar potential (PVGIS)',
+        orientation: 'Orientation',
+        tilt: 'Tilt angle',
+        tipsTitle: 'Tips for best results',
+        tipsCopy: 'Draw only one roof surface · Zoom in for higher accuracy',
+        advancedCopy:
+          'The mounting approach and tilt parameters are applied to the next calculation.'
+      }
+    }
   }
 };
 

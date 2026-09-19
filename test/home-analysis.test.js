@@ -6,6 +6,7 @@ import hy from '../src/content/hy.js';
 import ru from '../src/content/ru.js';
 import { CONTENT_LOCALE_SCHEMA, GENERATED_CONTENT_LOCALES } from '../src/content/schema.js';
 import { calculatorModes } from '../src/content/calculator-modes.js';
+import calculatorWizard from '../src/content/calculator-wizard.js';
 import {
   formatCurrency,
   formatDecimal,
@@ -55,6 +56,8 @@ test('all locale dictionaries have the same template data shape', () => {
     contentShape(calculatorModes.en.pro.results),
     contentShape(calculatorModes.ru.pro.results)
   );
+  assert.deepEqual(contentShape(calculatorWizard.en.ui), contentShape(calculatorWizard.hy.ui));
+  assert.deepEqual(contentShape(calculatorWizard.en.ui), contentShape(calculatorWizard.ru.ui));
 });
 
 test('bill upload validation permits supported files through 10 MiB only', () => {

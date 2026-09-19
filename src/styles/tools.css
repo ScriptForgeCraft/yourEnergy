@@ -2607,7 +2607,7 @@
   padding: 0.58rem 0.72rem;
   color: #17843d;
   background: #dcf9e5;
-  content: 'This is an estimate.';
+  content: attr(data-estimate-badge);
   font-size: 0.67rem;
   font-weight: 780;
   text-align: center;
@@ -2624,7 +2624,7 @@
 
 .calculator-page--professional [data-consumption-annual]::before {
   color: #142a50;
-  content: 'Estimated annual consumption';
+  content: attr(data-estimate-title);
   font-size: 0.76rem;
   font-weight: 760;
 }
@@ -2672,6 +2672,32 @@
 
 .professional-consumption-advanced[open] summary svg {
   transform: rotate(180deg);
+}
+
+.professional-consumption-advanced > div,
+.professional-roof-advanced > div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.8rem;
+  border-top: 1px solid #e5edf4;
+  padding: 0.72rem 0.9rem;
+}
+
+.professional-consumption-advanced p,
+.professional-roof-advanced p {
+  margin: 0;
+  color: #58718f;
+  font-size: 0.68rem;
+  line-height: 1.4;
+}
+
+.professional-consumption-advanced .text-button,
+.professional-roof-advanced .text-button {
+  flex: 0 0 auto;
+  color: #0877ef;
+  font-size: 0.68rem;
+  font-weight: 800;
 }
 
 .professional-consumption-actions {
@@ -3344,6 +3370,27 @@
   display: none;
 }
 
+.calculator-page--professional .professional-roof-mounting-select {
+  display: grid;
+  margin-top: 0.75rem;
+  color: #536c8a;
+  font-size: 0.69rem;
+  font-weight: 720;
+}
+
+.calculator-page--professional .professional-roof-mounting-select select {
+  min-height: 2.88rem;
+  margin-top: 0.3rem;
+  border: 1px solid #d2dfec;
+  border-radius: 0.52rem;
+  padding-inline: 0.7rem 2rem;
+  color: #172d52;
+  background: #fff;
+  font: inherit;
+  font-size: 0.74rem;
+  font-weight: 760;
+}
+
 .professional-roof-advanced {
   margin-top: 0.9rem;
   border: 1px solid #d7e3ee;
@@ -3371,6 +3418,10 @@
   width: 0.9rem;
   height: 0.9rem;
   color: #58718f;
+}
+
+.professional-roof-advanced[open] summary svg {
+  transform: rotate(180deg);
 }
 
 .professional-roof-actions {
