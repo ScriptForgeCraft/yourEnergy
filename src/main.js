@@ -77,9 +77,7 @@ if (document.querySelector('[data-contact-form]')) {
 }
 
 if (document.querySelector('[data-office-map]')) {
-  void import('./ui/contact-map.js').then(({ initContactMap }) =>
-    initContactMap({ config: contactConfig })
-  );
+  void import('./ui/contact-map.js').then(({ initContactMap }) => initContactMap());
 }
 
 if (document.querySelector('[data-about-page]')) {

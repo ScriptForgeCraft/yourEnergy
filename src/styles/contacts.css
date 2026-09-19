@@ -267,10 +267,13 @@
   background: #e8f0eb;
 }
 
-.office-map__canvas {
+.office-map__frame {
   position: absolute;
   z-index: 0;
   inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
   background: #e8f0eb;
 }
 
@@ -289,6 +292,15 @@
   color: #15283a;
   background: rgb(255 255 255 / 94%);
   box-shadow: 0 14px 26px rgb(34 75 55 / 13%);
+  transition:
+    border-color 180ms ease,
+    box-shadow 180ms ease,
+    transform 180ms ease;
+}
+
+.office-card.is-active {
+  border-color: rgb(87 173 128 / 86%);
+  box-shadow: 0 16px 34px rgb(22 128 75 / 18%);
 }
 
 .office-card--1 {
@@ -332,6 +344,40 @@
   height: 14px;
   flex: 0 0 auto;
   color: #16804b;
+}
+
+.office-card__show {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 8px;
+  border: 0;
+  padding: 0;
+  color: #526779;
+  background: transparent;
+  font: inherit;
+  font-size: 0.66rem;
+  font-weight: 760;
+  cursor: pointer;
+  transition: color 160ms ease;
+}
+
+.office-card__show svg {
+  width: 14px;
+  height: 14px;
+  color: #16804b;
+}
+
+.office-card__show:hover,
+.office-card__show:focus-visible,
+.office-card__show.is-active {
+  color: #16804b;
+}
+
+.office-card__show:focus-visible {
+  border-radius: 4px;
+  outline: 2px solid rgb(22 128 75 / 30%);
+  outline-offset: 3px;
 }
 
 .office-card > a {
@@ -768,6 +814,11 @@
   }
 
   .office-card p {
+    font-size: 0.61rem;
+  }
+
+  .office-card__show {
+    margin-top: 5px;
     font-size: 0.61rem;
   }
 

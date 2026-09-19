@@ -629,8 +629,11 @@ async function validateHeaders() {
     fail('_headers must allow the Cloudflare Web Analytics beacon script');
   }
   if (!csp.includes("connect-src 'self'")) fail('_headers must keep API connections same-origin');
-  if (!csp.includes('https://*.googleapis.com') || !csp.includes('https://*.gstatic.com')) {
-    fail('_headers CSP must allow Google Maps JavaScript resources');
+  if (!csp.includes('frame-src https://*.google.com')) {
+    fail('_headers CSP must allow the no-key Google Maps contact iframe');
+  }
+  if (csp.includes('maps.googleapis.com') || csp.includes("'unsafe-eval'")) {
+    fail('_headers must not retain Maps JavaScript API permissions');
   }
   if (/\*\s*;|\*$/u.test(csp)) fail('_headers CSP must not use a wildcard source');
 }
@@ -690,12 +693,36 @@ function validatePrivateCalculatorMarkup(html, page, type) {
 }
 
 function validateContactMapMarkup(html, page) {
-  for (const marker of ['data-office-map', 'data-office-map-canvas', "id='contact-page-config'"]) {
+  for (const marker of [
+    'data-office-map',
+    'data-office-map-frame',
+    'data-office-map-option',
+    "id='contact-page-config'"
+  ]) {
     if (!html.includes(marker)) fail(`${page}: Google office map is missing ${marker}`);
   }
 
-  for (const legacy of ['office-map__roads', 'office-map__district', 'office-map__pin']) {
-    if (html.includes(legacy)) fail(`${page}: legacy decorative office map token ${legacy} is present`);
+  for (const legacy of [
+    'office-map__roads',
+    'office-map__district',
+    'office-map__pin',
+    'data-office-map-canvas',
+    'maps.googleapis.com/maps/api/js'
+  ]) {
+    if (html.includes(legacy)) fail(`${page}: obsolete Google map token ${legacy} is present`);
+  }
+
+  const iframeMatch = html.match(
+    /<iframe\b[^>]*\bdata-office-map-frame\b[^>]*\bsrc=(?:"([^"]+)"|'([^']+)')[^>]*>/iu
+  );
+  const iframeSrc = iframeMatch?.[1] ?? iframeMatch?.[2] ?? '';
+  if (!iframeSrc.startsWith('https://maps.google.com/maps?') || !iframeSrc.includes('output&#x3D;embed')) {
+    fail(`${page}: office map must use the no-key Google Maps iframe URL`);
+  }
+
+  const options = [...html.matchAll(/\bdata-office-map-option\b/giu)];
+  if (options.length !== 2) {
+    fail(`${page}: office map must expose exactly two selectable office controls`);
   }
 
   const configMatch = html.match(
@@ -705,15 +732,8 @@ function validateContactMapMarkup(html, page) {
 
   try {
     const config = JSON.parse(configMatch[1].trim());
-    if (!Array.isArray(config.offices) || config.offices.length !== 2) {
-      fail(`${page}: contact-page-config must contain both office locations`);
-      return;
-    }
-    if (config.offices.some((office) => !office?.title || !office?.mapQuery || !office?.href)) {
-      fail(`${page}: every office map entry needs title, mapQuery and href`);
-    }
-    if ('googleMapsApiKey' in config) {
-      fail(`${page}: Google Maps API key must come from the Vite environment, not generated HTML`);
+    if ('offices' in config) {
+      fail(`${page}: office map data must not be injected into runtime config`);
     }
   } catch (error) {
     fail(`${page}: invalid contact-page-config JSON (${error.message})`);

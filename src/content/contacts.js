@@ -54,6 +54,7 @@ export const contactPageCopy = Object.freeze({
     officesTitle: 'Մեր գրասենյակները',
     officesIntro: 'Եկեք հյուր։ Հաճույքով կհանդիպենք ու անձամբ կքննարկենք ձեր նախագիծը։',
     route: 'Կառուցել երթուղի',
+    showOnMap: 'Ցույց տալ քարտեզում',
     offices: [
       office(
         'Երևան — Գլխավոր գրասենյակ',
@@ -148,6 +149,7 @@ export const contactPageCopy = Object.freeze({
     officesTitle: 'Наши офисы',
     officesIntro: 'Приходите к нам в гости. Мы будем рады встретиться и обсудить ваш проект лично.',
     route: 'Построить маршрут',
+    showOnMap: 'Показать на карте',
     offices: [
       office(
         'Ереван — Главный офис',
@@ -236,6 +238,7 @@ export const contactPageCopy = Object.freeze({
     officesTitle: 'Our offices',
     officesIntro: 'Come and visit us. We will be happy to meet and discuss your project in person.',
     route: 'Get directions',
+    showOnMap: 'Show on map',
     offices: [
       office(
         'Yerevan — Head office',

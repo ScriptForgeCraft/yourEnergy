@@ -92,6 +92,17 @@ const runtimeLocales = Object.freeze(
 const origin = 'https://yourenergy.am';
 const DEFAULT_OSM_TILE_URL = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
 const DEFAULT_OSM_TILE_ATTRIBUTION = '© OpenStreetMap contributors';
+const createNoKeyGoogleMapsEmbedUrl = (query, locale = 'en') => {
+  const params = new URLSearchParams({
+    hl: locale,
+    q: query,
+    z: '15',
+    ie: 'UTF8',
+    iwloc: 'B',
+    output: 'embed'
+  });
+  return `https://maps.google.com/maps?${params.toString()}`;
+};
 const sameOriginPath = (value, fallback) => {
   const candidate = value?.trim();
   return candidate && /^\/(?!\/)/u.test(candidate) ? candidate : fallback;
@@ -1161,8 +1172,15 @@ const createPlaceholderContext = (content, { type, title }) => {
 
 const createContactsContext = (content) => {
   const path = placeholderPath(content.locale, 'contacts');
-  const contactPage = contactPageCopy[content.locale];
-  if (!contactPage) throw new Error(`Missing contact-page content for ${content.locale}.`);
+  const sourceContactPage = contactPageCopy[content.locale];
+  if (!sourceContactPage) throw new Error(`Missing contact-page content for ${content.locale}.`);
+  const contactPage = {
+    ...sourceContactPage,
+    offices: sourceContactPage.offices.map((office) => ({
+      ...office,
+      embedHref: createNoKeyGoogleMapsEmbedUrl(office.mapQuery, content.locale)
+    }))
+  };
   return {
     ...createHomeContext(content, { pageKind: 'contacts' }),
     path,
@@ -1172,11 +1190,6 @@ const createContactsContext = (content) => {
     contactPage,
     contactPageConfig: escapeJsonForHtml({
       locale: runtimeLocales[content.locale],
-      offices: contactPage.offices.map(({ title, mapQuery, href }) => ({
-        title,
-        mapQuery,
-        href
-      })),
       copy: {
         invalid: contactPage.invalid,
         sending: contactPage.sending,
