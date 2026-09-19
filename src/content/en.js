@@ -110,7 +110,7 @@ export default {
     },
     consumption: {
       title: 'Electricity consumption',
-      copy: 'This is only needed for system sizing, budget and savings — not to find an address or the potential of a point.',
+      copy: 'Enter your electricity usage to calculate the optimal system size.',
       modes: {
         bill: 'Average bill',
         usage: 'Average consumption',
@@ -168,7 +168,7 @@ export default {
       invalidCoordinates: 'Enter valid property coordinates.'
     },
     roof: {
-      title: 'Roof outline',
+      title: 'Roof',
       copy: 'Outline the usable roof area and enter the actual roof-face parameters for a preliminary estimate.',
       mapDisclosure:
         'The map helps place a point and an approximate outline. Without aerial imagery or a 3D model, it cannot automatically detect the roof, its pitch or shading.',

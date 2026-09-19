@@ -16,7 +16,7 @@ const copy = {
     potentialReady:
       'PVGIS-ը ֆոնային ստուգում է ընտրված կետի արևային ռեսուրսը։ Այն տանիքը ավտոմատ չի չափում։',
     potentialSkip: 'Շարունակել առանց PVGIS-ի',
-    roofIntro: 'Նշեք արևային վահանակների համար հասանելի տանիքի մասը։',
+    roofIntro: 'Նշեք տանիքի մակերեսն ու պարամետրերը՝ արևային ներուժը ճշգրիտ գնահատելու համար։',
     parallel: 'Տանիքին զուգահեռ',
     elevated: 'Բարձրացված կառուցվածք',
     drawRoof:
@@ -93,7 +93,14 @@ const copy = {
         tilt: 'Թեքության անկյուն',
         tipsTitle: 'Լավագույն արդյունքի խորհուրդներ',
         tipsCopy: 'Ուրվագծեք միայն մեկ տանիքի մակերես · մոտեցրեք քարտեզը բարձր ճշգրտության համար',
-        advancedCopy: 'Տեղադրման եղանակը և թեքության պարամետրերը կիրառվում են հաջորդ հաշվարկի մեջ։'
+        advancedCopy: 'Տեղադրման եղանակը և թեքության պարամետրերը կիրառվում են հաջորդ հաշվարկի մեջ։',
+        outlineRequired:
+          'Հաշվարկի համար անհրաժեշտ է տանիքի մակերեսը։ Մուտքագրեք այն ստորև կամ կրկին ընտրեք քարտեզը և ավարտեք ուրվագիծը։',
+        areaRequired: 'Մուտքագրեք օգտագործելի տանիքի մակերեսը մ²-ով։',
+        orientationRequired: 'Ընտրեք տանիքի լանջի ուղղությունը։',
+        tiltRequired: 'Մուտքագրեք տանիքի թեքության անկյունը 0°-ից 90°։',
+        analysisFailed:
+          'Հաշվարկն այժմ չհաջողվեց։ Ձեր տվյալները պահպանված են․ ստուգեք կապը և կրկին փորձեք։'
       }
     }
   },
@@ -114,7 +121,7 @@ const copy = {
     potentialReady:
       'PVGIS в фоне проверяет солнечный ресурс выбранной точки. Он не измеряет крышу автоматически.',
     potentialSkip: 'Продолжить без PVGIS',
-    roofIntro: 'Укажите часть крыши, доступную для солнечных панелей.',
+    roofIntro: 'Задайте площадь и параметры крыши для точной оценки солнечного потенциала.',
     parallel: 'Параллельно крыше',
     elevated: 'Приподнятая конструкция',
     drawRoof:
@@ -191,7 +198,14 @@ const copy = {
         tipsTitle: 'Советы для лучшего результата',
         tipsCopy:
           'Обведите только одну поверхность крыши · увеличьте масштаб для более высокой точности',
-        advancedCopy: 'Способ установки и параметры наклона применяются в следующем расчёте.'
+        advancedCopy: 'Способ установки и параметры наклона применяются в следующем расчёте.',
+        outlineRequired:
+          'Для расчёта нужна площадь крыши. Введите её ниже или снова выберите карту и завершите контур.',
+        areaRequired: 'Введите полезную площадь крыши в м².',
+        orientationRequired: 'Выберите направление ската крыши.',
+        tiltRequired: 'Введите угол наклона крыши от 0° до 90°.',
+        analysisFailed:
+          'Сейчас не удалось выполнить расчёт. Ваши данные сохранены — проверьте соединение и повторите попытку.'
       }
     }
   },
@@ -212,7 +226,7 @@ const copy = {
     potentialReady:
       'PVGIS checks the selected point’s solar resource in the background. It does not measure a roof automatically.',
     potentialSkip: 'Continue without PVGIS',
-    roofIntro: 'Describe the part of the roof available for solar panels.',
+    roofIntro: 'Define your roof area and parameters for accurate solar potential.',
     parallel: 'Parallel to roof',
     elevated: 'Elevated structure',
     drawRoof:
@@ -290,7 +304,14 @@ const copy = {
         tipsTitle: 'Tips for best results',
         tipsCopy: 'Draw only one roof surface · Zoom in for higher accuracy',
         advancedCopy:
-          'The mounting approach and tilt parameters are applied to the next calculation.'
+          'The mounting approach and tilt parameters are applied to the next calculation.',
+        outlineRequired:
+          'The calculation needs a roof area. Enter it below, or select the map again and finish the outline.',
+        areaRequired: 'Enter the usable roof area in m².',
+        orientationRequired: 'Select the roof-face direction.',
+        tiltRequired: 'Enter a roof tilt from 0° to 90°.',
+        analysisFailed:
+          "We couldn't calculate the result right now. Your entries are saved — check the connection and try again."
       }
     }
   }

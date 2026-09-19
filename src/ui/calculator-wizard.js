@@ -81,6 +81,18 @@ const activeMountingMode = (root) =>
   root.querySelector('[data-roof-mounting-mode]:checked')?.value ??
   'roof-parallel';
 
+export const getRoofValidationIssue = (roof = {}) => {
+  if (
+    roof.areaMethod === 'map-projected' &&
+    (!roof.polygonComplete || roof.effectiveAreaSqm === null)
+  )
+    return 'outline';
+  if (roof.areaMethod === 'measured-plane' && roof.effectiveAreaSqm === null) return 'area';
+  if (roof.azimuthDegrees === null) return 'orientation';
+  if (roof.tiltDegrees === null) return 'tilt';
+  return null;
+};
+
 /**
  * The calculator has one state source and explicitly serializes only the
  * inputs needed by the same-origin analysis endpoint. In particular, a bill
@@ -128,6 +140,9 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
   const roofOrientationCustom = root.querySelector('[data-roof-orientation-custom]');
   const roofOrientationCustomInput = root.querySelector('[data-roof-orientation-custom-input]');
   const roofTilt = root.querySelector('[data-roof-tilt]');
+  const roofNotice = root.querySelector('.professional-roof-notice');
+  const roofNoticeCopy = roofNotice?.querySelector('p');
+  const roofNoticeDefault = roofNoticeCopy?.innerHTML ?? '';
   const resultDashboard = root.querySelector('[data-result-dashboard]');
   const resultSummary = root.querySelector('[data-result-summary]');
   const financeEmpty = root.querySelector('[data-finance-empty]');
@@ -159,6 +174,10 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
   setButtonLabel('[data-open-location-map]', wizard.searchAddress);
   setButtonLabel('[data-use-current-location]', wizard.useCurrentLocation);
   setButtonLabel('[data-use-map-coordinates]', wizard.useFromMap);
+  setButtonLabel(
+    '[data-run-analysis]',
+    `${wizard.next ?? 'Next'}: ${wizard.steps?.[3] ?? product.result?.title ?? 'Results'}`
+  );
 
   const session = createCalculatorSession();
   const savedSession = session.read();
@@ -179,6 +198,7 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
       : WIZARD_STEP_STATUSES.LOCKED
   });
   let mapController = null;
+  let mapControllerPromise = null;
   let potentialRequest = null;
   let analysisRequest = null;
   let lastPotential = null;
@@ -273,20 +293,12 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
     });
     updateProgress();
     if (target === 2) {
-      // The map is moved from the Object step into this ordinary in-flow
-      // container. Focus the active map only after the move and position it
-      // in the viewport; otherwise a long wizard page can appear to jump to
-      // the top while leaving the roof map outside the visible area.
       void mountMap('roof').then((controller) => {
         if (!controller || state.currentStep !== 2) return;
-        requestAnimationFrame(() => {
-          roofMapHost?.scrollIntoView({ block: 'start', behavior: 'auto' });
-          controller.resize();
-          mapElement?.focus({ preventScroll: true });
-        });
+        requestAnimationFrame(() => controller.resize());
       });
     }
-    if (focus && target !== 2) {
+    if (focus) {
       requestAnimationFrame(() => steps[target]?.focus({ preventScroll: false }));
     }
     return true;
@@ -382,7 +394,7 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
     if (mode === 'location' && locationMapWrap) locationMapWrap.hidden = false;
     try {
       if (!mapController) {
-        mapController = await createPropertyMap({
+        mapControllerPromise ??= createPropertyMap({
           container: mapElement,
           tileUrl: config.map?.tileUrl,
           tileAttribution: config.map?.tileAttribution,
@@ -393,6 +405,7 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
           onLocationChange: setPendingLocation,
           onRoofChange
         });
+        mapController = await mapControllerPromise;
       }
       mapController?.mount(host);
       mapController?.setMode(mode);
@@ -410,6 +423,7 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
       mapController?.resize();
       return mapController;
     } catch {
+      mapControllerPromise = null;
       writeStatus(product.roof?.fallback ?? product.location?.manualUnavailable, true);
       return null;
     }
@@ -571,17 +585,68 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
       polygonComplete: Boolean(state.roof?.complete)
     };
   };
-  const hasRoof = () => {
-    const roof = roofGeometry();
-    return (
-      roof.tiltDegrees !== null &&
-      roof.azimuthDegrees !== null &&
-      roof.effectiveAreaSqm !== null &&
-      (roof.areaMethod === 'measured-plane' || roof.polygonComplete)
+  const clearRoofValidation = () => {
+    roofNotice?.classList.remove('is-error');
+    roofNotice?.removeAttribute('role');
+    if (roofNoticeCopy && roofNoticeCopy.innerHTML !== roofNoticeDefault)
+      roofNoticeCopy.innerHTML = roofNoticeDefault;
+    [roofPlaneArea, roofOrientation, roofOrientationCustomInput, roofTilt].forEach((field) =>
+      field?.removeAttribute('aria-invalid')
     );
   };
 
-  const syncRoofControls = () => {
+  const showRoofValidation = (issue) => {
+    const messages = {
+      outline: wizard.ui?.roof?.outlineRequired ?? product.roof?.parametersRequired,
+      area: wizard.ui?.roof?.areaRequired ?? product.roof?.parametersRequired,
+      orientation: wizard.ui?.roof?.orientationRequired ?? product.roof?.parametersRequired,
+      tilt: wizard.ui?.roof?.tiltRequired ?? product.roof?.parametersRequired
+    };
+    let field = null;
+    if (issue === 'outline' || issue === 'area') {
+      const manualMethod = root.querySelector('[data-roof-area-method][value="measured-plane"]');
+      if (manualMethod) manualMethod.checked = true;
+      syncRoofControls({ preserveValidation: true });
+      field = roofPlaneArea;
+    } else if (issue === 'orientation') {
+      field = roofOrientation?.value === 'custom' ? roofOrientationCustomInput : roofOrientation;
+    } else if (issue === 'tilt') {
+      field = roofTilt;
+    }
+    clearRoofValidation();
+    roofNotice?.classList.add('is-error');
+    roofNotice?.setAttribute('role', 'alert');
+    if (roofNoticeCopy) roofNoticeCopy.textContent = messages[issue] ?? '';
+    field?.setAttribute('aria-invalid', 'true');
+    requestAnimationFrame(() => {
+      roofNotice?.scrollIntoView({ block: 'center', behavior: 'smooth' });
+      field?.focus({ preventScroll: true });
+    });
+  };
+
+  const showRoofActionError = (message) => {
+    clearRoofValidation();
+    roofNotice?.classList.add('is-error');
+    roofNotice?.setAttribute('role', 'alert');
+    if (roofNoticeCopy) roofNoticeCopy.textContent = message ?? '';
+    requestAnimationFrame(() =>
+      roofNotice?.scrollIntoView({ block: 'center', behavior: 'smooth' })
+    );
+  };
+
+  const hasRoof = () => getRoofValidationIssue(roofGeometry()) === null;
+
+  const validateRoof = () => {
+    const issue = getRoofValidationIssue(roofGeometry());
+    if (!issue) {
+      clearRoofValidation();
+      return true;
+    }
+    showRoofValidation(issue);
+    return false;
+  };
+
+  const syncRoofControls = ({ preserveValidation = false } = {}) => {
     const measured = activeAreaMethod(root) === 'measured-plane';
     if (roofPlaneWrap) roofPlaneWrap.hidden = !measured;
     if (roofPlaneArea) roofPlaneArea.disabled = !measured;
@@ -597,6 +662,7 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
       orientationDegrees: roof.azimuthDegrees
     };
     updateRoofAreaSummary();
+    if (!preserveValidation) clearRoofValidation();
     clearAnalysis();
     updateProgress();
   };
@@ -721,11 +787,7 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
       writeStatus(consumption?.message ?? product.consumption?.noConsumption, true);
       return;
     }
-    if (!hasRoof()) {
-      writeStatus(product.roof?.parametersRequired, true);
-      setStep(2);
-      return;
-    }
+    if (!validateRoof()) return;
     state.consumption = consumption.value;
     state.userTariff = consumption.tariff;
     const fingerprint = JSON.stringify(buildPayload());
@@ -761,7 +823,13 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
     } catch (error) {
       if (error instanceof ProductApiError && error.code === 'ABORTED') return;
       state.analysisStatus = WIZARD_STEP_STATUSES.UNAVAILABLE;
-      writeStatus(describeError(error, product), true);
+      const described = describeError(error, product);
+      const message =
+        described === product.result?.unavailable
+          ? (wizard.ui?.roof?.analysisFailed ?? described)
+          : described;
+      writeStatus(message, true);
+      showRoofActionError(message);
       updateProgress();
     } finally {
       if (analysisRequest === controller) analysisRequest = null;
@@ -1033,14 +1101,15 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
   if (state.analysis) renderResult(state.analysis);
   const restoredStep = Number.isInteger(savedSession.currentStep) ? savedSession.currentStep : 0;
   setStep(restoredStep, { focus: false });
-  void mountMap('location').then((map) => {
-    if (!map || state.confirmedProperty || state.pendingLocation) return;
-    const lat = number(latitudeInput?.value, -90, 90);
-    const lng = number(longitudeInput?.value, -180, 180);
-    if (lat !== null && lng !== null) {
-      map.setLocation({ lat, lng }, { notify: false });
-      syncLocationCoordinates({ lat, lng });
-    }
-  });
+  if (state.currentStep === 0)
+    void mountMap('location').then((map) => {
+      if (!map || state.confirmedProperty || state.pendingLocation) return;
+      const lat = number(latitudeInput?.value, -90, 90);
+      const lng = number(longitudeInput?.value, -180, 180);
+      if (lat !== null && lng !== null) {
+        map.setLocation({ lat, lng }, { notify: false });
+        syncLocationCoordinates({ lat, lng });
+      }
+    });
   return { state, getSelectedBillFile: () => fileUpload.getFile() };
 };

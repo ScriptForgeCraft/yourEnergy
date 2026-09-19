@@ -39,7 +39,8 @@ test('Professional has exactly four customer steps and retains every engineering
     'data-consumption-switch-monthly',
     "data-consumption-unit='amd'",
     'data-roof-enter-area',
-    'professional-roof-mounting-select'
+    'professional-roof-mounting-select',
+    'professional-roof-notice'
   ]) {
     assert.match(professional, new RegExp(marker, 'u'));
   }

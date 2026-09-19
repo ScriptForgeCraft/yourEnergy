@@ -10,6 +10,7 @@ import {
   WIZARD_STEP_STATUSES
 } from '../src/ui/calculator-wizard-state.js';
 import { getTariffSemantics } from '../src/ui/consumption-input.js';
+import { getRoofValidationIssue } from '../src/ui/calculator-wizard.js';
 
 const completePotential = Object.freeze({
   annualYieldKwhPerKwp: 1532,
@@ -118,4 +119,39 @@ test('tariff semantics are required only for average bill input', () => {
     label: 'Optional rate',
     help: 'Optional help'
   });
+});
+
+test('roof validation points to the exact missing input in a recoverable order', () => {
+  const base = {
+    areaMethod: 'map-projected',
+    polygonComplete: false,
+    effectiveAreaSqm: null,
+    azimuthDegrees: 180,
+    tiltDegrees: 30
+  };
+
+  assert.equal(getRoofValidationIssue(base), 'outline');
+  assert.equal(getRoofValidationIssue({ ...base, areaMethod: 'measured-plane' }), 'area');
+  assert.equal(
+    getRoofValidationIssue({
+      ...base,
+      polygonComplete: true,
+      effectiveAreaSqm: 82.4,
+      azimuthDegrees: null
+    }),
+    'orientation'
+  );
+  assert.equal(
+    getRoofValidationIssue({
+      ...base,
+      polygonComplete: true,
+      effectiveAreaSqm: 82.4,
+      tiltDegrees: null
+    }),
+    'tilt'
+  );
+  assert.equal(
+    getRoofValidationIssue({ ...base, polygonComplete: true, effectiveAreaSqm: 82.4 }),
+    null
+  );
 });
