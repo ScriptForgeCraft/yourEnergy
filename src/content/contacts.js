@@ -5,6 +5,7 @@ const office = (title, address, hours, mapQuery) => ({
   title,
   address,
   hours,
+  mapQuery,
   href: mapsUrl(mapQuery)
 });
 

@@ -47,7 +47,7 @@ const trustedMapOrigin = (tileUrl) => {
 };
 
 const createHeaders = (mapOrigin) => `/*
-  Content-Security-Policy: default-src 'self'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; object-src 'none'; script-src 'self' ${CLOUDFLARE_INSIGHTS_SCRIPT_ORIGIN}; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:${mapOrigin ? ` ${mapOrigin}` : ''}; font-src 'self' data:; connect-src 'self'; manifest-src 'self'; worker-src 'self'
+  Content-Security-Policy: default-src 'self'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; object-src 'none'; script-src 'self' 'unsafe-eval' ${CLOUDFLARE_INSIGHTS_SCRIPT_ORIGIN} https://*.googleapis.com https://*.gstatic.com https://*.google.com https://*.ggpht.com https://*.googleusercontent.com blob:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: blob:${mapOrigin ? ` ${mapOrigin}` : ''} https://*.googleapis.com https://*.gstatic.com https://*.google.com https://*.googleusercontent.com; font-src 'self' data: https://fonts.gstatic.com; connect-src 'self' https://*.googleapis.com https://*.google.com https://*.gstatic.com data: blob:; frame-src https://*.google.com; manifest-src 'self'; worker-src 'self' blob:
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: accelerometer=(), camera=(), geolocation=(), gyroscope=(), microphone=(), payment=(), usb=()
   X-Content-Type-Options: nosniff

@@ -261,111 +261,17 @@
   min-height: 340px;
   position: relative;
   overflow: hidden;
+  isolation: isolate;
   border: 1px solid #d8eee0;
   border-radius: 17px;
-  background:
-    radial-gradient(ellipse at 18% 8%, rgb(255 255 255 / 80%) 0 6%, transparent 6.2%),
-    radial-gradient(ellipse at 90% 85%, rgb(202 240 225 / 74%) 0 10%, transparent 10.2%),
-    linear-gradient(
-      132deg,
-      rgb(239 248 241 / 94%) 0 18%,
-      transparent 18.2% 42%,
-      rgb(221 246 235 / 74%) 42.2% 65%,
-      transparent 65.2%
-    ),
-    repeating-linear-gradient(
-      22deg,
-      transparent 0 33px,
-      rgb(255 255 255 / 48%) 34px 36px,
-      transparent 37px 64px
-    ),
-    #d7efd9;
+  background: #e8f0eb;
 }
 
-.office-map::before,
-.office-map::after {
-  position: absolute;
-  border: 1px solid rgb(117 187 140 / 28%);
-  border-radius: 45%;
-  content: '';
-}
-
-.office-map::before {
-  width: 44%;
-  height: 78%;
-  top: -25%;
-  left: 25%;
-  transform: rotate(-26deg);
-}
-
-.office-map::after {
-  width: 30%;
-  height: 84%;
-  right: -4%;
-  bottom: -38%;
-  transform: rotate(26deg);
-}
-
-.office-map__roads {
+.office-map__canvas {
   position: absolute;
   z-index: 0;
   inset: 0;
-  width: 100%;
-  height: 100%;
-  fill: none;
-  stroke: rgb(255 255 255 / 90%);
-  stroke-width: 4;
-}
-
-.office-map__district {
-  position: absolute;
-  z-index: 1;
-  color: rgb(63 102 83 / 56%);
-  font-size: clamp(0.84rem, 1.55vw, 1.25rem);
-  font-weight: 760;
-  letter-spacing: 0.03em;
-}
-
-.office-map__district--one {
-  top: 36%;
-  left: 45%;
-}
-
-.office-map__district--two {
-  top: 17%;
-  right: 23%;
-  font-size: 0.75rem;
-}
-
-.office-map__pin {
-  position: absolute;
-  z-index: 4;
-  width: 38px;
-  height: 38px;
-  display: grid;
-  place-items: center;
-  border: 4px solid #fff;
-  border-radius: 50% 50% 50% 0;
-  color: #fff;
-  background: #16804b;
-  box-shadow: 0 9px 20px rgb(20 93 57 / 28%);
-  transform: rotate(-45deg);
-}
-
-.office-map__pin svg {
-  width: 18px;
-  height: 18px;
-  transform: rotate(45deg);
-}
-
-.office-map__pin--1 {
-  top: 24%;
-  left: 36%;
-}
-
-.office-map__pin--2 {
-  top: 35%;
-  right: 33%;
+  background: #e8f0eb;
 }
 
 .office-card {
@@ -832,26 +738,6 @@
 
   .office-map {
     min-height: 480px;
-  }
-
-  .office-map__district--one {
-    top: 23%;
-    left: 41%;
-  }
-
-  .office-map__district--two {
-    top: 10%;
-    right: 12%;
-  }
-
-  .office-map__pin--1 {
-    top: 17%;
-    left: 29%;
-  }
-
-  .office-map__pin--2 {
-    top: 28%;
-    right: 24%;
   }
 
   .office-card {

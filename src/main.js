@@ -76,6 +76,12 @@ if (document.querySelector('[data-contact-form]')) {
   );
 }
 
+if (document.querySelector('[data-office-map]')) {
+  void import('./ui/contact-map.js').then(({ initContactMap }) =>
+    initContactMap({ config: contactConfig })
+  );
+}
+
 if (document.querySelector('[data-about-page]')) {
   void import('./ui/about-motion.js').then(({ initAboutMotion }) => initAboutMotion());
 }

@@ -1172,6 +1172,12 @@ const createContactsContext = (content) => {
     contactPage,
     contactPageConfig: escapeJsonForHtml({
       locale: runtimeLocales[content.locale],
+      googleMapsApiKey: publicEnv.VITE_GOOGLE_MAPS_API_KEY?.trim() || '',
+      offices: contactPage.offices.map(({ title, mapQuery, href }) => ({
+        title,
+        mapQuery,
+        href
+      })),
       copy: {
         invalid: contactPage.invalid,
         sending: contactPage.sending,
