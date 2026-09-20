@@ -95,8 +95,8 @@ export const initContactMap = async () => {
     const bounds = L.latLngBounds(offices.map(({ coordinates }) => coordinates));
     const isMobile = window.matchMedia('(max-width: 720px)').matches;
     map.fitBounds(bounds, {
-      paddingTopLeft: [36, 36],
-      paddingBottomRight: isMobile ? [36, 240] : [36, 180],
+      paddingTopLeft: [36, isMobile ? 82 : 72],
+      paddingBottomRight: [36, isMobile ? 250 : 220],
       maxZoom: 13
     });
   };

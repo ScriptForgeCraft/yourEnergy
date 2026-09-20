@@ -374,6 +374,7 @@ export const initProcessStory = ({ config = {} } = {}) => {
           gsap.set(state, { clearProps: 'all' });
           gsap.set(state.querySelector('[data-process-copy]'), { clearProps: 'all' });
           gsap.set(state.querySelector('[data-process-visual]'), { clearProps: 'all' });
+          gsap.set(state.querySelector('[data-process-media]'), { clearProps: 'all' });
         });
         setProgress(0);
 
@@ -580,6 +581,7 @@ export const initProcessStory = ({ config = {} } = {}) => {
           states.forEach((state) => {
             gsap.set(state.querySelector('[data-process-copy]'), { clearProps: 'all' });
             gsap.set(state.querySelector('[data-process-visual]'), { clearProps: 'all' });
+            gsap.set(state.querySelector('[data-process-media]'), { clearProps: 'all' });
             gsap.set(state.querySelectorAll('[data-process-card], [data-process-install-step]'), {
               clearProps: 'all'
             });
@@ -589,6 +591,7 @@ export const initProcessStory = ({ config = {} } = {}) => {
 
       const copies = states.map((state) => state.querySelector('[data-process-copy]'));
       const visuals = states.map((state) => state.querySelector('[data-process-visual]'));
+      const mediaFrames = states.map((state) => state.querySelector('[data-process-media]'));
       const ambient = root.querySelector('.process-stage__ambient');
       let transition = null;
       let sceneTween = null;
@@ -619,6 +622,7 @@ export const initProcessStory = ({ config = {} } = {}) => {
         });
         gsap.set(copies[nextIndex], { autoAlpha: 1, y: 0 });
         gsap.set(visuals[nextIndex], { autoAlpha: 1, scale: 1 });
+        gsap.set(mediaFrames[nextIndex], { autoAlpha: 1, scale: 1 });
         gsap.set(cardsFor(nextIndex), { autoAlpha: 1, y: 0, z: 0 });
         animateStepMetrics(nextIndex);
       };
@@ -667,8 +671,10 @@ export const initProcessStory = ({ config = {} } = {}) => {
         const incoming = states[nextIndex];
         const outgoingCopy = copies[previousIndex];
         const outgoingVisual = visuals[previousIndex];
+        const outgoingMedia = mediaFrames[previousIndex];
         const incomingCopy = copies[nextIndex];
         const incomingVisual = visuals[nextIndex];
+        const incomingMedia = mediaFrames[nextIndex];
         const incomingCards = cardsFor(nextIndex);
         const forward = direction >= 0;
 
@@ -681,6 +687,7 @@ export const initProcessStory = ({ config = {} } = {}) => {
         });
         gsap.set(outgoingCopy, { autoAlpha: 1, y: 0 });
         gsap.set(outgoingVisual, { autoAlpha: 1, scale: 1 });
+        gsap.set(outgoingMedia, { autoAlpha: 1, scale: 1 });
 
         root.dataset.processInitialized = 'true';
         animateSceneToStep(nextIndex);
@@ -692,6 +699,7 @@ export const initProcessStory = ({ config = {} } = {}) => {
           })
           .to(outgoingCopy, { autoAlpha: 0, y: forward ? -20 : 20, duration: 0.24 }, 0)
           .to(outgoingVisual, { autoAlpha: 0, scale: 1.025, duration: 0.28 }, 0)
+          .to(outgoingMedia, { autoAlpha: 0, scale: 1.025, duration: 0.28 }, 0)
           .set(outgoing, { autoAlpha: 0 }, 0.28)
           .call(
             () => {
@@ -705,6 +713,7 @@ export const initProcessStory = ({ config = {} } = {}) => {
               gsap.set(incoming, { autoAlpha: 1 });
               gsap.set(incomingCopy, { autoAlpha: 0, y: forward ? 26 : -26 });
               gsap.set(incomingVisual, { autoAlpha: 0, scale: 1.03 });
+              gsap.set(incomingMedia, { autoAlpha: 0, scale: 1.03 });
               gsap.set(incomingCards, {
                 autoAlpha: 0,
                 y: forward ? 16 : -16,
@@ -717,6 +726,7 @@ export const initProcessStory = ({ config = {} } = {}) => {
           )
           .to(incomingCopy, { autoAlpha: 1, y: 0, duration: 0.34 }, 0.3)
           .to(incomingVisual, { autoAlpha: 1, scale: 1, duration: 0.48 }, 0.3)
+          .to(incomingMedia, { autoAlpha: 1, scale: 1, duration: 0.48 }, 0.3)
           .to(incomingCards, { autoAlpha: 1, y: 0, z: 0, duration: 0.32, stagger: 0.035 }, 0.42);
         return true;
       };
@@ -947,6 +957,7 @@ export const initProcessStory = ({ config = {} } = {}) => {
           gsap.set(state, { clearProps: 'all' });
           gsap.set(state.querySelector('[data-process-copy]'), { clearProps: 'all' });
           gsap.set(state.querySelector('[data-process-visual]'), { clearProps: 'all' });
+          gsap.set(state.querySelector('[data-process-media]'), { clearProps: 'all' });
           gsap.set(state.querySelectorAll('[data-process-card], [data-process-install-step]'), {
             clearProps: 'all'
           });

@@ -36,13 +36,30 @@
           aria-labelledby='process-step-title-{{number}}'
           aria-hidden='{{ariaHidden}}'
         >
-          <picture class='process-state__media' aria-hidden='true'>
-            <source type='image/avif' srcset='{{image.avifSrcset}}' sizes='100vw' />
-            <source type='image/webp' srcset='{{image.webpSrcset}}' sizes='100vw' />
+          <picture class='process-state__background' aria-hidden='true'>
+            <img
+              src='/images/process-step-{{visual}}-bg.png'
+              alt=''
+              loading='lazy'
+              decoding='async'
+            />
+          </picture>
+
+          <picture class='process-state__media' aria-hidden='true' data-process-media>
+            <source
+              type='image/avif'
+              srcset='{{image.avifSrcset}}'
+              sizes='(min-width: 768px) 52vw, 100vw'
+            />
+            <source
+              type='image/webp'
+              srcset='{{image.webpSrcset}}'
+              sizes='(min-width: 768px) 52vw, 100vw'
+            />
             <img
               src='{{image.src}}'
               srcset='{{image.jpegSrcset}}'
-              sizes='100vw'
+              sizes='(min-width: 768px) 52vw, 100vw'
               width='{{image.width}}'
               height='{{image.height}}'
               alt=''

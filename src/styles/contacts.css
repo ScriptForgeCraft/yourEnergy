@@ -258,7 +258,7 @@
 }
 
 .office-map {
-  min-height: 340px;
+  min-height: 430px;
   position: relative;
   overflow: hidden;
   isolation: isolate;
@@ -825,7 +825,7 @@
   }
 
   .office-map {
-    min-height: 480px;
+    min-height: 540px;
   }
 
   .office-card {
