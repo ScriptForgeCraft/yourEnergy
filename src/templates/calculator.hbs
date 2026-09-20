@@ -120,11 +120,7 @@
                 <strong>{{wizard.selectedPoint}}</strong><output data-pending-coordinates>—</output>
                 <div><button type='button' class='button' data-confirm-location>{{wizard.confirmPoint}}</button></div>
               </div>
-              <div class='professional-location-notice'><svg aria-hidden='true'>
-                  <use href='/icons.svg#shield-check'></use>
-                </svg>
-                <p>{{wizard.potentialReady}}</p>
-              </div>
+ 
               <div class='async-card' data-potential-loading data-potential-status data-step-state='locked'
                 aria-live='polite'></div>
               <div data-potential-result hidden>
@@ -240,15 +236,6 @@
                 <div data-file-meta hidden><strong data-file-name></strong><button type='button'
                     class='button button--outline' data-file-remove>{{product.common.cancel}}</button></div>
               </section>
-              <details class='professional-consumption-advanced'>
-                <summary>{{wizard.ui.advancedOptions}} <svg aria-hidden='true'>
-                    <use href='/icons.svg#chevron-down'></use>
-                  </svg></summary>
-                <div>
-                  <p>{{wizard.ui.consumption.advancedCopy}}</p><button class='text-button' type='button'
-                    data-consumption-switch-monthly>{{wizard.ui.consumption.profileAction}}</button>
-                </div>
-              </details>
               <div class='flow-actions professional-consumption-actions'><button class='button button--outline'
                   type='button' data-wizard-back='0'><svg aria-hidden='true'>
                     <use href='/icons.svg#arrow-left'></use>
@@ -367,15 +354,7 @@
                     <option value='elevated'>{{product.roof.mountingModes.elevated}}</option>
                   </select></label>
               </section>
-              <details class='professional-roof-advanced'>
-                <summary>{{wizard.ui.advancedOptions}} <svg aria-hidden='true'>
-                    <use href='/icons.svg#chevron-down'></use>
-                  </svg></summary>
-                <div>
-                  <p>{{wizard.ui.roof.advancedCopy}}</p><button class='text-button' type='button'
-                    data-roof-enter-area>{{wizard.ui.consumption.manualAreaAction}}</button>
-                </div>
-              </details>
+ 
               <div class='flow-actions professional-roof-actions'><button class='button button--outline' type='button'
                   data-wizard-back='1'><svg aria-hidden='true'>
                     <use href='/icons.svg#arrow-left'></use>

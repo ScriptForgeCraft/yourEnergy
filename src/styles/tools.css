@@ -2639,67 +2639,7 @@
   white-space: nowrap;
 }
 
-.professional-consumption-advanced {
-  margin-top: 1.28rem;
-  border: 1px solid #d7e3ee;
-  border-radius: 0.55rem;
-  background: #fff;
-}
-
-.professional-consumption-advanced summary {
-  display: flex;
-  min-height: 3.15rem;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 0.9rem;
-  color: #183157;
-  cursor: pointer;
-  font-size: 0.78rem;
-  font-weight: 760;
-  list-style: none;
-}
-
-.professional-consumption-advanced summary::-webkit-details-marker {
-  display: none;
-}
-
-.professional-consumption-advanced summary svg {
-  width: 1rem;
-  height: 1rem;
-  color: #58718f;
-  transition: transform 160ms ease;
-}
-
-.professional-consumption-advanced[open] summary svg {
-  transform: rotate(180deg);
-}
-
-.professional-consumption-advanced > div,
-.professional-roof-advanced > div {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.8rem;
-  border-top: 1px solid #e5edf4;
-  padding: 0.72rem 0.9rem;
-}
-
-.professional-consumption-advanced p,
-.professional-roof-advanced p {
-  margin: 0;
-  color: #58718f;
-  font-size: 0.68rem;
-  line-height: 1.4;
-}
-
-.professional-consumption-advanced .text-button,
-.professional-roof-advanced .text-button {
-  flex: 0 0 auto;
-  color: #0877ef;
-  font-size: 0.68rem;
-  font-weight: 800;
-}
-
+ 
 .professional-consumption-actions {
   justify-content: space-between;
   margin-top: 1.9rem;
@@ -3408,39 +3348,7 @@
   font-size: 0.74rem;
   font-weight: 760;
 }
-
-.professional-roof-advanced {
-  margin-top: 0.9rem;
-  border: 1px solid #d7e3ee;
-  border-radius: 0.55rem;
-}
-
-.professional-roof-advanced summary {
-  display: flex;
-  min-height: 2.85rem;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 0.8rem;
-  color: #183157;
-  cursor: pointer;
-  font-size: 0.72rem;
-  font-weight: 760;
-  list-style: none;
-}
-
-.professional-roof-advanced summary::-webkit-details-marker {
-  display: none;
-}
-
-.professional-roof-advanced summary svg {
-  width: 0.9rem;
-  height: 0.9rem;
-  color: #58718f;
-}
-
-.professional-roof-advanced[open] summary svg {
-  transform: rotate(180deg);
-}
+ 
 
 .professional-roof-actions {
   justify-content: space-between;
@@ -4671,29 +4579,8 @@
   font-weight: 700;
 }
 
-.professional-location-notice {
-  display: grid;
-  grid-template-columns: 1.55rem minmax(0, 1fr);
-  gap: 0.55rem;
-  align-items: start;
-  margin-top: 0.72rem;
-  border-radius: 0.58rem;
-  padding: 0.72rem 0.82rem;
-  color: #254468;
-  background: linear-gradient(105deg, #eaf5ff, #f3f9ff);
-}
-
-.professional-location-notice > svg {
-  width: 1.45rem;
-  height: 1.45rem;
-  color: #0a78f3;
-}
-
-.professional-location-notice p {
-  margin: 0;
-  font-size: 0.72rem;
-  line-height: 1.48;
-}
+ 
+ 
 
 .calculator-page--professional .professional-location-form > .async-card:empty {
   display: none;
