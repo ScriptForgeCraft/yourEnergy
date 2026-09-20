@@ -68,3 +68,19 @@ test('one calculator exposes two modes and migrates historic routes safely', asy
   assert.match(generator, /createProfessionalCalculatorLanguageLinks/u);
   assert.doesNotMatch(generator, /renderRefineCalculator|roof-refinement/u);
 });
+
+test('Professional restores completed results and keeps inactive steps out of layout', async () => {
+  const [controller, styles] = await Promise.all([
+    source('src/ui/calculator-wizard.js'),
+    source('src/styles/tools.css')
+  ]);
+
+  assert.match(controller, /syncRoofControls\(\{ preserveAnalysis: true \}\)/u);
+  assert.match(controller, /root\.dataset\.currentStep = String\(target\)/u);
+  assert.match(controller, /wizard\.results\?\.title/u);
+  assert.match(controller, /window\.scrollTo\(\{ top: 0, left: 0, behavior: 'instant' \}\)/u);
+  assert.match(
+    styles,
+    /\.calculator-page--professional \.wizard-step\[hidden\][^{]*\{[^}]*display: none !important;/su
+  );
+});

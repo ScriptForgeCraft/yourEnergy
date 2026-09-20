@@ -150,6 +150,17 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
   const financeValues = root.querySelector('[data-finance-values]');
   const passportDialog = document.querySelector('[data-passport-dialog]');
   const passportContent = document.querySelector('[data-passport-dialog-content]');
+  const heroTitle = root.querySelector('#calculator-title');
+  const heroIntro = root.querySelector('.professional-hero__copy > p');
+  const heroBreadcrumbCurrent = root.querySelector('.calculator-breadcrumb > span');
+  const heroControls = root.querySelector('.professional-hero__controls');
+  const restartButton = root.querySelector('[data-wizard-restart]');
+  const defaultHeroTitle = heroTitle?.textContent ?? '';
+  const defaultHeroIntro = heroIntro?.textContent ?? '';
+  const defaultHeroBreadcrumb = heroBreadcrumbCurrent?.textContent ?? '';
+
+  if ('scrollRestoration' in window.history) window.history.scrollRestoration = 'manual';
+  if (heroControls && restartButton) heroControls.append(restartButton);
 
   [
     ['[data-location-region]', wizard.region],
@@ -284,10 +295,42 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
     }
   };
 
-  const setStep = (nextStep, { focus = true } = {}) => {
+  const scrollToTop = () => {
+    const previousScrollBehavior = document.documentElement.style.scrollBehavior;
+    document.documentElement.style.scrollBehavior = 'auto';
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    document.documentElement.style.scrollBehavior = previousScrollBehavior;
+  };
+
+  const scheduleScrollToTop = () => {
+    scrollToTop();
+    requestAnimationFrame(() => {
+      scrollToTop();
+      requestAnimationFrame(scrollToTop);
+    });
+  };
+
+  const setStep = (nextStep, { focus = true, scroll = true } = {}) => {
     const target = Math.max(0, Math.min(Number(nextStep), steps.length - 1));
     if (!isStepAccessible(target)) return false;
     state.currentStep = target;
+    root.dataset.currentStep = String(target);
+    const showingResults = target === 3;
+    if (heroTitle) {
+      heroTitle.textContent = showingResults
+        ? (wizard.results?.title ?? defaultHeroTitle)
+        : defaultHeroTitle;
+    }
+    if (heroIntro) {
+      heroIntro.textContent = showingResults
+        ? (wizard.results?.intro ?? defaultHeroIntro)
+        : defaultHeroIntro;
+    }
+    if (heroBreadcrumbCurrent) {
+      heroBreadcrumbCurrent.textContent = showingResults
+        ? (wizard.steps?.[3] ?? defaultHeroBreadcrumb)
+        : defaultHeroBreadcrumb;
+    }
     steps.forEach((step, index) => {
       step.hidden = index !== target;
     });
@@ -298,9 +341,8 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
         requestAnimationFrame(() => controller.resize());
       });
     }
-    if (focus) {
-      requestAnimationFrame(() => steps[target]?.focus({ preventScroll: false }));
-    }
+    if (focus) steps[target]?.focus({ preventScroll: true });
+    if (scroll) scheduleScrollToTop();
     return true;
   };
 
@@ -646,7 +688,7 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
     return false;
   };
 
-  const syncRoofControls = ({ preserveValidation = false } = {}) => {
+  const syncRoofControls = ({ preserveValidation = false, preserveAnalysis = false } = {}) => {
     const measured = activeAreaMethod(root) === 'measured-plane';
     if (roofPlaneWrap) roofPlaneWrap.hidden = !measured;
     if (roofPlaneArea) roofPlaneArea.disabled = !measured;
@@ -663,7 +705,7 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
     };
     updateRoofAreaSummary();
     if (!preserveValidation) clearRoofValidation();
-    clearAnalysis();
+    if (!preserveAnalysis) clearAnalysis();
     updateProgress();
   };
 
@@ -1097,7 +1139,7 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
     button.addEventListener('click', () => setStep(Number(button.dataset.wizardNav)))
   );
 
-  syncRoofControls();
+  syncRoofControls({ preserveAnalysis: true });
   if (state.analysis) renderResult(state.analysis);
   const restoredStep = Number.isInteger(savedSession.currentStep) ? savedSession.currentStep : 0;
   setStep(restoredStep, { focus: false });
