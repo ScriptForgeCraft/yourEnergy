@@ -1,3 +1,5 @@
+import { CONTACT_HOURS } from './contact-hours.js';
+
 const months = [
   ['Янв', 'Январь', 600, 32],
   ['Фев', 'Февраль', 750, 41],
@@ -59,7 +61,7 @@ export default {
     phoneLabel: 'Позвонить по номеру +374 91 095 950',
     address1: 'Армения, г. Ереван, ул. Арташисьяна, 48/14',
     address2: 'Армения, Котайкская область, с. Зовуни, 26-я улица, 33',
-    hours: 'Открыто до 21:00'
+    hours: CONTACT_HOURS.ru.footer
   },
   common: {
     headerCta: 'Получить расчёт',
@@ -376,7 +378,6 @@ export default {
     dashboardExample: {
       location: 'Ереван, Армения',
       status: 'ПРИМЕР РЕЗУЛЬТАТА',
-      label: 'Годовая генерация',
       annualGenerationKwh: 8420,
       annualGenerationDisplay: '8 420',
       monthlyGenerationKwh: [320, 390, 570, 740, 820, 900, 980, 940, 790, 630, 470, 350],

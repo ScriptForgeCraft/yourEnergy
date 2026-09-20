@@ -46,7 +46,7 @@
             <p class='about-hero__intro'>{{aboutPage.hero.copy}}</p>
             <ul class='about-hero__signals' role='list'>{{#each aboutPage.hero.signals}}<li><svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#{{icon}}'></use></svg><span>{{title}}<small>{{copy}}</small></span></li>{{/each}}</ul>
           </div>
-          <p class='about-hero__aside' data-about-reveal>{{#each aboutPage.hero.aside}}<span>{{this}}</span>{{/each}}</p>
+          <p class='about-hero__aside' data-about-reveal>{{#each aboutPage.hero.aside}}<span>{{this}}</span>{{#unless @last}} {{/unless}}{{/each}}</p>
           <p class='about-hero__scroll' aria-hidden='true'><span></span>{{aboutPage.hero.scroll}}</p>
         </div>
       </section>

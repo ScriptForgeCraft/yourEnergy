@@ -26,7 +26,13 @@ import {
   PROJECT_CASES,
   PROJECT_CASE_SLUGS
 } from '../src/content/project-cases.js';
-import { EQUIPMENT_COPY } from '../src/data/equipment/equipment-i18n.js';
+import {
+  EQUIPMENT_COPY,
+  formatProductCount,
+  isWarrantyLabel,
+  SPEC_LABELS
+} from '../src/data/equipment/equipment-i18n.js';
+import { createEquipmentCatalog } from '../src/data/equipment/catalog.js';
 
 const root = resolve(import.meta.dirname, '..');
 const mode = process.argv[2] ?? 'production';
@@ -1075,6 +1081,75 @@ const equipmentMeta = Object.freeze({
   }
 });
 
+const EQUIPMENT_CATEGORY_ICONS = Object.freeze({
+  'solar-panels': 'sun',
+  'grid-inverters': 'zap',
+  inverters: 'zap',
+  microinverters: 'zap',
+  batteries: 'cycle',
+  'home-ess': 'faq-home',
+  'commercial-ess': 'chart-bars',
+  'ev-chargers': 'zap',
+  mounting: 'solar-mount',
+  monitoring: 'satellite',
+  'system-components': 'faq-settings'
+});
+
+const labelEquipmentSpec = (key, locale) =>
+  SPEC_LABELS[key]?.[locale] ??
+  key.replace(/([a-z])([A-Z])/gu, '$1 $2').replace(/^./u, (letter) => letter.toUpperCase());
+
+const createEquipmentSsrContent = (locale) => {
+  const catalog = createEquipmentCatalog(locale);
+  const initialProduct = catalog.products.find(({ id }) => id);
+  if (!initialProduct) throw new Error(`Equipment catalog has no products for ${locale}.`);
+
+  const categoryProducts = catalog.products.filter(
+    ({ category }) => category === initialProduct.category
+  );
+  const warrantyItems = initialProduct.highlights.filter(({ label }) => isWarrantyLabel(label));
+  if (
+    initialProduct.specs?.warranty &&
+    !warrantyItems.some(({ value }) => value === initialProduct.specs.warranty)
+  ) {
+    warrantyItems.push({
+      label: EQUIPMENT_COPY[locale].product.manufacturerWarranty,
+      value: initialProduct.specs.warranty
+    });
+  }
+
+  return {
+    heroBackground: catalog.hero.background,
+    categories: catalog.categories.map((category) => {
+      const products = catalog.products.filter(({ category: id }) => id === category.id);
+      return {
+        ...category,
+        icon: EQUIPMENT_CATEGORY_ICONS[category.id] ?? 'sun',
+        productCount: products.length ? formatProductCount(products.length, locale) : '',
+        isAvailable: Boolean(category.enabled && products.length),
+        isSelected: category.id === initialProduct.category
+      };
+    }),
+    categoryProducts: categoryProducts.map((product) => ({
+      ...product,
+      isSelected: product.id === initialProduct.id
+    })),
+    initialProduct: {
+      ...initialProduct,
+      brandData: initialProduct.brand.toLowerCase(),
+      benefits:
+        initialProduct.benefits?.length > 0 ? initialProduct.benefits : initialProduct.hotspots,
+      specificationEntries: Object.entries(initialProduct.specs).map(([key, value]) => ({
+        label: labelEquipmentSpec(key, locale),
+        value
+      })),
+      warrantyItems,
+      hasWarrantyItems: warrantyItems.length > 0,
+      documentCount: `${initialProduct.documents.length} PDF`
+    }
+  };
+};
+
 const createEquipmentContext = (content) => {
   const path = toolPath(content.locale, 'equipment');
   const base = createHomeContext(content, { pageKind: 'equipment' });
@@ -1085,7 +1160,8 @@ const createEquipmentContext = (content) => {
     alternateLinks: createToolAlternateLinks('equipment'),
     languageLinks: createToolLanguageLinks(content.locale, 'equipment'),
     equipmentMeta: equipmentMeta[content.locale],
-    equipmentCopy: EQUIPMENT_COPY[content.locale]
+    equipmentCopy: EQUIPMENT_COPY[content.locale],
+    equipmentSsr: createEquipmentSsrContent(content.locale)
   };
 };
 

@@ -1,3 +1,5 @@
+import { CONTACT_HOURS } from './contact-hours.js';
+
 const mapsUrl = (query) =>
   `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(query)}`;
 
@@ -62,14 +64,14 @@ export const contactPageCopy = Object.freeze({
       office(
         'Երևան — Գլխավոր գրասենյակ',
         'Արտաշիսյան փ., 48/14, Երևան',
-        'Երկ–Ուրբ՝ 09:00–18:00 · Շբ՝ 10:00–15:00',
+        CONTACT_HOURS.hy.office,
         'Արտաշիսյան փողոց 48/14, Երևան, Հայաստան',
         [40.2272612, 44.5454473]
       ),
       office(
         'Զովունի — Ներկայացուցչություն',
         '26-րդ փ., 33, Զովունի, Կոտայք',
-        'Երկ–Ուրբ՝ 09:00–18:00 · Շբ՝ 10:00–15:00',
+        CONTACT_HOURS.hy.office,
         '26-րդ փողոց 33, Զովունի, Հայաստան',
         [40.1590219, 44.5387532]
       )
@@ -159,14 +161,14 @@ export const contactPageCopy = Object.freeze({
       office(
         'Ереван — Главный офис',
         'ул. Арташисьяна, 48/14, Ереван',
-        'Пн–Пт: 09:00–18:00 · Сб: 10:00–15:00',
+        CONTACT_HOURS.ru.office,
         'Artashisyan Street 48/14, Yerevan',
         [40.2272612, 44.5454473]
       ),
       office(
         'Зовуни — Представительство',
         '26-я ул., 33, Зовуни, Котайк',
-        'Пн–Пт: 09:00–18:00 · Сб: 10:00–15:00',
+        CONTACT_HOURS.ru.office,
         '26th Street 33, Zovuni, Armenia',
         [40.1590219, 44.5387532]
       )
@@ -250,14 +252,14 @@ export const contactPageCopy = Object.freeze({
       office(
         'Yerevan — Head office',
         '48/14 Artashisyan St., Yerevan',
-        'Mon–Fri: 09:00–18:00 · Sat: 10:00–15:00',
+        CONTACT_HOURS.en.office,
         'Artashisyan Street 48/14, Yerevan',
         [40.2272612, 44.5454473]
       ),
       office(
         'Zovuni — Representative office',
         '33, 26th St., Zovuni, Kotayk',
-        'Mon–Fri: 09:00–18:00 · Sat: 10:00–15:00',
+        CONTACT_HOURS.en.office,
         '26th Street 33, Zovuni, Armenia',
         [40.1590219, 44.5387532]
       )

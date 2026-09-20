@@ -5,6 +5,7 @@ import { fileURLToPath } from 'node:url';
 import test from 'node:test';
 import { createEquipmentCatalog } from '../src/data/equipment/catalog.js';
 import {
+  EQUIPMENT_COPY,
   findUnlocalizedStrings,
   missingEquipmentTranslations
 } from '../src/data/equipment/equipment-i18n.js';
@@ -161,4 +162,23 @@ test('equipment keeps a flat interactive hotspot layer and no pointer-follow par
   assert.match(css, /\.product-hotspots\s*\{[^}]*z-index:\s*2;/u);
   assert.match(css, /\.product-hotspot\s*\{[^}]*pointer-events:\s*auto;/u);
   assert.match(js, /link\.download = url\.split/u);
+});
+
+test('equipment has a complete static first product before JavaScript runs', async () => {
+  const html = await readFile(new URL('../equipment/index.html', import.meta.url), 'utf8');
+  const [product] = createEquipmentCatalog('hy').products;
+
+  assert.match(
+    html,
+    new RegExp(`<h1 id='equipment-title' data-page-title>${EQUIPMENT_COPY.hy.page.title}</h1>`, 'u')
+  );
+  assert.match(html, new RegExp(`<h2 data-product-name>${product.name}</h2>`, 'u'));
+  assert.match(
+    html,
+    new RegExp(`<p class='product-panel__model' data-product-model>${product.model}</p>`, 'u')
+  );
+  assert.match(html, /data-accordion-label='specs'>[^<]+<[/]span>/u);
+  assert.doesNotMatch(html, /<h[1-3][^>]*><\/h[1-3]>/u);
+  assert.doesNotMatch(html, /cellOrientation/u);
+  assert.doesNotMatch(html, /կավելացվի ավելի ուշ/u);
 });

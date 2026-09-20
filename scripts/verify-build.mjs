@@ -821,7 +821,7 @@ function validateCinematicHomeHero(html, page, calculatorHref) {
     'data-hero-analysis-coverage',
     'data-hero-analysis-savings',
     'data-hero-analysis-co2',
-    'data-hero-example-co2',
+    'data-hero-analysis-co2-label',
     'data-hero-example-trees',
     'data-hero-analysis-bars',
     'hero-dashboard__facts',

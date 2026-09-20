@@ -1,3 +1,5 @@
+import { CONTACT_HOURS } from './contact-hours.js';
+
 const months = [
   ['Հնվ', 'Հունվար', 600, 32],
   ['Փտր', 'Փետրվար', 750, 41],
@@ -59,7 +61,7 @@ export default {
     phoneLabel: 'Զանգել +374 91 095 950 համարով',
     address1: 'Հայաստան, Երևան, Արտաշիսյան փողոց, 48/14',
     address2: 'Հայաստան, Կոտայքի մարզ, Զովունի, 26-րդ փողոց, 33',
-    hours: 'Բաց է մինչև 21:00'
+    hours: CONTACT_HOURS.hy.footer
   },
   common: {
     headerCta: 'Ստանալ հաշվարկ',
@@ -378,7 +380,6 @@ export default {
     dashboardExample: {
       location: 'Երևան, Հայաստան',
       status: 'ԱՐԴՅՈՒՆՔԻ ՕՐԻՆԱԿ',
-      label: 'Տարեկան արտադրություն',
       annualGenerationKwh: 8420,
       annualGenerationDisplay: '8 420',
       monthlyGenerationKwh: [320, 390, 570, 740, 820, 900, 980, 940, 790, 630, 470, 350],

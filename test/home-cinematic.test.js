@@ -40,7 +40,7 @@ test('cinematic homepage Hero has a clearly labelled static example and one prim
     'data-hero-analysis-coverage',
     'data-hero-analysis-savings',
     'data-hero-analysis-co2',
-    'data-hero-example-co2',
+    'data-hero-analysis-co2-label',
     'data-hero-example-trees',
     "href='/icons.svg#leaf'",
     "href='/icons.svg#tree'",

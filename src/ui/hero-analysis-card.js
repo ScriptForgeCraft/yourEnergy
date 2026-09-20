@@ -146,10 +146,9 @@ const renderExampleCard = ({ root, copy, locale }) => {
   const example = copy.dashboardExample;
   if (!example) return null;
   root.dataset.dashboardMode = 'example';
-  root.dataset.co2Available = 'false';
+  root.dataset.co2Available = String(finite(example.co2Tons) !== null);
   text(root, '[data-hero-analysis-location]', example.location);
   text(root, '[data-hero-analysis-status]', example.status);
-  text(root, '[data-hero-analysis-label]', example.label);
   text(root, '[data-hero-analysis-note]', example.note);
   renderMetric({
     root,
@@ -160,11 +159,13 @@ const renderExampleCard = ({ root, copy, locale }) => {
     locale
   });
   renderBars(root, example.monthlyGenerationKwh);
-  renderExampleFact({
+  text(root, '[data-hero-analysis-co2-label]', example.co2Label);
+  renderMetric({
     root,
-    selector: '[data-hero-example-co2]',
-    valueSelector: '[data-hero-example-co2-value]',
+    valueSelector: '[data-hero-analysis-co2-value]',
+    unitSelector: '[data-hero-analysis-co2-unit]',
     value: finite(example.co2Tons),
+    fallback: '—',
     locale,
     decimals: 1
   });
@@ -177,7 +178,7 @@ const renderExampleCard = ({ root, copy, locale }) => {
   });
   hidden(root, '[data-hero-analysis-coverage]', true);
   hidden(root, '[data-hero-analysis-savings]', true);
-  hidden(root, '[data-hero-analysis-co2]', true);
+  hidden(root, '[data-hero-analysis-co2]', finite(example.co2Tons) === null);
   return { mode: 'example', ...example };
 };
 
@@ -200,7 +201,6 @@ export const renderHeroAnalysisCard = ({
     '[data-hero-analysis-status]',
     ready ? copy.dashboardStatusPreliminary : copy.dashboardLoading
   );
-  text(root, '[data-hero-analysis-label]', ready ? copy.dashboardReady : copy.dashboardLoading);
   text(
     root,
     '[data-hero-analysis-note]',
@@ -235,6 +235,7 @@ export const renderHeroAnalysisCard = ({
   const co2 = root.querySelector('[data-hero-analysis-co2]');
   if (co2) {
     co2.hidden = presentation.avoidedCo2Tons === null;
+    text(root, '[data-hero-analysis-co2-label]', copy.dashboardCo2);
     const value = root.querySelector('[data-hero-analysis-co2-value]');
     if (value && presentation.avoidedCo2Tons !== null) {
       value.textContent = formatNumber(presentation.avoidedCo2Tons, locale, {
@@ -244,7 +245,6 @@ export const renderHeroAnalysisCard = ({
       counter(value, presentation.avoidedCo2Tons, { decimals: 1 });
     }
   }
-  hidden(root, '[data-hero-example-co2]', true);
   hidden(root, '[data-hero-example-trees]', true);
   hidden(root, '[data-hero-analysis-coverage]', false);
   hidden(root, '[data-hero-analysis-savings]', false);

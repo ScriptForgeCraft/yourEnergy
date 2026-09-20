@@ -29,9 +29,10 @@ export const EQUIPMENT_COPY = Object.freeze({
       categories: 'Категории оборудования',
       manufacturerWarranty: 'Гарантия производителя',
       warrantyFallback: 'Условия гарантии уточняются при подборе оборудования.',
-      imageComingSoon: 'Фото позже',
-      imageMissing: 'Изображение будет добавлено. Характеристики и документы доступны справа.',
-      imageMissingExplorer: 'Изображение будет добавлено. Смотрите характеристики и документы.',
+      imageComingSoon: 'Изображение недоступно',
+      imageMissing:
+        'Изображение недоступно. Полные характеристики и документы указаны в карточке товара.',
+      imageMissingExplorer: 'Изображение недоступно. Смотрите характеристики и документы товара.',
       noScript:
         'Для интерактивного просмотра оборудования включите JavaScript. Технические паспорта доступны по запросу у YOURENERGY.',
       page: 'стр.'
@@ -64,10 +65,10 @@ export const EQUIPMENT_COPY = Object.freeze({
       categories: 'Սարքավորումների կատեգորիաներ',
       manufacturerWarranty: 'Արտադրողի երաշխիք',
       warrantyFallback: 'Երաշխիքային պայմանները ճշտվում են սարքավորումն ընտրելիս։',
-      imageComingSoon: 'Պատկերը շուտով',
+      imageComingSoon: 'Պատկերը հասանելի չէ',
       imageMissing:
-        'Պատկերը կավելացվի ավելի ուշ։ Բնութագրերն ու փաստաթղթերը հասանելի են աջ կողմում։',
-      imageMissingExplorer: 'Պատկերը կավելացվի ավելի ուշ։ Տեսեք բնութագրերն ու փաստաթղթերը։',
+        'Պատկերը հասանելի չէ։ Ամբողջական բնութագրերն ու փաստաթղթերը նշված են արտադրանքի քարտում։',
+      imageMissingExplorer: 'Պատկերը հասանելի չէ։ Տեսեք արտադրանքի բնութագրերն ու փաստաթղթերը։',
       noScript:
         'Սարքավորումների ինտերակտիվ դիտման համար միացրեք JavaScript-ը։ Տեխնիկական փաստաթղթերը հասանելի են YOURENERGY-ից հարցմամբ։',
       page: 'էջ'
@@ -100,10 +101,11 @@ export const EQUIPMENT_COPY = Object.freeze({
       categories: 'Equipment categories',
       manufacturerWarranty: 'Manufacturer warranty',
       warrantyFallback: 'Warranty terms are confirmed during equipment selection.',
-      imageComingSoon: 'Image coming soon',
+      imageComingSoon: 'Image unavailable',
       imageMissing:
-        'The image will be added later. Specifications and documents are available on the right.',
-      imageMissingExplorer: 'The image will be added later. See the specifications and documents.',
+        'The image is unavailable. Full specifications and documents are provided in the product card.',
+      imageMissingExplorer:
+        'The image is unavailable. See the product specifications and documents.',
       noScript:
         'Enable JavaScript to use the interactive equipment viewer. Technical documentation is available from YOURENERGY on request.',
       page: 'p.'

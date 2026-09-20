@@ -89,20 +89,15 @@
                     ></use></svg><span data-hero-analysis-location>{{hero.dashboardExample.location}}</span></span>
                 <span class='hero-dashboard__status' data-hero-analysis-status>{{hero.dashboardExample.status}}</span>
               </div>
-              <p class='hero-dashboard__label' data-hero-analysis-label aria-live='polite'>{{hero.dashboardExample.label}}</p>
-              <div class='hero-dashboard__production'>
-                <svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#sun'></use></svg>
-                <span>{{hero.dashboardGeneration}}</span>
-              </div>
+              <p class='hero-dashboard__label' data-hero-analysis-label aria-live='polite'>{{hero.dashboardGeneration}}</p>
               <div class='hero-dashboard__yield'>
                 <div class='hero-dashboard__metric'><strong data-hero-analysis-generation data-hero-countup data-hero-countup-value='{{hero.dashboardExample.annualGenerationKwh}}'>{{hero.dashboardExample.annualGenerationDisplay}}</strong><span data-hero-analysis-generation-unit>{{hero.dashboardGenerationUnit}}</span></div>
                 <div class='hero-dashboard__bars' data-hero-analysis-bars role='img' aria-label='{{hero.dashboardGeneration}}'>{{#each hero.dashboardExample.monthlyBarPercent}}<i style='--hero-bar-height: {{this}}%;'></i>{{/each}}</div>
               </div>
               <dl class='hero-dashboard__facts'>
-                <div data-hero-example-co2><svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#leaf'></use></svg><dt>{{hero.dashboardExample.co2Label}}</dt><dd><strong data-hero-example-co2-value data-hero-countup data-hero-countup-value='{{hero.dashboardExample.co2Tons}}' data-hero-countup-decimals='1'>{{hero.dashboardExample.co2Display}}</strong> <small>{{hero.dashboardCo2Unit}}</small></dd></div>
+                <div data-hero-analysis-co2><svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#leaf'></use></svg><dt data-hero-analysis-co2-label>{{hero.dashboardExample.co2Label}}</dt><dd><strong data-hero-analysis-co2-value data-hero-countup data-hero-countup-value='{{hero.dashboardExample.co2Tons}}' data-hero-countup-decimals='1'>{{hero.dashboardExample.co2Display}}</strong> <small data-hero-analysis-co2-unit>{{hero.dashboardCo2Unit}}</small></dd></div>
                 <div data-hero-analysis-coverage hidden><svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#shield-check'></use></svg><dt>{{hero.dashboardCoverage}}</dt><dd><strong data-hero-analysis-coverage-value>{{hero.dashboardNeedConsumption}}</strong> <small data-hero-analysis-coverage-unit hidden>{{hero.dashboardCoverageUnit}}</small></dd></div>
                 <div data-hero-analysis-savings hidden><svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#zap'></use></svg><dt>{{hero.dashboardSavings}}</dt><dd><strong data-hero-analysis-savings-value>{{hero.dashboardNeedTariff}}</strong> <small data-hero-analysis-savings-unit hidden>{{hero.dashboardSavingsUnit}}</small></dd></div>
-                <div data-hero-analysis-co2 hidden><svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#leaf'></use></svg><dt>{{hero.dashboardCo2}}</dt><dd><strong data-hero-analysis-co2-value>—</strong> <small data-hero-analysis-co2-unit>{{hero.dashboardCo2Unit}}</small></dd></div>
                 <div data-hero-example-trees><svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#tree'></use></svg><dt>{{hero.dashboardExample.treesLabel}}</dt><dd><strong data-hero-example-trees-value data-hero-countup data-hero-countup-value='{{hero.dashboardExample.trees}}'>{{hero.dashboardExample.trees}}</strong> <small>{{hero.dashboardExample.treesUnit}}</small></dd></div>
               </dl>
               <p class='hero-dashboard__note'><svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#zap'></use></svg><span data-hero-analysis-note>{{hero.dashboardExample.note}}</span></p>
@@ -147,7 +142,7 @@
         <div class='portfolio-projects__header container'>
           <div class='portfolio-projects__copy'><h2
               id='projects-title'
-            ><span>{{projects.titleLead}}</span><mark>{{projects.titleAccent}}</mark></h2><p
+            ><span>{{projects.titleLead}}</span> <mark>{{projects.titleAccent}}</mark></h2><p
               class='portfolio-projects__description'
             >{{projects.copy}}</p></div>
           <div class='portfolio-projects__actions'><a

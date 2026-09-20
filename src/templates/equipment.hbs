@@ -29,58 +29,58 @@
   <body class='page-equipment' data-equipment-page data-equipment-locale='{{locale}}'>
     <a class='skip-link' href='#main'>{{aria.skip}}</a>
     {{> site-header}}
-    <main id='main' class='equipment-showroom' data-equipment-showroom aria-busy='true'>
+    <main id='main' class='equipment-showroom' data-equipment-showroom aria-busy='true' style='--equipment-background: url("{{equipmentSsr.heroBackground}}");'>
       <div class='equipment-showroom__backdrop' aria-hidden='true'></div>
       <div class='equipment-showroom__noise' aria-hidden='true'></div>
       <div class='equipment-shell'>
         <div class='equipment-stage'>
           <section class='equipment-intro' aria-labelledby='equipment-title' data-intro>
-            <h1 id='equipment-title' data-page-title></h1>
-            <p class='equipment-intro__text' data-page-subtitle></p>
-            <div class='equipment-categories' data-category-list aria-label='{{equipmentCopy.product.categories}}'></div>
+            <h1 id='equipment-title' data-page-title>{{equipmentCopy.page.title}}</h1>
+            <p class='equipment-intro__text' data-page-subtitle>{{equipmentCopy.page.subtitle}}</p>
+            <div class='equipment-categories' data-category-list aria-label='{{equipmentCopy.product.categories}}'>{{#each equipmentSsr.categories}}<button class='equipment-category' type='button' data-category='{{id}}' aria-pressed='{{isSelected}}'{{#unless isAvailable}} disabled{{/unless}}><span class='equipment-category__icon'><svg class='equipment-icon' aria-hidden='true'><use href='/icons.svg#{{icon}}'></use></svg></span><span class='equipment-category__copy'><strong>{{label}}</strong><small>{{productCount}}</small></span></button>{{/each}}</div>
             <div class='equipment-model-picker'>
-              <label for='equipment-model'>{{equipmentCopy.product.modelInCategory}} <span data-category-product-count></span></label>
-              <select id='equipment-model' data-product-select></select>
+              <label for='equipment-model'>{{equipmentCopy.product.modelInCategory}} <span data-category-product-count>1 / {{equipmentSsr.categoryProducts.length}}</span></label>
+              <select id='equipment-model' data-product-select>{{#each equipmentSsr.categoryProducts}}<option value='{{id}}'{{#if isSelected}} selected{{/if}}>{{brand}} {{name}} · {{powerRange}}</option>{{/each}}</select>
             </div>
           </section>
           <section class='product-viewer' aria-label='{{equipmentCopy.product.interactiveView}}' data-viewer>
             <div class='product-viewer__halo' aria-hidden='true'></div>
             <div class='product-visual' data-product-visual><div class='product-visual__depth' data-product-depth>
-              <img class='product-visual__image' data-product-image alt='' fetchpriority='high' decoding='async' />
+              <img class='product-visual__image' data-product-image src='{{equipmentSsr.initialProduct.image}}' alt='{{equipmentSsr.initialProduct.brand}} {{equipmentSsr.initialProduct.name}}' fetchpriority='high' decoding='async' />
               <div class='product-hotspots' data-hotspots></div>
               <p class='product-image-missing' data-product-image-missing hidden>{{equipmentCopy.product.imageMissing}}</p>
             </div></div>
-            <p class='product-viewer__hint' data-rotate-hint><span class='product-viewer__axis' aria-hidden='true'></span><span data-rotate-hint-text></span></p>
-            <p class='sr-status' data-product-status aria-live='polite'></p>
-            <p class='product-viewer__image-note' data-product-image-note hidden></p>
+            <p class='product-viewer__hint' data-rotate-hint><span class='product-viewer__axis' aria-hidden='true'></span><span data-rotate-hint-text>{{equipmentCopy.product.rotateHint}}</span></p>
+            <p class='sr-status' data-product-status aria-live='polite'>{{equipmentSsr.initialProduct.brand}} {{equipmentSsr.initialProduct.name}}</p>
+            <p class='product-viewer__image-note' data-product-image-note{{#unless equipmentSsr.initialProduct.imageNote}} hidden{{/unless}}>{{equipmentSsr.initialProduct.imageNote}}</p>
           </section>
           <aside class='product-panel' data-product-panel aria-label='{{equipmentCopy.product.productInformation}}'>
             <button class='product-panel__fullscreen' type='button' data-fullscreen-open aria-label='{{equipmentCopy.product.openFullscreen}}' title='{{equipmentCopy.product.openFullscreen}}'><span aria-hidden='true'>⛶</span></button>
             <div class='product-panel__content' data-panel-content>
-              <div class='product-panel__brand-row'><span class='product-panel__brand' data-product-brand></span><span class='product-panel__popular' data-product-popular></span></div>
-              <h2 data-product-name></h2>
-              <p class='product-panel__model' data-product-model></p>
-              <p class='product-panel__power' data-product-power></p>
-              <p class='product-panel__description' data-product-description></p>
-              <div class='product-highlights' data-product-highlights></div>
+              <div class='product-panel__brand-row'><span class='product-panel__brand' data-product-brand data-brand='{{equipmentSsr.initialProduct.brandData}}'>{{equipmentSsr.initialProduct.brand}}</span><span class='product-panel__popular' data-product-popular>{{equipmentSsr.initialProduct.badge}}</span></div>
+              <h2 data-product-name>{{equipmentSsr.initialProduct.name}}</h2>
+              <p class='product-panel__model' data-product-model>{{equipmentSsr.initialProduct.model}}</p>
+              <p class='product-panel__power' data-product-power>{{equipmentSsr.initialProduct.powerRange}}</p>
+              <p class='product-panel__description' data-product-description>{{equipmentSsr.initialProduct.shortDescription}}</p>
+              <div class='product-highlights' data-product-highlights>{{#each equipmentSsr.initialProduct.highlights}}<div class='product-highlight'><svg class='equipment-icon' aria-hidden='true'><use href='/icons.svg#zap'></use></svg><span><strong>{{value}}</strong><small>{{label}}</small></span></div>{{/each}}</div>
               <div class='product-panel__actions'>
-                <a class='equipment-action equipment-action--primary' href='{{contactsHref}}'><span data-request-price></span><svg class='equipment-icon' aria-hidden='true'><use href='/icons.svg#arrow-right'></use></svg></a>
-                <a class='equipment-action equipment-action--secondary' data-pdf-link target='_blank' rel='noopener noreferrer'><svg class='equipment-icon' aria-hidden='true'><use href='/icons.svg#file'></use></svg><span data-download-pdf></span></a>
+                <a class='equipment-action equipment-action--primary' href='{{contactsHref}}'><span data-request-price>{{equipmentCopy.product.requestPrice}}</span><svg class='equipment-icon' aria-hidden='true'><use href='/icons.svg#arrow-right'></use></svg></a>
+                <a class='equipment-action equipment-action--secondary' data-pdf-link href='{{equipmentSsr.initialProduct.datasheetPdf}}' target='_blank' rel='noopener noreferrer'><svg class='equipment-icon' aria-hidden='true'><use href='/icons.svg#file'></use></svg><span data-download-pdf>{{equipmentCopy.product.downloadPdf}}</span></a>
               </div>
               <div class='equipment-accordions' data-accordions>
-                <section class='equipment-accordion'><button class='equipment-accordion__trigger' type='button' aria-expanded='false' aria-controls='equipment-benefits-panel' data-accordion-trigger='benefits'><span><svg class='equipment-icon' aria-hidden='true'><use href='/icons.svg#zap'></use></svg><span data-accordion-label='benefits'></span></span><i aria-hidden='true'></i></button><div class='equipment-accordion__panel' id='equipment-benefits-panel' data-accordion-panel='benefits' hidden></div></section>
-                <section class='equipment-accordion'><button class='equipment-accordion__trigger' type='button' aria-expanded='false' aria-controls='equipment-specs-panel' data-accordion-trigger='specs'><span><svg class='equipment-icon' aria-hidden='true'><use href='/icons.svg#calculator'></use></svg><span data-accordion-label='specs'></span></span><i aria-hidden='true'></i></button><div class='equipment-accordion__panel' id='equipment-specs-panel' data-accordion-panel='specs' hidden></div></section>
-                <section class='equipment-accordion'><button class='equipment-accordion__trigger' type='button' aria-expanded='false' aria-controls='equipment-documents-panel' data-accordion-trigger='documents'><span><svg class='equipment-icon' aria-hidden='true'><use href='/icons.svg#file'></use></svg><span data-accordion-label='documents'></span><b data-document-count></b></span><i aria-hidden='true'></i></button><div class='equipment-accordion__panel' id='equipment-documents-panel' data-accordion-panel='documents' hidden></div></section>
-                <section class='equipment-accordion'><button class='equipment-accordion__trigger' type='button' aria-expanded='false' aria-controls='equipment-warranty-panel' data-accordion-trigger='warranty'><span><svg class='equipment-icon' aria-hidden='true'><use href='/icons.svg#shield-check'></use></svg><span data-accordion-label='warranty'></span></span><i aria-hidden='true'></i></button><div class='equipment-accordion__panel' id='equipment-warranty-panel' data-accordion-panel='warranty' hidden></div></section>
+                <section class='equipment-accordion'><button class='equipment-accordion__trigger' type='button' aria-expanded='false' aria-controls='equipment-benefits-panel' data-accordion-trigger='benefits'><span><svg class='equipment-icon' aria-hidden='true'><use href='/icons.svg#zap'></use></svg><span data-accordion-label='benefits'>{{equipmentCopy.product.keyBenefits}}</span></span><i aria-hidden='true'></i></button><div class='equipment-accordion__panel' id='equipment-benefits-panel' data-accordion-panel='benefits' hidden><ul class='equipment-benefit-list'>{{#each equipmentSsr.initialProduct.benefits}}<li><strong>{{label}}</strong><span>{{text}}</span></li>{{/each}}</ul></div></section>
+                <section class='equipment-accordion'><button class='equipment-accordion__trigger' type='button' aria-expanded='false' aria-controls='equipment-specs-panel' data-accordion-trigger='specs'><span><svg class='equipment-icon' aria-hidden='true'><use href='/icons.svg#calculator'></use></svg><span data-accordion-label='specs'>{{equipmentCopy.product.technicalSpecs}}</span></span><i aria-hidden='true'></i></button><div class='equipment-accordion__panel' id='equipment-specs-panel' data-accordion-panel='specs' hidden><dl class='equipment-spec-list'>{{#each equipmentSsr.initialProduct.specificationEntries}}<div><dt>{{label}}</dt><dd>{{value}}</dd></div>{{/each}}</dl></div></section>
+                <section class='equipment-accordion'><button class='equipment-accordion__trigger' type='button' aria-expanded='false' aria-controls='equipment-documents-panel' data-accordion-trigger='documents'><span><svg class='equipment-icon' aria-hidden='true'><use href='/icons.svg#file'></use></svg><span data-accordion-label='documents'>{{equipmentCopy.product.documents}}</span><b data-document-count>{{equipmentSsr.initialProduct.documentCount}}</b></span><i aria-hidden='true'></i></button><div class='equipment-accordion__panel' id='equipment-documents-panel' data-accordion-panel='documents' hidden><div class='equipment-document-list'>{{#each equipmentSsr.initialProduct.documents}}<a href='{{url}}' download='{{url}}' target='_blank' rel='noopener noreferrer'><svg class='equipment-icon' aria-hidden='true'><use href='/icons.svg#file'></use></svg><span class='equipment-document-copy'><strong>{{label}}</strong><small>PDF{{#if language}} · {{language}}{{/if}}{{#if pages}} · {{pages}} {{@root.equipmentCopy.product.page}}{{/if}}{{#if sizeLabel}} · {{sizeLabel}}{{/if}}</small></span><svg class='equipment-icon' aria-hidden='true'><use href='/icons.svg#download'></use></svg></a>{{/each}}{{#if equipmentSsr.initialProduct.documentsNote}}<p class='equipment-document-note'>{{equipmentSsr.initialProduct.documentsNote}}</p>{{/if}}</div></div></section>
+                <section class='equipment-accordion'><button class='equipment-accordion__trigger' type='button' aria-expanded='false' aria-controls='equipment-warranty-panel' data-accordion-trigger='warranty'><span><svg class='equipment-icon' aria-hidden='true'><use href='/icons.svg#shield-check'></use></svg><span data-accordion-label='warranty'>{{equipmentCopy.product.warranty}}</span></span><i aria-hidden='true'></i></button><div class='equipment-accordion__panel' id='equipment-warranty-panel' data-accordion-panel='warranty' hidden>{{#if equipmentSsr.initialProduct.hasWarrantyItems}}<dl class='equipment-warranty-list'>{{#each equipmentSsr.initialProduct.warrantyItems}}<div><dt>{{label}}</dt><dd>{{value}}</dd></div>{{/each}}</dl>{{else}}<p class='equipment-document-note'>{{equipmentCopy.product.warrantyFallback}}</p>{{/if}}</div></section>
               </div>
             </div>
           </aside>
         </div>
         <section class='product-rail' aria-label='{{equipmentCopy.product.otherProducts}}' data-product-rail>
-          <div class='product-rail__tabs' data-rail-categories></div>
+          <div class='product-rail__tabs' data-rail-categories>{{#each equipmentSsr.categories}}{{#if isAvailable}}<button class='product-rail__tab' type='button' data-rail-category='{{id}}' aria-pressed='{{isSelected}}'>{{label}}</button>{{/if}}{{/each}}</div>
           <div class='product-rail__navigation'>
             <button class='product-rail__arrow' type='button' data-product-previous><svg class='equipment-icon' aria-hidden='true'><use href='/icons.svg#arrow-left'></use></svg><span class='sr-only'>{{equipmentCopy.product.previousProduct}}</span></button>
-            <div class='product-rail__viewport' data-product-viewport><div class='product-rail__track' data-product-track></div></div>
+            <div class='product-rail__viewport' data-product-viewport><div class='product-rail__track' data-product-track>{{#each equipmentSsr.categoryProducts}}<button class='product-card' type='button' data-product-id='{{id}}' aria-pressed='{{isSelected}}' aria-label='{{brand}} {{name}}, {{powerRange}}'><span class='product-card__image'><img src='{{image}}' alt='' loading='lazy' decoding='async' /></span><span class='product-card__copy'><small>{{brand}}</small><strong>{{name}}</strong><span>{{powerRange}}</span></span><span class='product-card__arrow'><svg class='equipment-icon' aria-hidden='true'><use href='/icons.svg#arrow-right'></use></svg></span></button>{{/each}}</div></div>
             <button class='product-rail__arrow' type='button' data-product-next><svg class='equipment-icon' aria-hidden='true'><use href='/icons.svg#arrow-right'></use></svg><span class='sr-only'>{{equipmentCopy.product.nextProduct}}</span></button>
           </div>
         </section>
@@ -90,7 +90,7 @@
       <button class='product-explorer__close' type='button' data-fullscreen-close aria-label='{{equipmentCopy.product.closeFullscreen}}'><svg class='equipment-icon' aria-hidden='true'><use href='/icons.svg#close'></use></svg></button>
       <div class='product-explorer__layout'>
         <section class='product-explorer__visual' aria-label='{{equipmentCopy.product.interactiveView}}'><div class='product-explorer__image-wrap'><img data-explorer-image alt='' /><p class='product-image-missing' data-explorer-image-missing hidden>{{equipmentCopy.product.imageMissingExplorer}}</p><div class='product-hotspots product-hotspots--explorer' data-explorer-hotspots></div></div><p class='product-explorer__image-note' data-explorer-image-note hidden></p></section>
-        <section class='product-explorer__details'><p class='product-explorer__brand' data-explorer-brand></p><h2 id='explorer-title' data-explorer-name></h2><p class='product-explorer__model' data-explorer-model></p><p class='product-explorer__description' data-explorer-description></p><div class='product-explorer__highlights' data-explorer-highlights></div><div class='product-explorer__section'><h3 data-explorer-specs-title></h3><dl class='product-explorer__specs' data-explorer-specs></dl></div><div class='product-explorer__section'><h3 data-explorer-warranty-title></h3><div data-explorer-warranty></div></div><div class='product-explorer__documents' data-explorer-documents></div></section>
+        <section class='product-explorer__details'><p class='product-explorer__brand' data-explorer-brand>{{equipmentSsr.initialProduct.brand}}</p><h2 id='explorer-title' data-explorer-name>{{equipmentSsr.initialProduct.name}}</h2><p class='product-explorer__model' data-explorer-model>{{equipmentSsr.initialProduct.model}} · {{equipmentSsr.initialProduct.powerRange}}</p><p class='product-explorer__description' data-explorer-description>{{equipmentSsr.initialProduct.shortDescription}}</p><div class='product-explorer__highlights' data-explorer-highlights></div><div class='product-explorer__section'><h3 data-explorer-specs-title>{{equipmentCopy.product.technicalSpecs}}</h3><dl class='product-explorer__specs' data-explorer-specs></dl></div><div class='product-explorer__section'><h3 data-explorer-warranty-title>{{equipmentCopy.product.warranty}}</h3><div data-explorer-warranty></div></div><div class='product-explorer__documents' data-explorer-documents></div></section>
       </div>
     </dialog>
     <noscript><p class='equipment-noscript'>{{equipmentCopy.product.noScript}}</p></noscript>

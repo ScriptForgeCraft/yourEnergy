@@ -1,3 +1,5 @@
+import { CONTACT_HOURS } from './contact-hours.js';
+
 const months = [
   ['Jan', 'January', 600, 32],
   ['Feb', 'February', 750, 41],
@@ -59,7 +61,7 @@ export default {
     phoneLabel: 'Call +374 91 095 950',
     address1: '48/14 Artashisyan St., Yerevan, Armenia',
     address2: '33, 26th Street, Zovuni, Kotayk Province, Armenia',
-    hours: 'Open until 21:00'
+    hours: CONTACT_HOURS.en.footer
   },
   common: {
     headerCta: 'Get a quote',
@@ -379,7 +381,6 @@ export default {
     dashboardExample: {
       location: 'Yerevan, Armenia',
       status: 'EXAMPLE RESULT',
-      label: 'Annual production',
       annualGenerationKwh: 8420,
       annualGenerationDisplay: '8,420',
       monthlyGenerationKwh: [320, 390, 570, 740, 820, 900, 980, 940, 790, 630, 470, 350],
