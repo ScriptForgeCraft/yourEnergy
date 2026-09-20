@@ -26,6 +26,7 @@ import {
   PROJECT_CASES,
   PROJECT_CASE_SLUGS
 } from '../src/content/project-cases.js';
+import { EQUIPMENT_COPY } from '../src/data/equipment/equipment-i18n.js';
 
 const root = resolve(import.meta.dirname, '..');
 const mode = process.argv[2] ?? 'production';
@@ -53,6 +54,7 @@ const projectCaseTemplate = await readFile(resolve(root, 'src/templates/project-
 const aboutTemplate = await readFile(resolve(root, 'src/templates/about.hbs'), 'utf8');
 const blogIndexTemplate = await readFile(resolve(root, 'src/templates/blog-index.hbs'), 'utf8');
 const blogArticleTemplate = await readFile(resolve(root, 'src/templates/blog-article.hbs'), 'utf8');
+const equipmentTemplate = await readFile(resolve(root, 'src/templates/equipment.hbs'), 'utf8');
 
 Handlebars.registerPartial(
   'site-header',
@@ -83,6 +85,7 @@ const renderProjectCase = Handlebars.compile(projectCaseTemplate, { noEscape: fa
 const renderAbout = Handlebars.compile(aboutTemplate, { noEscape: false });
 const renderBlogIndex = Handlebars.compile(blogIndexTemplate, { noEscape: false });
 const renderBlogArticle = Handlebars.compile(blogArticleTemplate, { noEscape: false });
+const renderEquipment = Handlebars.compile(equipmentTemplate, { noEscape: false });
 const writeGenerated = (file, markup) => writeFile(file, markup.replace(/[ \t]+\n/g, '\n'), 'utf8');
 
 const runtimeLocales = Object.freeze(
@@ -447,7 +450,7 @@ const createHomeContext = (content, { pageKind = 'home' } = {}) => {
       calculator: calculatorHref,
       projects: projectsHref,
       process: homeSectionHref('#process'),
-      equipment: '/equipment/',
+      equipment: toolPath(content.locale, 'equipment'),
       contacts: contactsHref,
       about: placeholderPath(content.locale, 'about'),
       blog: placeholderPath(content.locale, 'blog')
@@ -1056,6 +1059,36 @@ const createFaqContext = (content) => {
   };
 };
 
+const equipmentMeta = Object.freeze({
+  hy: {
+    ogTitle: 'Սարքավորումներ | YOURENERGY',
+    description:
+      'YOURENERGY-ի արևային վահանակներ, ինվերտորներ, կուտակիչներ և մոնտաժային համակարգեր։'
+  },
+  ru: {
+    ogTitle: 'Оборудование | YOURENERGY',
+    description: 'Оборудование YOURENERGY: солнечные панели, инверторы и аккумуляторные системы.'
+  },
+  en: {
+    ogTitle: 'Equipment | YOURENERGY',
+    description: 'YOURENERGY equipment: solar panels, inverters, batteries and mounting systems.'
+  }
+});
+
+const createEquipmentContext = (content) => {
+  const path = toolPath(content.locale, 'equipment');
+  const base = createHomeContext(content, { pageKind: 'equipment' });
+  return {
+    ...base,
+    path,
+    activeNavigation: createHeaderNavigationState('equipment'),
+    alternateLinks: createToolAlternateLinks('equipment'),
+    languageLinks: createToolLanguageLinks(content.locale, 'equipment'),
+    equipmentMeta: equipmentMeta[content.locale],
+    equipmentCopy: EQUIPMENT_COPY[content.locale]
+  };
+};
+
 const createProfessionalCalculatorContext = (content) => {
   const calculatorMeta = toolCopy[content.locale]?.calculatorMeta;
   const wizard = wizardCopy[content.locale];
@@ -1301,6 +1334,13 @@ for (const { key } of GENERATED_CONTENT_LOCALES) {
   const output = resolve(root, faqFile(key));
   await mkdir(dirname(output), { recursive: true });
   await writeGenerated(output, renderFaq(createFaqContext(content)));
+}
+
+for (const { key } of GENERATED_CONTENT_LOCALES) {
+  const content = homeContent[key];
+  const output = resolve(root, toolFile(key, 'equipment'));
+  await mkdir(dirname(output), { recursive: true });
+  await writeGenerated(output, renderEquipment(createEquipmentContext(content)));
 }
 
 for (const { key } of GENERATED_CONTENT_LOCALES) {

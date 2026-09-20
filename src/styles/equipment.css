@@ -44,34 +44,34 @@
   stroke-width: 1.8;
 }
 
-.equipment-header {
+.page-equipment .site-header {
   border-bottom-color: rgb(255 255 255 / 8%);
   background: linear-gradient(180deg, rgb(2 14 18 / 74%), rgb(2 14 18 / 10%));
   backdrop-filter: blur(8px);
 }
 
-.equipment-header.is-scrolled {
+.page-equipment .site-header.is-scrolled {
   background: rgb(4 18 18 / 92%);
 }
 
-.equipment-header .desktop-nav a:hover,
-.equipment-header .desktop-nav a.is-active {
+.page-equipment .site-header .desktop-nav a:hover,
+.page-equipment .site-header .desktop-nav a.is-active {
   color: var(--equipment-green);
 }
 
-.equipment-header .desktop-nav a.is-active::after {
+.page-equipment .site-header .desktop-nav a.is-active::after {
   background: var(--equipment-green);
   box-shadow: 0 0 12px rgb(57 230 164 / 62%);
 }
 
-.equipment-header .header-actions .button {
+.page-equipment .site-header .header-actions .button {
   border-color: rgb(57 230 164 / 40%);
   color: #fff;
   background: linear-gradient(135deg, #07845d, #026f51);
   box-shadow: 0 12px 32px rgb(0 104 76 / 22%);
 }
 
-.equipment-header .language-menu__static {
+.page-equipment .site-header .language-menu__static {
   min-width: 66px;
   min-height: 44px;
   display: inline-flex;
@@ -88,7 +88,7 @@
   letter-spacing: 0.01em;
 }
 
-.equipment-header .language-menu__static::after {
+.page-equipment .site-header .language-menu__static::after {
   width: 7px;
   height: 7px;
   border-right: 1.5px solid rgb(255 255 255 / 62%);

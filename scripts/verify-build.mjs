@@ -10,6 +10,11 @@ const toolPages = [
   { page: 'ru/calculator/index.html', locale: 'ru', type: 'calculator' },
   { page: 'en/calculator/index.html', locale: 'en', type: 'calculator' }
 ];
+const equipmentPages = ['hy', 'ru', 'en'].map((locale) => ({
+  page: locale === 'hy' ? 'equipment/index.html' : `${locale}/equipment/index.html`,
+  locale,
+  type: 'equipment'
+}));
 const faqPages = [
   { page: 'faq/index.html', locale: 'hy', type: 'faq' },
   { page: 'ru/faq/index.html', locale: 'ru', type: 'faq' },
@@ -81,7 +86,6 @@ const placeholderPages = placeholderTypes.flatMap((type) => [
 ]);
 const expectedPages = [
   'index.html',
-  'equipment/index.html',
   'ru/index.html',
   'privacy/index.html',
   'terms/index.html',
@@ -95,6 +99,7 @@ const expectedPages = [
   ...blogPages.map(({ page }) => page),
   ...placeholderPages,
   ...faqPages.map(({ page }) => page),
+  ...equipmentPages.map(({ page }) => page),
   ...toolPages.map(({ page }) => page),
   ...privateCalculatorPages.map(({ page }) => page),
   ...professionalShellPages
@@ -555,11 +560,21 @@ async function validateSitemap() {
   const toolRoutes = toolPages.map(({ locale, type }) =>
     locale === 'hy' ? `${origin}/${type}/` : `${origin}/${locale}/${type}/`
   );
+  const equipmentRoutes = equipmentPages.map(({ locale, type }) =>
+    locale === 'hy' ? `${origin}/${type}/` : `${origin}/${locale}/${type}/`
+  );
   const projectsRoutes = [...projectsPages, ...projectCasePages].map(({ locale, type }) =>
     locale === 'hy' ? `${origin}/${type}/` : `${origin}/${locale}/${type}/`
   );
   const blogRoutes = blogPages.map(({ locale, slug }) => `${origin}${blogPath(locale, slug)}`);
-  const expected = [...homeRoutes, ...projectsRoutes, ...faqRoutes, ...toolRoutes, ...blogRoutes];
+  const expected = [
+    ...homeRoutes,
+    ...projectsRoutes,
+    ...faqRoutes,
+    ...toolRoutes,
+    ...equipmentRoutes,
+    ...blogRoutes
+  ];
   if (locations.length !== expected.length || expected.some((url) => !locations.includes(url))) {
     fail(`sitemap must include ${expected.join(', ')}`);
   }
@@ -573,7 +588,8 @@ async function validateSitemap() {
       ...projectsPages,
       ...projectCasePages,
       ...faqPages,
-      ...toolPages
+      ...toolPages,
+      ...equipmentPages
     ].find(({ locale, type }) => {
       const url = locale === 'hy' ? `${origin}/${type}/` : `${origin}/${locale}/${type}/`;
       return location === url;
@@ -867,14 +883,7 @@ for (const page of expectedPages) {
 }
 
 for (const [page, html] of pages) {
-  const locale =
-    page === 'equipment/index.html'
-      ? 'ru'
-      : page.startsWith('ru/')
-        ? 'ru'
-        : page.startsWith('en/')
-          ? 'en'
-          : 'hy';
+  const locale = page.startsWith('ru/') ? 'ru' : page.startsWith('en/') ? 'en' : 'hy';
   validateBaseDocument(html, page, locale);
   await validateAssets(html, page);
   await validateAnchors(html, page, pages);
@@ -913,6 +922,12 @@ for (const { page, locale, type } of faqPages) {
   validateJsonLd(pages.get(page), page, { requiresFaq: true });
 }
 for (const { page, locale, type } of toolPages) {
+  if (!pages.has(page)) continue;
+  const canonical = locale === 'hy' ? `${origin}/${type}/` : `${origin}/${locale}/${type}/`;
+  await validateToolSeo(pages.get(page), page, canonical, type);
+  validateToolLanguageSwitcher(pages.get(page), page, locale, type);
+}
+for (const { page, locale, type } of equipmentPages) {
   if (!pages.has(page)) continue;
   const canonical = locale === 'hy' ? `${origin}/${type}/` : `${origin}/${locale}/${type}/`;
   await validateToolSeo(pages.get(page), page, canonical, type);
@@ -965,7 +980,8 @@ const publishedPages = new Set([
   ...projectCasePages.map(({ page }) => page),
   ...blogPages.map(({ page }) => page),
   ...faqPages.map(({ page }) => page),
-  ...toolPages.map(({ page }) => page)
+  ...toolPages.map(({ page }) => page),
+  ...equipmentPages.map(({ page }) => page)
 ]);
 const supportPageSet = new Set([
   'privacy/index.html',

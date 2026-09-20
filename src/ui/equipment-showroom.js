@@ -1,4 +1,9 @@
 import { productsInCategory } from '../data/equipment/catalog.js';
+import {
+  formatProductCount,
+  isWarrantyLabel,
+  SPEC_LABELS
+} from '../data/equipment/equipment-i18n.js';
 
 const CATEGORY_ICONS = Object.freeze({
   'solar-panels': 'sun',
@@ -15,44 +20,6 @@ const CATEGORY_ICONS = Object.freeze({
 });
 
 const HIGHLIGHT_ICONS = Object.freeze(['zap', 'shield-check', 'cycle', 'sun']);
-
-const SPEC_LABELS = Object.freeze({
-  cellOrientation: 'Схема ячеек',
-  junctionBox: 'Распределительная коробка',
-  glass: 'Стекло',
-  frame: 'Рама',
-  weight: 'Вес',
-  dimensions: 'Размеры',
-  operatingTemperature: 'Рабочая температура',
-  maxSystemVoltage: 'Максимальное напряжение системы',
-  protectionClass: 'Класс защиты',
-  bifaciality: 'Бифациальность',
-  frontStaticLoad: 'Фронтальная статическая нагрузка',
-  rearStaticLoad: 'Тыльная статическая нагрузка',
-  models: 'Модели',
-  maxEfficiency: 'Максимальная эффективность',
-  mpptEfficiency: 'Эффективность MPPT',
-  batteryType: 'Тип батареи',
-  batteryVoltageRange: 'Диапазон напряжения батареи',
-  degreeOfProtection: 'Степень защиты',
-  cooling: 'Охлаждение',
-  warranty: 'Гарантия',
-  moduleCapacity: 'Ёмкость модуля',
-  maxSystemCapacity: 'Номинальная ёмкость системы',
-  maxUsableCapacity: 'Полезная ёмкость системы',
-  nominalVoltage: 'Номинальное напряжение',
-  operatingVoltageRange: 'Рабочий диапазон напряжения',
-  communication: 'Связь',
-  cycleLife: 'Ресурс циклов',
-  cellType: 'Тип ячеек',
-  annualDegradation: 'Снижение мощности',
-  material: 'Материал',
-  inclination: 'Угол наклона',
-  kitLength: 'Длина комплекта',
-  railLength: 'Длина профиля',
-  supplier: 'Поставщик',
-  configuration: 'Комплектация'
-});
 
 const $ = (selector, root = document) => root.querySelector(selector);
 const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
@@ -91,23 +58,14 @@ const setProductImage = (image, placeholder, product) => {
   image.src = product.image;
 };
 
-const humanizeSpec = (key) =>
-  SPEC_LABELS[key] ??
+const humanizeSpec = (key, locale) =>
+  SPEC_LABELS[key]?.[locale] ??
   key.replace(/([a-z])([A-Z])/gu, '$1 $2').replace(/^./u, (letter) => letter.toUpperCase());
 
-const productCountLabel = (count) => {
-  const lastTwo = count % 100;
-  const last = count % 10;
-  if (lastTwo >= 11 && lastTwo <= 14) return `${count} моделей`;
-  if (last === 1) return `${count} модель`;
-  if (last >= 2 && last <= 4) return `${count} модели`;
-  return `${count} моделей`;
-};
-
-const getWarrantyItems = (product) => {
-  const items = product.highlights.filter(({ label }) => /гарант/iu.test(label));
+const getWarrantyItems = (product, copy) => {
+  const items = product.highlights.filter(({ label }) => isWarrantyLabel(label));
   if (product.specs?.warranty && !items.some(({ value }) => value === product.specs.warranty)) {
-    items.push({ label: 'Гарантия производителя', value: product.specs.warranty });
+    items.push({ label: copy.product.manufacturerWarranty, value: product.specs.warranty });
   }
   return items;
 };
@@ -186,19 +144,19 @@ const renderBenefits = (product, target) => {
   target.replaceChildren(list);
 };
 
-const renderSpecs = (product, target, className = 'equipment-spec-list') => {
+const renderSpecs = (product, target, locale, className = 'equipment-spec-list') => {
   const list = target.matches('dl') ? target : createElement('dl', className);
   list.className = className;
   list.replaceChildren();
   Object.entries(product.specs).forEach(([key, value]) => {
     const row = createElement('div');
-    row.append(createElement('dt', '', humanizeSpec(key)), createElement('dd', '', value));
+    row.append(createElement('dt', '', humanizeSpec(key, locale)), createElement('dd', '', value));
     list.append(row);
   });
   if (list !== target) target.replaceChildren(list);
 };
 
-const renderDocuments = (product, target, className = 'equipment-document-list') => {
+const renderDocuments = (product, target, copy, className = 'equipment-document-list') => {
   const list = createElement('div', className);
   product.documents.forEach(({ label, url, language, pages, sizeLabel }) => {
     const link = createElement('a');
@@ -206,16 +164,18 @@ const renderDocuments = (product, target, className = 'equipment-document-list')
     link.download = url.split('/').pop();
     link.target = '_blank';
     link.rel = 'noopener noreferrer';
-    const copy = createElement('span', 'equipment-document-copy');
-    copy.append(createElement('strong', '', label));
-    copy.append(
+    const documentCopy = createElement('span', 'equipment-document-copy');
+    documentCopy.append(createElement('strong', '', label));
+    documentCopy.append(
       createElement(
         'small',
         '',
-        ['PDF', language, pages && `${pages} стр.`, sizeLabel].filter(Boolean).join(' · ')
+        ['PDF', language, pages && `${pages} ${copy.product.page}`, sizeLabel]
+          .filter(Boolean)
+          .join(' · ')
       )
     );
-    link.append(createIcon('file'), copy, createIcon('download'));
+    link.append(createIcon('file'), documentCopy, createIcon('download'));
     list.append(link);
   });
   if (product.documentsNote)
@@ -223,19 +183,19 @@ const renderDocuments = (product, target, className = 'equipment-document-list')
   target.replaceChildren(list);
 };
 
-const renderWarranty = (product, target, className = 'equipment-warranty-list') => {
-  if (!getWarrantyItems(product).length) {
+const renderWarranty = (product, target, copy, className = 'equipment-warranty-list') => {
+  if (!getWarrantyItems(product, copy).length) {
     target.replaceChildren(
       createElement(
         'p',
         'equipment-document-note',
-        product.warrantyNote ?? 'Условия гарантии уточняются при подборе оборудования.'
+        product.warrantyNote ?? copy.product.warrantyFallback
       )
     );
     return;
   }
   const list = createElement('dl', className);
-  getWarrantyItems(product).forEach(({ label, value }) => {
+  getWarrantyItems(product, copy).forEach(({ label, value }) => {
     const row = createElement('div');
     row.append(createElement('dt', '', label), createElement('dd', '', value));
     list.append(row);
@@ -300,7 +260,7 @@ const setAccordionCopy = (copy) => {
   $('[data-accordion-label="warranty"]').textContent = copy.product.warranty;
 };
 
-const renderExplorer = (product, copy, explorer) => {
+const renderExplorer = (product, copy, locale, explorer) => {
   setProductImage(
     $('[data-explorer-image]', explorer),
     $('[data-explorer-image-missing]', explorer),
@@ -316,11 +276,17 @@ const renderExplorer = (product, copy, explorer) => {
   $('[data-explorer-warranty-title]', explorer).textContent = copy.product.warranty;
   renderHotspots(product, $('[data-explorer-hotspots]', explorer));
   renderHighlights(product, $('[data-explorer-highlights]', explorer), { compact: true });
-  renderSpecs(product, $('[data-explorer-specs]', explorer), 'product-explorer__specs');
-  renderWarranty(product, $('[data-explorer-warranty]', explorer), 'product-explorer__warranty');
+  renderSpecs(product, $('[data-explorer-specs]', explorer), locale, 'product-explorer__specs');
+  renderWarranty(
+    product,
+    $('[data-explorer-warranty]', explorer),
+    copy,
+    'product-explorer__warranty'
+  );
   renderDocuments(
     product,
     $('[data-explorer-documents]', explorer),
+    copy,
     'product-explorer__document-list'
   );
 };
@@ -335,7 +301,7 @@ const preloadProducts = (products) => {
     });
 };
 
-export const initEquipmentShowroom = ({ data, copy, gsap }) => {
+export const initEquipmentShowroom = ({ data, copy, locale, gsap }) => {
   const root = $('[data-equipment-showroom]');
   if (!root || !data?.products?.length) return;
 
@@ -366,6 +332,7 @@ export const initEquipmentShowroom = ({ data, copy, gsap }) => {
   $('[data-rotate-hint-text]', root).textContent = copy.product.rotateHint;
   $('[data-fullscreen-open]', root).setAttribute('aria-label', copy.product.openFullscreen);
   $('[data-fullscreen-open]', root).title = copy.product.openFullscreen;
+  $('[data-fullscreen-close]').setAttribute('aria-label', copy.product.closeFullscreen);
   setAccordionCopy(copy);
 
   const selectCategory = (categoryId) => {
@@ -393,7 +360,7 @@ export const initEquipmentShowroom = ({ data, copy, gsap }) => {
         createElement(
           'small',
           '',
-          categoryProducts.length ? productCountLabel(categoryProducts.length) : ''
+          categoryProducts.length ? formatProductCount(categoryProducts.length, locale) : ''
         )
       );
       button.append(icon, text);
@@ -437,7 +404,10 @@ export const initEquipmentShowroom = ({ data, copy, gsap }) => {
         image.loading = product.id === selectedProduct.id ? 'eager' : 'lazy';
         image.decoding = 'async';
         imageWrap.append(image);
-      } else imageWrap.append(createElement('span', 'product-card__no-image', 'Фото позже'));
+      } else
+        imageWrap.append(
+          createElement('span', 'product-card__no-image', copy.product.imageComingSoon)
+        );
 
       const copyWrap = createElement('span', 'product-card__copy');
       copyWrap.append(
@@ -511,10 +481,10 @@ export const initEquipmentShowroom = ({ data, copy, gsap }) => {
     renderHighlights(product, $('[data-product-highlights]', root));
     renderHotspots(product, $('[data-hotspots]', root));
     renderBenefits(product, $('[data-accordion-panel="benefits"]', root));
-    renderSpecs(product, $('[data-accordion-panel="specs"]', root));
-    renderDocuments(product, $('[data-accordion-panel="documents"]', root));
-    renderWarranty(product, $('[data-accordion-panel="warranty"]', root));
-    renderExplorer(product, copy, explorer);
+    renderSpecs(product, $('[data-accordion-panel="specs"]', root), locale);
+    renderDocuments(product, $('[data-accordion-panel="documents"]', root), copy);
+    renderWarranty(product, $('[data-accordion-panel="warranty"]', root), copy);
+    renderExplorer(product, copy, locale, explorer);
     $('[data-product-status]', root).textContent = `${product.brand} ${product.name}`;
     root.dataset.productCategory = product.category;
     syncNavigationState();
@@ -601,7 +571,7 @@ export const initEquipmentShowroom = ({ data, copy, gsap }) => {
   });
 
   const openExplorer = () => {
-    renderExplorer(selectedProduct, copy, explorer);
+    renderExplorer(selectedProduct, copy, locale, explorer);
     document.body.classList.add('has-product-explorer');
     if (typeof explorer.showModal === 'function') explorer.showModal();
     else explorer.setAttribute('open', '');

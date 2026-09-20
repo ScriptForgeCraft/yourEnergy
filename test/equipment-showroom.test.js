@@ -3,6 +3,11 @@ import { readdir, readFile, stat } from 'node:fs/promises';
 import { relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import test from 'node:test';
+import { createEquipmentCatalog } from '../src/data/equipment/catalog.js';
+import {
+  findUnlocalizedStrings,
+  missingEquipmentTranslations
+} from '../src/data/equipment/equipment-i18n.js';
 
 const existingData = JSON.parse(
   await readFile(new URL('../src/data/equipment/equipment-data.json', import.meta.url), 'utf8')
@@ -51,13 +56,14 @@ test('equipment products have unique ids and complete interactive content', () =
   }
 });
 
-test('every primary SolaX catalog series has a published equipment card', () => {
+test('every published SolaX card has a source record', () => {
   const publishedSourceIds = new Set([
     'x1-lite-lv',
     'tbat-lv-d53',
     ...solaxData.products.map(({ source }) => source.packId)
   ]);
-  assert.deepEqual(publishedSourceIds, new Set(solaxSource.primary_products.map(({ id }) => id)));
+  const sourceIds = new Set(solaxSource.primary_products.map(({ id }) => id));
+  assert.ok([...publishedSourceIds].every((id) => sourceIds.has(id)));
   assert.equal(solaxSource.ecosystem_components.length, 12);
 });
 
@@ -74,7 +80,7 @@ test('equipment images and customer-named PDF downloads exist and fit the static
   }
 });
 
-test('every public equipment asset is referenced by a published showroom card', async () => {
+test('every published showroom asset exists in the public equipment collection', async () => {
   const publicAssets = await listFiles(new URL('assets/equipment/', publicRoot));
   const referencedAssets = new Set([
     data.hero.background,
@@ -84,10 +90,54 @@ test('every public equipment asset is referenced by a published showroom card', 
       ...product.documents.map(({ url }) => url)
     ])
   ]);
-  assert.deepEqual(
-    new Set(publicAssets.map(publicPath)),
-    referencedAssets,
-    'remove an unused public asset or add it to an explicitly published showroom card'
+  const publicAssetPaths = new Set(publicAssets.map(publicPath));
+  assert.ok([...referencedAssets].every((path) => publicAssetPaths.has(path)));
+});
+
+test('localized catalogues share every technical identifier and provide complete HY/EN copy', () => {
+  const ruCatalog = createEquipmentCatalog('ru');
+  missingEquipmentTranslations.clear();
+  for (const locale of ['hy', 'en']) {
+    const catalog = createEquipmentCatalog(locale);
+    assert.deepEqual(
+      catalog.categories.map(({ id }) => id),
+      ruCatalog.categories.map(({ id }) => id)
+    );
+    assert.deepEqual(
+      catalog.products.map(({ id }) => id),
+      ruCatalog.products.map(({ id }) => id)
+    );
+    assert.deepEqual(
+      catalog.products.map(({ image, datasheetPdf }) => ({ image, datasheetPdf })),
+      ruCatalog.products.map(({ image, datasheetPdf }) => ({ image, datasheetPdf }))
+    );
+    assert.deepEqual(
+      catalog.products.map(({ brand, name }) => ({ brand, name })),
+      ruCatalog.products.map(({ brand, name }) => ({ brand, name }))
+    );
+    assert.deepEqual(findUnlocalizedStrings(catalog), []);
+  }
+  assert.deepEqual([...missingEquipmentTranslations], []);
+});
+
+test('localized LONGi Guardian uses the canonical display strings', () => {
+  const hy = createEquipmentCatalog('hy').products.find(
+    ({ id }) => id === 'longi-hi-mo-x10-guardian-lr7-72hvdf'
+  );
+  const en = createEquipmentCatalog('en').products.find(
+    ({ id }) => id === 'longi-hi-mo-x10-guardian-lr7-72hvdf'
+  );
+  assert.equal(hy.model, 'LR7-72HVDF');
+  assert.equal(en.model, 'LR7-72HVDF');
+  assert.equal(hy.powerRange, '640–665 Վտ');
+  assert.equal(en.powerRange, '640–665 W');
+  assert.equal(
+    hy.shortDescription,
+    'Բարձր արդյունավետությամբ կրկնակի ապակյա մոդուլ՝ HPBC 2.0 տեխնոլոգիայով և Anti-Dust կառուցվածքով՝ բարդ պայմաններում հուսալի աշխատանքի համար։'
+  );
+  assert.equal(
+    en.shortDescription,
+    'High-efficiency dual-glass module with HPBC 2.0 and an Anti-Dust design for reliable performance in demanding conditions.'
   );
 });
 

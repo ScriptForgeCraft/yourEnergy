@@ -1,10 +1,12 @@
 import { gsap } from 'gsap';
-import equipmentCopy from './data/equipment/equipment-copy.ru.json';
-import { equipmentCatalog as equipmentData } from './data/equipment/catalog.js';
+import { EQUIPMENT_COPY } from './data/equipment/equipment-i18n.js';
+import { createEquipmentCatalog } from './data/equipment/catalog.js';
 import { initEquipmentShowroom } from './ui/equipment-showroom.js';
 import { initNavigation } from './ui/navigation.js';
 
 document.documentElement.classList.add('js');
 
 initNavigation();
-initEquipmentShowroom({ data: equipmentData, copy: equipmentCopy, gsap });
+const locale = document.documentElement.lang.split('-')[0];
+const copy = EQUIPMENT_COPY[locale] ?? EQUIPMENT_COPY.hy;
+initEquipmentShowroom({ data: createEquipmentCatalog(locale), copy, locale, gsap });

@@ -197,7 +197,7 @@
                       name='consumption-mode' value='usage' /><svg class='consumption-mode-icon' aria-hidden='true'>
                       <use href='/icons.svg#zap'></use>
                     </svg><span>{{product.consumption.modes.usage}}</span></label><label><input type='radio'
-                      name='consumption-mode' value='monthly' /><svg class='consumption-mode-icon' aria-hidden='true'>
+                      name='consumption-mode' value='monthly' data-consumption-switch-monthly /><svg class='consumption-mode-icon' aria-hidden='true'>
                       <use href='/icons.svg#chart-bars'></use>
                     </svg><span>{{product.consumption.modes.monthly}}</span></label>
                 </fieldset>
@@ -348,8 +348,7 @@
                   </label></div><label data-roof-orientation-custom hidden>{{product.roof.customOrientationLabel}}<input
                     type='number' min='0' max='359' step='1' inputmode='decimal'
                     data-roof-orientation-custom-input /></label><label
-                  class='professional-roof-mounting-select'>{{product.roof.mountingModeLabel}}<select
-                    data-roof-mounting-mode>
+                  class='professional-roof-mounting-select'>{{product.roof.mountingModeLabel}}<select data-roof-mounting-mode>
                     <option value='roof-parallel'>{{product.roof.mountingModes.roofParallel}}</option>
                     <option value='elevated'>{{product.roof.mountingModes.elevated}}</option>
                   </select></label>
