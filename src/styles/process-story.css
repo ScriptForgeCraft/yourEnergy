@@ -380,7 +380,10 @@
   z-index: 5;
   left: clamp(64px, 5.65vw, 104px);
   display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
+  /* A fixed six-column grid can shrink cards to a few pixels when this
+     component is narrower than the viewport (or the page is zoomed). Keep a
+     usable card width and let surplus cards start a new row instead. */
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 148px), 1fr));
   gap: clamp(8px, 1vw, 16px);
   margin: 0;
   padding: 0;
@@ -433,7 +436,8 @@
 .process-metric > strong {
   display: block;
   margin-top: 4px;
-  overflow-wrap: break-word;
+  overflow-wrap: normal;
+  word-break: normal;
   color: #f7f8f9;
   font-size: clamp(11px, 0.92vw, 14px);
   font-weight: 650;
@@ -444,10 +448,6 @@
 .process-metric > small:not(:empty) {
   margin-top: 3px;
   color: #d6b65f;
-}
-
-.process-metrics:has(.process-metric:nth-child(6)) {
-  grid-template-columns: repeat(6, minmax(0, 1fr));
 }
 
 /* 01–06 — a blurred scene sits behind the framed step photograph. */
@@ -730,8 +730,6 @@
   text-align: left;
   cursor: pointer;
   transition: color 220ms ease;
- 
-
 }
 
 .process-progress__node {
