@@ -267,14 +267,56 @@
   background: #e8f0eb;
 }
 
-.office-map__frame {
+.office-map__canvas {
   position: absolute;
   z-index: 0;
   inset: 0;
   width: 100%;
   height: 100%;
-  border: 0;
   background: #e8f0eb;
+}
+
+.office-map__marker {
+  background: transparent;
+  border: 0;
+}
+
+.office-map__marker > span {
+  width: 26px;
+  height: 26px;
+  display: block;
+  position: relative;
+  border: 3px solid #fff;
+  border-radius: 50% 50% 50% 0;
+  background: #16804b;
+  box-shadow: 0 3px 11px rgb(7 26 45 / 32%);
+  transform: rotate(-45deg);
+}
+
+.office-map__marker > span::after {
+  width: 8px;
+  height: 8px;
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  border-radius: 50%;
+  background: #fff;
+  content: '';
+}
+
+.office-map__marker--2 > span {
+  background: #e3a600;
+}
+
+.office-map__popup strong {
+  color: #0b2b45;
+}
+
+.office-map__popup p {
+  margin: 4px 0 0;
+  color: #536579;
+  font-size: 0.78rem;
+  line-height: 1.35;
 }
 
 .office-card {

@@ -1,11 +1,14 @@
 const mapsUrl = (query) =>
   `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(query)}`;
 
-const office = (title, address, hours, mapQuery) => ({
+const office = (title, address, hours, mapQuery, coordinates) => ({
   title,
   address,
   hours,
   mapQuery,
+  coordinates: Object.freeze(coordinates),
+  latitude: coordinates[0],
+  longitude: coordinates[1],
   href: mapsUrl(mapQuery)
 });
 
@@ -60,13 +63,15 @@ export const contactPageCopy = Object.freeze({
         'Երևան — Գլխավոր գրասենյակ',
         'Արտաշիսյան փ., 48/14, Երևան',
         'Երկ–Ուրբ՝ 09:00–18:00 · Շբ՝ 10:00–15:00',
-        'Արտաշիսյան փողոց 48/14, Երևան, Հայաստան'
+        'Արտաշիսյան փողոց 48/14, Երևան, Հայաստան',
+        [40.2272612, 44.5454473]
       ),
       office(
         'Զովունի — Ներկայացուցչություն',
         '26-րդ փ., 33, Զովունի, Կոտայք',
         'Երկ–Ուրբ՝ 09:00–18:00 · Շբ՝ 10:00–15:00',
-        '26-րդ փողոց 33, Զովունի, Հայաստան'
+        '26-րդ փողոց 33, Զովունի, Հայաստան',
+        [40.1590219, 44.5387532]
       )
     ],
     formEyebrow: 'Հարցեր մնացի՞ն',
@@ -155,13 +160,15 @@ export const contactPageCopy = Object.freeze({
         'Ереван — Главный офис',
         'ул. Арташисьяна, 48/14, Ереван',
         'Пн–Пт: 09:00–18:00 · Сб: 10:00–15:00',
-        'Artashisyan Street 48/14, Yerevan'
+        'Artashisyan Street 48/14, Yerevan',
+        [40.2272612, 44.5454473]
       ),
       office(
         'Зовуни — Представительство',
         '26-я ул., 33, Зовуни, Котайк',
         'Пн–Пт: 09:00–18:00 · Сб: 10:00–15:00',
-        '26th Street 33, Zovuni, Armenia'
+        '26th Street 33, Zovuni, Armenia',
+        [40.1590219, 44.5387532]
       )
     ],
     formEyebrow: 'Остались вопросы?',
@@ -244,13 +251,15 @@ export const contactPageCopy = Object.freeze({
         'Yerevan — Head office',
         '48/14 Artashisyan St., Yerevan',
         'Mon–Fri: 09:00–18:00 · Sat: 10:00–15:00',
-        'Artashisyan Street 48/14, Yerevan'
+        'Artashisyan Street 48/14, Yerevan',
+        [40.2272612, 44.5454473]
       ),
       office(
         'Zovuni — Representative office',
         '33, 26th St., Zovuni, Kotayk',
         'Mon–Fri: 09:00–18:00 · Sat: 10:00–15:00',
-        '26th Street 33, Zovuni, Armenia'
+        '26th Street 33, Zovuni, Armenia',
+        [40.1590219, 44.5387532]
       )
     ],
     formEyebrow: 'Have questions?',

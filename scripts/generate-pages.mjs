@@ -95,17 +95,6 @@ const DEFAULT_OSM_TILE_ATTRIBUTION = '© OpenStreetMap contributors';
 const DEFAULT_SATELLITE_TILE_URL =
   'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}';
 const DEFAULT_SATELLITE_TILE_ATTRIBUTION = 'Tiles © Esri';
-const createNoKeyGoogleMapsEmbedUrl = (query, locale = 'en') => {
-  const params = new URLSearchParams({
-    hl: locale,
-    q: query,
-    z: '15',
-    ie: 'UTF8',
-    iwloc: 'B',
-    output: 'embed'
-  });
-  return `https://maps.google.com/maps?${params.toString()}`;
-};
 const sameOriginPath = (value, fallback) => {
   const candidate = value?.trim();
   return candidate && /^\/(?!\/)/u.test(candidate) ? candidate : fallback;
@@ -1187,13 +1176,7 @@ const createContactsContext = (content) => {
   const path = placeholderPath(content.locale, 'contacts');
   const sourceContactPage = contactPageCopy[content.locale];
   if (!sourceContactPage) throw new Error(`Missing contact-page content for ${content.locale}.`);
-  const contactPage = {
-    ...sourceContactPage,
-    offices: sourceContactPage.offices.map((office) => ({
-      ...office,
-      embedHref: createNoKeyGoogleMapsEmbedUrl(office.mapQuery, content.locale)
-    }))
-  };
+  const contactPage = sourceContactPage;
   return {
     ...createHomeContext(content, { pageKind: 'contacts' }),
     path,

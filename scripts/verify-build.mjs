@@ -629,11 +629,8 @@ async function validateHeaders() {
     fail('_headers must allow the Cloudflare Web Analytics beacon script');
   }
   if (!csp.includes("connect-src 'self'")) fail('_headers must keep API connections same-origin');
-  if (!csp.includes('frame-src https://*.google.com')) {
-    fail('_headers CSP must allow the no-key Google Maps contact iframe');
-  }
-  if (csp.includes('maps.googleapis.com') || csp.includes("'unsafe-eval'")) {
-    fail('_headers must not retain Maps JavaScript API permissions');
+  if (csp.includes('google.com') || csp.includes("'unsafe-eval'")) {
+    fail('_headers must not retain Google Maps or unsafe-eval permissions');
   }
   if (/\*\s*;|\*$/u.test(csp)) fail('_headers CSP must not use a wildcard source');
 }
@@ -695,34 +692,31 @@ function validatePrivateCalculatorMarkup(html, page, type) {
 function validateContactMapMarkup(html, page) {
   for (const marker of [
     'data-office-map',
-    'data-office-map-frame',
+    'data-office-map-canvas',
     'data-office-map-option',
     "id='contact-page-config'"
   ]) {
-    if (!html.includes(marker)) fail(`${page}: Google office map is missing ${marker}`);
+    if (!html.includes(marker)) fail(`${page}: office map is missing ${marker}`);
   }
 
   for (const legacy of [
     'office-map__roads',
     'office-map__district',
     'office-map__pin',
-    'data-office-map-canvas',
-    'maps.googleapis.com/maps/api/js'
+    'data-office-map-frame',
+    'maps.google.com/maps?'
   ]) {
-    if (html.includes(legacy)) fail(`${page}: obsolete Google map token ${legacy} is present`);
-  }
-
-  const iframeMatch = html.match(
-    /<iframe\b[^>]*\bdata-office-map-frame\b[^>]*\bsrc=(?:"([^"]+)"|'([^']+)')[^>]*>/iu
-  );
-  const iframeSrc = iframeMatch?.[1] ?? iframeMatch?.[2] ?? '';
-  if (!iframeSrc.startsWith('https://maps.google.com/maps?') || !iframeSrc.includes('output&#x3D;embed')) {
-    fail(`${page}: office map must use the no-key Google Maps iframe URL`);
+    if (html.includes(legacy))
+      fail(`${page}: obsolete single-office map token ${legacy} is present`);
   }
 
   const options = [...html.matchAll(/\bdata-office-map-option\b/giu)];
   if (options.length !== 2) {
     fail(`${page}: office map must expose exactly two selectable office controls`);
+  }
+  const locations = [...html.matchAll(/\bdata-office-map-lat\b/giu)];
+  if (locations.length !== 2) {
+    fail(`${page}: office map must expose coordinates for both offices`);
   }
 
   const configMatch = html.match(
