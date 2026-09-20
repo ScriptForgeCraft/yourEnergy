@@ -1106,6 +1106,7 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
   root
     .querySelectorAll('[data-roof-area-method], [data-roof-mounting-mode], [data-roof-orientation]')
     .forEach((input) => input.addEventListener('change', syncRoofControls));
+
   root.querySelectorAll('[data-roof-enter-area]').forEach((button) =>
     button.addEventListener('click', () => {
       const manualMethod = root.querySelector('[data-roof-area-method][value="measured-plane"]');
@@ -1114,6 +1115,8 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
       requestAnimationFrame(() => roofPlaneArea?.focus({ preventScroll: false }));
     })
   );
+
+  
   root.querySelector('[data-run-analysis]')?.addEventListener('click', () => void runAnalysis());
   root.querySelector('[data-add-tariff]')?.addEventListener('click', () => {
     setStep(1);

@@ -2639,7 +2639,6 @@
   white-space: nowrap;
 }
 
- 
 .professional-consumption-actions {
   justify-content: space-between;
   margin-top: 1.9rem;
@@ -3348,7 +3347,6 @@
   font-size: 0.74rem;
   font-weight: 760;
 }
- 
 
 .professional-roof-actions {
   justify-content: space-between;
@@ -3411,15 +3409,17 @@
 
 .professional-roof-map__layers {
   top: 1rem;
-  left: 1rem;
+  left: 4rem;
   display: inline-flex;
   overflow: hidden;
   border: 1px solid #dde6ef;
   border-radius: 0.52rem;
   background: rgb(255 255 255 / 94%);
   box-shadow: 0 6px 16px rgb(13 43 74 / 16%);
+  & button {
+    cursor: pointer;
+  }
 }
-
 .professional-roof-map__layers button {
   min-height: 2.35rem;
   border: 0;
@@ -4579,9 +4579,6 @@
   font-weight: 700;
 }
 
- 
- 
-
 .calculator-page--professional .professional-location-form > .async-card:empty {
   display: none;
 }
@@ -4656,15 +4653,10 @@
   background: #fff;
 }
 
-
-
 .wizard-map__data-title span {
   color: #466584;
   font-weight: 650;
 }
-
-
-
 
 .map-data-icon {
   display: grid;
@@ -4694,8 +4686,6 @@
   color: #087bf5;
   background: #e8f3ff;
 }
-
-
 
 .calculator-page--professional .wizard-map-wrap--location .leaflet-control-zoom {
   top: 4.7rem;
@@ -4788,8 +4778,6 @@
   .calculator-page--professional .wizard-step[data-wizard-step='0'] {
     grid-template-columns: minmax(0, 0.9fr) minmax(25rem, 1fr);
   }
-
-
 }
 
 @media (max-width: 860px) {
@@ -4874,14 +4862,10 @@
     margin-top: 0.55rem !important;
   }
 
-
-
-
   .map-data-icon {
     width: 2.25rem;
     height: 2.25rem;
   }
-
 
   .professional-benefits {
     grid-template-columns: 1fr;
