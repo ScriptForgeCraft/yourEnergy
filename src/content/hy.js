@@ -169,7 +169,22 @@ export default {
       latitudeLabel: 'Լայնություն',
       longitudeLabel: 'Երկայնություն',
       useCoordinates: 'Օգտագործել այս կոորդինատները',
-      invalidCoordinates: 'Մուտքագրեք օբյեկտի ճիշտ կոորդինատներ։'
+      invalidCoordinates: 'Մուտքագրեք օբյեկտի ճիշտ կոորդինատներ։',
+      regionLabel: 'Մարզ կամ Երևան',
+      regionHelp: 'Քարտեզը կենտրոնանում է մարզկենտրոնում․ նշեք ձեր տան ճշգրիտ կետը քարտեզի վրա։',
+      regions: [
+        { id: 'yerevan', label: 'Երևան' },
+        { id: 'aragatsotn', label: 'Արագածոտն' },
+        { id: 'ararat', label: 'Արարատ' },
+        { id: 'armavir', label: 'Արմավիր' },
+        { id: 'gegharkunik', label: 'Գեղարքունիք' },
+        { id: 'kotayk', label: 'Կոտայք' },
+        { id: 'lori', label: 'Լոռի' },
+        { id: 'shirak', label: 'Շիրակ' },
+        { id: 'syunik', label: 'Սյունիք' },
+        { id: 'tavush', label: 'Տավուշ' },
+        { id: 'vayots-dzor', label: 'Վայոց ձոր' }
+      ]
     },
     roof: {
       title: 'Տանիք',

@@ -20,7 +20,7 @@ const copy = {
     parallel: 'Տանիքին զուգահեռ',
     elevated: 'Բարձրացված կառուցվածք',
     drawRoof:
-      'Քարտեզը մոտեցված է ընտրված կետին։ Կտտացրեք տանիքի անկյունները, քաշեք մարկերը՝ դիրքը փոխելու համար, կամ կտտացրեք մարկերին՝ անկյունը հեռացնելու համար։',
+      'Նշեք նույն տանիքի առնվազն 3 անկյունը քարտեզի վրա։ Մարկերը կարող եք քաշել՝ դիրքը շտկելու համար։ Հաշվարկ պահանջելիս ուրվագիծը կավարտվի ինքնաբար։',
     continueConsumption: 'Շարունակել դեպի արդյունք',
     calculate: 'Ստանալ նախնական հաշվարկ',
     back: 'Վերադառնալ',
@@ -80,8 +80,7 @@ const copy = {
         tipTariffTitle: 'Սակագինը կարևոր է',
         tipTariffCopy: 'Սակագները փոխում են ֆինանսական գնահատումն ու հետգնման ժամկետը։',
         advancedCopy: 'Ամսական պրոֆիլն ու ձեր նշած սակագինը պահպանվում են հաշվարկում։',
-        profileAction: 'Մուտքագրել ամսական պրոֆիլ',
-        manualAreaAction: 'Մուտքագրել տանիքի մակերեսը'
+        profileAction: 'Մուտքագրել ամսական պրոֆիլ'
       },
       roof: {
         map: 'Քարտեզ',
@@ -95,7 +94,7 @@ const copy = {
         tipsCopy: 'Ուրվագծեք միայն մեկ տանիքի մակերես · մոտեցրեք քարտեզը բարձր ճշգրտության համար',
         advancedCopy: 'Տեղադրման եղանակը և թեքության պարամետրերը կիրառվում են հաջորդ հաշվարկի մեջ։',
         outlineRequired:
-          'Հաշվարկի համար անհրաժեշտ է տանիքի մակերեսը։ Մուտքագրեք այն ստորև կամ կրկին ընտրեք քարտեզը և ավարտեք ուրվագիծը։',
+          'Քարտեզի վրա նշեք նույն տանիքի առնվազն 3 անկյունը։ Հաշվարկ պահանջելիս ուրվագիծը կավարտվի ինքնաբար։',
         areaRequired: 'Մուտքագրեք օգտագործելի տանիքի մակերեսը մ²-ով։',
         orientationRequired: 'Ընտրեք տանիքի լանջի ուղղությունը։',
         tiltRequired: 'Մուտքագրեք տանիքի թեքության անկյունը 0°-ից 90°։',
@@ -125,7 +124,7 @@ const copy = {
     parallel: 'Параллельно крыше',
     elevated: 'Приподнятая конструкция',
     drawRoof:
-      'Карта открывается на максимальном масштабе выбранной точки. Нажимайте на углы крыши, перетаскивайте маркер для исправления позиции или кликните по маркеру, чтобы удалить этот угол.',
+      'Отметьте на карте минимум 3 угла одной поверхности крыши. Маркеры можно перетаскивать для уточнения позиции. При запуске расчёта контур завершится автоматически.',
     continueConsumption: 'Перейти к результату',
     calculate: 'Получить предварительный расчёт',
     back: 'Назад',
@@ -184,8 +183,7 @@ const copy = {
         tipTariffTitle: 'Тариф имеет значение',
         tipTariffCopy: 'Разные тарифы влияют на финансовую оценку и срок окупаемости.',
         advancedCopy: 'Помесячный профиль и введённый тариф сохраняются для следующего расчёта.',
-        profileAction: 'Перейти к помесячному профилю',
-        manualAreaAction: 'Ввести площадь крыши вручную'
+        profileAction: 'Перейти к помесячному профилю'
       },
       roof: {
         map: 'Карта',
@@ -200,7 +198,7 @@ const copy = {
           'Обведите только одну поверхность крыши · увеличьте масштаб для более высокой точности',
         advancedCopy: 'Способ установки и параметры наклона применяются в следующем расчёте.',
         outlineRequired:
-          'Для расчёта нужна площадь крыши. Введите её ниже или снова выберите карту и завершите контур.',
+          'Отметьте на карте минимум 3 угла одной поверхности крыши. При запуске расчёта контур завершится автоматически.',
         areaRequired: 'Введите полезную площадь крыши в м².',
         orientationRequired: 'Выберите направление ската крыши.',
         tiltRequired: 'Введите угол наклона крыши от 0° до 90°.',
@@ -230,7 +228,7 @@ const copy = {
     parallel: 'Parallel to roof',
     elevated: 'Elevated structure',
     drawRoof:
-      'The map opens at the selected point’s maximum zoom. Click roof corners, drag a marker to adjust it, or click a marker to remove that corner.',
+      'Mark at least 3 corners of one roof surface on the map. Drag markers to refine their positions. The outline finishes automatically when you request a calculation.',
     continueConsumption: 'Continue to result',
     calculate: 'Get preliminary calculation',
     back: 'Back',
@@ -290,8 +288,7 @@ const copy = {
         tipTariffCopy: 'Different tariffs affect the financial analysis and payback period.',
         advancedCopy:
           'The monthly profile and entered tariff are retained for the next calculation.',
-        profileAction: 'Enter monthly profile',
-        manualAreaAction: 'Enter roof area manually'
+        profileAction: 'Enter monthly profile'
       },
       roof: {
         map: 'Map',
@@ -306,7 +303,7 @@ const copy = {
         advancedCopy:
           'The mounting approach and tilt parameters are applied to the next calculation.',
         outlineRequired:
-          'The calculation needs a roof area. Enter it below, or select the map again and finish the outline.',
+          'Mark at least 3 corners of one roof surface on the map. The outline finishes automatically when you request a calculation.',
         areaRequired: 'Enter the usable roof area in m².',
         orientationRequired: 'Select the roof-face direction.',
         tiltRequired: 'Enter a roof tilt from 0° to 90°.',

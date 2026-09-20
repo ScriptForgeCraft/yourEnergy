@@ -167,7 +167,23 @@ export default {
       latitudeLabel: 'Широта',
       longitudeLabel: 'Долгота',
       useCoordinates: 'Использовать эти координаты',
-      invalidCoordinates: 'Введите корректные координаты объекта.'
+      invalidCoordinates: 'Введите корректные координаты объекта.',
+      regionLabel: 'Регион или Ереван',
+      regionHelp:
+        'Карта центрируется на административном центре региона. Затем отметьте на ней точное место объекта.',
+      regions: [
+        { id: 'yerevan', label: 'Ереван' },
+        { id: 'aragatsotn', label: 'Арагацотн' },
+        { id: 'ararat', label: 'Арарат' },
+        { id: 'armavir', label: 'Армавир' },
+        { id: 'gegharkunik', label: 'Гегаркуник' },
+        { id: 'kotayk', label: 'Котайк' },
+        { id: 'lori', label: 'Лори' },
+        { id: 'shirak', label: 'Ширак' },
+        { id: 'syunik', label: 'Сюник' },
+        { id: 'tavush', label: 'Тавуш' },
+        { id: 'vayots-dzor', label: 'Вайоц-Дзор' }
+      ]
     },
     roof: {
       title: 'Крыша',

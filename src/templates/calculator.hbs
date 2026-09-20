@@ -84,32 +84,28 @@
               <div class='location-methods'><button class='button button--outline is-selected' type='button'
                   data-open-location-map><svg aria-hidden='true'>
                     <use href='/icons.svg#search'></use>
-                  </svg>{{wizard.mapOpen}}</button><button class='button button--outline' type='button'
+                  </svg>{{wizard.searchAddress}}</button><button class='button button--outline' type='button'
                   data-use-current-location><svg aria-hidden='true'>
                     <use href='/icons.svg#map-pin'></use>
-                  </svg>{{product.location.manualTitle}}</button></div><label class='location-address-field'
+                  </svg>{{wizard.useCurrentLocation}}</button></div><label class='location-address-field'
                 for='wizard-address'><span class='visually-hidden'>{{wizard.addressLabel}}</span><svg
                   aria-hidden='true'>
                   <use href='/icons.svg#search'></use>
                 </svg><input id='wizard-address' data-wizard-address maxlength='220' autocomplete='street-address'
-                  placeholder='{{hero.addressPlaceholder}}' /><svg class='location-address-field__clear'
-                  aria-hidden='true'>
+                  placeholder='{{hero.addressPlaceholder}}' /><button class='location-address-field__clear'
+                  type='button' data-clear-address aria-label='{{product.common.cancel}}'><svg aria-hidden='true'>
                   <use href='/icons.svg#close'></use>
-                </svg></label>
-              <div class='location-selects'><label>{{toolShared.calculator}}<select data-location-region>
-                    <option>Yerevan</option>
-                  </select></label><label>{{product.location.title}}<select data-location-city>
-                    <option>Yerevan</option>
-                  </select></label><label>{{product.common.optional}}<select data-location-district>
-                    <option>{{product.common.optional}}</option>
-                  </select></label></div>
+                  </svg></button></label>
+              <div class='location-search-results' data-location-search-results aria-live='polite' hidden></div>
+              <label class='location-region'><span>{{product.location.regionLabel}}</span><select
+                  data-location-region>{{#each product.location.regions}}<option value='{{id}}'>{{label}}</option>{{/each}}</select><small>{{product.location.regionHelp}}</small></label>
               <section class='professional-panel professional-panel--coordinates'
                 aria-labelledby='professional-location-parameters'>
                 <div class='professional-panel__title'>
                   <h3 id='professional-location-parameters'>{{wizard.engineering}}</h3><button class='text-button'
                     type='button' data-use-map-coordinates><svg aria-hidden='true'>
                       <use href='/icons.svg#map-pin'></use>
-                    </svg>{{wizard.mapOpen}}</button>
+                    </svg>{{wizard.showOnMap}}</button>
                 </div>
                 <div class='wizard-coordinates'><label>{{product.location.latitudeLabel}}<input type='number' step='any'
                       inputmode='decimal' value='40.1811'
@@ -184,10 +180,7 @@
                 <p>{{product.consumption.copy}}</p>
               </div>
             </div>
-            <div class='professional-consumption-form'><label class='professional-upload-tab' for='bill-file'><svg
-                  aria-hidden='true'>
-                  <use href='/icons.svg#file-up'></use>
-                </svg><span>{{wizard.ui.uploadBill}}</span></label>
+            <div class='professional-consumption-form'>
               <div data-consumption-inputs class='consumption-inputs'>
                 <fieldset>
                   <legend>{{product.consumption.title}}</legend><label><input type='radio' name='consumption-mode'
@@ -199,7 +192,10 @@
                     </svg><span>{{product.consumption.modes.usage}}</span></label><label><input type='radio'
                       name='consumption-mode' value='monthly' data-consumption-switch-monthly /><svg class='consumption-mode-icon' aria-hidden='true'>
                       <use href='/icons.svg#chart-bars'></use>
-                    </svg><span>{{product.consumption.modes.monthly}}</span></label>
+                    </svg><span>{{product.consumption.modes.monthly}}</span></label><label class='professional-upload-tab'
+                    for='bill-file'><svg aria-hidden='true'>
+                      <use href='/icons.svg#file-up'></use>
+                    </svg><span>{{wizard.ui.uploadBill}}</span></label>
                 </fieldset>
                 <div class='consumption-panel' data-consumption-panel='bill'><label>{{product.consumption.billLabel}}
                     <div class='input-with-unit'><input type='number' min='0.01' step='1' inputmode='decimal'
@@ -223,8 +219,13 @@
                 </label>
                 <p class='input-help' id='consumption-tariff-help' data-consumption-tariff-help>
                   {{product.consumption.tariffBillHelp}}</p>
-                <p data-estimate-badge='{{wizard.ui.estimateBadge}}'>{{product.consumption.annualLabel}}: <output
-                    data-consumption-annual data-estimate-title='{{wizard.ui.estimateTitle}}'>—</output> kWh</p>
+                <div class='consumption-estimate'>
+                  <span class='consumption-estimate__icon' aria-hidden='true'><svg><use href='/icons.svg#zap'></use></svg></span>
+                  <span class='consumption-estimate__copy'><span
+                      class='consumption-estimate__label'>{{product.consumption.annualLabel}}</span><span
+                      class='consumption-estimate__value'><output data-consumption-annual>—</output><span>kWh</span></span></span>
+                  <span class='consumption-estimate__badge'>{{wizard.ui.estimateBadge}}</span>
+                </div>
               </div>
               <section class='professional-panel file-upload' data-optional-upload
                 aria-labelledby='professional-file-title'>
@@ -310,10 +311,7 @@
                   </svg><span>{{product.roof.areaMethods.mapProjected}}</span></label><label><input type='radio'
                     name='roof-area-method' value='measured-plane' data-roof-area-method /><svg aria-hidden='true'>
                     <use href='/icons.svg#calculator'></use>
-                  </svg><span>{{product.roof.areaMethods.measuredPlane}}</span></label><button type='button'
-                  data-roof-enter-area><svg aria-hidden='true'>
-                    <use href='/icons.svg#faq-home'></use>
-                  </svg>{{wizard.ui.consumption.manualAreaAction}}</button>
+                  </svg><span>{{product.roof.areaMethods.measuredPlane}}</span></label>
               </fieldset>
               <section class='professional-roof-notice'><svg aria-hidden='true'>
                   <use href='/icons.svg#info'></use>
@@ -321,9 +319,9 @@
                 <p>{{wizard.drawRoof}}<small>{{wizard.mapApproximate}}</small></p>
               </section>
               <div class='roof-controls'><button class='button button--outline' type='button'
-                  data-roof-undo>{{product.roof.undo}}</button><button class='button button--outline' type='button'
-                  data-roof-reset>{{product.roof.reset}}</button><button class='button' type='button'
-                  data-roof-finish>{{product.roof.finish}}</button></div>
+                  data-roof-undo><svg aria-hidden='true'><use href='/icons.svg#arrow-left'></use></svg>{{product.roof.undo}}</button><button class='button button--outline' type='button'
+                  data-roof-reset><svg aria-hidden='true'><use href='/icons.svg#cycle'></use></svg>{{product.roof.reset}}</button><button class='button' type='button'
+                  data-roof-finish><svg aria-hidden='true'><use href='/icons.svg#check'></use></svg>{{product.roof.finish}}</button></div>
               <section class='professional-roof-area'><span><svg aria-hidden='true'>
                     <use href='/icons.svg#faq-home'></use>
                   </svg></span>

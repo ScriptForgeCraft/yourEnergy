@@ -241,6 +241,17 @@ export const createPropertyMap = async ({
     return true;
   };
 
+  const focusLocation = (candidate, { zoom = 11 } = {}) => {
+    if (!isFinitePoint(candidate)) return false;
+    map.setView(normalizePoint(candidate), zoom, { animate: false });
+    return true;
+  };
+
+  const clearLocation = () => {
+    locationMarker?.remove();
+    locationMarker = null;
+  };
+
   const setRoofPoints = (points, { fit = false, complete = false } = {}) => {
     roofPoints = points.filter(isFinitePoint).map(normalizePoint);
     roofFinished = Boolean(complete) && roofPoints.length >= 3;
@@ -292,6 +303,8 @@ export const createPropertyMap = async ({
       return true;
     },
     setLocation,
+    focusLocation,
+    clearLocation,
     setMode(nextMode) {
       mode = nextMode === 'roof' ? 'roof' : 'location';
       container.dataset.mode = mode;

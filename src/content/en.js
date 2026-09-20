@@ -167,7 +167,23 @@ export default {
       latitudeLabel: 'Latitude',
       longitudeLabel: 'Longitude',
       useCoordinates: 'Use these coordinates',
-      invalidCoordinates: 'Enter valid property coordinates.'
+      invalidCoordinates: 'Enter valid property coordinates.',
+      regionLabel: 'Region or Yerevan',
+      regionHelp:
+        'The map centres on the regional capital. Then mark the property’s exact point on the map.',
+      regions: [
+        { id: 'yerevan', label: 'Yerevan' },
+        { id: 'aragatsotn', label: 'Aragatsotn' },
+        { id: 'ararat', label: 'Ararat' },
+        { id: 'armavir', label: 'Armavir' },
+        { id: 'gegharkunik', label: 'Gegharkunik' },
+        { id: 'kotayk', label: 'Kotayk' },
+        { id: 'lori', label: 'Lori' },
+        { id: 'shirak', label: 'Shirak' },
+        { id: 'syunik', label: 'Syunik' },
+        { id: 'tavush', label: 'Tavush' },
+        { id: 'vayots-dzor', label: 'Vayots Dzor' }
+      ]
     },
     roof: {
       title: 'Roof',

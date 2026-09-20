@@ -25,7 +25,10 @@ test('Quick keeps maps and professional fields out of its initial markup', async
 });
 
 test('Professional has exactly four customer steps and retains every engineering input', async () => {
-  const professional = await source('src/templates/calculator.hbs');
+  const [professional, controller] = await Promise.all([
+    source('src/templates/calculator.hbs'),
+    source('src/ui/calculator-wizard.js')
+  ]);
   assert.equal((professional.match(/data-wizard-step='/gu) ?? []).length, 4);
   assert.doesNotMatch(professional, /System configuration|Best choice|Most popular/u);
   for (const marker of [
@@ -38,7 +41,6 @@ test('Professional has exactly four customer steps and retains every engineering
     'data-optional-upload',
     'data-consumption-switch-monthly',
     "data-consumption-unit='amd'",
-    'data-roof-enter-area',
     'professional-roof-mounting-select',
     'professional-roof-notice'
   ]) {
@@ -49,7 +51,19 @@ test('Professional has exactly four customer steps and retains every engineering
   assert.match(professional, /wizard\.results\.calculationTitle/u);
   assert.match(professional, /wizard\.results\.benefits/u);
   assert.match(professional, /<select data-roof-mounting-mode>/u);
+  assert.match(professional, /class='consumption-estimate'/u);
+  assert.match(
+    professional,
+    /class='consumption-estimate__value'><output data-consumption-annual>/u
+  );
   assert.doesNotMatch(professional, /data-roof-add-center/u);
+  assert.doesNotMatch(professional, /data-roof-enter-area/u);
+  assert.match(professional, /data-location-region/u);
+  assert.doesNotMatch(professional, /data-location-(?:city|district)/u);
+  assert.match(controller, /ARMENIA_REGION_CENTERS/u);
+  assert.match(controller, /map\?\.focusLocation\(center\)/u);
+  assert.match(controller, /mapController\?\.finishRoof\(\)/u);
+  assert.doesNotMatch(controller, /issue === 'outline' \|\| issue === 'area'/u);
 });
 
 test('one calculator exposes two modes and migrates historic routes safely', async () => {
@@ -82,5 +96,28 @@ test('Professional restores completed results and keeps inactive steps out of la
   assert.match(
     styles,
     /\.calculator-page--professional \.wizard-step\[hidden\][^{]*\{[^}]*display: none !important;/su
+  );
+});
+
+test('Professional location actions are honest, searchable and recoverable', async () => {
+  const [template, controller, config, headers] = await Promise.all([
+    source('src/templates/calculator.hbs'),
+    source('src/ui/calculator-wizard.js'),
+    source('vite.config.js'),
+    source('public/_headers')
+  ]);
+
+  assert.match(template, /data-location-search-results/u);
+  assert.match(template, /data-clear-address/u);
+  assert.match(template, /fieldset[\s\S]*professional-upload-tab/u);
+  assert.match(controller, /api\.geocode\(\{ query, locale \}/u);
+  assert.match(controller, /navigator\.geolocation\.getCurrentPosition/u);
+  assert.match(controller, /locationSearchResults\.hidden = false/u);
+  assert.match(config, /Permissions-Policy:.*geolocation=\(self\)/u);
+  assert.match(headers, /Permissions-Policy:.*geolocation=\(self\)/u);
+  assert.doesNotMatch(
+    controller,
+    /data-use-current-location[\s\S]*setLocationAtCenter/u,
+    'current location must not silently use the map centre'
   );
 });

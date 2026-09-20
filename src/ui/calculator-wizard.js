@@ -81,6 +81,20 @@ const activeMountingMode = (root) =>
   root.querySelector('[data-roof-mounting-mode]:checked')?.value ??
   'roof-parallel';
 
+const ARMENIA_REGION_CENTERS = Object.freeze({
+  yerevan: { lat: 40.1792, lng: 44.4991 },
+  aragatsotn: { lat: 40.2992, lng: 44.3629 },
+  ararat: { lat: 39.9539, lng: 44.5506 },
+  armavir: { lat: 40.1545, lng: 44.0382 },
+  gegharkunik: { lat: 40.3585, lng: 45.1262 },
+  kotayk: { lat: 40.4972, lng: 44.7661 },
+  lori: { lat: 40.8071, lng: 44.4939 },
+  shirak: { lat: 40.7894, lng: 43.8475 },
+  syunik: { lat: 39.2075, lng: 46.4058 },
+  tavush: { lat: 40.8756, lng: 45.1486 },
+  'vayots-dzor': { lat: 39.7639, lng: 45.3324 }
+});
+
 export const getRoofValidationIssue = (roof = {}) => {
   if (
     roof.areaMethod === 'map-projected' &&
@@ -112,8 +126,10 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
   const mobileProgress = root.querySelector('[data-wizard-mobile-progress]');
   const status = root.querySelector('[data-wizard-status]');
   const address = root.querySelector('[data-wizard-address]');
+  const locationSearchResults = root.querySelector('[data-location-search-results]');
   const latitudeInput = root.querySelector('[data-location-latitude]');
   const longitudeInput = root.querySelector('[data-location-longitude]');
+  const regionSelect = root.querySelector('[data-location-region]');
   const mapLatitude = root.querySelector('[data-map-latitude]');
   const mapLongitude = root.querySelector('[data-map-longitude]');
   const mapElement = root.querySelector('[data-property-map]');
@@ -162,34 +178,6 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
   if ('scrollRestoration' in window.history) window.history.scrollRestoration = 'manual';
   if (heroControls && restartButton) heroControls.append(restartButton);
 
-  [
-    ['[data-location-region]', wizard.region],
-    ['[data-location-city]', wizard.city],
-    ['[data-location-district]', wizard.district]
-  ].forEach(([selector, label]) => {
-    if (!label) return;
-    const field = root.querySelector(selector)?.closest('label');
-    const textNode = [...(field?.childNodes ?? [])].find(
-      (node) => node.nodeType === Node.TEXT_NODE
-    );
-    if (textNode) textNode.nodeValue = label;
-  });
-  const setButtonLabel = (selector, label) => {
-    if (!label) return;
-    const button = root.querySelector(selector);
-    const textNode = [...(button?.childNodes ?? [])].find(
-      (node) => node.nodeType === Node.TEXT_NODE
-    );
-    if (textNode) textNode.nodeValue = label;
-  };
-  setButtonLabel('[data-open-location-map]', wizard.searchAddress);
-  setButtonLabel('[data-use-current-location]', wizard.useCurrentLocation);
-  setButtonLabel('[data-use-map-coordinates]', wizard.useFromMap);
-  setButtonLabel(
-    '[data-run-analysis]',
-    `${wizard.next ?? 'Next'}: ${wizard.steps?.[3] ?? product.result?.title ?? 'Results'}`
-  );
-
   const session = createCalculatorSession();
   const savedSession = session.read();
   const state = createCalculatorWizardState({
@@ -211,6 +199,7 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
   let mapController = null;
   let mapControllerPromise = null;
   let potentialRequest = null;
+  let geocodeRequest = null;
   let analysisRequest = null;
   let lastPotential = null;
   let lastAnalysis = null;
@@ -235,6 +224,17 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
       analysisStatus: state.analysisStatus,
       solarPassport: state.solarPassport
     });
+
+  const clearLocationSearchResults = () => {
+    if (!locationSearchResults) return;
+    locationSearchResults.replaceChildren();
+    locationSearchResults.hidden = true;
+  };
+
+  const stopAddressSearch = () => {
+    geocodeRequest?.abort();
+    geocodeRequest = null;
+  };
 
   const writeStatus = (message, error = false) => {
     if (!status) return;
@@ -389,6 +389,91 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
     if (pointConfirmation) pointConfirmation.hidden = false;
     updateProgress();
     return true;
+  };
+
+  const chooseAddressCandidate = async (candidate) => {
+    const lat = number(candidate?.coordinates?.latitude, -90, 90);
+    const lng = number(candidate?.coordinates?.longitude, -180, 180);
+    if (lat === null || lng === null) return;
+    if (address) address.value = candidate.label ?? '';
+    clearLocationSearchResults();
+    if (!setPendingLocation({ lat, lng })) return;
+    const map = await mountMap('location');
+    map?.setLocation({ lat, lng }, { notify: false });
+  };
+
+  const renderAddressCandidates = (candidates) => {
+    if (!locationSearchResults) return;
+    locationSearchResults.replaceChildren();
+    const heading = element('p', 'location-search-results__title', wizard.addressResults ?? '');
+    locationSearchResults.append(heading);
+    candidates.forEach((candidate) => {
+      const option = element('button', 'location-search-results__option', candidate.label);
+      option.type = 'button';
+      option.addEventListener('click', () => void chooseAddressCandidate(candidate));
+      locationSearchResults.append(option);
+    });
+    locationSearchResults.hidden = false;
+  };
+
+  const searchAddress = async () => {
+    const query = address?.value.trim() ?? '';
+    if (query.length < 3) {
+      clearLocationSearchResults();
+      writeStatus(wizard.addressSearchHint ?? '', true);
+      address?.focus();
+      return;
+    }
+    stopAddressSearch();
+    const controller = new AbortController();
+    geocodeRequest = controller;
+    const button = root.querySelector('[data-open-location-map]');
+    button?.setAttribute('aria-busy', 'true');
+    button?.setAttribute('disabled', '');
+    clearLocationSearchResults();
+    writeStatus(wizard.addressSearching ?? '');
+    try {
+      const response = await api.geocode({ query, locale }, { signal: controller.signal });
+      if (controller.signal.aborted || geocodeRequest !== controller) return;
+      const candidates = Array.isArray(response?.location?.candidates)
+        ? response.location.candidates
+        : [];
+      if (!candidates.length) {
+        writeStatus(wizard.addressNoResults ?? '', true);
+        return;
+      }
+      writeStatus('');
+      renderAddressCandidates(candidates);
+    } catch (error) {
+      if (error instanceof ProductApiError && error.code === 'ABORTED') return;
+      writeStatus(wizard.addressSearchUnavailable ?? product.location?.unavailable ?? '', true);
+    } finally {
+      if (geocodeRequest === controller) geocodeRequest = null;
+      button?.removeAttribute('aria-busy');
+      button?.removeAttribute('disabled');
+    }
+  };
+
+  const useCurrentLocation = () => {
+    if (!window.isSecureContext || !navigator.geolocation) {
+      writeStatus(wizard.currentLocationUnavailable ?? '', true);
+      return;
+    }
+    writeStatus(wizard.currentLocationLoading ?? '');
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const lat = number(position.coords.latitude, -90, 90);
+        const lng = number(position.coords.longitude, -180, 180);
+        if (lat === null || lng === null || !setPendingLocation({ lat, lng })) {
+          writeStatus(wizard.currentLocationUnavailable ?? '', true);
+          return;
+        }
+        writeStatus('');
+        void mountMap('location').then((map) => map?.setLocation({ lat, lng }, { notify: false }));
+      },
+      () => writeStatus(wizard.currentLocationUnavailable ?? '', true),
+      { enableHighAccuracy: false, timeout: 10_000, maximumAge: 300_000 }
+    );
   };
 
   const onRoofChange = (roof) => {
@@ -645,7 +730,7 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
       tilt: wizard.ui?.roof?.tiltRequired ?? product.roof?.parametersRequired
     };
     let field = null;
-    if (issue === 'outline' || issue === 'area') {
+    if (issue === 'area') {
       const manualMethod = root.querySelector('[data-roof-area-method][value="measured-plane"]');
       if (manualMethod) manualMethod.checked = true;
       syncRoofControls({ preserveValidation: true });
@@ -829,6 +914,15 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
       writeStatus(consumption?.message ?? product.consumption?.noConsumption, true);
       return;
     }
+    // Three vertices form a closed area. Requesting a calculation is an
+    // explicit finish action, so the visitor never has to retype map data.
+    if (
+      activeAreaMethod(root) === 'map-projected' &&
+      !state.roof?.complete &&
+      state.roof?.points?.length >= 3
+    ) {
+      if (!mapController?.finishRoof()) onRoofChange({ ...state.roof, complete: true });
+    }
     if (!validateRoof()) return;
     state.consumption = consumption.value;
     state.userTariff = consumption.tariff;
@@ -1006,7 +1100,19 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
 
   root
     .querySelector('[data-open-location-map]')
-    ?.addEventListener('click', () => void mountMap('location'));
+    ?.addEventListener('click', () => void searchAddress());
+  address?.addEventListener('keydown', (event) => {
+    if (event.key !== 'Enter') return;
+    event.preventDefault();
+    void searchAddress();
+  });
+  root.querySelector('[data-clear-address]')?.addEventListener('click', () => {
+    stopAddressSearch();
+    clearLocationSearchResults();
+    if (address) address.value = '';
+    writeStatus('');
+    address?.focus();
+  });
   root
     .querySelector('[data-confirm-location]')
     ?.addEventListener('click', () => void confirmLocation());
@@ -1025,8 +1131,23 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
     ?.addEventListener('click', selectCoordinates);
   root.querySelector('[data-use-map-coordinates]')?.addEventListener('click', selectCoordinates);
   root.querySelector('[data-map-focus-location]')?.addEventListener('click', selectCoordinates);
-  root.querySelector('[data-use-current-location]')?.addEventListener('click', () => {
-    void mountMap('location').then((map) => map?.setLocationAtCenter());
+  root.querySelector('[data-use-current-location]')?.addEventListener('click', useCurrentLocation);
+  regionSelect?.addEventListener('change', () => {
+    const center = ARMENIA_REGION_CENTERS[regionSelect.value];
+    if (!center) return;
+    stopAddressSearch();
+    clearLocationSearchResults();
+    if (address) address.value = '';
+    state.pendingLocation = null;
+    state.confirmedProperty = null;
+    pointConfirmation.hidden = true;
+    clearPotentialAndBelow();
+    syncLocationCoordinates(center);
+    updateProgress();
+    void mountMap('location').then((map) => {
+      map?.clearLocation();
+      map?.focusLocation(center);
+    });
   });
   root.querySelector('[data-location-continue]')?.addEventListener('click', () => {
     const lat = number(latitudeInput?.value, -90, 90);
@@ -1107,16 +1228,6 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
     .querySelectorAll('[data-roof-area-method], [data-roof-mounting-mode], [data-roof-orientation]')
     .forEach((input) => input.addEventListener('change', syncRoofControls));
 
-  root.querySelectorAll('[data-roof-enter-area]').forEach((button) =>
-    button.addEventListener('click', () => {
-      const manualMethod = root.querySelector('[data-roof-area-method][value="measured-plane"]');
-      if (manualMethod) manualMethod.checked = true;
-      syncRoofControls();
-      requestAnimationFrame(() => roofPlaneArea?.focus({ preventScroll: false }));
-    })
-  );
-
-  
   root.querySelector('[data-run-analysis]')?.addEventListener('click', () => void runAnalysis());
   root.querySelector('[data-add-tariff]')?.addEventListener('click', () => {
     setStep(1);
