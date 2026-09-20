@@ -7,6 +7,7 @@ import ru from '../src/content/ru.js';
 import en from '../src/content/en.js';
 import aboutPageCopy from '../src/content/about.js';
 import { contactPageCopy } from '../src/content/contacts.js';
+import { legalDocuments } from '../src/content/legal.js';
 import toolCopy from '../src/content/tools.js';
 import wizardCopy from '../src/content/calculator-wizard.js';
 import { processStoryCopy } from '../src/content/process-story.js';
@@ -295,8 +296,6 @@ const createProjectCaseLanguageLinks = (currentLocale, slug) =>
     label: languageLabels[key],
     name: localizedLanguageNames[currentLocale][key]
   }));
-const supportTypeForPath = (path) => (path.endsWith('/privacy/') ? 'privacy' : 'terms');
-
 const escapeJsonForHtml = (value) =>
   JSON.stringify(value)
     .replaceAll('<', '\\u003c')
@@ -1289,6 +1288,7 @@ const createContactsContext = (content) => {
   return {
     ...createHomeContext(content, { pageKind: 'contacts' }),
     path,
+    privacyHref: toolPath(content.locale, 'privacy'),
     activeNavigation: createHeaderNavigationState('contacts'),
     alternateLinks: createPlaceholderAlternateLinks('contacts'),
     languageLinks: createPlaceholderLanguageLinks(content.locale, 'contacts'),
@@ -1488,92 +1488,36 @@ for (const { key } of GENERATED_CONTENT_LOCALES) {
   }
 }
 
-const supportPages = [
-  [
-    'privacy/index.html',
-    {
-      locale: 'hy',
-      path: '/privacy/',
-      homeHref: '/',
-      label: 'Իրավական նախագիծ',
-      title: 'Գաղտնիության քաղաքականություն',
-      copy: 'Այս դեմո տարբերակում հասցեն և հաշվի ֆայլը չեն ուղարկվում սերվեր։ Փաստաթուղթը պետք է իրավական ստուգում անցնի հրապարակումից առաջ։',
-      back: 'Վերադառնալ գլխավոր էջ'
-    }
-  ],
-  [
-    'terms/index.html',
-    {
-      locale: 'hy',
-      path: '/terms/',
-      homeHref: '/',
-      label: 'Իրավական նախագիծ',
-      title: 'Օգտագործման պայմաններ',
-      copy: 'Կայքում ցուցադրված հաշվարկներն ու նախագծերը ցուցադրական օրինակներ են և չեն հանդիսանում առևտրային առաջարկ։',
-      back: 'Վերադառնալ գլխավոր էջ'
-    }
-  ],
-  [
-    'ru/privacy/index.html',
-    {
-      locale: 'ru',
-      path: '/ru/privacy/',
-      homeHref: '/ru/',
-      label: 'Юридический черновик',
-      title: 'Политика конфиденциальности',
-      copy: 'В этой демо-версии адрес и файл счёта не отправляются на сервер. Документ требует юридического согласования перед публикацией.',
-      back: 'Вернуться на главную'
-    }
-  ],
-  [
-    'ru/terms/index.html',
-    {
-      locale: 'ru',
-      path: '/ru/terms/',
-      homeHref: '/ru/',
-      label: 'Юридический черновик',
-      title: 'Условия использования',
-      copy: 'Расчёты и проекты на сайте являются демонстрационными примерами и не считаются коммерческим предложением.',
-      back: 'Вернуться на главную'
-    }
-  ],
-  [
-    'en/privacy/index.html',
-    {
-      locale: 'en',
-      path: '/en/privacy/',
-      homeHref: '/en/',
-      label: 'Draft legal notice',
-      title: 'Privacy policy',
-      copy: 'In this demonstration version, the address and electricity-bill file are not sent to a server. This draft requires legal approval before publication.',
-      back: 'Back to homepage'
-    }
-  ],
-  [
-    'en/terms/index.html',
-    {
-      locale: 'en',
-      path: '/en/terms/',
-      homeHref: '/en/',
-      label: 'Draft legal notice',
-      title: 'Terms of use',
-      copy: 'The estimates and projects shown on this site are demonstration examples and do not constitute a commercial offer.',
-      back: 'Back to homepage'
-    }
-  ]
-];
+const supportFiles = Object.freeze({
+  privacy: Object.freeze({
+    hy: 'privacy/index.html',
+    ru: 'ru/privacy/index.html',
+    en: 'en/privacy/index.html'
+  }),
+  terms: Object.freeze({
+    hy: 'terms/index.html',
+    ru: 'ru/terms/index.html',
+    en: 'en/terms/index.html'
+  })
+});
 
-for (const [file, content] of supportPages) {
-  const output = resolve(root, file);
-  const supportType = supportTypeForPath(content.path);
-  await mkdir(dirname(output), { recursive: true });
-  await writeGenerated(
-    output,
-    renderSupport({
-      ...createHomeContext(homeContent[content.locale], { pageKind: 'support' }),
-      ...content,
-      alternateLinks: createToolAlternateLinks(supportType),
-      languageLinks: createToolLanguageLinks(content.locale, supportType)
-    })
-  );
+for (const supportType of ['privacy', 'terms']) {
+  for (const { key } of GENERATED_CONTENT_LOCALES) {
+    const document = legalDocuments[supportType][key];
+    if (!document) throw new Error(`Missing ${supportType} document for ${key}.`);
+
+    const output = resolve(root, supportFiles[supportType][key]);
+    await mkdir(dirname(output), { recursive: true });
+    await writeGenerated(
+      output,
+      renderSupport({
+        ...createHomeContext(homeContent[key], { pageKind: 'support' }),
+        path: toolPath(key, supportType),
+        title: document.title,
+        document,
+        alternateLinks: createToolAlternateLinks(supportType),
+        languageLinks: createToolLanguageLinks(key, supportType)
+      })
+    );
+  }
 }

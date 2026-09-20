@@ -16,10 +16,13 @@
   <body class='support-page'>
     <a class='skip-link' href='#main'>{{aria.skip}}</a>
     {{> site-header}}
-    <main class='support-main' id='main'>
-      <section class='support-shell' aria-labelledby='support-title'>
-        <h1 id='support-title'>{{title}}</h1><p>{{copy}}</p><a class='button' href='{{homeHref}}'>{{back}}</a>
-      </section>
+    <main class='support-main support-main--legal' id='main'>
+      <header class='legal-hero'>
+        <div class='container legal-hero__inner'><p class='legal-hero__eyebrow'>{{document.eyebrow}}</p><h1 id='support-title'>{{document.title}}</h1><p class='legal-hero__updated'>{{document.updated}}</p><p class='legal-hero__intro'>{{document.intro}}</p></div>
+      </header>
+      <div class='container legal-content'>
+        <article class='legal-document' aria-labelledby='support-title'>{{#each document.sections}}<section class='legal-section'><h2>{{title}}</h2>{{#each blocks}}{{#if heading}}<h3>{{heading}}</h3>{{/if}}{{#if text}}<p>{{text}}</p>{{/if}}{{#if lines}}<address class='legal-lines'>{{#each lines}}<span>{{this}}</span>{{/each}}</address>{{/if}}{{#if items}}<ul>{{#each items}}<li>{{this}}</li>{{/each}}</ul>{{/if}}{{/each}}</section>{{/each}}</article>
+      </div>
     </main>
     {{> site-footer}}
   </body>

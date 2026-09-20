@@ -85,7 +85,11 @@ export const contactPageCopy = Object.freeze({
     topic: 'Թեմա',
     message: 'Ձեր հաղորդագրությունը',
     topicOptions: ['Համակարգի հաշվարկ', 'Տեղազննում', 'Սարքավորումներ', 'Այլ հարց'],
-    consent: 'Համաձայն եմ անձնական տվյալների մշակմանը',
+    consent: {
+      before: 'Համաձայն եմ ',
+      link: 'Գաղտնիության քաղաքականությանը',
+      after: ' և անձնական տվյալների մշակմանը'
+    },
     submit: 'Ուղարկել հաղորդագրությունը',
     sending: 'Ուղարկում ենք հաղորդագրությունը…',
     invalid: 'Լրացրեք անունը, հեռախոսը և համաձայնությունը։',
@@ -182,7 +186,11 @@ export const contactPageCopy = Object.freeze({
     topic: 'Тема обращения',
     message: 'Ваше сообщение',
     topicOptions: ['Расчёт системы', 'Выезд специалиста', 'Оборудование', 'Другой вопрос'],
-    consent: 'Я согласен(-на) на обработку персональных данных',
+    consent: {
+      before: 'Я согласен(-на) с ',
+      link: 'Политикой конфиденциальности',
+      after: ' и на обработку персональных данных'
+    },
     submit: 'Отправить сообщение',
     sending: 'Отправляем сообщение…',
     invalid: 'Укажите имя, телефон и согласие на обработку данных.',
@@ -273,7 +281,11 @@ export const contactPageCopy = Object.freeze({
     topic: 'Topic',
     message: 'Your message',
     topicOptions: ['System estimate', 'Site visit', 'Equipment', 'Other question'],
-    consent: 'I agree to the processing of my personal data',
+    consent: {
+      before: 'I agree to the ',
+      link: 'Privacy Policy',
+      after: ' and the processing of my personal data'
+    },
     submit: 'Send message',
     sending: 'Sending message…',
     invalid: 'Enter your name, phone number and consent.',

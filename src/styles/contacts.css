@@ -571,6 +571,13 @@
   accent-color: #19824d;
 }
 
+.contact-form__consent a {
+  color: #126a3d;
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
 .contact-form__submit {
   width: 100%;
   min-height: 58px;

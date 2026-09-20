@@ -917,8 +917,8 @@ export default {
         links: [['Contact', '#contacts']]
       }
     ],
-    privacy: 'Draft privacy policy',
-    terms: 'Draft terms of use',
+    privacy: 'Privacy Policy',
+    terms: 'Terms of Use',
     copyright: '© 2026 YOURENERGY. All rights reserved.'
   },
   status: {
