@@ -1,61 +1,504 @@
 <!doctype html>
 <html lang='{{locale}}'>
-  <head>
-    <meta charset='UTF-8' /><meta name='viewport' content='width=device-width, initial-scale=1.0' />
-    <meta name='theme-color' content='#071a2d' /><meta name='robots' content='noindex,follow' /><title>{{meta.title}}</title>
-    <meta name='description' content='{{meta.description}}' /><meta property='og:type' content='website' /><meta property='og:site_name' content='YOURENERGY' />
-    <meta property='og:title' content='{{meta.ogTitle}}' /><meta property='og:description' content='{{meta.ogDescription}}' /><meta property='og:url' content='https://yourenergy.am{{path}}' /><meta property='og:image' content='https://yourenergy.am/og.png' />
-    <meta name='twitter:card' content='summary_large_image' /><link rel='canonical' href='https://yourenergy.am{{path}}' />
-    {{#each alternateLinks}}<link rel='alternate' hreflang='{{hreflang}}' href='{{href}}' />{{/each}}
-    <link rel='icon' href='/favicon.ico' sizes='any' /><link rel='icon' href='/yourenergy-mark.svg' type='image/svg+xml' /><link rel='apple-touch-icon' href='/apple-touch-icon.png' /><link rel='stylesheet' href='/src/styles/tools-page.css' />
-    <script type='application/ld+json'>{{{jsonLd}}}</script>
-  </head>
-  <body class='calculator-page calculator-page--wizard calculator-page--professional'>
-    <a class='skip-link' href='#main'>{{aria.skip}}</a>{{> site-header}}
-    <main id='main'><div data-calculator-wizard data-professional-calculator aria-labelledby='calculator-title'>
-      <noscript><style>[data-wizard-step][hidden]{display:block!important}.wizard-progress,.wizard-mobile-progress{display:none!important}</style><section class='section section--soft'><div class='container'><h2>{{toolShared.calculator}}</h2><p>{{product.common.noJsCalculator}}</p><a class='button' href='{{contact.phoneHref}}'>{{contact.phone}}</a></div></section></noscript>
-      <section class='calculator-hero calculator-hero--professional section'><div class='container calculator-hero__inner professional-hero__inner'><div class='professional-hero__copy'><nav class='calculator-breadcrumb' aria-label='Breadcrumb'><a href='{{calculatorHref}}'>{{toolShared.calculator}}</a><svg aria-hidden='true'><use href='/icons.svg#chevron-right'></use></svg><span>{{modeControl.professional}}</span></nav><h1 id='calculator-title'>{{wizard.title}}</h1><p>{{wizard.intro}}</p></div><div class='professional-hero__controls'><nav class='wizard-progress' aria-label='{{toolShared.calculator}}'>{{#each wizard.steps}}<button type='button' data-wizard-nav='{{@index}}' data-step-state='{{#if @first}}available{{else}}locked{{/if}}' aria-label='{{this}}'><span>{{add @index 1}}</span><strong>{{this}}</strong></button>{{/each}}</nav><a class='professional-quick-switch' data-calculator-mode='quick' href='{{calculatorHref}}'><svg aria-hidden='true'><use href='/icons.svg#zap'></use></svg><span><strong>{{modeControl.quick}}</strong><small>{{modeControl.quickCopy}}</small></span></a></div></div></section>
-      <section class='wizard section'><div class='container wizard__container'>
-        <p class='wizard-mobile-progress' data-wizard-mobile-progress aria-live='polite'></p><p class='wizard-status form-status' data-wizard-status aria-live='polite'></p>
 
-        <section class='wizard-step' data-wizard-step='0' aria-labelledby='wizard-object-title' tabindex='-1'>
-          <div class='wizard-step__heading'><span>1</span><div><h2 id='wizard-object-title'>{{wizard.locationTitle}}</h2><p>{{wizard.locationCopy}}</p></div></div>
-          <div class='professional-location-form'><div class='location-methods'><button class='button button--outline is-selected' type='button' data-open-location-map><svg aria-hidden='true'><use href='/icons.svg#search'></use></svg>{{wizard.mapOpen}}</button><button class='button button--outline' type='button' data-use-current-location><svg aria-hidden='true'><use href='/icons.svg#map-pin'></use></svg>{{product.location.manualTitle}}</button></div><label class='location-address-field' for='wizard-address'><span class='visually-hidden'>{{wizard.addressLabel}}</span><svg aria-hidden='true'><use href='/icons.svg#search'></use></svg><input id='wizard-address' data-wizard-address maxlength='220' autocomplete='street-address' placeholder='{{hero.addressPlaceholder}}' /><svg class='location-address-field__clear' aria-hidden='true'><use href='/icons.svg#close'></use></svg></label><div class='location-selects'><label>{{toolShared.calculator}}<select data-location-region><option>Yerevan</option></select></label><label>{{product.location.title}}<select data-location-city><option>Yerevan</option></select></label><label>{{product.common.optional}}<select data-location-district><option>{{product.common.optional}}</option></select></label></div><section class='professional-panel professional-panel--coordinates' aria-labelledby='professional-location-parameters'><div class='professional-panel__title'><h3 id='professional-location-parameters'>{{wizard.engineering}}</h3><button class='text-button' type='button' data-use-map-coordinates><svg aria-hidden='true'><use href='/icons.svg#map-pin'></use></svg>{{wizard.mapOpen}}</button></div><div class='wizard-coordinates'><label>{{product.location.latitudeLabel}}<input type='number' step='any' inputmode='decimal' value='40.1811' data-location-latitude /></label><label>{{product.location.longitudeLabel}}<input type='number' step='any' inputmode='decimal' value='44.5136' data-location-longitude /></label></div></section><div class='point-confirmation' data-point-confirmation hidden><strong>{{wizard.selectedPoint}}</strong><output data-pending-coordinates>—</output><div><button type='button' class='button' data-confirm-location>{{wizard.confirmPoint}}</button></div></div><div class='professional-location-notice'><svg aria-hidden='true'><use href='/icons.svg#shield-check'></use></svg><p>{{wizard.potentialReady}}</p></div><div class='async-card' data-potential-loading data-potential-status data-step-state='locked' aria-live='polite'></div><div data-potential-result hidden><dl class='wizard-kpis'><div><dt>{{product.potential.annualYieldLabel}}</dt><dd data-potential-yield>—</dd></div><div><dt>{{product.potential.orientationLabel}}</dt><dd data-potential-azimuth>—</dd></div><div><dt>{{product.potential.tiltLabel}}</dt><dd data-potential-tilt>—</dd></div></dl><figure class='wizard-chart'><figcaption>{{product.potential.annualYieldLabel}} · kWh/kWp</figcaption><div class='chart-bars' data-potential-chart></div><details><summary>{{passport.tableTitle}}</summary><table><thead><tr><th>{{passport.monthLabel}}</th><th>kWh/kWp</th></tr></thead><tbody data-potential-table></tbody></table></details></figure><p class='input-help' data-potential-source></p><p class='section-disclosure'>{{product.potential.disclosure}}</p></div><div class='flow-actions' data-potential-actions><button class='button button--outline' type='button' data-potential-retry hidden>{{product.potential.retry}}</button><button class='button button--outline' type='button' data-potential-skip hidden>{{wizard.potentialSkip}}</button></div><div class='flow-actions professional-location-actions'><button class='button button--outline' type='button' data-wizard-back='0'><svg aria-hidden='true'><use href='/icons.svg#arrow-left'></use></svg>{{wizard.back}}</button><button class='button' type='button' data-location-continue>{{wizard.next}}: {{product.consumption.title}}<svg aria-hidden='true'><use href='/icons.svg#arrow-right'></use></svg></button></div></div>
-          <div class='wizard-map-wrap wizard-map-wrap--location' data-location-map-wrap><div class='property-map wizard-map' data-property-map data-mode='location'></div><div class='wizard-map__layers' role='group' aria-label='{{wizard.ui.location.map}}'><button class='is-active' type='button' data-map-layer='map'>{{wizard.ui.location.map}}</button><button type='button' data-map-layer='satellite'>{{wizard.ui.location.satellite}}</button></div><button class='wizard-map__search' type='button' data-map-focus-location><svg aria-hidden='true'><use href='/icons.svg#search'></use></svg>{{wizard.mapOpen}}</button><aside class='wizard-map__data'><div class='wizard-map__data-title'>{{wizard.ui.location.dataTitle}} <span>(PVGIS)</span></div><div><span class='map-data-icon map-data-icon--sun'><svg aria-hidden='true'><use href='/icons.svg#sun'></use></svg></span><p><strong>1,702</strong><small>kWh/m²/year<br />{{wizard.ui.location.irradiation}}</small></p></div><div><span class='map-data-icon map-data-icon--heat'>♨</span><p><strong>4.7</strong><small>kWh/m²/day<br />{{wizard.ui.location.dailyAverage}}</small></p></div><div><span class='map-data-icon map-data-icon--chart'><svg aria-hidden='true'><use href='/icons.svg#chart-bars'></use></svg></span><p><strong>+15%</strong><small>{{wizard.ui.location.vsEu}}<br />{{wizard.ui.location.higherPotential}}</small></p></div></aside><aside class='wizard-map__place'><img src='/images/roof-scan-480.webp' alt='' /><div><strong>{{wizard.ui.location.place}}</strong><p>{{wizard.ui.location.latitude}} <output data-map-latitude>40.1811</output><br />{{wizard.ui.location.longitude}} <output data-map-longitude>44.5136</output></p><span><svg aria-hidden='true'><use href='/icons.svg#sun'></use></svg>{{wizard.ui.location.annualIrradiation}}<br /><b>1,702 kWh/m²/year</b></span></div></aside></div>
-        </section>
+<head>
+  <meta charset='UTF-8' />
+  <meta name='viewport' content='width=device-width, initial-scale=1.0' />
+  <meta name='theme-color' content='#071a2d' />
+  <meta name='robots' content='noindex,follow' />
+  <title>{{meta.title}}</title>
+  <meta name='description' content='{{meta.description}}' />
+  <meta property='og:type' content='website' />
+  <meta property='og:site_name' content='YOURENERGY' />
+  <meta property='og:title' content='{{meta.ogTitle}}' />
+  <meta property='og:description' content='{{meta.ogDescription}}' />
+  <meta property='og:url' content='https://yourenergy.am{{path}}' />
+  <meta property='og:image' content='https://yourenergy.am/og.png' />
+  <meta name='twitter:card' content='summary_large_image' />
+  <link rel='canonical' href='https://yourenergy.am{{path}}' />
+  {{#each alternateLinks}}
+  <link rel='alternate' hreflang='{{hreflang}}' href='{{href}}' />{{/each}}
+  <link rel='icon' href='/favicon.ico' sizes='any' />
+  <link rel='icon' href='/yourenergy-mark.svg' type='image/svg+xml' />
+  <link rel='apple-touch-icon' href='/apple-touch-icon.png' />
+  <link rel='stylesheet' href='/src/styles/tools-page.css' />
+  <script type='application/ld+json'>{{{jsonLd}}}</script>
+</head>
 
-        <section class='wizard-step' data-wizard-step='1' aria-labelledby='wizard-consumption-title' hidden tabindex='-1'>
-          <div class='wizard-step__heading'><span>2</span><div><h2 id='wizard-consumption-title'>{{product.consumption.title}}</h2><p>{{product.consumption.copy}}</p></div></div>
-          <div class='professional-consumption-form'><label class='professional-upload-tab' for='bill-file'><svg aria-hidden='true'><use href='/icons.svg#file-up'></use></svg><span>{{wizard.ui.uploadBill}}</span></label>
-          <div data-consumption-inputs class='consumption-inputs'><fieldset><legend>{{product.consumption.title}}</legend><label><input type='radio' name='consumption-mode' value='bill' checked /><svg class='consumption-mode-icon' aria-hidden='true'><use href='/icons.svg#file'></use></svg><span>{{product.consumption.modes.bill}}</span></label><label><input type='radio' name='consumption-mode' value='usage' /><svg class='consumption-mode-icon' aria-hidden='true'><use href='/icons.svg#zap'></use></svg><span>{{product.consumption.modes.usage}}</span></label><label><input type='radio' name='consumption-mode' value='monthly' /><svg class='consumption-mode-icon' aria-hidden='true'><use href='/icons.svg#chart-bars'></use></svg><span>{{product.consumption.modes.monthly}}</span></label></fieldset><div class='consumption-panel' data-consumption-panel='bill'><label>{{product.consumption.billLabel}}<div class='input-with-unit'><input type='number' min='0.01' step='1' inputmode='decimal' value='25000' data-consumption-bill /><span>AMD</span></div></label><p class='consumption-field-note'><svg aria-hidden='true'><use href='/icons.svg#info'></use></svg>{{product.consumption.billHelp}}</p></div><div class='consumption-panel' data-consumption-panel='usage' hidden><label>{{product.consumption.usageLabel}}<div class='input-with-unit'><input type='number' min='0.01' step='1' inputmode='decimal' data-consumption-usage /><span>kWh</span></div></label></div><div class='consumption-panel consumption-panel--months' data-consumption-panel='monthly' hidden><div class='month-inputs'>{{#each passport.months}}<label>{{short}}<input type='number' min='0' step='1' inputmode='decimal' data-consumption-month /></label>{{/each}}</div></div><label><span data-consumption-tariff-label>{{product.consumption.tariffBillLabel}}</span><div class='input-with-unit'><input type='number' min='0.01' step='0.01' inputmode='decimal' value='46.48' data-consumption-tariff aria-describedby='consumption-tariff-help' required aria-required='true' /><span>AMD/kWh</span></div></label><p class='input-help' id='consumption-tariff-help' data-consumption-tariff-help>{{product.consumption.tariffBillHelp}}</p><p data-estimate-badge='{{wizard.ui.estimateBadge}}'>{{product.consumption.annualLabel}}: <output data-consumption-annual data-estimate-title='{{wizard.ui.estimateTitle}}'>—</output> kWh</p></div>
-          <section class='professional-panel file-upload' data-optional-upload aria-labelledby='professional-file-title'><h3 id='professional-file-title'>{{hero.uploadTitle}}</h3><p>{{hero.uploadHelp}}</p><label class='file-drop' data-file-drop for='bill-file'><input id='bill-file' type='file' accept='.pdf,.jpg,.jpeg,.png,application/pdf,image/jpeg,image/png' /><span>{{hero.uploadPrompt}}</span></label><p class='form-status' data-file-status aria-live='polite'></p><div data-file-meta hidden><strong data-file-name></strong><button type='button' class='button button--outline' data-file-remove>{{product.common.cancel}}</button></div></section>
-          <details class='professional-consumption-advanced'><summary>{{wizard.ui.advancedOptions}} <svg aria-hidden='true'><use href='/icons.svg#chevron-down'></use></svg></summary><div><p>{{wizard.ui.consumption.advancedCopy}}</p><button class='text-button' type='button' data-consumption-switch-monthly>{{wizard.ui.consumption.profileAction}}</button></div></details><div class='flow-actions professional-consumption-actions'><button class='button button--outline' type='button' data-wizard-back='0'><svg aria-hidden='true'><use href='/icons.svg#arrow-left'></use></svg>{{wizard.back}}</button><button class='button' type='button' data-consumption-continue>{{wizard.next}}: {{product.roof.title}}<svg aria-hidden='true'><use href='/icons.svg#arrow-right'></use></svg></button></div></div>
-          <aside class='professional-consumption-aside'><section class='consumption-chart-card'><div class='consumption-chart-card__heading'><div><h3>{{wizard.ui.consumption.monthlyTitle}} <span>({{wizard.ui.consumption.optional}})</span></h3><p>{{wizard.ui.consumption.monthlyCopy}}</p></div><div class='chart-unit-toggle' role='group' aria-label='{{wizard.ui.consumption.monthlyTitle}}'><button class='is-active' type='button' data-consumption-unit='kwh' aria-pressed='true'>{{wizard.ui.consumption.kwh}}</button><button type='button' data-consumption-unit='amd' aria-pressed='false'>{{wizard.ui.consumption.amd}}</button></div></div><div class='consumption-profile-chart' data-consumption-chart aria-label='{{wizard.ui.consumption.monthlyTitle}}'>{{#each passport.months}}<div class='consumption-profile-chart__item'><output data-consumption-chart-value>—</output><span class='consumption-profile-chart__bar' style='--chart-height: 0%'></span><small>{{short}}</small></div>{{/each}}</div><button class='consumption-fill-average' type='button' data-consumption-fill-average><svg aria-hidden='true'><use href='/icons.svg#chart-bars'></use></svg>{{wizard.ui.consumption.fillAverage}}</button></section><section class='consumption-tips'><h3><svg aria-hidden='true'><use href='/icons.svg#sun'></use></svg>{{wizard.ui.consumption.tipsTitle}}</h3><div><span><svg aria-hidden='true'><use href='/icons.svg#file'></use></svg></span><p><strong>{{wizard.ui.consumption.tipBillTitle}}</strong><small>{{wizard.ui.consumption.tipBillCopy}}</small></p></div><div><span><svg aria-hidden='true'><use href='/icons.svg#chart-bars'></use></svg></span><p><strong>{{wizard.ui.consumption.tipMonthlyTitle}}</strong><small>{{wizard.ui.consumption.tipMonthlyCopy}}</small></p></div><div><span><svg aria-hidden='true'><use href='/icons.svg#faq-settings'></use></svg></span><p><strong>{{wizard.ui.consumption.tipTariffTitle}}</strong><small>{{wizard.ui.consumption.tipTariffCopy}}</small></p></div></section></aside>
-        </section>
+<body class='calculator-page calculator-page--wizard calculator-page--professional'>
+  <a class='skip-link' href='#main'>{{aria.skip}}</a>{{> site-header}}
+  <main id='main'>
+    <div data-calculator-wizard data-professional-calculator aria-labelledby='calculator-title'>
+      <noscript>
+        <style>
+          [data-wizard-step][hidden] {
+            display: block !important
+          }
 
-        <section class='wizard-step' data-wizard-step='2' aria-labelledby='wizard-roof-title' hidden tabindex='-1'>
-          <div class='wizard-step__heading'><span>3</span><div><h2 id='wizard-roof-title'>{{product.roof.title}}</h2><p>{{wizard.roofIntro}}</p></div></div>
-          <div class='professional-roof-form'><fieldset class='professional-roof-methods'><legend>{{product.roof.areaMethodTitle}}</legend><label><input type='radio' name='roof-area-method' value='map-projected' checked data-roof-area-method /><svg aria-hidden='true'><use href='/icons.svg#file-up'></use></svg><span>{{product.roof.areaMethods.mapProjected}}</span></label><label><input type='radio' name='roof-area-method' value='measured-plane' data-roof-area-method /><svg aria-hidden='true'><use href='/icons.svg#calculator'></use></svg><span>{{product.roof.areaMethods.measuredPlane}}</span></label><button type='button' data-roof-enter-area><svg aria-hidden='true'><use href='/icons.svg#faq-home'></use></svg>{{wizard.ui.consumption.manualAreaAction}}</button></fieldset><section class='professional-roof-notice'><svg aria-hidden='true'><use href='/icons.svg#info'></use></svg><p>{{wizard.drawRoof}}<small>{{wizard.mapApproximate}}</small></p></section><div class='roof-controls'><button class='button button--outline' type='button' data-roof-undo>{{product.roof.undo}}</button><button class='button button--outline' type='button' data-roof-reset>{{product.roof.reset}}</button><button class='button' type='button' data-roof-finish>{{product.roof.finish}}</button></div><section class='professional-roof-area'><span><svg aria-hidden='true'><use href='/icons.svg#faq-home'></use></svg></span><div><small data-roof-area-label>{{product.roof.areaLabel}}</small><strong data-roof-area>—</strong></div><button class='button button--outline' type='button' data-roof-reset>{{product.roof.reset}}</button></section><label class='professional-roof-plane-input' data-roof-plane-area-wrap hidden>{{product.roof.planeAreaLabel}}<div class='input-with-unit'><input type='number' min='0.01' step='0.1' inputmode='decimal' data-roof-plane-area /><span>m²</span></div></label><section class='professional-roof-parameters' aria-labelledby='professional-roof-parameters'><h3 id='professional-roof-parameters'>{{wizard.engineering}}</h3><div class='wizard-form-grid'><label>{{product.roof.orientationLabel}}<select data-roof-orientation><option value='180'>{{product.roof.orientationOptions.south}}</option><option value='135'>{{product.roof.orientationOptions.southEast}}</option><option value='225'>{{product.roof.orientationOptions.southWest}}</option><option value='90'>{{product.roof.orientationOptions.east}}</option><option value='270'>{{product.roof.orientationOptions.west}}</option><option value='0'>{{product.roof.orientationOptions.north}}</option><option value='custom'>{{product.roof.orientationOptions.custom}}</option></select></label><label>{{product.roof.tiltLabel}}<div class='input-with-unit'><input type='number' min='0' max='90' step='1' inputmode='decimal' value='30' data-roof-tilt /><span>°</span></div></label></div><label data-roof-orientation-custom hidden>{{product.roof.customOrientationLabel}}<input type='number' min='0' max='359' step='1' inputmode='decimal' data-roof-orientation-custom-input /></label><label class='professional-roof-mounting-select'>{{product.roof.mountingModeLabel}}<select data-roof-mounting-mode><option value='roof-parallel'>{{product.roof.mountingModes.roofParallel}}</option><option value='elevated'>{{product.roof.mountingModes.elevated}}</option></select></label></section><details class='professional-roof-advanced'><summary>{{wizard.ui.advancedOptions}} <svg aria-hidden='true'><use href='/icons.svg#chevron-down'></use></svg></summary><div><p>{{wizard.ui.roof.advancedCopy}}</p><button class='text-button' type='button' data-roof-enter-area>{{wizard.ui.consumption.manualAreaAction}}</button></div></details><div class='flow-actions professional-roof-actions'><button class='button button--outline' type='button' data-wizard-back='1'><svg aria-hidden='true'><use href='/icons.svg#arrow-left'></use></svg>{{wizard.back}}</button><button class='button' type='button' data-run-analysis>{{wizard.calculate}}<svg aria-hidden='true'><use href='/icons.svg#arrow-right'></use></svg></button></div></div><div class='wizard-map-wrap professional-roof-map'><div data-roof-map-host></div><div class='professional-roof-map__layers'><button type='button' class='is-active'>{{wizard.ui.roof.map}}</button><button type='button'>{{wizard.ui.roof.satellite}}</button></div><aside class='professional-roof-map__analysis'><header><svg aria-hidden='true'><use href='/icons.svg#faq-home'></use></svg><strong>{{wizard.ui.roof.analysis}}</strong></header><div><span><svg aria-hidden='true'><use href='/icons.svg#faq-home'></use></svg></span><p><strong data-roof-map-area>—</strong><small>{{wizard.ui.roof.area}}</small></p></div><div><span><svg aria-hidden='true'><use href='/icons.svg#sun'></use></svg></span><p><strong>PVGIS</strong><small>{{wizard.ui.roof.potential}}</small></p></div><div><span><svg aria-hidden='true'><use href='/icons.svg#faq-home'></use></svg></span><p><strong data-roof-map-orientation>South</strong><small>{{wizard.ui.roof.orientation}}</small></p></div><div><span>∠</span><p><strong data-roof-map-tilt>30°</strong><small>{{wizard.ui.roof.tilt}}</small></p></div></aside><div class='professional-roof-map__tip'><svg aria-hidden='true'><use href='/icons.svg#info'></use></svg><strong>{{wizard.ui.roof.tipsTitle}}</strong><span>{{wizard.ui.roof.tipsCopy}}</span></div></div>
-        </section>
-
-        <section class='wizard-step' data-wizard-step='3' aria-labelledby='wizard-result-title' hidden tabindex='-1'>
-          <div class='wizard-step__heading'><span>4</span><div><h2 id='wizard-result-title'>{{wizard.results.title}}</h2><p data-result-summary>{{wizard.results.intro}}</p></div></div>
-          <button class='professional-results-restart button button--outline' type='button' data-wizard-restart><svg aria-hidden='true'><use href='/icons.svg#cycle'></use></svg>{{wizard.results.restart}}</button>
-          <div class='professional-results-grid'>
-            <section class='professional-results-hero'><div><small>{{wizard.results.potential}}</small><h3>{{#each wizard.results.heroLines}}{{this}}{{#unless @last}}<br />{{/unless}}{{/each}}</h3><p>{{wizard.results.heroCopy}}</p></div></section>
-            <div class='result-dashboard' data-result-dashboard aria-live='polite'></div>
-            <section class='professional-results-explainer'><h3><span><svg aria-hidden='true'><use href='/icons.svg#chart-bars'></use></svg></span>{{wizard.results.calculationTitle}}</h3><p>{{wizard.results.calculationCopy}}</p></section>
-            <section class='professional-next-steps'><h3>{{wizard.results.nextTitle}}</h3><ol>{{#each wizard.results.nextSteps}}<li><span>{{add @index 1}}</span><p><strong>{{title}}</strong><small>{{copy}}</small></p></li>{{/each}}</ol><a class='button' href='{{contact.phoneHref}}'>{{wizard.results.offer}} <svg aria-hidden='true'><use href='/icons.svg#arrow-right'></use></svg></a></section>
+          .wizard-progress,
+          .wizard-mobile-progress {
+            display: none !important
+          }
+        </style>
+        <section class='section section--soft'>
+          <div class='container'>
+            <h2>{{toolShared.calculator}}</h2>
+            <p>{{product.common.noJsCalculator}}</p><a class='button' href='{{contact.phoneHref}}'>{{contact.phone}}</a>
           </div>
-          <section class='finance-empty' data-finance-empty hidden><p>{{wizard.tariffNeeded}}</p><button class='button' type='button' data-add-tariff>{{wizard.addTariff}}</button></section>
-          <section class='professional-finance' data-finance-result hidden><h3>{{finance.title}}</h3><dl data-finance-values></dl><p class='section-disclosure'>{{finance.disclaimer}}</p></section>
-          <div class='flow-actions professional-results-actions'><button class='button button--outline' type='button' data-wizard-back='2'><svg aria-hidden='true'><use href='/icons.svg#arrow-left'></use></svg>{{wizard.back}}</button></div>
         </section>
-        <section class='professional-benefits' aria-label='{{wizard.results.benefitsLabel}}'>{{#each wizard.results.benefits}}<div><span><svg aria-hidden='true'><use href='/icons.svg#{{icon}}'></use></svg></span><p><strong>{{title}}</strong><small>{{copy}}</small></p></div>{{/each}}</section>
-      </div></section>
-    </div></main>
-    {{> site-footer}}
-    <dialog class='passport-dialog' data-passport-dialog aria-labelledby='passport-dialog-title'><form method='dialog' class='dialog-close'><button class='round-button' aria-label='{{passport.close}}'>×</button></form><div class='dialog-content'><h2 id='passport-dialog-title'>{{wizard.passportTitle}}</h2><p>{{wizard.passportCopy}}</p><div data-passport-dialog-content></div></div></dialog>
-    <script id='page-config' type='application/json'>{{{pageConfig}}}</script><script type='module' src='/src/main.js'></script>
-  </body>
+      </noscript>
+      <section class='calculator-hero calculator-hero--professional section'>
+        <div class='container calculator-hero__inner professional-hero__inner'>
+          <div class='professional-hero__copy'>
+            <nav class='calculator-breadcrumb' aria-label='Breadcrumb'><a
+                href='{{calculatorHref}}'>{{toolShared.calculator}}</a><svg aria-hidden='true'>
+                <use href='/icons.svg#chevron-right'></use>
+              </svg><span>{{modeControl.professional}}</span></nav>
+            <h1 id='calculator-title'>{{wizard.title}}</h1>
+            <p>{{wizard.intro}}</p>
+          </div>
+          <div class='professional-hero__controls'>
+            <nav class='wizard-progress' aria-label='{{toolShared.calculator}}'>{{#each wizard.steps}}<button
+                type='button' data-wizard-nav='{{@index}}'
+                data-step-state='{{#if @first}}available{{else}}locked{{/if}}' aria-label='{{this}}'><span>{{add @index
+                  1}}</span><strong>{{this}}</strong></button>{{/each}}</nav><a class='professional-quick-switch'
+              data-calculator-mode='quick' href='{{calculatorHref}}'><svg aria-hidden='true'>
+                <use href='/icons.svg#zap'></use>
+              </svg><span><strong>{{modeControl.quick}}</strong><small>{{modeControl.quickCopy}}</small></span></a>
+          </div>
+        </div>
+      </section>
+      <section class='wizard section'>
+        <div class='container wizard__container'>
+          <p class='wizard-mobile-progress' data-wizard-mobile-progress aria-live='polite'></p>
+          <p class='wizard-status form-status' data-wizard-status aria-live='polite'></p>
+
+          <section class='wizard-step' data-wizard-step='0' aria-labelledby='wizard-object-title' tabindex='-1'>
+            <div class='wizard-step__heading'><span>1</span>
+              <div>
+                <h2 id='wizard-object-title'>{{wizard.locationTitle}}</h2>
+                <p>{{wizard.locationCopy}}</p>
+              </div>
+            </div>
+            <div class='professional-location-form'>
+              <div class='location-methods'><button class='button button--outline is-selected' type='button'
+                  data-open-location-map><svg aria-hidden='true'>
+                    <use href='/icons.svg#search'></use>
+                  </svg>{{wizard.mapOpen}}</button><button class='button button--outline' type='button'
+                  data-use-current-location><svg aria-hidden='true'>
+                    <use href='/icons.svg#map-pin'></use>
+                  </svg>{{product.location.manualTitle}}</button></div><label class='location-address-field'
+                for='wizard-address'><span class='visually-hidden'>{{wizard.addressLabel}}</span><svg
+                  aria-hidden='true'>
+                  <use href='/icons.svg#search'></use>
+                </svg><input id='wizard-address' data-wizard-address maxlength='220' autocomplete='street-address'
+                  placeholder='{{hero.addressPlaceholder}}' /><svg class='location-address-field__clear'
+                  aria-hidden='true'>
+                  <use href='/icons.svg#close'></use>
+                </svg></label>
+              <div class='location-selects'><label>{{toolShared.calculator}}<select data-location-region>
+                    <option>Yerevan</option>
+                  </select></label><label>{{product.location.title}}<select data-location-city>
+                    <option>Yerevan</option>
+                  </select></label><label>{{product.common.optional}}<select data-location-district>
+                    <option>{{product.common.optional}}</option>
+                  </select></label></div>
+              <section class='professional-panel professional-panel--coordinates'
+                aria-labelledby='professional-location-parameters'>
+                <div class='professional-panel__title'>
+                  <h3 id='professional-location-parameters'>{{wizard.engineering}}</h3><button class='text-button'
+                    type='button' data-use-map-coordinates><svg aria-hidden='true'>
+                      <use href='/icons.svg#map-pin'></use>
+                    </svg>{{wizard.mapOpen}}</button>
+                </div>
+                <div class='wizard-coordinates'><label>{{product.location.latitudeLabel}}<input type='number' step='any'
+                      inputmode='decimal' value='40.1811'
+                      data-location-latitude /></label><label>{{product.location.longitudeLabel}}<input type='number'
+                      step='any' inputmode='decimal' value='44.5136' data-location-longitude /></label></div>
+              </section>
+              <div class='point-confirmation' data-point-confirmation hidden>
+                <strong>{{wizard.selectedPoint}}</strong><output data-pending-coordinates>—</output>
+                <div><button type='button' class='button' data-confirm-location>{{wizard.confirmPoint}}</button></div>
+              </div>
+              <div class='professional-location-notice'><svg aria-hidden='true'>
+                  <use href='/icons.svg#shield-check'></use>
+                </svg>
+                <p>{{wizard.potentialReady}}</p>
+              </div>
+              <div class='async-card' data-potential-loading data-potential-status data-step-state='locked'
+                aria-live='polite'></div>
+              <div data-potential-result hidden>
+                <dl class='wizard-kpis'>
+                  <div>
+                    <dt>{{product.potential.annualYieldLabel}}</dt>
+                    <dd data-potential-yield>—</dd>
+                  </div>
+                  <div>
+                    <dt>{{product.potential.orientationLabel}}</dt>
+                    <dd data-potential-azimuth>—</dd>
+                  </div>
+                  <div>
+                    <dt>{{product.potential.tiltLabel}}</dt>
+                    <dd data-potential-tilt>—</dd>
+                  </div>
+                </dl>
+                <figure class='wizard-chart'>
+                  <figcaption>{{product.potential.annualYieldLabel}} · kWh/kWp</figcaption>
+                  <div class='chart-bars' data-potential-chart></div>
+                  <details>
+                    <summary>{{passport.tableTitle}}</summary>
+                    <table>
+                      <thead>
+                        <tr>
+                          <th>{{passport.monthLabel}}</th>
+                          <th>kWh/kWp</th>
+                        </tr>
+                      </thead>
+                      <tbody data-potential-table></tbody>
+                    </table>
+                  </details>
+                </figure>
+                <p class='input-help' data-potential-source></p>
+                <p class='section-disclosure'>{{product.potential.disclosure}}</p>
+              </div>
+              <div class='flow-actions' data-potential-actions><button class='button button--outline' type='button'
+                  data-potential-retry hidden>{{product.potential.retry}}</button><button class='button button--outline'
+                  type='button' data-potential-skip hidden>{{wizard.potentialSkip}}</button></div>
+              <div class='flow-actions professional-location-actions'><button class='button button--outline'
+                  type='button' data-wizard-back='0'><svg aria-hidden='true'>
+                    <use href='/icons.svg#arrow-left'></use>
+                  </svg>{{wizard.back}}</button><button class='button' type='button'
+                  data-location-continue>{{wizard.next}}: {{product.consumption.title}}<svg aria-hidden='true'>
+                    <use href='/icons.svg#arrow-right'></use>
+                  </svg></button></div>
+            </div>
+            <div class='wizard-map-wrap wizard-map-wrap--location' data-location-map-wrap>
+              <div class='property-map wizard-map' data-property-map data-mode='location'></div>
+              <div class='wizard-map__layers' role='group' aria-label='{{wizard.ui.location.map}}'><button
+                  class='is-active' type='button' data-map-layer='map'>{{wizard.ui.location.map}}</button><button
+                  type='button' data-map-layer='satellite'>{{wizard.ui.location.satellite}}</button></div> 
+  
+              <aside class='wizard-map__place'><img src='/images/roof-scan-480.webp' alt='' />
+                <div><strong>{{wizard.ui.location.place}}</strong>
+                  <p>{{wizard.ui.location.latitude}} <output
+                      data-map-latitude>40.1811</output><br />{{wizard.ui.location.longitude}} <output
+                      data-map-longitude>44.5136</output></p><span><svg aria-hidden='true'>
+                      <use href='/icons.svg#sun'></use>
+                    </svg>{{wizard.ui.location.annualIrradiation}}<br /><b>1,702 kWh/m²/year</b></span>
+                </div>
+              </aside>
+            </div>
+          </section>
+
+          <section class='wizard-step' data-wizard-step='1' aria-labelledby='wizard-consumption-title' hidden
+            tabindex='-1'>
+            <div class='wizard-step__heading'><span>2</span>
+              <div>
+                <h2 id='wizard-consumption-title'>{{product.consumption.title}}</h2>
+                <p>{{product.consumption.copy}}</p>
+              </div>
+            </div>
+            <div class='professional-consumption-form'><label class='professional-upload-tab' for='bill-file'><svg
+                  aria-hidden='true'>
+                  <use href='/icons.svg#file-up'></use>
+                </svg><span>{{wizard.ui.uploadBill}}</span></label>
+              <div data-consumption-inputs class='consumption-inputs'>
+                <fieldset>
+                  <legend>{{product.consumption.title}}</legend><label><input type='radio' name='consumption-mode'
+                      value='bill' checked /><svg class='consumption-mode-icon' aria-hidden='true'>
+                      <use href='/icons.svg#file'></use>
+                    </svg><span>{{product.consumption.modes.bill}}</span></label><label><input type='radio'
+                      name='consumption-mode' value='usage' /><svg class='consumption-mode-icon' aria-hidden='true'>
+                      <use href='/icons.svg#zap'></use>
+                    </svg><span>{{product.consumption.modes.usage}}</span></label><label><input type='radio'
+                      name='consumption-mode' value='monthly' /><svg class='consumption-mode-icon' aria-hidden='true'>
+                      <use href='/icons.svg#chart-bars'></use>
+                    </svg><span>{{product.consumption.modes.monthly}}</span></label>
+                </fieldset>
+                <div class='consumption-panel' data-consumption-panel='bill'><label>{{product.consumption.billLabel}}
+                    <div class='input-with-unit'><input type='number' min='0.01' step='1' inputmode='decimal'
+                        value='25000' data-consumption-bill /><span>AMD</span></div>
+                  </label>
+                  <p class='consumption-field-note'><svg aria-hidden='true'>
+                      <use href='/icons.svg#info'></use>
+                    </svg>{{product.consumption.billHelp}}</p>
+                </div>
+                <div class='consumption-panel' data-consumption-panel='usage' hidden>
+                  <label>{{product.consumption.usageLabel}}<div class='input-with-unit'><input type='number' min='0.01'
+                        step='1' inputmode='decimal' data-consumption-usage /><span>kWh</span></div></label>
+                </div>
+                <div class='consumption-panel consumption-panel--months' data-consumption-panel='monthly' hidden>
+                  <div class='month-inputs'>{{#each passport.months}}<label>{{short}}<input type='number' min='0'
+                        step='1' inputmode='decimal' data-consumption-month /></label>{{/each}}</div>
+                </div><label><span data-consumption-tariff-label>{{product.consumption.tariffBillLabel}}</span>
+                  <div class='input-with-unit'><input type='number' min='0.01' step='0.01' inputmode='decimal'
+                      value='46.48' data-consumption-tariff aria-describedby='consumption-tariff-help' required
+                      aria-required='true' /><span>AMD/kWh</span></div>
+                </label>
+                <p class='input-help' id='consumption-tariff-help' data-consumption-tariff-help>
+                  {{product.consumption.tariffBillHelp}}</p>
+                <p data-estimate-badge='{{wizard.ui.estimateBadge}}'>{{product.consumption.annualLabel}}: <output
+                    data-consumption-annual data-estimate-title='{{wizard.ui.estimateTitle}}'>—</output> kWh</p>
+              </div>
+              <section class='professional-panel file-upload' data-optional-upload
+                aria-labelledby='professional-file-title'>
+                <h3 id='professional-file-title'>{{hero.uploadTitle}}</h3>
+                <p>{{hero.uploadHelp}}</p><label class='file-drop' data-file-drop for='bill-file'><input id='bill-file'
+                    type='file'
+                    accept='.pdf,.jpg,.jpeg,.png,application/pdf,image/jpeg,image/png' /><span>{{hero.uploadPrompt}}</span></label>
+                <p class='form-status' data-file-status aria-live='polite'></p>
+                <div data-file-meta hidden><strong data-file-name></strong><button type='button'
+                    class='button button--outline' data-file-remove>{{product.common.cancel}}</button></div>
+              </section>
+              <details class='professional-consumption-advanced'>
+                <summary>{{wizard.ui.advancedOptions}} <svg aria-hidden='true'>
+                    <use href='/icons.svg#chevron-down'></use>
+                  </svg></summary>
+                <div>
+                  <p>{{wizard.ui.consumption.advancedCopy}}</p><button class='text-button' type='button'
+                    data-consumption-switch-monthly>{{wizard.ui.consumption.profileAction}}</button>
+                </div>
+              </details>
+              <div class='flow-actions professional-consumption-actions'><button class='button button--outline'
+                  type='button' data-wizard-back='0'><svg aria-hidden='true'>
+                    <use href='/icons.svg#arrow-left'></use>
+                  </svg>{{wizard.back}}</button><button class='button' type='button'
+                  data-consumption-continue>{{wizard.next}}: {{product.roof.title}}<svg aria-hidden='true'>
+                    <use href='/icons.svg#arrow-right'></use>
+                  </svg></button></div>
+            </div>
+            <aside class='professional-consumption-aside'>
+              <section class='consumption-chart-card'>
+                <div class='consumption-chart-card__heading'>
+                  <div>
+                    <h3>{{wizard.ui.consumption.monthlyTitle}} <span>({{wizard.ui.consumption.optional}})</span></h3>
+                    <p>{{wizard.ui.consumption.monthlyCopy}}</p>
+                  </div>
+                  <div class='chart-unit-toggle' role='group' aria-label='{{wizard.ui.consumption.monthlyTitle}}'>
+                    <button class='is-active' type='button' data-consumption-unit='kwh'
+                      aria-pressed='true'>{{wizard.ui.consumption.kwh}}</button><button type='button'
+                      data-consumption-unit='amd' aria-pressed='false'>{{wizard.ui.consumption.amd}}</button>
+                  </div>
+                </div>
+                <div class='consumption-profile-chart' data-consumption-chart
+                  aria-label='{{wizard.ui.consumption.monthlyTitle}}'>{{#each passport.months}}<div
+                    class='consumption-profile-chart__item'><output data-consumption-chart-value>—</output><span
+                      class='consumption-profile-chart__bar' style='--chart-height: 0%'></span><small>{{short}}</small>
+                  </div>{{/each}}</div><button class='consumption-fill-average' type='button'
+                  data-consumption-fill-average><svg aria-hidden='true'>
+                    <use href='/icons.svg#chart-bars'></use>
+                  </svg>{{wizard.ui.consumption.fillAverage}}</button>
+              </section>
+              <section class='consumption-tips'>
+                <h3><svg aria-hidden='true'>
+                    <use href='/icons.svg#sun'></use>
+                  </svg>{{wizard.ui.consumption.tipsTitle}}</h3>
+                <div><span><svg aria-hidden='true'>
+                      <use href='/icons.svg#file'></use>
+                    </svg></span>
+                  <p>
+                    <strong>{{wizard.ui.consumption.tipBillTitle}}</strong><small>{{wizard.ui.consumption.tipBillCopy}}</small>
+                  </p>
+                </div>
+                <div><span><svg aria-hidden='true'>
+                      <use href='/icons.svg#chart-bars'></use>
+                    </svg></span>
+                  <p>
+                    <strong>{{wizard.ui.consumption.tipMonthlyTitle}}</strong><small>{{wizard.ui.consumption.tipMonthlyCopy}}</small>
+                  </p>
+                </div>
+                <div><span><svg aria-hidden='true'>
+                      <use href='/icons.svg#faq-settings'></use>
+                    </svg></span>
+                  <p>
+                    <strong>{{wizard.ui.consumption.tipTariffTitle}}</strong><small>{{wizard.ui.consumption.tipTariffCopy}}</small>
+                  </p>
+                </div>
+              </section>
+            </aside>
+          </section>
+
+          <section class='wizard-step' data-wizard-step='2' aria-labelledby='wizard-roof-title' hidden tabindex='-1'>
+            <div class='wizard-step__heading'><span>3</span>
+              <div>
+                <h2 id='wizard-roof-title'>{{product.roof.title}}</h2>
+                <p>{{wizard.roofIntro}}</p>
+              </div>
+            </div>
+            <div class='professional-roof-form'>
+              <fieldset class='professional-roof-methods'>
+                <legend>{{product.roof.areaMethodTitle}}</legend><label><input type='radio' name='roof-area-method'
+                    value='map-projected' checked data-roof-area-method /><svg aria-hidden='true'>
+                    <use href='/icons.svg#file-up'></use>
+                  </svg><span>{{product.roof.areaMethods.mapProjected}}</span></label><label><input type='radio'
+                    name='roof-area-method' value='measured-plane' data-roof-area-method /><svg aria-hidden='true'>
+                    <use href='/icons.svg#calculator'></use>
+                  </svg><span>{{product.roof.areaMethods.measuredPlane}}</span></label><button type='button'
+                  data-roof-enter-area><svg aria-hidden='true'>
+                    <use href='/icons.svg#faq-home'></use>
+                  </svg>{{wizard.ui.consumption.manualAreaAction}}</button>
+              </fieldset>
+              <section class='professional-roof-notice'><svg aria-hidden='true'>
+                  <use href='/icons.svg#info'></use>
+                </svg>
+                <p>{{wizard.drawRoof}}<small>{{wizard.mapApproximate}}</small></p>
+              </section>
+              <div class='roof-controls'><button class='button button--outline' type='button'
+                  data-roof-undo>{{product.roof.undo}}</button><button class='button button--outline' type='button'
+                  data-roof-reset>{{product.roof.reset}}</button><button class='button' type='button'
+                  data-roof-finish>{{product.roof.finish}}</button></div>
+              <section class='professional-roof-area'><span><svg aria-hidden='true'>
+                    <use href='/icons.svg#faq-home'></use>
+                  </svg></span>
+                <div><small data-roof-area-label>{{product.roof.areaLabel}}</small><strong data-roof-area>—</strong>
+                </div><button class='button button--outline' type='button'
+                  data-roof-reset>{{product.roof.reset}}</button>
+              </section><label class='professional-roof-plane-input' data-roof-plane-area-wrap
+                hidden>{{product.roof.planeAreaLabel}}<div class='input-with-unit'><input type='number' min='0.01'
+                    step='0.1' inputmode='decimal' data-roof-plane-area /><span>m²</span></div></label>
+              <section class='professional-roof-parameters' aria-labelledby='professional-roof-parameters'>
+                <h3 id='professional-roof-parameters'>{{wizard.engineering}}</h3>
+                <div class='wizard-form-grid'><label>{{product.roof.orientationLabel}}<select data-roof-orientation>
+                      <option value='180'>{{product.roof.orientationOptions.south}}</option>
+                      <option value='135'>{{product.roof.orientationOptions.southEast}}</option>
+                      <option value='225'>{{product.roof.orientationOptions.southWest}}</option>
+                      <option value='90'>{{product.roof.orientationOptions.east}}</option>
+                      <option value='270'>{{product.roof.orientationOptions.west}}</option>
+                      <option value='0'>{{product.roof.orientationOptions.north}}</option>
+                      <option value='custom'>{{product.roof.orientationOptions.custom}}</option>
+                    </select></label><label>{{product.roof.tiltLabel}}<div class='input-with-unit'><input type='number'
+                        min='0' max='90' step='1' inputmode='decimal' value='30' data-roof-tilt /><span>°</span></div>
+                  </label></div><label data-roof-orientation-custom hidden>{{product.roof.customOrientationLabel}}<input
+                    type='number' min='0' max='359' step='1' inputmode='decimal'
+                    data-roof-orientation-custom-input /></label><label
+                  class='professional-roof-mounting-select'>{{product.roof.mountingModeLabel}}<select
+                    data-roof-mounting-mode>
+                    <option value='roof-parallel'>{{product.roof.mountingModes.roofParallel}}</option>
+                    <option value='elevated'>{{product.roof.mountingModes.elevated}}</option>
+                  </select></label>
+              </section>
+              <details class='professional-roof-advanced'>
+                <summary>{{wizard.ui.advancedOptions}} <svg aria-hidden='true'>
+                    <use href='/icons.svg#chevron-down'></use>
+                  </svg></summary>
+                <div>
+                  <p>{{wizard.ui.roof.advancedCopy}}</p><button class='text-button' type='button'
+                    data-roof-enter-area>{{wizard.ui.consumption.manualAreaAction}}</button>
+                </div>
+              </details>
+              <div class='flow-actions professional-roof-actions'><button class='button button--outline' type='button'
+                  data-wizard-back='1'><svg aria-hidden='true'>
+                    <use href='/icons.svg#arrow-left'></use>
+                  </svg>{{wizard.back}}</button><button class='button' type='button'
+                  data-run-analysis>{{wizard.calculate}}<svg aria-hidden='true'>
+                    <use href='/icons.svg#arrow-right'></use>
+                  </svg></button></div>
+            </div>
+            <div class='wizard-map-wrap professional-roof-map'>
+              <div data-roof-map-host></div>
+              <div class='professional-roof-map__layers'><button type='button'
+                  class='is-active'>{{wizard.ui.roof.map}}</button><button
+                  type='button'>{{wizard.ui.roof.satellite}}</button></div>
+              <aside class='professional-roof-map__analysis'>
+                <header><svg aria-hidden='true'>
+                    <use href='/icons.svg#faq-home'></use>
+                  </svg><strong>{{wizard.ui.roof.analysis}}</strong></header>
+                <div><span><svg aria-hidden='true'>
+                      <use href='/icons.svg#faq-home'></use>
+                    </svg></span>
+                  <p><strong data-roof-map-area>—</strong><small>{{wizard.ui.roof.area}}</small></p>
+                </div>
+                <div><span><svg aria-hidden='true'>
+                      <use href='/icons.svg#sun'></use>
+                    </svg></span>
+                  <p><strong>PVGIS</strong><small>{{wizard.ui.roof.potential}}</small></p>
+                </div>
+                <div><span><svg aria-hidden='true'>
+                      <use href='/icons.svg#faq-home'></use>
+                    </svg></span>
+                  <p><strong data-roof-map-orientation>South</strong><small>{{wizard.ui.roof.orientation}}</small></p>
+                </div>
+                <div><span>∠</span>
+                  <p><strong data-roof-map-tilt>30°</strong><small>{{wizard.ui.roof.tilt}}</small></p>
+                </div>
+              </aside>
+              <div class='professional-roof-map__tip'><svg aria-hidden='true'>
+                  <use href='/icons.svg#info'></use>
+                </svg><strong>{{wizard.ui.roof.tipsTitle}}</strong><span>{{wizard.ui.roof.tipsCopy}}</span></div>
+            </div>
+          </section>
+
+          <section class='wizard-step' data-wizard-step='3' aria-labelledby='wizard-result-title' hidden tabindex='-1'>
+            <div class='wizard-step__heading'><span>4</span>
+              <div>
+                <h2 id='wizard-result-title'>{{wizard.results.title}}</h2>
+                <p data-result-summary>{{wizard.results.intro}}</p>
+              </div>
+            </div>
+            <button class='professional-results-restart button button--outline' type='button' data-wizard-restart><svg
+                aria-hidden='true'>
+                <use href='/icons.svg#cycle'></use>
+              </svg>{{wizard.results.restart}}</button>
+            <div class='professional-results-grid'>
+              <section class='professional-results-hero'>
+                <div><small>{{wizard.results.potential}}</small>
+                  <h3>{{#each wizard.results.heroLines}}{{this}}{{#unless @last}}<br />{{/unless}}{{/each}}</h3>
+                  <p>{{wizard.results.heroCopy}}</p>
+                </div>
+              </section>
+              <div class='result-dashboard' data-result-dashboard aria-live='polite'></div>
+              <section class='professional-results-explainer'>
+                <h3><span><svg aria-hidden='true'>
+                      <use href='/icons.svg#chart-bars'></use>
+                    </svg></span>{{wizard.results.calculationTitle}}</h3>
+                <p>{{wizard.results.calculationCopy}}</p>
+              </section>
+              <section class='professional-next-steps'>
+                <h3>{{wizard.results.nextTitle}}</h3>
+                <ol>{{#each wizard.results.nextSteps}}<li><span>{{add @index 1}}</span>
+                    <p><strong>{{title}}</strong><small>{{copy}}</small></p>
+                  </li>{{/each}}</ol><a class='button' href='{{contact.phoneHref}}'>{{wizard.results.offer}} <svg
+                    aria-hidden='true'>
+                    <use href='/icons.svg#arrow-right'></use>
+                  </svg></a>
+              </section>
+            </div>
+            <section class='finance-empty' data-finance-empty hidden>
+              <p>{{wizard.tariffNeeded}}</p><button class='button' type='button'
+                data-add-tariff>{{wizard.addTariff}}</button>
+            </section>
+            <section class='professional-finance' data-finance-result hidden>
+              <h3>{{finance.title}}</h3>
+              <dl data-finance-values></dl>
+              <p class='section-disclosure'>{{finance.disclaimer}}</p>
+            </section>
+            <div class='flow-actions professional-results-actions'><button class='button button--outline' type='button'
+                data-wizard-back='2'><svg aria-hidden='true'>
+                  <use href='/icons.svg#arrow-left'></use>
+                </svg>{{wizard.back}}</button></div>
+          </section>
+          <section class='professional-benefits' aria-label='{{wizard.results.benefitsLabel}}'>{{#each
+            wizard.results.benefits}}<div><span><svg aria-hidden='true'>
+                  <use href='/icons.svg#{{icon}}'></use>
+                </svg></span>
+              <p><strong>{{title}}</strong><small>{{copy}}</small></p>
+            </div>{{/each}}</section>
+        </div>
+      </section>
+    </div>
+  </main>
+  {{> site-footer}}
+  <dialog class='passport-dialog' data-passport-dialog aria-labelledby='passport-dialog-title'>
+    <form method='dialog' class='dialog-close'><button class='round-button' aria-label='{{passport.close}}'>×</button>
+    </form>
+    <div class='dialog-content'>
+      <h2 id='passport-dialog-title'>{{wizard.passportTitle}}</h2>
+      <p>{{wizard.passportCopy}}</p>
+      <div data-passport-dialog-content></div>
+    </div>
+  </dialog>
+  <script id='page-config' type='application/json'>{{{pageConfig}}}</script>
+  <script type='module' src='/src/main.js'></script>
+</body>
+
 </html>

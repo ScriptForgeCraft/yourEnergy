@@ -4733,8 +4733,6 @@
 }
 
 .wizard-map__layers,
-.wizard-map__search,
-.wizard-map__data,
 .wizard-map__place {
   position: absolute;
   z-index: 3;
@@ -4772,64 +4770,15 @@
   background: #fff;
 }
 
-.wizard-map__search {
-  top: 1rem;
-  right: 1rem;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.58rem;
-  min-height: 2.65rem;
-  border: 1px solid #dce5ee;
-  border-radius: 0.55rem;
-  padding: 0 0.9rem;
-  color: #1a3457;
-  background: rgb(255 255 255 / 95%);
-  box-shadow: 0 6px 16px rgb(13 43 74 / 16%);
-  cursor: pointer;
-  font: inherit;
-  font-size: 0.74rem;
-  font-weight: 750;
-}
 
-.wizard-map__search svg {
-  width: 1.18rem;
-  height: 1.18rem;
-}
-
-.wizard-map__data {
-  top: 5rem;
-  right: 1rem;
-  width: min(16.7rem, calc(100% - 2rem));
-  overflow: hidden;
-  border-radius: 0.75rem;
-  padding: 0.94rem 1rem;
-  color: #16315a;
-  background: rgb(255 255 255 / 94%);
-  box-shadow: 0 10px 25px rgb(12 39 69 / 21%);
-}
-
-.wizard-map__data-title {
-  margin-bottom: 0.7rem;
-  color: #15284b;
-  font-size: 0.74rem;
-  font-weight: 850;
-}
 
 .wizard-map__data-title span {
   color: #466584;
   font-weight: 650;
 }
 
-.wizard-map__data > div:not(.wizard-map__data-title) {
-  display: grid;
-  grid-template-columns: 2.75rem minmax(0, 1fr);
-  gap: 0.56rem;
-  align-items: center;
-}
 
-.wizard-map__data > div:not(.wizard-map__data-title) + div {
-  margin-top: 0.74rem;
-}
+
 
 .map-data-icon {
   display: grid;
@@ -4860,26 +4809,6 @@
   background: #e8f3ff;
 }
 
-.wizard-map__data p,
-.wizard-map__place p {
-  margin: 0;
-}
-
-.wizard-map__data strong {
-  display: block;
-  color: #10264b;
-  font-size: 1.25rem;
-  letter-spacing: -0.035em;
-  line-height: 1;
-}
-
-.wizard-map__data small {
-  display: block;
-  margin-top: 0.26rem;
-  color: #516b8a;
-  font-size: 0.67rem;
-  line-height: 1.38;
-}
 
 .wizard-map__place {
   bottom: 1rem;
@@ -5031,9 +4960,6 @@
     grid-template-columns: minmax(0, 0.9fr) minmax(25rem, 1fr);
   }
 
-  .wizard-map__data {
-    width: 14rem;
-  }
 
   .wizard-map__place {
     grid-template-columns: 5.5rem minmax(10rem, 1fr);
@@ -5126,16 +5052,8 @@
     margin-top: 0.55rem !important;
   }
 
-  .wizard-map__data {
-    top: 4.7rem;
-    right: 0.62rem;
-    width: 12.65rem;
-    padding: 0.72rem;
-  }
 
-  .wizard-map__data > div:not(.wizard-map__data-title) {
-    grid-template-columns: 2.25rem minmax(0, 1fr);
-  }
+
 
   .map-data-icon {
     width: 2.25rem;
