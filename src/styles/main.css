@@ -724,9 +724,7 @@ h1 mark {
     font-size: 1.15rem;
   }
 
-  .site-header {
-    background: linear-gradient(180deg, rgb(2 14 24 / 72%), rgb(2 14 24 / 4%));
-  }
+ 
   .hero {
     min-height: auto;
   }
