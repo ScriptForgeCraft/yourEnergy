@@ -124,9 +124,9 @@ const calculatorModeControl = Object.freeze({
     title: 'Պարզեք ձեր արևային ներուժը',
     label: 'Հաշվիչի ռեժիմ',
     quick: 'Արագ և պարզ',
-    quickCopy: '2 քայլ, արագ արդյունք',
+    quickCopy: '2 քայլ, նախնական արդյունք',
     professional: 'Պրոֆեսիոնալ',
-    professionalCopy: 'Լիարժեք հաշվարկ բոլոր պարամետրերով',
+    professionalCopy: 'Մանրամասն հաշվարկ՝ ընդլայնված պարամետրերով',
     unavailable: 'Պրոֆեսիոնալ ռեժիմը հիմա հասանելի չէ։',
     migration: {
       title: 'Հաշվիչը տեղափոխվել է',
@@ -139,9 +139,9 @@ const calculatorModeControl = Object.freeze({
     title: 'Узнайте потенциал солнечной энергии',
     label: 'Режим калькулятора',
     quick: 'Быстро и просто',
-    quickCopy: '2 шага, быстрый результат',
+    quickCopy: '2 шага, предварительный результат',
     professional: 'Профессиональный',
-    professionalCopy: 'Полный расчёт со всеми параметрами',
+    professionalCopy: 'Подробный расчёт с расширенными параметрами',
     unavailable: 'Профессиональный режим сейчас недоступен.',
     migration: {
       title: 'Калькулятор переехал',
@@ -154,9 +154,9 @@ const calculatorModeControl = Object.freeze({
     title: 'See your solar potential',
     label: 'Calculator mode',
     quick: 'Quick & Easy',
-    quickCopy: '2 steps, instant result',
+    quickCopy: '2 steps, preliminary result',
     professional: 'Professional',
-    professionalCopy: 'Full calculation with all parameters',
+    professionalCopy: 'Detailed calculation with advanced parameters',
     unavailable: 'Professional mode is temporarily unavailable.',
     migration: {
       title: 'The calculator has moved',
@@ -511,17 +511,17 @@ const createHomeContext = (content, { pageKind = 'home' } = {}) => {
 const projectsPageCopy = Object.freeze({
   ru: {
     meta: {
-      title: 'Наши проекты солнечных станций в Армении | YOURENERGY',
+      title: 'Наши солнечные проекты в Армении | YOURENERGY',
       description:
-        'Реализованные солнечные станции YOURENERGY для домов, бизнеса и производственных объектов в Армении.',
+        'Реализованные солнечные системы YOURENERGY для домов, бизнеса и производственных объектов в Армении.',
       ogTitle: 'Реальные проекты солнечной энергетики | YOURENERGY',
-      ogDescription: 'Смотрите реализованные солнечные станции и их результаты.'
+      ogDescription: 'Смотрите реализованные солнечные системы и опубликованные показатели проектов.'
     },
     hero: {
       kicker: 'НАШИ ПРОЕКТЫ',
       titleLead: 'Энергия,',
       titleAccent: 'которая уже работает.',
-      copy: 'Реальные солнечные станции в Армении. От идеи до стабильной генерации.',
+      copy: 'Солнечные системы в Армении — от идеи до стабильной выработки энергии.',
       watch: 'Смотреть видео',
       pause: 'Поставить видео на паузу',
       duration: '00:48',
@@ -538,17 +538,17 @@ const projectsPageCopy = Object.freeze({
     },
     featured: {
       kicker: 'ВЫБРАННЫЙ ПРОЕКТ',
-      total: '20',
+      total: '07',
       tag: 'Частный дом',
-      imageAlt: 'Современный дом с солнечной станцией в Ереване',
+      imageAlt: 'Современный дом с солнечной системой в Ереване',
       location: 'Ереван, Армения',
-      title: 'Современный дом с солнечной станцией',
-      copy: 'Надёжное и эстетичное решение для семьи, которое обеспечивает значительную часть потребления электроэнергии.',
+      title: 'Современный дом с солнечной системой',
+      copy: 'Реализованная солнечная система для частного дома с опубликованной установленной мощностью 8,4 kWp.',
       action: 'Подробнее о проекте',
       metrics: [
-        { icon: 'zap', label: 'Установленная мощность', value: '8.4 kWp' },
+        { icon: 'zap', label: 'Установленная мощность', value: '8,4 kWp' },
         { icon: 'chart-bars', label: 'Годовая выработка', value: '8 420 kWh' },
-        { icon: 'leaf', label: 'Сокращение CO₂ в год', value: '3.5 т' }
+        { icon: 'leaf', label: 'Сокращение CO₂ в год', value: '3,5 т' }
       ]
     },
     list: {
@@ -569,7 +569,7 @@ const projectsPageCopy = Object.freeze({
         },
         { number: '2', title: 'Проектирование', copy: 'Разрабатываем техническое решение' },
         { number: '3', title: 'Монтаж', copy: 'Профессиональная установка и запуск' },
-        { number: '4', title: 'Стабильная генерация', copy: 'Чистая энергия на долгие годы' }
+        { number: '4', title: 'Стабильная выработка', copy: 'Чистая энергия на долгие годы' }
       ]
     },
     cta: {
@@ -585,42 +585,42 @@ const projectsPageCopy = Object.freeze({
         title: 'Загородный дом',
         city: 'Котайк',
         image: 'project-ararat',
-        metrics: ['10.4 kWp', '13 500 kWh/год', '5.8 т CO₂']
+        metrics: ['10,4 kWp', '13 500 kWh/год', '5,8 т CO₂']
       },
       {
         tag: 'Бизнес',
         title: 'Офисное здание',
         city: 'Ереван',
         image: 'project-abovyan',
-        metrics: ['30 kWp', '42 000 kWh/год', '17.6 т CO₂']
+        metrics: ['30 kWp', '42 000 kWh/год', '17,6 т CO₂']
       },
       {
         tag: 'Образование',
         title: 'Учебное учреждение',
         city: 'Ереван',
         image: 'project-arabkir',
-        metrics: ['20 kWp', '28 000 kWh/год', '11.7 т CO₂']
+        metrics: ['20 kWp', '28 000 kWh/год', '11,7 т CO₂']
       },
       {
         tag: 'Промышленность',
         title: 'Производственный объект',
         city: 'Армавир',
         image: 'project-vagharshapat',
-        metrics: ['50 kWp', '68 000 kWh/год', '28.4 т CO₂']
+        metrics: ['50 kWp', '68 000 kWh/год', '28,4 т CO₂']
       },
       {
         tag: 'Частный дом',
         title: 'Дом в горах',
         city: 'Дилижан',
         image: 'project-ararat',
-        metrics: ['7.5 kWp', '9 800 kWh/год', '4.1 т CO₂']
+        metrics: ['7,5 kWp', '9 800 kWh/год', '4,1 т CO₂']
       },
       {
         tag: 'Сельское хозяйство',
         title: 'Агропредприятие',
         city: 'Армавир',
         image: 'project-vagharshapat',
-        metrics: ['25 kWp', '37 000 kWh/год', '15.4 т CO₂']
+        metrics: ['25 kWp', '37 000 kWh/год', '15,4 т CO₂']
       }
     ]
   },
@@ -628,15 +628,15 @@ const projectsPageCopy = Object.freeze({
     meta: {
       title: 'Մեր արևային նախագծերը Հայաստանում | YOURENERGY',
       description:
-        'YOURENERGY-ի իրականացված արևային կայաններ Հայաստանի տների, բիզնեսների և արտադրական օբյեկտների համար։',
+        'YOURENERGY-ի իրականացված արևային համակարգեր Հայաստանի տների, բիզնեսների և արտադրական օբյեկտների համար։',
       ogTitle: 'Արևային էներգետիկայի իրական նախագծեր | YOURENERGY',
-      ogDescription: 'Տեսեք իրականացված արևային կայաններն ու դրանց արդյունքները։'
+      ogDescription: 'Տեսեք իրականացված արևային համակարգերն ու նախագծերի հրապարակված ցուցանիշները։'
     },
     hero: {
       kicker: 'ՄԵՐ ՆԱԽԱԳԾԵՐԸ',
       titleLead: 'Էներգիա,',
       titleAccent: 'որն արդեն աշխատում է։',
-      copy: 'Իրական արևային կայաններ Հայաստանում։ Գաղափարից մինչև կայուն արտադրություն։',
+      copy: 'Արևային համակարգեր Հայաստանում՝ գաղափարից մինչև կայուն արտադրություն։',
       watch: 'Դիտել տեսանյութը',
       pause: 'Դադարեցնել տեսանյութը',
       duration: '00:48',
@@ -653,17 +653,17 @@ const projectsPageCopy = Object.freeze({
     },
     featured: {
       kicker: 'ԸՆՏՐՎԱԾ ՆԱԽԱԳԻԾ',
-      total: '20',
+      total: '07',
       tag: 'Առանձնատուն',
-      imageAlt: 'Ժամանակակից տուն արևային կայանով Երևանում',
+      imageAlt: 'Ժամանակակից տուն արևային համակարգով Երևանում',
       location: 'Երևան, Հայաստան',
-      title: 'Ժամանակակից տուն արևային կայանով',
-      copy: 'Ընտանիքի համար հուսալի և գեղագիտական լուծում, որը ծածկում է էլեկտրաէներգիայի սպառման զգալի մասը։',
+      title: 'Ժամանակակից տուն արևային համակարգով',
+      copy: 'Առանձնատան համար իրականացված արևային համակարգ՝ հրապարակված 8,4 kWp տեղադրված հզորությամբ։',
       action: 'Նախագծի մանրամասները',
       metrics: [
-        { icon: 'zap', label: 'Տեղադրված հզորություն', value: '8.4 kWp' },
+        { icon: 'zap', label: 'Տեղադրված հզորություն', value: '8,4 kWp' },
         { icon: 'chart-bars', label: 'Տարեկան արտադրություն', value: '8 420 kWh' },
-        { icon: 'leaf', label: 'CO₂-ի կրճատում', value: '3.5 տ' }
+        { icon: 'leaf', label: 'CO₂-ի կրճատում', value: '3,5 տ' }
       ]
     },
     list: {
@@ -696,42 +696,42 @@ const projectsPageCopy = Object.freeze({
         title: 'Ամառանոց',
         city: 'Կոտայք',
         image: 'project-ararat',
-        metrics: ['10.4 kWp', '13 500 kWh/տարի', '5.8 տ CO₂']
+        metrics: ['10,4 kWp', '13 500 kWh/տարի', '5,8 տ CO₂']
       },
       {
         tag: 'Բիզնես',
         title: 'Գրասենյակային շենք',
         city: 'Երևան',
         image: 'project-abovyan',
-        metrics: ['30 kWp', '42 000 kWh/տարի', '17.6 տ CO₂']
+        metrics: ['30 kWp', '42 000 kWh/տարի', '17,6 տ CO₂']
       },
       {
         tag: 'Կրթություն',
         title: 'Ուսումնական կենտրոն',
         city: 'Երևան',
         image: 'project-arabkir',
-        metrics: ['20 kWp', '28 000 kWh/տարի', '11.7 տ CO₂']
+        metrics: ['20 kWp', '28 000 kWh/տարի', '11,7 տ CO₂']
       },
       {
         tag: 'Արդյունաբերություն',
         title: 'Արտադրական օբյեկտ',
         city: 'Արմավիր',
         image: 'project-vagharshapat',
-        metrics: ['50 kWp', '68 000 kWh/տարի', '28.4 տ CO₂']
+        metrics: ['50 kWp', '68 000 kWh/տարի', '28,4 տ CO₂']
       },
       {
         tag: 'Առանձնատուն',
         title: 'Տուն լեռներում',
         city: 'Դիլիջան',
         image: 'project-ararat',
-        metrics: ['7.5 kWp', '9 800 kWh/տարի', '4.1 տ CO₂']
+        metrics: ['7,5 kWp', '9 800 kWh/տարի', '4,1 տ CO₂']
       },
       {
         tag: 'Գյուղատնտեսություն',
         title: 'Ագրոձեռնարկություն',
         city: 'Արմավիր',
         image: 'project-vagharshapat',
-        metrics: ['25 kWp', '37 000 kWh/տարի', '15.4 տ CO₂']
+        metrics: ['25 kWp', '37 000 kWh/տարի', '15,4 տ CO₂']
       }
     ]
   },
@@ -764,12 +764,12 @@ const projectsPageCopy = Object.freeze({
     },
     featured: {
       kicker: 'FEATURED PROJECT',
-      total: '20',
+      total: '07',
       tag: 'Private home',
-      imageAlt: 'Modern home with a solar station in Yerevan',
+      imageAlt: 'Modern home with a solar system in Yerevan',
       location: 'Yerevan, Armenia',
-      title: 'Modern home with a solar station',
-      copy: 'A reliable and elegant family solution that covers a significant share of household electricity use.',
+      title: 'Modern home with a solar system',
+      copy: 'A completed residential solar system with a published installed capacity of 8.4 kWp.',
       action: 'Project details',
       metrics: [
         { icon: 'zap', label: 'Installed capacity', value: '8.4 kWp' },
@@ -858,7 +858,7 @@ const galleryProjectCaseCopy = Object.freeze({
     eyebrow: 'РЕАЛИЗОВАННЫЙ ПРОЕКТ',
     metaDescription: 'Карточка проекта YOURENERGY',
     intro:
-      'В публичной карточке объекта указаны категория, локация и показатели ниже. Данные о конкретных моделях оборудования в доступном каталоге не опубликованы.',
+      'В публичной карточке объекта указаны категория, местоположение и показатели ниже. Данные о конкретных моделях оборудования в доступном каталоге не опубликованы.',
     photoCaption: 'Опубликованная фотография объекта',
     metricsTitle: 'Опубликованные показатели',
     recordsTitle: 'Техническая карточка объекта',
@@ -886,7 +886,7 @@ const galleryProjectCaseCopy = Object.freeze({
     ],
     disclosureTitle: 'О данных проекта',
     disclosure:
-      'Показатели выше опубликованы в каталоге проектов YOURENERGY. В текущих публичных материалах нет источника и даты их измерения, поэтому годовая выработка не обозначается как PVGIS-расчёт или фактическая генерация.',
+      'Показатели выше опубликованы в каталоге проектов YOURENERGY. В текущих публичных материалах нет источника и даты их измерения, поэтому годовая выработка не обозначается как PVGIS-расчёт или фактически измеренная выработка.',
     back: 'Все проекты',
     calculatorAction: 'Рассчитать свой проект'
   },
@@ -922,7 +922,7 @@ const galleryProjectCaseCopy = Object.freeze({
     ],
     disclosureTitle: 'Նախագծի տվյալների մասին',
     disclosure:
-      'Վերոնշյալ ցուցանիշները հրապարակված են YOURENERGY նախագծերի կատալոգում։ Ընթացիկ հրապարակային նյութերը չեն պարունակում դրանց չափման աղբյուրն ու ամսաթիվը, ուստի տարեկան արտադրությունը չի ներկայացվում որպես PVGIS հաշվարկ կամ փաստացի գեներացիա։',
+      'Վերոնշյալ ցուցանիշները հրապարակված են YOURENERGY նախագծերի կատալոգում։ Ընթացիկ հրապարակային նյութերը չեն պարունակում դրանց չափման աղբյուրն ու ամսաթիվը, ուստի տարեկան արտադրությունը չի ներկայացվում որպես PVGIS հաշվարկ կամ փաստացի չափված արտադրություն։',
     back: 'Բոլոր նախագծերը',
     calculatorAction: 'Հաշվարկել իմ նախագիծը'
   },

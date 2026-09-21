@@ -2,25 +2,25 @@ const modernHomeYerevan = Object.freeze({
   ru: {
     slug: 'modern-home-yerevan',
     meta: {
-      title: 'Современный дом с солнечной станцией в Ереване | YOURENERGY',
+      title: 'Современный дом с солнечной системой в Ереване | YOURENERGY',
       description:
-        'Карточка реализованного проекта YOURENERGY: современный дом с солнечной станцией в Ереване.',
-      ogTitle: 'Современный дом с солнечной станцией | YOURENERGY',
+        'Карточка реализованного проекта YOURENERGY: современный дом с солнечной системой в Ереване.',
+      ogTitle: 'Современный дом с солнечной системой | YOURENERGY',
       ogDescription: 'Опубликованные показатели и сведения о проекте в Ереване.'
     },
     eyebrow: 'РЕАЛИЗОВАННЫЙ ПРОЕКТ',
     category: 'Частный дом',
     location: 'Ереван, Армения',
-    title: 'Современный дом с солнечной станцией',
+    title: 'Современный дом с солнечной системой',
     intro:
-      'Надёжное и эстетичное решение для семьи, которое обеспечивает значительную часть потребления электроэнергии.',
-    imageAlt: 'Современный дом с солнечной станцией в Ереване',
+      'Реализованная солнечная система для частного дома с опубликованной установленной мощностью 8,4 kWp.',
+    imageAlt: 'Современный дом с солнечной системой в Ереване',
     photoCaption: 'Опубликованная фотография объекта',
     metricsTitle: 'Опубликованные показатели',
     metrics: [
-      { icon: 'zap', label: 'Установленная мощность', value: '8.4 kWp' },
+      { icon: 'zap', label: 'Установленная мощность', value: '8,4 kWp' },
       { icon: 'chart-bars', label: 'Годовая выработка', value: '8 420 kWh' },
-      { icon: 'leaf', label: 'Сокращение CO₂ в год', value: '3.5 т' }
+      { icon: 'leaf', label: 'Сокращение CO₂ в год', value: '3,5 т' }
     ],
     recordsTitle: 'Техническая карточка объекта',
     records: [
@@ -47,32 +47,32 @@ const modernHomeYerevan = Object.freeze({
     ],
     disclosureTitle: 'О данных проекта',
     disclosure:
-      'Показатели выше опубликованы в каталоге проектов YOURENERGY. В текущей записи нет источника и даты их измерения, поэтому годовая выработка не обозначается как PVGIS-расчёт или фактическая генерация.',
+      'Показатели выше опубликованы в каталоге проектов YOURENERGY. В текущей записи нет источника и даты их измерения, поэтому годовая выработка не обозначается как расчёт PVGIS или фактически измеренная выработка.',
     back: 'Все проекты',
     calculatorAction: 'Рассчитать свой проект'
   },
   hy: {
     slug: 'modern-home-yerevan',
     meta: {
-      title: 'Ժամանակակից տուն արևային կայանով Երևանում | YOURENERGY',
+      title: 'Ժամանակակից տուն արևային համակարգով Երևանում | YOURENERGY',
       description:
-        'YOURENERGY-ի իրականացված նախագծի քարտ՝ ժամանակակից տուն արևային կայանով Երևանում։',
-      ogTitle: 'Ժամանակակից տուն արևային կայանով | YOURENERGY',
+        'YOURENERGY-ի իրականացված նախագծի քարտ՝ ժամանակակից տուն արևային համակարգով Երևանում։',
+      ogTitle: 'Ժամանակակից տուն արևային համակարգով | YOURENERGY',
       ogDescription: 'Երևանի նախագծի հրապարակված ցուցանիշներն ու տվյալները։'
     },
     eyebrow: 'ԻՐԱԿԱՆԱՑՎԱԾ ՆԱԽԱԳԻԾ',
     category: 'Առանձնատուն',
     location: 'Երևան, Հայաստան',
-    title: 'Ժամանակակից տուն արևային կայանով',
+    title: 'Ժամանակակից տուն արևային համակարգով',
     intro:
-      'Ընտանիքի համար հուսալի և գեղագիտական լուծում, որը ծածկում է էլեկտրաէներգիայի սպառման զգալի մասը։',
-    imageAlt: 'Ժամանակակից տուն արևային կայանով Երևանում',
+      'Առանձնատան համար իրականացված արևային համակարգ՝ հրապարակված 8,4 kWp տեղադրված հզորությամբ։',
+    imageAlt: 'Ժամանակակից տուն արևային համակարգով Երևանում',
     photoCaption: 'Օբյեկտի հրապարակված լուսանկարը',
     metricsTitle: 'Հրապարակված ցուցանիշներ',
     metrics: [
-      { icon: 'zap', label: 'Տեղադրված հզորություն', value: '8.4 kWp' },
+      { icon: 'zap', label: 'Տեղադրված հզորություն', value: '8,4 kWp' },
       { icon: 'chart-bars', label: 'Տարեկան արտադրություն', value: '8 420 kWh' },
-      { icon: 'leaf', label: 'CO₂-ի կրճատում', value: '3.5 տ' }
+      { icon: 'leaf', label: 'CO₂-ի կրճատում', value: '3,5 տ' }
     ],
     recordsTitle: 'Օբյեկտի տեխնիկական քարտ',
     records: [
@@ -99,26 +99,26 @@ const modernHomeYerevan = Object.freeze({
     ],
     disclosureTitle: 'Նախագծի տվյալների մասին',
     disclosure:
-      'Վերոնշյալ ցուցանիշները հրապարակված են YOURENERGY նախագծերի կատալոգում։ Ընթացիկ գրառումը չի պարունակում դրանց չափման աղբյուրն ու ամսաթիվը, ուստի տարեկան արտադրությունը չի ներկայացվում որպես PVGIS հաշվարկ կամ փաստացի գեներացիա։',
+      'Վերոնշյալ ցուցանիշները հրապարակված են YOURENERGY նախագծերի կատալոգում։ Ընթացիկ գրառումը չի պարունակում դրանց չափման աղբյուրն ու ամսաթիվը, ուստի տարեկան արտադրությունը չի ներկայացվում որպես PVGIS հաշվարկ կամ փաստացի չափված արտադրություն։',
     back: 'Բոլոր նախագծերը',
     calculatorAction: 'Հաշվարկել իմ նախագիծը'
   },
   en: {
     slug: 'modern-home-yerevan',
     meta: {
-      title: 'Modern home with a solar station in Yerevan | YOURENERGY',
+      title: 'Modern home with a solar system in Yerevan | YOURENERGY',
       description:
-        'Completed YOURENERGY project record: a modern home with a solar station in Yerevan.',
-      ogTitle: 'Modern home with a solar station | YOURENERGY',
+        'Completed YOURENERGY project record: a modern home with a solar system in Yerevan.',
+      ogTitle: 'Modern home with a solar system | YOURENERGY',
       ogDescription: 'Published results and project information for the Yerevan site.'
     },
     eyebrow: 'COMPLETED PROJECT',
     category: 'Private home',
     location: 'Yerevan, Armenia',
-    title: 'Modern home with a solar station',
+    title: 'Modern home with a solar system',
     intro:
-      'A reliable and elegant family solution that covers a significant share of household electricity use.',
-    imageAlt: 'Modern home with a solar station in Yerevan',
+      'A completed residential solar system with a published installed capacity of 8.4 kWp.',
+    imageAlt: 'Modern home with a solar system in Yerevan',
     photoCaption: 'Published photograph of the site',
     metricsTitle: 'Published results',
     metrics: [

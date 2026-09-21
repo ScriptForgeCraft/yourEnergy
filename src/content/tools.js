@@ -4,7 +4,7 @@ const tools = {
     calculatorMeta: {
       title: 'Արևային հաշվիչ՝ սպառումից մինչև տանիքի վերլուծություն | YOURENERGY',
       description:
-        'Սկսեք ձեր Solar Passport-ը սպառման տվյալներից, ապա հաստատեք կետն ու տանիքի ուրվագիծը իրական PVGIS նախնական վերլուծության համար։',
+        'Սկսեք Solar Passport-ը սպառման տվյալներից, ապա հաստատեք օբյեկտի կետն ու տանիքի ուրվագիծը՝ PVGIS-ի վրա հիմնված նախնական վերլուծության համար։',
       ogTitle: 'Սկսեք ձեր արևային հաշվարկը | YOURENERGY',
       ogDescription: 'Մուտքագրեք սպառումը և շարունակեք կետի ու տանիքի հաստատմանը։'
     },
@@ -24,7 +24,7 @@ const tools = {
     calculatorMeta: {
       title: 'Калькулятор солнечной системы: от потребления к анализу крыши | YOURENERGY',
       description:
-        'Начните Solar Passport с данных о потреблении, затем подтвердите точку и контур крыши для реального предварительного анализа PVGIS.',
+        'Начните Solar Passport с данных о потреблении, затем подтвердите точку объекта и контур крыши для предварительного анализа на основе PVGIS.',
       ogTitle: 'Начните расчёт солнечной системы | YOURENERGY',
       ogDescription: 'Укажите потребление и продолжите к подтверждению точки и крыши.'
     },
@@ -45,7 +45,7 @@ const tools = {
     calculatorMeta: {
       title: 'Solar calculator: from consumption to roof analysis | YOURENERGY',
       description:
-        'Start a Solar Passport with consumption data, then confirm the property point and roof outline for a real preliminary PVGIS analysis.',
+        'Start a Solar Passport with consumption data, then confirm the property point and roof outline for a preliminary analysis based on PVGIS.',
       ogTitle: 'Start your solar calculation | YOURENERGY',
       ogDescription: 'Enter consumption and continue to property-point and roof confirmation.'
     },

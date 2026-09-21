@@ -52,11 +52,11 @@ const aboutPageCopy = {
     certificates: {
       eyebrow: 'СЕРТИФИКАТЫ',
       title: 'Подтверждаем качество первоисточниками',
-      copy: 'Здесь будут опубликованы только документы, переданные YOURENERGY и пригодные для проверки. У каждого появятся предпросмотр и ссылка на исходный PDF.',
-      emptyTitle: 'Оригиналы сертификатов готовятся к публикации',
+      copy: 'Здесь публикуются только документы, переданные YOURENERGY и пригодные для независимой проверки. Для каждого документа предусмотрены предпросмотр и ссылка на исходный PDF.',
+      emptyTitle: 'Подтверждённые сертификаты пока не опубликованы',
       emptyCopy:
-        'Не показываем макеты и не заявляем сертификаты до получения подтверждённого документа. После добавления у каждого файла будут название, дата, предпросмотр и PDF.',
-      emptyNote: 'Материалы будут размещены после проверки.',
+        'Мы не показываем макеты и не заявляем сертификаты без подтверждённого документа. В этом разделе появятся только проверенные оригиналы с названием, датой, предпросмотром и PDF.',
+      emptyNote: 'Публикуем материалы только после проверки оригиналов.',
       openPdf: 'Открыть PDF',
       preview: 'Предпросмотр документа',
       items: []
@@ -78,10 +78,10 @@ const aboutPageCopy = {
       verification: 'Контрольный номер: RBE4-88FA-4C78-8ECF',
       filesTitle: 'Официальные PDF компании',
       filesCopy:
-        'В этом архиве будут размещены регистрационные документы, выписки и другие подтверждающие PDF, которые передаст компания.',
-      emptyTitle: 'Архив документов будет добавлен',
+        'В этом разделе публикуются регистрационные документы, выписки и другие подтверждающие PDF после получения и проверки оригиналов.',
+      emptyTitle: 'Официальные PDF пока не опубликованы',
       emptyCopy:
-        'Файлы появятся здесь только после получения оригиналов. Карточки компании визуально отделены от сертификатов и не подменяют их.',
+        'Публикуем файлы только после получения оригиналов. Юридические документы компании отделены от сертификатов и не заменяют их.',
       openPdf: 'Открыть PDF',
       preview: 'Предпросмотр документа',
       items: []
@@ -89,20 +89,20 @@ const aboutPageCopy = {
     partners: {
       eyebrow: 'НАШИ ПАРТНЁРЫ',
       title: 'Партнёрства, которые можно проверить',
-      copy: 'Мы покажем логотип и статус только тех компаний, чьё партнёрство с YOURENERGY подтверждено материалами для публикации.',
-      emptyTitle: 'Логотипы появятся после подтверждения',
+      copy: 'Публикуем логотип и статус только тех компаний, чьи отношения с YOURENERGY подтверждены материалами, пригодными для публикации.',
+      emptyTitle: 'Подтверждённые партнёрства пока не опубликованы',
       emptyCopy:
-        'Не используем логотипы производителей как заявление об официальном партнёрстве. Когда подтверждения будут готовы, эта витрина станет реестром с понятным статусом каждого партнёра.',
+        'Мы не используем логотипы производителей как заявление об официальном партнёрстве. В разделе будут только отношения, статус которых подтверждён документально.',
       emptyNote: 'Только подтверждённые партнёрства.',
       items: []
     },
     events: {
       eyebrow: 'СОБЫТИЯ И ДОСТИЖЕНИЯ',
       title: 'Развитие через знания и партнёрство',
-      copy: 'Здесь появятся реальные фотографии YOURENERGY с выставок, обучения, встреч и получения сертификатов — с датой, названием и кратким контекстом.',
-      emptyTitle: 'Галерея ожидает реальные материалы',
+      copy: 'Здесь публикуются только реальные материалы YOURENERGY с выставок, обучения, встреч и сертификационных мероприятий — с датой, названием и кратким контекстом.',
+      emptyTitle: 'Материалы о событиях пока не опубликованы',
       emptyCopy:
-        'Мы не заменяем события стоковыми сюжетами. Как только будут переданы фотографии, они появятся в этой ленте вместе с фактами о событии.',
+        'Мы не заменяем реальные события стоковыми сюжетами. Здесь появятся только фотографии и сведения, которые можно привязать к конкретному событию.',
       emptyMeta: 'Фото · дата · описание',
       allEvents: 'Все события',
       items: []
@@ -169,11 +169,11 @@ const aboutPageCopy = {
     certificates: {
       eyebrow: 'ՀԱՎԱՍՏԱԳՐԵՐ',
       title: 'Որակը հաստատում ենք սկզբնաղբյուրներով',
-      copy: 'Այստեղ կհրապարակվեն միայն YOURENERGY-ի փոխանցած և ստուգման համար պիտանի փաստաթղթերը։ Յուրաքանչյուրի համար կլինի նախադիտում և սկզբնական PDF-ի հղում։',
-      emptyTitle: 'Հավաստագրերի բնօրինակները պատրաստվում են հրապարակման',
+      copy: 'Այստեղ հրապարակվում են միայն YOURENERGY-ի տրամադրած և անկախ ստուգման համար պիտանի փաստաթղթերը։ Յուրաքանչյուր փաստաթղթի համար նախատեսված են նախադիտում և սկզբնական PDF-ի հղում։',
+      emptyTitle: 'Հաստատված հավաստագրերը դեռ հրապարակված չեն',
       emptyCopy:
-        'Չենք ցուցադրում մակետներ և չենք հայտարարում հավաստագրեր՝ առանց հաստատված փաստաթղթի։ Ավելացնելուց հետո յուրաքանչյուր ֆայլ կունենա անուն, ամսաթիվ, նախադիտում և PDF։',
-      emptyNote: 'Նյութերը կհրապարակվեն ստուգումից հետո։',
+        'Չենք ցուցադրում մակետներ և չենք հայտարարում հավաստագրեր առանց հաստատված փաստաթղթի։ Այս բաժնում կհայտնվեն միայն ստուգված բնօրինակներ՝ անվամբ, ամսաթվով, նախադիտմամբ և PDF-ով։',
+      emptyNote: 'Նյութերը հրապարակվում են միայն բնօրինակների ստուգումից հետո։',
       openPdf: 'Բացել PDF-ը',
       preview: 'Փաստաթղթի նախադիտում',
       items: []
@@ -195,10 +195,10 @@ const aboutPageCopy = {
       verification: 'Վերահսկիչ համար՝ RBE4-88FA-4C78-8ECF',
       filesTitle: 'Ընկերության պաշտոնական PDF-ներ',
       filesCopy:
-        'Այստեղ կհրապարակվեն գրանցման փաստաթղթերը, քաղվածքները և այլ հաստատող PDF-ները, որոնք կփոխանցի ընկերությունը։',
-      emptyTitle: 'Փաստաթղթերի արխիվը կավելացվի',
+        'Այս բաժնում գրանցման փաստաթղթերը, քաղվածքները և այլ հաստատող PDF-ները հրապարակվում են բնօրինակները ստանալուց և ստուգելուց հետո։',
+      emptyTitle: 'Պաշտոնական PDF-ները դեռ հրապարակված չեն',
       emptyCopy:
-        'Ֆայլերը կհայտնվեն այստեղ միայն բնօրինակները ստանալուց հետո։ Ընկերության քարտերը տեսողականորեն բաժանված են հավաստագրերից և չեն փոխարինում դրանց։',
+        'Ֆայլերը հրապարակվում են միայն բնօրինակները ստանալուց հետո։ Ընկերության իրավաբանական փաստաթղթերը ներկայացված են առանձին և չեն փոխարինում հավաստագրերին։',
       openPdf: 'Բացել PDF-ը',
       preview: 'Փաստաթղթի նախադիտում',
       items: []
@@ -206,28 +206,28 @@ const aboutPageCopy = {
     partners: {
       eyebrow: 'ՄԵՐ ԳՈՐԾԸՆԿԵՐՆԵՐԸ',
       title: 'Գործընկերություններ, որոնք կարելի է ստուգել',
-      copy: 'Կցուցադրենք լոգոն ու կարգավիճակը միայն այն ընկերությունների համար, որոնց գործընկերությունը YOURENERGY-ի հետ հաստատված է հրապարակման համար նախատեսված նյութերով։',
-      emptyTitle: 'Լոգոները կհայտնվեն հաստատումից հետո',
+      copy: 'Հրապարակում ենք միայն այն ընկերությունների լոգոն և կարգավիճակը, որոնց հարաբերությունը YOURENERGY-ի հետ հաստատված է հրապարակման համար պիտանի նյութերով։',
+      emptyTitle: 'Հաստատված գործընկերությունները դեռ հրապարակված չեն',
       emptyCopy:
-        'Արտադրողների լոգոները չենք օգտագործում որպես պաշտոնական գործընկերության հայտարարություն։ Հաստատումները պատրաստ լինելուց հետո այս հատվածը կդառնա յուրաքանչյուր գործընկերոջ հստակ կարգավիճակով ռեեստր։',
+        'Արտադրողների լոգոները չենք օգտագործում որպես պաշտոնական գործընկերության հայտարարություն։ Այս բաժնում կներկայացվեն միայն փաստաթղթերով հաստատված հարաբերություններ և դրանց հստակ կարգավիճակը։',
       emptyNote: 'Միայն հաստատված գործընկերություններ։',
       items: []
     },
     events: {
       eyebrow: 'ԻՐԱԴԱՐՁՈՒԹՅՈՒՆՆԵՐ ԵՎ ՆՎԱՃՈՒՄՆԵՐ',
       title: 'Զարգացում՝ գիտելիքի և գործընկերության միջոցով',
-      copy: 'Այստեղ կհայտնվեն YOURENERGY-ի իրական լուսանկարները ցուցահանդեսներից, ուսուցումներից, հանդիպումներից և հավաստագրերի ստացումից՝ ամսաթվով, վերնագրով և կարճ նկարագրությամբ։',
-      emptyTitle: 'Պատկերասրահը սպասում է իրական նյութերին',
+      copy: 'Այստեղ հրապարակվում են միայն YOURENERGY-ի իրական նյութերը ցուցահանդեսներից, ուսուցումներից, հանդիպումներից և հավաստագրման միջոցառումներից՝ ամսաթվով, վերնագրով և կարճ նկարագրությամբ։',
+      emptyTitle: 'Իրադարձությունների նյութերը դեռ հրապարակված չեն',
       emptyCopy:
-        'Իրադարձությունները չենք փոխարինում ֆոնդային սյուժեներով։ Լուսանկարները փոխանցվելուց հետո դրանք կհայտնվեն այս ժապավենում՝ իրադարձության փաստերով։',
+        'Իրական իրադարձությունները չենք փոխարինում ֆոնդային սյուժեներով։ Այստեղ կհայտնվեն միայն կոնկրետ իրադարձությանը կապվող լուսանկարներն ու ստուգելի տվյալները։',
       emptyMeta: 'Լուսանկար · ամսաթիվ · նկարագրություն',
       allEvents: 'Բոլոր իրադարձությունները',
       items: []
     },
     finalCta: {
       eyebrow: 'ԵԿԵՔ ՔՆՆԱՐԿԵՆՔ ՁԵՐ ՆԱԽԱԳԻԾԸ',
-      title: 'Մաքուր էներգիան դարձնենք Ձեր ապագայի մի մասը',
-      copy: 'Թողեք հայտ՝ սկսենք Ձեր տան կամ բիզնեսի համար հասկանալի նախնական հաշվարկից։',
+      title: 'Մաքուր էներգիան դարձնենք ձեր ապագայի մի մասը',
+      copy: 'Թողեք հայտ՝ սկսենք ձեր տան կամ բիզնեսի համար հասկանալի նախնական հաշվարկից։',
       primary: 'Ստանալ հաշվարկ',
       secondary: 'Կապվել մեզ հետ',
       note: ['Մաքուր', 'էներգիա։', 'Իրական', 'լուծումներ։']
@@ -286,11 +286,11 @@ const aboutPageCopy = {
     certificates: {
       eyebrow: 'CERTIFICATES',
       title: 'Quality, supported by source documents',
-      copy: 'Only documents supplied by YOURENERGY and suitable for verification will be published here. Each will include a preview and a link to the original PDF.',
-      emptyTitle: 'Original certificates are being prepared for publication',
+      copy: 'Only documents supplied by YOURENERGY and suitable for independent verification are published here. Each document includes a preview and a link to the original PDF.',
+      emptyTitle: 'Verified certificates have not been published yet',
       emptyCopy:
-        'We do not show mock-ups or claim certificates before a verified document is received. Once added, every file will have its title, date, preview and PDF.',
-      emptyNote: 'Materials will appear after verification.',
+        'We do not show mock-ups or claim certificates without a verified document. This section will contain only checked originals with a title, date, preview and PDF.',
+      emptyNote: 'Materials are published only after the originals are verified.',
       openPdf: 'Open PDF',
       preview: 'Document preview',
       items: []
@@ -312,10 +312,10 @@ const aboutPageCopy = {
       verification: 'Reference number: RBE4-88FA-4C78-8ECF',
       filesTitle: 'Official company PDFs',
       filesCopy:
-        'Registration documents, extracts and other supporting PDFs supplied by the company will be published in this archive.',
-      emptyTitle: 'The document archive will be added',
+        'Registration documents, extracts and other supporting PDFs are published here after the originals are received and verified.',
+      emptyTitle: 'Official PDFs have not been published yet',
       emptyCopy:
-        'Files will appear here only after originals are received. Company cards are visually separate from certificates and never substitute for them.',
+        'Files are published only after the originals are received. Company legal documents are kept separate from certificates and do not substitute for them.',
       openPdf: 'Open PDF',
       preview: 'Document preview',
       items: []
@@ -323,20 +323,20 @@ const aboutPageCopy = {
     partners: {
       eyebrow: 'OUR PARTNERS',
       title: 'Partnerships you can verify',
-      copy: 'We will show the logo and status only for companies whose relationship with YOURENERGY is confirmed with publishable materials.',
-      emptyTitle: 'Logos will appear after confirmation',
+      copy: 'We publish a logo and status only when a company’s relationship with YOURENERGY is supported by materials suitable for publication.',
+      emptyTitle: 'Verified partnerships have not been published yet',
       emptyCopy:
-        'We do not use manufacturer logos as an assertion of an official partnership. Once confirmation is ready, this space will become a register with the clear status of every partner.',
+        'We do not use manufacturer logos as an assertion of an official partnership. This section will contain only relationships with documented status.',
       emptyNote: 'Confirmed partnerships only.',
       items: []
     },
     events: {
       eyebrow: 'EVENTS & MILESTONES',
       title: 'Growing through knowledge and partnership',
-      copy: 'Real YOURENERGY photography from exhibitions, training, meetings and certification events will appear here, with a date, title and short context.',
-      emptyTitle: 'The gallery awaits real materials',
+      copy: 'Only real YOURENERGY materials from exhibitions, training, meetings and certification events are published here, with a date, title and short context.',
+      emptyTitle: 'Event materials have not been published yet',
       emptyCopy:
-        'We do not replace events with stock scenes. Once photographs are supplied, they will appear in this editorial rail with facts about the event.',
+        'We do not replace real events with stock scenes. This section will contain only photographs and information that can be tied to a specific event.',
       emptyMeta: 'Photo · date · description',
       allEvents: 'All events',
       items: []

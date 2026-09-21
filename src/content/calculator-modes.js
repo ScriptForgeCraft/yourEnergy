@@ -50,7 +50,7 @@ const common = {
       ogDescription: 'Սկսեք երկու հասկանալի դաշտից։'
     },
     refineMeta: {
-      title: 'Տանիքի պարզեցում | YOURENERGY',
+      title: 'Տանիքի ճշգրտում | YOURENERGY',
       description: 'Հաստատեք կետն ու մատչելի տանիքի տարածքը՝ նախնական հաշվարկը ճշգրտելու համար։',
       ogTitle: 'Ճշգրտել տանիքի գնահատումը | YOURENERGY',
       ogDescription: 'Քարտեզի ուրվագիծ կամ չափված տարածք։'
@@ -68,7 +68,7 @@ const common = {
       heroCopy:
         'Ընտրեք ռեժիմը, նշեք տարածաշրջանն ու միջին սպառումը և ստացեք PVGIS-ի հիման վրա նախնական գնահատում։',
       locationTitle: 'Տարածաշրջան',
-      locationCopy: 'Ընտրեք տարածաշրջանը՝ արևային ճշգրիտ տվյալների համար',
+      locationCopy: 'Ընտրեք տարածաշրջանը՝ նախնական արևային տվյալների համար',
       consumptionTitle: 'Էլեկտրաէներգիայի սպառում',
       consumptionCopy: 'Մուտքագրեք միջին ամսական հաշիվը կամ սպառումը',
       region: 'Տարածաշրջան',
@@ -169,7 +169,7 @@ const common = {
       noJs: 'JavaScript-ի բացակայության դեպքում զանգահարեք ինժեներին՝ նախնական խորհրդատվության համար։'
     },
     refine: {
-      eyebrow: 'Տանիքի պարզեցում',
+      eyebrow: 'Տանիքի ճշգրտում',
       title: 'Ճշգրտեք գնահատումը ձեր տան կետով և տանիքով',
       intro: 'Ընտրեք ձեր տունը, ապա կամ ուրվագծեք մատչելի տանիքը, կամ մուտքագրեք չափված մակերեսը։',
       openMap: 'Ընտրել տունը քարտեզի վրա',
@@ -201,12 +201,12 @@ const common = {
       pro: 'Ավելի մանրամասն կարգավորումներ',
       invalid: 'Հաստատեք կետը և նշեք վավեր տանիքի տարածք։',
       unavailable:
-        'Ճշգրտված հաշվարկն այժմ անհասանելի է։ Ներմուծված տվյալները պահպանվել են այս session-ում։'
+        'Ճշգրտված հաշվարկն այժմ անհասանելի է։ Մուտքագրված տվյալները պահպանվում են այս աշխատաշրջանում։'
     },
     pro: {
       eyebrow: 'Պրոֆեսիոնալ ռեժիմ',
       title: 'Արևային պրոֆեսիոնալ հաշվիչ',
-      intro: 'Ճշգրիտ վերլուծություն բոլոր պարամետրերով։ Պլանավորեք ձեր համակարգը քայլ առ քայլ։',
+      intro: 'Մանրամասն նախնական վերլուծություն՝ հասանելի պարամետրերով։ Պլանավորեք համակարգը քայլ առ քայլ։',
       steps: ['Տեղադրություն', 'Սպառում', 'Տանիք', 'Արդյունքներ'],
       locationTitle: 'Տեղադրություն',
       locationCopy:
@@ -233,16 +233,16 @@ const common = {
       },
       results: {
         title: 'Ձեր արևային արդյունքները',
-        intro: 'Ահա՝ ինչ կարող է ապահովել արևային էներգիան ձեր տանիքի համար։',
+        intro: 'Ահա ձեր տանիքի նախնական արևային ներուժը՝ ըստ մուտքագրված տվյալների։',
         restart: 'Սկսել նորից',
         potential: 'Ձեր արևային ներուժը',
         heroLines: ['Ավելի մաքուր,', 'ավելի պայծառ ապագան', 'սկսվում է այստեղ'],
-        heroCopy: 'Փոխեք ձեր տանիքը մաքուր էներգիայի և սկսեք խնայել հենց այսօր։',
+        heroCopy: 'Տեսեք ձեր տանիքի համար հաշվարկված արևային արտադրությունն ու հնարավոր խնայողությունը։',
         monthlyProduction: 'Ամսական արտադրություն',
         impactTitle: 'Ձեր բնապահպանական ազդեցությունը',
-        calculationTitle: 'Ինչպե՞ս ենք հաշվարկել սա',
+        calculationTitle: 'Ինչպես է հաշվարկվել այս գնահատումը',
         calculationCopy:
-          'Մենք օգտագործել ենք PVGIS-ի իրական արևային տվյալները, ձեր տեղադրությունը, էլեկտրաէներգիայի սպառումը և տանիքի բնութագրերը՝ արևային ներուժը գնահատելու համար։',
+          'Մենք օգտագործել ենք PVGIS-ի արևային ռեսուրսի տվյալները, ձեր տեղադրությունը, էլեկտրաէներգիայի սպառումը և տանիքի բնութագրերը՝ արևային ներուժը գնահատելու համար։',
         nextTitle: 'Ի՞նչ է հաջորդը',
         nextSteps: [
           {
@@ -253,7 +253,7 @@ const common = {
             title: 'Խոսեք մեր մասնագետի հետ',
             copy: 'Կվերանայենք արդյունքները և կպատասխանենք ձեր բոլոր հարցերին։'
           },
-          { title: 'Սկսեք խնայել', copy: 'Փոխեք արևի լույսը իրական խնայողության։' }
+          { title: 'Հաստատեք նախագիծը', copy: 'Տեղազննությունից հետո հաստատեք վերջնական սարքավորումները, աշխատանքների ծավալն ու տեղադրման պայմանները։' }
         ],
         offer: 'Ստանալ մանրամասն առաջարկ',
         metrics: {
@@ -268,12 +268,12 @@ const common = {
           {
             icon: 'shield-check',
             title: 'Հուսալի տվյալներ',
-            copy: 'Հիմնված է PVGIS-ի իրական տվյալների վրա'
+            copy: 'Հիմնված է PVGIS-ի արևային ռեսուրսի տվյալների վրա'
           },
           {
             icon: 'chart-bars',
-            title: 'Ճշգրիտ արդյունքներ',
-            copy: 'Հարմարեցված է ձեր տեղադրությանն ու տանիքին'
+            title: 'Օբյեկտին համապատասխան գնահատում',
+            copy: 'Հաշվի է առնում տեղադրությունն ու տանիքի մուտքագրված տվյալները'
           },
           {
             icon: 'leaf',
@@ -318,7 +318,7 @@ const common = {
       heroCopy:
         'Выберите режим, регион и среднее потребление, чтобы получить предварительную оценку на основе PVGIS.',
       locationTitle: 'Местоположение',
-      locationCopy: 'Выберите регион для точных солнечных данных',
+      locationCopy: 'Выберите регион для предварительных солнечных данных',
       consumptionTitle: 'Потребление электроэнергии',
       consumptionCopy: 'Введите средний счёт за месяц или потребление',
       region: 'Регион',
@@ -350,7 +350,7 @@ const common = {
       proTitle: 'Нужен более подробный анализ?',
       proCopy:
         'Откройте профессиональный режим для карты крыши и расширенного финансового анализа.',
-      proAction: 'Перейти в Professional',
+      proAction: 'Перейти в профессиональный режим',
       waiting: 'Выберите регион и введите потребление.',
       loading: 'Получаем региональные солнечные данные из PVGIS…',
       unavailable: 'PVGIS сейчас недоступен. Мы не подставили примерные цифры. Попробуйте снова.',
@@ -365,8 +365,8 @@ const common = {
       resultsCopy: 'На основе солнечных данных выбранного региона и вашего потребления',
       capacity: 'Рекомендуемая мощность',
       panels: 'Панели',
-      generation: 'Годовая генерация',
-      monthlyProduction: 'Расчётная генерация по месяцам',
+      generation: 'Годовая выработка',
+      monthlyProduction: 'Расчётная выработка по месяцам',
       co2: 'Сокращение CO₂',
       trees: 'Эквивалент деревьев',
       budget: 'Предварительный бюджет',
@@ -457,20 +457,20 @@ const common = {
     pro: {
       eyebrow: 'Профессиональный режим',
       title: 'Профессиональный солнечный калькулятор',
-      intro: 'Точный анализ всех параметров. Планируйте систему шаг за шагом.',
-      steps: ['Локация', 'Потребление', 'Крыша', 'Результаты'],
-      locationTitle: 'Локация',
-      locationCopy: 'Найдите адрес, выберите объект на карте или используйте текущую локацию.',
+      intro: 'Подробный предварительный анализ по доступным параметрам. Планируйте систему шаг за шагом.',
+      steps: ['Местоположение', 'Потребление', 'Крыша', 'Результаты'],
+      locationTitle: 'Местоположение',
+      locationCopy: 'Найдите адрес, выберите объект на карте или используйте текущее местоположение.',
       searchAddress: 'Найти адрес',
-      useCurrentLocation: 'Использовать текущую локацию',
+      useCurrentLocation: 'Использовать текущее местоположение',
       addressSearchHint: 'Введите не менее 3 символов адреса.',
       addressSearching: 'Ищем адрес…',
       addressResults: 'Выберите подходящий адрес',
       addressNoResults: 'Адрес не найден. Выберите точку на карте.',
       addressSearchUnavailable: 'Поиск адреса сейчас недоступен. Выберите точку на карте.',
-      currentLocationLoading: 'Определяем текущую локацию…',
+      currentLocationLoading: 'Определяем текущее местоположение…',
       currentLocationUnavailable:
-        'Не удалось получить текущую локацию. Разрешите доступ к геопозиции или выберите точку на карте.',
+        'Не удалось определить текущее местоположение. Разрешите доступ к геопозиции или выберите точку на карте.',
       region: 'Регион',
       city: 'Город / община',
       district: 'Район (необязательно)',
@@ -483,16 +483,16 @@ const common = {
       },
       results: {
         title: 'Ваши результаты по солнечной энергии',
-        intro: 'Вот чего вы можете достичь с солнечной системой на своей крыше.',
+        intro: 'Вот предварительная оценка солнечного потенциала вашей крыши по введённым данным.',
         restart: 'Начать заново',
         potential: 'Ваш солнечный потенциал',
         heroLines: ['Более чистое,', 'более светлое будущее', 'начинается здесь'],
-        heroCopy: 'Превратите крышу в источник чистой энергии и начните экономить уже сегодня.',
+        heroCopy: 'Посмотрите расчётную выработку и возможную экономию для вашей крыши.',
         monthlyProduction: 'Выработка по месяцам',
         impactTitle: 'Ваш вклад в окружающую среду',
-        calculationTitle: 'Как мы это рассчитали?',
+        calculationTitle: 'Как рассчитана эта оценка',
         calculationCopy:
-          'Мы использовали реальные солнечные данные PVGIS, вашу локацию, потребление электроэнергии и характеристики крыши, чтобы оценить солнечный потенциал.',
+          'Мы использовали данные PVGIS о солнечном ресурсе, местоположение, потребление электроэнергии и характеристики крыши, чтобы оценить солнечный потенциал.',
         nextTitle: 'Что дальше?',
         nextSteps: [
           {
@@ -503,7 +503,7 @@ const common = {
             title: 'Поговорите со специалистом',
             copy: 'Мы проверим результаты и ответим на все ваши вопросы.'
           },
-          { title: 'Начните экономить', copy: 'Превратите солнечный свет в реальную экономию!' }
+          { title: 'Подтвердите проект', copy: 'После осмотра объекта подтвердите итоговое оборудование, объём работ и условия монтажа.' }
         ],
         offer: 'Получить подробное предложение',
         metrics: {
@@ -518,12 +518,12 @@ const common = {
           {
             icon: 'shield-check',
             title: 'Надёжные данные',
-            copy: 'На основе реальных данных PVGIS'
+            copy: 'На основе данных PVGIS о солнечном ресурсе'
           },
           {
             icon: 'chart-bars',
-            title: 'Точные результаты',
-            copy: 'С учётом вашей локации и крыши'
+            title: 'Оценка по вашему объекту',
+            copy: 'На основе местоположения и параметров крыши'
           },
           {
             icon: 'leaf',
@@ -563,7 +563,7 @@ const common = {
       heroCopy:
         'Choose a mode, region and average consumption to get a preliminary PVGIS-based estimate.',
       locationTitle: 'Location',
-      locationCopy: 'Select a region for accurate solar data',
+      locationCopy: 'Select a region for preliminary solar data',
       consumptionTitle: 'Electricity consumption',
       consumptionCopy: 'Enter your average monthly bill or consumption',
       region: 'Region',
@@ -593,7 +593,7 @@ const common = {
       pro: 'Open professional calculator',
       proTitle: 'Want a more detailed analysis?',
       proCopy: 'Open Professional mode for roof mapping and advanced financial analysis.',
-      proAction: 'Switch to Professional',
+      proAction: 'Switch to professional mode',
       waiting: 'Choose a region and enter consumption.',
       loading: 'Getting regional solar data from PVGIS…',
       unavailable:
@@ -621,7 +621,7 @@ const common = {
       contact: 'Get a proposal',
       phone: 'Call an engineer',
       lead: {
-        eyebrow: 'Your preliminary result',
+        eyebrow: 'Your preliminary estimate',
         title: 'Get a proposal',
         copy: 'Leave your contact details and an engineer will receive a short summary of this preliminary calculation.',
         name: 'Name',
@@ -686,12 +686,12 @@ const common = {
       pro: 'More engineering settings',
       invalid: 'Confirm a point and enter a valid roof area.',
       unavailable:
-        'The refined calculation is unavailable right now. Your entered data remains in this session.'
+        'The refined calculation is unavailable right now. Your entered data remains available in this browser session.'
     },
     pro: {
       eyebrow: 'Professional mode',
       title: 'Professional Solar Calculator',
-      intro: 'Accurate analysis with all parameters. Plan your system step by step.',
+      intro: 'Detailed preliminary analysis using the available parameters. Plan your system step by step.',
       steps: ['Location', 'Consumption', 'Roof', 'Results'],
       locationTitle: 'Location',
       locationCopy:
@@ -719,16 +719,16 @@ const common = {
       },
       results: {
         title: 'Your Solar Results',
-        intro: 'Here is what you can achieve with solar on your roof.',
+        intro: 'Here is the preliminary solar potential of your roof based on the inputs provided.',
         restart: 'Start over',
         potential: 'Your solar potential',
         heroLines: ['A cleaner,', 'brighter future', 'starts here'],
-        heroCopy: 'Turn your roof into clean energy and start saving from day one.',
+        heroCopy: 'See how your roof could contribute to clean-energy generation and estimated savings.',
         monthlyProduction: 'Monthly production',
         impactTitle: 'Your environmental impact',
-        calculationTitle: 'How we calculated this?',
+        calculationTitle: 'How this estimate was calculated',
         calculationCopy:
-          'We used real solar data (PVGIS), your location, electricity consumption and roof characteristics to estimate your solar potential.',
+          'We used PVGIS solar-resource data, your location, electricity consumption and roof characteristics to estimate your solar potential.',
         nextTitle: 'What’s next?',
         nextSteps: [
           {
@@ -739,7 +739,7 @@ const common = {
             title: 'Talk to our specialist',
             copy: 'We’ll review the results and answer all your questions.'
           },
-          { title: 'Start saving', copy: 'Turn sunlight into real savings!' }
+          { title: 'Confirm the project', copy: 'After the site review, confirm the final equipment, scope and installation terms.' }
         ],
         offer: 'Get a detailed offer',
         metrics: {
@@ -754,12 +754,12 @@ const common = {
           {
             icon: 'shield-check',
             title: 'Reliable data',
-            copy: 'Based on real solar data (PVGIS)'
+            copy: 'Based on PVGIS solar-resource data'
           },
           {
             icon: 'chart-bars',
-            title: 'Accurate results',
-            copy: 'Tailored to your location and roof'
+            title: 'Property-specific estimate',
+            copy: 'Based on your location and roof inputs'
           },
           {
             icon: 'leaf',

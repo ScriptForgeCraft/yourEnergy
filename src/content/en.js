@@ -26,7 +26,7 @@ export default {
     title: 'Solar calculator for homes in Armenia | YOURENERGY',
     description:
       'Choose a region and enter consumption for a preliminary solar estimate, then refine it with your roof and professional inputs when needed.',
-    ogTitle: 'Start a clear solar estimate for your home | YOURENERGY',
+    ogTitle: 'Start your home solar estimate | YOURENERGY',
     ogDescription:
       'Region and consumption first; optional roof refinement and professional calculation follow.',
     serviceDescription:
@@ -64,8 +64,8 @@ export default {
     hours: CONTACT_HOURS.en.footer
   },
   common: {
-    headerCta: 'Get a quote',
-    demo: 'Demonstration example',
+    headerCta: 'Get an estimate',
+    demo: 'Example',
     illustrative: 'Illustrative image'
   },
   product: {
@@ -122,7 +122,7 @@ export default {
       billHelp: 'Enter the average monthly amount in AMD.',
       tariffLabel: 'Tariff from your bill',
       tariffHelp:
-        'Optional for kWh. A bill in AMD needs it to convert the amount to kWh; the Passport will mark it as user-provided.',
+        'Optional for kWh. A bill in AMD needs the tariff to convert the amount to kWh; Solar Passport will mark it as user-provided.',
       tariffBillLabel: 'Tariff AMD/kWh — required to calculate consumption',
       tariffBillHelp: 'Enter the rate from your bill to convert AMD to kWh.',
       tariffOptionalLabel: 'Tariff AMD/kWh — optional',
@@ -285,7 +285,7 @@ export default {
       },
       assumptionsTitle: 'Assumptions and limits',
       commercialEstimate:
-        'Preliminary YOUR ENERGY price · {version} · not an offer: {p25}–{p75}; P50 {p50}. Valid until {validUntil}.'
+        'Preliminary YOURENERGY price · {version} · not an offer: {p25}–{p75}; P50 {p50}. Valid until {validUntil}.'
     },
     ledger: {
       title: 'How this was calculated',
@@ -298,7 +298,7 @@ export default {
         userTariff: 'Entered by the visitor from a bill',
         solar: 'Solar resource',
         investment: 'System price',
-        pricebook: 'Temporary YOUR ENERGY price book',
+        pricebook: 'Temporary YOURENERGY price list',
         unavailable: 'Source not connected'
       },
       assumptions: {
@@ -317,7 +317,7 @@ export default {
         USER_PROVIDED_TARIFF:
           'The tariff was entered by the visitor from a bill and is not a tariff registry record.',
         TEMPORARY_PRICEBOOK_NOT_OFFER:
-          'The temporary PriceBook is a preliminary budget guide, not an offer or contractual price.',
+          'The temporary price list is a preliminary budget guide, not an offer or contractual price.',
         MAP_PROJECTED_AREA_CONVERTED_TO_ROOF_PLANE:
           'The map outline area was converted from a top view to a preliminary roof-plane area using the entered tilt.',
         USER_MEASURED_ROOF_PLANE_AREA:
@@ -355,7 +355,7 @@ export default {
     months: months.map(({ short, name }) => ({ short, name }))
   },
   hero: {
-    eyebrow: 'Manage your energy your way.',
+    eyebrow: 'Manage your solar energy your way.',
     titleLead: 'Your roof',
     titleMiddle: 'has more potential',
     titleAccent: 'than you think.',
@@ -378,8 +378,8 @@ export default {
     uploadHelp:
       'PDF, JPG or PNG up to 10 MB. The file stays out of the server and is not read automatically; enter values manually.',
     removeFile: 'Remove file',
-    signatureLead: 'Clean energy',
-    signatureTail: 'Brighter lives',
+    signatureLead: 'Your solar energy,',
+    signatureTail: 'your way.',
     dashboardAriaLabel: 'Solar calculation summary',
     dashboardLocationSelected: 'Selected point',
     dashboardLocationRegional: 'Regional estimate',
@@ -437,14 +437,14 @@ export default {
     panels: '16 × 650 W',
     source: 'Source: example data',
     chartTitle: 'Monthly generation, kWh',
-    chartDescription: 'A bar chart showing demonstration generation from January to December.',
+    chartDescription: 'A bar chart showing example monthly generation from January to December.',
     tableTitle: 'Monthly generation data table',
     monthLabel: 'Month',
     months
   },
   trust: {
     disclosure:
-      'Each preliminary result shows its connected, missing and manually supplied sources. Static cards remain demonstrations.',
+      'Each preliminary result shows which data came from connected sources, was entered manually or is still missing. The examples on the page illustrate the result structure; your calculation is built from your own data.',
     items: [
       {
         icon: 'satellite',
@@ -467,12 +467,12 @@ export default {
   journey: {
     title: 'Your solar journey',
     progressLabel: 'Solar analysis journey',
-    previewLabel: 'Example preview',
-    chartPreviewLabel: 'Example chart — available after calculation',
+    previewLabel: 'Preliminary result',
+    chartPreviewLabel: 'Monthly generation is calculated from your inputs',
     chartReadyLabel: 'Monthly generation from your calculation',
-    availableAfterCalculation: 'Available after calculation',
+    availableAfterCalculation: 'Calculated from your inputs',
     confirmedInput: 'Confirmed input',
-    awaitingInput: 'Add this in the calculator',
+    awaitingInput: 'Enter this in the calculator',
     previousStepLabel: 'Back',
     nextStepLabel: 'Continue',
     chartMonths: ['J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'],
@@ -481,7 +481,7 @@ export default {
         number: '1',
         nav: 'Your Home',
         visual: 'home',
-        visualLabel: 'Home visual placeholder',
+        visualLabel: 'Illustrative home view',
         headline: 'Let’s start with your home',
         copy: 'Enter your location and electricity use. We’ll establish the starting point for your solar analysis.',
         status: 'home',
@@ -489,19 +489,19 @@ export default {
           {
             icon: 'map-pin',
             label: 'Location',
-            value: 'Add this in the calculator',
+            value: 'Choose a region or property point',
             data: 'location'
           },
           {
             icon: 'zap',
             label: 'Electricity use',
-            value: 'Add this in the calculator',
+            value: 'Enter your bill or monthly consumption',
             data: 'consumption'
           },
           {
             icon: 'sun',
             label: 'Solar resource',
-            value: 'Available after calculation',
+            value: 'Calculated from the selected location',
             data: 'solar-resource'
           }
         ],
@@ -514,7 +514,7 @@ export default {
         number: '2',
         nav: 'Roof Details',
         visual: 'roof',
-        visualLabel: 'Roof outline visual placeholder',
+        visualLabel: 'Illustrative roof outline',
         headline: 'Let’s understand your roof',
         copy: 'Refine the estimate with your property point, usable roof area and roof conditions.',
         status: 'roof',
@@ -522,19 +522,19 @@ export default {
           {
             icon: 'satellite',
             label: 'Usable roof area',
-            value: 'Add this in the calculator',
+            value: 'From an outline or measured area',
             data: 'roof-area'
           },
           {
             icon: 'sun',
             label: 'Roof direction',
-            value: 'Add this in the calculator',
+            value: 'Enter the roof-face direction',
             data: 'roof-direction'
           },
           {
             icon: 'arrow-right',
             label: 'Roof tilt',
-            value: 'Add this in the calculator',
+            value: 'Enter the roof tilt angle',
             data: 'roof-tilt'
           }
         ],
@@ -547,30 +547,30 @@ export default {
         number: '3',
         nav: 'System Design',
         visual: 'system',
-        visualLabel: 'Solar system visual placeholder',
+        visualLabel: 'Illustrative solar-system view',
         headline: 'Your solar system takes shape',
         copy: 'We combine your consumption, location and roof inputs to recommend a system that fits your home.',
         status: 'system',
         chart: true,
         cards: [
-          { icon: 'zap', label: 'System size', value: 'Example preview', data: 'system-size' },
-          { icon: 'sun', label: 'Solar panels', value: 'Example preview', data: 'panel-count' },
+          { icon: 'zap', label: 'System size', value: 'Based on consumption and solar resource', data: 'system-size' },
+          { icon: 'sun', label: 'Solar panels', value: 'Count based on capacity and selected panel', data: 'panel-count' },
           {
             icon: 'shield-check',
             label: 'Inverter',
-            value: 'Confirmed during design',
+            value: 'Power and type matched to the system',
             data: 'inverter'
           },
           {
             icon: 'cycle',
             label: 'Annual production',
-            value: 'Example preview',
+            value: 'Based on system configuration and solar data',
             data: 'annual-production'
           }
         ],
         visualCards: [
-          { label: 'Recommended system', value: 'Example preview', data: 'system-size' },
-          { label: 'Data source', value: 'Available after calculation', data: 'system-status' }
+          { label: 'Recommended system', value: 'Based on your entered data', data: 'system-size' },
+          { label: 'Data source', value: 'Shown with the calculated result', data: 'system-status' }
         ]
       },
       {
@@ -584,12 +584,12 @@ export default {
           {
             icon: 'pin',
             label: 'Roof measurements',
-            value: 'During the survey'
+            value: 'Measured on site'
           },
           {
             icon: 'calculator',
             label: 'Electrical panel',
-            value: 'During the survey'
+            value: 'Connection conditions are checked'
           },
           {
             icon: 'sun',
@@ -606,38 +606,38 @@ export default {
         number: '5',
         nav: 'Installation',
         visual: 'installation',
-        visualLabel: 'Installation visual placeholder',
+        visualLabel: 'Illustrative installation view',
         headline: 'From analysis to installation',
         copy: 'An engineer verifies the property, finalizes the design and prepares the system for professional installation.',
         cards: [
-          { icon: 'pin', label: 'Site review', value: 'Engineer verification' },
-          { icon: 'calculator', label: 'Final design', value: 'After review' },
-          { icon: 'sun', label: 'Equipment preparation', value: 'Confirmed for the project' }
+          { icon: 'pin', label: 'Site review', value: 'Property parameters confirmed on site' },
+          { icon: 'calculator', label: 'Final design', value: 'Approved system configuration' },
+          { icon: 'sun', label: 'Equipment preparation', value: 'Specified for the approved design' }
         ],
         timeline: [
-          { number: '1', label: 'Site review' },
-          { number: '2', label: 'Final design' },
-          { number: '3', label: 'Equipment preparation' },
-          { number: '4', label: 'Installation' },
-          { number: '5', label: 'Commissioning' }
+          { number: '1', label: 'Site preparation' },
+          { number: '2', label: 'Mounting-system installation' },
+          { number: '3', label: 'Panel installation' },
+          { number: '4', label: 'Inverter and electrical work' },
+          { number: '5', label: 'Testing and commissioning' }
         ]
       },
       {
         number: '6',
         nav: 'Lifetime Support',
         visual: 'support',
-        visualLabel: 'Support visual placeholder',
+        visualLabel: 'Illustrative monitoring and service view',
         headline: 'Your system keeps working for you',
-        copy: 'Keep your system information, production context and support journey together after installation.',
+        copy: 'After installation, keep system information, generation data and service contacts together in one place.',
         cards: [
-          { icon: 'file', label: 'Solar Passport', value: 'Your current analysis context' },
-          { icon: 'shield-check', label: 'System information', value: 'Project documentation' },
-          { icon: 'cycle', label: 'Production context', value: 'Available analysis inputs' },
-          { icon: 'support', label: 'Support', value: 'Your support journey' }
+          { icon: 'file', label: 'Solar Passport', value: 'Inputs and assumptions from the current calculation' },
+          { icon: 'shield-check', label: 'System information', value: 'Design and technical documentation' },
+          { icon: 'cycle', label: 'Generation', value: 'Monitoring data when available' },
+          { icon: 'support', label: 'Support', value: 'YOURENERGY service and contact options' }
         ],
         visualCards: [
           { label: 'Documents', value: 'Together in one place' },
-          { label: 'System context', value: 'Kept with your journey' }
+          { label: 'Service', value: 'Support after commissioning' }
         ],
         cta: 'Start my solar analysis'
       }
@@ -732,8 +732,8 @@ export default {
       'Financial values are not shown before analysis. The model excludes tariff growth, degradation, maintenance, financing, discounting, taxes and export rules.'
   },
   engineering: {
-    eyebrow: 'A human check',
-    title: 'First we estimate digitally. Then we check on site.',
+    eyebrow: 'Engineer review',
+    title: 'We estimate online first. Then we verify on site.',
     copy: 'A final offer is made only after an on-site inspection and engineering review of the property.',
     items: [
       'Roof condition and load-bearing capacity',
@@ -742,7 +742,7 @@ export default {
       'Protection, grounding and connection'
     ],
     imageAlt: 'Illustrative image of an engineer inspecting a solar system',
-    imageNote: 'The person shown is not a confirmed YOURENERGY employee.'
+    imageNote: 'The person shown is illustrative and is not identified as a YOURENERGY employee.'
   },
   companyRecord: {
     eyebrow: 'Legal information',
@@ -804,7 +804,7 @@ export default {
           { label: 'Enclosure protection', value: 'IP65' },
           { label: 'Stated warranty', value: '5 years' }
         ],
-        note: 'The manufacturer marks this sheet as preliminary and subject to change without notice. It lists EN IEC 62109-1/-2 and other standards; an engineer confirms final compatibility.'
+        note: 'The manufacturer identifies this data sheet as preliminary and may change it without notice. It lists EN IEC 62109-1/-2 and other standards; an engineer confirms final compatibility.'
       },
       {
         vendor: 'SolaX · data sheet',
@@ -885,15 +885,15 @@ export default {
       ],
       [
         'Can I install a battery?',
-        'Yes. A battery appears in the Energy independence demo option. Actual capacity is selected from the consumption profile and required backup time.'
+        'Yes. The Energy Independence option includes an example with battery storage. Actual capacity is selected from the consumption profile and required backup time.'
       ],
       [
         'Can I finance a system?',
-        'This version does not advertise a financing programme. Financing terms can be published only after a specific partner and agreement are confirmed.'
+        'No verified financing programme is currently published on the website. Financing terms will be stated only when a specific partner and agreement are confirmed.'
       ],
       [
         'What is a Solar Passport?',
-        'A preliminary Passport keeps the current session’s inputs, sources and assumptions together. It is not an engineering design, bank document or offer, and it is not stored as a permanent link or PDF.'
+        'A preliminary Solar Passport keeps the current calculation inputs, sources and assumptions together. It is not an engineering design, bank document or binding offer; a permanent link and PDF are not currently generated.'
       ]
     ].map(([question, answer], index) => ({
       question,
@@ -912,10 +912,10 @@ export default {
   },
   finalCta: {
     title: 'Ready to discover your home’s potential?',
-    copy: 'Start a preliminary analysis and see exactly which information is confirmed, missing or still needs an engineer.',
+    copy: 'Start a preliminary analysis and see which information is confirmed, missing or still needs an engineer.',
     primary: 'Calculate my home',
     secondary: 'View Solar Passport',
-    note: 'Free, with no obligation and no commercial promise.'
+    note: 'Free, with no obligation and no binding commercial offer.'
   },
   footer: {
     description:
@@ -951,7 +951,7 @@ export default {
     fileSelected: 'The file was selected and remains only in browser memory.',
     fileRemoved: 'File removed.',
     mapReady: 'The interactive property map is ready.',
-    mapFailed: 'The map is unavailable. The static demonstration fallback remains available.',
+    mapFailed: 'The map is unavailable. A static fallback is shown instead.',
     monthTooltip: 'Generation in {month}: {value} kWh'
   }
 };

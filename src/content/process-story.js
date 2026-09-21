@@ -5,12 +5,12 @@ export const processStoryCopy = {
     previousStepLabel: 'Previous step',
     nextStepLabel: 'Next step',
     scrollLabel: 'Scroll to continue',
-    availableAfterAnalysis: 'Available after your analysis',
-    addInCalculator: 'Add this in the calculator',
-    verifiedOnSite: 'Verified during the site visit',
-    confirmedInDesign: 'Confirmed in the final design',
-    includedInProposal: 'Included in the final proposal',
-    preliminaryEstimate: 'Preliminary estimate, if available',
+    availableAfterAnalysis: 'Calculated from your analysis',
+    addInCalculator: 'Enter the data in the calculator',
+    verifiedOnSite: 'Verified on site',
+    confirmedInDesign: 'Defined in the final design',
+    includedInProposal: 'Detailed in the final proposal',
+    preliminaryEstimate: 'Preliminary estimate when data allows',
     form: {
       region: 'Region',
       chooseRegion: 'Choose your region',
@@ -39,38 +39,38 @@ export const processStoryCopy = {
         number: '1',
         nav: 'Your Solar Analysis',
         visual: 'analysis',
-        visualLabel: 'Solar analysis visual placeholder',
+        visualLabel: 'Solar system analysis visual',
         headline: 'We start with the numbers.',
         copy: 'Your consumption, location and available solar data become a clear starting point for your system.',
         cards: [
           {
             icon: 'map-pin',
             label: 'Location',
-            value: 'Add this in the calculator',
+            value: 'Choose your region in the calculator',
             data: 'location'
           },
           {
             icon: 'zap',
             label: 'Consumption',
-            value: 'Add this in the calculator',
+            value: 'Enter your bill or monthly usage',
             data: 'consumption'
           },
           {
             icon: 'sun',
             label: 'Solar resource',
-            value: 'Available after your analysis',
+            value: 'Calculated from the site location',
             data: 'solar-resource'
           },
           {
             icon: 'calculator',
             label: 'Recommended system',
-            value: 'Available after your analysis',
+            value: 'Based on consumption and solar resource',
             data: 'system-capacity'
           },
           {
             icon: 'cycle',
             label: 'Expected generation',
-            value: 'Available after your analysis',
+            value: 'Estimated from system size and location',
             data: 'annual-generation'
           }
         ],
@@ -80,38 +80,38 @@ export const processStoryCopy = {
         number: '2',
         nav: 'Engineer Site Visit',
         visual: 'inspection',
-        visualLabel: 'On-site engineering inspection placeholder',
-        headline: 'Then we verify the real home.',
+        visualLabel: 'On-site engineering inspection',
+        headline: 'Then we verify the property on site.',
         copy: 'An engineer checks the roof, usable area, orientation, shading and electrical conditions.',
         cards: [
           {
             icon: 'satellite',
             label: 'Roof area',
-            value: 'Verified during the site visit',
+            value: 'Measured on site',
             data: 'roof-area'
           },
           {
             icon: 'sun',
             label: 'Orientation',
-            value: 'Verified during the site visit',
+            value: 'Confirmed from the actual roof position',
             data: 'orientation'
           },
           {
             icon: 'arrow-right',
             label: 'Tilt',
-            value: 'Verified during the site visit',
+            value: 'Measured on the roof',
             data: 'tilt'
           },
           {
             icon: 'sun',
             label: 'Shading',
-            value: 'Verified during the site visit',
+            value: 'Potential shading is checked on site',
             data: 'shading'
           },
           {
             icon: 'zap',
             label: 'Electrical panel',
-            value: 'Verified during the site visit',
+            value: 'Connection conditions are checked',
             data: 'electrical-panel'
           }
         ]
@@ -120,38 +120,38 @@ export const processStoryCopy = {
         number: '3',
         nav: 'Final System Design',
         visual: 'design',
-        visualLabel: 'Final solar system design placeholder',
+        visualLabel: 'Final solar system design',
         headline: 'Your system takes its final shape.',
         copy: 'We turn verified measurements into the panel layout, inverter configuration and final engineering design.',
         cards: [
           {
             icon: 'satellite',
             label: 'Panel layout',
-            value: 'Confirmed in the final design',
+            value: 'Final roof placement',
             data: 'panel-layout'
           },
           {
             icon: 'zap',
             label: 'System capacity',
-            value: 'Available after your analysis',
+            value: 'Refined from analysis and site measurements',
             data: 'system-capacity'
           },
           {
             icon: 'sun',
             label: 'Panel count',
-            value: 'Available after your analysis',
+            value: 'Based on capacity and selected panel model',
             data: 'panel-count'
           },
           {
             icon: 'shield-check',
             label: 'Inverter',
-            value: 'Confirmed in the final design',
+            value: 'Power and type matched to the system',
             data: 'inverter'
           },
           {
             icon: 'cycle',
             label: 'Expected generation',
-            value: 'Available after your analysis',
+            value: 'Based on the final configuration',
             data: 'annual-generation'
           }
         ]
@@ -160,64 +160,64 @@ export const processStoryCopy = {
         number: '4',
         nav: 'Clear Proposal & Agreement',
         visual: 'proposal',
-        visualLabel: 'Proposal and agreement placeholder',
+        visualLabel: 'Proposal and agreement',
         headline: 'Everything is clear before installation.',
         copy: 'You receive the final equipment list, price, scope, warranties and project terms before work begins.',
         cards: [
           {
             icon: 'sun',
             label: 'Equipment',
-            value: 'Included in the final proposal',
+            value: 'Selected types and models',
             data: 'equipment'
           },
           {
             icon: 'zap',
             label: 'System size',
-            value: 'Confirmed in the final design',
+            value: 'Capacity approved in the final design',
             data: 'system-capacity'
           },
           {
             icon: 'file',
-            label: 'Project scope',
-            value: 'Included in the final proposal',
+            label: 'Scope of work',
+            value: 'Defined in the final contract',
             data: 'project-scope'
           },
           {
             icon: 'calculator',
             label: 'Price',
-            value: 'Preliminary estimate, if available',
+            value: 'Based on equipment and scope',
             data: 'commercial-estimate'
           },
           {
             icon: 'shield-check',
             label: 'Warranty',
-            value: 'Included in the final proposal',
+            value: 'Equipment and workmanship warranties',
             data: 'warranty'
           },
-          { icon: 'file', label: 'Terms', value: 'Included in the final proposal', data: 'terms' }
+          { icon: 'file', label: 'Terms', value: 'Schedule, payment and work terms', data: 'terms' }
         ]
       },
       {
         number: '5',
         nav: 'Installation & Commissioning',
         visual: 'installation',
-        visualLabel: 'Installation and commissioning placeholder',
+        visualLabel: 'Installation and commissioning',
         headline: 'We build it.\nTest it.\nTurn it on.',
         copy: 'The system is installed according to the approved design, checked and commissioned for operation.',
         timeline: [
           { number: '1', label: 'Site preparation' },
           { number: '2', label: 'Mounting' },
-          { number: '3', label: 'Panels' },
-          { number: '4', label: 'Inverter & electrical' },
+          { number: '3', label: 'Panel installation' },
+          { number: '4', label: 'Inverter installation & connection' },
           { number: '5', label: 'Testing' },
-          { number: '6', label: 'System online' }
+          { number: '6', label: 'System commissioning' }
         ]
       },
       {
         number: '6',
         nav: 'Monitoring & Service',
         visual: 'support',
-        visualLabel: 'Monitoring and service placeholder',
+        visualLabel: 'Monitoring and service',
         headline: 'Your system is live.\nWe stay with you.',
         copy: 'After commissioning, you get access to the monitoring app for your installed equipment to follow generation and system status. We help with setup, diagnostics and ongoing service.',
         cards: [
@@ -268,12 +268,12 @@ export const processStoryCopy = {
     previousStepLabel: 'Предыдущий этап',
     nextStepLabel: 'Следующий этап',
     scrollLabel: 'Листайте дальше',
-    availableAfterAnalysis: 'Доступно после вашего анализа',
-    addInCalculator: 'Добавьте данные в калькуляторе',
-    verifiedOnSite: 'Проверяется при осмотре объекта',
-    confirmedInDesign: 'Подтверждается в финальном проекте',
-    includedInProposal: 'Указывается в финальном предложении',
-    preliminaryEstimate: 'Предварительная оценка, если она доступна',
+    availableAfterAnalysis: 'Рассчитывается по результатам анализа',
+    addInCalculator: 'Введите данные в калькуляторе',
+    verifiedOnSite: 'Уточняется на объекте',
+    confirmedInDesign: 'Определяется в финальном проекте',
+    includedInProposal: 'Детализируется в итоговом предложении',
+    preliminaryEstimate: 'Предварительная оценка при наличии данных',
     form: {
       region: 'Регион',
       chooseRegion: 'Выберите регион',
@@ -309,31 +309,31 @@ export const processStoryCopy = {
           {
             icon: 'map-pin',
             label: 'Местоположение',
-            value: 'Добавьте данные в калькуляторе',
+            value: 'Выберите регион в калькуляторе',
             data: 'location'
           },
           {
             icon: 'zap',
             label: 'Потребление',
-            value: 'Добавьте данные в калькуляторе',
+            value: 'Укажите счёт или месячное потребление',
             data: 'consumption'
           },
           {
             icon: 'sun',
             label: 'Солнечный ресурс',
-            value: 'Доступно после вашего анализа',
+            value: 'Рассчитывается по местоположению',
             data: 'solar-resource'
           },
           {
             icon: 'calculator',
             label: 'Рекомендованная система',
-            value: 'Доступно после вашего анализа',
+            value: 'По потреблению и солнечному ресурсу',
             data: 'system-capacity'
           },
           {
             icon: 'cycle',
-            label: 'Ожидаемая генерация',
-            value: 'Доступно после вашего анализа',
+            label: 'Ожидаемая выработка',
+            value: 'По мощности системы и местоположению',
             data: 'annual-generation'
           }
         ],
@@ -344,37 +344,37 @@ export const processStoryCopy = {
         nav: 'Выезд инженера',
         visual: 'inspection',
         visualLabel: 'Визуализация инженерного осмотра объекта',
-        headline: 'Затем проверяем ваш дом на месте.',
+        headline: 'Затем проверяем объект на месте.',
         copy: 'Инженер проверяет крышу, полезную площадь, ориентацию, затенение и состояние электрики.',
         cards: [
           {
             icon: 'satellite',
             label: 'Площадь крыши',
-            value: 'Проверяется при осмотре объекта',
+            value: 'Измеряется на объекте',
             data: 'roof-area'
           },
           {
             icon: 'sun',
             label: 'Ориентация',
-            value: 'Проверяется при осмотре объекта',
+            value: 'Уточняется по фактическому положению крыши',
             data: 'orientation'
           },
           {
             icon: 'arrow-right',
             label: 'Угол наклона',
-            value: 'Проверяется при осмотре объекта',
+            value: 'Измеряется на крыше',
             data: 'tilt'
           },
           {
             icon: 'sun',
             label: 'Затенение',
-            value: 'Проверяется при осмотре объекта',
+            value: 'Проверяются возможные зоны затенения',
             data: 'shading'
           },
           {
             icon: 'zap',
             label: 'Электрощит',
-            value: 'Проверяется при осмотре объекта',
+            value: 'Проверяются условия подключения',
             data: 'electrical-panel'
           }
         ]
@@ -390,31 +390,31 @@ export const processStoryCopy = {
           {
             icon: 'satellite',
             label: 'Схема панелей',
-            value: 'Подтверждается в финальном проекте',
+            value: 'Финальная раскладка на крыше',
             data: 'panel-layout'
           },
           {
             icon: 'zap',
             label: 'Мощность системы',
-            value: 'Доступно после вашего анализа',
+            value: 'Уточняется по анализу и замерам',
             data: 'system-capacity'
           },
           {
             icon: 'sun',
             label: 'Количество панелей',
-            value: 'Доступно после вашего анализа',
+            value: 'По мощности и выбранной модели',
             data: 'panel-count'
           },
           {
             icon: 'shield-check',
             label: 'Инвертор',
-            value: 'Подтверждается в финальном проекте',
+            value: 'Мощность и тип под выбранную систему',
             data: 'inverter'
           },
           {
             icon: 'cycle',
-            label: 'Ожидаемая генерация',
-            value: 'Доступно после вашего анализа',
+            label: 'Ожидаемая выработка',
+            value: 'По финальной конфигурации системы',
             data: 'annual-generation'
           }
         ]
@@ -430,37 +430,37 @@ export const processStoryCopy = {
           {
             icon: 'sun',
             label: 'Оборудование',
-            value: 'Указывается в финальном предложении',
+            value: 'Выбранные типы и модели',
             data: 'equipment'
           },
           {
             icon: 'zap',
             label: 'Мощность системы',
-            value: 'Подтверждается в финальном проекте',
+            value: 'Утверждённая мощность по финальному проекту',
             data: 'system-capacity'
           },
           {
             icon: 'file',
             label: 'Объём работ',
-            value: 'Указывается в финальном предложении',
+            value: 'Фиксируется в финальном договоре',
             data: 'project-scope'
           },
           {
             icon: 'calculator',
             label: 'Цена',
-            value: 'Предварительная оценка, если она доступна',
+            value: 'По оборудованию и объёму работ',
             data: 'commercial-estimate'
           },
           {
             icon: 'shield-check',
             label: 'Гарантия',
-            value: 'Указывается в финальном предложении',
+            value: 'Гарантии на оборудование и работы',
             data: 'warranty'
           },
           {
             icon: 'file',
             label: 'Условия',
-            value: 'Указываются в финальном предложении',
+            value: 'Сроки, оплата и условия выполнения работ',
             data: 'terms'
           }
         ]
@@ -475,10 +475,10 @@ export const processStoryCopy = {
         timeline: [
           { number: '1', label: 'Подготовка объекта' },
           { number: '2', label: 'Монтаж конструкций' },
-          { number: '3', label: 'Панели' },
-          { number: '4', label: 'Инвертор и электрика' },
+          { number: '3', label: 'Монтаж панелей' },
+          { number: '4', label: 'Монтаж и подключение инвертора' },
           { number: '5', label: 'Проверка' },
-          { number: '6', label: 'Система запущена' }
+          { number: '6', label: 'Запуск системы' }
         ]
       },
       {
@@ -487,7 +487,7 @@ export const processStoryCopy = {
         visual: 'support',
         visualLabel: 'Визуализация мониторинга и обслуживания',
         headline: 'Система запущена.\nМы остаёмся на связи.',
-        copy: 'После запуска вы получаете доступ к приложению мониторинга установленного оборудования, чтобы видеть генерацию и состояние системы. Мы помогаем с настройкой, диагностикой и дальнейшим обслуживанием.',
+        copy: 'После запуска вы получаете доступ к приложению мониторинга установленного оборудования, чтобы видеть выработку и состояние системы. Мы помогаем с настройкой, диагностикой и дальнейшим обслуживанием.',
         cards: [
           {
             icon: 'support',
@@ -497,7 +497,7 @@ export const processStoryCopy = {
           },
           {
             icon: 'cycle',
-            label: 'Генерация',
+            label: 'Выработка',
             value: 'Текущие и исторические данные',
             data: 'generation'
           },
@@ -536,12 +536,12 @@ export const processStoryCopy = {
     previousStepLabel: 'Նախորդ քայլը',
     nextStepLabel: 'Հաջորդ քայլը',
     scrollLabel: 'Ոլորեք՝ շարունակելու համար',
-    availableAfterAnalysis: 'Հասանելի կլինի ձեր վերլուծությունից հետո',
-    addInCalculator: 'Ավելացրեք տվյալները հաշվիչում',
-    verifiedOnSite: 'Ստուգվում է տեղազննման ընթացքում',
-    confirmedInDesign: 'Հաստատվում է վերջնական նախագծում',
-    includedInProposal: 'Նշվում է վերջնական առաջարկում',
-    preliminaryEstimate: 'Նախնական գնահատական՝ առկայության դեպքում',
+    availableAfterAnalysis: 'Հաշվարկվում է վերլուծության արդյունքներով',
+    addInCalculator: 'Մուտքագրեք տվյալները հաշվիչում',
+    verifiedOnSite: 'Ճշտվում է տեղում',
+    confirmedInDesign: 'Սահմանվում է վերջնական նախագծում',
+    includedInProposal: 'Մանրամասնվում է վերջնական առաջարկում',
+    preliminaryEstimate: 'Նախնական գնահատական՝ բավարար տվյալների դեպքում',
     form: {
       region: 'Մարզ',
       chooseRegion: 'Ընտրեք մարզը',
@@ -577,31 +577,31 @@ export const processStoryCopy = {
           {
             icon: 'map-pin',
             label: 'Տեղադրություն',
-            value: 'Ավելացրեք տվյալները հաշվիչում',
+            value: 'Ընտրեք մարզը հաշվիչում',
             data: 'location'
           },
           {
             icon: 'zap',
             label: 'Սպառում',
-            value: 'Ավելացրեք տվյալները հաշվիչում',
+            value: 'Նշեք հաշիվը կամ ամսական սպառումը',
             data: 'consumption'
           },
           {
             icon: 'sun',
             label: 'Արևային ռեսուրս',
-            value: 'Հասանելի կլինի ձեր վերլուծությունից հետո',
+            value: 'Հաշվարկվում է ըստ տեղադրության',
             data: 'solar-resource'
           },
           {
             icon: 'calculator',
             label: 'Առաջարկվող համակարգ',
-            value: 'Հասանելի կլինի ձեր վերլուծությունից հետո',
+            value: 'Ըստ ձեր սպառման և արևային ռեսուրսի',
             data: 'system-capacity'
           },
           {
             icon: 'cycle',
             label: 'Սպասվող արտադրություն',
-            value: 'Հասանելի կլինի ձեր վերլուծությունից հետո',
+            value: 'Ըստ համակարգի հզորության և տեղադրության',
             data: 'annual-generation'
           }
         ],
@@ -612,37 +612,37 @@ export const processStoryCopy = {
         nav: 'Ինժեների այց և տեղազննում',
         visual: 'inspection',
         visualLabel: 'Օբյեկտի ինժեներական տեղազննման տեսապատկեր',
-        headline: 'Այնուհետև տունը ստուգում ենք տեղում։',
+        headline: 'Այնուհետև օբյեկտը ստուգում ենք տեղում։',
         copy: 'Ինժեները ստուգում է տանիքը, օգտագործելի մակերեսը, կողմնորոշումը, ստվերավորումը և էլեկտրական պայմանները։',
         cards: [
           {
             icon: 'satellite',
             label: 'Տանիքի մակերես',
-            value: 'Ստուգվում է տեղազննման ընթացքում',
+            value: 'Չափվում է օբյեկտում',
             data: 'roof-area'
           },
           {
             icon: 'sun',
             label: 'Կողմնորոշում',
-            value: 'Ստուգվում է տեղազննման ընթացքում',
+            value: 'Որոշվում է տանիքի իրական դիրքով',
             data: 'orientation'
           },
           {
             icon: 'arrow-right',
             label: 'Թեքություն',
-            value: 'Ստուգվում է տեղազննման ընթացքում',
+            value: 'Չափվում է տանիքի վրա',
             data: 'tilt'
           },
           {
             icon: 'sun',
             label: 'Ստվերավորում',
-            value: 'Ստուգվում է տեղազննման ընթացքում',
+            value: 'Ստուգվում են հնարավոր ստվերները',
             data: 'shading'
           },
           {
             icon: 'zap',
             label: 'Էլեկտրական վահանակ',
-            value: 'Ստուգվում է տեղազննման ընթացքում',
+            value: 'Ստուգվում են միացման պայմանները',
             data: 'electrical-panel'
           }
         ]
@@ -658,31 +658,31 @@ export const processStoryCopy = {
           {
             icon: 'satellite',
             label: 'Վահանակների դասավորություն',
-            value: 'Հաստատվում է վերջնական նախագծում',
+            value: 'Վերջնական տեղաբաշխումը՝ տանիքի վրա',
             data: 'panel-layout'
           },
           {
             icon: 'zap',
             label: 'Համակարգի հզորություն',
-            value: 'Հասանելի կլինի ձեր վերլուծությունից հետո',
+            value: 'Ճշտվում է վերլուծությամբ և տեղազննմամբ',
             data: 'system-capacity'
           },
           {
             icon: 'sun',
             label: 'Վահանակների քանակ',
-            value: 'Հասանելի կլինի ձեր վերլուծությունից հետո',
+            value: 'Ըստ հզորության և ընտրված մոդելի',
             data: 'panel-count'
           },
           {
             icon: 'shield-check',
             label: 'Ինվերտոր',
-            value: 'Հաստատվում է վերջնական նախագծում',
+            value: 'Հզորությունն ու տեսակը՝ ըստ համակարգի',
             data: 'inverter'
           },
           {
             icon: 'cycle',
             label: 'Սպասվող արտադրություն',
-            value: 'Հասանելի կլինի ձեր վերլուծությունից հետո',
+            value: 'Վերջնական կազմաձևի հիման վրա',
             data: 'annual-generation'
           }
         ]
@@ -698,37 +698,37 @@ export const processStoryCopy = {
           {
             icon: 'sun',
             label: 'Սարքավորումներ',
-            value: 'Նշվում է վերջնական առաջարկում',
+            value: 'Ընտրված տեսակներն ու մոդելները',
             data: 'equipment'
           },
           {
             icon: 'zap',
             label: 'Համակարգի հզորություն',
-            value: 'Հաստատվում է վերջնական նախագծում',
+            value: 'Վերջնական նախագծով հաստատված հզորությունը',
             data: 'system-capacity'
           },
           {
             icon: 'file',
             label: 'Աշխատանքի ծավալ',
-            value: 'Նշվում է վերջնական առաջարկում',
+            value: 'Սահմանվում է վերջնական պայմանագրում',
             data: 'project-scope'
           },
           {
             icon: 'calculator',
             label: 'Գին',
-            value: 'Նախնական գնահատական՝ առկայության դեպքում',
+            value: 'Ըստ սարքավորումների և աշխատանքի ծավալի',
             data: 'commercial-estimate'
           },
           {
             icon: 'shield-check',
             label: 'Երաշխիք',
-            value: 'Նշվում է վերջնական առաջարկում',
+            value: 'Սարքավորումների և աշխատանքների երաշխիքներ',
             data: 'warranty'
           },
           {
             icon: 'file',
             label: 'Պայմաններ',
-            value: 'Նշվում են վերջնական առաջարկում',
+            value: 'Ժամկետներ, վճարում և կատարման պայմաններ',
             data: 'terms'
           }
         ]
@@ -743,10 +743,10 @@ export const processStoryCopy = {
         timeline: [
           { number: '1', label: 'Օբյեկտի նախապատրաստում' },
           { number: '2', label: 'Կրող համակարգի մոնտաժ' },
-          { number: '3', label: 'Վահանակներ' },
-          { number: '4', label: 'Ինվերտոր և էլեկտրական աշխատանքներ' },
+          { number: '3', label: 'Վահանակների տեղադրում' },
+          { number: '4', label: 'Ինվերտորի մոնտաժ և միացում' },
           { number: '5', label: 'Փորձարկում' },
-          { number: '6', label: 'Համակարգը գործարկված է' }
+          { number: '6', label: 'Համակարգի գործարկում' }
         ]
       },
       {

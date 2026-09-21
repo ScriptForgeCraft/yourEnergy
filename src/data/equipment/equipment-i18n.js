@@ -133,14 +133,14 @@ export const CATEGORY_LABELS = Object.freeze({
     hy: 'Առևտրային կուտակման համակարգեր (ESS)',
     en: 'Commercial ESS'
   },
-  'ev-chargers': { ru: 'EV Charger', hy: 'Էլեկտրոմոբիլների լիցքավորիչներ', en: 'EV Chargers' },
+  'ev-chargers': { ru: 'Зарядные станции для электромобилей', hy: 'Էլեկտրոմոբիլների լիցքավորիչներ', en: 'EV Chargers' },
   mounting: { ru: 'Монтажные системы', hy: 'Մոնտաժային համակարգեր', en: 'Mounting Systems' },
-  monitoring: { ru: 'Системы мониторинга', hy: 'Մոնիտորինգի համակարգեր', en: 'Monitoring systems' }
+  monitoring: { ru: 'Системы мониторинга', hy: 'Մոնիտորինգի համակարգեր', en: 'Monitoring Systems' }
 });
 
 export const SPEC_LABELS = Object.freeze({
   cellOrientation: { ru: 'Схема ячеек', hy: 'Բջիջների դասավորություն', en: 'Cell layout' },
-  junctionBox: { ru: 'Распределительная коробка', hy: 'Միացման տուփ', en: 'Junction box' },
+  junctionBox: { ru: 'Соединительная коробка', hy: 'Միացման տուփ', en: 'Junction box' },
   glass: { ru: 'Стекло', hy: 'Ապակի', en: 'Glass' },
   frame: { ru: 'Рама', hy: 'Շրջանակ', en: 'Frame' },
   weight: { ru: 'Вес', hy: 'Քաշ', en: 'Weight' },
@@ -791,7 +791,7 @@ const TEXT = Object.freeze({
   'Гибридный инвертор': ['Հիբրիդային ինվերտոր', 'Hybrid inverter'],
   'Хранение энергии': ['Էներգիայի կուտակում', 'Energy storage'],
   'Монтаж солнечных панелей': ['Արևային վահանակների մոնտաժ', 'Solar panel mounting'],
-  'Фото позже': ['Պատկերը շուտով', 'Image coming soon']
+  'Изображение недоступно': ['Պատկերը հասանելի չէ', 'Image unavailable']
 });
 
 const REPLACEMENTS = Object.freeze([

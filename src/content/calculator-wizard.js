@@ -14,9 +14,9 @@ const copy = {
     confirmPoint: 'Հաստատել այս կետը',
     coordinateAlternative: 'Գիտեմ կոորդինատները / քարտեզը հասանելի չէ',
     potentialReady:
-      'PVGIS-ը ֆոնային ստուգում է ընտրված կետի արևային ռեսուրսը։ Այն տանիքը ավտոմատ չի չափում։',
+      'PVGIS-ը ֆոնային ռեժիմում գնահատում է ընտրված կետի արևային ռեսուրսը։ Այն տանիքը ավտոմատ չի չափում։',
     potentialSkip: 'Շարունակել առանց PVGIS-ի',
-    roofIntro: 'Նշեք տանիքի մակերեսն ու պարամետրերը՝ արևային ներուժը ճշգրիտ գնահատելու համար։',
+    roofIntro: 'Նշեք տանիքի մակերեսն ու պարամետրերը՝ նախնական գնահատումը ճշգրտելու համար։',
     parallel: 'Տանիքին զուգահեռ',
     elevated: 'Բարձրացված կառուցվածք',
     drawRoof:
@@ -36,14 +36,14 @@ const copy = {
       system: 'Համակարգ',
       tariff: 'Սակագին'
     },
-    budget: 'YOUR ENERGY-ի նախնական բյուջե',
+    budget: 'YOURENERGY-ի նախնական բյուջե',
     roofLimit: 'Հզորությունը սահմանափակված է հասանելի տանիքի մակերեսով',
     tariffNeeded:
       'Խնայողությունն ու հետգնման ժամկետը տեսնելու համար մուտքագրեք ձեր հաշվի սակագինը։',
     addTariff: 'Ավելացնել սակագին',
     openPassport: 'Բացել Solar Passport-ը',
     passportTitle: 'Solar Passport',
-    passportCopy: 'Այս session-ի նախնական տվյալները, աղբյուրները և սահմանափակումները։',
+    passportCopy: 'Այս աշխատաշրջանի նախնական տվյալները, աղբյուրներն ու սահմանափակումները։',
     stepMobile: 'Քայլ {step} 4-ից · {title}',
     mapApproximate:
       'Քարտեզի ուրվագիծը մոտավոր է։ Տեղային ստվերը և կոնստրուկցիան հաստատում է ինժեները։',
@@ -120,7 +120,7 @@ const copy = {
     potentialReady:
       'PVGIS в фоне проверяет солнечный ресурс выбранной точки. Он не измеряет крышу автоматически.',
     potentialSkip: 'Продолжить без PVGIS',
-    roofIntro: 'Задайте площадь и параметры крыши для точной оценки солнечного потенциала.',
+    roofIntro: 'Задайте площадь и параметры крыши, чтобы уточнить предварительную оценку солнечного потенциала.',
     parallel: 'Параллельно крыше',
     elevated: 'Приподнятая конструкция',
     drawRoof:
@@ -129,10 +129,10 @@ const copy = {
     calculate: 'Получить предварительный расчёт',
     back: 'Назад',
     next: 'Продолжить',
-    production: 'Помесячная генерация системы',
+    production: 'Помесячная выработка системы',
     metrics: {
       panels: 'Панели',
-      annualGeneration: 'Годовая генерация',
+      annualGeneration: 'Годовая выработка',
       coverage: 'Покрытие',
       annualSavings: 'Экономия в год',
       payback: 'Окупаемость',
@@ -140,7 +140,7 @@ const copy = {
       system: 'Система',
       tariff: 'Тариф'
     },
-    budget: 'Предварительный бюджет YOUR ENERGY',
+    budget: 'Предварительный бюджет YOURENERGY',
     roofLimit: 'Мощность ограничена доступной площадью крыши',
     tariffNeeded: 'Хотите увидеть экономию и окупаемость? Укажите тариф из вашего счёта.',
     addTariff: 'Добавить тариф',
@@ -154,7 +154,7 @@ const copy = {
       location: {
         map: 'Карта',
         satellite: 'Спутник',
-        dataTitle: 'Данные локации',
+        dataTitle: 'Данные местоположения',
         irradiation: 'Годовая инсоляция',
         dailyAverage: 'Среднее в день',
         vsEu: 'к среднему по ЕС',
@@ -208,8 +208,8 @@ const copy = {
     }
   },
   en: {
-    eyebrow: 'Free preliminary calculation',
-    title: 'A simple solar-system calculation for your home',
+    eyebrow: 'Free preliminary estimate',
+    title: 'A simple solar estimate for your home',
     intro:
       'Choose the home, enter consumption and outline the usable roof. Technical inputs appear only when you need them.',
     steps: ['Property', 'Consumption', 'Roof', 'Result'],
@@ -224,13 +224,13 @@ const copy = {
     potentialReady:
       'PVGIS checks the selected point’s solar resource in the background. It does not measure a roof automatically.',
     potentialSkip: 'Continue without PVGIS',
-    roofIntro: 'Define your roof area and parameters for accurate solar potential.',
+    roofIntro: 'Define your roof area and parameters to refine the preliminary estimate.',
     parallel: 'Parallel to roof',
     elevated: 'Elevated structure',
     drawRoof:
       'Mark at least 3 corners of one roof surface on the map. Drag markers to refine their positions. The outline finishes automatically when you request a calculation.',
     continueConsumption: 'Continue to result',
-    calculate: 'Get preliminary calculation',
+    calculate: 'Get preliminary estimate',
     back: 'Back',
     next: 'Continue',
     production: 'Monthly system generation',
@@ -244,7 +244,7 @@ const copy = {
       system: 'System',
       tariff: 'Tariff'
     },
-    budget: 'YOUR ENERGY preliminary budget',
+    budget: 'YOURENERGY preliminary budget',
     roofLimit: 'Capacity is limited by the available roof area',
     tariffNeeded: 'Want to see savings and payback? Add the tariff from your bill.',
     addTariff: 'Add tariff',

@@ -26,7 +26,7 @@ export const contactPageCopy = Object.freeze({
     eyebrow: 'Կապ',
     title: 'Կապվեք\n<span>մեզ հետ</span>',
     intro:
-      'Մենք միշտ կապի մեջ ենք՝ պատասխանելու հարցերին, հաշվարկելու նախագիծը և օգնելու սկսել մաքուր էներգիայի ուղին։',
+      'Մենք միշտ կապի մեջ ենք՝ պատասխանելու հարցերին, հաշվարկելու նախագիծը և օգնելու կատարել առաջին քայլը դեպի մաքուր էներգիա։',
     signature: 'Մաքուր էներգիան\nավելի մոտ է,\nքան կարծում եք',
     channels: [
       {
@@ -88,7 +88,7 @@ export const contactPageCopy = Object.freeze({
     consent: {
       before: 'Համաձայն եմ ',
       link: 'Գաղտնիության քաղաքականությանը',
-      after: ' և անձնական տվյալների մշակմանը'
+      after: ' և տալիս եմ համաձայնություն անձնական տվյալների մշակմանը'
     },
     submit: 'Ուղարկել հաղորդագրությունը',
     sending: 'Ուղարկում ենք հաղորդագրությունը…',
@@ -97,7 +97,7 @@ export const contactPageCopy = Object.freeze({
       'Չհաջողվեց ուղարկել հաղորդագրությունը։ Խնդրում ենք փորձել ավելի ուշ կամ զանգահարել մեզ։',
     success: 'Շնորհակալություն։ Ձեր հաղորդագրությունն ընդունվել է, շուտով կկապվենք։',
     cardTitle: 'Միասին՝\nմաքուր էներգիայի\nճանապարհին',
-    cardCopy: 'Խորհրդատվություն · Հաշվարկ · Նախագիծ · Իրականացում',
+    cardCopy: 'Խորհրդատվություն · Հաշվարկ · Նախագիծ · Տեղադրում',
     benefits: [
       {
         icon: 'whatsapp',
@@ -182,14 +182,14 @@ export const contactPageCopy = Object.freeze({
     formIntro: 'Заполните форму, и мы свяжемся с вами в ближайшее время.',
     name: 'Ваше имя',
     phone: 'Телефон',
-    email: 'Email',
+    email: 'Эл. почта',
     topic: 'Тема обращения',
     message: 'Ваше сообщение',
     topicOptions: ['Расчёт системы', 'Выезд специалиста', 'Оборудование', 'Другой вопрос'],
     consent: {
       before: 'Я согласен(-на) с ',
       link: 'Политикой конфиденциальности',
-      after: ' и на обработку персональных данных'
+      after: ' и даю согласие на обработку персональных данных'
     },
     submit: 'Отправить сообщение',
     sending: 'Отправляем сообщение…',
@@ -197,7 +197,7 @@ export const contactPageCopy = Object.freeze({
     unavailable: 'Не удалось отправить сообщение. Попробуйте позже или позвоните нам.',
     success: 'Спасибо! Сообщение принято — мы скоро свяжемся с вами.',
     cardTitle: 'Вместе\nк чистой энергии',
-    cardCopy: 'Консультация · Расчёт · Проект · Реализация',
+    cardCopy: 'Консультация · Расчёт · Проект · Установка',
     benefits: [
       {
         icon: 'whatsapp',
@@ -207,7 +207,7 @@ export const contactPageCopy = Object.freeze({
       {
         icon: 'support',
         title: 'Профессиональная консультация',
-        copy: 'Поможем выбрать оптимальное решение под ваши задачи.'
+        copy: 'Поможем выбрать подходящее решение под ваши задачи.'
       },
       {
         icon: 'pin',
@@ -277,14 +277,14 @@ export const contactPageCopy = Object.freeze({
     formIntro: 'Fill in the form and we will get in touch shortly.',
     name: 'Your name',
     phone: 'Phone',
-    email: 'Email',
+    email: 'Эл. почта',
     topic: 'Topic',
     message: 'Your message',
     topicOptions: ['System estimate', 'Site visit', 'Equipment', 'Other question'],
     consent: {
       before: 'I agree to the ',
       link: 'Privacy Policy',
-      after: ' and the processing of my personal data'
+      after: ' and consent to the processing of my personal data'
     },
     submit: 'Send message',
     sending: 'Sending message…',
@@ -292,7 +292,7 @@ export const contactPageCopy = Object.freeze({
     unavailable: 'We could not send your message. Please try again later or call us.',
     success: 'Thank you. Your message was accepted and we will contact you shortly.',
     cardTitle: 'Together\ntoward clean energy',
-    cardCopy: 'Consultation · Estimate · Design · Delivery',
+    cardCopy: 'Consultation · Estimate · Design · Installation',
     benefits: [
       { icon: 'whatsapp', title: 'Quick response', copy: 'We usually reply within a few hours.' },
       {

@@ -68,7 +68,19 @@
             />
           </picture>
 
- 
+          {{#if isAnalysis}}
+            <svg
+              class='process-analysis-orientation'
+              viewBox='0 0 1536 1024'
+              preserveAspectRatio='xMidYMid slice'
+              aria-hidden='true'
+            >
+              <text x='292' y='355'>W</text>
+              <text x='768' y='96'>N</text>
+              <text x='1225' y='355'>E</text>
+            </svg>
+          {{/if}}
+
           <div class='process-state__copy' data-process-copy>
             <h3 id='process-step-title-{{number}}' class='process-state__title'>
               {{#each headlineLines}}<span>{{this}}</span>{{#unless @last}}{{/unless}}{{/each}}

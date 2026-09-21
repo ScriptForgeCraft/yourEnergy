@@ -373,9 +373,8 @@
   min-height: 0;
   transform-style: preserve-3d;
   will-change: transform, opacity;
-  top: 1rem;
 }
- 
+
 .process-metrics {
   position: relative;
   z-index: 5;
@@ -510,7 +509,6 @@
     0 26px 70px rgba(0, 0, 0, 0.46),
     0 0 0 1px rgba(255, 255, 255, 0.06);
   pointer-events: none;
-  margin-inline-end: 40px;
 }
 
 .process-state__media::after {
@@ -593,7 +591,12 @@
   pointer-events: none;
 }
 
-
+.process-analysis-orientation text {
+  fill: #f4f6f7;
+  font: 600 24px/1 sans-serif;
+  text-anchor: middle;
+  filter: drop-shadow(0 2px 7px #000b);
+}
 
 .process-state--photo .process-state__copy,
 .process-state--photo .process-visual {
@@ -877,7 +880,7 @@
     --process-card-row-height: 118px;
   }
   .page-home .process-state__title {
-    font-size: clamp(32px, 3vw, 54px);
+    font-size: clamp(32px, 3.6vw, 54px);
   }
   .page-home .process-state__intro {
     margin-top: 12px;
