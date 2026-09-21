@@ -188,15 +188,11 @@
 .wizard-progress button[data-step-state='loading'] span {
   background: #f5efdc;
 }
-.wizard-progress button:disabled {
-  cursor: not-allowed;
-  opacity: 0.56;
-}
-
+.wizard-progress button:disabled,
 .wizard-progress button:disabled span {
   cursor: not-allowed;
-  opacity: 0.56;
 }
+
 .wizard-mobile-progress {
   display: none;
   font-weight: 700;
@@ -4280,8 +4276,7 @@
   width: 2.45rem;
   height: 2.45rem;
   border: 0;
-  background: #e9f2fb;
-  color: #0b2348;
+  background: #b1d3ff;
   font-size: 0.82rem;
 }
 
