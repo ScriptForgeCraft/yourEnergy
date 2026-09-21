@@ -182,9 +182,9 @@ test('the cinematic header uses one compact language control and retains normal 
 
 test('hero copy is localized and keeps example data visibly separate from a visitor result', () => {
   const expected = new Map([
-    [hy, ['Տնօրինիր քո էներգիան յուրովի։', 'քան կարծում եք։', 'Հաշվել իմ տան համար']],
-    [ru, ['Управляй своей энергией по-своему.', 'чем вы думаете.', 'Рассчитать для дома']],
-    [en, ['Manage your energy your way.', 'than you think.', 'Calculate my home']]
+    [hy, ['Յուրովի տնօրինիր քո արևը։', 'քան կարծում եք։', 'Հաշվել իմ տան համար']],
+    [ru, ['Управляй своей солнечной энергией по-своему.', 'чем вы думаете.', 'Рассчитать для дома']],
+    [en, ['Manage your solar energy your way.', 'than you think.', 'Calculate my home']]
   ]);
   for (const [content, [eyebrow, accent, cta]] of expected) {
     assert.equal(content.hero.eyebrow, eyebrow);
