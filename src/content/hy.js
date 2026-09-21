@@ -377,8 +377,8 @@ export default {
     uploadHelp:
       'PDF, JPG կամ PNG՝ մինչև 10 ՄԲ։ Ֆայլը չի ուղարկվում սերվեր և ավտոմատ չի կարդացվում․ արժեքները մուտքագրեք ձեռքով։',
     removeFile: 'Հեռացնել ֆայլը',
-    signatureLead: 'Մաքուր էներգիա',
-    signatureTail: 'Ավելի պայծառ կյանք',
+    signatureLead: 'Յուրովի տնօրինիր',
+    signatureTail: 'Քո արևը',
     dashboardAriaLabel: 'Արևային հաշվարկի ամփոփում',
     dashboardLocationSelected: 'Ընտրված կետ',
     dashboardLocationRegional: 'Տարածաշրջանային գնահատում',
