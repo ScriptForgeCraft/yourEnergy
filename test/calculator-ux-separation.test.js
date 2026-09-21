@@ -59,8 +59,11 @@ test('Professional has exactly four customer steps and retains every engineering
   assert.doesNotMatch(professional, /data-roof-add-center/u);
   assert.doesNotMatch(professional, /data-roof-enter-area/u);
   assert.match(professional, /data-location-region/u);
-  assert.doesNotMatch(professional, /data-location-(?:city|district)/u);
+  assert.match(professional, /data-location-locality/u);
   assert.match(controller, /ARMENIA_REGION_CENTERS/u);
+  assert.match(controller, /localitiesForRegion/u);
+  assert.match(controller, /localityCenter/u);
+  assert.match(controller, /locateSelectedLocality/u);
   assert.match(controller, /map\?\.focusLocation\(center\)/u);
   assert.match(controller, /mapController\?\.finishRoof\(\)/u);
   assert.doesNotMatch(controller, /issue === 'outline' \|\| issue === 'area'/u);
@@ -109,6 +112,8 @@ test('Professional location actions are honest, searchable and recoverable', asy
 
   assert.match(template, /data-location-search-results/u);
   assert.match(template, /data-clear-address/u);
+  assert.match(template, /addressSearchDisclosure/u);
+  assert.match(template, /addressSearchAttribution/u);
   assert.match(template, /fieldset[\s\S]*professional-upload-tab/u);
   assert.match(controller, /api\.geocode\(\{ query, locale \}/u);
   assert.match(controller, /navigator\.geolocation\.getCurrentPosition/u);

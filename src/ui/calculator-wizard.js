@@ -13,6 +13,7 @@ import {
 import { initConsumptionInput } from './consumption-input.js';
 import { initFileUpload } from './file-upload.js';
 import { createCalculatorSession } from './calculator-session.js';
+import { localitiesForRegion, localityCenter } from '../data/locations/armenia.js';
 
 const PVGIS_KWP = 1;
 const PVGIS_LOSS = 14;
@@ -130,6 +131,7 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
   const latitudeInput = root.querySelector('[data-location-latitude]');
   const longitudeInput = root.querySelector('[data-location-longitude]');
   const regionSelect = root.querySelector('[data-location-region]');
+  const localitySelect = root.querySelector('[data-location-locality]');
   const mapLatitude = root.querySelector('[data-map-latitude]');
   const mapLongitude = root.querySelector('[data-map-longitude]');
   const mapElement = root.querySelector('[data-property-map]');
@@ -229,6 +231,24 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
     if (!locationSearchResults) return;
     locationSearchResults.replaceChildren();
     locationSearchResults.hidden = true;
+  };
+
+  const populateLocalityOptions = () => {
+    if (!localitySelect) return;
+    const localities = localitiesForRegion(regionSelect?.value);
+    const placeholder = document.createElement('option');
+    placeholder.value = '';
+    placeholder.textContent = product.location?.localityPlaceholder ?? '';
+    placeholder.disabled = true;
+    placeholder.selected = true;
+    const options = localities.map((locality) => {
+      const option = document.createElement('option');
+      option.value = locality;
+      option.textContent = locality;
+      return option;
+    });
+    localitySelect.replaceChildren(placeholder, ...options);
+    localitySelect.disabled = localities.length === 0;
   };
 
   const stopAddressSearch = () => {
@@ -451,6 +471,65 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
       if (geocodeRequest === controller) geocodeRequest = null;
       button?.removeAttribute('aria-busy');
       button?.removeAttribute('disabled');
+    }
+  };
+
+  const focusLocality = async (coordinates) => {
+    const lat = number(coordinates?.lat ?? coordinates?.latitude, -90, 90);
+    const lng = number(coordinates?.lng ?? coordinates?.longitude, -180, 180);
+    if (lat === null || lng === null) return false;
+    state.pendingLocation = null;
+    state.confirmedProperty = null;
+    if (pointConfirmation) pointConfirmation.hidden = true;
+    clearPotentialAndBelow();
+    syncLocationCoordinates({ lat, lng });
+    updateProgress();
+    const map = await mountMap('location');
+    map?.clearLocation();
+    map?.focusLocation({ lat, lng }, { zoom: 14 });
+    return true;
+  };
+
+  const locateSelectedLocality = async () => {
+    const locality = localitySelect?.value.trim() ?? '';
+    if (!locality) return;
+    const regionId = regionSelect?.value;
+    const selectedCenter = localityCenter(regionId, locality);
+    if (selectedCenter) {
+      stopAddressSearch();
+      clearLocationSearchResults();
+      if (address) address.value = '';
+      await focusLocality(selectedCenter);
+      writeStatus('');
+      return;
+    }
+    const regionName = regionSelect?.selectedOptions?.[0]?.textContent?.trim() ?? '';
+    const query = [locality, regionName, 'Armenia'].filter(Boolean).join(', ');
+    if (address) address.value = query;
+    stopAddressSearch();
+    const controller = new AbortController();
+    geocodeRequest = controller;
+    localitySelect.disabled = true;
+    clearLocationSearchResults();
+    writeStatus(wizard.addressSearching ?? '');
+    try {
+      const response = await api.geocode({ query, locale }, { signal: controller.signal });
+      if (controller.signal.aborted || geocodeRequest !== controller) return;
+      const candidates = Array.isArray(response?.location?.candidates)
+        ? response.location.candidates
+        : [];
+      if (!candidates.length || !(await focusLocality(candidates[0]?.coordinates))) {
+        writeStatus(wizard.addressNoResults ?? '', true);
+        return;
+      }
+      writeStatus('');
+    } catch (error) {
+      if (error instanceof ProductApiError && error.code === 'ABORTED') return;
+      writeStatus(wizard.addressSearchUnavailable ?? product.location?.unavailable ?? '', true);
+    } finally {
+      if (geocodeRequest === controller) geocodeRequest = null;
+      if (localitySelect)
+        localitySelect.disabled = localitiesForRegion(regionSelect?.value).length === 0;
     }
   };
 
@@ -1135,6 +1214,7 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
   regionSelect?.addEventListener('change', () => {
     const center = ARMENIA_REGION_CENTERS[regionSelect.value];
     if (!center) return;
+    populateLocalityOptions();
     stopAddressSearch();
     clearLocationSearchResults();
     if (address) address.value = '';
@@ -1149,6 +1229,7 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
       map?.focusLocation(center);
     });
   });
+  localitySelect?.addEventListener('change', () => void locateSelectedLocality());
   root.querySelector('[data-location-continue]')?.addEventListener('click', () => {
     const lat = number(latitudeInput?.value, -90, 90);
     const lng = number(longitudeInput?.value, -180, 180);
@@ -1253,6 +1334,7 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
     button.addEventListener('click', () => setStep(Number(button.dataset.wizardNav)))
   );
 
+  populateLocalityOptions();
   syncRoofControls({ preserveAnalysis: true });
   if (state.analysis) renderResult(state.analysis);
   const restoredStep = Number.isInteger(savedSession.currentStep) ? savedSession.currentStep : 0;

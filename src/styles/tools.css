@@ -933,7 +933,7 @@
 
 .wizard-progress button[aria-current='step'] {
   background: transparent;
-  color: #0875ed;
+  color: #155396;
 }
 
 .wizard-progress button[aria-current='step'] span {
@@ -4530,6 +4530,28 @@
   box-shadow: 0 0 0 3px rgb(20 122 243 / 12%);
 }
 
+.calculator-page--professional .location-address-disclosure {
+  display: block;
+  margin-top: 0.42rem;
+  color: #5c7491;
+  font-size: 0.67rem;
+  font-weight: 540;
+  line-height: 1.35;
+}
+
+.calculator-page--professional .location-search-attribution {
+  display: block;
+  margin-top: 0.18rem;
+  color: #6d8098;
+  font-size: 0.62rem;
+  line-height: 1.3;
+}
+
+.calculator-page--professional .location-search-attribution a {
+  color: inherit;
+  text-decoration: underline;
+}
+
 .location-search-results {
   display: grid;
   gap: 0.24rem;
@@ -4568,16 +4590,22 @@
   background: #edf7ff;
 }
 
-.calculator-page--professional .location-region {
+.calculator-page--professional .location-picker-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.72rem;
+  margin-top: 0.72rem;
+}
+
+.calculator-page--professional .location-picker {
   display: grid;
   gap: 0.32rem;
-  margin-top: 0.72rem;
   color: #0b2146;
   font-size: 0.72rem;
   font-weight: 760;
 }
 
-.calculator-page--professional .location-region select {
+.calculator-page--professional .location-picker select {
   min-height: 2.92rem;
   border: 1px solid #d5e1ec;
   border-radius: 0.56rem;
@@ -4589,7 +4617,15 @@
   font-weight: 700;
 }
 
-.calculator-page--professional .location-region small {
+.calculator-page--professional .location-picker select:disabled {
+  color: #8496aa;
+  background: #f4f7fa;
+  cursor: not-allowed;
+}
+
+.calculator-page--professional .location-picker-help {
+  display: block;
+  margin-top: 0.42rem;
   color: #5c7491;
   font-size: 0.67rem;
   font-weight: 540;
@@ -4932,6 +4968,7 @@
   }
 
   .location-methods,
+  .calculator-page--professional .location-picker-grid,
   .calculator-page--professional .wizard-coordinates {
     grid-template-columns: 1fr;
   }

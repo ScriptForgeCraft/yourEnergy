@@ -4,6 +4,7 @@ import { fetchJsonWithTimeout } from './provider.js';
 
 const MAX_RESULTS = 5;
 const SUPPORTED_LOCALES = new Set(['hy', 'ru', 'en']);
+const PUBLIC_NOMINATIM_HOST = 'nominatim.openstreetmap.org';
 
 const normalizeText = (value) =>
   typeof value === 'string' ? value.replace(/\s+/g, ' ').trim() : '';
@@ -56,6 +57,19 @@ const replaceTemplateToken = (url, token, value) =>
 
 export const buildGeocodingUrl = (endpoint, input, env) => {
   const serializedEndpoint = endpoint.toString();
+  const provider = (envString(env, 'GEOCODING_PROVIDER') ?? '').toLowerCase();
+  const isNominatim = provider === 'nominatim' || endpoint.hostname === PUBLIC_NOMINATIM_HOST;
+  if (isNominatim) {
+    const url = new URL(endpoint);
+    // This is intentionally a submit-only address lookup, never an
+    // autocomplete endpoint. Keep the public service restricted to Armenia.
+    url.searchParams.set('q', input.query);
+    url.searchParams.set('format', 'jsonv2');
+    url.searchParams.set('countrycodes', 'am');
+    url.searchParams.set('limit', String(MAX_RESULTS));
+    if (input.locale) url.searchParams.set('accept-language', input.locale);
+    return url;
+  }
   const usesQueryTemplate = templateTokenPresent(serializedEndpoint, 'query');
   const usesLocaleTemplate = templateTokenPresent(serializedEndpoint, 'locale');
   let url = endpoint;
@@ -147,12 +161,18 @@ export const createGeocodingAdapter = (env, { fetchImpl = fetch } = {}) => {
   const endpoint = configuredUrl(env, 'GEOCODING_ENDPOINT', 'GEOCODER_NOT_CONFIGURED');
   const credential = optionalSecretHeader(env, 'GEOCODING');
   const provider = envString(env, 'GEOCODING_PROVIDER') ?? 'configured-geocoder';
+  const userAgent = envString(env, 'GEOCODING_USER_AGENT');
+  const isPublicNominatim = endpoint.hostname === PUBLIC_NOMINATIM_HOST;
   const timeoutMs = providerTimeoutMs(env);
 
   return {
     async search(input, { signal } = {}) {
+      // The public endpoint's policy requires an application-identifying user
+      // agent. Refuse to call it until the owner supplies one server-side.
+      if (isPublicNominatim && !userAgent) throw new ApiError('GEOCODER_NOT_CONFIGURED');
       const url = buildGeocodingUrl(endpoint, input, env);
       const headers = new Headers({ accept: 'application/json' });
+      if (userAgent) headers.set('user-agent', userAgent);
       if (credential) {
         headers.set(credential.name, credential.value);
       }

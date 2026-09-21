@@ -4,10 +4,16 @@
 # Pages dashboard (and in local Wrangler configuration) under exactly that name.
 # The cache salt is a secret; use any non-production value only for local tests.
 PVGIS_CACHE_SALT=
-# The browser currently uses a manual point/coordinate flow. Keep geocoding
-# unset until an approved provider is connected; it is not a browser fallback.
+# Address search is opt-in. For a Nominatim-compatible endpoint, use:
+# GEOCODING_ENDPOINT=https://your-nominatim.example/search
+# GEOCODING_PROVIDER=nominatim
+# GEOCODING_USER_AGENT=YOURENERGY calculator/1.0 (+https://yourenergy.am/contacts/)
+# The public OSM Nominatim endpoint is limited to one request per second per
+# application and must not receive personal/confidential information. Use a
+# self-hosted or contract provider for production home-address search.
 GEOCODING_ENDPOINT=
 GEOCODING_PROVIDER=
+GEOCODING_USER_AGENT=
 GEOCODING_API_KEY=
 GEOCODING_API_KEY_HEADER=authorization
 GEOCODING_API_KEY_PREFIX=Bearer 

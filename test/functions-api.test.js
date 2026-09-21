@@ -150,6 +150,68 @@ test('geocoding validates input and normalizes provider candidates without expos
   ]);
 });
 
+test('Nominatim address searches are explicit, Armenia-only and identify the application', async () => {
+  const requests = [];
+  const adapter = createGeocodingAdapter(
+    {
+      GEOCODING_ENDPOINT: 'https://nominatim.openstreetmap.org/search',
+      GEOCODING_PROVIDER: 'nominatim',
+      GEOCODING_USER_AGENT: 'YOURENERGY calculator/1.0 (+https://yourenergy.am/contacts/)'
+    },
+    {
+      fetchImpl: async (url, init) => {
+        requests.push({ url: new URL(url), init });
+        return new Response(
+          JSON.stringify([
+            {
+              display_name: 'Комитаса проспект, Арабкир, Ереван, Армения',
+              lat: '40.20549',
+              lon: '44.50699'
+            }
+          ]),
+          { headers: { 'content-type': 'application/json' } }
+        );
+      }
+    }
+  );
+
+  const location = await adapter.search({ query: 'Ереван, Комитаса 10', locale: 'ru' });
+
+  assert.equal(requests.length, 1);
+  assert.equal(requests[0].url.pathname, '/search');
+  assert.equal(requests[0].url.searchParams.get('q'), 'Ереван, Комитаса 10');
+  assert.equal(requests[0].url.searchParams.get('format'), 'jsonv2');
+  assert.equal(requests[0].url.searchParams.get('countrycodes'), 'am');
+  assert.equal(requests[0].url.searchParams.get('accept-language'), 'ru');
+  assert.equal(requests[0].url.searchParams.get('limit'), '5');
+  assert.equal(
+    requests[0].init.headers.get('user-agent'),
+    'YOURENERGY calculator/1.0 (+https://yourenergy.am/contacts/)'
+  );
+  assert.deepEqual(location.candidates, [
+    {
+      label: 'Комитаса проспект, Арабкир, Ереван, Армения',
+      coordinates: { latitude: 40.20549, longitude: 44.50699 },
+      confidence: null
+    }
+  ]);
+});
+
+test('the public Nominatim endpoint is never called without an identifying user agent', async () => {
+  const adapter = createGeocodingAdapter(
+    {
+      GEOCODING_ENDPOINT: 'https://nominatim.openstreetmap.org/search',
+      GEOCODING_PROVIDER: 'nominatim'
+    },
+    { fetchImpl: async () => assert.fail('provider must not be called') }
+  );
+
+  await assert.rejects(
+    () => adapter.search({ query: 'Ереван, Комитаса 10', locale: 'ru' }),
+    (error) => error.code === 'GEOCODER_NOT_CONFIGURED'
+  );
+});
+
 test('PVGIS accepts only explicit roof/system inputs and normalizes a valid twelve-month result', () => {
   const input = validateAnalysisInput(analysisPayload);
   const url = buildPvgisUrl('https://pvgis.example/api', input);

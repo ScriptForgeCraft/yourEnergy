@@ -169,8 +169,10 @@ export default {
       useCoordinates: 'Use these coordinates',
       invalidCoordinates: 'Enter valid property coordinates.',
       regionLabel: 'Region or Yerevan',
-      regionHelp:
-        'The map centres on the regional capital. Then mark the property’s exact point on the map.',
+      localityLabel: 'City, locality or district',
+      localityPlaceholder: 'Choose from the list',
+      localityHelp:
+        'Choose a place and the map will move there immediately. Then click once to mark your home’s exact point.',
       regions: [
         { id: 'yerevan', label: 'Yerevan' },
         { id: 'aragatsotn', label: 'Aragatsotn' },
@@ -363,10 +365,12 @@ export default {
       'First choose and confirm a point manually, then see its PVGIS potential. Roof and consumption data are only needed for the detailed estimate.',
     disclosure:
       'A preliminary result requires property confirmation and does not replace a site visit, engineering design or commercial proposal.',
-    addressLabel: 'Address for the engineer (optional)',
-    addressPlaceholder: 'For example: Yerevan, Arabkir',
-    addressHelp:
-      'The address is not geocoded. Open the map, choose a point manually or enter coordinates below.',
+    addressLabel: 'Property address',
+    addressPlaceholder: 'For example: Yerevan, Komitas 10',
+    addressHelp: 'Find the address, choose a result, then confirm the home point on the map.',
+    addressSearchDisclosure:
+      'Search sends the address you enter to the configured geocoding service. A result is not a confirmed home point.',
+    addressSearchAttribution: 'Address-search data:',
     analyze: 'Open point selection',
     openCalculator: 'Calculate my home',
     uploadTitle: 'Attach an electricity bill (optional)',

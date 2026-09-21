@@ -49,11 +49,12 @@ so Quick still starts without a map or engineering controls.
 1. Quick Calculator gets its regional PVGIS result only after a visitor
    deliberately submits consumption. A regional point is never shown as their
    property address or roof location.
-2. In refinement/professional modes a visitor deliberately places and confirms
-   a manual map point or enters coordinates. An address is only an optional
-   label for an engineer; it is not geocoded.
-3. `/api/geocode` is kept as a disabled future adapter. It is not a production
-   browser fallback until an approved geocoding provider is connected.
+2. In refinement/professional modes a visitor can submit an address search,
+   select a returned match, and then deliberately place and confirm the exact
+   home point on the map. A search result is never treated as confirmation.
+3. `/api/geocode` is an opt-in server-side adapter. Nominatim-compatible
+   endpoints receive an Armenia-only request; public Nominatim is not enabled
+   by default and needs its own usage-policy safeguards.
 4. `/api/potential` returns a PVGIS **site-potential benchmark**:
    annual and monthly yield for **1 kWp** and PVGIS’s optimum orientation/tilt
    for a fixed free-standing system. The UI says explicitly that this is not a
@@ -77,7 +78,7 @@ the same returned `SolarAnalysis`. A tariff entered from the visitor's bill is
 explicitly identified as user-provided. The server selects any temporary
 commercial price book; the client cannot submit a capex value to obtain a quote.
 
-No address is treated as geocoded. An unavailable map, PVGIS adapter or lead-delivery channel
+No search result is treated as a confirmed property. An unavailable map, PVGIS adapter or lead-delivery channel
 never falls back to a fabricated real result or delivery success. The free
 PVGIS flow is limited to the Armenia service area and reports only
 `preliminary` input-data completeness, never an exact/high roof confidence.
@@ -134,7 +135,7 @@ verification date; add matching tests before release.
 All endpoints are same-origin POST JSON and use the envelope
 `{ ok: true, data }` or `{ ok: false, error }`.
 
-- `/api/geocode` — disabled-by-default future provider adapter; never a confirmation.
+- `/api/geocode` — opt-in server-side address search; returned candidates always require map-point confirmation.
 - `/api/quick-analysis` — regional PVGIS estimate from an explicit region and
   consumption; never a property coordinate, roof survey or fallback result.
 - `/api/potential` — location-level PVGIS benchmark for a confirmed point;
@@ -232,8 +233,8 @@ local bindings.
 ## 13. Before launch
 
 1. Bind Cloudflare KV as `PVGIS_CACHE` and configure the `PVGIS_CACHE_SALT`
-   secret before enabling real PVGIS on Pages. Obtain an approved geocoder only
-   if address search is deliberately enabled, plus a dated tariff
+   secret before enabling real PVGIS on Pages. Configure an approved geocoder
+   only if address search is deliberately enabled, plus a dated tariff
    source/revision, Telegram, Cloudflare Email Service and Turnstile credentials.
    To automate actual roof
    measurement, also approve an aerial/3D roof-data provider; address lookup

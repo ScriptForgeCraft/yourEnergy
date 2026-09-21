@@ -96,9 +96,17 @@
                   type='button' data-clear-address aria-label='{{product.common.cancel}}'><svg aria-hidden='true'>
                   <use href='/icons.svg#close'></use>
                   </svg></button></label>
+              <small class='location-address-disclosure'>{{wizard.addressSearchDisclosure}}</small>
+              <small class='location-search-attribution'>{{wizard.addressSearchAttribution}} <a
+                  href='https://www.openstreetmap.org/copyright' target='_blank' rel='noopener'>© OpenStreetMap contributors</a></small>
               <div class='location-search-results' data-location-search-results aria-live='polite' hidden></div>
-              <label class='location-region'><span>{{product.location.regionLabel}}</span><select
-                  data-location-region>{{#each product.location.regions}}<option value='{{id}}'>{{label}}</option>{{/each}}</select><small>{{product.location.regionHelp}}</small></label>
+              <div class='location-picker-grid'>
+                <label class='location-picker'><span>{{product.location.regionLabel}}</span><select
+                    data-location-region>{{#each product.location.regions}}<option value='{{id}}'>{{label}}</option>{{/each}}</select></label>
+                <label class='location-picker'><span>{{product.location.localityLabel}}</span><select
+                    data-location-locality aria-describedby='location-picker-help' disabled></select></label>
+              </div>
+              <small class='location-picker-help' id='location-picker-help'>{{product.location.localityHelp}}</small>
               <section class='professional-panel professional-panel--coordinates'
                 aria-labelledby='professional-location-parameters'>
                 <div class='professional-panel__title'>

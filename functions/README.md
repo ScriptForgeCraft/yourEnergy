@@ -3,9 +3,10 @@
 These Cloudflare Pages Functions are an honest server boundary for optional
 address lookup, PVGIS yield data and lead delivery. They do not log request
 payloads, fabricate a location or solar result, or acknowledge a lead before
-both configured Telegram chats and Cloudflare Email Service accept it. The browser's production calculator uses a
-manual point/coordinate flow; `/api/geocode` remains an opt-in future adapter,
-not a fallback that silently interprets an address as a property location.
+both configured Telegram chats and Cloudflare Email Service accept it. The
+browser's production calculator uses an opt-in address-search plus manual
+map-point confirmation flow; `/api/geocode` never silently interprets an
+address as a property location.
 
 They are intentionally independent of Vite. `vite dev` does not execute Pages
 Functions; use `wrangler pages dev` (or the Cloudflare deployment preview) when
@@ -40,10 +41,9 @@ Request:
 `address` is accepted as a backward-compatible alias for `query`. The response
 contains `data.location.candidates` (provider-returned label, latitude,
 longitude and optional provider confidence), `selectionRequired: true`, and a
-source ledger. It is intentionally not called by the current public browser
-flow until an approved provider is configured. Any future caller must require
-the visitor to select or manually place a point; a text query is never a
-confirmed property.
+source ledger. The calculator sends a query only after the visitor explicitly
+submits it, shows the returned choices, and requires a separate map-point
+confirmation. A text query or search result is never a confirmed property.
 
 ### `POST /api/potential`
 
@@ -242,31 +242,37 @@ service-availability message.
 Set these in the Cloudflare dashboard / `wrangler secret put`, never in
 `VITE_*` variables or committed files:
 
-| Binding                                                                    | Required for                                             | Notes                                                                                                                                               |
-| -------------------------------------------------------------------------- | -------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `GEOCODING_ENDPOINT`                                                       | `/api/geocode`                                           | HTTPS provider endpoint. It receives `q`, `language`, and `limit` by default; `{query}` and `{locale}` placeholders are supported.                  |
-| `GEOCODING_PROVIDER`                                                       | Optional                                                 | A human-readable source name returned to the browser.                                                                                               |
-| `GEOCODING_API_KEY`                                                        | Optional                                                 | Sent in a header, never as a browser value.                                                                                                         |
-| `GEOCODING_API_KEY_HEADER` / `GEOCODING_API_KEY_PREFIX`                    | Optional                                                 | Header defaults to `authorization`; use prefix such as `Bearer `.                                                                                   |
-| `GEOCODING_QUERY_PARAM`, `GEOCODING_LOCALE_PARAM`, `GEOCODING_LIMIT_PARAM` | Optional                                                 | Use only for a provider with matching query parameter names.                                                                                        |
-| `PVGIS_CACHE`                                                              | `/api/quick-analysis`, `/api/potential`, `/api/analysis` | Cloudflare KV namespace binding. It is mandatory; use exactly this binding name.                                                                    |
-| `PVGIS_CACHE_SALT`                                                         | `/api/quick-analysis`, `/api/potential`, `/api/analysis` | Secret used only to salt cache keys. Never expose it in `VITE_*`, logs or source control.                                                           |
-| `PVGIS_ENDPOINT`                                                           | Optional override                                        | HTTPS PVGIS `PVcalc` endpoint. If absent, the Function uses the documented public PVGIS endpoint server-side; no URL or key is sent by the browser. |
-| `TELEGRAM_BOT_TOKEN`                                                       | `/api/lead`                                              | Telegram bot token used only by the Function to call `sendMessage`.                                                                                 |
-| `TELEGRAM_CHAT_ID`                                                         | `/api/lead`                                              | Mandatory Telegram chat ID for the site owner. The bot must have permission to post there.                                                          |
-| `CF_EMAIL_API_TOKEN`                                                       | `/api/lead`                                              | Cloudflare API token with Email Sending permission. Never expose it to the browser.                                                                 |
-| `CF_ACCOUNT_ID`                                                            | `/api/lead`                                              | Cloudflare account ID used with the Email Service REST endpoint.                                                                                    |
-| `CONTACT_EMAIL`                                                            | `/api/lead`                                              | Required, confirmed Email Service destination for lead notifications.                                                                               |
-| `EMAIL_FROM`                                                               | `/api/lead`                                              | Required verified sending address; set to `website@yourenergy.am`.                                                                                  |
-| `TURNSTILE_SECRET_KEY`                                                     | Optional                                                 | Enables server verification. When set, a token is required for each lead.                                                                           |
-| `LEAD_REQUIRE_TURNSTILE`                                                   | Optional                                                 | Set to `true` to reject leads until Turnstile is configured. Default is `false`.                                                                    |
-| `API_FETCH_TIMEOUT_MS`                                                     | Optional                                                 | Server fetch timeout, clamped to 5–20 seconds; default 12 seconds. Values below 5 seconds are raised because a valid PVGIS request can take longer. |
-| `ALLOW_INSECURE_PROVIDER_URLS`                                             | Local dev only                                           | Set `true` only for `http://localhost`, `127.0.0.1` or `[::1]` test adapters.                                                                       |
+| Binding                                                                    | Required for                                             | Notes                                                                                                                                                                                                                                                                      |
+| -------------------------------------------------------------------------- | -------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `GEOCODING_ENDPOINT`                                                       | `/api/geocode`                                           | HTTPS provider endpoint. With `GEOCODING_PROVIDER=nominatim`, it receives `q`, `format=jsonv2`, `countrycodes=am`, `accept-language`, and `limit=5`. Other providers receive `q`, `language`, and `limit` by default; `{query}` and `{locale}` placeholders are supported. |
+| `GEOCODING_PROVIDER`                                                       | Optional                                                 | Set to `nominatim` for the Nominatim parameter mapping; otherwise it is the human-readable source name returned to the browser.                                                                                                                                            |
+| `GEOCODING_USER_AGENT`                                                     | Public Nominatim                                         | Required when the endpoint is `nominatim.openstreetmap.org`; identifies YOURENERGY server-side and is never a browser value.                                                                                                                                               |
+| `GEOCODING_API_KEY`                                                        | Optional                                                 | Sent in a header, never as a browser value.                                                                                                                                                                                                                                |
+| `GEOCODING_API_KEY_HEADER` / `GEOCODING_API_KEY_PREFIX`                    | Optional                                                 | Header defaults to `authorization`; use prefix such as `Bearer `.                                                                                                                                                                                                          |
+| `GEOCODING_QUERY_PARAM`, `GEOCODING_LOCALE_PARAM`, `GEOCODING_LIMIT_PARAM` | Optional                                                 | Use only for a provider with matching query parameter names.                                                                                                                                                                                                               |
+| `PVGIS_CACHE`                                                              | `/api/quick-analysis`, `/api/potential`, `/api/analysis` | Cloudflare KV namespace binding. It is mandatory; use exactly this binding name.                                                                                                                                                                                           |
+| `PVGIS_CACHE_SALT`                                                         | `/api/quick-analysis`, `/api/potential`, `/api/analysis` | Secret used only to salt cache keys. Never expose it in `VITE_*`, logs or source control.                                                                                                                                                                                  |
+| `PVGIS_ENDPOINT`                                                           | Optional override                                        | HTTPS PVGIS `PVcalc` endpoint. If absent, the Function uses the documented public PVGIS endpoint server-side; no URL or key is sent by the browser.                                                                                                                        |
+| `TELEGRAM_BOT_TOKEN`                                                       | `/api/lead`                                              | Telegram bot token used only by the Function to call `sendMessage`.                                                                                                                                                                                                        |
+| `TELEGRAM_CHAT_ID`                                                         | `/api/lead`                                              | Mandatory Telegram chat ID for the site owner. The bot must have permission to post there.                                                                                                                                                                                 |
+| `CF_EMAIL_API_TOKEN`                                                       | `/api/lead`                                              | Cloudflare API token with Email Sending permission. Never expose it to the browser.                                                                                                                                                                                        |
+| `CF_ACCOUNT_ID`                                                            | `/api/lead`                                              | Cloudflare account ID used with the Email Service REST endpoint.                                                                                                                                                                                                           |
+| `CONTACT_EMAIL`                                                            | `/api/lead`                                              | Required, confirmed Email Service destination for lead notifications.                                                                                                                                                                                                      |
+| `EMAIL_FROM`                                                               | `/api/lead`                                              | Required verified sending address; set to `website@yourenergy.am`.                                                                                                                                                                                                         |
+| `TURNSTILE_SECRET_KEY`                                                     | Optional                                                 | Enables server verification. When set, a token is required for each lead.                                                                                                                                                                                                  |
+| `LEAD_REQUIRE_TURNSTILE`                                                   | Optional                                                 | Set to `true` to reject leads until Turnstile is configured. Default is `false`.                                                                                                                                                                                           |
+| `API_FETCH_TIMEOUT_MS`                                                     | Optional                                                 | Server fetch timeout, clamped to 5–20 seconds; default 12 seconds. Values below 5 seconds are raised because a valid PVGIS request can take longer.                                                                                                                        |
+| `ALLOW_INSECURE_PROVIDER_URLS`                                             | Local dev only                                           | Set `true` only for `http://localhost`, `127.0.0.1` or `[::1]` test adapters.                                                                                                                                                                                              |
 
 The generic geocoder normalizes GeoJSON `features`, Nominatim-style arrays, and
-objects with `results` or `data` arrays. A provider with another wire format
-needs a small adapter change in `functions/_lib/geocoding.js`, not client-side
-parsing or a browser secret.
+objects with `results` or `data` arrays. For Nominatim, use a submit-only
+address search — never autocomplete — and keep the endpoint switchable. The
+public OSM endpoint is limited to one request per second per application,
+requires an identifying `User-Agent`, caching where possible, attribution, and
+must not receive personal or confidential information. For production home
+addresses, use a self-hosted Nominatim instance or an approved contract
+provider. A provider with another wire format needs a small adapter change in
+`functions/_lib/geocoding.js`, not client-side parsing or a browser secret.
 
 ## Error codes
 
