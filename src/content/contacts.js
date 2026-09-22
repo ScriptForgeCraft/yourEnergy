@@ -63,7 +63,7 @@ export const contactPageCopy = Object.freeze({
     offices: [
       office(
         'Երևան — Գլխավոր գրասենյակ',
-        'Արտաշիսյան փ., 48/14, Երևան',
+        'Արտաշիսյան փ., 48, Երևան',
         CONTACT_HOURS.hy.office,
         '48 Artashesyan St, Yerevan',
         [40.151219, 44.474063]
