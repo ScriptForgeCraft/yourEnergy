@@ -535,7 +535,7 @@ export const processStoryCopy = {
     progressLabel: 'Արևային համակարգի նախագծի փուլերը',
     previousStepLabel: 'Նախորդ քայլը',
     nextStepLabel: 'Հաջորդ քայլը',
-    scrollLabel: 'Ոլորեք՝ շարունակելու համար',
+    scrollLabel: 'Թերթի՛ր ավելին տեսնելու համար',
     availableAfterAnalysis: 'Հաշվարկվում է վերլուծության արդյունքներով',
     addInCalculator: 'Մուտքագրեք տվյալները հաշվիչում',
     verifiedOnSite: 'Ճշտվում է տեղում',
