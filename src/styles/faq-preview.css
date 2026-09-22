@@ -5,7 +5,7 @@
   overflow: hidden;
   scroll-margin-top: var(--header-height);
   color: #0a2237;
-  background: #f9f7f1;
+  background: #f9f7f16f;
 }
 
 .faq-preview::before,
@@ -19,13 +19,12 @@
 
 .faq-preview::before {
   background:
-    radial-gradient(ellipse 66% 94% at 104% 10%, rgb(255 255 255 / 76%) 0 47%, transparent 47.3%),
     linear-gradient(
       90deg,
-      #fbfaf6 0%,
-      rgb(251 250 246 / 98%) 40%,
-      rgb(251 250 246 / 68%) 60%,
-      rgb(251 250 246 / 8%) 100%
+      #fbfaf63b 0%,
+      rgba(251, 250, 246, 0.764) 40%,
+      rgba(251, 250, 246, 0.275) 60%,
+      rgba(251, 250, 246, 0.145) 100%
     );
 }
 
@@ -186,13 +185,13 @@
   margin: 0;
   padding-left: 38px;
   border-left: 1px solid #c8c8c3;
-  color: #747d86;
+  color: #000000;
   font-size: 0.92rem;
   line-height: 1.35;
 }
 
 .faq-preview__footer p a {
-  color: #b77d00;
+  color:#0c75b2;
   font-weight: 800;
   text-decoration: underline;
   text-underline-offset: 3px;
