@@ -568,6 +568,27 @@
 .result-notice--warning {
   border-left: 4px solid var(--color-yellow-strong);
 }
+
+.result-energy-balance h3,
+.result-roof-capacity h3 {
+  margin: 0 0 0.75rem;
+  color: var(--color-navy);
+  font-size: 0.95rem;
+}
+
+.result-energy-balance .wizard-kpis,
+.result-roof-capacity .wizard-kpis {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.result-roof-capacity small,
+.result-environmental__source {
+  display: block;
+  margin-top: 0.65rem;
+  color: var(--color-muted);
+  font-size: 0.75rem;
+  line-height: 1.45;
+}
 .passport-ledger {
   display: grid;
   gap: 0.65rem;
@@ -3204,6 +3225,52 @@
 .professional-roof-notice small {
   margin-top: 0.16rem;
   color: #5b7390;
+}
+
+.professional-roof-capacity {
+  grid-column: 1 / -1;
+  margin-top: 0.1rem;
+  padding: 0.8rem;
+  border: 1px solid #dceaf5;
+  border-radius: 0.72rem;
+  background: #f8fcff;
+}
+
+.professional-roof-capacity > strong {
+  display: block;
+  color: #173259;
+  font-size: 0.78rem;
+}
+
+.professional-roof-capacity dl {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.55rem;
+  margin: 0.65rem 0;
+}
+
+.professional-roof-capacity dl > div {
+  min-width: 0;
+}
+
+.professional-roof-capacity dt,
+.professional-roof-capacity small {
+  color: #5b7390;
+  font-size: 0.68rem;
+  line-height: 1.35;
+}
+
+.professional-roof-capacity dd,
+.professional-roof-capacity p {
+  margin: 0.18rem 0 0;
+  color: #173259;
+  font-size: 0.76rem;
+  line-height: 1.35;
+}
+
+.professional-roof-capacity small {
+  display: block;
+  margin-top: 0.42rem;
 }
 
 .professional-roof-notice.is-error {

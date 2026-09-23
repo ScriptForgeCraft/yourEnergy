@@ -1,7 +1,9 @@
 import {
   ANALYSIS_SCHEMA_VERSION,
+  calculatePreliminaryRoofCapacity,
   calculateRoofPlaneArea,
   getCalculatorInputNumber,
+  PRELIMINARY_USABLE_ROOF_RATIO,
   SolarPassportRepository
 } from '../domain/index.js';
 import { toFiniteNumberOrNull } from '../domain/numbers.js';
@@ -212,6 +214,13 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
   const roofNotice = root.querySelector('.professional-roof-notice');
   const roofNoticeCopy = roofNotice?.querySelector('p');
   const roofNoticeDefault = roofNoticeCopy?.innerHTML ?? '';
+  const roofCapacityPreview = root.querySelector('[data-roof-capacity-preview]');
+  const roofCapacityArea = root.querySelector('[data-roof-capacity-area]');
+  const roofCapacityUsable = root.querySelector('[data-roof-capacity-usable]');
+  const roofCapacityPanels = root.querySelector('[data-roof-capacity-panels]');
+  const roofCapacityPanel = root.querySelector('[data-roof-capacity-panel]');
+  const roofCapacitySystem = root.querySelector('[data-roof-capacity-system]');
+  const roofCapacityAssumption = root.querySelector('[data-roof-capacity-assumption]');
   const resultDashboard = root.querySelector('[data-result-dashboard]');
   const resultSummary = root.querySelector('[data-result-summary]');
   const financeEmpty = root.querySelector('[data-finance-empty]');
@@ -706,6 +715,48 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
     updateProgress();
   };
 
+  const updateRoofCapacityPreview = (roof) => {
+    if (!roofCapacityPreview) return;
+    const system =
+      getCalculatorSystemForPanel(state.selectedPanelId) ?? getDefaultCalculatorSystem();
+    const profile = getSolarPanelCalculationProfile(system?.equipment?.panelId);
+    const capacity = calculatePreliminaryRoofCapacity({
+      roofAreaSqm: roof.effectiveAreaSqm,
+      usableAreaRatio: PRELIMINARY_USABLE_ROOF_RATIO,
+      panelAreaSqm: system?.panelAreaSqm,
+      panelWatts: system?.panelWatts
+    });
+    if (!capacity || !profile) {
+      roofCapacityPreview.hidden = true;
+      return;
+    }
+
+    roofCapacityPreview.hidden = false;
+    if (roofCapacityArea)
+      roofCapacityArea.textContent = `${format(capacity.roofAreaSqm, locale, {
+        maximumFractionDigits: 1
+      })} m²`;
+    if (roofCapacityUsable)
+      roofCapacityUsable.textContent = `${format(capacity.usableRoofAreaSqm, locale, {
+        maximumFractionDigits: 1
+      })} m²`;
+    if (roofCapacityPanels)
+      roofCapacityPanels.textContent = format(capacity.maximumPanelCount, locale);
+    if (roofCapacityPanel)
+      roofCapacityPanel.textContent = `${wizard.calculationPanelLabel ?? 'Calculation solar module'}: ${panelDescription(profile)}`;
+    if (roofCapacitySystem)
+      roofCapacitySystem.textContent = text(wizard.roofCapacityPreview, {
+        capacity: format(capacity.maximumCapacityKwp, locale, { maximumFractionDigits: 2 }),
+        count: format(capacity.maximumPanelCount, locale)
+      });
+    if (roofCapacityAssumption)
+      roofCapacityAssumption.textContent = text(wizard.roofCapacityAssumption, {
+        ratio: format(PRELIMINARY_USABLE_ROOF_RATIO * 100, locale, {
+          maximumFractionDigits: 0
+        })
+      });
+  };
+
   const updateRoofAreaSummary = () => {
     const roof = roofGeometry();
     if (roofAreaLabel) {
@@ -734,6 +785,7 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
     }
     if (roofMapTilt && roof.tiltDegrees !== null)
       roofMapTilt.textContent = `${format(roof.tiltDegrees, locale)}°`;
+    updateRoofCapacityPreview(roof);
   };
 
   const mountMap = async (mode) => {
@@ -1064,6 +1116,13 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
         coordinates.sourceType
       );
     }
+    if (basis.consumption) {
+      add(
+        wizard.annualConsumption ?? 'Annual consumption',
+        `${format(basis.consumption.annualKwh, locale)} kWh`,
+        basis.consumption.sourceType
+      );
+    }
     const solarYield = basis.solarYield;
     if (solarYield) {
       const loss = solarYield.configuration?.systemLossPercent;
@@ -1172,8 +1231,13 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
     const monthly = scenario.generation?.monthlyKwh ?? [];
     const annualSavings = scenario.financial?.annualSavingsAmd;
     const avoidedCo2 = analysis.environmental?.avoidedCo2Tons;
+    const annualConsumptionKwh = number(scenario.energyBalance?.annualConsumptionKwh, 0);
+    const offsetEnergyKwh = number(scenario.energyBalance?.offsetEnergyKwh, 0);
     const surplusEnergyKwh = number(scenario.energyBalance?.surplusEnergyKwh, 0);
+    const retailOffsetValueAmd = number(scenario.financial?.retailOffsetValueAmd, 0);
     const surplusCompensationValueAmd = number(scenario.financial?.surplusCompensationValueAmd, 0);
+    const displayedSavings = number(annualSavings, 0) ?? retailOffsetValueAmd;
+    const savingsAreOffsetOnly = number(annualSavings, 0) === null && retailOffsetValueAmd !== null;
     resultDashboard.replaceChildren();
     const metrics = element('dl', 'wizard-kpis result-kpis');
     metrics.append(
@@ -1188,8 +1252,12 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
         'consumption'
       ),
       dashboardMetric(
-        wizard.results?.metrics?.annualSavings ?? wizard.metrics?.annualSavings ?? 'Annual savings',
-        Number.isFinite(Number(annualSavings)) ? `≈ ${format(annualSavings, locale)} ֏` : '—',
+        savingsAreOffsetOnly
+          ? (wizard.retailOffsetSavings ?? 'Savings from covered consumption')
+          : (wizard.results?.metrics?.annualSavings ??
+              wizard.metrics?.annualSavings ??
+              'Annual savings'),
+        displayedSavings === null ? '—' : `≈ ${format(displayedSavings, locale)} ֏`,
         'savings'
       ),
       dashboardMetric(
@@ -1201,21 +1269,61 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
       )
     );
     resultDashboard.append(metrics);
-    if (surplusEnergyKwh !== null && surplusEnergyKwh > 0) {
-      const compensationCopy =
-        surplusCompensationValueAmd === null
-          ? wizard.surplusCompensationUnavailableCopy
-          : wizard.surplusCompensationValueCopy;
-      resultDashboard.append(
-        element(
-          'p',
-          'result-notice',
-          text(compensationCopy, {
-            surplus: format(surplusEnergyKwh, locale),
-            value: format(surplusCompensationValueAmd, locale)
-          })
+    if (annualConsumptionKwh !== null || offsetEnergyKwh !== null || surplusEnergyKwh !== null) {
+      const balance = element('section', 'result-notice result-energy-balance');
+      balance.append(element('h3', '', wizard.energyBalanceTitle ?? 'Energy balance'));
+      const values = element('dl', 'wizard-kpis');
+      values.append(
+        dashboardMetric(
+          wizard.annualConsumption ?? 'Annual consumption',
+          annualConsumptionKwh === null ? '—' : `${format(annualConsumptionKwh, locale)} kWh`
+        ),
+        dashboardMetric(
+          wizard.results?.metrics?.annualProduction ??
+            wizard.metrics?.annualGeneration ??
+            'kWh/year',
+          `${format(scenario.generation?.annualKwh, locale)} kWh`
+        ),
+        dashboardMetric(
+          wizard.coveredConsumption ?? 'Covered consumption',
+          offsetEnergyKwh === null ? '—' : `${format(offsetEnergyKwh, locale)} kWh`
+        ),
+        dashboardMetric(
+          wizard.surplusEnergy ?? 'Surplus generation',
+          surplusEnergyKwh === null ? '—' : `${format(surplusEnergyKwh, locale)} kWh`
         )
       );
+      balance.append(values);
+      if (retailOffsetValueAmd !== null)
+        balance.append(
+          element(
+            'p',
+            '',
+            `${wizard.retailOffsetSavings ?? 'Savings from covered consumption'}: ${text(
+              wizard.retailOffsetSavingsCopy ?? '≈ {value} AMD/year',
+              { value: format(retailOffsetValueAmd, locale) }
+            )}`
+          )
+        );
+      if (surplusEnergyKwh !== null && surplusEnergyKwh > 0) {
+        const surplusCopy =
+          surplusCompensationValueAmd === null
+            ? (wizard.surplusValueUnavailable ?? wizard.surplusCompensationUnavailableCopy)
+            : text(wizard.surplusCompensationValueCopy, {
+                surplus: format(surplusEnergyKwh, locale),
+                value: format(surplusCompensationValueAmd, locale)
+              });
+        balance.append(
+          element(
+            'p',
+            '',
+            surplusCompensationValueAmd === null
+              ? surplusCopy
+              : `${wizard.surplusCompensationValue ?? 'Surplus compensation'}: ${surplusCopy}`
+          )
+        );
+      }
+      resultDashboard.append(balance);
     }
     const equipmentRecommendation = analysis.equipmentRecommendation;
     const solarModule = equipmentRecommendation?.solarModule;
@@ -1267,6 +1375,54 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
           )
         );
       }
+    }
+    const roofCapacity = calculatePreliminaryRoofCapacity({
+      roofAreaSqm: analysis.roof?.areaSqm,
+      usableAreaRatio: analysis.roof?.usableAreaRatio,
+      panelAreaSqm: scenario.system?.panelAreaSqm,
+      panelWatts: scenario.system?.panelWatts
+    });
+    if (roofCapacity) {
+      const roofFit = element('section', 'result-notice result-roof-capacity');
+      roofFit.append(element('h3', '', wizard.roofCapacityTitle ?? 'Preliminary roof fit'));
+      const values = element('dl', 'wizard-kpis');
+      values.append(
+        dashboardMetric(
+          wizard.roofAreaForSizing ?? 'Roof area used for sizing',
+          `${format(roofCapacity.roofAreaSqm, locale, { maximumFractionDigits: 1 })} m²`
+        ),
+        dashboardMetric(
+          wizard.preliminaryUsableRoofArea ?? 'Preliminary usable module area',
+          `${format(roofCapacity.usableRoofAreaSqm, locale, { maximumFractionDigits: 1 })} m²`
+        ),
+        dashboardMetric(
+          wizard.maximumPanelsForRoof ?? 'Maximum with the selected module',
+          format(roofCapacity.maximumPanelCount, locale)
+        )
+      );
+      roofFit.append(
+        values,
+        element(
+          'p',
+          '',
+          text(wizard.roofCapacityPreview, {
+            capacity: format(roofCapacity.maximumCapacityKwp, locale, {
+              maximumFractionDigits: 2
+            }),
+            count: format(roofCapacity.maximumPanelCount, locale)
+          })
+        ),
+        element(
+          'small',
+          '',
+          text(wizard.roofCapacityAssumption, {
+            ratio: format(roofCapacity.usableAreaRatio * 100, locale, {
+              maximumFractionDigits: 0
+            })
+          })
+        )
+      );
+      resultDashboard.append(roofFit);
     }
     const inverter = equipmentRecommendation?.inverter ?? analysis.inverterRecommendation;
     if (inverter?.productId && Number.isFinite(Number(inverter.selectedAcPowerKw))) {
@@ -1469,6 +1625,20 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
         );
       }
       impact.append(values);
+      const factor = environmental.factor ?? {};
+      if (Number.isFinite(Number(factor.valueKgCo2PerKwh))) {
+        impact.append(
+          element(
+            'small',
+            'result-environmental__source',
+            `${wizard.environmentalFactorSource ?? 'Historical grid-emission factor'}${
+              factor.dataYear ? ` (${factor.dataYear})` : ''
+            }: ${format(factor.valueKgCo2PerKwh, locale, {
+              maximumFractionDigits: 3
+            })} kgCO₂/kWh`
+          )
+        );
+      }
       resultDashboard.append(impact);
     }
     const chart = element('figure', 'wizard-chart');
@@ -1911,6 +2081,7 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
     session.selectPanel(panelId);
     clearAnalysis();
     lastAnalysis = null;
+    updateRoofAreaSummary();
     updateProgress();
   });
 

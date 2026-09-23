@@ -44,6 +44,8 @@ export {
   normalizeSystem,
   roundAnalysisValue
 } from './solar-analysis.js';
+export { PRELIMINARY_USABLE_ROOF_RATIO } from './calculator-assumptions.js';
+export { calculatePreliminaryRoofCapacity } from './roof-capacity.js';
 export { buildRegionalQuickAnalysis } from './quick-analysis.js';
 export {
   INVERTER_COMPATIBILITY_LIMITATIONS,

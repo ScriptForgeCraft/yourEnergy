@@ -50,6 +50,8 @@ test('property-level calculation basis identifies PVGIS, catalog IDs, a roof ass
   const basis = analysis.calculationBasis;
 
   assert.equal(basis.coordinates.sourceType, CALCULATION_BASIS_SOURCE_TYPE.USER_INPUT);
+  assert.equal(basis.consumption.sourceType, CALCULATION_BASIS_SOURCE_TYPE.USER_INPUT);
+  assert.equal(basis.consumption.annualKwh, 9_000);
   assert.equal(basis.solarYield.sourceType, CALCULATION_BASIS_SOURCE_TYPE.PVGIS_RESULT);
   assert.equal(basis.solarYield.source.provider, 'PVGIS');
   assert.equal(basis.solarYield.configuration.systemLossPercent, 14);

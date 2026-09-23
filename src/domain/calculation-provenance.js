@@ -61,6 +61,7 @@ const pvgisConfiguration = (value) => {
 export const buildCalculationBasis = ({
   scope,
   property,
+  consumption,
   roof,
   production,
   equipment,
@@ -94,6 +95,14 @@ export const buildCalculationBasis = ({
             source: sourceReference(property?.source)
           }
         : null,
+    consumption:
+      toPositiveNumberOrNull(consumption?.annualKwh) === null
+        ? null
+        : {
+            sourceType: CALCULATION_BASIS_SOURCE_TYPE.USER_INPUT,
+            annualKwh: toPositiveNumberOrNull(consumption.annualKwh),
+            source: sourceReference(consumption?.source)
+          },
     solarYield:
       toPositiveNumberOrNull(production?.annualYieldKwhPerKwp) === null
         ? null

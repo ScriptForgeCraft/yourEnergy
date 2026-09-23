@@ -2,6 +2,7 @@ import {
   ARMENIA_GRID_CO2_FACTOR,
   ARMENIA_TARIFF_DATASET,
   EPA_URBAN_TREE_CO2_EQUIVALENCY,
+  PRELIMINARY_USABLE_ROOF_RATIO,
   PriceBookRepository,
   buildSolarAnalysis,
   createRegistryTariffSelection,
@@ -36,7 +37,6 @@ const priceBookRepository = new PriceBookRepository();
 
 // Conservative, server-owned assumptions make a manually outlined roof part
 // of the preliminary capacity constraint without presenting it as a layout.
-const PRELIMINARY_USABLE_ROOF_RATIO = 0.7;
 const MAX_PROJECTED_AREA_TILT_DEGREES = 75;
 
 const positiveRoofArea = (value) => getCalculatorInputNumber(value, 'roofAreaSqm');

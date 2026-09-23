@@ -22,6 +22,7 @@ import { recommendStorage } from './storage-recommendation.js';
 import { recommendMountingHardware } from './mounting-recommendation.js';
 import { buildEquipmentRecommendation } from './equipment-recommendation.js';
 import { buildCalculationBasis } from './calculation-provenance.js';
+import { calculatePreliminaryRoofCapacity } from './roof-capacity.js';
 
 export const ANALYSIS_SCHEMA_VERSION = '1.1.0';
 
@@ -289,15 +290,14 @@ const normalizeScenarioTargets = (targets) => {
 };
 
 const roofPanelLimit = (roof, system) => {
-  if (
-    roof.areaSqm === null ||
-    roof.usableAreaRatio === null ||
-    system.panelAreaSqm === null ||
-    system.panelWatts === null
-  ) {
-    return null;
-  }
-  return Math.floor((roof.areaSqm * roof.usableAreaRatio) / system.panelAreaSqm);
+  return (
+    calculatePreliminaryRoofCapacity({
+      roofAreaSqm: roof.areaSqm,
+      usableAreaRatio: roof.usableAreaRatio,
+      panelAreaSqm: system.panelAreaSqm,
+      panelWatts: system.panelWatts
+    })?.maximumPanelCount ?? null
+  );
 };
 
 const getScenarioCapex = (investment, capacityKwp) => {
@@ -760,6 +760,7 @@ export const buildSolarAnalysis = (input = {}) => {
   const calculationBasis = buildCalculationBasis({
     scope,
     property,
+    consumption,
     roof,
     production,
     equipment: system.equipment,
