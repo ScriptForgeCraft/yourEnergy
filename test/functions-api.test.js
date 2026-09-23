@@ -7,6 +7,8 @@ import { onRequest as leadOnRequest } from '../functions/api/lead.js';
 import { onRequest as potentialOnRequest } from '../functions/api/potential.js';
 import { providerTimeoutMs } from '../functions/_lib/config.js';
 import { buildP0SolarAnalysis } from '../functions/_lib/solar-analysis.js';
+import { getDefaultCalculatorSystem } from '../src/data/equipment/calculator-defaults.js';
+import { getSolarPanels } from '../src/data/equipment/calculator-catalog.js';
 import {
   createGeocodingAdapter,
   normalizeGeocodingCandidate,
@@ -450,6 +452,34 @@ test('the server selects the dated P1 price book instead of accepting a client p
   assert.equal(analysis.financial.price.kind, 'temporary');
 });
 
+test('the server resolves an explicit catalog panel ID without altering PVGIS-specific yield', () => {
+  const selectedPanel = getSolarPanels()[1];
+  const analysis = buildP0SolarAnalysis({
+    body: {
+      ...p0AnalysisPayload,
+      equipment: { panelId: selectedPanel.id }
+    },
+    validatedInput: {
+      property: { latitude: 40.18, longitude: 44.51 },
+      roof: { tiltDegrees: 30, azimuthDegrees: 180 }
+    },
+    providerAnalysis: {
+      generation: {
+        annualKwh: 1_500,
+        monthlyKwh: Array.from({ length: 12 }, () => 125)
+      },
+      sourceLedger: [{ retrievedAt: '2026-08-31T00:00:00.000Z' }]
+    },
+    effectiveDate: '2026-08-31'
+  });
+  const scenario = analysis.selectedScenario;
+
+  assert.equal(analysis.equipment.panelId, selectedPanel.id);
+  assert.equal(scenario.system.panelWatts, selectedPanel.calculation.panelWatts);
+  assert.equal(scenario.system.panelAreaSqm, selectedPanel.calculation.panelAreaSqm);
+  assert.equal(scenario.generation.annualKwh, scenario.system.capacityKwp * 1_500);
+});
+
 test('the server makes a small outlined roof a visible preliminary capacity constraint', () => {
   const analysis = buildP0SolarAnalysis({
     body: {
@@ -473,8 +503,9 @@ test('the server makes a small outlined roof a visible preliminary capacity cons
   assert.equal(analysis.selectedScenario.system.maximumPanelCount, 1);
   assert.equal(analysis.selectedScenario.system.panelCount, 1);
   assert.equal(analysis.selectedScenario.system.capacityKwp, 0.65);
+  assert.deepEqual(analysis.equipment, getDefaultCalculatorSystem()?.equipment);
   assert.ok(analysis.selectedScenario.limitations.includes('ROOF_CAPACITY_LIMIT'));
-  assert.ok(analysis.assumptions.includes('PRELIMINARY_PANEL_SIZE_650W_2M2'));
+  assert.ok(analysis.assumptions.includes('PRELIMINARY_PANEL_FROM_EQUIPMENT_CATALOG'));
 });
 
 test('analysis refuses an unconfirmed property or incomplete roof before contacting PVGIS', async () => {

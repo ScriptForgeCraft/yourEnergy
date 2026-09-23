@@ -8,17 +8,25 @@ import {
   createUserTariffSelection,
   normalizeConsumption
 } from '../../src/domain/index.js';
+import {
+  getCalculatorSystemForPanel,
+  getDefaultCalculatorSystem
+} from '../../src/data/equipment/calculator-defaults.js';
 import { ApiError } from './http.js';
 
 const cleanString = (value, maximum = 220) =>
   typeof value === 'string' ? value.replace(/\s+/gu, ' ').trim().slice(0, maximum) || null : null;
 
+// The browser may choose a stable catalogue ID, but never supplies technical
+// panel values. Unknown or malformed IDs safely retain the configured default.
+const calculatorSystemForBody = (body) =>
+  getCalculatorSystemForPanel(cleanString(body?.equipment?.panelId, 160) ?? undefined) ??
+  getDefaultCalculatorSystem();
+
 const priceBookRepository = new PriceBookRepository();
 
 // Conservative, server-owned assumptions make a manually outlined roof part
 // of the preliminary capacity constraint without presenting it as a layout.
-const PRELIMINARY_PANEL_WATTS = 650;
-const PRELIMINARY_PANEL_AREA_SQM = 2;
 const PRELIMINARY_USABLE_ROOF_RATIO = 0.7;
 const MAX_PROJECTED_AREA_TILT_DEGREES = 75;
 
@@ -189,10 +197,7 @@ export const buildP0SolarAnalysis = ({
     // either an explicit official tariff ID + day/night choice or a rate the
     // visitor entered from a bill; missing selection remains unavailable.
     tariffSelection,
-    system: {
-      panelWatts: PRELIMINARY_PANEL_WATTS,
-      panelAreaSqm: PRELIMINARY_PANEL_AREA_SQM
-    },
+    system: calculatorSystemForBody(body),
     // The browser never controls capex. A dated server-side price book is the
     // only provisional commercial source used in this P1 route.
     investment: {},
@@ -219,7 +224,7 @@ export const buildP0SolarAnalysis = ({
     assumptions: [
       'PVGIS_SYSTEM_LOSS_14_PERCENT',
       'PRELIMINARY_ROOF_USABLE_AREA_70_PERCENT',
-      'PRELIMINARY_PANEL_SIZE_650W_2M2',
+      'PRELIMINARY_PANEL_FROM_EQUIPMENT_CATALOG',
       ...(body?.roof?.areaMethod === 'map-projected'
         ? ['MAP_PROJECTED_AREA_CONVERTED_TO_ROOF_PLANE']
         : ['USER_MEASURED_ROOF_PLANE_AREA'])

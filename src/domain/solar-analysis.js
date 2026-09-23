@@ -210,10 +210,42 @@ export const normalizeProduction = (input = {}) => {
   };
 };
 
-export const normalizeSystem = (input = {}) => ({
-  panelWatts: toPositiveNumberOrNull(input.panelWatts),
-  panelAreaSqm: toPositiveNumberOrNull(input.panelAreaSqm)
-});
+const normalizeEquipment = (input, panelWatts, panelAreaSqm) => {
+  if (!input || typeof input !== 'object') return null;
+  const panelId = cleanString(input.panelId);
+  const panelBrand = cleanString(input.panelBrand);
+  const panelModel = cleanString(input.panelModel);
+  if (
+    !panelId ||
+    !panelBrand ||
+    !panelModel ||
+    panelWatts === null ||
+    panelAreaSqm === null ||
+    input.source !== 'equipment-catalog'
+  ) {
+    return null;
+  }
+
+  return {
+    panelId,
+    panelBrand,
+    panelModel,
+    panelWatts,
+    panelAreaSqm,
+    source: 'equipment-catalog'
+  };
+};
+
+export const normalizeSystem = (input = {}) => {
+  const system = input && typeof input === 'object' ? input : {};
+  const panelWatts = toPositiveNumberOrNull(system.panelWatts);
+  const panelAreaSqm = toPositiveNumberOrNull(system.panelAreaSqm);
+  return {
+    panelWatts,
+    panelAreaSqm,
+    equipment: normalizeEquipment(system.equipment, panelWatts, panelAreaSqm)
+  };
+};
 
 export const normalizeInvestment = (input = {}) => ({
   capexAmd: toPositiveNumberOrNull(input.capexAmd),
@@ -330,7 +362,13 @@ export const calculateSolarScenario = ({
       targetCoverage: target,
       status: ANALYSIS_STATUS.UNAVAILABLE,
       limitations: ['CONSUMPTION_AND_CONFIRMED_YIELD_REQUIRED'],
-      system: { capacityKwp: null, panelCount: null, panelWatts: system.panelWatts },
+      system: {
+        capacityKwp: null,
+        panelCount: null,
+        panelWatts: system.panelWatts,
+        panelAreaSqm: system.panelAreaSqm,
+        equipment: system.equipment
+      },
       generation: { annualKwh: null, monthlyKwh: null },
       coveragePercent: null,
       financial: {
@@ -393,8 +431,10 @@ export const calculateSolarScenario = ({
       capacityKwp,
       panelCount,
       panelWatts: system.panelWatts,
+      panelAreaSqm: system.panelAreaSqm,
       requestedCapacityKwp,
-      maximumPanelCount: maxPanelCount
+      maximumPanelCount: maxPanelCount,
+      equipment: system.equipment
     },
     generation: { annualKwh, monthlyKwh },
     coveragePercent: (annualKwh / consumption.annualKwh) * 100,
@@ -599,6 +639,7 @@ export const buildSolarAnalysis = (input = {}) => {
     production,
     tariff,
     system,
+    equipment: system.equipment,
     investment,
     priceBook: commercialEstimate?.priceBook ?? null,
     commercialEstimate,

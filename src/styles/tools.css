@@ -3357,6 +3357,19 @@
   font-weight: 720;
 }
 
+.calculator-page--professional .professional-calculation-panel {
+  display: grid;
+  margin-top: 0.75rem;
+}
+
+.calculator-page--professional .professional-calculation-panel small {
+  margin-top: 0.32rem;
+  color: #607895;
+  font-size: 0.67rem;
+  font-weight: 540;
+  line-height: 1.35;
+}
+
 .calculator-page--professional .professional-roof-mounting-select select {
   min-height: 2.88rem;
   margin-top: 0.3rem;

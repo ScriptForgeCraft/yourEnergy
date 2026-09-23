@@ -351,7 +351,8 @@
                       <option value='custom'>{{product.roof.orientationOptions.custom}}</option>
                     </select></label><label>{{product.roof.tiltLabel}}<div class='input-with-unit'><input type='number'
                         min='0' max='90' step='1' inputmode='decimal' value='30' data-roof-tilt /><span>°</span></div>
-                  </label></div><label data-roof-orientation-custom hidden>{{product.roof.customOrientationLabel}}<input
+                  </label></div><label class='professional-calculation-panel'>{{wizard.calculationPanelLabel}}<select
+                    data-calculation-panel></select><small>{{wizard.calculationPanelHelp}}</small></label><label data-roof-orientation-custom hidden>{{product.roof.customOrientationLabel}}<input
                     type='number' min='0' max='359' step='1' inputmode='decimal'
                     data-roof-orientation-custom-input /></label><label
                   class='professional-roof-mounting-select'>{{product.roof.mountingModeLabel}}<select data-roof-mounting-mode>

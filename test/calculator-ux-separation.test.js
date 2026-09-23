@@ -15,6 +15,7 @@ test('Quick keeps maps and professional fields out of its initial markup', async
     'data-roof-tilt',
     'data-roof-orientation',
     'data-roof-mounting-mode',
+    'data-calculation-panel',
     'P25',
     'P50',
     'P75'
@@ -66,6 +67,10 @@ test('Professional has exactly four customer steps and retains every engineering
   assert.match(controller, /locateSelectedLocality/u);
   assert.match(controller, /map\?\.focusLocation\(center\)/u);
   assert.match(controller, /mapController\?\.finishRoof\(\)/u);
+  assert.match(controller, /getCalculatorSystemForPanel/u);
+  assert.match(controller, /equipment: \{ panelId: state\.selectedPanelId \}/u);
+  assert.match(controller, /session\.selectPanel\(panelId\)/u);
+  assert.match(controller, /analysisMatchesPanel/u);
   assert.doesNotMatch(controller, /issue === 'outline' \|\| issue === 'area'/u);
 });
 

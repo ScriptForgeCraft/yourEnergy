@@ -312,8 +312,8 @@ export default {
           'PVGIS uses a 14% preliminary system-loss assumption; an engineer must confirm it.',
         PRELIMINARY_ROOF_USABLE_AREA_70_PERCENT:
           'Preliminary capacity uses 70% of the outlined roof area. An engineer verifies actual usable area, setbacks and access paths.',
-        PRELIMINARY_PANEL_SIZE_650W_2M2:
-          'Preliminary capacity uses a 650 W, 2 m² module; this is not a confirmed equipment specification.',
+        PRELIMINARY_PANEL_FROM_EQUIPMENT_CATALOG:
+          'Preliminary capacity uses a module from the equipment catalog; an engineer must confirm the final specification.',
         USER_PROVIDED_TARIFF:
           'The tariff was entered by the visitor from a bill and is not a tariff registry record.',
         TEMPORARY_PRICEBOOK_NOT_OFFER:

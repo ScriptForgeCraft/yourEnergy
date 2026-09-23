@@ -14,6 +14,12 @@ import { initConsumptionInput } from './consumption-input.js';
 import { initFileUpload } from './file-upload.js';
 import { createCalculatorSession } from './calculator-session.js';
 import { localitiesForRegion, localityCenter } from '../data/locations/armenia.js';
+import { getSolarPanels } from '../data/equipment/calculator-catalog.js';
+import {
+  getCalculatorSystemForPanel,
+  getDefaultCalculatorSystem,
+  getSolarPanelCalculationProfile
+} from '../data/equipment/calculator-defaults.js';
 
 const PVGIS_KWP = 1;
 const PVGIS_LOSS = 14;
@@ -42,6 +48,20 @@ const element = (tag, className, value) => {
   if (value !== undefined && value !== null) node.textContent = value;
   return node;
 };
+
+const analysisMatchesPanel = (analysis, system) => {
+  const equipment = analysis?.equipment ?? analysis?.selectedScenario?.system?.equipment;
+  const selected = system?.equipment;
+  if (!equipment || !selected) return false;
+  return (
+    equipment?.panelId === selected?.panelId &&
+    equipment?.panelWatts === selected?.panelWatts &&
+    equipment?.panelAreaSqm === selected?.panelAreaSqm
+  );
+};
+
+const panelDescription = (profile) =>
+  profile ? `${profile.brand} ${profile.model} · ${profile.watts} W` : '—';
 
 const compass = (degrees, directions) => {
   const value = Number(degrees);
@@ -158,6 +178,7 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
   const roofOrientationCustom = root.querySelector('[data-roof-orientation-custom]');
   const roofOrientationCustomInput = root.querySelector('[data-roof-orientation-custom-input]');
   const roofTilt = root.querySelector('[data-roof-tilt]');
+  const calculationPanel = root.querySelector('[data-calculation-panel]');
   const roofNotice = root.querySelector('.professional-roof-notice');
   const roofNoticeCopy = roofNotice?.querySelector('p');
   const roofNoticeDefault = roofNoticeCopy?.innerHTML ?? '';
@@ -182,6 +203,11 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
 
   const session = createCalculatorSession();
   const savedSession = session.read();
+  const selectedPanelSystem =
+    getCalculatorSystemForPanel(savedSession.selectedPanelId) ?? getDefaultCalculatorSystem();
+  const restoredAnalysis = analysisMatchesPanel(savedSession.analysis, selectedPanelSystem)
+    ? savedSession.analysis
+    : null;
   const state = createCalculatorWizardState({
     addressNote: savedSession.addressNote ?? '',
     confirmedProperty: savedSession.property?.coordinates ?? null,
@@ -192,11 +218,10 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
     roof: savedSession.roof ?? null,
     consumption: savedSession.consumption ?? null,
     userTariff: savedSession.userTariff ?? null,
-    analysis: savedSession.analysis ?? null,
-    solarPassport: savedSession.solarPassport ?? null,
-    analysisStatus: savedSession.analysis
-      ? WIZARD_STEP_STATUSES.COMPLETE
-      : WIZARD_STEP_STATUSES.LOCKED
+    selectedPanelId: selectedPanelSystem?.equipment?.panelId ?? null,
+    analysis: restoredAnalysis,
+    solarPassport: restoredAnalysis ? (savedSession.solarPassport ?? null) : null,
+    analysisStatus: restoredAnalysis ? WIZARD_STEP_STATUSES.COMPLETE : WIZARD_STEP_STATUSES.LOCKED
   });
   let mapController = null;
   let mapControllerPromise = null;
@@ -222,6 +247,7 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
       roof: state.roof,
       consumption: state.consumption,
       userTariff: state.userTariff,
+      selectedPanelId: state.selectedPanelId,
       analysis: state.analysis,
       analysisStatus: state.analysisStatus,
       solarPassport: state.solarPassport
@@ -249,6 +275,27 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
     });
     localitySelect.replaceChildren(placeholder, ...options);
     localitySelect.disabled = localities.length === 0;
+  };
+
+  const populateCalculationPanelOptions = () => {
+    if (!calculationPanel) return;
+    const profiles = getSolarPanels()
+      .map(({ id }) => getSolarPanelCalculationProfile(id))
+      .filter(Boolean);
+    const availableIds = new Set(profiles.map(({ id }) => id));
+    if (!availableIds.has(state.selectedPanelId)) {
+      state.selectedPanelId = profiles[0]?.id ?? null;
+    }
+    calculationPanel.replaceChildren(
+      ...profiles.map((profile) => {
+        const option = document.createElement('option');
+        option.value = profile.id;
+        option.textContent = panelDescription(profile);
+        return option;
+      })
+    );
+    calculationPanel.disabled = profiles.length === 0;
+    if (state.selectedPanelId) calculationPanel.value = state.selectedPanelId;
   };
 
   const stopAddressSearch = () => {
@@ -912,6 +959,16 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
       )
     );
     resultDashboard.append(metrics);
+    const equipment = analysis.equipment ?? scenario.system?.equipment;
+    if (equipment?.panelBrand && equipment?.panelModel) {
+      resultDashboard.append(
+        element(
+          'p',
+          'result-notice',
+          `${wizard.calculationPanelLabel ?? 'Calculation solar module'}: ${equipment.panelBrand} ${equipment.panelModel} · ${format(equipment.panelWatts, locale)} W`
+        )
+      );
+    }
     if (scenario.limitations?.includes('ROOF_CAPACITY_LIMIT')) {
       const limit = element('p', 'result-notice result-notice--warning', wizard.roofLimit);
       limit.append(
@@ -983,7 +1040,10 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
         tiltDegrees: roof.tiltDegrees,
         azimuthDegrees: roof.azimuthDegrees
       },
-      system: { capacityKwp: PVGIS_KWP, lossPercent: PVGIS_LOSS }
+      // PVGIS remains a normalized 1 kWp yield query. Panel selection is sent
+      // independently as an ID and resolved by the server-side catalogue.
+      system: { capacityKwp: PVGIS_KWP, lossPercent: PVGIS_LOSS },
+      equipment: { panelId: state.selectedPanelId }
     };
   };
 
@@ -1073,7 +1133,7 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
     );
     add(
       wizard.metrics?.system ?? 'System',
-      `${format(analysis.selectedScenario?.system?.capacityKwp, locale, { maximumFractionDigits: 2 })} kWp · ${format(analysis.selectedScenario?.system?.panelCount, locale)} × ${format(analysis.selectedScenario?.system?.panelWatts, locale)} W`
+      `${format(analysis.selectedScenario?.system?.capacityKwp, locale, { maximumFractionDigits: 2 })} kWp · ${format(analysis.selectedScenario?.system?.panelCount, locale)} × ${format(analysis.selectedScenario?.system?.panelWatts, locale)} W${analysis.equipment?.panelBrand && analysis.equipment?.panelModel ? ` · ${analysis.equipment.panelBrand} ${analysis.equipment.panelModel}` : ''}`
     );
     const estimate = analysis.commercialEstimate;
     add(
@@ -1309,6 +1369,22 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
     .querySelectorAll('[data-roof-area-method], [data-roof-mounting-mode], [data-roof-orientation]')
     .forEach((input) => input.addEventListener('change', syncRoofControls));
 
+  calculationPanel?.addEventListener('change', () => {
+    const system =
+      getCalculatorSystemForPanel(calculationPanel.value) ?? getDefaultCalculatorSystem();
+    const panelId = system?.equipment?.panelId;
+    if (!panelId || panelId === state.selectedPanelId) return;
+    state.selectedPanelId = panelId;
+    calculationPanel.value = panelId;
+    // This clears both saved analysis variants before the new panel can be
+    // used, so Back/Forward and cross-route session handoffs cannot show the
+    // prior module's roof fit or installed capacity.
+    session.selectPanel(panelId);
+    clearAnalysis();
+    lastAnalysis = null;
+    updateProgress();
+  });
+
   root.querySelector('[data-run-analysis]')?.addEventListener('click', () => void runAnalysis());
   root.querySelector('[data-add-tariff]')?.addEventListener('click', () => {
     setStep(1);
@@ -1335,6 +1411,7 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
   );
 
   populateLocalityOptions();
+  populateCalculationPanelOptions();
   syncRoofControls({ preserveAnalysis: true });
   if (state.analysis) renderResult(state.analysis);
   const restoredStep = Number.isInteger(savedSession.currentStep) ? savedSession.currentStep : 0;

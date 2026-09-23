@@ -88,6 +88,7 @@
  * @property {Object|null} commercialEstimate
  * @property {Object[]} scenarios
  * @property {Object|null} selectedScenario
+ * @property {{panelId: string, panelBrand: string, panelModel: string, panelWatts: number, panelAreaSqm: number, source: 'equipment-catalog'}|null} equipment
  * @property {'manual-roof-plane'|string} scope
  * @property {Object} dataCompleteness
  * @property {Object|null} cache

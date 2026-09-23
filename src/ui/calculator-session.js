@@ -19,6 +19,7 @@ const emptyState = () => ({
   property: null,
   roof: null,
   sitePotential: null,
+  selectedPanelId: null,
   quickAnalysis: null,
   analysis: null,
   analysisStatus: 'idle',
@@ -91,6 +92,22 @@ export const createCalculatorSession = ({ storage } = {}) => {
   const clearAnalysis = () =>
     write({ analysis: null, analysisStatus: 'idle', solarPassport: null });
 
+  /**
+   * A calculation panel affects physical roof fit and installed kWp. Keep the
+   * visitor's inputs, but never retain a result calculated for another panel.
+   */
+  const selectPanel = (panelId) => {
+    const selectedPanelId =
+      typeof panelId === 'string' ? panelId.trim().slice(0, 160) || null : null;
+    return write({
+      selectedPanelId,
+      quickAnalysis: null,
+      analysis: null,
+      analysisStatus: 'idle',
+      solarPassport: null
+    });
+  };
+
   const clear = () => {
     const next = emptyState();
     try {
@@ -102,5 +119,5 @@ export const createCalculatorSession = ({ storage } = {}) => {
     return next;
   };
 
-  return Object.freeze({ key: SESSION_KEY, read, write, clearAnalysis, clear });
+  return Object.freeze({ key: SESSION_KEY, read, write, clearAnalysis, selectPanel, clear });
 };

@@ -6,6 +6,8 @@ const copy = {
       'Ընտրեք տունը, նշեք սպառումն ու հասանելի տանիքը։ Մնացած տեխնիկական տվյալները հասանելի են ըստ անհրաժեշտության։',
     steps: ['Օբյեկտ', 'Սպառում', 'Տանիք', 'Արդյունք'],
     engineering: 'Ինժեներական պարամետրեր',
+    calculationPanelLabel: 'Հաշվարկային արևային մոդուլ',
+    calculationPanelHelp: 'Հաշվարկը օգտագործում է ընտրված մոդուլի հզորությունն ու ֆիզիկական մակերեսը։',
     addressLabel: 'Նշում ինժեների համար',
     addressHelp:
       'Հասցեն չի օգտագործվում հաշվարկի համար։ Ընտրեք ճշգրիտ կետ քարտեզի վրա կամ մուտքագրեք կոորդինատներ։',
@@ -110,6 +112,8 @@ const copy = {
       'Выберите дом, укажите потребление и доступную крышу. Технические параметры откроются только при необходимости.',
     steps: ['Объект', 'Потребление', 'Крыша', 'Результат'],
     engineering: 'Инженерные параметры',
+    calculationPanelLabel: 'Расчётный солнечный модуль',
+    calculationPanelHelp: 'Расчёт использует мощность и физическую площадь выбранного модуля.',
     addressLabel: 'Заметка для инженера',
     addressHelp:
       'Адрес не используется для солнечного расчёта. Выберите точную точку на карте или введите координаты.',
@@ -214,6 +218,8 @@ const copy = {
       'Choose the home, enter consumption and outline the usable roof. Technical inputs appear only when you need them.',
     steps: ['Property', 'Consumption', 'Roof', 'Result'],
     engineering: 'Engineering parameters',
+    calculationPanelLabel: 'Calculation solar module',
+    calculationPanelHelp: 'The calculation uses the selected module’s wattage and physical area.',
     addressLabel: 'Note for the engineer',
     addressHelp:
       'The address is not used for the solar calculation. Choose the exact point on the map or enter coordinates.',

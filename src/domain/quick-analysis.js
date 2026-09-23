@@ -1,3 +1,4 @@
+import { getDefaultCalculatorSystem } from '../data/equipment/calculator-defaults.js';
 import { buildSolarAnalysis } from './solar-analysis.js';
 
 /**
@@ -35,7 +36,7 @@ export const buildRegionalQuickAnalysis = ({
     },
     production,
     tariffSelection,
-    system: { panelWatts: 650, panelAreaSqm: 2 },
+    system: getDefaultCalculatorSystem(),
     investment: {},
     priceBook,
     gridEmissionFactor,

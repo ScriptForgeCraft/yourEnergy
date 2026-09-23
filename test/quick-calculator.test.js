@@ -13,6 +13,8 @@ import {
   createUserTariffSelection,
   getArmeniaRegionalBenchmark
 } from '../src/domain/index.js';
+import { getDefaultCalculatorSystem } from '../src/data/equipment/calculator-defaults.js';
+import { getSolarPanels } from '../src/data/equipment/calculator-catalog.js';
 import { createCalculatorSession } from '../src/ui/calculator-session.js';
 import { formatConsumerCommercialRange } from '../src/ui/commercial-range.js';
 import {
@@ -89,7 +91,7 @@ test('regional quick analysis delegates unchanged sizing, budget and finance for
       source: region.source
     },
     roof: {},
-    system: { panelWatts: 650, panelAreaSqm: 2 },
+    system: getDefaultCalculatorSystem(),
     scope: 'regional-preliminary',
     limitations: [
       'REGIONAL_REFERENCE_POINT_NOT_PROPERTY_LOCATION',
@@ -265,6 +267,38 @@ test('a detailed roof result preserves its compatible quick result for a simple 
   const restored = session.read();
   assert.equal(restored.quickAnalysis.selectedScenario.id, 'quick');
   assert.equal(restored.analysis.selectedScenario.id, 'refined');
+});
+
+test('selecting a calculation panel invalidates cached sizing results but keeps visitor inputs', () => {
+  const values = new Map();
+  const session = createCalculatorSession({
+    storage: {
+      getItem: (key) => values.get(key) ?? null,
+      setItem: (key, value) => values.set(key, value)
+    }
+  });
+  const defaultSystem = getDefaultCalculatorSystem();
+  const selectedPanel = getSolarPanels()[1];
+  session.write({
+    consumption: { mode: 'usage', averageMonthlyKwh: 850 },
+    roof: { areaSqm: 100, complete: true },
+    selectedPanelId: defaultSystem.equipment.panelId,
+    quickAnalysis: { selectedScenario: { system: defaultSystem } },
+    analysis: { equipment: defaultSystem.equipment },
+    analysisStatus: 'complete',
+    solarPassport: { analysis: { equipment: defaultSystem.equipment } }
+  });
+
+  session.selectPanel(selectedPanel.id);
+  const restored = session.read();
+
+  assert.equal(restored.selectedPanelId, selectedPanel.id);
+  assert.equal(restored.consumption.averageMonthlyKwh, 850);
+  assert.equal(restored.roof.areaSqm, 100);
+  assert.equal(restored.quickAnalysis, null);
+  assert.equal(restored.analysis, null);
+  assert.equal(restored.analysisStatus, 'idle');
+  assert.equal(restored.solarPassport, null);
 });
 
 test('changing the regional starting point never carries an old roof into the new estimate', () => {
