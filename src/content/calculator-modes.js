@@ -109,51 +109,20 @@ const common = {
       providerNotConfigured:
         'Արևային հաշվարկի ծառայությունը դեռ կարգավորված չէ։ Կապվեք ինժեների հետ։',
       retry: 'Կրկնել PVGIS հարցումը',
-      regional: 'Տարածաշրջանային նախնական արդյունք',
+      regional: 'Տարածաշրջանային գնահատում',
       regionalCopy:
         'PVGIS-ի տվյալը վերաբերում է ընտրված տարածաշրջանի ներկայացուցչական կետին, ոչ թե ձեր տան հասցեին կամ տանիքին։',
       resultsTitle: 'Ձեր նախնական արդյունքը',
-      resultsCopy: 'Ընտրված տարածաշրջանի արևային տվյալների և ձեր սպառման հիման վրա',
-      recommendedSystem: 'Առաջարկվող համակարգ',
-      solarModule: 'Արևային մոդուլ',
-      inverter: 'Ինվերտեր',
-      moduleRecommendationCopy: '{quantity} մոդուլ × {watts} W · {capacity} kWp DC',
-      moduleRecommendationReason:
-        'Մոդուլների քանակն ու կատալոգային հզորությունը համապատասխանում են հաշվարկված DC հզորությանը։',
-      inverterRecommendationCopy: '{technology} · հասանելի AC տարբերակ՝ {acPower} kW',
-      inverterRecommendationReason:
-        'Ընտրված է հաշվարկված PV DC հզորությանը համապատասխան կատալոգային տարբերակից։',
-      gridTiedInverter: 'Ցանցային ինվերտեր',
-      hybridInverter: 'Հիբրիդային ինվերտեր',
-      equipmentPreliminary:
-        'Սա կատալոգի հիման վրա նախնական ընտրություն է․ վերջնական էլեկտրական համատեղելիությունը հաստատում է ինժեները։',
-      calculationBasisTitle: 'Ինչպես է հաշվարկվել',
-      calculationBasis: {
-        coordinates: 'Տարածաշրջանային հենակետ',
-        solarYield: 'Արևային արտադրողականություն',
-        solarModule: 'Հաշվարկային մոդուլ',
-        tariff: 'Սակագին',
-        noTariff: 'Սակագինը ընտրված չէ',
-        systemLoss: 'Համակարգի կորուստ',
-        sourceTypes: {
-          'regional-reference': 'տարածաշրջանային հենակետ',
-          'pvgis-result': 'PVGIS արդյունք',
-          'catalog-technical-value': 'կատալոգի տեխնիկական արժեք',
-          'registry-value': 'գրանցամատյանի արժեք',
-          'user-input': 'օգտատիրոջ մուտքագրում',
-          unavailable: 'անհասանելի աղբյուր'
-        }
-      },
+      resultsCopy: 'Ընտրված տարածաշրջանի և ձեր էլեկտրաէներգիայի սպառման հիման վրա։',
       capacity: 'Առաջարկվող հզորություն',
-      panels: 'Վահանակներ',
-      generation: 'Տարեկան արտադրություն',
+      panels: 'Վահանակների քանակ',
+      generation: 'Սպասվող տարեկան արտադրություն',
+      coverage: 'Սպառման ծածկույթ',
+      approximately: '≈',
+      kwhPerYear: 'kWh/տարի',
+      amdPerYear: 'AMD/տարի',
       monthlyProduction: 'Կանխատեսվող ամսական արտադրություն',
-      co2: 'CO₂ կրճատում',
-      trees: 'Ծառերի համարժեք',
-      budget: 'Նախնական բյուջե',
-      savings: 'Տարեկան խնայողություն',
-      surplusEnergy: 'Ավելցուկային արտադրություն',
-      payback: 'Հետգնման ժամկետ',
+      savings: 'Մոտավոր տարեկան խնայողություն',
       refine: 'Ճշգրտել իմ տանիքով',
       contact: 'Ստանալ առաջարկ',
       phone: 'Զանգել ինժեներին',
@@ -172,13 +141,9 @@ const common = {
         close: 'Փակել'
       },
       disclaimer:
-        'Հաշվարկը նախնական է։ Վերջնական պարամետրերն ու արժեքը հաստատվում են օբյեկտի ինժեներական ստուգումից հետո։',
-      noTariff:
-        'Խնայողության և հետգնման համար ավելացրեք սակագինը կամ օգտագործեք ձեր հաշվի տվյալները։',
-      surplusValueUnavailable:
-        'Տարեկան սպառումից բարձր արտադրությունը ցուցադրվում է առանձին։ Դրա դրամական արժեքն ու հետգնման ժամկետը հասանելի չեն, քանի դեռ չի կարգավորվել հաստատված փոխհատուցման սակագին։',
-      priceUnavailable:
-        'Նախնական գների միջակայքն այժմ հասանելի չէ։ Հարցրեք ինժեներական զննում՝ ընթացիկ արժեքը հաստատելու համար։',
+        'Տարածաշրջանային նախնական գնահատում։ Տանիքի տվյալները կարող եք ճշգրտել Պրոֆեսիոնալ ռեժիմում։',
+      noTariff: 'Ավելացրեք սակագին՝ մոտավոր տարեկան խնայողությունը տեսնելու համար։',
+      savingsUnavailable: 'Մոտավոր տարեկան խնայողությունը հասանելի չէ ընտրված սակագնի համար։',
       benefitsLabel: 'Արևային էներգիայի առավելությունները',
       benefits: [
         { icon: 'leaf', title: 'Ավելի ցածր հաշիվներ', copy: 'Օգտագործեք մաքուր արևային էներգիա' },
@@ -396,50 +361,20 @@ const common = {
         'Солнечный расчёт ещё не включён: защищённый кэш сервиса не настроен. Свяжитесь с инженером.',
       providerNotConfigured: 'Сервис солнечного расчёта ещё не настроен. Свяжитесь с инженером.',
       retry: 'Повторить запрос PVGIS',
-      regional: 'Региональный предварительный результат',
+      regional: 'Региональная оценка',
       regionalCopy:
         'PVGIS-данные относятся к представительской точке выбранного региона, а не к вашему адресу или крыше.',
-      resultsTitle: 'Ваши предварительные результаты',
-      resultsCopy: 'На основе солнечных данных выбранного региона и вашего потребления',
-      recommendedSystem: 'Рекомендуемая система',
-      solarModule: 'Солнечный модуль',
-      inverter: 'Инвертор',
-      moduleRecommendationCopy: '{quantity} модулей × {watts} W · {capacity} кВтp DC',
-      moduleRecommendationReason:
-        'Количество модулей и их мощность из каталога дают рассчитанную DC-мощность.',
-      inverterRecommendationCopy: '{technology} · доступный вариант AC: {acPower} кВт',
-      inverterRecommendationReason: 'Выбран из вариантов каталога для рассчитанной PV DC-мощности.',
-      gridTiedInverter: 'Сетевой инвертор',
-      hybridInverter: 'Гибридный инвертор',
-      equipmentPreliminary:
-        'Это предварительный подбор по каталогу; окончательную электрическую совместимость подтверждает инженер.',
-      calculationBasisTitle: 'Как рассчитано',
-      calculationBasis: {
-        coordinates: 'Региональная опорная точка',
-        solarYield: 'Солнечная выработка',
-        solarModule: 'Расчётный модуль',
-        tariff: 'Тариф',
-        noTariff: 'Тариф не выбран',
-        systemLoss: 'Системные потери',
-        sourceTypes: {
-          'regional-reference': 'региональная опорная точка',
-          'pvgis-result': 'результат PVGIS',
-          'catalog-technical-value': 'техническое значение каталога',
-          'registry-value': 'значение реестра',
-          'user-input': 'ввод пользователя',
-          unavailable: 'источник недоступен'
-        }
-      },
+      resultsTitle: 'Ваш предварительный результат',
+      resultsCopy: 'На основе выбранного региона и вашего потребления электроэнергии.',
       capacity: 'Рекомендуемая мощность',
-      panels: 'Панели',
-      generation: 'Годовая выработка',
+      panels: 'Количество панелей',
+      generation: 'Ожидаемая выработка',
+      coverage: 'Покрытие потребления',
+      approximately: '≈',
+      kwhPerYear: 'kWh/год',
+      amdPerYear: 'AMD/год',
       monthlyProduction: 'Расчётная выработка по месяцам',
-      co2: 'Сокращение CO₂',
-      trees: 'Эквивалент деревьев',
-      budget: 'Предварительный бюджет',
-      savings: 'Экономия в год',
-      surplusEnergy: 'Избыточная выработка',
-      payback: 'Окупаемость',
+      savings: 'Ориентировочная экономия',
       refine: 'Уточнить по моей крыше',
       contact: 'Получить предложение',
       phone: 'Позвонить инженеру',
@@ -459,13 +394,9 @@ const common = {
         close: 'Закрыть'
       },
       disclaimer:
-        'Расчёт предварительный. Финальные параметры и стоимость подтверждаются после инженерной проверки объекта.',
-      noTariff:
-        'Добавьте тариф, чтобы увидеть экономию и окупаемость, или используйте данные из счёта.',
-      surplusValueUnavailable:
-        'Выработка выше годового потребления показана отдельно. Её денежная оценка и окупаемость недоступны, пока не настроена подтверждённая ставка компенсации.',
-      priceUnavailable:
-        'Предварительный ценовой диапазон сейчас недоступен. Запросите инженерное обследование для актуальной стоимости.',
+        'Предварительная региональная оценка. Параметры крыши можно уточнить в Профессиональном режиме.',
+      noTariff: 'Добавьте тариф, чтобы увидеть ориентировочную годовую экономию.',
+      savingsUnavailable: 'Ориентировочная годовая экономия недоступна для выбранного тарифа.',
       benefitsLabel: 'Преимущества солнечной энергии',
       benefits: [
         {
@@ -678,51 +609,20 @@ const common = {
       providerNotConfigured:
         'The solar calculation service is not configured yet. Contact an engineer.',
       retry: 'Retry PVGIS request',
-      regional: 'Regional preliminary result',
+      regional: 'Regional estimate',
       regionalCopy:
         'The PVGIS data applies to a representative point in the selected region, not to your address or roof.',
-      resultsTitle: 'Your estimated results',
-      resultsCopy: 'Based on solar data for the selected region and your consumption',
-      recommendedSystem: 'Recommended system',
-      solarModule: 'Solar module',
-      inverter: 'Inverter',
-      moduleRecommendationCopy: '{quantity} modules × {watts} W · {capacity} kWp DC',
-      moduleRecommendationReason:
-        'The catalog module count and rating produce the calculated DC capacity.',
-      inverterRecommendationCopy: '{technology} · available AC variant: {acPower} kW',
-      inverterRecommendationReason:
-        'Selected from catalog variants for the calculated PV DC capacity.',
-      gridTiedInverter: 'Grid-tied inverter',
-      hybridInverter: 'Hybrid inverter',
-      equipmentPreliminary:
-        'This is a catalog-based preliminary selection; an engineer confirms final electrical compatibility.',
-      calculationBasisTitle: 'How this was calculated',
-      calculationBasis: {
-        coordinates: 'Regional reference point',
-        solarYield: 'Solar yield',
-        solarModule: 'Calculation module',
-        tariff: 'Tariff',
-        noTariff: 'No tariff selected',
-        systemLoss: 'System loss',
-        sourceTypes: {
-          'regional-reference': 'regional reference point',
-          'pvgis-result': 'PVGIS result',
-          'catalog-technical-value': 'catalog technical value',
-          'registry-value': 'registry value',
-          'user-input': 'user input',
-          unavailable: 'source unavailable'
-        }
-      },
-      capacity: 'Recommended capacity',
-      panels: 'Panels',
-      generation: 'Annual generation',
+      resultsTitle: 'Your preliminary result',
+      resultsCopy: 'Based on the selected region and your electricity consumption.',
+      capacity: 'Recommended power',
+      panels: 'Panel count',
+      generation: 'Expected production',
+      coverage: 'Consumption coverage',
+      approximately: '≈',
+      kwhPerYear: 'kWh/year',
+      amdPerYear: 'AMD/year',
       monthlyProduction: 'Estimated monthly production',
-      co2: 'CO₂ reduction',
-      trees: 'Tree equivalent',
-      budget: 'Preliminary budget',
-      savings: 'Annual savings',
-      surplusEnergy: 'Surplus generation',
-      payback: 'Payback',
+      savings: 'Estimated annual savings',
       refine: 'Refine with my roof',
       contact: 'Get a proposal',
       phone: 'Call an engineer',
@@ -741,12 +641,9 @@ const common = {
         close: 'Close'
       },
       disclaimer:
-        'The calculation is preliminary. Final parameters and price are confirmed after an engineering site review.',
-      noTariff: 'Add your tariff to see savings and payback, or use bill details.',
-      surplusValueUnavailable:
-        'Generation above annual consumption is shown separately. Its monetary value and payback are unavailable until a verified surplus-compensation rate is configured.',
-      priceUnavailable:
-        'The preliminary price range is temporarily unavailable. Request an engineering survey for current pricing.',
+        'Preliminary regional estimate. Roof parameters can be refined in Professional mode.',
+      noTariff: 'Add a tariff to see estimated annual savings.',
+      savingsUnavailable: 'Estimated annual savings are not available for the selected tariff.',
       benefitsLabel: 'Solar energy benefits',
       benefits: [
         { icon: 'leaf', title: 'Lower electricity bills', copy: 'Use clean solar energy' },

@@ -1,7 +1,6 @@
 import { ProductApiClient, ProductApiError } from '../services/api-client.js';
 import { getCalculatorInputNumber, isCalculatorInputInRange } from '../domain/calculator-inputs.js';
 import { tariffBracketIncludesMonthlyKwh } from '../domain/tariffs.js';
-import { formatConsumerCommercialRange } from './commercial-range.js';
 import { createAsyncRequestLifecycle } from './async-request-lifecycle.js';
 import { createCalculatorSession } from './calculator-session.js';
 
@@ -130,6 +129,57 @@ const format = (value, locale, options = {}) =>
     ? new Intl.NumberFormat(locale, { maximumFractionDigits: 0, ...options }).format(Number(value))
     : '—';
 
+/**
+ * The consumer result intentionally contains only the few homeowner values
+ * needed to understand a preliminary regional estimate. Engineering,
+ * equipment and provenance data stay in the analysis for Professional mode.
+ */
+export const buildQuickResultMetrics = ({ scenario, copy = {}, locale = 'en-US' } = {}) => {
+  const annualSavingsAmd = finite(scenario?.financial?.annualSavingsAmd);
+  const metrics = [
+    {
+      id: 'panel-count',
+      label: copy.panels ?? 'Panel count',
+      value: format(scenario?.system?.panelCount, locale),
+      icon: 'panel',
+      tone: 'sky'
+    },
+    {
+      id: 'recommended-power',
+      label: copy.capacity ?? 'Recommended power',
+      value: `${format(scenario?.system?.capacityKwp, locale, { maximumFractionDigits: 2 })} kWp`,
+      icon: 'bolt',
+      tone: 'sky'
+    },
+    {
+      id: 'expected-production',
+      label: copy.generation ?? 'Expected production',
+      value: `${format(scenario?.generation?.annualKwh, locale)} ${copy.kwhPerYear ?? 'kWh/year'}`,
+      icon: 'sun',
+      tone: 'sun'
+    },
+    {
+      id: 'consumption-coverage',
+      label: copy.coverage ?? 'Consumption coverage',
+      value: `${copy.approximately ?? '≈'} ${format(scenario?.coveragePercent, locale)}%`,
+      icon: 'chart-bars',
+      tone: 'sky'
+    }
+  ];
+
+  if (annualSavingsAmd !== null) {
+    metrics.push({
+      id: 'estimated-annual-savings',
+      label: copy.savings ?? 'Estimated annual savings',
+      value: `${format(annualSavingsAmd, locale)} ${copy.amdPerYear ?? 'AMD/year'}`,
+      icon: 'coin',
+      tone: 'gold'
+    });
+  }
+
+  return { metrics, savingsAvailable: annualSavingsAmd !== null };
+};
+
 const createIcon = (name) => {
   const iconName = { bolt: 'zap', coin: 'calculator', panel: 'chart-bars' }[name] ?? name;
   const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
@@ -197,139 +247,6 @@ const monthlyProductionChart = ({ production, months, label, locale }) => {
   heading.append(caption, unit);
   chart.append(heading, bars);
   return chart;
-};
-
-const recommendationText = (template, values) =>
-  Object.entries(values).reduce(
-    (result, [key, value]) => result.replaceAll(`{${key}}`, String(value)),
-    template ?? ''
-  );
-
-const quickEquipmentRecommendation = ({ recommendation, copy, locale }) => {
-  const solarModule = recommendation?.solarModule;
-  const inverter = recommendation?.inverter;
-  if (!solarModule && !inverter) return null;
-
-  const section = document.createElement('section');
-  section.className = 'quick-result__equipment';
-  const heading = document.createElement('h3');
-  heading.textContent = copy.recommendedSystem ?? 'Recommended system';
-  section.append(heading);
-
-  if (solarModule) {
-    const module = document.createElement('p');
-    const label = document.createElement('strong');
-    label.textContent = `${copy.solarModule ?? 'Solar module'}: `;
-    module.append(label, `${solarModule.brand} ${solarModule.productName} · ${solarModule.model}`);
-    const sizing = document.createElement('p');
-    sizing.textContent = recommendationText(copy.moduleRecommendationCopy, {
-      quantity: format(solarModule.quantity, locale),
-      watts: format(solarModule.watts, locale),
-      capacity: format(solarModule.totalDcCapacityKwp, locale, { maximumFractionDigits: 2 })
-    });
-    const reason = document.createElement('small');
-    reason.textContent = copy.moduleRecommendationReason;
-    section.append(module, sizing, reason);
-  }
-
-  if (inverter) {
-    const inverterLine = document.createElement('p');
-    const label = document.createElement('strong');
-    label.textContent = `${copy.inverter ?? 'Inverter'}: `;
-    inverterLine.append(label, `${inverter.brand} ${inverter.productName} · ${inverter.model}`);
-    const technology =
-      inverter.technology === 'hybrid'
-        ? (copy.hybridInverter ?? 'Hybrid inverter')
-        : (copy.gridTiedInverter ?? 'Grid-tied inverter');
-    const variant = document.createElement('p');
-    variant.textContent = recommendationText(copy.inverterRecommendationCopy, {
-      technology,
-      acPower: format(inverter.selectedAcPowerKw, locale, { maximumFractionDigits: 1 })
-    });
-    const reason = document.createElement('small');
-    reason.textContent = copy.inverterRecommendationReason;
-    section.append(inverterLine, variant, reason);
-  }
-
-  const preliminary = document.createElement('small');
-  preliminary.className = 'quick-result__equipment-disclaimer';
-  preliminary.textContent = copy.equipmentPreliminary;
-  section.append(preliminary);
-  return section;
-};
-
-const quickCalculationBasis = ({ basis, copy, locale }) => {
-  if (!basis) return null;
-  const basisCopy = copy.calculationBasis ?? {};
-  const sourceType = (type) => basisCopy.sourceTypes?.[type] ?? type ?? '';
-  const line = (label, value, type) => {
-    const item = document.createElement('li');
-    item.textContent = `${label}: ${value} · ${sourceType(type)}`.replace(/\s*·\s*$/u, '');
-    return item;
-  };
-  const detail = document.createElement('details');
-  detail.className = 'quick-result__basis';
-  const summary = document.createElement('summary');
-  summary.textContent = copy.calculationBasisTitle ?? 'How this was calculated';
-  const list = document.createElement('ul');
-  const coordinates = basis.coordinates;
-  if (coordinates) {
-    const label = basisCopy.coordinates ?? 'Regional reference point';
-    const region = coordinates.regionId ? ` · ${coordinates.regionId}` : '';
-    list.append(
-      line(
-        label,
-        `${format(coordinates.latitude, locale, { maximumFractionDigits: 4 })}, ${format(coordinates.longitude, locale, { maximumFractionDigits: 4 })}${region}`,
-        coordinates.sourceType
-      )
-    );
-  }
-  const solarYield = basis.solarYield;
-  if (solarYield) {
-    const loss = solarYield.configuration?.systemLossPercent;
-    const lossCopy =
-      loss === null || loss === undefined
-        ? ''
-        : ` · ${basisCopy.systemLoss ?? 'System loss'}: ${format(loss, locale, { maximumFractionDigits: 1 })}%`;
-    list.append(
-      line(
-        basisCopy.solarYield ?? 'Solar yield',
-        `${solarYield.source?.provider ?? 'PVGIS'} · ${format(solarYield.annualYieldKwhPerKwp, locale)} kWh/kWp${lossCopy}`,
-        solarYield.sourceType
-      )
-    );
-  }
-  const panel = basis.solarModule;
-  if (panel) {
-    list.append(
-      line(
-        basisCopy.solarModule ?? 'Calculation module',
-        `${panel.brand ?? ''} ${panel.model ?? ''} · ${format(panel.panelWatts, locale)} W · ${format(panel.panelAreaSqm, locale, { maximumFractionDigits: 2 })} m² · ${panel.productId}`.trim(),
-        panel.sourceType
-      )
-    );
-  }
-  const tariff = basis.tariff;
-  if (tariff?.rateAmdPerKwh !== null && tariff?.rateAmdPerKwh !== undefined) {
-    const identity = [tariff.tariffId, tariff.revision, tariff.period].filter(Boolean).join(' · ');
-    list.append(
-      line(
-        basisCopy.tariff ?? 'Tariff',
-        `${identity ? `${identity} · ` : ''}${format(tariff.rateAmdPerKwh, locale, { maximumFractionDigits: 2 })} AMD/kWh`,
-        tariff.sourceType
-      )
-    );
-  } else {
-    list.append(
-      line(
-        basisCopy.tariff ?? 'Tariff',
-        basisCopy.noTariff ?? 'No tariff selected',
-        tariff?.sourceType
-      )
-    );
-  }
-  detail.append(summary, list);
-  return detail;
 };
 
 const errorMessage = (error, copy) => {
@@ -576,90 +493,20 @@ export const initQuickCalculator = ({ config = {} } = {}) => {
   const render = (analysis) => {
     const scenario = analysis?.selectedScenario;
     if (!scenario) return;
-    const estimate = analysis.commercialEstimate;
     const values = document.createElement('dl');
     values.className = 'quick-result__metrics';
-    const environmental = analysis.environmental ?? {};
-    const avoidedCo2Tons = finite(environmental.avoidedCo2Tons);
-    const treeEquivalent = finite(environmental.treeEquivalent);
-    const annualSavingsAmd = finite(scenario.financial?.annualSavingsAmd);
     const retailOffsetValueAmd = finite(scenario.financial?.retailOffsetValueAmd);
-    const surplusEnergyKwh = finite(scenario.energyBalance?.surplusEnergyKwh);
-    const surplusCompensationValueAmd = finite(scenario.financial?.surplusCompensationValueAmd);
-    const hasUnvaluedSurplus =
-      surplusEnergyKwh !== null && surplusEnergyKwh > 0 && surplusCompensationValueAmd === null;
-    const budgetRange = formatConsumerCommercialRange(estimate, locale);
-    const summaryMetrics = [
-      metric(copy.generation, `${format(scenario.generation?.annualKwh, locale)} kWh`, {
-        icon: 'sun',
-        tone: 'sun'
-      }),
-      avoidedCo2Tons !== null
-        ? metric(
-            copy.co2,
-            `${format(avoidedCo2Tons, locale, { maximumFractionDigits: 1 })} t/year`,
-            {
-              icon: 'leaf',
-              tone: 'green'
-            }
-          )
-        : metric(
-            copy.capacity,
-            `${format(scenario.system?.capacityKwp, locale, { maximumFractionDigits: 2 })} kWp`,
-            { icon: 'bolt', tone: 'sky' }
-          ),
-      treeEquivalent !== null
-        ? metric(copy.trees, format(treeEquivalent, locale), { icon: 'tree', tone: 'green' })
-        : metric(copy.panels, format(scenario.system?.panelCount, locale), {
-            icon: 'panel',
-            tone: 'sky'
-          })
-    ];
-    if (annualSavingsAmd !== null) {
-      summaryMetrics.push(
-        metric(copy.savings, `${format(annualSavingsAmd, locale)} ֏`, {
-          icon: 'coin',
-          tone: 'gold'
-        })
-      );
-    } else if (budgetRange) {
-      summaryMetrics.push(metric(copy.budget, budgetRange, { icon: 'coin', tone: 'gold' }));
+    const summary = buildQuickResultMetrics({ scenario, copy, locale });
+    values.append(
+      ...summary.metrics.map(({ label, value, icon, tone }) => metric(label, value, { icon, tone }))
+    );
+    let savingsNotice = null;
+    if (!summary.savingsAvailable) {
+      savingsNotice = document.createElement('p');
+      savingsNotice.className = 'quick-result__notice';
+      savingsNotice.textContent =
+        retailOffsetValueAmd === null ? copy.noTariff : copy.savingsUnavailable;
     }
-    if (surplusEnergyKwh !== null && surplusEnergyKwh > 0) {
-      summaryMetrics.push(
-        metric(copy.surplusEnergy, `${format(surplusEnergyKwh, locale)} kWh`, {
-          icon: 'bolt',
-          tone: 'sky'
-        })
-      );
-    }
-    values.append(...summaryMetrics);
-    if (estimate?.reason === 'PRICEBOOK_EXPIRED' || estimate?.reason === 'PRICEBOOK_UNAVAILABLE') {
-      const note = document.createElement('p');
-      note.className = 'input-help';
-      note.textContent = copy.priceUnavailable;
-      values.append(note);
-    }
-    if (retailOffsetValueAmd === null) {
-      const note = document.createElement('p');
-      note.className = 'input-help';
-      note.textContent = copy.noTariff;
-      values.append(note);
-    }
-    if (hasUnvaluedSurplus) {
-      const note = document.createElement('p');
-      note.className = 'input-help';
-      note.textContent = copy.surplusValueUnavailable;
-      values.append(note);
-    }
-    const equipment = quickEquipmentRecommendation({
-      recommendation: analysis.equipmentRecommendation,
-      copy,
-      locale
-    });
-    if (equipment) values.append(equipment);
-    const basis = quickCalculationBasis({ basis: analysis.calculationBasis, copy, locale });
-    if (basis) values.append(basis);
     const chart = monthlyProductionChart({
       production: scenario.generation?.monthlyKwh,
       months,
@@ -668,7 +515,11 @@ export const initQuickCalculator = ({ config = {} } = {}) => {
     });
     resultTitle.textContent = copy.resultsTitle ?? copy.regional;
     resultCopy.textContent = copy.resultsCopy ?? copy.regionalCopy;
-    resultValues.replaceChildren(values, ...(chart ? [chart] : []));
+    resultValues.replaceChildren(
+      values,
+      ...(savingsNotice ? [savingsNotice] : []),
+      ...(chart ? [chart] : [])
+    );
     resultValues.hidden = false;
     resultActions.hidden = false;
     setResultState('complete');

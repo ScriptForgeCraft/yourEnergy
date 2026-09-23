@@ -15,9 +15,11 @@ import {
 } from '../src/domain/index.js';
 import { getDefaultCalculatorSystem } from '../src/data/equipment/calculator-defaults.js';
 import { getSolarPanels } from '../src/data/equipment/calculator-catalog.js';
+import { calculatorModes } from '../src/content/calculator-modes.js';
 import { createCalculatorSession } from '../src/ui/calculator-session.js';
 import { formatConsumerCommercialRange } from '../src/ui/commercial-range.js';
 import {
+  buildQuickResultMetrics,
   buildQuickTariffOptions,
   buildQuickLeadContext,
   readQuickTariffSelection,
@@ -60,6 +62,82 @@ const pvgisResponse = () =>
     }),
     { headers: { 'content-type': 'application/json' } }
   );
+
+test('Quick result presents only homeowner metrics and gates savings on a financial value', () => {
+  const scenario = {
+    system: { panelCount: 11, capacityKwp: 7.15 },
+    generation: { annualKwh: 10_374 },
+    coveragePercent: 100,
+    financial: { annualSavingsAmd: 502_946, retailOffsetValueAmd: 502_946 }
+  };
+
+  for (const [language, locale] of [
+    ['hy', 'hy-AM'],
+    ['ru', 'ru-RU'],
+    ['en', 'en-US']
+  ]) {
+    const copy = calculatorModes[language].quick;
+    const summary = buildQuickResultMetrics({ scenario, copy, locale });
+
+    assert.deepEqual(
+      summary.metrics.map(({ id }) => id),
+      [
+        'panel-count',
+        'recommended-power',
+        'expected-production',
+        'consumption-coverage',
+        'estimated-annual-savings'
+      ]
+    );
+    assert.deepEqual(
+      summary.metrics.map(({ label }) => label),
+      [copy.panels, copy.capacity, copy.generation, copy.coverage, copy.savings]
+    );
+    assert.equal(summary.savingsAvailable, true);
+  }
+
+  assert.deepEqual(
+    buildQuickResultMetrics({
+      scenario,
+      copy: calculatorModes.en.quick,
+      locale: 'en-US'
+    }).metrics.map(({ value }) => value),
+    ['11', '7.15 kWp', '10,374 kWh/year', '≈ 100%', '502,946 AMD/year']
+  );
+
+  const withoutFinancialValue = buildQuickResultMetrics({
+    scenario: { ...scenario, financial: { annualSavingsAmd: null, retailOffsetValueAmd: null } },
+    copy: calculatorModes.en.quick,
+    locale: 'en-US'
+  });
+  assert.equal(withoutFinancialValue.savingsAvailable, false);
+  assert.deepEqual(
+    withoutFinancialValue.metrics.map(({ id }) => id),
+    ['panel-count', 'recommended-power', 'expected-production', 'consumption-coverage']
+  );
+});
+
+test('Quick excludes equipment, environmental and provenance blocks while Professional keeps equipment', async () => {
+  const [quick, professional] = await Promise.all([
+    readFile(resolve(root, 'src/ui/quick-calculator.js'), 'utf8'),
+    readFile(resolve(root, 'src/ui/calculator-wizard.js'), 'utf8')
+  ]);
+
+  for (const forbidden of [
+    'quickEquipmentRecommendation',
+    'quickCalculationBasis',
+    'equipmentRecommendation',
+    'calculationBasis',
+    'avoidedCo2Tons',
+    'treeEquivalent',
+    'solarModule',
+    'inverter'
+  ]) {
+    assert.equal(quick.includes(forbidden), false, `Quick result exposes ${forbidden}`);
+  }
+  assert.match(professional, /analysis\.equipmentRecommendation/u);
+  assert.match(professional, /equipmentRecommendationCards/u);
+});
 
 test('regional configuration has exactly eleven labelled Armenia benchmarks and never represents a property', () => {
   assert.equal(ARMENIA_REGIONAL_BENCHMARKS.length, 11);
