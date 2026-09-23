@@ -14,6 +14,14 @@ const copy = {
     inverterRecommendationTitle: 'Առաջարկվող ինվերտեր',
     inverterRecommendationCopy:
       'Ընտրված է հաշվարկված PV DC հզորության համար։ Վերջնական լարային, MPPT և ցանցային համատեղելիությունը հաստատվում է ինժեներական փուլում։',
+    mountingHardwareTitle: 'Կատալոգային ամրացման տարբերակ',
+    mountingHardwareCopy:
+      'PVGIS օպտիմում՝ {optimum}° · հասանելի անկյուններ՝ {available}° · գործնական կատալոգային տարբերակ՝ {practical}°',
+    mountingHardwareDimensionsCopy: 'Կոմպլեկտ՝ {kit} mm · ռելս՝ {rail} mm',
+    mountingHardwareNoMatchCopy:
+      'PVGIS օպտիմումը {optimum}° է, սակայն կատալոգում նորմալացված աջակցվող անկյունով ամրացման տարբերակ չկա։',
+    mountingHardwareEngineeringCopy:
+      'Կատալոգային անկյունը չի փոխում հաշվարկված տանիքի հարթությունը։ Կոնստրուկցիան և քամու բեռը հաստատվում են ինժեների կողմից։',
     storageRecommendationTitle: 'Էներգիայի կուտակման տարբերակ',
     storageProfileRequiredCopy:
       'Կուտակիչը ընտրովի է։ Ճշգրիտ հզորությունը պահանջում է կրիտիկական բեռի և պահուստի տևողության տվյալներ։',
@@ -135,6 +143,14 @@ const copy = {
     inverterRecommendationTitle: 'Рекомендуемый инвертор',
     inverterRecommendationCopy:
       'Выбран для рассчитанной PV DC-мощности. Окончательную совместимость строк, MPPT и сети подтверждает инженер.',
+    mountingHardwareTitle: 'Вариант крепления из каталога',
+    mountingHardwareCopy:
+      'Оптимум PVGIS: {optimum}° · доступные углы: {available}° · практический вариант из каталога: {practical}°',
+    mountingHardwareDimensionsCopy: 'Комплект: {kit} мм · рельс: {rail} мм',
+    mountingHardwareNoMatchCopy:
+      'Оптимум PVGIS — {optimum}°, но в каталоге нет крепления с нормализованным поддерживаемым углом.',
+    mountingHardwareEngineeringCopy:
+      'Каталожный угол не меняет расчётную плоскость крыши. Конструкцию и ветровую нагрузку подтверждает инженер.',
     storageRecommendationTitle: 'Вариант накопления энергии',
     storageProfileRequiredCopy:
       'Накопитель необязателен. Для точного подбора нужны данные о критической нагрузке и времени резерва.',
@@ -255,6 +271,14 @@ const copy = {
     inverterRecommendationTitle: 'Recommended inverter',
     inverterRecommendationCopy:
       'Selected for the calculated PV DC capacity. Final string, MPPT and grid compatibility is confirmed during engineering.',
+    mountingHardwareTitle: 'Catalog mounting option',
+    mountingHardwareCopy:
+      'PVGIS optimum: {optimum}° · available mounting angles: {available}° · practical catalog option: {practical}°',
+    mountingHardwareDimensionsCopy: 'Kit: {kit} mm · rail: {rail} mm',
+    mountingHardwareNoMatchCopy:
+      'PVGIS optimum is {optimum}°, but no catalog mounting option has a normalized supported angle.',
+    mountingHardwareEngineeringCopy:
+      'The catalog angle does not change the calculated roof plane. Structure and wind-load design are confirmed during engineering.',
     storageRecommendationTitle: 'Energy-storage option',
     storageProfileRequiredCopy:
       'Storage is optional. Exact battery sizing requires critical-load and backup-duration inputs.',

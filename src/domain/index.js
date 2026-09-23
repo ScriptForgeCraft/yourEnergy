@@ -48,6 +48,12 @@ export {
   recommendStorage
 } from './storage-recommendation.js';
 export {
+  MOUNTING_HARDWARE_COMPATIBILITY_LIMITATIONS,
+  MOUNTING_HARDWARE_RECOMMENDATION_STATUS,
+  recommendMountingHardware,
+  selectPracticalMountingOption
+} from './mounting-recommendation.js';
+export {
   buildEnvironmentalImpact,
   buildTreeEquivalence,
   normalizeGridEmissionFactor,

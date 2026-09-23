@@ -9,7 +9,8 @@ const usesElevatedMount = (body) => body?.roof?.mountingMode === 'elevated';
 
 const benchmarkInputFor = (input) => ({
   property: { ...input.property, confirmed: true },
-  system: input.system
+  system: input.system,
+  roof: { pvgisMountingPlace: 'free' }
 });
 
 export const analyze = async ({ request, env, fetchImpl }) => {
@@ -27,29 +28,33 @@ export const analyze = async ({ request, env, fetchImpl }) => {
     throw new ApiError('INVALID_INPUT');
   }
   const adapter = createPvgisAdapter(env, { fetchImpl });
-  const providerAnalysis = usesElevatedMount(body)
-    ? await adapter.potential(benchmarkInputFor(input), { signal: request.signal })
-    : await adapter.analyze(input, { signal: request.signal });
-  const normalizedProviderAnalysis = usesElevatedMount(body)
-    ? {
-        ...providerAnalysis,
-        generation: providerAnalysis.optimum.generation,
-        recommendedMounting: {
+  const elevatedMount = usesElevatedMount(body);
+  const [providerAnalysis, providerPotential] = await Promise.all([
+    // Both mounting approaches calculate the visitor's entered plane. Only
+    // `mountingplace` changes: building-mounted or free-standing.
+    adapter.analyze(input, { signal: request.signal }),
+    elevatedMount
+      ? adapter.potential(benchmarkInputFor(input), { signal: request.signal })
+      : Promise.resolve(null)
+  ]);
+  const normalizedProviderAnalysis = {
+    ...providerAnalysis,
+    recommendedMounting: elevatedMount
+      ? {
           mountingMode: 'elevated',
-          tiltDegrees: providerAnalysis.optimum.tiltDegrees,
-          azimuthDegrees: providerAnalysis.optimum.azimuthDegrees,
+          tiltDegrees: providerPotential.optimum.tiltDegrees,
+          azimuthDegrees: providerPotential.optimum.azimuthDegrees,
+          pvgisMountingPlace: input.roof.pvgisMountingPlace,
           basis: 'pvgis-fixed-free-standing-optimum'
         }
-      }
-    : {
-        ...providerAnalysis,
-        recommendedMounting: {
+      : {
           mountingMode: 'roof-parallel',
           tiltDegrees: input.roof.tiltDegrees,
           azimuthDegrees: input.roof.azimuthDegrees,
+          pvgisMountingPlace: input.roof.pvgisMountingPlace,
           basis: 'user-entered-roof-plane'
         }
-      };
+  };
   return {
     analysis: buildP0SolarAnalysis({
       body,

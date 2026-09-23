@@ -207,7 +207,7 @@ export default {
       areaLabel: 'Preliminary area from the outline',
       mountingModeLabel: 'Mounting approach',
       mountingModeHelp:
-        'For roof-parallel mounting, the entered plane is calculated. For an elevated system, the PVGIS benchmark is compared with the planned plane.',
+        'PVGIS calculates the entered plane as building-mounted for roof-parallel systems and free-standing for elevated systems. A PVGIS optimum remains a separate benchmark.',
       mountingModes: {
         roofParallel: 'Parallel to the roof face',
         elevated: 'Elevated / free-standing structure'

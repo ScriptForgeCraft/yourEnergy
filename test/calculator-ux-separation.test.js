@@ -78,6 +78,8 @@ test('Professional has exactly four customer steps and retains every engineering
   assert.match(controller, /storageRequired\?\.addEventListener\('change'/u);
   assert.match(controller, /analysis\.inverterRecommendation/u);
   assert.match(controller, /wizard\.inverterRecommendationTitle/u);
+  assert.match(controller, /analysis\.mountingHardwareRecommendation/u);
+  assert.match(controller, /wizard\.mountingHardwareTitle/u);
   assert.match(controller, /analysis\.storageRecommendation/u);
   assert.match(controller, /wizard\.storageRecommendationTitle/u);
   assert.doesNotMatch(controller, /issue === 'outline' \|\| issue === 'area'/u);

@@ -13,6 +13,7 @@ import { getUsableTariffRate, selectEffectiveTariff } from './tariffs.js';
 import { buildCommercialEstimate } from './pricebook.js';
 import { recommendInverter } from './inverter-recommendation.js';
 import { recommendStorage } from './storage-recommendation.js';
+import { recommendMountingHardware } from './mounting-recommendation.js';
 
 export const ANALYSIS_SCHEMA_VERSION = '1.0.0';
 
@@ -551,6 +552,13 @@ export const buildSolarAnalysis = (input = {}) => {
     criticalLoadPowerKw: storageInput.criticalLoadPowerKw,
     backupDurationHours: storageInput.backupDurationHours
   });
+  const mountingHardwareRecommendation = recommendMountingHardware({
+    mountingMode: roof.mountingMode,
+    pvgisOptimumTiltDegrees:
+      input.mountingRecommendation?.basis === 'pvgis-fixed-free-standing-optimum'
+        ? input.mountingRecommendation.tiltDegrees
+        : null
+  });
   const status = selectedScenario?.status ?? ANALYSIS_STATUS.UNAVAILABLE;
   const commercialEstimate = selectedScenario?.commercialEstimate ?? null;
   const tariffKind =
@@ -654,6 +662,7 @@ export const buildSolarAnalysis = (input = {}) => {
     equipment: system.equipment,
     inverterRecommendation,
     storageRecommendation,
+    mountingHardwareRecommendation,
     investment,
     priceBook: commercialEstimate?.priceBook ?? null,
     commercialEstimate,

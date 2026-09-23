@@ -26,6 +26,17 @@ const pvgisAspectToCompass = (aspectDegrees) => {
   return Object.is(compass, -0) ? 0 : compass;
 };
 
+export const PVGIS_MOUNTING_PLACE = Object.freeze({
+  BUILDING: 'building',
+  FREE: 'free'
+});
+
+// Professional Calculator semantics distinguish an array that follows the
+// building roof face from an elevated/free-standing structure. PVGIS models
+// those conditions through `mountingplace`, separately from tilt and aspect.
+export const pvgisMountingPlaceFor = (mountingMode) =>
+  mountingMode === 'elevated' ? PVGIS_MOUNTING_PLACE.FREE : PVGIS_MOUNTING_PLACE.BUILDING;
+
 // PVGIS has a public no-key API. Keeping the request server-side prevents the
 // browser from gaining a direct provider dependency and leaves a single point
 // for future endpoint/version changes.
@@ -60,7 +71,8 @@ export const validateAnalysisInput = (body) => {
     roof: {
       tiltDegrees,
       azimuthDegrees,
-      pvgisAspectDegrees: compassToPvgisAspect(azimuthDegrees)
+      pvgisAspectDegrees: compassToPvgisAspect(azimuthDegrees),
+      pvgisMountingPlace: pvgisMountingPlaceFor(body?.roof?.mountingMode)
     }
   };
 };
@@ -80,7 +92,10 @@ export const validatePotentialInput = (body) => {
 
   return {
     property: { latitude, longitude },
-    system: { capacityKwp: 1, lossPercent: 14 }
+    system: { capacityKwp: 1, lossPercent: 14 },
+    // A location-only optimum remains a free-standing benchmark. It has no
+    // roof geometry and must not be interpreted as a building-mounted result.
+    roof: { pvgisMountingPlace: PVGIS_MOUNTING_PLACE.FREE }
   };
 };
 
@@ -90,6 +105,12 @@ export const buildPvgisUrl = (endpoint, input, { optimalAngles = false } = {}) =
   url.searchParams.set('lon', String(input.property.longitude));
   url.searchParams.set('peakpower', String(input.system.capacityKwp));
   url.searchParams.set('loss', String(input.system.lossPercent));
+  url.searchParams.set(
+    'mountingplace',
+    input?.roof?.pvgisMountingPlace === PVGIS_MOUNTING_PLACE.BUILDING
+      ? PVGIS_MOUNTING_PLACE.BUILDING
+      : PVGIS_MOUNTING_PLACE.FREE
+  );
   if (optimalAngles) {
     // PVGIS ignores angle/aspect when this is true. Omitting them makes it
     // explicit that this is only a free-standing optimum benchmark.

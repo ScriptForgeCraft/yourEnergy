@@ -998,6 +998,71 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
       );
       resultDashboard.append(recommendation);
     }
+    const mountingHardware = analysis.mountingHardwareRecommendation;
+    if (mountingHardware?.status === 'matched' && mountingHardware.productId) {
+      const recommendation = element('section', 'result-notice');
+      const availableAngles = (mountingHardware.availableInclinationDeg ?? [])
+        .map((angle) => format(angle, locale, { maximumFractionDigits: 1 }))
+        .join(' / ');
+      recommendation.append(
+        element('h3', '', wizard.mountingHardwareTitle ?? 'Catalog mounting option'),
+        element('p', '', `${mountingHardware.brand} ${mountingHardware.productName}`),
+        element('p', '', mountingHardware.model),
+        element(
+          'p',
+          '',
+          text(wizard.mountingHardwareCopy, {
+            optimum: format(mountingHardware.pvgisOptimumTiltDegrees, locale, {
+              maximumFractionDigits: 1
+            }),
+            available: availableAngles,
+            practical: format(mountingHardware.practicalInclinationDeg, locale, {
+              maximumFractionDigits: 1
+            })
+          })
+        )
+      );
+      if (
+        Number.isFinite(Number(mountingHardware.kitLengthMm)) ||
+        Number.isFinite(Number(mountingHardware.railLengthMm))
+      ) {
+        recommendation.append(
+          element(
+            'p',
+            '',
+            text(wizard.mountingHardwareDimensionsCopy, {
+              kit: Number.isFinite(Number(mountingHardware.kitLengthMm))
+                ? format(mountingHardware.kitLengthMm, locale)
+                : '—',
+              rail: Number.isFinite(Number(mountingHardware.railLengthMm))
+                ? format(mountingHardware.railLengthMm, locale)
+                : '—'
+            })
+          )
+        );
+      }
+      recommendation.append(
+        element(
+          'small',
+          '',
+          wizard.mountingHardwareEngineeringCopy ??
+            'The catalog angle does not change the calculated roof plane. Structure and wind-load design are confirmed during engineering.'
+        )
+      );
+      resultDashboard.append(recommendation);
+    } else if (mountingHardware?.status === 'no-catalog-match') {
+      resultDashboard.append(
+        element(
+          'p',
+          'result-notice',
+          text(wizard.mountingHardwareNoMatchCopy, {
+            optimum: format(mountingHardware.pvgisOptimumTiltDegrees, locale, {
+              maximumFractionDigits: 1
+            })
+          })
+        )
+      );
+    }
     const storage = analysis.storageRecommendation;
     if (storage) {
       const recommendation = element('section', 'result-notice');
@@ -1233,6 +1298,13 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
       add(
         wizard.storageRecommendationTitle ?? 'Energy-storage option',
         `${storage.brand} ${storage.productName} · ${format(storage.selectedUsableCapacityKwh, locale, { maximumFractionDigits: 2 })} kWh · ${format(storage.moduleCount, locale)} modules`
+      );
+    }
+    const mountingHardware = analysis.mountingHardwareRecommendation;
+    if (mountingHardware?.status === 'matched' && mountingHardware.productId) {
+      add(
+        wizard.mountingHardwareTitle ?? 'Catalog mounting option',
+        `${mountingHardware.brand} ${mountingHardware.productName} · ${format(mountingHardware.practicalInclinationDeg, locale, { maximumFractionDigits: 1 })}°`
       );
     }
     const estimate = analysis.commercialEstimate;

@@ -228,6 +228,7 @@ test('PVGIS accepts only explicit roof/system inputs and normalizes a valid twel
   assert.equal(url.searchParams.get('lat'), '40.18');
   assert.equal(url.searchParams.get('lon'), '44.51');
   assert.equal(url.searchParams.get('peakpower'), '6.96');
+  assert.equal(url.searchParams.get('mountingplace'), 'building');
   assert.equal(url.searchParams.get('aspect'), '0');
   assert.equal(normalized.annualKwh, 10_440);
   assert.deepEqual(normalized.monthlyKwh, Array(12).fill(870));
@@ -240,6 +241,28 @@ test('PVGIS accepts only explicit roof/system inputs and normalizes a valid twel
     () => normalizePvgisResult({ outputs: { totals: { fixed: { E_y: 1 } } } }),
     (error) => error.code === 'PVGIS_RESPONSE_INVALID'
   );
+});
+
+test('PVGIS mountingplace follows the Professional mounting mode without changing azimuth conversion', () => {
+  const roofParallel = validateAnalysisInput({
+    ...analysisPayload,
+    roof: { ...analysisPayload.roof, mountingMode: 'roof-parallel', azimuthDegrees: 90 }
+  });
+  const elevated = validateAnalysisInput({
+    ...analysisPayload,
+    roof: { ...analysisPayload.roof, mountingMode: 'elevated', azimuthDegrees: 90 }
+  });
+  const buildingUrl = buildPvgisUrl('https://pvgis.example/api', roofParallel);
+  const freeUrl = buildPvgisUrl('https://pvgis.example/api', elevated);
+
+  assert.equal(roofParallel.roof.pvgisAspectDegrees, -90);
+  assert.equal(elevated.roof.pvgisAspectDegrees, -90);
+  assert.equal(buildingUrl.searchParams.get('mountingplace'), 'building');
+  assert.equal(freeUrl.searchParams.get('mountingplace'), 'free');
+  assert.equal(buildingUrl.searchParams.get('angle'), '30');
+  assert.equal(freeUrl.searchParams.get('angle'), '30');
+  assert.equal(buildingUrl.searchParams.get('aspect'), '-90');
+  assert.equal(freeUrl.searchParams.get('aspect'), '-90');
 });
 
 test('site potential requests PVGIS optimum angles only for a confirmed point', async () => {
@@ -256,6 +279,7 @@ test('site potential requests PVGIS optimum angles only for a confirmed point', 
   });
 
   assert.equal(url.searchParams.get('optimalangles'), '1');
+  assert.equal(url.searchParams.get('mountingplace'), 'free');
   assert.equal(url.searchParams.has('angle'), false);
   assert.equal(url.searchParams.has('aspect'), false);
   assert.equal(normalized.tiltDegrees, 33);

@@ -152,8 +152,9 @@ converted provisionally to roof-face area using `projectedArea / cos(tilt)`.
 At 75° or steeper the endpoint rejects the request with
 `ROOF_AREA_REQUIRES_MEASURED_PLANE`; callers must use
 `areaMethod: "measured-plane"` with `planeAreaSqm`. `mountingMode:
-"roof-parallel"` requests PVGIS using the visitor's entered roof plane. For
-`"elevated"`, it uses the PVGIS fixed/free-standing optimum and returns it as a
+"roof-parallel"` requests PVGIS for the visitor's entered roof plane with
+`mountingplace=building`. `"elevated"` calculates that same entered plane with
+`mountingplace=free`, while a separate PVGIS free-standing optimum remains a
 benchmark mounting recommendation. Neither mode measures local obstacles or
 structural capacity.
 

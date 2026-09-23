@@ -91,6 +91,7 @@
  * @property {{panelId: string, panelBrand: string, panelModel: string, panelWatts: number, panelAreaSqm: number, source: 'equipment-catalog'}|null} equipment
  * @property {{technology: 'grid-tied'|'hybrid', productId: string, brand: string, productName: string, model: string, selectedAcPowerKw: number, reason: string, source: 'equipment-catalog', compatibilityStatus: 'preliminary', compatibilityLimitations: string[]}|null} inverterRecommendation
  * @property {{status: 'profile-required'|'sized'|'catalog-capacity-exceeded', technology: 'battery-module'|'residential-ess'|'commercial-ess'|null, productId?: string, requiredUsableCapacityKwh?: number, moduleCount?: number, source?: 'equipment-catalog', compatibilityStatus: 'preliminary', compatibilityLimitations: string[]}|null} storageRecommendation
+ * @property {{status: 'matched'|'no-catalog-match', mountingMode: 'elevated', pvgisOptimumTiltDegrees: number, productId?: string, availableInclinationDeg?: number[], practicalInclinationDeg?: number, source: 'equipment-catalog', compatibilityStatus: 'preliminary', compatibilityLimitations: string[]}|null} mountingHardwareRecommendation
  * @property {'manual-roof-plane'|string} scope
  * @property {Object} dataCompleteness
  * @property {Object|null} cache

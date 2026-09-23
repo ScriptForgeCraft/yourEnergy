@@ -146,6 +146,7 @@ test('the PVGIS cache uses a salted key, stores no private request data and expi
     roof: {
       pvgisAspectDegrees: 0,
       tiltDegrees: 30,
+      pvgisMountingPlace: 'building',
       polygon: [
         [40.1, 44.5],
         [40.2, 44.6]
@@ -166,6 +167,14 @@ test('the PVGIS cache uses a salted key, stores no private request data and expi
   assert.doesNotMatch(namespace.writes[0].value, /Private address|12000|polygon/u);
   assert.equal(namespace.writes[0].options.expirationTtl, PVGIS_CACHE_TTL_SECONDS);
   assert.equal((await cache.read({ mode: 'manual-roof-plane', input })).hit, true);
+  const freeStandingInput = {
+    ...input,
+    roof: { ...input.roof, pvgisMountingPlace: 'free' }
+  };
+  assert.equal(
+    (await cache.read({ mode: 'manual-roof-plane', input: freeStandingInput })).hit,
+    false
+  );
 
   now = new Date(now.getTime() + (PVGIS_CACHE_TTL_SECONDS + 1) * 1000);
   assert.equal((await cache.read({ mode: 'manual-roof-plane', input })).hit, false);
@@ -205,8 +214,8 @@ test('a repeated potential request uses the normalized seven-day cache rather th
   assert.equal(secondBody.data.potential.cache.state, 'hit');
 });
 
-test('an elevated system uses the PVGIS free-standing benchmark but stays preliminary', async () => {
-  let requestedUrl = null;
+test('an elevated system uses a free-standing PVGIS calculation and retains the optimum as a benchmark', async () => {
+  const requestedUrls = [];
   const response = await analysisOnRequest({
     request: postJson('/analysis', {
       ...p0Payload,
@@ -214,10 +223,17 @@ test('an elevated system uses the PVGIS free-standing benchmark but stays prelim
     }),
     env: pvgisEnv(),
     fetch: async (url) => {
-      requestedUrl = new URL(url);
+      const requestedUrl = new URL(url);
+      requestedUrls.push(requestedUrl);
+      const optimum = requestedUrl.searchParams.get('optimalangles') === '1';
       return new Response(
         JSON.stringify({
-          ...pvgisGeneration(),
+          outputs: {
+            totals: { fixed: { E_y: optimum ? 1600 : 1500 } },
+            monthly: {
+              fixed: Array.from({ length: 12 }, () => ({ E_m: optimum ? 133.333 : 125 }))
+            }
+          },
           inputs: { mounting_system: { fixed: { slope: { value: 31 }, azimuth: { value: -10 } } } }
         }),
         { headers: { 'content-type': 'application/json' } }
@@ -228,15 +244,27 @@ test('an elevated system uses the PVGIS free-standing benchmark but stays prelim
   const analysis = body.data.analysis;
 
   assert.equal(response.status, 200);
-  assert.equal(requestedUrl.searchParams.get('optimalangles'), '1');
+  assert.equal(requestedUrls.length, 2);
+  const generationUrl = requestedUrls.find((url) => url.searchParams.get('optimalangles') !== '1');
+  const optimumUrl = requestedUrls.find((url) => url.searchParams.get('optimalangles') === '1');
+  assert.equal(generationUrl?.searchParams.get('mountingplace'), 'free');
+  assert.equal(generationUrl?.searchParams.get('angle'), '30');
+  assert.equal(generationUrl?.searchParams.get('aspect'), '0');
+  assert.equal(optimumUrl?.searchParams.get('mountingplace'), 'free');
   assert.equal(analysis.scope, 'manual-roof-plane');
   assert.equal(analysis.dataCompleteness.level, 'preliminary');
+  assert.equal(analysis.roof.tiltDegrees, 30);
+  assert.equal(analysis.roof.orientationDegrees, 180);
+  assert.equal(analysis.production.annualYieldKwhPerKwp, 1500);
   assert.deepEqual(analysis.mountingRecommendation, {
     mountingMode: 'elevated',
     tiltDegrees: 31,
     azimuthDegrees: 170,
     basis: 'pvgis-fixed-free-standing-optimum'
   });
+  assert.equal(analysis.mountingHardwareRecommendation.status, 'matched');
+  assert.deepEqual(analysis.mountingHardwareRecommendation.availableInclinationDeg, [20, 30]);
+  assert.equal(analysis.mountingHardwareRecommendation.practicalInclinationDeg, 30);
   assert.ok(analysis.limitations.includes('PVGIS_FREE_STANDING_BENCHMARK_FOR_ELEVATED_MOUNT'));
 });
 

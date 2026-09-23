@@ -2,7 +2,7 @@ import { envString } from './config.js';
 import { ApiError } from './http.js';
 
 export const PVGIS_CACHE_TTL_SECONDS = 7 * 24 * 60 * 60;
-const CACHE_SCHEMA_VERSION = '1';
+const CACHE_SCHEMA_VERSION = '2';
 
 const finite = (value) => Number.isFinite(Number(value));
 const canonicalNumber = (value, decimals = 5) => Number(value).toFixed(decimals);
@@ -23,6 +23,7 @@ const stableCacheInput = ({ mode, input }) => {
   if (mode === 'manual-roof-plane') {
     pieces.push(`tilt=${canonicalNumber(roof.tiltDegrees, 2)}`);
     pieces.push(`aspect=${canonicalNumber(roof.pvgisAspectDegrees, 2)}`);
+    pieces.push(`mountingplace=${roof.pvgisMountingPlace === 'free' ? 'free' : 'building'}`);
   }
   return pieces.join('|');
 };
