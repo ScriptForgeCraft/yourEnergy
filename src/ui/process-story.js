@@ -26,10 +26,12 @@ export const buildProcessStartState = ({ regionId, mode, amount }, previous = {}
 
   if (inputSignature(next) !== inputSignature(previous)) {
     Object.assign(next, {
-      analysis: null,
       quickAnalysis: null,
-      solarPassport: null,
-      analysisStatus: 'idle'
+      quickAnalysisStatus: 'idle',
+      professionalAnalysis: null,
+      professionalAnalysisStatus: 'idle',
+      professionalAnalysisIdentity: null,
+      professionalSolarPassport: null
     });
   }
   if (previous.regionId !== regionId) {
@@ -45,9 +47,16 @@ const finite = (value) => toNonNegativeNumberOrNull(value);
  * It intentionally performs no sizing, production, price or financial calculation.
  */
 export const buildProcessPresentation = (state = {}) => {
-  const candidate = state.analysis ?? state.quickAnalysis ?? null;
+  const candidate = state.professionalAnalysis
+    ? {
+        analysis: state.professionalAnalysis,
+        status: state.professionalAnalysisStatus
+      }
+    : { analysis: state.quickAnalysis ?? null, status: state.quickAnalysisStatus };
   const analysis =
-    state.analysisStatus === 'complete' && candidate?.selectedScenario ? candidate : null;
+    candidate.status === 'complete' && candidate.analysis?.selectedScenario
+      ? candidate.analysis
+      : null;
   const scenario = analysis?.selectedScenario ?? null;
   const roof = analysis?.roof ?? state.roof ?? null;
   const estimate = scenario?.commercialEstimate ?? analysis?.commercialEstimate ?? null;
@@ -78,7 +87,7 @@ export const buildProcessPresentation = (state = {}) => {
     annualGeneration: finite(scenario?.generation?.annualKwh),
     commercialEstimateMax: upperEstimate,
     avoidedCo2Tons: finite(analysis?.environmental?.avoidedCo2Tons),
-    passportReady: Boolean(state.solarPassport)
+    passportReady: Boolean(state.professionalSolarPassport)
   };
 };
 
@@ -239,7 +248,15 @@ export const initProcessStory = ({ config = {} } = {}) => {
     const sameInput = currentDraft && inputSignature(currentDraft) === inputSignature(saved);
     const visibleState =
       hasEditedInput && !sameInput
-        ? { ...saved, analysis: null, quickAnalysis: null, analysisStatus: 'idle' }
+        ? {
+            ...saved,
+            quickAnalysis: null,
+            quickAnalysisStatus: 'idle',
+            professionalAnalysis: null,
+            professionalAnalysisStatus: 'idle',
+            professionalAnalysisIdentity: null,
+            professionalSolarPassport: null
+          }
         : saved;
     const presentation = buildProcessPresentation(visibleState);
 

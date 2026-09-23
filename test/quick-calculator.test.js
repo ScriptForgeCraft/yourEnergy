@@ -249,7 +249,7 @@ test('one temporary session carries quick values to refinement and professional 
   assert.equal(session.read().currentStep, 3);
   session.clear();
   assert.equal(session.read().currentStep, 0);
-  assert.equal(session.read().analysis, null);
+  assert.equal(session.read().professionalAnalysis, null);
 });
 
 test('a detailed roof result preserves its compatible quick result for a simple comparison', () => {
@@ -263,10 +263,13 @@ test('a detailed roof result preserves its compatible quick result for a simple 
   session.write({
     quickAnalysis: { scope: 'regional-preliminary', selectedScenario: { id: 'quick' } }
   });
-  session.write({ analysis: { scope: 'manual-roof-plane', selectedScenario: { id: 'refined' } } });
+  session.write({
+    professionalAnalysis: { scope: 'manual-roof-plane', selectedScenario: { id: 'refined' } },
+    professionalAnalysisIdentity: 'refined-inputs'
+  });
   const restored = session.read();
   assert.equal(restored.quickAnalysis.selectedScenario.id, 'quick');
-  assert.equal(restored.analysis.selectedScenario.id, 'refined');
+  assert.equal(restored.professionalAnalysis.selectedScenario.id, 'refined');
 });
 
 test('selecting a calculation panel invalidates cached sizing results but keeps visitor inputs', () => {
@@ -283,10 +286,12 @@ test('selecting a calculation panel invalidates cached sizing results but keeps 
     consumption: { mode: 'usage', averageMonthlyKwh: 850 },
     roof: { areaSqm: 100, complete: true },
     selectedPanelId: defaultSystem.equipment.panelId,
-    quickAnalysis: { selectedScenario: { system: defaultSystem } },
-    analysis: { equipment: defaultSystem.equipment },
-    analysisStatus: 'complete',
-    solarPassport: { analysis: { equipment: defaultSystem.equipment } }
+    quickAnalysis: { scope: 'regional-preliminary', selectedScenario: { system: defaultSystem } },
+    quickAnalysisStatus: 'complete',
+    professionalAnalysis: { scope: 'manual-roof-plane', equipment: defaultSystem.equipment },
+    professionalAnalysisStatus: 'complete',
+    professionalAnalysisIdentity: 'prior-panel',
+    professionalSolarPassport: { analysis: { equipment: defaultSystem.equipment } }
   });
 
   session.selectPanel(selectedPanel.id);
@@ -295,10 +300,10 @@ test('selecting a calculation panel invalidates cached sizing results but keeps 
   assert.equal(restored.selectedPanelId, selectedPanel.id);
   assert.equal(restored.consumption.averageMonthlyKwh, 850);
   assert.equal(restored.roof.areaSqm, 100);
-  assert.equal(restored.quickAnalysis, null);
-  assert.equal(restored.analysis, null);
-  assert.equal(restored.analysisStatus, 'idle');
-  assert.equal(restored.solarPassport, null);
+  assert.equal(restored.quickAnalysis.scope, 'regional-preliminary');
+  assert.equal(restored.professionalAnalysis, null);
+  assert.equal(restored.professionalAnalysisStatus, 'idle');
+  assert.equal(restored.professionalSolarPassport, null);
 });
 
 test('changing the regional starting point never carries an old roof into the new estimate', () => {

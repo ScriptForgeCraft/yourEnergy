@@ -29,12 +29,12 @@ const analysis = {
 test('process presentation reads completed SolarAnalysis values without deriving new results', () => {
   assert.deepEqual(
     buildProcessPresentation({
-      version: 2,
+      version: 3,
       regionId: 'yerevan',
       consumption: { mode: 'usage', averageMonthlyKwh: 900 },
-      analysis,
-      analysisStatus: 'complete',
-      solarPassport: { id: 'passport-1' }
+      professionalAnalysis: analysis,
+      professionalAnalysisStatus: 'complete',
+      professionalSolarPassport: { id: 'passport-1' }
     }),
     {
       hasAnalysis: true,
@@ -58,15 +58,20 @@ test('process presentation reads completed SolarAnalysis values without deriving
 
 test('process never presents stale or incomplete analysis as a personal result', () => {
   for (const status of ['idle', 'loading', 'unavailable']) {
-    const presentation = buildProcessPresentation({ analysis, analysisStatus: status });
+    const presentation = buildProcessPresentation({
+      professionalAnalysis: analysis,
+      professionalAnalysisStatus: status
+    });
     assert.equal(presentation.hasAnalysis, false);
     assert.equal(presentation.systemCapacity, null);
     assert.equal(presentation.annualGeneration, null);
     assert.equal(presentation.commercialEstimateMax, null);
   }
   assert.equal(
-    buildProcessPresentation({ analysis: { selectedScenario: {} }, analysisStatus: 'complete' })
-      .hasAnalysis,
+    buildProcessPresentation({
+      professionalAnalysis: { selectedScenario: {} },
+      professionalAnalysisStatus: 'complete'
+    }).hasAnalysis,
     true
   );
 });
@@ -84,9 +89,12 @@ test('process form hands only validated inputs to CalculatorSession and invalida
   const previous = {
     regionId: 'yerevan',
     consumption: { mode: 'usage', averageMonthlyKwh: 350 },
-    analysis,
     quickAnalysis: analysis,
-    analysisStatus: 'complete',
+    quickAnalysisStatus: 'complete',
+    professionalAnalysis: analysis,
+    professionalAnalysisStatus: 'complete',
+    professionalAnalysisIdentity: 'previous-inputs',
+    professionalSolarPassport: { id: 'passport-1' },
     roof: { areaSqm: 80 },
     userTariff: { rateAmdPerKwh: 50 }
   };
@@ -100,7 +108,7 @@ test('process form hands only validated inputs to CalculatorSession and invalida
     mode: 'bill',
     averageMonthlyBillAmd: 35_000
   });
-  assert.equal(next.analysis, null);
+  assert.equal(next.professionalAnalysis, null);
   assert.equal(next.roof, null);
   assert.equal(next.userTariff, null);
 

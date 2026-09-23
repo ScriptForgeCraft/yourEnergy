@@ -264,10 +264,19 @@ export const initHeroAnalysisCard = ({ hero, copy, locale, onRender = () => {} }
   const session = createCalculatorSession();
   const refresh = ({ analysis, status } = {}) => {
     const snapshot = analysis === undefined ? session.read() : null;
+    const preferred = snapshot?.professionalAnalysis
+      ? {
+          analysis: snapshot.professionalAnalysis,
+          status: snapshot.professionalAnalysisStatus
+        }
+      : {
+          analysis: snapshot?.quickAnalysis ?? null,
+          status: snapshot?.quickAnalysisStatus ?? 'idle'
+        };
     const presentation = renderHeroAnalysisCard({
       root,
-      analysis: analysis ?? snapshot?.analysis ?? snapshot?.quickAnalysis ?? null,
-      status: status ?? snapshot?.analysisStatus ?? 'idle',
+      analysis: analysis ?? preferred.analysis,
+      status: status ?? preferred.status,
       copy,
       locale
     });

@@ -1,4 +1,8 @@
-import { calculateRoofPlaneArea, SolarPassportRepository } from '../domain/index.js';
+import {
+  ANALYSIS_SCHEMA_VERSION,
+  calculateRoofPlaneArea,
+  SolarPassportRepository
+} from '../domain/index.js';
 import { toFiniteNumberOrNull } from '../domain/numbers.js';
 import { ProductApiClient, ProductApiError } from '../services/api-client.js';
 import { createPropertyMap } from '../services/property-map.js';
@@ -13,6 +17,10 @@ import {
 import { initConsumptionInput } from './consumption-input.js';
 import { initFileUpload } from './file-upload.js';
 import { createCalculatorSession } from './calculator-session.js';
+import {
+  createProfessionalAnalysisIdentity,
+  isRestorableProfessionalAnalysis
+} from './professional-analysis-identity.js';
 import { localitiesForRegion, localityCenter } from '../data/locations/armenia.js';
 import { getSolarPanels } from '../data/equipment/calculator-catalog.js';
 import {
@@ -210,10 +218,27 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
   const selectedPanelSystem =
     getCalculatorSystemForPanel(savedSession.selectedPanelId) ?? getDefaultCalculatorSystem();
   const savedStorageRequired = savedSession.storageRequired === true;
+  const savedProfessionalIdentity = createProfessionalAnalysisIdentity({
+    property: savedSession.property?.coordinates,
+    consumption: savedSession.consumption,
+    tariff: savedSession.userTariff,
+    roof: savedSession.roof,
+    system: { capacityKwp: PVGIS_KWP, lossPercent: PVGIS_LOSS },
+    panelId: selectedPanelSystem?.equipment?.panelId,
+    storageRequired: savedStorageRequired,
+    calculationVersion: ANALYSIS_SCHEMA_VERSION
+  });
   const restoredAnalysis =
-    analysisMatchesPanel(savedSession.analysis, selectedPanelSystem) &&
-    analysisMatchesStorageRequest(savedSession.analysis, savedStorageRequired)
-      ? savedSession.analysis
+    analysisMatchesPanel(savedSession.professionalAnalysis, selectedPanelSystem) &&
+    analysisMatchesStorageRequest(savedSession.professionalAnalysis, savedStorageRequired) &&
+    isRestorableProfessionalAnalysis({
+      analysis: savedSession.professionalAnalysis,
+      status: savedSession.professionalAnalysisStatus,
+      storedIdentity: savedSession.professionalAnalysisIdentity,
+      currentIdentity: savedProfessionalIdentity,
+      calculationVersion: ANALYSIS_SCHEMA_VERSION
+    })
+      ? savedSession.professionalAnalysis
       : null;
   const state = createCalculatorWizardState({
     addressNote: savedSession.addressNote ?? '',
@@ -228,7 +253,7 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
     selectedPanelId: selectedPanelSystem?.equipment?.panelId ?? null,
     storageRequired: savedStorageRequired,
     analysis: restoredAnalysis,
-    solarPassport: restoredAnalysis ? (savedSession.solarPassport ?? null) : null,
+    solarPassport: restoredAnalysis ? (savedSession.professionalSolarPassport ?? null) : null,
     analysisStatus: restoredAnalysis ? WIZARD_STEP_STATUSES.COMPLETE : WIZARD_STEP_STATUSES.LOCKED
   });
   let mapController = null;
@@ -239,6 +264,9 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
   let lastPotential = null;
   let lastAnalysis = null;
   let passportOpener = null;
+  let professionalAnalysisIdentity = restoredAnalysis
+    ? savedSession.professionalAnalysisIdentity
+    : null;
 
   const persistSession = () =>
     session.write({
@@ -257,9 +285,10 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
       userTariff: state.userTariff,
       selectedPanelId: state.selectedPanelId,
       storageRequired: state.storageRequired,
-      analysis: state.analysis,
-      analysisStatus: state.analysisStatus,
-      solarPassport: state.solarPassport
+      professionalAnalysis: state.analysis,
+      professionalAnalysisStatus: state.analysisStatus,
+      professionalAnalysisIdentity,
+      professionalSolarPassport: state.solarPassport
     });
 
   const clearLocationSearchResults = () => {
@@ -435,6 +464,7 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
     state.analysis = null;
     state.analysisStatus = WIZARD_STEP_STATUSES.LOCKED;
     state.solarPassport = null;
+    professionalAnalysisIdentity = null;
     resultDashboard?.replaceChildren();
     if (resultSummary) resultSummary.textContent = wizard.results?.intro ?? '';
     if (financeEmpty) financeEmpty.hidden = true;
@@ -1216,7 +1246,8 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
     if (!validateRoof()) return;
     state.consumption = consumption.value;
     state.userTariff = consumption.tariff;
-    const fingerprint = JSON.stringify(buildPayload());
+    const payload = buildPayload();
+    const fingerprint = JSON.stringify(payload);
     const remaining =
       lastAnalysis?.fingerprint === fingerprint
         ? ANALYSIS_COOLDOWN_MS - (Date.now() - lastAnalysis.startedAt)
@@ -1237,12 +1268,22 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
     updateProgress();
     try {
       // selectedBillFile is deliberately not part of this payload.
-      const response = await api.analyze(buildPayload(), { signal: controller.signal });
+      const response = await api.analyze(payload, { signal: controller.signal });
       if (controller.signal.aborted || analysisRequest !== controller) return;
       state.analysis = response?.analysis ?? null;
       if (!state.analysis) throw new ProductApiError('MALFORMED_RESPONSE');
       state.analysisStatus = WIZARD_STEP_STATUSES.COMPLETE;
       state.solarPassport = passportRepository.create(state.analysis, { locale });
+      professionalAnalysisIdentity = createProfessionalAnalysisIdentity({
+        property: payload.property,
+        consumption: payload.consumption,
+        tariff: payload.tariff,
+        roof: payload.roof,
+        system: payload.system,
+        panelId: payload.equipment?.panelId,
+        storageRequired: payload.storageRequired,
+        calculationVersion: ANALYSIS_SCHEMA_VERSION
+      });
       renderResult(state.analysis);
       writeStatus('');
       setStep(3);

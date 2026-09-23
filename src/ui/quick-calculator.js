@@ -374,9 +374,14 @@ export const initQuickCalculator = ({ config = {} } = {}) => {
   const clearAnalysis = () => {
     session.write({
       quickAnalysis: null,
-      analysis: null,
-      analysisStatus: 'idle',
-      solarPassport: null
+      quickAnalysisStatus: 'idle',
+      // Consumption and tariff are shared inputs. Editing either makes a
+      // Professional result incompatible, but never lets the two result
+      // scopes overwrite one another.
+      professionalAnalysis: null,
+      professionalAnalysisStatus: 'idle',
+      professionalAnalysisIdentity: null,
+      professionalSolarPassport: null
     });
     resultValues.hidden = true;
     resultActions.hidden = true;
@@ -543,9 +548,11 @@ export const initQuickCalculator = ({ config = {} } = {}) => {
       ...current.state,
       ...(changedRegion ? { property: null, roof: null, sitePotential: null } : {}),
       quickAnalysis: null,
-      analysis: null,
-      analysisStatus: 'loading',
-      solarPassport: null
+      quickAnalysisStatus: 'loading',
+      professionalAnalysis: null,
+      professionalAnalysisStatus: 'idle',
+      professionalAnalysisIdentity: null,
+      professionalSolarPassport: null
     });
     submit.disabled = true;
     submit.setAttribute('aria-busy', 'true');
@@ -562,9 +569,7 @@ export const initQuickCalculator = ({ config = {} } = {}) => {
       session.write({
         ...current.state,
         quickAnalysis: analysis,
-        analysis,
-        analysisStatus: 'complete',
-        solarPassport: null
+        quickAnalysisStatus: 'complete'
       });
       render(analysis);
       setStatus('');
@@ -575,7 +580,7 @@ export const initQuickCalculator = ({ config = {} } = {}) => {
       resultValues.hidden = true;
       resultActions.hidden = true;
       setResultState('error');
-      session.write({ analysis: null, quickAnalysis: null, analysisStatus: 'unavailable' });
+      session.write({ quickAnalysis: null, quickAnalysisStatus: 'unavailable' });
       setStatus(errorMessage(error, copy), true);
       const retry = document.createElement('button');
       retry.type = 'button';
@@ -610,7 +615,7 @@ export const initQuickCalculator = ({ config = {} } = {}) => {
 
   leadOpen?.addEventListener('click', () => {
     const snapshot = session.read();
-    const analysis = snapshot.quickAnalysis ?? snapshot.analysis;
+    const analysis = snapshot.quickAnalysis;
     if (!analysis || typeof leadDialog?.showModal !== 'function') return;
     leadTrigger = leadOpen;
     resetLeadDialog();
@@ -646,7 +651,7 @@ export const initQuickCalculator = ({ config = {} } = {}) => {
     }
 
     const snapshot = session.read();
-    const analysis = snapshot.quickAnalysis ?? snapshot.analysis;
+    const analysis = snapshot.quickAnalysis;
     if (!analysis) {
       setLeadStatus(copy.lead?.unavailable, true);
       return;
@@ -685,7 +690,7 @@ export const initQuickCalculator = ({ config = {} } = {}) => {
   });
 
   updateMode();
-  const savedQuickAnalysis = saved.quickAnalysis ?? saved.analysis;
+  const savedQuickAnalysis = saved.quickAnalysis;
   if (savedQuickAnalysis?.scope === 'regional-preliminary') render(savedQuickAnalysis);
   return { session, clearAnalysis };
 };
