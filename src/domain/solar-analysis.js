@@ -9,13 +9,18 @@ import {
   toFiniteNumberOrNull,
   toPositiveNumberOrNull
 } from './numbers.js';
-import { getUsableTariffRate, selectEffectiveTariff } from './tariffs.js';
+import {
+  getUsableSurplusCompensationRate,
+  getUsableTariffRate,
+  selectEffectiveSurplusCompensation,
+  selectEffectiveTariff
+} from './tariffs.js';
 import { buildCommercialEstimate } from './pricebook.js';
 import { recommendInverter } from './inverter-recommendation.js';
 import { recommendStorage } from './storage-recommendation.js';
 import { recommendMountingHardware } from './mounting-recommendation.js';
 
-export const ANALYSIS_SCHEMA_VERSION = '1.0.0';
+export const ANALYSIS_SCHEMA_VERSION = '1.1.0';
 
 /**
  * Planning coverage choices, not production quotes or property-specific
@@ -326,6 +331,16 @@ const makeTimeline = (capexAmd, annualSavingsAmd) => {
   }));
 };
 
+const surplusCompensationSummary = (selection) => ({
+  kind: selection?.kind === 'regulatory-registry' ? 'registry' : 'unavailable',
+  available: selection?.available === true,
+  id: selection?.compensation?.id ?? null,
+  revision: selection?.dataset?.revision ?? selection?.compensation?.datasetRevision ?? null,
+  rateAmdPerKwh: getUsableSurplusCompensationRate(selection),
+  reason: selection?.reason ?? 'SURPLUS_COMPENSATION_NOT_CONFIGURED',
+  source: selection?.source ?? unavailableSource
+});
+
 /**
  * Calculates one scenario exclusively from the supplied inputs. It never
  * fills in a solar yield, tariff, roof area, or price on the caller's behalf.
@@ -337,6 +352,8 @@ export const calculateSolarScenario = ({
   roof: suppliedRoof,
   production: suppliedProduction,
   tariff = null,
+  surplusCompensation: suppliedSurplusCompensation,
+  surplusCompensationDataset,
   investment: suppliedInvestment,
   system: suppliedSystem,
   priceBook = null,
@@ -349,6 +366,9 @@ export const calculateSolarScenario = ({
   const production = normalizeProduction(suppliedProduction);
   const investment = normalizeInvestment(suppliedInvestment);
   const system = normalizeSystem(suppliedSystem);
+  const surplusCompensation =
+    suppliedSurplusCompensation ??
+    selectEffectiveSurplusCompensation(surplusCompensationDataset, effectiveDate);
   const target = toFiniteNumberOrNull(targetCoverage);
   const readyForGeneration =
     consumption?.available &&
@@ -373,14 +393,24 @@ export const calculateSolarScenario = ({
         equipment: system.equipment
       },
       generation: { annualKwh: null, monthlyKwh: null },
+      energyBalance: {
+        annualConsumptionKwh: consumption?.annualKwh ?? null,
+        annualGenerationKwh: null,
+        offsetEnergyKwh: null,
+        surplusEnergyKwh: null
+      },
       coveragePercent: null,
       financial: {
+        retailOffsetValueAmd: null,
+        surplusCompensationValueAmd: null,
+        annualEconomicValueAmd: null,
         annualSavingsAmd: null,
         grossSavings25YearsAmd: null,
         capexAmd: null,
         paybackYears: null,
         timeline: [],
-        price: financialPrice(null, null)
+        price: financialPrice(null, null),
+        surplusCompensation: surplusCompensationSummary(surplusCompensation)
       },
       commercialEstimate: buildCommercialEstimate({
         capacityKwp: null,
@@ -407,19 +437,36 @@ export const calculateSolarScenario = ({
   const monthlyKwh = production.monthlyYieldFactors
     ? production.monthlyYieldFactors.map((factor) => annualKwh * factor)
     : null;
-  const rateAmdPerKwh = getUsableTariffRate(tariff);
-  const annualSavingsAmd = rateAmdPerKwh === null ? null : annualKwh * rateAmdPerKwh;
+  const retailRateAmdPerKwh = getUsableTariffRate(tariff);
+  const surplusCompensationRateAmdPerKwh = getUsableSurplusCompensationRate(surplusCompensation);
+  const offsetEnergyKwh = Math.min(annualKwh, consumption.annualKwh);
+  const surplusEnergyKwh = Math.max(annualKwh - consumption.annualKwh, 0);
+  const retailOffsetValueAmd =
+    retailRateAmdPerKwh === null ? null : offsetEnergyKwh * retailRateAmdPerKwh;
+  const surplusCompensationValueAmd =
+    surplusEnergyKwh === 0
+      ? 0
+      : surplusCompensationRateAmdPerKwh === null
+        ? null
+        : surplusEnergyKwh * surplusCompensationRateAmdPerKwh;
+  const annualEconomicValueAmd =
+    retailOffsetValueAmd === null || surplusCompensationValueAmd === null
+      ? null
+      : retailOffsetValueAmd + surplusCompensationValueAmd;
   const commercialEstimate = buildCommercialEstimate({ capacityKwp, priceBook, at: effectiveDate });
   const capexAmd = getScenarioCapex(investment, capacityKwp) ?? commercialEstimate.primaryAmd;
   const paybackYears =
-    capexAmd !== null && annualSavingsAmd !== null && annualSavingsAmd > 0
-      ? capexAmd / annualSavingsAmd
+    capexAmd !== null && annualEconomicValueAmd !== null && annualEconomicValueAmd > 0
+      ? capexAmd / annualEconomicValueAmd
       : null;
   const roofLimited =
     maxPanelCount !== null && requestedPanelCount !== null && panelCount < requestedPanelCount;
 
   const financialReady =
-    capexAmd !== null && capexAmd > 0 && annualSavingsAmd !== null && annualSavingsAmd > 0;
+    capexAmd !== null &&
+    capexAmd > 0 &&
+    annualEconomicValueAmd !== null &&
+    annualEconomicValueAmd > 0;
 
   return {
     id,
@@ -427,7 +474,10 @@ export const calculateSolarScenario = ({
     status: financialReady ? ANALYSIS_STATUS.FINANCIAL_READY : ANALYSIS_STATUS.TECHNICAL_READY,
     limitations: [
       ...(roofLimited ? ['ROOF_CAPACITY_LIMIT'] : []),
-      ...(rateAmdPerKwh === null ? ['TARIFF_REQUIRED'] : []),
+      ...(retailRateAmdPerKwh === null ? ['TARIFF_REQUIRED'] : []),
+      ...(surplusEnergyKwh > 0 && surplusCompensationValueAmd === null
+        ? ['SURPLUS_COMPENSATION_UNAVAILABLE']
+        : []),
       ...(capexAmd === null ? ['CAPEX_REQUIRED'] : [])
     ],
     system: {
@@ -440,14 +490,27 @@ export const calculateSolarScenario = ({
       equipment: system.equipment
     },
     generation: { annualKwh, monthlyKwh },
+    energyBalance: {
+      annualConsumptionKwh: consumption.annualKwh,
+      annualGenerationKwh: annualKwh,
+      offsetEnergyKwh,
+      surplusEnergyKwh
+    },
     coveragePercent: (annualKwh / consumption.annualKwh) * 100,
     financial: {
-      annualSavingsAmd,
-      grossSavings25YearsAmd: annualSavingsAmd === null ? null : annualSavingsAmd * 25,
+      retailOffsetValueAmd,
+      surplusCompensationValueAmd,
+      annualEconomicValueAmd,
+      // Retained for presentation compatibility; it is now always the
+      // corrected complete annual economic value, never all generation at a
+      // retail rate.
+      annualSavingsAmd: annualEconomicValueAmd,
+      grossSavings25YearsAmd: annualEconomicValueAmd === null ? null : annualEconomicValueAmd * 25,
       capexAmd,
       paybackYears,
-      timeline: makeTimeline(capexAmd, annualSavingsAmd),
-      price: financialPrice(commercialEstimate, capexAmd)
+      timeline: makeTimeline(capexAmd, annualEconomicValueAmd),
+      price: financialPrice(commercialEstimate, capexAmd),
+      surplusCompensation: surplusCompensationSummary(surplusCompensation)
     },
     commercialEstimate
   };
@@ -521,6 +584,9 @@ export const buildSolarAnalysis = (input = {}) => {
   const priceBook = input.priceBook ?? null;
   const tariff =
     input.tariffSelection ?? selectEffectiveTariff(input.tariffDataset, input.effectiveDate);
+  const surplusCompensation =
+    input.surplusCompensationSelection ??
+    selectEffectiveSurplusCompensation(input.surplusCompensationDataset, input.effectiveDate);
   const consumption = isNormalizedConsumption(input.consumption)
     ? input.consumption
     : normalizeConsumption(input.consumption, { tariff });
@@ -532,6 +598,7 @@ export const buildSolarAnalysis = (input = {}) => {
       roof,
       production,
       tariff,
+      surplusCompensation,
       investment,
       system,
       priceBook,
@@ -614,6 +681,12 @@ export const buildSolarAnalysis = (input = {}) => {
       tariff?.available ? null : (tariff?.reason ?? 'TARIFF_REQUIRED')
     ),
     sourceEntry(
+      'surplus-compensation',
+      surplusCompensation?.source,
+      surplusCompensation?.available,
+      surplusCompensation?.reason ?? 'SURPLUS_COMPENSATION_NOT_CONFIGURED'
+    ),
+    sourceEntry(
       'investment',
       investment.source,
       investment.capexAmdPerKwp !== null || investment.capexAmd !== null,
@@ -692,6 +765,7 @@ export const buildSolarAnalysis = (input = {}) => {
         rateAmdPerKwh: getUsableTariffRate(tariff),
         source: tariff?.source ?? unavailableSource
       },
+      surplusCompensation: surplusCompensationSummary(surplusCompensation),
       price: {
         kind: priceKind,
         source: commercialEstimate?.priceBook?.source ?? unavailableSource,

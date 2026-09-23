@@ -1,5 +1,6 @@
 import { ProductApiClient, ProductApiError } from '../services/api-client.js';
 import { formatConsumerCommercialRange } from './commercial-range.js';
+import { createAsyncRequestLifecycle } from './async-request-lifecycle.js';
 import { createCalculatorSession } from './calculator-session.js';
 
 const positive = (value) => {
@@ -228,6 +229,7 @@ export const initQuickCalculator = ({ config = {} } = {}) => {
   const months = config.product?.passport?.months ?? [];
   const session = createCalculatorSession();
   const api = new ProductApiClient({ endpoints: config.endpoints ?? {} });
+  const lifecycle = createAsyncRequestLifecycle();
   const form = root.querySelector('[data-quick-form]');
   const region = root.querySelector('[data-quick-region]');
   const bill = root.querySelector('[data-quick-bill]');
@@ -372,6 +374,7 @@ export const initQuickCalculator = ({ config = {} } = {}) => {
     tariffHelp.textContent = billMode ? copy.tariffHelpBill : copy.tariffHelpUsage;
   };
   const clearAnalysis = () => {
+    if (!lifecycle.isActive()) return;
     session.write({
       quickAnalysis: null,
       quickAnalysisStatus: 'idle',
@@ -444,6 +447,11 @@ export const initQuickCalculator = ({ config = {} } = {}) => {
     const avoidedCo2Tons = finite(environmental.avoidedCo2Tons);
     const treeEquivalent = finite(environmental.treeEquivalent);
     const annualSavingsAmd = finite(scenario.financial?.annualSavingsAmd);
+    const retailOffsetValueAmd = finite(scenario.financial?.retailOffsetValueAmd);
+    const surplusEnergyKwh = finite(scenario.energyBalance?.surplusEnergyKwh);
+    const surplusCompensationValueAmd = finite(scenario.financial?.surplusCompensationValueAmd);
+    const hasUnvaluedSurplus =
+      surplusEnergyKwh !== null && surplusEnergyKwh > 0 && surplusCompensationValueAmd === null;
     const budgetRange = formatConsumerCommercialRange(estimate, locale);
     const summaryMetrics = [
       metric(copy.generation, `${format(scenario.generation?.annualKwh, locale)} kWh`, {
@@ -481,6 +489,14 @@ export const initQuickCalculator = ({ config = {} } = {}) => {
     } else if (budgetRange) {
       summaryMetrics.push(metric(copy.budget, budgetRange, { icon: 'coin', tone: 'gold' }));
     }
+    if (surplusEnergyKwh !== null && surplusEnergyKwh > 0) {
+      summaryMetrics.push(
+        metric(copy.surplusEnergy, `${format(surplusEnergyKwh, locale)} kWh`, {
+          icon: 'bolt',
+          tone: 'sky'
+        })
+      );
+    }
     values.append(...summaryMetrics);
     if (estimate?.reason === 'PRICEBOOK_EXPIRED' || estimate?.reason === 'PRICEBOOK_UNAVAILABLE') {
       const note = document.createElement('p');
@@ -488,10 +504,16 @@ export const initQuickCalculator = ({ config = {} } = {}) => {
       note.textContent = copy.priceUnavailable;
       values.append(note);
     }
-    if (annualSavingsAmd === null) {
+    if (retailOffsetValueAmd === null) {
       const note = document.createElement('p');
       note.className = 'input-help';
       note.textContent = copy.noTariff;
+      values.append(note);
+    }
+    if (hasUnvaluedSurplus) {
+      const note = document.createElement('p');
+      note.className = 'input-help';
+      note.textContent = copy.surplusValueUnavailable;
       values.append(note);
     }
     const chart = monthlyProductionChart({
@@ -529,6 +551,7 @@ export const initQuickCalculator = ({ config = {} } = {}) => {
   region.addEventListener('change', clearAnalysis);
   form.addEventListener('submit', async (event) => {
     event.preventDefault();
+    if (!lifecycle.isActive()) return;
     const current = input();
     if (!current.valid) {
       current.field?.setAttribute('aria-invalid', 'true');
@@ -537,7 +560,8 @@ export const initQuickCalculator = ({ config = {} } = {}) => {
       return;
     }
     request?.abort();
-    request = new AbortController();
+    const controller = lifecycle.createController();
+    request = controller;
     const previous = session.read();
     // A different regional benchmark means a previously refined property may
     // no longer belong to the selected starting context. Keep the roof when
@@ -562,8 +586,8 @@ export const initQuickCalculator = ({ config = {} } = {}) => {
     setResultState('loading');
     setStatus(copy.loading);
     try {
-      const response = await api.quickAnalyze(current.payload, { signal: request.signal });
-      if (request.signal.aborted) return;
+      const response = await api.quickAnalyze(current.payload, { signal: controller.signal });
+      if (!lifecycle.canCommit(controller, request)) return;
       const analysis = response?.analysis;
       if (!analysis) throw new ProductApiError('MALFORMED_RESPONSE');
       session.write({
@@ -574,6 +598,7 @@ export const initQuickCalculator = ({ config = {} } = {}) => {
       render(analysis);
       setStatus('');
     } catch (error) {
+      if (!lifecycle.canCommit(controller, request)) return;
       if (error instanceof ProductApiError && error.code === 'ABORTED') return;
       resultTitle.textContent = copy.unavailable;
       resultCopy.textContent = errorMessage(error, copy);
@@ -590,13 +615,18 @@ export const initQuickCalculator = ({ config = {} } = {}) => {
       resultValues.replaceChildren(retry);
       resultValues.hidden = false;
     } finally {
-      submit.disabled = false;
-      submit.removeAttribute('aria-busy');
-      request = null;
+      const ownsRequest = request === controller;
+      if (ownsRequest) request = null;
+      lifecycle.release(controller);
+      if (lifecycle.isActive() && ownsRequest) {
+        submit.disabled = false;
+        submit.removeAttribute('aria-busy');
+      }
     }
   });
 
   const resetLeadDialog = () => {
+    if (!lifecycle.isActive()) return;
     leadRequest?.abort();
     leadRequest = null;
     leadComplete = false;
@@ -614,6 +644,7 @@ export const initQuickCalculator = ({ config = {} } = {}) => {
   };
 
   leadOpen?.addEventListener('click', () => {
+    if (!lifecycle.isActive()) return;
     const snapshot = session.read();
     const analysis = snapshot.quickAnalysis;
     if (!analysis || typeof leadDialog?.showModal !== 'function') return;
@@ -629,6 +660,10 @@ export const initQuickCalculator = ({ config = {} } = {}) => {
 
   leadDialog?.addEventListener('close', () => {
     const trigger = leadTrigger;
+    if (!lifecycle.isActive()) {
+      leadTrigger = null;
+      return;
+    }
     resetLeadDialog();
     leadTrigger = null;
     trigger?.focus?.();
@@ -636,6 +671,7 @@ export const initQuickCalculator = ({ config = {} } = {}) => {
 
   leadForm?.addEventListener('submit', async (event) => {
     event.preventDefault();
+    if (!lifecycle.isActive()) return;
     if (leadRequest || leadComplete) return;
     const validated = validateQuickLeadForm({
       name: leadName?.value,
@@ -657,7 +693,8 @@ export const initQuickCalculator = ({ config = {} } = {}) => {
       return;
     }
 
-    leadRequest = new AbortController();
+    const controller = lifecycle.createController();
+    leadRequest = controller;
     leadSubmit.disabled = true;
     leadForm.setAttribute('aria-busy', 'true');
     setLeadStatus(copy.lead?.loading);
@@ -672,25 +709,37 @@ export const initQuickCalculator = ({ config = {} } = {}) => {
             locale: config.locale
           })
         },
-        { signal: leadRequest.signal }
+        { signal: controller.signal }
       );
-      if (leadRequest.signal.aborted) return;
+      if (!lifecycle.canCommit(controller, leadRequest)) return;
       leadComplete = true;
       leadForm.hidden = true;
       leadSuccess.hidden = false;
       setLeadStatus(copy.lead?.success);
     } catch (error) {
+      if (!lifecycle.canCommit(controller, leadRequest)) return;
       if (error instanceof ProductApiError && error.code === 'ABORTED') return;
       setLeadStatus(copy.lead?.unavailable, true);
     } finally {
-      if (!leadComplete) leadSubmit.disabled = false;
-      leadForm.removeAttribute('aria-busy');
-      leadRequest = null;
+      const ownsRequest = leadRequest === controller;
+      if (ownsRequest) leadRequest = null;
+      lifecycle.release(controller);
+      if (lifecycle.isActive() && ownsRequest) {
+        if (!leadComplete) leadSubmit.disabled = false;
+        leadForm.removeAttribute('aria-busy');
+      }
     }
   });
 
   updateMode();
   const savedQuickAnalysis = saved.quickAnalysis;
   if (savedQuickAnalysis?.scope === 'regional-preliminary') render(savedQuickAnalysis);
-  return { session, clearAnalysis };
+  const destroy = () => {
+    if (!lifecycle.destroy()) return;
+    request = null;
+    leadRequest = null;
+    leadTrigger = null;
+    if (leadDialog?.open) leadDialog.close();
+  };
+  return { session, clearAnalysis, destroy };
 };

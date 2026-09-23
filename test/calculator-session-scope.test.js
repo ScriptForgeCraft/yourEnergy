@@ -43,7 +43,7 @@ const professionalAnalysis = {
   selectedScenario: { id: 'property-roof' }
 };
 
-test('a legacy Quick result migrates only into Quick state and retains shared inputs', () => {
+test('a pre-correction Quick result is discarded while shared inputs remain reusable', () => {
   const { storage, values } = sessionStorage();
   const session = createCalculatorSession({ storage });
   values.set(
@@ -60,11 +60,39 @@ test('a legacy Quick result migrates only into Quick state and retains shared in
   const restoredAfterQuickToPro = session.read();
   const restoredAfterRefresh = session.read();
 
-  assert.equal(restoredAfterQuickToPro.quickAnalysis.selectedScenario.id, 'regional');
+  assert.equal(restoredAfterQuickToPro.quickAnalysis, null);
+  assert.equal(restoredAfterQuickToPro.quickAnalysisStatus, 'idle');
   assert.equal(restoredAfterQuickToPro.professionalAnalysis, null);
   assert.equal('analysis' in restoredAfterQuickToPro, false);
   assert.equal(restoredAfterQuickToPro.consumption.averageMonthlyKwh, 850);
   assert.deepEqual(restoredAfterRefresh, restoredAfterQuickToPro);
+});
+
+test('a version 3 scoped result cannot restore the former overproduction payback', () => {
+  const { storage, values } = sessionStorage();
+  const session = createCalculatorSession({ storage });
+  values.set(
+    session.key,
+    JSON.stringify({
+      version: 3,
+      consumption: { mode: 'usage', averageMonthlyKwh: 850 },
+      userTariff: { rateAmdPerKwh: 45 },
+      quickAnalysis: { scope: 'regional-preliminary', selectedScenario: { id: 'regional' } },
+      quickAnalysisStatus: 'complete',
+      professionalAnalysis,
+      professionalAnalysisStatus: 'complete',
+      professionalAnalysisIdentity: 'old-financial-model'
+    })
+  );
+
+  const restored = session.read();
+
+  assert.equal(restored.quickAnalysis, null);
+  assert.equal(restored.professionalAnalysis, null);
+  assert.equal(restored.quickAnalysisStatus, 'idle');
+  assert.equal(restored.professionalAnalysisStatus, 'idle');
+  assert.equal(restored.consumption.averageMonthlyKwh, 850);
+  assert.equal(restored.userTariff.rateAmdPerKwh, 45);
 });
 
 test('a legacy Professional result without an input fingerprint is discarded but its inputs remain', () => {

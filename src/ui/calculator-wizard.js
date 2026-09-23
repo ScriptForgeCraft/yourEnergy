@@ -16,6 +16,7 @@ import {
 } from './calculator-wizard-state.js';
 import { initConsumptionInput } from './consumption-input.js';
 import { initFileUpload } from './file-upload.js';
+import { createAsyncRequestLifecycle } from './async-request-lifecycle.js';
 import { createCalculatorSession } from './calculator-session.js';
 import {
   createProfessionalAnalysisIdentity,
@@ -152,6 +153,7 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
   const wizard = config.wizard ?? {};
   const locale = config.locale ?? 'en-US';
   const api = new ProductApiClient({ endpoints: config.endpoints ?? {} });
+  const lifecycle = createAsyncRequestLifecycle();
   const passportRepository = new SolarPassportRepository();
   const steps = [...root.querySelectorAll('[data-wizard-step]')];
   const progress = [...root.querySelectorAll('[data-wizard-nav]')];
@@ -268,7 +270,8 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
     ? savedSession.professionalAnalysisIdentity
     : null;
 
-  const persistSession = () =>
+  const persistSession = () => {
+    if (!lifecycle.isActive()) return;
     session.write({
       currentStep: state.currentStep,
       addressNote: state.addressNote,
@@ -290,6 +293,7 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
       professionalAnalysisIdentity,
       professionalSolarPassport: state.solarPassport
     });
+  };
 
   const clearLocationSearchResults = () => {
     if (!locationSearchResults) return;
@@ -338,10 +342,12 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
 
   const stopAddressSearch = () => {
     geocodeRequest?.abort();
+    lifecycle.release(geocodeRequest);
     geocodeRequest = null;
   };
 
   const writeStatus = (message, error = false) => {
+    if (!lifecycle.isActive()) return;
     if (!status) return;
     status.textContent = message ?? '';
     status.classList.toggle('is-error', Boolean(error));
@@ -381,6 +387,7 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
   };
 
   const updateProgress = () => {
+    if (!lifecycle.isActive()) return;
     persistSession();
     const allStepStates = stepStates();
     progress.forEach((button, index) => {
@@ -401,6 +408,7 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
   };
 
   const scrollToTop = () => {
+    if (!lifecycle.isActive()) return;
     const previousScrollBehavior = document.documentElement.style.scrollBehavior;
     document.documentElement.style.scrollBehavior = 'auto';
     window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
@@ -408,14 +416,19 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
   };
 
   const scheduleScrollToTop = () => {
+    if (!lifecycle.isActive()) return;
     scrollToTop();
     requestAnimationFrame(() => {
+      if (!lifecycle.isActive()) return;
       scrollToTop();
-      requestAnimationFrame(scrollToTop);
+      requestAnimationFrame(() => {
+        if (lifecycle.isActive()) scrollToTop();
+      });
     });
   };
 
   const setStep = (nextStep, { focus = true, scroll = true } = {}) => {
+    if (!lifecycle.isActive()) return false;
     const target = Math.max(0, Math.min(Number(nextStep), steps.length - 1));
     if (!isStepAccessible(target)) return false;
     state.currentStep = target;
@@ -442,8 +455,10 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
     updateProgress();
     if (target === 2) {
       void mountMap('roof').then((controller) => {
-        if (!controller || state.currentStep !== 2) return;
-        requestAnimationFrame(() => controller.resize());
+        if (!lifecycle.isActive() || !controller || state.currentStep !== 2) return;
+        requestAnimationFrame(() => {
+          if (lifecycle.isActive()) controller.resize();
+        });
       });
     }
     if (focus) steps[target]?.focus({ preventScroll: true });
@@ -453,10 +468,12 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
 
   const stopPotential = () => {
     potentialRequest?.abort();
+    lifecycle.release(potentialRequest);
     potentialRequest = null;
   };
   const stopAnalysis = () => {
     analysisRequest?.abort();
+    lifecycle.release(analysisRequest);
     analysisRequest = null;
   };
   const clearAnalysis = () => {
@@ -483,6 +500,7 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
   };
 
   const setPendingLocation = (coordinates) => {
+    if (!lifecycle.isActive()) return false;
     const lat = number(coordinates?.lat, -90, 90);
     const lng = number(coordinates?.lng, -180, 180);
     if (lat === null || lng === null) return false;
@@ -498,6 +516,7 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
   };
 
   const chooseAddressCandidate = async (candidate) => {
+    if (!lifecycle.isActive()) return;
     const lat = number(candidate?.coordinates?.latitude, -90, 90);
     const lng = number(candidate?.coordinates?.longitude, -180, 180);
     if (lat === null || lng === null) return;
@@ -505,6 +524,7 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
     clearLocationSearchResults();
     if (!setPendingLocation({ lat, lng })) return;
     const map = await mountMap('location');
+    if (!lifecycle.isActive()) return;
     map?.setLocation({ lat, lng }, { notify: false });
   };
 
@@ -523,6 +543,7 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
   };
 
   const searchAddress = async () => {
+    if (!lifecycle.isActive()) return;
     const query = address?.value.trim() ?? '';
     if (query.length < 3) {
       clearLocationSearchResults();
@@ -531,7 +552,7 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
       return;
     }
     stopAddressSearch();
-    const controller = new AbortController();
+    const controller = lifecycle.createController();
     geocodeRequest = controller;
     const button = root.querySelector('[data-open-location-map]');
     button?.setAttribute('aria-busy', 'true');
@@ -540,7 +561,7 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
     writeStatus(wizard.addressSearching ?? '');
     try {
       const response = await api.geocode({ query, locale }, { signal: controller.signal });
-      if (controller.signal.aborted || geocodeRequest !== controller) return;
+      if (!lifecycle.canCommit(controller, geocodeRequest)) return;
       const candidates = Array.isArray(response?.location?.candidates)
         ? response.location.candidates
         : [];
@@ -551,16 +572,22 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
       writeStatus('');
       renderAddressCandidates(candidates);
     } catch (error) {
+      if (!lifecycle.canCommit(controller, geocodeRequest)) return;
       if (error instanceof ProductApiError && error.code === 'ABORTED') return;
       writeStatus(wizard.addressSearchUnavailable ?? product.location?.unavailable ?? '', true);
     } finally {
-      if (geocodeRequest === controller) geocodeRequest = null;
-      button?.removeAttribute('aria-busy');
-      button?.removeAttribute('disabled');
+      const ownsRequest = geocodeRequest === controller;
+      if (ownsRequest) geocodeRequest = null;
+      lifecycle.release(controller);
+      if (lifecycle.isActive() && ownsRequest) {
+        button?.removeAttribute('aria-busy');
+        button?.removeAttribute('disabled');
+      }
     }
   };
 
   const focusLocality = async (coordinates) => {
+    if (!lifecycle.isActive()) return false;
     const lat = number(coordinates?.lat ?? coordinates?.latitude, -90, 90);
     const lng = number(coordinates?.lng ?? coordinates?.longitude, -180, 180);
     if (lat === null || lng === null) return false;
@@ -571,12 +598,14 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
     syncLocationCoordinates({ lat, lng });
     updateProgress();
     const map = await mountMap('location');
+    if (!lifecycle.isActive()) return false;
     map?.clearLocation();
     map?.focusLocation({ lat, lng }, { zoom: 14 });
     return true;
   };
 
   const locateSelectedLocality = async () => {
+    if (!lifecycle.isActive()) return;
     const locality = localitySelect?.value.trim() ?? '';
     if (!locality) return;
     const regionId = regionSelect?.value;
@@ -586,6 +615,7 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
       clearLocationSearchResults();
       if (address) address.value = '';
       await focusLocality(selectedCenter);
+      if (!lifecycle.isActive()) return;
       writeStatus('');
       return;
     }
@@ -593,14 +623,14 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
     const query = [locality, regionName, 'Armenia'].filter(Boolean).join(', ');
     if (address) address.value = query;
     stopAddressSearch();
-    const controller = new AbortController();
+    const controller = lifecycle.createController();
     geocodeRequest = controller;
     localitySelect.disabled = true;
     clearLocationSearchResults();
     writeStatus(wizard.addressSearching ?? '');
     try {
       const response = await api.geocode({ query, locale }, { signal: controller.signal });
-      if (controller.signal.aborted || geocodeRequest !== controller) return;
+      if (!lifecycle.canCommit(controller, geocodeRequest)) return;
       const candidates = Array.isArray(response?.location?.candidates)
         ? response.location.candidates
         : [];
@@ -610,16 +640,20 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
       }
       writeStatus('');
     } catch (error) {
+      if (!lifecycle.canCommit(controller, geocodeRequest)) return;
       if (error instanceof ProductApiError && error.code === 'ABORTED') return;
       writeStatus(wizard.addressSearchUnavailable ?? product.location?.unavailable ?? '', true);
     } finally {
-      if (geocodeRequest === controller) geocodeRequest = null;
-      if (localitySelect)
+      const ownsRequest = geocodeRequest === controller;
+      if (ownsRequest) geocodeRequest = null;
+      lifecycle.release(controller);
+      if (lifecycle.isActive() && ownsRequest && localitySelect)
         localitySelect.disabled = localitiesForRegion(regionSelect?.value).length === 0;
     }
   };
 
   const useCurrentLocation = () => {
+    if (!lifecycle.isActive()) return;
     if (!window.isSecureContext || !navigator.geolocation) {
       writeStatus(wizard.currentLocationUnavailable ?? '', true);
       return;
@@ -627,6 +661,7 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
     writeStatus(wizard.currentLocationLoading ?? '');
     navigator.geolocation.getCurrentPosition(
       (position) => {
+        if (!lifecycle.isActive()) return;
         const lat = number(position.coords.latitude, -90, 90);
         const lng = number(position.coords.longitude, -180, 180);
         if (lat === null || lng === null || !setPendingLocation({ lat, lng })) {
@@ -634,14 +669,19 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
           return;
         }
         writeStatus('');
-        void mountMap('location').then((map) => map?.setLocation({ lat, lng }, { notify: false }));
+        void mountMap('location').then((map) => {
+          if (lifecycle.isActive()) map?.setLocation({ lat, lng }, { notify: false });
+        });
       },
-      () => writeStatus(wizard.currentLocationUnavailable ?? '', true),
+      () => {
+        if (lifecycle.isActive()) writeStatus(wizard.currentLocationUnavailable ?? '', true);
+      },
       { enableHighAccuracy: false, timeout: 10_000, maximumAge: 300_000 }
     );
   };
 
   const onRoofChange = (roof) => {
+    if (!lifecycle.isActive()) return;
     state.roof = roof;
     if (roofPoints)
       roofPoints.textContent = text(product.roof?.pointsLabel, { count: roof.points.length });
@@ -681,24 +721,37 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
   };
 
   const mountMap = async (mode) => {
+    if (!lifecycle.isActive()) return null;
     const host = mode === 'roof' ? roofMapHost : locationMapWrap;
     if (!mapElement || !host) return null;
     if (mode === 'location' && locationMapWrap) locationMapWrap.hidden = false;
     try {
       if (!mapController) {
-        mapControllerPromise ??= createPropertyMap({
-          container: mapElement,
-          tileUrl: config.map?.tileUrl,
-          tileAttribution: config.map?.tileAttribution,
-          imageryTileUrl: config.map?.imageryTileUrl,
-          imageryTileAttribution: config.map?.imageryTileAttribution,
-          locationPointLabel: product.location?.resultLabel,
-          roofPointLabel: (index) => text(product.roof?.pointSelectLabel, { index: index + 1 }),
-          onLocationChange: setPendingLocation,
-          onRoofChange
-        });
-        mapController = await mapControllerPromise;
+        const pendingMap =
+          mapControllerPromise ??
+          createPropertyMap({
+            container: mapElement,
+            tileUrl: config.map?.tileUrl,
+            tileAttribution: config.map?.tileAttribution,
+            imageryTileUrl: config.map?.imageryTileUrl,
+            imageryTileAttribution: config.map?.imageryTileAttribution,
+            locationPointLabel: product.location?.resultLabel,
+            roofPointLabel: (index) => text(product.roof?.pointSelectLabel, { index: index + 1 }),
+            onLocationChange: setPendingLocation,
+            onRoofChange
+          });
+        mapControllerPromise ??= pendingMap;
+        const createdMap = await pendingMap;
+        if (!lifecycle.isActive()) {
+          if (mapControllerPromise === pendingMap) {
+            mapControllerPromise = null;
+            createdMap?.destroy();
+          }
+          return null;
+        }
+        mapController = createdMap;
       }
+      if (!lifecycle.isActive()) return null;
       mapController?.mount(host);
       mapController?.setMode(mode);
       if (mode === 'roof') {
@@ -716,6 +769,7 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
       return mapController;
     } catch {
       mapControllerPromise = null;
+      if (!lifecycle.isActive()) return null;
       writeStatus(product.roof?.fallback ?? product.location?.manualUnavailable, true);
       return null;
     }
@@ -779,7 +833,7 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
   };
 
   const requestPotential = async ({ force = false } = {}) => {
-    if (!state.confirmedProperty || potentialRequest) return;
+    if (!lifecycle.isActive() || !state.confirmedProperty || potentialRequest) return;
     const fingerprint = `${state.confirmedProperty.lat.toFixed(5)},${state.confirmedProperty.lng.toFixed(5)}`;
     const remaining =
       lastPotential?.fingerprint === fingerprint
@@ -794,7 +848,7 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
       return;
     }
     stopPotential();
-    const controller = new AbortController();
+    const controller = lifecycle.createController();
     potentialRequest = controller;
     lastPotential = { fingerprint, startedAt: Date.now() };
     setPotentialOutcome({ status: WIZARD_STEP_STATUSES.LOADING });
@@ -815,7 +869,7 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
         },
         { signal: controller.signal }
       );
-      if (controller.signal.aborted || potentialRequest !== controller) return;
+      if (!lifecycle.canCommit(controller, potentialRequest)) return;
       const potential = response?.potential;
       if (
         !Array.isArray(potential?.monthlyYieldKwhPerKwp) ||
@@ -827,6 +881,7 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
       if (potentialLoading) potentialLoading.textContent = '';
       updateProgress();
     } catch (error) {
+      if (!lifecycle.canCommit(controller, potentialRequest)) return;
       if (error instanceof ProductApiError && error.code === 'ABORTED') return;
       setPotentialOutcome({ status: WIZARD_STEP_STATUSES.UNAVAILABLE });
       if (potentialLoading) potentialLoading.textContent = describeError(error, product);
@@ -835,16 +890,18 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
       updateProgress();
     } finally {
       if (potentialRequest === controller) potentialRequest = null;
+      lifecycle.release(controller);
     }
   };
 
   const confirmLocation = async () => {
-    if (!state.pendingLocation) return;
+    if (!lifecycle.isActive() || !state.pendingLocation) return;
     state.addressNote = address?.value.trim() ?? '';
     state.confirmedProperty = { ...state.pendingLocation };
     setPotentialOutcome({ status: WIZARD_STEP_STATUSES.AVAILABLE });
     pointConfirmation.hidden = true;
     await mountMap('location');
+    if (!lifecycle.isActive()) return;
     mapController?.setLocation(state.confirmedProperty, { notify: false });
     setStep(1);
     void requestPotential();
@@ -911,6 +968,7 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
     if (roofNoticeCopy) roofNoticeCopy.textContent = messages[issue] ?? '';
     field?.setAttribute('aria-invalid', 'true');
     requestAnimationFrame(() => {
+      if (!lifecycle.isActive()) return;
       roofNotice?.scrollIntoView({ block: 'center', behavior: 'smooth' });
       field?.focus({ preventScroll: true });
     });
@@ -921,9 +979,9 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
     roofNotice?.classList.add('is-error');
     roofNotice?.setAttribute('role', 'alert');
     if (roofNoticeCopy) roofNoticeCopy.textContent = message ?? '';
-    requestAnimationFrame(() =>
-      roofNotice?.scrollIntoView({ block: 'center', behavior: 'smooth' })
-    );
+    requestAnimationFrame(() => {
+      if (lifecycle.isActive()) roofNotice?.scrollIntoView({ block: 'center', behavior: 'smooth' });
+    });
   };
 
   const hasRoof = () => getRoofValidationIssue(roofGeometry()) === null;
@@ -971,6 +1029,8 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
     const monthly = scenario.generation?.monthlyKwh ?? [];
     const annualSavings = scenario.financial?.annualSavingsAmd;
     const avoidedCo2 = analysis.environmental?.avoidedCo2Tons;
+    const surplusEnergyKwh = number(scenario.energyBalance?.surplusEnergyKwh, 0);
+    const surplusCompensationValueAmd = number(scenario.financial?.surplusCompensationValueAmd, 0);
     resultDashboard.replaceChildren();
     const metrics = element('dl', 'wizard-kpis result-kpis');
     metrics.append(
@@ -998,6 +1058,22 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
       )
     );
     resultDashboard.append(metrics);
+    if (surplusEnergyKwh !== null && surplusEnergyKwh > 0) {
+      const compensationCopy =
+        surplusCompensationValueAmd === null
+          ? wizard.surplusCompensationUnavailableCopy
+          : wizard.surplusCompensationValueCopy;
+      resultDashboard.append(
+        element(
+          'p',
+          'result-notice',
+          text(compensationCopy, {
+            surplus: format(surplusEnergyKwh, locale),
+            value: format(surplusCompensationValueAmd, locale)
+          })
+        )
+      );
+    }
     const equipment = analysis.equipment ?? scenario.system?.equipment;
     if (equipment?.panelBrand && equipment?.panelModel) {
       resultDashboard.append(
@@ -1229,6 +1305,7 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
   };
 
   const runAnalysis = async () => {
+    if (!lifecycle.isActive()) return;
     const consumption = consumptionInput?.read();
     if (!consumption?.valid) {
       writeStatus(consumption?.message ?? product.consumption?.noConsumption, true);
@@ -1257,7 +1334,7 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
       return;
     }
     stopAnalysis();
-    const controller = new AbortController();
+    const controller = lifecycle.createController();
     analysisRequest = controller;
     state.analysisStatus = WIZARD_STEP_STATUSES.LOADING;
     lastAnalysis = { fingerprint, startedAt: Date.now() };
@@ -1269,7 +1346,7 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
     try {
       // selectedBillFile is deliberately not part of this payload.
       const response = await api.analyze(payload, { signal: controller.signal });
-      if (controller.signal.aborted || analysisRequest !== controller) return;
+      if (!lifecycle.canCommit(controller, analysisRequest)) return;
       state.analysis = response?.analysis ?? null;
       if (!state.analysis) throw new ProductApiError('MALFORMED_RESPONSE');
       state.analysisStatus = WIZARD_STEP_STATUSES.COMPLETE;
@@ -1288,6 +1365,7 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
       writeStatus('');
       setStep(3);
     } catch (error) {
+      if (!lifecycle.canCommit(controller, analysisRequest)) return;
       if (error instanceof ProductApiError && error.code === 'ABORTED') return;
       state.analysisStatus = WIZARD_STEP_STATUSES.UNAVAILABLE;
       const described = describeError(error, product);
@@ -1299,9 +1377,13 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
       showRoofActionError(message);
       updateProgress();
     } finally {
-      if (analysisRequest === controller) analysisRequest = null;
-      button?.removeAttribute('aria-busy');
-      button?.removeAttribute('disabled');
+      const ownsRequest = analysisRequest === controller;
+      if (ownsRequest) analysisRequest = null;
+      lifecycle.release(controller);
+      if (lifecycle.isActive() && ownsRequest) {
+        button?.removeAttribute('aria-busy');
+        button?.removeAttribute('disabled');
+      }
     }
   };
 
@@ -1327,6 +1409,24 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
       wizard.metrics?.system ?? 'System',
       `${format(analysis.selectedScenario?.system?.capacityKwp, locale, { maximumFractionDigits: 2 })} kWp · ${format(analysis.selectedScenario?.system?.panelCount, locale)} × ${format(analysis.selectedScenario?.system?.panelWatts, locale)} W${analysis.equipment?.panelBrand && analysis.equipment?.panelModel ? ` · ${analysis.equipment.panelBrand} ${analysis.equipment.panelModel}` : ''}`
     );
+    const surplusEnergyKwh = number(analysis.selectedScenario?.energyBalance?.surplusEnergyKwh, 0);
+    const surplusCompensationValueAmd = number(
+      analysis.selectedScenario?.financial?.surplusCompensationValueAmd,
+      0
+    );
+    if (surplusEnergyKwh !== null && surplusEnergyKwh > 0) {
+      const compensationCopy =
+        surplusCompensationValueAmd === null
+          ? wizard.surplusCompensationUnavailableCopy
+          : wizard.surplusCompensationValueCopy;
+      add(
+        wizard.surplusEnergy ?? 'Surplus generation',
+        text(compensationCopy, {
+          surplus: format(surplusEnergyKwh, locale),
+          value: format(surplusCompensationValueAmd, locale)
+        })
+      );
+    }
     const inverter = analysis.inverterRecommendation;
     if (inverter?.productId && Number.isFinite(Number(inverter.selectedAcPowerKw))) {
       add(
@@ -1477,7 +1577,9 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
       return;
     }
     setPendingLocation({ lat, lng });
-    void mountMap('location').then((map) => map?.setLocation({ lat, lng }, { notify: false }));
+    void mountMap('location').then((map) => {
+      if (lifecycle.isActive()) map?.setLocation({ lat, lng }, { notify: false });
+    });
   };
   root
     .querySelector('[data-location-coordinates-submit]')
@@ -1499,6 +1601,7 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
     syncLocationCoordinates(center);
     updateProgress();
     void mountMap('location').then((map) => {
+      if (!lifecycle.isActive()) return;
       map?.clearLocation();
       map?.focusLocation(center);
     });
@@ -1519,6 +1622,7 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
       const layer = button.dataset.mapLayer;
       if (!layer) return;
       void mountMap('location').then((map) => {
+        if (!lifecycle.isActive()) return;
         if (!map?.setLayer(layer)) return;
         root.querySelectorAll('[data-map-layer]').forEach((item) => {
           item.classList.toggle('is-active', item.dataset.mapLayer === layer);
@@ -1530,6 +1634,7 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
     button.addEventListener('click', () => {
       const layer = index === 0 ? 'map' : 'satellite';
       void mountMap('roof').then((map) => {
+        if (!lifecycle.isActive()) return;
         if (!map?.setLayer(layer)) return;
         root
           .querySelectorAll('.professional-roof-map__layers button')
@@ -1551,7 +1656,7 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
   });
   const useRoofMap = (action) => {
     void mountMap('roof').then((controller) => {
-      if (controller) action(controller);
+      if (lifecycle.isActive() && controller) action(controller);
     });
   };
   root
@@ -1590,9 +1695,9 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
     if (!panelId || panelId === state.selectedPanelId) return;
     state.selectedPanelId = panelId;
     calculationPanel.value = panelId;
-    // This clears both saved analysis variants before the new panel can be
-    // used, so Back/Forward and cross-route session handoffs cannot show the
-    // prior module's roof fit or installed capacity.
+    // This clears the Professional result before the new panel can be used,
+    // so Back/Forward and cross-route session handoffs cannot show the prior
+    // module's roof fit or installed capacity.
     session.selectPanel(panelId);
     clearAnalysis();
     lastAnalysis = null;
@@ -1611,7 +1716,9 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
   root.querySelector('[data-run-analysis]')?.addEventListener('click', () => void runAnalysis());
   root.querySelector('[data-add-tariff]')?.addEventListener('click', () => {
     setStep(1);
-    requestAnimationFrame(() => root.querySelector('[data-consumption-tariff]')?.focus());
+    requestAnimationFrame(() => {
+      if (lifecycle.isActive()) root.querySelector('[data-consumption-tariff]')?.focus();
+    });
   });
   root.querySelector('[data-wizard-restart]')?.addEventListener('click', () => {
     session.clear();
@@ -1641,7 +1748,7 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
   setStep(restoredStep, { focus: false });
   if (state.currentStep === 0)
     void mountMap('location').then((map) => {
-      if (!map || state.confirmedProperty || state.pendingLocation) return;
+      if (!lifecycle.isActive() || !map || state.confirmedProperty || state.pendingLocation) return;
       const lat = number(latitudeInput?.value, -90, 90);
       const lng = number(longitudeInput?.value, -180, 180);
       if (lat !== null && lng !== null) {
@@ -1649,5 +1756,14 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
         syncLocationCoordinates({ lat, lng });
       }
     });
-  return { state, getSelectedBillFile: () => fileUpload.getFile() };
+  const destroy = () => {
+    if (!lifecycle.destroy()) return;
+    stopAddressSearch();
+    stopPotential();
+    stopAnalysis();
+    mapController?.destroy();
+    mapController = null;
+    if (passportDialog?.open) passportDialog.close();
+  };
+  return { state, getSelectedBillFile: () => fileUpload.getFile(), destroy };
 };

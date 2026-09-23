@@ -2,10 +2,12 @@ export { ANALYSIS_STATUS, DATA_COMPLETENESS_LEVEL, SOURCE_KIND, SOURCE_STATUS } 
 export { normalizeConsumption, isNormalizedConsumption } from './consumption.js';
 export {
   getConfirmedTariffRate,
+  getUsableSurplusCompensationRate,
   getUsableTariffRate,
   isConfirmedTariff,
   listRegistryTariffOptions,
   selectEffectiveTariff,
+  selectEffectiveSurplusCompensation,
   suggestStandardTariff,
   toIsoDate,
   createRegistryTariffSelection,
@@ -66,6 +68,7 @@ export {
   createSolarPassportId
 } from './solar-passport.js';
 export { ARMENIA_TARIFF_DATASET } from '../data/tariffs/armenia.js';
+export { ARMENIA_SURPLUS_COMPENSATION_DATASET } from '../data/regulatory/armenia-surplus-compensation.js';
 export { ARMENIA_GRID_CO2_FACTOR } from '../data/environment/armenia-grid-co2.js';
 export { EPA_URBAN_TREE_CO2_EQUIVALENCY } from '../data/environment/epa-tree-co2-equivalence.js';
 export { ARMENIA_PRICEBOOKS, TEMPORARY_YOURENERGY_PRICEBOOK } from '../data/pricebooks/armenia.js';

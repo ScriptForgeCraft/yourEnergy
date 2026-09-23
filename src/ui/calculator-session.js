@@ -1,8 +1,8 @@
 import { PROFESSIONAL_ANALYSIS_SCOPE } from './professional-analysis-identity.js';
 
 const SESSION_KEY = 'yourenergy.calculator.v2';
-const SESSION_VERSION = 3;
-const LEGACY_SESSION_VERSION = 2;
+const SESSION_VERSION = 4;
+const LEGACY_SESSION_VERSIONS = new Set([2, 3]);
 
 const cloneSafe = (value) => {
   if (!value || typeof value !== 'object') return value ?? null;
@@ -36,39 +36,28 @@ const isQuickAnalysis = (analysis) => analysis?.scope === 'regional-preliminary'
 const isProfessionalAnalysis = (analysis) => analysis?.scope === PROFESSIONAL_ANALYSIS_SCOPE;
 
 /**
- * Version 2 stored two incompatible scopes in a generic `analysis` field.
- * Retain every reusable input while moving an unambiguous result into its
- * scoped slot. Unknown or incomplete legacy results are discarded rather than
- * ever being promoted from a regional estimate to a property calculation.
+ * Versions 2 and 3 can contain financial output that valued annual generation
+ * above consumption at the retail tariff. Retain reusable inputs but discard
+ * every cached result so an old payback value is never restored.
  */
-const migrateLegacyState = (stored = {}) => {
-  const legacyAnalysis = stored.analysis;
-  const quickAnalysis = isQuickAnalysis(stored.quickAnalysis)
-    ? stored.quickAnalysis
-    : isQuickAnalysis(legacyAnalysis)
-      ? legacyAnalysis
-      : null;
-  return {
-    ...emptyState(),
-    ...stored,
-    version: SESSION_VERSION,
-    quickAnalysis,
-    quickAnalysisStatus: quickAnalysis ? 'complete' : 'idle',
-    professionalAnalysis: null,
-    professionalAnalysisStatus: 'idle',
-    // Legacy Professional results did not have an input fingerprint and are
-    // intentionally not restorable. The visible inputs are still preserved.
-    professionalAnalysisIdentity: null,
-    professionalSolarPassport: null
-  };
-};
+const migrateFinancialModelState = (stored = {}) => ({
+  ...emptyState(),
+  ...stored,
+  version: SESSION_VERSION,
+  quickAnalysis: null,
+  quickAnalysisStatus: 'idle',
+  professionalAnalysis: null,
+  professionalAnalysisStatus: 'idle',
+  professionalAnalysisIdentity: null,
+  professionalSolarPassport: null
+});
 
 const readStoredState = (stored) => {
   const state =
     stored?.version === SESSION_VERSION
       ? { ...emptyState(), ...stored }
-      : stored?.version === LEGACY_SESSION_VERSION
-        ? migrateLegacyState(stored)
+      : LEGACY_SESSION_VERSIONS.has(stored?.version)
+        ? migrateFinancialModelState(stored)
         : emptyState();
   delete state.analysis;
   delete state.analysisStatus;

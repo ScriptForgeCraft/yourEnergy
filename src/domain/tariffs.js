@@ -1,4 +1,5 @@
 import { ARMENIA_TARIFF_DATASET } from '../data/tariffs/armenia.js';
+import { ARMENIA_SURPLUS_COMPENSATION_DATASET } from '../data/regulatory/armenia-surplus-compensation.js';
 import { cleanString, toPositiveNumberOrNull } from './numbers.js';
 import { SOURCE_KIND, SOURCE_STATUS } from './models.js';
 
@@ -109,6 +110,104 @@ const normalizedRecords = (dataset, requestedDate) => {
     ? dataset.records.map((record) => normalizeRecord(record, metadata.currency))
     : [];
   return { metadata, records: records.filter((record) => isEffectiveOn(record, requestedDate)) };
+};
+
+const normalizeSurplusCompensationRecord = (record, currency) => ({
+  id: cleanString(record?.id),
+  datasetRevision: cleanString(record?.datasetRevision),
+  effectiveFrom: toIsoDate(record?.effectiveFrom),
+  effectiveTo: toIsoDate(record?.effectiveTo),
+  status: record?.status === 'confirmed' ? 'confirmed' : 'unavailable',
+  rateAmdPerKwh: toPositiveNumberOrNull(record?.rateAmdPerKwh),
+  currency: cleanString(record?.currency) ?? currency ?? 'AMD',
+  source: normalizeSource(record?.source)
+});
+
+const hasConfirmedSurplusCompensation = (record) =>
+  record.status === 'confirmed' &&
+  record.currency === 'AMD' &&
+  record.rateAmdPerKwh !== null &&
+  record.source.kind === SOURCE_KIND.REGISTRY &&
+  record.source.status === SOURCE_STATUS.CONFIRMED &&
+  Boolean(record.source.verifiedAt);
+
+/**
+ * Selects a dated, verified surplus-compensation record. It is deliberately
+ * separate from consumer retail tariffs: an empty registry does not imply that
+ * excess generation is worth the retail electricity rate.
+ */
+export const selectEffectiveSurplusCompensation = (
+  dataset = ARMENIA_SURPLUS_COMPENSATION_DATASET,
+  effectiveDate = new Date()
+) => {
+  const requestedDate = toIsoDate(effectiveDate);
+  const metadata = datasetMetadata(dataset);
+  if (!requestedDate) {
+    return {
+      kind: 'regulatory-registry',
+      available: false,
+      requestedDate: null,
+      dataset: metadata,
+      compensation: null,
+      reason: 'INVALID_EFFECTIVE_DATE',
+      source: unavailableSource
+    };
+  }
+
+  const records = Array.isArray(dataset?.records)
+    ? dataset.records
+        .map((record) => normalizeSurplusCompensationRecord(record, metadata.currency))
+        .filter((record) => isEffectiveOn(record, requestedDate))
+    : [];
+  if (!records.length) {
+    return {
+      kind: 'regulatory-registry',
+      available: false,
+      requestedDate,
+      dataset: metadata,
+      compensation: null,
+      reason: 'SURPLUS_COMPENSATION_NOT_CONFIGURED',
+      source: normalizeSource(dataset?.source)
+    };
+  }
+
+  const candidate = records.sort((left, right) =>
+    right.effectiveFrom.localeCompare(left.effectiveFrom)
+  )[0];
+  if (!hasConfirmedSurplusCompensation(candidate)) {
+    return {
+      kind: 'regulatory-registry',
+      available: false,
+      requestedDate,
+      dataset: metadata,
+      compensation: candidate,
+      reason: 'UNVERIFIED_SURPLUS_COMPENSATION',
+      source: candidate.source
+    };
+  }
+
+  return {
+    kind: 'regulatory-registry',
+    available: true,
+    requestedDate,
+    dataset: metadata,
+    compensation: {
+      ...candidate,
+      datasetRevision: metadata.revision
+    },
+    reason: 'CONFIRMED_SURPLUS_COMPENSATION',
+    source: candidate.source
+  };
+};
+
+/** Returns only a verified, dated regulatory surplus-compensation rate. */
+export const getUsableSurplusCompensationRate = (selectionOrCompensation) => {
+  const selection = selectionOrCompensation?.compensation ? selectionOrCompensation : null;
+  const compensation = selection?.compensation ?? selectionOrCompensation;
+  const normalized = normalizeSurplusCompensationRecord(compensation, compensation?.currency);
+  return selection && selection.available && hasConfirmedSurplusCompensation(normalized)
+    ? normalized.rateAmdPerKwh
+    : null;
 };
 
 /**

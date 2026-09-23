@@ -7,7 +7,8 @@ const copy = {
     steps: ['Օբյեկտ', 'Սպառում', 'Տանիք', 'Արդյունք'],
     engineering: 'Ինժեներական պարամետրեր',
     calculationPanelLabel: 'Հաշվարկային արևային մոդուլ',
-    calculationPanelHelp: 'Հաշվարկը օգտագործում է ընտրված մոդուլի հզորությունն ու ֆիզիկական մակերեսը։',
+    calculationPanelHelp:
+      'Հաշվարկը օգտագործում է ընտրված մոդուլի հզորությունն ու ֆիզիկական մակերեսը։',
     storageRequestLabel: 'Ներառել կուտակիչի / պահուստի գնահատում',
     storageRequestHelp:
       'Ճշգրիտ ընտրության համար անհրաժեշտ են կրիտիկական բեռի և պահուստի տևողության տվյալներ։',
@@ -63,6 +64,11 @@ const copy = {
     },
     budget: 'YOURENERGY-ի նախնական բյուջե',
     roofLimit: 'Հզորությունը սահմանափակված է հասանելի տանիքի մակերեսով',
+    surplusEnergy: 'Ավելցուկային արտադրություն',
+    surplusCompensationUnavailableCopy:
+      '{surplus} kWh/տարին գերազանցում է տարեկան սպառումը։ Ավելցուկի դրամական արժեքը և հետգնման ժամկետը չեն ցուցադրվում, քանի դեռ չի կարգավորվել հաստատված փոխհատուցման սակագին։',
+    surplusCompensationValueCopy:
+      'Ավելցուկային արտադրություն՝ {surplus} kWh/տարի · փոխհատուցման արժեք՝ {value} AMD/տարի։',
     tariffNeeded:
       'Խնայողությունն ու հետգնման ժամկետը տեսնելու համար մուտքագրեք ձեր հաշվի սակագինը։',
     addTariff: 'Ավելացնել սակագին',
@@ -170,7 +176,8 @@ const copy = {
     potentialReady:
       'PVGIS в фоне проверяет солнечный ресурс выбранной точки. Он не измеряет крышу автоматически.',
     potentialSkip: 'Продолжить без PVGIS',
-    roofIntro: 'Задайте площадь и параметры крыши, чтобы уточнить предварительную оценку солнечного потенциала.',
+    roofIntro:
+      'Задайте площадь и параметры крыши, чтобы уточнить предварительную оценку солнечного потенциала.',
     parallel: 'Параллельно крыше',
     elevated: 'Приподнятая конструкция',
     drawRoof:
@@ -192,6 +199,11 @@ const copy = {
     },
     budget: 'Предварительный бюджет YOURENERGY',
     roofLimit: 'Мощность ограничена доступной площадью крыши',
+    surplusEnergy: 'Избыточная выработка',
+    surplusCompensationUnavailableCopy:
+      '{surplus} кВт·ч/год превышают годовое потребление. Денежная оценка избытка и окупаемость не показаны, пока не будет настроена подтверждённая ставка компенсации.',
+    surplusCompensationValueCopy:
+      'Избыточная выработка: {surplus} кВт·ч/год · компенсация: {value} AMD/год.',
     tariffNeeded: 'Хотите увидеть экономию и окупаемость? Укажите тариф из вашего счёта.',
     addTariff: 'Добавить тариф',
     openPassport: 'Открыть Solar Passport',
@@ -320,6 +332,11 @@ const copy = {
     },
     budget: 'YOURENERGY preliminary budget',
     roofLimit: 'Capacity is limited by the available roof area',
+    surplusEnergy: 'Surplus generation',
+    surplusCompensationUnavailableCopy:
+      '{surplus} kWh/year exceeds annual consumption. Its monetary value and payback are unavailable until a verified surplus-compensation rate is configured.',
+    surplusCompensationValueCopy:
+      'Surplus generation: {surplus} kWh/year · compensation value: {value} AMD/year.',
     tariffNeeded: 'Want to see savings and payback? Add the tariff from your bill.',
     addTariff: 'Add tariff',
     openPassport: 'Open Solar Passport',

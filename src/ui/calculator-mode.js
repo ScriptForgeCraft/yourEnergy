@@ -49,6 +49,22 @@ export const initCalculatorMode = async ({ config = {} } = {}) => {
   const quickHref = new URL('.', window.location.href).pathname;
   const modeCopy = config.modeControl ?? {};
   let professionalMarkup = null;
+  let professionalMarkupRequest = null;
+  let currentInstance = null;
+  let renderEpoch = 0;
+  let destroyed = false;
+
+  const destroyCurrentInstance = () => {
+    currentInstance?.destroy?.();
+    currentInstance = null;
+  };
+
+  const isCurrentRender = (epoch) => !destroyed && epoch === renderEpoch;
+
+  const stopProfessionalMarkupLoad = () => {
+    professionalMarkupRequest?.abort();
+    professionalMarkupRequest = null;
+  };
 
   const bindModeControls = (render) => {
     stage.querySelectorAll('[data-calculator-mode]').forEach((control) => {
@@ -63,47 +79,67 @@ export const initCalculatorMode = async ({ config = {} } = {}) => {
     });
   };
 
-  const initializeQuick = async (render, { replace = false } = {}) => {
+  const initializeQuick = async (render, epoch, { replace = false } = {}) => {
+    if (!isCurrentRender(epoch)) return;
     if (replace) stage.innerHTML = quickMarkup;
     const { initQuickCalculator } = await import('./quick-calculator.js');
-    initQuickCalculator({ config });
+    if (!isCurrentRender(epoch)) return;
+    currentInstance = initQuickCalculator({ config });
     bindModeControls(render);
   };
 
   const loadProfessionalMarkup = async () => {
     if (professionalMarkup) return professionalMarkup;
-    const response = await fetch(professionalSource, {
-      credentials: 'same-origin',
-      headers: { Accept: 'text/html' }
-    });
-    if (!response.ok)
-      throw new Error(`Professional calculator request failed (${response.status})`);
-    const documentFragment = new DOMParser().parseFromString(await response.text(), 'text/html');
-    const main = documentFragment.querySelector('main');
-    if (!main?.innerHTML) throw new Error('Professional calculator markup is unavailable.');
-    professionalMarkup = {
-      main: main.innerHTML,
-      passport: documentFragment.querySelector('[data-passport-dialog]')?.outerHTML ?? ''
-    };
-    return professionalMarkup;
+    stopProfessionalMarkupLoad();
+    const controller = new AbortController();
+    professionalMarkupRequest = controller;
+    try {
+      const response = await fetch(professionalSource, {
+        credentials: 'same-origin',
+        headers: { Accept: 'text/html' },
+        signal: controller.signal
+      });
+      if (!response.ok)
+        throw new Error(`Professional calculator request failed (${response.status})`);
+      const documentFragment = new DOMParser().parseFromString(await response.text(), 'text/html');
+      const main = documentFragment.querySelector('main');
+      if (!main?.innerHTML) throw new Error('Professional calculator markup is unavailable.');
+      professionalMarkup = {
+        main: main.innerHTML,
+        passport: documentFragment.querySelector('[data-passport-dialog]')?.outerHTML ?? ''
+      };
+      return professionalMarkup;
+    } finally {
+      if (professionalMarkupRequest === controller) professionalMarkupRequest = null;
+    }
   };
 
   const render = async (mode) => {
+    const epoch = ++renderEpoch;
+    destroyCurrentInstance();
+    stopProfessionalMarkupLoad();
+    if (!isCurrentRender(epoch)) return;
     stage.setAttribute('aria-busy', 'true');
     document.body.classList.toggle('calculator-page--professional', mode === 'professional');
     document.body.classList.toggle('calculator-page--quick', mode !== 'professional');
     syncLanguageLinks(mode);
     try {
       if (mode !== 'professional') {
-        await initializeQuick(render, { replace: true });
+        await initializeQuick(render, epoch, { replace: true });
         return;
       }
+      // Detach the retired Quick controls while the Professional markup is
+      // loading. Their instance has already been destroyed above.
+      stage.replaceChildren();
       const markup = await loadProfessionalMarkup();
+      if (!isCurrentRender(epoch)) return;
       stage.innerHTML = `${markup.main}${markup.passport}`;
       const { initCalculatorWizard } = await import('./calculator-wizard.js');
-      initCalculatorWizard({ config });
+      if (!isCurrentRender(epoch)) return;
+      currentInstance = initCalculatorWizard({ config });
       bindModeControls(render);
     } catch {
+      if (!isCurrentRender(epoch)) return;
       stage.replaceChildren(
         errorView(
           modeCopy.unavailable ?? 'Professional mode is temporarily unavailable.',
@@ -112,14 +148,23 @@ export const initCalculatorMode = async ({ config = {} } = {}) => {
         )
       );
     } finally {
-      stage.removeAttribute('aria-busy');
+      if (isCurrentRender(epoch)) stage.removeAttribute('aria-busy');
     }
   };
 
-  window.addEventListener('popstate', () => {
+  const onPopstate = () => {
     void render(isProfessionalUrl() ? 'professional' : 'quick');
-  });
+  };
+  window.addEventListener('popstate', onPopstate);
 
   await render(isProfessionalUrl() ? 'professional' : 'quick');
-  return { render };
+  const destroy = () => {
+    if (destroyed) return;
+    destroyed = true;
+    renderEpoch += 1;
+    destroyCurrentInstance();
+    stopProfessionalMarkupLoad();
+    window.removeEventListener('popstate', onPopstate);
+  };
+  return { render, destroy };
 };

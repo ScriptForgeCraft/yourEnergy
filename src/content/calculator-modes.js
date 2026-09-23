@@ -122,6 +122,7 @@ const common = {
       trees: 'Ծառերի համարժեք',
       budget: 'Նախնական բյուջե',
       savings: 'Տարեկան խնայողություն',
+      surplusEnergy: 'Ավելցուկային արտադրություն',
       payback: 'Հետգնման ժամկետ',
       refine: 'Ճշգրտել իմ տանիքով',
       contact: 'Ստանալ առաջարկ',
@@ -144,6 +145,8 @@ const common = {
         'Հաշվարկը նախնական է։ Վերջնական պարամետրերն ու արժեքը հաստատվում են օբյեկտի ինժեներական ստուգումից հետո։',
       noTariff:
         'Խնայողության և հետգնման համար ավելացրեք սակագինը կամ օգտագործեք ձեր հաշվի տվյալները։',
+      surplusValueUnavailable:
+        'Տարեկան սպառումից բարձր արտադրությունը ցուցադրվում է առանձին։ Դրա դրամական արժեքն ու հետգնման ժամկետը հասանելի չեն, քանի դեռ չի կարգավորվել հաստատված փոխհատուցման սակագին։',
       priceUnavailable:
         'Նախնական գների միջակայքն այժմ հասանելի չէ։ Հարցրեք ինժեներական զննում՝ ընթացիկ արժեքը հաստատելու համար։',
       benefitsLabel: 'Արևային էներգիայի առավելությունները',
@@ -206,7 +209,8 @@ const common = {
     pro: {
       eyebrow: 'Պրոֆեսիոնալ ռեժիմ',
       title: 'Արևային պրոֆեսիոնալ հաշվիչ',
-      intro: 'Մանրամասն նախնական վերլուծություն՝ հասանելի պարամետրերով։ Պլանավորեք համակարգը քայլ առ քայլ։',
+      intro:
+        'Մանրամասն նախնական վերլուծություն՝ հասանելի պարամետրերով։ Պլանավորեք համակարգը քայլ առ քայլ։',
       steps: ['Տեղադրություն', 'Սպառում', 'Տանիք', 'Արդյունքներ'],
       locationTitle: 'Տեղադրություն',
       locationCopy:
@@ -237,7 +241,8 @@ const common = {
         restart: 'Սկսել նորից',
         potential: 'Ձեր արևային ներուժը',
         heroLines: ['Ավելի մաքուր,', 'ավելի պայծառ ապագան', 'սկսվում է այստեղ'],
-        heroCopy: 'Տեսեք ձեր տանիքի համար հաշվարկված արևային արտադրությունն ու հնարավոր խնայողությունը։',
+        heroCopy:
+          'Տեսեք ձեր տանիքի համար հաշվարկված արևային արտադրությունն ու հնարավոր խնայողությունը։',
         monthlyProduction: 'Ամսական արտադրություն',
         impactTitle: 'Ձեր բնապահպանական ազդեցությունը',
         calculationTitle: 'Ինչպես է հաշվարկվել այս գնահատումը',
@@ -253,7 +258,10 @@ const common = {
             title: 'Խոսեք մեր մասնագետի հետ',
             copy: 'Կվերանայենք արդյունքները և կպատասխանենք ձեր բոլոր հարցերին։'
           },
-          { title: 'Հաստատեք նախագիծը', copy: 'Տեղազննությունից հետո հաստատեք վերջնական սարքավորումները, աշխատանքների ծավալն ու տեղադրման պայմանները։' }
+          {
+            title: 'Հաստատեք նախագիծը',
+            copy: 'Տեղազննությունից հետո հաստատեք վերջնական սարքավորումները, աշխատանքների ծավալն ու տեղադրման պայմանները։'
+          }
         ],
         offer: 'Ստանալ մանրամասն առաջարկ',
         metrics: {
@@ -371,6 +379,7 @@ const common = {
       trees: 'Эквивалент деревьев',
       budget: 'Предварительный бюджет',
       savings: 'Экономия в год',
+      surplusEnergy: 'Избыточная выработка',
       payback: 'Окупаемость',
       refine: 'Уточнить по моей крыше',
       contact: 'Получить предложение',
@@ -394,6 +403,8 @@ const common = {
         'Расчёт предварительный. Финальные параметры и стоимость подтверждаются после инженерной проверки объекта.',
       noTariff:
         'Добавьте тариф, чтобы увидеть экономию и окупаемость, или используйте данные из счёта.',
+      surplusValueUnavailable:
+        'Выработка выше годового потребления показана отдельно. Её денежная оценка и окупаемость недоступны, пока не настроена подтверждённая ставка компенсации.',
       priceUnavailable:
         'Предварительный ценовой диапазон сейчас недоступен. Запросите инженерное обследование для актуальной стоимости.',
       benefitsLabel: 'Преимущества солнечной энергии',
@@ -457,10 +468,12 @@ const common = {
     pro: {
       eyebrow: 'Профессиональный режим',
       title: 'Профессиональный солнечный калькулятор',
-      intro: 'Подробный предварительный анализ по доступным параметрам. Планируйте систему шаг за шагом.',
+      intro:
+        'Подробный предварительный анализ по доступным параметрам. Планируйте систему шаг за шагом.',
       steps: ['Местоположение', 'Потребление', 'Крыша', 'Результаты'],
       locationTitle: 'Местоположение',
-      locationCopy: 'Найдите адрес, выберите объект на карте или используйте текущее местоположение.',
+      locationCopy:
+        'Найдите адрес, выберите объект на карте или используйте текущее местоположение.',
       searchAddress: 'Найти адрес',
       useCurrentLocation: 'Использовать текущее местоположение',
       addressSearchHint: 'Введите не менее 3 символов адреса.',
@@ -503,7 +516,10 @@ const common = {
             title: 'Поговорите со специалистом',
             copy: 'Мы проверим результаты и ответим на все ваши вопросы.'
           },
-          { title: 'Подтвердите проект', copy: 'После осмотра объекта подтвердите итоговое оборудование, объём работ и условия монтажа.' }
+          {
+            title: 'Подтвердите проект',
+            copy: 'После осмотра объекта подтвердите итоговое оборудование, объём работ и условия монтажа.'
+          }
         ],
         offer: 'Получить подробное предложение',
         metrics: {
@@ -616,6 +632,7 @@ const common = {
       trees: 'Tree equivalent',
       budget: 'Preliminary budget',
       savings: 'Annual savings',
+      surplusEnergy: 'Surplus generation',
       payback: 'Payback',
       refine: 'Refine with my roof',
       contact: 'Get a proposal',
@@ -637,6 +654,8 @@ const common = {
       disclaimer:
         'The calculation is preliminary. Final parameters and price are confirmed after an engineering site review.',
       noTariff: 'Add your tariff to see savings and payback, or use bill details.',
+      surplusValueUnavailable:
+        'Generation above annual consumption is shown separately. Its monetary value and payback are unavailable until a verified surplus-compensation rate is configured.',
       priceUnavailable:
         'The preliminary price range is temporarily unavailable. Request an engineering survey for current pricing.',
       benefitsLabel: 'Solar energy benefits',
@@ -691,7 +710,8 @@ const common = {
     pro: {
       eyebrow: 'Professional mode',
       title: 'Professional Solar Calculator',
-      intro: 'Detailed preliminary analysis using the available parameters. Plan your system step by step.',
+      intro:
+        'Detailed preliminary analysis using the available parameters. Plan your system step by step.',
       steps: ['Location', 'Consumption', 'Roof', 'Results'],
       locationTitle: 'Location',
       locationCopy:
@@ -723,7 +743,8 @@ const common = {
         restart: 'Start over',
         potential: 'Your solar potential',
         heroLines: ['A cleaner,', 'brighter future', 'starts here'],
-        heroCopy: 'See how your roof could contribute to clean-energy generation and estimated savings.',
+        heroCopy:
+          'See how your roof could contribute to clean-energy generation and estimated savings.',
         monthlyProduction: 'Monthly production',
         impactTitle: 'Your environmental impact',
         calculationTitle: 'How this estimate was calculated',
@@ -739,7 +760,10 @@ const common = {
             title: 'Talk to our specialist',
             copy: 'We’ll review the results and answer all your questions.'
           },
-          { title: 'Confirm the project', copy: 'After the site review, confirm the final equipment, scope and installation terms.' }
+          {
+            title: 'Confirm the project',
+            copy: 'After the site review, confirm the final equipment, scope and installation terms.'
+          }
         ],
         offer: 'Get a detailed offer',
         metrics: {
