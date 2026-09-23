@@ -59,6 +59,21 @@ const element = (tag, className, value) => {
   return node;
 };
 
+const inverterTechnology = (technology, wizard) =>
+  technology === 'hybrid'
+    ? (wizard.hybridInverter ?? 'Hybrid inverter')
+    : (wizard.gridTiedInverter ?? 'Grid-tied inverter');
+
+const inverterReason = (reason, wizard) =>
+  reason === 'EXACT_CATALOG_AC_VARIANT_FOR_CALCULATED_PV_DC_CAPACITY'
+    ? (wizard.inverterExactVariantReason ??
+      'The selected AC variant exactly matches the calculated PV DC capacity.')
+    : reason === 'SMALLEST_CATALOG_AC_VARIANT_NOT_BELOW_CALCULATED_PV_DC_CAPACITY'
+      ? (wizard.inverterNextVariantReason ??
+        'The smallest available catalog AC variant not below the calculated PV DC capacity was selected.')
+      : (wizard.inverterRecommendationCopy ??
+        'Selected for the calculated PV DC capacity. Final compatibility is confirmed during engineering.');
+
 const analysisMatchesPanel = (analysis, system) => {
   const equipment = analysis?.equipment ?? analysis?.selectedScenario?.system?.equipment;
   const selected = system?.equipment;
@@ -1075,17 +1090,58 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
         )
       );
     }
-    const equipment = analysis.equipment ?? scenario.system?.equipment;
-    if (equipment?.panelBrand && equipment?.panelModel) {
-      resultDashboard.append(
+    const equipmentRecommendation = analysis.equipmentRecommendation;
+    const solarModule = equipmentRecommendation?.solarModule;
+    if (solarModule) {
+      const recommendation = element('section', 'result-notice');
+      recommendation.append(
+        element('h3', '', wizard.moduleRecommendationTitle ?? 'Recommended solar module'),
+        element('p', '', `${solarModule.brand} ${solarModule.productName}`),
+        element('p', '', solarModule.model),
         element(
           'p',
-          'result-notice',
-          `${wizard.calculationPanelLabel ?? 'Calculation solar module'}: ${equipment.panelBrand} ${equipment.panelModel} · ${format(equipment.panelWatts, locale)} W`
+          '',
+          text(wizard.moduleRecommendationCopy, {
+            quantity: format(solarModule.quantity, locale),
+            watts: format(solarModule.watts, locale),
+            capacity: format(solarModule.totalDcCapacityKwp, locale, {
+              maximumFractionDigits: 2
+            }),
+            area: format(solarModule.physicalModuleAreaSqm, locale, {
+              maximumFractionDigits: 2
+            }),
+            footprint: format(solarModule.totalModuleFootprintSqm, locale, {
+              maximumFractionDigits: 2
+            })
+          })
+        ),
+        element(
+          'p',
+          '',
+          wizard.moduleRecommendationReason ??
+            'The catalog module count and rating produce the calculated DC capacity.'
+        ),
+        element(
+          'small',
+          '',
+          wizard.equipmentPreliminaryCopy ??
+            'Final string design, electrical compatibility and site implementation are confirmed during engineering.'
         )
       );
+      resultDashboard.append(recommendation);
+    } else {
+      const equipment = analysis.equipment ?? scenario.system?.equipment;
+      if (equipment?.panelBrand && equipment?.panelModel) {
+        resultDashboard.append(
+          element(
+            'p',
+            'result-notice',
+            `${wizard.calculationPanelLabel ?? 'Calculation solar module'}: ${equipment.panelBrand} ${equipment.panelModel} · ${format(equipment.panelWatts, locale)} W`
+          )
+        );
+      }
     }
-    const inverter = analysis.inverterRecommendation;
+    const inverter = equipmentRecommendation?.inverter ?? analysis.inverterRecommendation;
     if (inverter?.productId && Number.isFinite(Number(inverter.selectedAcPowerKw))) {
       const recommendation = element('section', 'result-notice');
       recommendation.append(
@@ -1097,9 +1153,18 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
         ),
         element('p', '', inverter.model),
         element(
+          'p',
+          '',
+          text(wizard.inverterTechnologyCopy, {
+            technology: inverterTechnology(inverter.technology, wizard)
+          })
+        ),
+        element('p', '', inverterReason(inverter.reason, wizard)),
+        element(
           'small',
           '',
-          wizard.inverterRecommendationCopy ??
+          wizard.equipmentPreliminaryCopy ??
+            wizard.inverterRecommendationCopy ??
             'Final string, MPPT and grid compatibility is confirmed during engineering.'
         )
       );
@@ -1150,6 +1215,14 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
       }
       recommendation.append(
         element(
+          'p',
+          '',
+          wizard.mountingHardwareReason ??
+            'The catalog-supported inclination nearest the PVGIS optimum was selected.'
+        )
+      );
+      recommendation.append(
+        element(
           'small',
           '',
           wizard.mountingHardwareEngineeringCopy ??
@@ -1192,6 +1265,12 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
                 maximumFractionDigits: 2
               })
             })
+          ),
+          element(
+            'p',
+            '',
+            wizard.storageSizingReason ??
+              'A whole module count was rounded up to cover the required usable capacity.'
           )
         );
       } else if (storage.status === 'catalog-capacity-exceeded') {

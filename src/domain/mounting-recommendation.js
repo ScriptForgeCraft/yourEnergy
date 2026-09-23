@@ -125,6 +125,7 @@ export const recommendMountingHardware = ({
     mountingMode,
     pvgisOptimumTiltDegrees: optimum,
     ...option,
+    reason: 'CATALOG_INCLINATION_NEAREST_TO_PVGIS_OPTIMUM',
     compatibilityStatus: 'preliminary',
     compatibilityLimitations: MOUNTING_HARDWARE_COMPATIBILITY_LIMITATIONS
   });

@@ -34,6 +34,36 @@
   grid-column: 1 / -1;
   margin: 0;
 }
+
+.quick-result__equipment {
+  display: grid;
+  grid-column: 1 / -1;
+  gap: 0.35rem;
+  border: 1px solid #d8e8f4;
+  border-radius: 0.9rem;
+  padding: 1rem;
+  background: linear-gradient(145deg, #fff, #f4f9fd);
+}
+
+.quick-result__equipment h3,
+.quick-result__equipment p,
+.quick-result__equipment small {
+  margin: 0;
+}
+
+.quick-result__equipment h3 {
+  color: #062e68;
+  font-size: 1rem;
+}
+
+.quick-result__equipment small {
+  color: #5a748e;
+  line-height: 1.4;
+}
+
+.quick-result__equipment-disclaimer {
+  margin-top: 0.3rem !important;
+}
 .quick-result__actions {
   display: flex;
   flex-wrap: wrap;

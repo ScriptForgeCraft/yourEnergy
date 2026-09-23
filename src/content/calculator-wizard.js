@@ -9,6 +9,20 @@ const copy = {
     calculationPanelLabel: 'Հաշվարկային արևային մոդուլ',
     calculationPanelHelp:
       'Հաշվարկը օգտագործում է ընտրված մոդուլի հզորությունն ու ֆիզիկական մակերեսը։',
+    moduleRecommendationTitle: 'Առաջարկվող արևային մոդուլ',
+    moduleRecommendationCopy:
+      '{quantity} մոդուլ × {watts} W = {capacity} kWp DC · ֆիզիկական մակերես՝ {area} m²/մոդուլ · ընդհանուր հետք՝ {footprint} m²',
+    moduleRecommendationReason:
+      'Մոդուլների քանակն ու կատալոգային հզորությունը համապատասխանում են հաշվարկված DC հզորությանը։',
+    inverterTechnologyCopy: 'Տեխնոլոգիա՝ {technology}',
+    gridTiedInverter: 'Ցանցային ինվերտեր',
+    hybridInverter: 'Հիբրիդային ինվերտեր',
+    inverterExactVariantReason:
+      'Ընտրված AC տարբերակը ճշգրիտ համապատասխանում է հաշվարկված PV DC հզորությանը։',
+    inverterNextVariantReason:
+      'Ընտրված է կատալոգի ամենափոքր հասանելի AC տարբերակը, որը հաշվարկված PV DC հզորությունից ցածր չէ։',
+    equipmentPreliminaryCopy:
+      'Ընտրությունը նախնական է․ լարային նախագիծը, էլեկտրական համատեղելիությունը և տեղային իրականացումը հաստատում է ինժեները։',
     storageRequestLabel: 'Ներառել կուտակիչի / պահուստի գնահատում',
     storageRequestHelp:
       'Ճշգրիտ ընտրության համար անհրաժեշտ են կրիտիկական բեռի և պահուստի տևողության տվյալներ։',
@@ -18,6 +32,7 @@ const copy = {
     mountingHardwareTitle: 'Կատալոգային ամրացման տարբերակ',
     mountingHardwareCopy:
       'PVGIS օպտիմում՝ {optimum}° · հասանելի անկյուններ՝ {available}° · գործնական կատալոգային տարբերակ՝ {practical}°',
+    mountingHardwareReason: 'Ընտրված է կատալոգի PVGIS օպտիմումին ամենամոտ աջակցվող թեքությունը։',
     mountingHardwareDimensionsCopy: 'Կոմպլեկտ՝ {kit} mm · ռելս՝ {rail} mm',
     mountingHardwareNoMatchCopy:
       'PVGIS օպտիմումը {optimum}° է, սակայն կատալոգում նորմալացված աջակցվող անկյունով ամրացման տարբերակ չկա։',
@@ -28,6 +43,8 @@ const copy = {
       'Կուտակիչը ընտրովի է։ Ճշգրիտ հզորությունը պահանջում է կրիտիկական բեռի և պահուստի տևողության տվյալներ։',
     storageSizingCopy:
       'Պահանջվող օգտագործելի՝ {required} kWh · {modules} մոդուլ · ընտրված օգտագործելի՝ {selected} kWh',
+    storageSizingReason:
+      'Մոդուլների ամբողջական քանակը կլորացվել է վեր՝ պահանջվող օգտագործելի հզորությունը ծածկելու համար։',
     storageCapacityExceededCopy:
       'Պահանջվող օգտագործելի հզորությունը գերազանցում է կատալոգային համակարգի առավելագույնը՝ {maximum} kWh։',
     storageEngineeringCopy:
@@ -143,6 +160,20 @@ const copy = {
     engineering: 'Инженерные параметры',
     calculationPanelLabel: 'Расчётный солнечный модуль',
     calculationPanelHelp: 'Расчёт использует мощность и физическую площадь выбранного модуля.',
+    moduleRecommendationTitle: 'Рекомендуемый солнечный модуль',
+    moduleRecommendationCopy:
+      '{quantity} модулей × {watts} W = {capacity} кВтp DC · физическая площадь: {area} м²/модуль · общий контур: {footprint} м²',
+    moduleRecommendationReason:
+      'Количество модулей и их мощность из каталога дают рассчитанную DC-мощность.',
+    inverterTechnologyCopy: 'Технология: {technology}',
+    gridTiedInverter: 'Сетевой инвертор',
+    hybridInverter: 'Гибридный инвертор',
+    inverterExactVariantReason:
+      'Выбранный вариант AC точно соответствует рассчитанной PV DC-мощности.',
+    inverterNextVariantReason:
+      'Выбран наименьший доступный вариант AC из каталога, не меньший рассчитанной PV DC-мощности.',
+    equipmentPreliminaryCopy:
+      'Подбор предварительный: схему строк, электрическую совместимость и реализацию на объекте подтверждает инженер.',
     storageRequestLabel: 'Включить оценку накопителя / резерва',
     storageRequestHelp:
       'Для точного подбора нужны данные о критической нагрузке и времени резерва.',
@@ -152,6 +183,7 @@ const copy = {
     mountingHardwareTitle: 'Вариант крепления из каталога',
     mountingHardwareCopy:
       'Оптимум PVGIS: {optimum}° · доступные углы: {available}° · практический вариант из каталога: {practical}°',
+    mountingHardwareReason: 'Выбран ближайший к оптимуму PVGIS поддерживаемый угол из каталога.',
     mountingHardwareDimensionsCopy: 'Комплект: {kit} мм · рельс: {rail} мм',
     mountingHardwareNoMatchCopy:
       'Оптимум PVGIS — {optimum}°, но в каталоге нет крепления с нормализованным поддерживаемым углом.',
@@ -162,6 +194,8 @@ const copy = {
       'Накопитель необязателен. Для точного подбора нужны данные о критической нагрузке и времени резерва.',
     storageSizingCopy:
       'Требуемая полезная ёмкость: {required} кВт·ч · модулей: {modules} · выбранная полезная ёмкость: {selected} кВт·ч',
+    storageSizingReason:
+      'Целое число модулей округлено вверх, чтобы покрыть требуемую полезную ёмкость.',
     storageCapacityExceededCopy:
       'Требуемая полезная ёмкость превышает максимум системы в каталоге: {maximum} кВт·ч.',
     storageEngineeringCopy:
@@ -278,6 +312,20 @@ const copy = {
     engineering: 'Engineering parameters',
     calculationPanelLabel: 'Calculation solar module',
     calculationPanelHelp: 'The calculation uses the selected module’s wattage and physical area.',
+    moduleRecommendationTitle: 'Recommended solar module',
+    moduleRecommendationCopy:
+      '{quantity} modules × {watts} W = {capacity} kWp DC · physical area: {area} m²/module · total footprint: {footprint} m²',
+    moduleRecommendationReason:
+      'The catalog module count and rating produce the calculated DC capacity.',
+    inverterTechnologyCopy: 'Technology: {technology}',
+    gridTiedInverter: 'Grid-tied inverter',
+    hybridInverter: 'Hybrid inverter',
+    inverterExactVariantReason:
+      'The selected AC variant exactly matches the calculated PV DC capacity.',
+    inverterNextVariantReason:
+      'The smallest available catalog AC variant not below the calculated PV DC capacity was selected.',
+    equipmentPreliminaryCopy:
+      'This selection is preliminary; an engineer confirms string design, electrical compatibility and site implementation.',
     storageRequestLabel: 'Include storage / backup review',
     storageRequestHelp: 'Exact sizing requires critical-load and backup-duration inputs.',
     inverterRecommendationTitle: 'Recommended inverter',
@@ -286,6 +334,8 @@ const copy = {
     mountingHardwareTitle: 'Catalog mounting option',
     mountingHardwareCopy:
       'PVGIS optimum: {optimum}° · available mounting angles: {available}° · practical catalog option: {practical}°',
+    mountingHardwareReason:
+      'The catalog-supported inclination nearest the PVGIS optimum was selected.',
     mountingHardwareDimensionsCopy: 'Kit: {kit} mm · rail: {rail} mm',
     mountingHardwareNoMatchCopy:
       'PVGIS optimum is {optimum}°, but no catalog mounting option has a normalized supported angle.',
@@ -296,6 +346,8 @@ const copy = {
       'Storage is optional. Exact battery sizing requires critical-load and backup-duration inputs.',
     storageSizingCopy:
       'Required usable: {required} kWh · modules: {modules} · selected usable: {selected} kWh',
+    storageSizingReason:
+      'A whole module count was rounded up to cover the required usable capacity.',
     storageCapacityExceededCopy:
       'The required usable capacity exceeds the catalog system maximum of {maximum} kWh.',
     storageEngineeringCopy:

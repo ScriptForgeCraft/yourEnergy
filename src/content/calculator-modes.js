@@ -114,6 +114,19 @@ const common = {
         'PVGIS-ի տվյալը վերաբերում է ընտրված տարածաշրջանի ներկայացուցչական կետին, ոչ թե ձեր տան հասցեին կամ տանիքին։',
       resultsTitle: 'Ձեր նախնական արդյունքը',
       resultsCopy: 'Ընտրված տարածաշրջանի արևային տվյալների և ձեր սպառման հիման վրա',
+      recommendedSystem: 'Առաջարկվող համակարգ',
+      solarModule: 'Արևային մոդուլ',
+      inverter: 'Ինվերտեր',
+      moduleRecommendationCopy: '{quantity} մոդուլ × {watts} W · {capacity} kWp DC',
+      moduleRecommendationReason:
+        'Մոդուլների քանակն ու կատալոգային հզորությունը համապատասխանում են հաշվարկված DC հզորությանը։',
+      inverterRecommendationCopy: '{technology} · հասանելի AC տարբերակ՝ {acPower} kW',
+      inverterRecommendationReason:
+        'Ընտրված է հաշվարկված PV DC հզորությանը համապատասխան կատալոգային տարբերակից։',
+      gridTiedInverter: 'Ցանցային ինվերտեր',
+      hybridInverter: 'Հիբրիդային ինվերտեր',
+      equipmentPreliminary:
+        'Սա կատալոգի հիման վրա նախնական ընտրություն է․ վերջնական էլեկտրական համատեղելիությունը հաստատում է ինժեները։',
       capacity: 'Առաջարկվող հզորություն',
       panels: 'Վահանակներ',
       generation: 'Տարեկան արտադրություն',
@@ -371,6 +384,18 @@ const common = {
         'PVGIS-данные относятся к представительской точке выбранного региона, а не к вашему адресу или крыше.',
       resultsTitle: 'Ваши предварительные результаты',
       resultsCopy: 'На основе солнечных данных выбранного региона и вашего потребления',
+      recommendedSystem: 'Рекомендуемая система',
+      solarModule: 'Солнечный модуль',
+      inverter: 'Инвертор',
+      moduleRecommendationCopy: '{quantity} модулей × {watts} W · {capacity} кВтp DC',
+      moduleRecommendationReason:
+        'Количество модулей и их мощность из каталога дают рассчитанную DC-мощность.',
+      inverterRecommendationCopy: '{technology} · доступный вариант AC: {acPower} кВт',
+      inverterRecommendationReason: 'Выбран из вариантов каталога для рассчитанной PV DC-мощности.',
+      gridTiedInverter: 'Сетевой инвертор',
+      hybridInverter: 'Гибридный инвертор',
+      equipmentPreliminary:
+        'Это предварительный подбор по каталогу; окончательную электрическую совместимость подтверждает инженер.',
       capacity: 'Рекомендуемая мощность',
       panels: 'Панели',
       generation: 'Годовая выработка',
@@ -624,6 +649,19 @@ const common = {
         'The PVGIS data applies to a representative point in the selected region, not to your address or roof.',
       resultsTitle: 'Your estimated results',
       resultsCopy: 'Based on solar data for the selected region and your consumption',
+      recommendedSystem: 'Recommended system',
+      solarModule: 'Solar module',
+      inverter: 'Inverter',
+      moduleRecommendationCopy: '{quantity} modules × {watts} W · {capacity} kWp DC',
+      moduleRecommendationReason:
+        'The catalog module count and rating produce the calculated DC capacity.',
+      inverterRecommendationCopy: '{technology} · available AC variant: {acPower} kW',
+      inverterRecommendationReason:
+        'Selected from catalog variants for the calculated PV DC capacity.',
+      gridTiedInverter: 'Grid-tied inverter',
+      hybridInverter: 'Hybrid inverter',
+      equipmentPreliminary:
+        'This is a catalog-based preliminary selection; an engineer confirms final electrical compatibility.',
       capacity: 'Recommended capacity',
       panels: 'Panels',
       generation: 'Annual generation',

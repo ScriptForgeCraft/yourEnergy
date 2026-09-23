@@ -63,6 +63,10 @@ export {
   selectPracticalMountingOption
 } from './mounting-recommendation.js';
 export {
+  EQUIPMENT_RECOMMENDATION_COMPATIBILITY_LIMITATIONS,
+  buildEquipmentRecommendation
+} from './equipment-recommendation.js';
+export {
   buildEnvironmentalImpact,
   buildTreeEquivalence,
   normalizeGridEmissionFactor,

@@ -199,6 +199,65 @@ const monthlyProductionChart = ({ production, months, label, locale }) => {
   return chart;
 };
 
+const recommendationText = (template, values) =>
+  Object.entries(values).reduce(
+    (result, [key, value]) => result.replaceAll(`{${key}}`, String(value)),
+    template ?? ''
+  );
+
+const quickEquipmentRecommendation = ({ recommendation, copy, locale }) => {
+  const solarModule = recommendation?.solarModule;
+  const inverter = recommendation?.inverter;
+  if (!solarModule && !inverter) return null;
+
+  const section = document.createElement('section');
+  section.className = 'quick-result__equipment';
+  const heading = document.createElement('h3');
+  heading.textContent = copy.recommendedSystem ?? 'Recommended system';
+  section.append(heading);
+
+  if (solarModule) {
+    const module = document.createElement('p');
+    const label = document.createElement('strong');
+    label.textContent = `${copy.solarModule ?? 'Solar module'}: `;
+    module.append(label, `${solarModule.brand} ${solarModule.productName} · ${solarModule.model}`);
+    const sizing = document.createElement('p');
+    sizing.textContent = recommendationText(copy.moduleRecommendationCopy, {
+      quantity: format(solarModule.quantity, locale),
+      watts: format(solarModule.watts, locale),
+      capacity: format(solarModule.totalDcCapacityKwp, locale, { maximumFractionDigits: 2 })
+    });
+    const reason = document.createElement('small');
+    reason.textContent = copy.moduleRecommendationReason;
+    section.append(module, sizing, reason);
+  }
+
+  if (inverter) {
+    const inverterLine = document.createElement('p');
+    const label = document.createElement('strong');
+    label.textContent = `${copy.inverter ?? 'Inverter'}: `;
+    inverterLine.append(label, `${inverter.brand} ${inverter.productName} · ${inverter.model}`);
+    const technology =
+      inverter.technology === 'hybrid'
+        ? (copy.hybridInverter ?? 'Hybrid inverter')
+        : (copy.gridTiedInverter ?? 'Grid-tied inverter');
+    const variant = document.createElement('p');
+    variant.textContent = recommendationText(copy.inverterRecommendationCopy, {
+      technology,
+      acPower: format(inverter.selectedAcPowerKw, locale, { maximumFractionDigits: 1 })
+    });
+    const reason = document.createElement('small');
+    reason.textContent = copy.inverterRecommendationReason;
+    section.append(inverterLine, variant, reason);
+  }
+
+  const preliminary = document.createElement('small');
+  preliminary.className = 'quick-result__equipment-disclaimer';
+  preliminary.textContent = copy.equipmentPreliminary;
+  section.append(preliminary);
+  return section;
+};
+
 const errorMessage = (error, copy) => {
   if (error instanceof ProductApiError) {
     if (error.code === 'PVGIS_CACHE_NOT_CONFIGURED') return copy.cacheNotConfigured;
@@ -519,6 +578,12 @@ export const initQuickCalculator = ({ config = {} } = {}) => {
       note.textContent = copy.surplusValueUnavailable;
       values.append(note);
     }
+    const equipment = quickEquipmentRecommendation({
+      recommendation: analysis.equipmentRecommendation,
+      copy,
+      locale
+    });
+    if (equipment) values.append(equipment);
     const chart = monthlyProductionChart({
       production: scenario.generation?.monthlyKwh,
       months,

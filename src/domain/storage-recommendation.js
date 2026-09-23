@@ -163,6 +163,7 @@ export const recommendStorage = ({
     maximumModuleCount: selected.maximumModuleCount,
     systemNominalCapacityMaxKwh: selected.systemNominalCapacityMaxKwh,
     systemUsableCapacityMaxKwh: selected.systemUsableCapacityMaxKwh,
+    reason: 'WHOLE_CATALOG_BATTERY_MODULE_COUNT_COVERS_REQUIRED_USABLE_CAPACITY',
     source: 'equipment-catalog',
     compatibilityStatus: 'preliminary',
     compatibilityLimitations: STORAGE_COMPATIBILITY_LIMITATIONS

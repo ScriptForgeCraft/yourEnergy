@@ -20,6 +20,7 @@ import { buildCommercialEstimate } from './pricebook.js';
 import { recommendInverter } from './inverter-recommendation.js';
 import { recommendStorage } from './storage-recommendation.js';
 import { recommendMountingHardware } from './mounting-recommendation.js';
+import { buildEquipmentRecommendation } from './equipment-recommendation.js';
 
 export const ANALYSIS_SCHEMA_VERSION = '1.1.0';
 
@@ -627,6 +628,12 @@ export const buildSolarAnalysis = (input = {}) => {
         ? input.mountingRecommendation.tiltDegrees
         : null
   });
+  const equipmentRecommendation = buildEquipmentRecommendation({
+    selectedScenario,
+    inverterRecommendation,
+    mountingHardwareRecommendation,
+    storageRecommendation
+  });
   const status = selectedScenario?.status ?? ANALYSIS_STATUS.UNAVAILABLE;
   const commercialEstimate = selectedScenario?.commercialEstimate ?? null;
   const tariffKind =
@@ -737,6 +744,7 @@ export const buildSolarAnalysis = (input = {}) => {
     inverterRecommendation,
     storageRecommendation,
     mountingHardwareRecommendation,
+    equipmentRecommendation,
     investment,
     priceBook: commercialEstimate?.priceBook ?? null,
     commercialEstimate,
