@@ -1,6 +1,7 @@
 import { ProductApiClient, ProductApiError } from '../services/api-client.js';
 import { getCalculatorInputNumber, isCalculatorInputInRange } from '../domain/calculator-inputs.js';
 import { tariffBracketIncludesMonthlyKwh } from '../domain/tariffs.js';
+import { formatConsumerCommercialRange } from './commercial-range.js';
 import { createAsyncRequestLifecycle } from './async-request-lifecycle.js';
 import { createCalculatorSession } from './calculator-session.js';
 
@@ -134,8 +135,17 @@ const format = (value, locale, options = {}) =>
  * needed to understand a preliminary regional estimate. Engineering,
  * equipment and provenance data stay in the analysis for Professional mode.
  */
-export const buildQuickResultMetrics = ({ scenario, copy = {}, locale = 'en-US' } = {}) => {
+export const buildQuickResultMetrics = ({
+  scenario,
+  commercialEstimate,
+  copy = {},
+  locale = 'en-US'
+} = {}) => {
   const annualSavingsAmd = finite(scenario?.financial?.annualSavingsAmd);
+  const systemCost = formatConsumerCommercialRange(
+    commercialEstimate ?? scenario?.commercialEstimate,
+    locale
+  );
   const metrics = [
     {
       id: 'panel-count',
@@ -177,7 +187,21 @@ export const buildQuickResultMetrics = ({ scenario, copy = {}, locale = 'en-US' 
     });
   }
 
-  return { metrics, savingsAvailable: annualSavingsAmd !== null };
+  if (systemCost) {
+    metrics.push({
+      id: 'estimated-system-cost',
+      label: copy.systemCost ?? 'Estimated system cost',
+      value: systemCost,
+      icon: 'coin',
+      tone: 'gold'
+    });
+  }
+
+  return {
+    metrics,
+    savingsAvailable: annualSavingsAmd !== null,
+    systemCostAvailable: systemCost !== null
+  };
 };
 
 const createIcon = (name) => {
@@ -496,7 +520,12 @@ export const initQuickCalculator = ({ config = {} } = {}) => {
     const values = document.createElement('dl');
     values.className = 'quick-result__metrics';
     const retailOffsetValueAmd = finite(scenario.financial?.retailOffsetValueAmd);
-    const summary = buildQuickResultMetrics({ scenario, copy, locale });
+    const summary = buildQuickResultMetrics({
+      scenario,
+      commercialEstimate: analysis?.commercialEstimate,
+      copy,
+      locale
+    });
     values.append(
       ...summary.metrics.map(({ label, value, icon, tone }) => metric(label, value, { icon, tone }))
     );

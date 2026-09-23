@@ -70,6 +70,10 @@ test('Quick result presents only homeowner metrics and gates savings on a financ
     coveragePercent: 100,
     financial: { annualSavingsAmd: 502_946, retailOffsetValueAmd: 502_946 }
   };
+  const commercialEstimate = {
+    available: true,
+    rangeAmd: { p25: 2_000_000, p50: 2_100_000, p75: 2_200_000 }
+  };
 
   for (const [language, locale] of [
     ['hy', 'hy-AM'],
@@ -77,7 +81,7 @@ test('Quick result presents only homeowner metrics and gates savings on a financ
     ['en', 'en-US']
   ]) {
     const copy = calculatorModes[language].quick;
-    const summary = buildQuickResultMetrics({ scenario, copy, locale });
+    const summary = buildQuickResultMetrics({ scenario, commercialEstimate, copy, locale });
 
     assert.deepEqual(
       summary.metrics.map(({ id }) => id),
@@ -86,34 +90,48 @@ test('Quick result presents only homeowner metrics and gates savings on a financ
         'recommended-power',
         'expected-production',
         'consumption-coverage',
-        'estimated-annual-savings'
+        'estimated-annual-savings',
+        'estimated-system-cost'
       ]
     );
     assert.deepEqual(
       summary.metrics.map(({ label }) => label),
-      [copy.panels, copy.capacity, copy.generation, copy.coverage, copy.savings]
+      [copy.panels, copy.capacity, copy.generation, copy.coverage, copy.savings, copy.systemCost]
     );
     assert.equal(summary.savingsAvailable, true);
+    assert.equal(summary.systemCostAvailable, true);
   }
 
   assert.deepEqual(
     buildQuickResultMetrics({
       scenario,
+      commercialEstimate,
       copy: calculatorModes.en.quick,
       locale: 'en-US'
     }).metrics.map(({ value }) => value),
-    ['11', '7.15 kWp', '10,374 kWh/year', '≈ 100%', '502,946 AMD/year']
+    ['11', '7.15 kWp', '10,374 kWh/year', '≈ 100%', '502,946 AMD/year', '2,000,000 ֏ – 2,200,000 ֏']
   );
 
   const withoutFinancialValue = buildQuickResultMetrics({
-    scenario: { ...scenario, financial: { annualSavingsAmd: null, retailOffsetValueAmd: null } },
+    scenario: {
+      ...scenario,
+      financial: { annualSavingsAmd: null, retailOffsetValueAmd: null }
+    },
+    commercialEstimate,
     copy: calculatorModes.en.quick,
     locale: 'en-US'
   });
   assert.equal(withoutFinancialValue.savingsAvailable, false);
+  assert.equal(withoutFinancialValue.systemCostAvailable, true);
   assert.deepEqual(
     withoutFinancialValue.metrics.map(({ id }) => id),
-    ['panel-count', 'recommended-power', 'expected-production', 'consumption-coverage']
+    [
+      'panel-count',
+      'recommended-power',
+      'expected-production',
+      'consumption-coverage',
+      'estimated-system-cost'
+    ]
   );
 });
 
