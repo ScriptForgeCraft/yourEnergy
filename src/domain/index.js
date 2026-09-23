@@ -37,6 +37,11 @@ export {
 } from './solar-analysis.js';
 export { buildRegionalQuickAnalysis } from './quick-analysis.js';
 export {
+  INVERTER_COMPATIBILITY_LIMITATIONS,
+  INVERTER_TECHNOLOGY,
+  recommendInverter
+} from './inverter-recommendation.js';
+export {
   buildEnvironmentalImpact,
   buildTreeEquivalence,
   normalizeGridEmissionFactor,

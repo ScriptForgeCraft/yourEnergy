@@ -969,6 +969,26 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
         )
       );
     }
+    const inverter = analysis.inverterRecommendation;
+    if (inverter?.productId && Number.isFinite(Number(inverter.selectedAcPowerKw))) {
+      const recommendation = element('section', 'result-notice');
+      recommendation.append(
+        element('h3', '', wizard.inverterRecommendationTitle ?? 'Recommended inverter'),
+        element(
+          'p',
+          '',
+          `${inverter.brand} ${inverter.productName} · ${format(inverter.selectedAcPowerKw, locale, { maximumFractionDigits: 1 })} kW`
+        ),
+        element('p', '', inverter.model),
+        element(
+          'small',
+          '',
+          wizard.inverterRecommendationCopy ??
+            'Final string, MPPT and grid compatibility is confirmed during engineering.'
+        )
+      );
+      resultDashboard.append(recommendation);
+    }
     if (scenario.limitations?.includes('ROOF_CAPACITY_LIMIT')) {
       const limit = element('p', 'result-notice result-notice--warning', wizard.roofLimit);
       limit.append(
@@ -1135,6 +1155,13 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
       wizard.metrics?.system ?? 'System',
       `${format(analysis.selectedScenario?.system?.capacityKwp, locale, { maximumFractionDigits: 2 })} kWp · ${format(analysis.selectedScenario?.system?.panelCount, locale)} × ${format(analysis.selectedScenario?.system?.panelWatts, locale)} W${analysis.equipment?.panelBrand && analysis.equipment?.panelModel ? ` · ${analysis.equipment.panelBrand} ${analysis.equipment.panelModel}` : ''}`
     );
+    const inverter = analysis.inverterRecommendation;
+    if (inverter?.productId && Number.isFinite(Number(inverter.selectedAcPowerKw))) {
+      add(
+        wizard.inverterRecommendationTitle ?? 'Recommended inverter',
+        `${inverter.brand} ${inverter.productName} · ${format(inverter.selectedAcPowerKw, locale, { maximumFractionDigits: 1 })} kW`
+      );
+    }
     const estimate = analysis.commercialEstimate;
     add(
       wizard.budget,

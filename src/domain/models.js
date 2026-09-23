@@ -89,6 +89,7 @@
  * @property {Object[]} scenarios
  * @property {Object|null} selectedScenario
  * @property {{panelId: string, panelBrand: string, panelModel: string, panelWatts: number, panelAreaSqm: number, source: 'equipment-catalog'}|null} equipment
+ * @property {{technology: 'grid-tied'|'hybrid', productId: string, brand: string, productName: string, model: string, selectedAcPowerKw: number, reason: string, source: 'equipment-catalog', compatibilityStatus: 'preliminary', compatibilityLimitations: string[]}|null} inverterRecommendation
  * @property {'manual-roof-plane'|string} scope
  * @property {Object} dataCompleteness
  * @property {Object|null} cache

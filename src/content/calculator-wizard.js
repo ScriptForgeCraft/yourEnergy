@@ -8,6 +8,9 @@ const copy = {
     engineering: 'Ինժեներական պարամետրեր',
     calculationPanelLabel: 'Հաշվարկային արևային մոդուլ',
     calculationPanelHelp: 'Հաշվարկը օգտագործում է ընտրված մոդուլի հզորությունն ու ֆիզիկական մակերեսը։',
+    inverterRecommendationTitle: 'Առաջարկվող ինվերտեր',
+    inverterRecommendationCopy:
+      'Ընտրված է հաշվարկված PV DC հզորության համար։ Վերջնական լարային, MPPT և ցանցային համատեղելիությունը հաստատվում է ինժեներական փուլում։',
     addressLabel: 'Նշում ինժեների համար',
     addressHelp:
       'Հասցեն չի օգտագործվում հաշվարկի համար։ Ընտրեք ճշգրիտ կետ քարտեզի վրա կամ մուտքագրեք կոորդինատներ։',
@@ -114,6 +117,9 @@ const copy = {
     engineering: 'Инженерные параметры',
     calculationPanelLabel: 'Расчётный солнечный модуль',
     calculationPanelHelp: 'Расчёт использует мощность и физическую площадь выбранного модуля.',
+    inverterRecommendationTitle: 'Рекомендуемый инвертор',
+    inverterRecommendationCopy:
+      'Выбран для рассчитанной PV DC-мощности. Окончательную совместимость строк, MPPT и сети подтверждает инженер.',
     addressLabel: 'Заметка для инженера',
     addressHelp:
       'Адрес не используется для солнечного расчёта. Выберите точную точку на карте или введите координаты.',
@@ -220,6 +226,9 @@ const copy = {
     engineering: 'Engineering parameters',
     calculationPanelLabel: 'Calculation solar module',
     calculationPanelHelp: 'The calculation uses the selected module’s wattage and physical area.',
+    inverterRecommendationTitle: 'Recommended inverter',
+    inverterRecommendationCopy:
+      'Selected for the calculated PV DC capacity. Final string, MPPT and grid compatibility is confirmed during engineering.',
     addressLabel: 'Note for the engineer',
     addressHelp:
       'The address is not used for the solar calculation. Choose the exact point on the map or enter coordinates.',

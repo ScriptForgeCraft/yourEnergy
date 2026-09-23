@@ -11,6 +11,7 @@ import {
 } from './numbers.js';
 import { getUsableTariffRate, selectEffectiveTariff } from './tariffs.js';
 import { buildCommercialEstimate } from './pricebook.js';
+import { recommendInverter } from './inverter-recommendation.js';
 
 export const ANALYSIS_SCHEMA_VERSION = '1.0.0';
 
@@ -539,6 +540,10 @@ export const buildSolarAnalysis = (input = {}) => {
     cleanString(input.selectedScenarioId) ?? scenarios[1]?.id ?? scenarios[0]?.id;
   const selectedScenario =
     scenarios.find((scenario) => scenario.id === selectedScenarioId) ?? scenarios[0] ?? null;
+  const inverterRecommendation = recommendInverter({
+    dcCapacityKwp: selectedScenario?.system?.capacityKwp,
+    storageRequired: input.storageRequired === true
+  });
   const status = selectedScenario?.status ?? ANALYSIS_STATUS.UNAVAILABLE;
   const commercialEstimate = selectedScenario?.commercialEstimate ?? null;
   const tariffKind =
@@ -640,6 +645,7 @@ export const buildSolarAnalysis = (input = {}) => {
     tariff,
     system,
     equipment: system.equipment,
+    inverterRecommendation,
     investment,
     priceBook: commercialEstimate?.priceBook ?? null,
     commercialEstimate,

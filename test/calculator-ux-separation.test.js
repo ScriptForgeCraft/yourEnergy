@@ -71,6 +71,8 @@ test('Professional has exactly four customer steps and retains every engineering
   assert.match(controller, /equipment: \{ panelId: state\.selectedPanelId \}/u);
   assert.match(controller, /session\.selectPanel\(panelId\)/u);
   assert.match(controller, /analysisMatchesPanel/u);
+  assert.match(controller, /analysis\.inverterRecommendation/u);
+  assert.match(controller, /wizard\.inverterRecommendationTitle/u);
   assert.doesNotMatch(controller, /issue === 'outline' \|\| issue === 'area'/u);
 });
 
