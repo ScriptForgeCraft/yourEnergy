@@ -22,15 +22,19 @@ const stableValue = (value) => {
 
 const coordinatesFor = (property) => property?.coordinates ?? property ?? {};
 
-const normalizedRoof = (roof = {}) => ({
-  areaMethod: typeof roof.areaMethod === 'string' ? roof.areaMethod : null,
-  mountingMode: typeof roof.mountingMode === 'string' ? roof.mountingMode : null,
-  projectedAreaSqm: finiteNumber(roof.projectedAreaSqm ?? roof.areaSqm),
-  planeAreaSqm: finiteNumber(roof.planeAreaSqm),
-  polygonComplete: Boolean(roof.polygonComplete ?? roof.complete),
-  tiltDegrees: finiteNumber(roof.tiltDegrees),
-  azimuthDegrees: finiteNumber(roof.azimuthDegrees ?? roof.orientationDegrees)
-});
+const normalizedRoof = (roof) => {
+  const source = roof !== null && typeof roof === 'object' && !Array.isArray(roof) ? roof : {};
+
+  return {
+    areaMethod: typeof source.areaMethod === 'string' ? source.areaMethod : null,
+    mountingMode: typeof source.mountingMode === 'string' ? source.mountingMode : null,
+    projectedAreaSqm: finiteNumber(source.projectedAreaSqm ?? source.areaSqm),
+    planeAreaSqm: finiteNumber(source.planeAreaSqm),
+    polygonComplete: Boolean(source.polygonComplete ?? source.complete),
+    tiltDegrees: finiteNumber(source.tiltDegrees),
+    azimuthDegrees: finiteNumber(source.azimuthDegrees ?? source.orientationDegrees)
+  };
+};
 
 /**
  * A stable representation of every Professional Calculator value sent to the

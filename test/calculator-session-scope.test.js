@@ -43,6 +43,39 @@ const professionalAnalysis = {
   selectedScenario: { id: 'property-roof' }
 };
 
+test('a fresh Professional session has a neutral roof identity', () => {
+  const { storage } = sessionStorage();
+  const freshSession = createCalculatorSession({ storage }).read();
+
+  assert.equal(freshSession.roof, null);
+  assert.doesNotThrow(() => createProfessionalAnalysisIdentity({ roof: freshSession.roof }));
+  assert.deepEqual(JSON.parse(createProfessionalAnalysisIdentity({ roof: freshSession.roof })).roof, {
+    areaMethod: null,
+    mountingMode: null,
+    projectedAreaSqm: null,
+    planeAreaSqm: null,
+    polygonComplete: false,
+    tiltDegrees: null,
+    azimuthDegrees: null
+  });
+});
+
+test('Professional roof identity treats null and invalid roof values as empty', () => {
+  const neutralRoof = {
+    areaMethod: null,
+    mountingMode: null,
+    projectedAreaSqm: null,
+    planeAreaSqm: null,
+    polygonComplete: false,
+    tiltDegrees: null,
+    azimuthDegrees: null
+  };
+
+  for (const roof of [null, undefined, false, 42, 'invalid', []]) {
+    assert.deepEqual(JSON.parse(createProfessionalAnalysisIdentity({ roof })).roof, neutralRoof);
+  }
+});
+
 test('a pre-correction Quick result is discarded while shared inputs remain reusable', () => {
   const { storage, values } = sessionStorage();
   const session = createCalculatorSession({ storage });
