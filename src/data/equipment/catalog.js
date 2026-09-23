@@ -1,5 +1,5 @@
-import existing from './equipment-data.json' with { type: 'json' };
-import solax from './solax-products.json' with { type: 'json' };
+import existing from './equipment-data.json';
+import solax from './solax-products.json';
 import { createLocalizedCatalog } from './equipment-i18n.js';
 
 // Source records contain the identifiers, files and positioning data shared by every locale.

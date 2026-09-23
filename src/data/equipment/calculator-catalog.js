@@ -1,4 +1,4 @@
-import sourceProducts from '../../../data/equipment/yourenergy-equipment-calculator.json' with { type: 'json' };
+import sourceProducts from '../../../data/equipment/yourenergy-equipment-calculator.json';
 
 // This module is deliberately separate from the showroom catalogue. The showroom
 // retains its localized display content, while this file is the single boundary
