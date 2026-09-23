@@ -15,6 +15,7 @@ export const buildRegionalQuickAnalysis = ({
   priceBook,
   gridEmissionFactor,
   treeEquivalency,
+  calculationConfig,
   effectiveDate = new Date()
 } = {}) => {
   const analysis = buildSolarAnalysis({
@@ -43,6 +44,8 @@ export const buildRegionalQuickAnalysis = ({
     treeEquivalency,
     effectiveDate,
     scope: 'regional-preliminary',
+    regionalReference: { regionId: region?.id ?? null },
+    calculationConfig,
     limitations: [
       'REGIONAL_REFERENCE_POINT_NOT_PROPERTY_LOCATION',
       'ROOF_AREA_ORIENTATION_TILT_AND_SHADING_NOT_INCLUDED',

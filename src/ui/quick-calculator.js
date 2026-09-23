@@ -258,6 +258,80 @@ const quickEquipmentRecommendation = ({ recommendation, copy, locale }) => {
   return section;
 };
 
+const quickCalculationBasis = ({ basis, copy, locale }) => {
+  if (!basis) return null;
+  const basisCopy = copy.calculationBasis ?? {};
+  const sourceType = (type) => basisCopy.sourceTypes?.[type] ?? type ?? '';
+  const line = (label, value, type) => {
+    const item = document.createElement('li');
+    item.textContent = `${label}: ${value} · ${sourceType(type)}`.replace(/\s*·\s*$/u, '');
+    return item;
+  };
+  const detail = document.createElement('details');
+  detail.className = 'quick-result__basis';
+  const summary = document.createElement('summary');
+  summary.textContent = copy.calculationBasisTitle ?? 'How this was calculated';
+  const list = document.createElement('ul');
+  const coordinates = basis.coordinates;
+  if (coordinates) {
+    const label = basisCopy.coordinates ?? 'Regional reference point';
+    const region = coordinates.regionId ? ` · ${coordinates.regionId}` : '';
+    list.append(
+      line(
+        label,
+        `${format(coordinates.latitude, locale, { maximumFractionDigits: 4 })}, ${format(coordinates.longitude, locale, { maximumFractionDigits: 4 })}${region}`,
+        coordinates.sourceType
+      )
+    );
+  }
+  const solarYield = basis.solarYield;
+  if (solarYield) {
+    const loss = solarYield.configuration?.systemLossPercent;
+    const lossCopy =
+      loss === null || loss === undefined
+        ? ''
+        : ` · ${basisCopy.systemLoss ?? 'System loss'}: ${format(loss, locale, { maximumFractionDigits: 1 })}%`;
+    list.append(
+      line(
+        basisCopy.solarYield ?? 'Solar yield',
+        `${solarYield.source?.provider ?? 'PVGIS'} · ${format(solarYield.annualYieldKwhPerKwp, locale)} kWh/kWp${lossCopy}`,
+        solarYield.sourceType
+      )
+    );
+  }
+  const panel = basis.solarModule;
+  if (panel) {
+    list.append(
+      line(
+        basisCopy.solarModule ?? 'Calculation module',
+        `${panel.brand ?? ''} ${panel.model ?? ''} · ${format(panel.panelWatts, locale)} W · ${format(panel.panelAreaSqm, locale, { maximumFractionDigits: 2 })} m² · ${panel.productId}`.trim(),
+        panel.sourceType
+      )
+    );
+  }
+  const tariff = basis.tariff;
+  if (tariff?.rateAmdPerKwh !== null && tariff?.rateAmdPerKwh !== undefined) {
+    const identity = [tariff.tariffId, tariff.revision, tariff.period].filter(Boolean).join(' · ');
+    list.append(
+      line(
+        basisCopy.tariff ?? 'Tariff',
+        `${identity ? `${identity} · ` : ''}${format(tariff.rateAmdPerKwh, locale, { maximumFractionDigits: 2 })} AMD/kWh`,
+        tariff.sourceType
+      )
+    );
+  } else {
+    list.append(
+      line(
+        basisCopy.tariff ?? 'Tariff',
+        basisCopy.noTariff ?? 'No tariff selected',
+        tariff?.sourceType
+      )
+    );
+  }
+  detail.append(summary, list);
+  return detail;
+};
+
 const errorMessage = (error, copy) => {
   if (error instanceof ProductApiError) {
     if (error.code === 'PVGIS_CACHE_NOT_CONFIGURED') return copy.cacheNotConfigured;
@@ -584,6 +658,8 @@ export const initQuickCalculator = ({ config = {} } = {}) => {
       locale
     });
     if (equipment) values.append(equipment);
+    const basis = quickCalculationBasis({ basis: analysis.calculationBasis, copy, locale });
+    if (basis) values.append(basis);
     const chart = monthlyProductionChart({
       production: scenario.generation?.monthlyKwh,
       months,

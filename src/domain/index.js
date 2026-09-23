@@ -66,6 +66,7 @@ export {
   EQUIPMENT_RECOMMENDATION_COMPATIBILITY_LIMITATIONS,
   buildEquipmentRecommendation
 } from './equipment-recommendation.js';
+export { CALCULATION_BASIS_SOURCE_TYPE, buildCalculationBasis } from './calculation-provenance.js';
 export {
   buildEnvironmentalImpact,
   buildTreeEquivalence,

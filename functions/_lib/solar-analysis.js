@@ -178,6 +178,7 @@ export const buildP0SolarAnalysis = ({
   tariffSelection,
   roofArea,
   calculatorSystem,
+  calculationConfig,
   effectiveDate = new Date()
 }) => {
   const priceBook = priceBookRepository.getActive({
@@ -218,6 +219,7 @@ export const buildP0SolarAnalysis = ({
     scope: 'manual-roof-plane',
     dataCompleteness: 'preliminary',
     cache: providerAnalysis.cache ?? null,
+    calculationConfig,
     providerRetrievedAt:
       providerAnalysis.providerRetrievedAt ??
       providerAnalysis.sourceLedger?.[0]?.retrievedAt ??

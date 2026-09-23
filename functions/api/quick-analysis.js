@@ -91,6 +91,10 @@ export const quickAnalyze = async ({ request, env, fetchImpl }) => {
       priceBook,
       gridEmissionFactor: ARMENIA_GRID_CO2_FACTOR,
       treeEquivalency: EPA_URBAN_TREE_CO2_EQUIVALENCY,
+      calculationConfig: {
+        systemLossPercent: P0_PVGIS_QUERY.lossPercent,
+        mountingPlace: 'free'
+      },
       effectiveDate: new Date()
     })
   };

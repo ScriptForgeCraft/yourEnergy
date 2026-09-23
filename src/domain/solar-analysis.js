@@ -21,6 +21,7 @@ import { recommendInverter } from './inverter-recommendation.js';
 import { recommendStorage } from './storage-recommendation.js';
 import { recommendMountingHardware } from './mounting-recommendation.js';
 import { buildEquipmentRecommendation } from './equipment-recommendation.js';
+import { buildCalculationBasis } from './calculation-provenance.js';
 
 export const ANALYSIS_SCHEMA_VERSION = '1.1.0';
 
@@ -526,6 +527,14 @@ const sourceEntry = (key, source, available, reason = null) => ({
   reason
 });
 
+const catalogSource = (productId) => ({
+  kind: SOURCE_KIND.CATALOG,
+  status: SOURCE_STATUS.CONFIRMED,
+  provider: 'equipment-catalog',
+  reference: productId,
+  verifiedAt: null
+});
+
 /**
  * Builds a transparent completeness score. It measures evidence available to
  * this calculation, rather than the physical quality of the proposed system.
@@ -634,6 +643,7 @@ export const buildSolarAnalysis = (input = {}) => {
     mountingHardwareRecommendation,
     storageRecommendation
   });
+  const scope = cleanString(input.scope) ?? 'manual-roof-plane';
   const status = selectedScenario?.status ?? ANALYSIS_STATUS.UNAVAILABLE;
   const commercialEstimate = selectedScenario?.commercialEstimate ?? null;
   const tariffKind =
@@ -713,7 +723,25 @@ export const buildSolarAnalysis = (input = {}) => {
       environmental.avoidedCo2Tons !== null
         ? `VERIFIED_HISTORICAL_GRID_FACTOR_${environmental.factor.dataYear ?? 'UNKNOWN'}`
         : 'GRID_FACTOR_UNAVAILABLE'
-    )
+    ),
+    ...(system.equipment?.panelId
+      ? [sourceEntry('panel', catalogSource(system.equipment.panelId), true)]
+      : []),
+    ...(equipmentRecommendation?.inverter?.productId
+      ? [sourceEntry('inverter', catalogSource(equipmentRecommendation.inverter.productId), true)]
+      : []),
+    ...(equipmentRecommendation?.storage?.productId
+      ? [sourceEntry('storage', catalogSource(equipmentRecommendation.storage.productId), true)]
+      : []),
+    ...(equipmentRecommendation?.mounting?.productId
+      ? [
+          sourceEntry(
+            'mounting-hardware',
+            catalogSource(equipmentRecommendation.mounting.productId),
+            true
+          )
+        ]
+      : [])
   ];
 
   const dataCompleteness = calculateDataCompleteness({
@@ -729,6 +757,27 @@ export const buildSolarAnalysis = (input = {}) => {
   const limitations = Array.isArray(input.limitations)
     ? input.limitations.filter((limitation) => typeof limitation === 'string' && limitation)
     : [];
+  const calculationBasis = buildCalculationBasis({
+    scope,
+    property,
+    roof,
+    production,
+    equipment: system.equipment,
+    equipmentRecommendation,
+    financial: {
+      tariff: {
+        kind: tariffKind,
+        tariffId: tariff?.tariff?.tariffId ?? null,
+        revision: tariff?.dataset?.revision ?? tariff?.tariff?.datasetRevision ?? null,
+        period: tariff?.tariff?.period ?? null,
+        rateAmdPerKwh: getUsableTariffRate(tariff),
+        source: tariff?.source ?? unavailableSource
+      },
+      surplusCompensation: surplusCompensationSummary(surplusCompensation)
+    },
+    calculationConfig: input.calculationConfig,
+    regionalReference: input.regionalReference
+  });
 
   return {
     schemaVersion: ANALYSIS_SCHEMA_VERSION,
@@ -748,7 +797,7 @@ export const buildSolarAnalysis = (input = {}) => {
     investment,
     priceBook: commercialEstimate?.priceBook ?? null,
     commercialEstimate,
-    scope: cleanString(input.scope) ?? 'manual-roof-plane',
+    scope,
     dataCompleteness,
     cache: input.cache && typeof input.cache === 'object' ? input.cache : null,
     providerRetrievedAt: cleanString(input.providerRetrievedAt),
@@ -761,6 +810,7 @@ export const buildSolarAnalysis = (input = {}) => {
             basis: cleanString(input.mountingRecommendation.basis)
           }
         : null,
+    calculationBasis,
     environmental,
     limitations,
     financial: {

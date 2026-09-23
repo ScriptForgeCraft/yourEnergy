@@ -62,7 +62,11 @@ export const analyze = async ({ request, env, fetchImpl }) => {
       providerAnalysis: normalizedProviderAnalysis,
       tariffSelection: workflow.tariffSelection,
       roofArea: workflow.roofArea,
-      calculatorSystem: workflow.calculatorSystem
+      calculatorSystem: workflow.calculatorSystem,
+      calculationConfig: {
+        systemLossPercent: input.system.lossPercent,
+        mountingPlace: input.roof.pvgisMountingPlace
+      }
     })
   };
 };

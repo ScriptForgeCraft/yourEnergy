@@ -6,7 +6,7 @@
  * financial estimate has been verified.
  */
 
-/** @typedef {'manual'|'provider'|'registry'|'unavailable'} SourceKind */
+/** @typedef {'manual'|'provider'|'registry'|'catalog'|'unavailable'} SourceKind */
 /** @typedef {'confirmed'|'provided'|'estimated'|'unavailable'} SourceStatus */
 /** @typedef {'preliminary'|'incomplete'|'unavailable'} DataCompletenessLevel */
 /** @typedef {'unavailable'|'technical-ready'|'financial-ready'} AnalysisStatus */
@@ -97,6 +97,7 @@
  * @property {Object|null} cache
  * @property {string|null} providerRetrievedAt
  * @property {Object|null} mountingRecommendation
+ * @property {Object} calculationBasis
  * @property {{factor: Object, avoidedCo2Tons: number|null, treeEquivalency: Object, treeEquivalent: number|null}} environmental
  * @property {string[]} limitations
  * @property {Object[]} sourceLedger
@@ -144,6 +145,7 @@ export const SOURCE_KIND = Object.freeze({
   MANUAL: 'manual',
   PROVIDER: 'provider',
   REGISTRY: 'registry',
+  CATALOG: 'catalog',
   UNAVAILABLE: 'unavailable'
 });
 

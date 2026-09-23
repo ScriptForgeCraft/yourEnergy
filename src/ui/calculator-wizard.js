@@ -1039,6 +1039,133 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
     return wrapper;
   };
 
+  const calculationBasisDetail = (basis) => {
+    if (!basis) return null;
+    const basisCopy = wizard.calculationBasis ?? {};
+    const sourceType = (type) => basisCopy.sourceTypes?.[type] ?? type ?? '';
+    const withSource = (value, type) => `${value} · ${sourceType(type)}`.replace(/\s*·\s*$/u, '');
+    const detail = element('details', 'wizard-details calculation-basis');
+    detail.append(element('summary', '', wizard.calculationBasisTitle ?? 'Calculation basis'));
+    const list = element('dl', 'passport-ledger');
+    const add = (label, value, type) => {
+      if (!value) return;
+      list.append(dashboardMetric(label, withSource(value, type)));
+    };
+    const coordinates = basis.coordinates;
+    if (coordinates) {
+      const label =
+        coordinates.sourceType === 'regional-reference'
+          ? (basisCopy.regionalCoordinates ?? 'Regional reference point')
+          : (basisCopy.coordinates ?? 'Coordinates');
+      const region = coordinates.regionId ? ` · ${coordinates.regionId}` : '';
+      add(
+        label,
+        `${format(coordinates.latitude, locale, { maximumFractionDigits: 5 })}, ${format(coordinates.longitude, locale, { maximumFractionDigits: 5 })}${region}`,
+        coordinates.sourceType
+      );
+    }
+    const solarYield = basis.solarYield;
+    if (solarYield) {
+      const loss = solarYield.configuration?.systemLossPercent;
+      const lossCopy =
+        loss === null || loss === undefined
+          ? ''
+          : ` · ${basisCopy.systemLoss ?? 'System loss'}: ${format(loss, locale, { maximumFractionDigits: 1 })}%`;
+      add(
+        basisCopy.solarYield ?? 'Solar yield',
+        `${solarYield.source?.provider ?? 'PVGIS'} · ${format(solarYield.annualYieldKwhPerKwp, locale)} kWh/kWp${lossCopy}`,
+        solarYield.sourceType
+      );
+    }
+    const roof = basis.roof;
+    if (roof) {
+      const mountingMode =
+        roof.mountingMode === 'elevated'
+          ? (wizard.elevated ?? 'Elevated structure')
+          : roof.mountingMode === 'roof-parallel'
+            ? (wizard.parallel ?? 'Parallel to roof')
+            : '—';
+      add(
+        basisCopy.roof ?? 'Roof data',
+        `${format(roof.areaSqm, locale, { maximumFractionDigits: 1 })} m² · ${format(roof.orientationDegrees, locale, { maximumFractionDigits: 1 })}° · ${format(roof.tiltDegrees, locale, { maximumFractionDigits: 1 })}° · ${mountingMode}`,
+        roof.sourceType
+      );
+    }
+    if (basis.usableRoofRatio) {
+      add(
+        basisCopy.usableRoofRatio ?? 'Usable roof ratio',
+        `${format(basis.usableRoofRatio.ratio * 100, locale, { maximumFractionDigits: 0 })}%`,
+        basis.usableRoofRatio.sourceType
+      );
+    }
+    const solarModule = basis.solarModule;
+    if (solarModule) {
+      add(
+        basisCopy.solarModule ?? 'Calculation solar module',
+        `${solarModule.brand ?? ''} ${solarModule.model ?? ''} · ${format(solarModule.panelWatts, locale)} W · ${format(solarModule.panelAreaSqm, locale, { maximumFractionDigits: 2 })} m² · ${solarModule.productId}`.trim(),
+        solarModule.sourceType
+      );
+    }
+    const inverter = basis.inverter;
+    if (inverter) {
+      add(
+        basisCopy.inverter ?? 'Recommended inverter',
+        `${inverter.brand ?? ''} ${inverter.productName ?? inverter.model ?? ''} · ${format(inverter.selectedAcPowerKw, locale, { maximumFractionDigits: 1 })} kW · ${inverter.productId}`.trim(),
+        inverter.sourceType
+      );
+    }
+    const storage = basis.storage;
+    if (storage) {
+      add(
+        basisCopy.storage ?? 'Storage option',
+        `${storage.brand ?? ''} ${storage.productName ?? storage.model ?? ''}${storage.selectedUsableCapacityKwh ? ` · ${format(storage.selectedUsableCapacityKwh, locale, { maximumFractionDigits: 2 })} kWh` : ''} · ${storage.productId}`.trim(),
+        storage.sourceType
+      );
+    }
+    const mounting = basis.mounting;
+    if (mounting) {
+      add(
+        basisCopy.mounting ?? 'Mounting option',
+        `${mounting.brand ?? ''} ${mounting.productName ?? mounting.model ?? ''}${mounting.practicalInclinationDeg === null ? '' : ` · ${format(mounting.practicalInclinationDeg, locale, { maximumFractionDigits: 1 })}°`} · ${mounting.productId}`.trim(),
+        mounting.sourceType
+      );
+    }
+    const tariff = basis.tariff;
+    if (tariff?.rateAmdPerKwh !== null && tariff?.rateAmdPerKwh !== undefined) {
+      const identity = [tariff.tariffId, tariff.revision, tariff.period]
+        .filter(Boolean)
+        .join(' · ');
+      add(
+        basisCopy.tariff ?? 'Electricity tariff',
+        `${identity ? `${identity} · ` : ''}${format(tariff.rateAmdPerKwh, locale, { maximumFractionDigits: 2 })} AMD/kWh`,
+        tariff.sourceType
+      );
+    } else {
+      add(
+        basisCopy.tariff ?? 'Electricity tariff',
+        basisCopy.noTariff ?? 'No tariff selected',
+        tariff?.sourceType
+      );
+    }
+    const surplus = basis.surplusCompensation;
+    if (surplus?.rateAmdPerKwh !== null && surplus?.rateAmdPerKwh !== undefined) {
+      const identity = [surplus.id, surplus.revision].filter(Boolean).join(' · ');
+      add(
+        basisCopy.surplusCompensation ?? 'Surplus compensation',
+        `${identity ? `${identity} · ` : ''}${format(surplus.rateAmdPerKwh, locale, { maximumFractionDigits: 2 })} AMD/kWh`,
+        surplus.sourceType
+      );
+    } else {
+      add(
+        basisCopy.surplusCompensation ?? 'Surplus compensation',
+        basisCopy.noSurplusCompensation ?? 'No verified compensation rate is configured',
+        surplus?.sourceType
+      );
+    }
+    detail.append(list);
+    return detail;
+  };
+
   const renderResult = (analysis) => {
     const scenario = analysis.selectedScenario;
     if (!scenario || !resultDashboard) return;
@@ -1305,6 +1432,8 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
       );
       resultDashboard.append(recommendation);
     }
+    const basis = calculationBasisDetail(analysis.calculationBasis);
+    if (basis) resultDashboard.append(basis);
     if (scenario.limitations?.includes('ROOF_CAPACITY_LIMIT')) {
       const limit = element('p', 'result-notice result-notice--warning', wizard.roofLimit);
       limit.append(
@@ -1481,9 +1610,10 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
       wizard.steps?.[2] ?? 'Roof',
       `${format(analysis.roof?.areaSqm, locale, { maximumFractionDigits: 1 })} m² · ${format(analysis.roof?.orientationDegrees, locale)}° · ${format(analysis.roof?.tiltDegrees, locale)}°`
     );
+    const pvgisLoss = analysis.calculationBasis?.solarYield?.configuration?.systemLossPercent;
     add(
       wizard.metrics?.pvgis ?? 'PVGIS',
-      `${format(analysis.production?.annualYieldKwhPerKwp, locale)} kWh/kWp · ${analysis.providerRetrievedAt ?? '—'} · 14%`
+      `${format(analysis.production?.annualYieldKwhPerKwp, locale)} kWh/kWp · ${analysis.providerRetrievedAt ?? '—'}${pvgisLoss === null || pvgisLoss === undefined ? '' : ` · ${format(pvgisLoss, locale, { maximumFractionDigits: 1 })}%`}`
     );
     add(
       wizard.metrics?.system ?? 'System',

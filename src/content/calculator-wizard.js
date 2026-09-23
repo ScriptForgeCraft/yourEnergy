@@ -23,6 +23,33 @@ const copy = {
       'Ընտրված է կատալոգի ամենափոքր հասանելի AC տարբերակը, որը հաշվարկված PV DC հզորությունից ցածր չէ։',
     equipmentPreliminaryCopy:
       'Ընտրությունը նախնական է․ լարային նախագիծը, էլեկտրական համատեղելիությունը և տեղային իրականացումը հաստատում է ինժեները։',
+    calculationBasisTitle: 'Հաշվարկի հիմքը',
+    calculationBasis: {
+      coordinates: 'Կոորդինատներ',
+      regionalCoordinates: 'Տարածաշրջանային հենակետ',
+      solarYield: 'Արևային արտադրողականություն',
+      roof: 'Տանիքի տվյալներ',
+      usableRoofRatio: 'Տանիքի օգտակար բաժին',
+      solarModule: 'Հաշվարկային արևային մոդուլ',
+      inverter: 'Առաջարկվող ինվերտեր',
+      storage: 'Կուտակիչի տարբերակ',
+      mounting: 'Ամրացման տարբերակ',
+      tariff: 'Էլեկտրաէներգիայի սակագին',
+      surplusCompensation: 'Ավելցուկի փոխհատուցում',
+      noTariff: 'Սակագինը ընտրված չէ',
+      noSurplusCompensation: 'Փոխհատուցման հաստատված սակագինը կարգավորված չէ',
+      systemLoss: 'Համակարգի կորուստ',
+      sourceTypes: {
+        'user-input': 'օգտատիրոջ մուտքագրում',
+        'regional-reference': 'տարածաշրջանային հենակետ',
+        'pvgis-result': 'PVGIS արդյունք',
+        'catalog-technical-value': 'կատալոգի տեխնիկական արժեք',
+        'calculator-assumption': 'հաշվիչի ենթադրություն',
+        'registry-value': 'գրանցամատյանի արժեք',
+        'preliminary-recommendation': 'նախնական առաջարկ',
+        unavailable: 'անհասանելի աղբյուր'
+      }
+    },
     storageRequestLabel: 'Ներառել կուտակիչի / պահուստի գնահատում',
     storageRequestHelp:
       'Ճշգրիտ ընտրության համար անհրաժեշտ են կրիտիկական բեռի և պահուստի տևողության տվյալներ։',
@@ -174,6 +201,33 @@ const copy = {
       'Выбран наименьший доступный вариант AC из каталога, не меньший рассчитанной PV DC-мощности.',
     equipmentPreliminaryCopy:
       'Подбор предварительный: схему строк, электрическую совместимость и реализацию на объекте подтверждает инженер.',
+    calculationBasisTitle: 'Основание расчёта',
+    calculationBasis: {
+      coordinates: 'Координаты',
+      regionalCoordinates: 'Региональная опорная точка',
+      solarYield: 'Солнечная выработка',
+      roof: 'Данные крыши',
+      usableRoofRatio: 'Полезная доля крыши',
+      solarModule: 'Расчётный солнечный модуль',
+      inverter: 'Рекомендуемый инвертор',
+      storage: 'Вариант накопителя',
+      mounting: 'Вариант крепления',
+      tariff: 'Тариф электроэнергии',
+      surplusCompensation: 'Компенсация избытка',
+      noTariff: 'Тариф не выбран',
+      noSurplusCompensation: 'Подтверждённая ставка компенсации не настроена',
+      systemLoss: 'Системные потери',
+      sourceTypes: {
+        'user-input': 'ввод пользователя',
+        'regional-reference': 'региональная опорная точка',
+        'pvgis-result': 'результат PVGIS',
+        'catalog-technical-value': 'техническое значение каталога',
+        'calculator-assumption': 'допущение калькулятора',
+        'registry-value': 'значение реестра',
+        'preliminary-recommendation': 'предварительная рекомендация',
+        unavailable: 'источник недоступен'
+      }
+    },
     storageRequestLabel: 'Включить оценку накопителя / резерва',
     storageRequestHelp:
       'Для точного подбора нужны данные о критической нагрузке и времени резерва.',
@@ -326,6 +380,33 @@ const copy = {
       'The smallest available catalog AC variant not below the calculated PV DC capacity was selected.',
     equipmentPreliminaryCopy:
       'This selection is preliminary; an engineer confirms string design, electrical compatibility and site implementation.',
+    calculationBasisTitle: 'Calculation basis',
+    calculationBasis: {
+      coordinates: 'Coordinates',
+      regionalCoordinates: 'Regional reference point',
+      solarYield: 'Solar yield',
+      roof: 'Roof data',
+      usableRoofRatio: 'Usable roof ratio',
+      solarModule: 'Calculation solar module',
+      inverter: 'Recommended inverter',
+      storage: 'Storage option',
+      mounting: 'Mounting option',
+      tariff: 'Electricity tariff',
+      surplusCompensation: 'Surplus compensation',
+      noTariff: 'No tariff selected',
+      noSurplusCompensation: 'No verified compensation rate is configured',
+      systemLoss: 'System loss',
+      sourceTypes: {
+        'user-input': 'user input',
+        'regional-reference': 'regional reference point',
+        'pvgis-result': 'PVGIS result',
+        'catalog-technical-value': 'catalog technical value',
+        'calculator-assumption': 'calculator assumption',
+        'registry-value': 'registry value',
+        'preliminary-recommendation': 'preliminary recommendation',
+        unavailable: 'source unavailable'
+      }
+    },
     storageRequestLabel: 'Include storage / backup review',
     storageRequestHelp: 'Exact sizing requires critical-load and backup-duration inputs.',
     inverterRecommendationTitle: 'Recommended inverter',

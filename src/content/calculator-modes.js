@@ -127,6 +127,23 @@ const common = {
       hybridInverter: 'Հիբրիդային ինվերտեր',
       equipmentPreliminary:
         'Սա կատալոգի հիման վրա նախնական ընտրություն է․ վերջնական էլեկտրական համատեղելիությունը հաստատում է ինժեները։',
+      calculationBasisTitle: 'Ինչպես է հաշվարկվել',
+      calculationBasis: {
+        coordinates: 'Տարածաշրջանային հենակետ',
+        solarYield: 'Արևային արտադրողականություն',
+        solarModule: 'Հաշվարկային մոդուլ',
+        tariff: 'Սակագին',
+        noTariff: 'Սակագինը ընտրված չէ',
+        systemLoss: 'Համակարգի կորուստ',
+        sourceTypes: {
+          'regional-reference': 'տարածաշրջանային հենակետ',
+          'pvgis-result': 'PVGIS արդյունք',
+          'catalog-technical-value': 'կատալոգի տեխնիկական արժեք',
+          'registry-value': 'գրանցամատյանի արժեք',
+          'user-input': 'օգտատիրոջ մուտքագրում',
+          unavailable: 'անհասանելի աղբյուր'
+        }
+      },
       capacity: 'Առաջարկվող հզորություն',
       panels: 'Վահանակներ',
       generation: 'Տարեկան արտադրություն',
@@ -396,6 +413,23 @@ const common = {
       hybridInverter: 'Гибридный инвертор',
       equipmentPreliminary:
         'Это предварительный подбор по каталогу; окончательную электрическую совместимость подтверждает инженер.',
+      calculationBasisTitle: 'Как рассчитано',
+      calculationBasis: {
+        coordinates: 'Региональная опорная точка',
+        solarYield: 'Солнечная выработка',
+        solarModule: 'Расчётный модуль',
+        tariff: 'Тариф',
+        noTariff: 'Тариф не выбран',
+        systemLoss: 'Системные потери',
+        sourceTypes: {
+          'regional-reference': 'региональная опорная точка',
+          'pvgis-result': 'результат PVGIS',
+          'catalog-technical-value': 'техническое значение каталога',
+          'registry-value': 'значение реестра',
+          'user-input': 'ввод пользователя',
+          unavailable: 'источник недоступен'
+        }
+      },
       capacity: 'Рекомендуемая мощность',
       panels: 'Панели',
       generation: 'Годовая выработка',
@@ -662,6 +696,23 @@ const common = {
       hybridInverter: 'Hybrid inverter',
       equipmentPreliminary:
         'This is a catalog-based preliminary selection; an engineer confirms final electrical compatibility.',
+      calculationBasisTitle: 'How this was calculated',
+      calculationBasis: {
+        coordinates: 'Regional reference point',
+        solarYield: 'Solar yield',
+        solarModule: 'Calculation module',
+        tariff: 'Tariff',
+        noTariff: 'No tariff selected',
+        systemLoss: 'System loss',
+        sourceTypes: {
+          'regional-reference': 'regional reference point',
+          'pvgis-result': 'PVGIS result',
+          'catalog-technical-value': 'catalog technical value',
+          'registry-value': 'registry value',
+          'user-input': 'user input',
+          unavailable: 'source unavailable'
+        }
+      },
       capacity: 'Recommended capacity',
       panels: 'Panels',
       generation: 'Annual generation',
