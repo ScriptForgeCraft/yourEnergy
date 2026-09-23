@@ -60,6 +60,9 @@ const analysisMatchesPanel = (analysis, system) => {
   );
 };
 
+const analysisMatchesStorageRequest = (analysis, storageRequired) =>
+  Boolean(analysis?.storageRecommendation) === storageRequired;
+
 const panelDescription = (profile) =>
   profile ? `${profile.brand} ${profile.model} · ${profile.watts} W` : '—';
 
@@ -179,6 +182,7 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
   const roofOrientationCustomInput = root.querySelector('[data-roof-orientation-custom-input]');
   const roofTilt = root.querySelector('[data-roof-tilt]');
   const calculationPanel = root.querySelector('[data-calculation-panel]');
+  const storageRequired = root.querySelector('[data-storage-required]');
   const roofNotice = root.querySelector('.professional-roof-notice');
   const roofNoticeCopy = roofNotice?.querySelector('p');
   const roofNoticeDefault = roofNoticeCopy?.innerHTML ?? '';
@@ -205,9 +209,12 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
   const savedSession = session.read();
   const selectedPanelSystem =
     getCalculatorSystemForPanel(savedSession.selectedPanelId) ?? getDefaultCalculatorSystem();
-  const restoredAnalysis = analysisMatchesPanel(savedSession.analysis, selectedPanelSystem)
-    ? savedSession.analysis
-    : null;
+  const savedStorageRequired = savedSession.storageRequired === true;
+  const restoredAnalysis =
+    analysisMatchesPanel(savedSession.analysis, selectedPanelSystem) &&
+    analysisMatchesStorageRequest(savedSession.analysis, savedStorageRequired)
+      ? savedSession.analysis
+      : null;
   const state = createCalculatorWizardState({
     addressNote: savedSession.addressNote ?? '',
     confirmedProperty: savedSession.property?.coordinates ?? null,
@@ -219,6 +226,7 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
     consumption: savedSession.consumption ?? null,
     userTariff: savedSession.userTariff ?? null,
     selectedPanelId: selectedPanelSystem?.equipment?.panelId ?? null,
+    storageRequired: savedStorageRequired,
     analysis: restoredAnalysis,
     solarPassport: restoredAnalysis ? (savedSession.solarPassport ?? null) : null,
     analysisStatus: restoredAnalysis ? WIZARD_STEP_STATUSES.COMPLETE : WIZARD_STEP_STATUSES.LOCKED
@@ -248,6 +256,7 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
       consumption: state.consumption,
       userTariff: state.userTariff,
       selectedPanelId: state.selectedPanelId,
+      storageRequired: state.storageRequired,
       analysis: state.analysis,
       analysisStatus: state.analysisStatus,
       solarPassport: state.solarPassport
@@ -989,6 +998,62 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
       );
       resultDashboard.append(recommendation);
     }
+    const storage = analysis.storageRecommendation;
+    if (storage) {
+      const recommendation = element('section', 'result-notice');
+      recommendation.append(
+        element('h3', '', wizard.storageRecommendationTitle ?? 'Energy-storage option')
+      );
+      if (storage.status === 'sized' && storage.productId) {
+        recommendation.append(
+          element('p', '', `${storage.brand} ${storage.productName}`),
+          element('p', '', storage.model),
+          element(
+            'p',
+            '',
+            text(wizard.storageSizingCopy, {
+              required: format(storage.requiredUsableCapacityKwh, locale, {
+                maximumFractionDigits: 2
+              }),
+              modules: storage.moduleCount,
+              selected: format(storage.selectedUsableCapacityKwh, locale, {
+                maximumFractionDigits: 2
+              })
+            })
+          )
+        );
+      } else if (storage.status === 'catalog-capacity-exceeded') {
+        recommendation.append(
+          element(
+            'p',
+            '',
+            text(wizard.storageCapacityExceededCopy, {
+              maximum: format(storage.systemUsableCapacityMaxKwh, locale, {
+                maximumFractionDigits: 2
+              })
+            })
+          )
+        );
+      } else {
+        recommendation.append(
+          element(
+            'p',
+            '',
+            wizard.storageProfileRequiredCopy ??
+              'Storage is optional. Exact battery sizing requires a load and backup profile.'
+          )
+        );
+      }
+      recommendation.append(
+        element(
+          'small',
+          '',
+          wizard.storageEngineeringCopy ??
+            'Final compatibility, backup output and connection design are confirmed during engineering.'
+        )
+      );
+      resultDashboard.append(recommendation);
+    }
     if (scenario.limitations?.includes('ROOF_CAPACITY_LIMIT')) {
       const limit = element('p', 'result-notice result-notice--warning', wizard.roofLimit);
       limit.append(
@@ -1063,7 +1128,8 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
       // PVGIS remains a normalized 1 kWp yield query. Panel selection is sent
       // independently as an ID and resolved by the server-side catalogue.
       system: { capacityKwp: PVGIS_KWP, lossPercent: PVGIS_LOSS },
-      equipment: { panelId: state.selectedPanelId }
+      equipment: { panelId: state.selectedPanelId },
+      storageRequired: state.storageRequired
     };
   };
 
@@ -1162,6 +1228,13 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
         `${inverter.brand} ${inverter.productName} · ${format(inverter.selectedAcPowerKw, locale, { maximumFractionDigits: 1 })} kW`
       );
     }
+    const storage = analysis.storageRecommendation;
+    if (storage?.status === 'sized' && storage.productId) {
+      add(
+        wizard.storageRecommendationTitle ?? 'Energy-storage option',
+        `${storage.brand} ${storage.productName} · ${format(storage.selectedUsableCapacityKwh, locale, { maximumFractionDigits: 2 })} kWh · ${format(storage.moduleCount, locale)} modules`
+      );
+    }
     const estimate = analysis.commercialEstimate;
     add(
       wizard.budget,
@@ -1224,6 +1297,7 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
     savedTariff.value = state.userTariff.rateAmdPerKwh;
   }
   if (state.addressNote && address) address.value = state.addressNote;
+  if (storageRequired) storageRequired.checked = state.storageRequired;
   if (state.roof) {
     const areaMethod = root.querySelector(
       `[data-roof-area-method][value="${state.roof.areaMethod}"]`
@@ -1407,6 +1481,15 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
     // used, so Back/Forward and cross-route session handoffs cannot show the
     // prior module's roof fit or installed capacity.
     session.selectPanel(panelId);
+    clearAnalysis();
+    lastAnalysis = null;
+    updateProgress();
+  });
+
+  storageRequired?.addEventListener('change', () => {
+    const nextStorageRequired = storageRequired.checked;
+    if (nextStorageRequired === state.storageRequired) return;
+    state.storageRequired = nextStorageRequired;
     clearAnalysis();
     lastAnalysis = null;
     updateProgress();

@@ -12,6 +12,7 @@ import {
 import { getUsableTariffRate, selectEffectiveTariff } from './tariffs.js';
 import { buildCommercialEstimate } from './pricebook.js';
 import { recommendInverter } from './inverter-recommendation.js';
+import { recommendStorage } from './storage-recommendation.js';
 
 export const ANALYSIS_SCHEMA_VERSION = '1.0.0';
 
@@ -544,6 +545,12 @@ export const buildSolarAnalysis = (input = {}) => {
     dcCapacityKwp: selectedScenario?.system?.capacityKwp,
     storageRequired: input.storageRequired === true
   });
+  const storageInput = input.storage && typeof input.storage === 'object' ? input.storage : {};
+  const storageRecommendation = recommendStorage({
+    storageRequired: input.storageRequired === true,
+    criticalLoadPowerKw: storageInput.criticalLoadPowerKw,
+    backupDurationHours: storageInput.backupDurationHours
+  });
   const status = selectedScenario?.status ?? ANALYSIS_STATUS.UNAVAILABLE;
   const commercialEstimate = selectedScenario?.commercialEstimate ?? null;
   const tariffKind =
@@ -646,6 +653,7 @@ export const buildSolarAnalysis = (input = {}) => {
     system,
     equipment: system.equipment,
     inverterRecommendation,
+    storageRecommendation,
     investment,
     priceBook: commercialEstimate?.priceBook ?? null,
     commercialEstimate,

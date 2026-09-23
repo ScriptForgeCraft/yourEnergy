@@ -42,6 +42,12 @@ export {
   recommendInverter
 } from './inverter-recommendation.js';
 export {
+  STORAGE_COMPATIBILITY_LIMITATIONS,
+  STORAGE_RECOMMENDATION_STATUS,
+  STORAGE_TECHNOLOGY,
+  recommendStorage
+} from './storage-recommendation.js';
+export {
   buildEnvironmentalImpact,
   buildTreeEquivalence,
   normalizeGridEmissionFactor,

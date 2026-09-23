@@ -3370,6 +3370,33 @@
   line-height: 1.35;
 }
 
+.calculator-page--professional .professional-storage-request {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  column-gap: 0.55rem;
+  margin-top: 0.85rem;
+  color: #294968;
+  font-size: 0.73rem;
+  font-weight: 720;
+}
+
+.calculator-page--professional .professional-storage-request input {
+  grid-row: span 2;
+  align-self: start;
+  width: 1rem;
+  height: 1rem;
+  margin: 0.08rem 0 0;
+  accent-color: #1e7b62;
+}
+
+.calculator-page--professional .professional-storage-request small {
+  margin-top: 0.2rem;
+  color: #607895;
+  font-size: 0.67rem;
+  font-weight: 540;
+  line-height: 1.35;
+}
+
 .calculator-page--professional .professional-roof-mounting-select select {
   min-height: 2.88rem;
   margin-top: 0.3rem;

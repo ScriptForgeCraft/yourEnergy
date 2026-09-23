@@ -198,6 +198,7 @@ export const buildP0SolarAnalysis = ({
     // visitor entered from a bill; missing selection remains unavailable.
     tariffSelection,
     system: calculatorSystemForBody(body),
+    storageRequired: body?.storageRequired === true,
     // The browser never controls capex. A dated server-side price book is the
     // only provisional commercial source used in this P1 route.
     investment: {},

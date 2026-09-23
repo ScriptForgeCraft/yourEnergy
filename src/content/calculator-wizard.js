@@ -8,9 +8,21 @@ const copy = {
     engineering: 'Ինժեներական պարամետրեր',
     calculationPanelLabel: 'Հաշվարկային արևային մոդուլ',
     calculationPanelHelp: 'Հաշվարկը օգտագործում է ընտրված մոդուլի հզորությունն ու ֆիզիկական մակերեսը։',
+    storageRequestLabel: 'Ներառել կուտակիչի / պահուստի գնահատում',
+    storageRequestHelp:
+      'Ճշգրիտ ընտրության համար անհրաժեշտ են կրիտիկական բեռի և պահուստի տևողության տվյալներ։',
     inverterRecommendationTitle: 'Առաջարկվող ինվերտեր',
     inverterRecommendationCopy:
       'Ընտրված է հաշվարկված PV DC հզորության համար։ Վերջնական լարային, MPPT և ցանցային համատեղելիությունը հաստատվում է ինժեներական փուլում։',
+    storageRecommendationTitle: 'Էներգիայի կուտակման տարբերակ',
+    storageProfileRequiredCopy:
+      'Կուտակիչը ընտրովի է։ Ճշգրիտ հզորությունը պահանջում է կրիտիկական բեռի և պահուստի տևողության տվյալներ։',
+    storageSizingCopy:
+      'Պահանջվող օգտագործելի՝ {required} kWh · {modules} մոդուլ · ընտրված օգտագործելի՝ {selected} kWh',
+    storageCapacityExceededCopy:
+      'Պահանջվող օգտագործելի հզորությունը գերազանցում է կատալոգային համակարգի առավելագույնը՝ {maximum} kWh։',
+    storageEngineeringCopy:
+      'Վերջնական համատեղելիությունը, պահուստային հզորությունը և միացման սխեման հաստատվում են ինժեներական փուլում։',
     addressLabel: 'Նշում ինժեների համար',
     addressHelp:
       'Հասցեն չի օգտագործվում հաշվարկի համար։ Ընտրեք ճշգրիտ կետ քարտեզի վրա կամ մուտքագրեք կոորդինատներ։',
@@ -117,9 +129,21 @@ const copy = {
     engineering: 'Инженерные параметры',
     calculationPanelLabel: 'Расчётный солнечный модуль',
     calculationPanelHelp: 'Расчёт использует мощность и физическую площадь выбранного модуля.',
+    storageRequestLabel: 'Включить оценку накопителя / резерва',
+    storageRequestHelp:
+      'Для точного подбора нужны данные о критической нагрузке и времени резерва.',
     inverterRecommendationTitle: 'Рекомендуемый инвертор',
     inverterRecommendationCopy:
       'Выбран для рассчитанной PV DC-мощности. Окончательную совместимость строк, MPPT и сети подтверждает инженер.',
+    storageRecommendationTitle: 'Вариант накопления энергии',
+    storageProfileRequiredCopy:
+      'Накопитель необязателен. Для точного подбора нужны данные о критической нагрузке и времени резерва.',
+    storageSizingCopy:
+      'Требуемая полезная ёмкость: {required} кВт·ч · модулей: {modules} · выбранная полезная ёмкость: {selected} кВт·ч',
+    storageCapacityExceededCopy:
+      'Требуемая полезная ёмкость превышает максимум системы в каталоге: {maximum} кВт·ч.',
+    storageEngineeringCopy:
+      'Окончательную совместимость, резервную мощность и схему подключения подтверждает инженер.',
     addressLabel: 'Заметка для инженера',
     addressHelp:
       'Адрес не используется для солнечного расчёта. Выберите точную точку на карте или введите координаты.',
@@ -226,9 +250,20 @@ const copy = {
     engineering: 'Engineering parameters',
     calculationPanelLabel: 'Calculation solar module',
     calculationPanelHelp: 'The calculation uses the selected module’s wattage and physical area.',
+    storageRequestLabel: 'Include storage / backup review',
+    storageRequestHelp: 'Exact sizing requires critical-load and backup-duration inputs.',
     inverterRecommendationTitle: 'Recommended inverter',
     inverterRecommendationCopy:
       'Selected for the calculated PV DC capacity. Final string, MPPT and grid compatibility is confirmed during engineering.',
+    storageRecommendationTitle: 'Energy-storage option',
+    storageProfileRequiredCopy:
+      'Storage is optional. Exact battery sizing requires critical-load and backup-duration inputs.',
+    storageSizingCopy:
+      'Required usable: {required} kWh · modules: {modules} · selected usable: {selected} kWh',
+    storageCapacityExceededCopy:
+      'The required usable capacity exceeds the catalog system maximum of {maximum} kWh.',
+    storageEngineeringCopy:
+      'Final compatibility, backup output and connection design are confirmed during engineering.',
     addressLabel: 'Note for the engineer',
     addressHelp:
       'The address is not used for the solar calculation. Choose the exact point on the map or enter coordinates.',

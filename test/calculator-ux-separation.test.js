@@ -16,6 +16,7 @@ test('Quick keeps maps and professional fields out of its initial markup', async
     'data-roof-orientation',
     'data-roof-mounting-mode',
     'data-calculation-panel',
+    'data-storage-required',
     'P25',
     'P50',
     'P75'
@@ -39,6 +40,7 @@ test('Professional has exactly four customer steps and retains every engineering
     'data-roof-tilt',
     'data-roof-orientation',
     'data-roof-mounting-mode',
+    'data-storage-required',
     'data-optional-upload',
     'data-consumption-switch-monthly',
     "data-consumption-unit='amd'",
@@ -69,10 +71,15 @@ test('Professional has exactly four customer steps and retains every engineering
   assert.match(controller, /mapController\?\.finishRoof\(\)/u);
   assert.match(controller, /getCalculatorSystemForPanel/u);
   assert.match(controller, /equipment: \{ panelId: state\.selectedPanelId \}/u);
+  assert.match(controller, /storageRequired: state\.storageRequired/u);
   assert.match(controller, /session\.selectPanel\(panelId\)/u);
   assert.match(controller, /analysisMatchesPanel/u);
+  assert.match(controller, /analysisMatchesStorageRequest/u);
+  assert.match(controller, /storageRequired\?\.addEventListener\('change'/u);
   assert.match(controller, /analysis\.inverterRecommendation/u);
   assert.match(controller, /wizard\.inverterRecommendationTitle/u);
+  assert.match(controller, /analysis\.storageRecommendation/u);
+  assert.match(controller, /wizard\.storageRecommendationTitle/u);
   assert.doesNotMatch(controller, /issue === 'outline' \|\| issue === 'area'/u);
 });
 

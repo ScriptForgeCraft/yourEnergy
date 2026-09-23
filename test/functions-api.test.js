@@ -480,6 +480,33 @@ test('the server resolves an explicit catalog panel ID without altering PVGIS-sp
   assert.equal(scenario.generation.annualKwh, scenario.system.capacityKwp * 1_500);
 });
 
+test('the server requires a future load profile before sizing requested storage', () => {
+  const analysis = buildP0SolarAnalysis({
+    body: {
+      ...p0AnalysisPayload,
+      storageRequired: true,
+      // P0 intentionally does not accept these unvalidated future inputs.
+      storage: { criticalLoadPowerKw: 2, backupDurationHours: 5 }
+    },
+    validatedInput: {
+      property: { latitude: 40.18, longitude: 44.51 },
+      roof: { tiltDegrees: 30, azimuthDegrees: 180 }
+    },
+    providerAnalysis: {
+      generation: {
+        annualKwh: 1_500,
+        monthlyKwh: Array.from({ length: 12 }, () => 125)
+      },
+      sourceLedger: [{ retrievedAt: '2026-08-31T00:00:00.000Z' }]
+    },
+    effectiveDate: '2026-08-31'
+  });
+
+  assert.equal(analysis.storageRecommendation.status, 'profile-required');
+  assert.equal(analysis.storageRecommendation.storageOptional, true);
+  assert.equal(analysis.inverterRecommendation.technology, 'hybrid');
+});
+
 test('the server makes a small outlined roof a visible preliminary capacity constraint', () => {
   const analysis = buildP0SolarAnalysis({
     body: {

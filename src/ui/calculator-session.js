@@ -20,6 +20,7 @@ const emptyState = () => ({
   roof: null,
   sitePotential: null,
   selectedPanelId: null,
+  storageRequired: false,
   quickAnalysis: null,
   analysis: null,
   analysisStatus: 'idle',
