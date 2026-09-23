@@ -9,6 +9,7 @@ import {
   findUnlocalizedStrings,
   missingEquipmentTranslations
 } from '../src/data/equipment/equipment-i18n.js';
+import { productFromDeepLink } from '../src/ui/equipment-showroom.js';
 
 const existingData = JSON.parse(
   await readFile(new URL('../src/data/equipment/equipment-data.json', import.meta.url), 'utf8')
@@ -139,6 +140,31 @@ test('localized LONGi Guardian uses the canonical display strings', () => {
   assert.equal(
     en.shortDescription,
     'High-efficiency dual-glass module with HPBC 2.0 and an Anti-Dust design for reliable performance in demanding conditions.'
+  );
+});
+
+test('a valid product deep link opens the requested localized showroom product', () => {
+  const productId = 'longi-hi-mo-x10-guardian-lr7-72hvdf';
+  const products = createEquipmentCatalog('en').products;
+  const productById = new Map(products.map((product) => [product.id, product]));
+  const selected = productFromDeepLink(productById, products[0], `?product=${productId}`);
+
+  assert.equal(selected?.id, productId);
+  assert.equal(selected?.category, 'solar-panels');
+  assert.ok(selected?.image);
+  assert.ok(selected?.shortDescription);
+  assert.ok(Object.keys(selected?.specs ?? {}).length);
+  assert.ok(selected?.highlights?.length);
+  assert.ok(selected?.documents?.length);
+});
+
+test('an invalid product deep link falls back to the normal showroom default', () => {
+  const products = createEquipmentCatalog('hy').products;
+  const productById = new Map(products.map((product) => [product.id, product]));
+
+  assert.equal(
+    productFromDeepLink(productById, products[0], '?product=not-a-catalog-product'),
+    products[0]
   );
 });
 

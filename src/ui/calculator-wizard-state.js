@@ -32,7 +32,6 @@ export const createCalculatorWizardState = (overrides = {}) => ({
   roof: null,
   consumption: null,
   userTariff: null,
-  selectedPanelId: null,
   storageRequired: false,
   selectedBillFile: null,
   analysis: null,

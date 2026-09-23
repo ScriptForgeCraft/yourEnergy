@@ -26,12 +26,8 @@ import {
   isRestorableProfessionalAnalysis
 } from './professional-analysis-identity.js';
 import { localitiesForRegion, localityCenter } from '../data/locations/armenia.js';
-import { getSolarPanels } from '../data/equipment/calculator-catalog.js';
-import {
-  getCalculatorSystemForPanel,
-  getDefaultCalculatorSystem,
-  getSolarPanelCalculationProfile
-} from '../data/equipment/calculator-defaults.js';
+import { createEquipmentCatalog } from '../data/equipment/catalog.js';
+import { getDefaultCalculatorSystem } from '../data/equipment/calculator-defaults.js';
 
 const PVGIS_KWP = 1;
 const PVGIS_LOSS = 14;
@@ -90,8 +86,14 @@ const analysisMatchesPanel = (analysis, system) => {
 const analysisMatchesStorageRequest = (analysis, storageRequired) =>
   Boolean(analysis?.storageRecommendation) === storageRequired;
 
-const panelDescription = (profile) =>
-  profile ? `${profile.brand} ${profile.model} · ${profile.watts} W` : '—';
+const localeCode = (locale) => locale?.split('-')[0] ?? 'hy';
+
+export const equipmentProductHref = (productId, locale) => {
+  if (typeof productId !== 'string' || !productId.trim()) return null;
+  const language = localeCode(locale);
+  const route = language === 'hy' ? '/equipment/' : `/${language}/equipment/`;
+  return `${route}?product=${encodeURIComponent(productId)}`;
+};
 
 const compass = (degrees, directions) => {
   const value = Number(degrees);
@@ -170,6 +172,11 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
   const product = config.product ?? {};
   const wizard = config.wizard ?? {};
   const locale = config.locale ?? 'en-US';
+  const displayProductsById = new Map(
+    createEquipmentCatalog(localeCode(locale)).products
+      .filter((displayProduct) => displayProduct?.id)
+      .map((displayProduct) => [displayProduct.id, displayProduct])
+  );
   const api = new ProductApiClient({ endpoints: config.endpoints ?? {} });
   const lifecycle = createAsyncRequestLifecycle();
   const passportRepository = new SolarPassportRepository();
@@ -209,7 +216,6 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
   const roofOrientationCustom = root.querySelector('[data-roof-orientation-custom]');
   const roofOrientationCustomInput = root.querySelector('[data-roof-orientation-custom-input]');
   const roofTilt = root.querySelector('[data-roof-tilt]');
-  const calculationPanel = root.querySelector('[data-calculation-panel]');
   const storageRequired = root.querySelector('[data-storage-required]');
   const roofNotice = root.querySelector('.professional-roof-notice');
   const roofNoticeCopy = roofNotice?.querySelector('p');
@@ -242,8 +248,10 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
 
   const session = createCalculatorSession();
   const savedSession = session.read();
-  const selectedPanelSystem =
-    getCalculatorSystemForPanel(savedSession.selectedPanelId) ?? getDefaultCalculatorSystem();
+  // Professional sizing always starts with the calculator-selected catalog
+  // module. A legacy session's former customer choice is deliberately ignored.
+  const recommendedPanelSystem = getDefaultCalculatorSystem();
+  const recommendedPanelId = recommendedPanelSystem?.equipment?.panelId ?? null;
   const savedStorageRequired = savedSession.storageRequired === true;
   const savedProfessionalIdentity = createProfessionalAnalysisIdentity({
     property: savedSession.property?.coordinates,
@@ -251,12 +259,12 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
     tariff: savedSession.userTariff,
     roof: savedSession.roof,
     system: { capacityKwp: PVGIS_KWP, lossPercent: PVGIS_LOSS },
-    panelId: selectedPanelSystem?.equipment?.panelId,
+    panelId: recommendedPanelId,
     storageRequired: savedStorageRequired,
     calculationVersion: ANALYSIS_SCHEMA_VERSION
   });
   const restoredAnalysis =
-    analysisMatchesPanel(savedSession.professionalAnalysis, selectedPanelSystem) &&
+    analysisMatchesPanel(savedSession.professionalAnalysis, recommendedPanelSystem) &&
     analysisMatchesStorageRequest(savedSession.professionalAnalysis, savedStorageRequired) &&
     isRestorableProfessionalAnalysis({
       analysis: savedSession.professionalAnalysis,
@@ -277,7 +285,6 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
     roof: savedSession.roof ?? null,
     consumption: savedSession.consumption ?? null,
     userTariff: savedSession.userTariff ?? null,
-    selectedPanelId: selectedPanelSystem?.equipment?.panelId ?? null,
     storageRequired: savedStorageRequired,
     analysis: restoredAnalysis,
     solarPassport: restoredAnalysis ? (savedSession.professionalSolarPassport ?? null) : null,
@@ -311,7 +318,6 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
       roof: state.roof,
       consumption: state.consumption,
       userTariff: state.userTariff,
-      selectedPanelId: state.selectedPanelId,
       storageRequired: state.storageRequired,
       professionalAnalysis: state.analysis,
       professionalAnalysisStatus: state.analysisStatus,
@@ -342,27 +348,6 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
     });
     localitySelect.replaceChildren(placeholder, ...options);
     localitySelect.disabled = localities.length === 0;
-  };
-
-  const populateCalculationPanelOptions = () => {
-    if (!calculationPanel) return;
-    const profiles = getSolarPanels()
-      .map(({ id }) => getSolarPanelCalculationProfile(id))
-      .filter(Boolean);
-    const availableIds = new Set(profiles.map(({ id }) => id));
-    if (!availableIds.has(state.selectedPanelId)) {
-      state.selectedPanelId = profiles[0]?.id ?? null;
-    }
-    calculationPanel.replaceChildren(
-      ...profiles.map((profile) => {
-        const option = document.createElement('option');
-        option.value = profile.id;
-        option.textContent = panelDescription(profile);
-        return option;
-      })
-    );
-    calculationPanel.disabled = profiles.length === 0;
-    if (state.selectedPanelId) calculationPanel.value = state.selectedPanelId;
   };
 
   const stopAddressSearch = () => {
@@ -717,16 +702,14 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
 
   const updateRoofCapacityPreview = (roof) => {
     if (!roofCapacityPreview) return;
-    const system =
-      getCalculatorSystemForPanel(state.selectedPanelId) ?? getDefaultCalculatorSystem();
-    const profile = getSolarPanelCalculationProfile(system?.equipment?.panelId);
+    const system = recommendedPanelSystem;
     const capacity = calculatePreliminaryRoofCapacity({
       roofAreaSqm: roof.effectiveAreaSqm,
       usableAreaRatio: PRELIMINARY_USABLE_ROOF_RATIO,
       panelAreaSqm: system?.panelAreaSqm,
       panelWatts: system?.panelWatts
     });
-    if (!capacity || !profile) {
+    if (!capacity || !system) {
       roofCapacityPreview.hidden = true;
       return;
     }
@@ -743,7 +726,9 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
     if (roofCapacityPanels)
       roofCapacityPanels.textContent = format(capacity.maximumPanelCount, locale);
     if (roofCapacityPanel)
-      roofCapacityPanel.textContent = `${wizard.calculationPanelLabel ?? 'Calculation solar module'}: ${panelDescription(profile)}`;
+      roofCapacityPanel.textContent =
+        wizard.preliminarySizingBasisCopy ??
+        'The preliminary roof fit uses a catalog module footprint and rating.';
     if (roofCapacitySystem)
       roofCapacitySystem.textContent = text(wizard.roofCapacityPreview, {
         capacity: format(capacity.maximumCapacityKwp, locale, { maximumFractionDigits: 2 }),
@@ -1225,6 +1210,135 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
     return detail;
   };
 
+  const equipmentCard = ({ title, recommendation, value, reason }) => {
+    const productId = recommendation?.productId;
+    if (typeof productId !== 'string' || !productId) return null;
+    const displayProduct = displayProductsById.get(productId) ?? null;
+    const card = document.createElement(displayProduct ? 'a' : 'article');
+    card.className = 'result-equipment-card';
+    card.dataset.recommendedProduct = productId;
+    if (displayProduct) {
+      card.href = equipmentProductHref(productId, locale);
+      card.target = '_blank';
+      card.rel = 'noopener noreferrer';
+    } else {
+      card.classList.add('result-equipment-card--unlinked');
+    }
+
+    const displayName = displayProduct?.name ?? recommendation.productName ?? '';
+    const displayModel = displayProduct?.model ?? recommendation.model ?? '';
+    const displayBrand = displayProduct?.brand ?? recommendation.brand ?? '';
+    const media = element('div', 'result-equipment-card__media');
+    const imageUnavailable = element(
+      'span',
+      'result-equipment-card__image-unavailable',
+      wizard.equipmentImageUnavailable ?? 'Product image unavailable'
+    );
+    if (displayProduct?.image) {
+      const image = document.createElement('img');
+      image.src = displayProduct.image;
+      image.alt = [displayBrand, displayName, displayModel].filter(Boolean).join(' · ');
+      image.loading = 'lazy';
+      image.decoding = 'async';
+      imageUnavailable.hidden = true;
+      image.addEventListener('error', () => {
+        image.hidden = true;
+        imageUnavailable.hidden = false;
+      });
+      media.append(image, imageUnavailable);
+    } else {
+      media.append(imageUnavailable);
+    }
+
+    const content = element('div', 'result-equipment-card__content');
+    content.append(
+      element('p', 'result-equipment-card__label', title),
+      element('p', 'result-equipment-card__brand', displayBrand),
+      element('h4', '', displayName),
+      element('p', 'result-equipment-card__model', displayModel),
+      element('p', 'result-equipment-card__value', value),
+      element('p', 'result-equipment-card__reason', reason),
+      element(
+        'p',
+        'result-equipment-card__status',
+        wizard.recommendationPreliminary ?? 'Preliminary recommendation'
+      )
+    );
+    if (displayProduct)
+      content.append(element('span', 'result-equipment-card__cta', wizard.viewProduct ?? 'View product'));
+    card.append(media, content);
+    return card;
+  };
+
+  const equipmentRecommendationCards = (recommendation) => {
+    const cards = [];
+    const solarModule = recommendation?.solarModule;
+    if (solarModule?.productId) {
+      cards.push(
+        equipmentCard({
+          title: wizard.moduleRecommendationTitle ?? 'Recommended solar module',
+          recommendation: solarModule,
+          value: `${format(solarModule.quantity, locale)} × ${format(solarModule.watts, locale)} W · ${format(solarModule.totalDcCapacityKwp, locale, { maximumFractionDigits: 2 })} kWp DC`,
+          reason:
+            wizard.moduleRecommendationReason ??
+            'The catalog module count and rating produce the calculated DC capacity.'
+        })
+      );
+    }
+    const inverter = recommendation?.inverter;
+    if (inverter?.productId && Number.isFinite(Number(inverter.selectedAcPowerKw))) {
+      cards.push(
+        equipmentCard({
+          title: wizard.inverterRecommendationTitle ?? 'Recommended inverter',
+          recommendation: inverter,
+          value: `${format(inverter.selectedAcPowerKw, locale, { maximumFractionDigits: 1 })} kW AC · ${inverterTechnology(inverter.technology, wizard)}`,
+          reason: inverterReason(inverter.reason, wizard)
+        })
+      );
+    }
+    const mounting = recommendation?.mounting;
+    if (mounting?.productId) {
+      cards.push(
+        equipmentCard({
+          title: wizard.mountingHardwareTitle ?? 'Mounting recommendation',
+          recommendation: mounting,
+          value: `${format(mounting.practicalInclinationDeg, locale, { maximumFractionDigits: 1 })}° · ${mounting.installationType === 'elevated' ? (wizard.elevated ?? 'Elevated structure') : (wizard.parallel ?? 'Parallel to roof')}`,
+          reason:
+            wizard.mountingHardwareReason ??
+            'The catalog-supported inclination nearest the PVGIS optimum was selected.'
+        })
+      );
+    }
+    const storage = recommendation?.storage;
+    if (storage?.status === 'sized' && storage.productId) {
+      cards.push(
+        equipmentCard({
+          title: wizard.storageRecommendationTitle ?? 'Battery / storage option',
+          recommendation: storage,
+          value: `${format(storage.selectedUsableCapacityKwh, locale, { maximumFractionDigits: 2 })} kWh · ${format(storage.moduleCount, locale)} ${wizard.storageModules ?? 'modules'}`,
+          reason:
+            wizard.storageSizingReason ??
+            'A whole module count was rounded up to cover the required usable capacity.'
+        })
+      );
+    }
+
+    const availableCards = cards.filter(Boolean);
+    if (!availableCards.length) return null;
+    const section = element('section', 'result-equipment');
+    section.append(
+      element('h3', '', wizard.recommendedSystemTitle ?? 'Recommended system'),
+      ...availableCards,
+      element(
+        'p',
+        'result-equipment__engineering-note',
+        wizard.equipmentPreliminaryCopy ??
+          'This selection is preliminary; an engineer confirms string design, electrical compatibility and site implementation.'
+      )
+    );
+    return section;
+  };
+
   const renderResult = (analysis) => {
     const scenario = analysis.selectedScenario;
     if (!scenario || !resultDashboard) return;
@@ -1326,8 +1440,10 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
       resultDashboard.append(balance);
     }
     const equipmentRecommendation = analysis.equipmentRecommendation;
+    const renderedEquipmentCards = equipmentRecommendationCards(equipmentRecommendation);
+    if (renderedEquipmentCards) resultDashboard.append(renderedEquipmentCards);
     const solarModule = equipmentRecommendation?.solarModule;
-    if (solarModule) {
+    if (!renderedEquipmentCards && solarModule) {
       const recommendation = element('section', 'result-notice');
       recommendation.append(
         element('h3', '', wizard.moduleRecommendationTitle ?? 'Recommended solar module'),
@@ -1371,7 +1487,7 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
           element(
             'p',
             'result-notice',
-            `${wizard.calculationPanelLabel ?? 'Calculation solar module'}: ${equipment.panelBrand} ${equipment.panelModel} · ${format(equipment.panelWatts, locale)} W`
+            `${wizard.preliminarySizingBasis ?? 'Preliminary sizing basis'}: ${equipment.panelBrand} ${equipment.panelModel} · ${format(equipment.panelWatts, locale)} W`
           )
         );
       }
@@ -1425,7 +1541,11 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
       resultDashboard.append(roofFit);
     }
     const inverter = equipmentRecommendation?.inverter ?? analysis.inverterRecommendation;
-    if (inverter?.productId && Number.isFinite(Number(inverter.selectedAcPowerKw))) {
+    if (
+      !renderedEquipmentCards &&
+      inverter?.productId &&
+      Number.isFinite(Number(inverter.selectedAcPowerKw))
+    ) {
       const recommendation = element('section', 'result-notice');
       recommendation.append(
         element('h3', '', wizard.inverterRecommendationTitle ?? 'Recommended inverter'),
@@ -1454,7 +1574,7 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
       resultDashboard.append(recommendation);
     }
     const mountingHardware = analysis.mountingHardwareRecommendation;
-    if (mountingHardware?.status === 'matched' && mountingHardware.productId) {
+    if (!renderedEquipmentCards && mountingHardware?.status === 'matched' && mountingHardware.productId) {
       const recommendation = element('section', 'result-notice');
       const availableAngles = (mountingHardware.availableInclinationDeg ?? [])
         .map((angle) => format(angle, locale, { maximumFractionDigits: 1 }))
@@ -1513,7 +1633,7 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
         )
       );
       resultDashboard.append(recommendation);
-    } else if (mountingHardware?.status === 'no-catalog-match') {
+    } else if (!renderedEquipmentCards && mountingHardware?.status === 'no-catalog-match') {
       resultDashboard.append(
         element(
           'p',
@@ -1527,7 +1647,7 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
       );
     }
     const storage = analysis.storageRecommendation;
-    if (storage) {
+    if (!renderedEquipmentCards && storage) {
       const recommendation = element('section', 'result-notice');
       recommendation.append(
         element('h3', '', wizard.storageRecommendationTitle ?? 'Energy-storage option')
@@ -1675,10 +1795,10 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
         tiltDegrees: roof.tiltDegrees,
         azimuthDegrees: roof.azimuthDegrees
       },
-      // PVGIS remains a normalized 1 kWp yield query. Panel selection is sent
-      // independently as an ID and resolved by the server-side catalogue.
+      // PVGIS remains a normalized 1 kWp yield query. The calculator-selected
+      // catalog module is sent independently and resolved server-side.
       system: { capacityKwp: PVGIS_KWP, lossPercent: PVGIS_LOSS },
-      equipment: { panelId: state.selectedPanelId },
+      equipment: { panelId: recommendedPanelId },
       storageRequired: state.storageRequired
     };
   };
@@ -2068,23 +2188,6 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
     .querySelectorAll('[data-roof-area-method], [data-roof-mounting-mode], [data-roof-orientation]')
     .forEach((input) => input.addEventListener('change', syncRoofControls));
 
-  calculationPanel?.addEventListener('change', () => {
-    const system =
-      getCalculatorSystemForPanel(calculationPanel.value) ?? getDefaultCalculatorSystem();
-    const panelId = system?.equipment?.panelId;
-    if (!panelId || panelId === state.selectedPanelId) return;
-    state.selectedPanelId = panelId;
-    calculationPanel.value = panelId;
-    // This clears the Professional result before the new panel can be used,
-    // so Back/Forward and cross-route session handoffs cannot show the prior
-    // module's roof fit or installed capacity.
-    session.selectPanel(panelId);
-    clearAnalysis();
-    lastAnalysis = null;
-    updateRoofAreaSummary();
-    updateProgress();
-  });
-
   storageRequired?.addEventListener('change', () => {
     const nextStorageRequired = storageRequired.checked;
     if (nextStorageRequired === state.storageRequired) return;
@@ -2122,7 +2225,6 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
   );
 
   populateLocalityOptions();
-  populateCalculationPanelOptions();
   syncRoofControls({ preserveAnalysis: true });
   if (state.analysis) renderResult(state.analysis);
   const restoredStep = Number.isInteger(savedSession.currentStep) ? savedSession.currentStep : 0;

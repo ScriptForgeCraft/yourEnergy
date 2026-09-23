@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import test from 'node:test';
+import { equipmentProductHref } from '../src/ui/calculator-wizard.js';
 
 const root = resolve(import.meta.dirname, '..');
 const source = (path) => readFile(resolve(root, path), 'utf8');
@@ -69,10 +70,11 @@ test('Professional has exactly four customer steps and retains every engineering
   assert.match(controller, /locateSelectedLocality/u);
   assert.match(controller, /map\?\.focusLocation\(center\)/u);
   assert.match(controller, /mapController\?\.finishRoof\(\)/u);
-  assert.match(controller, /getCalculatorSystemForPanel/u);
-  assert.match(controller, /equipment: \{ panelId: state\.selectedPanelId \}/u);
+  assert.doesNotMatch(professional, /data-calculation-panel/u);
+  assert.match(controller, /getDefaultCalculatorSystem/u);
+  assert.match(controller, /equipment: \{ panelId: recommendedPanelId \}/u);
+  assert.doesNotMatch(controller, /session\.selectPanel\(panelId\)/u);
   assert.match(controller, /storageRequired: state\.storageRequired/u);
-  assert.match(controller, /session\.selectPanel\(panelId\)/u);
   assert.match(controller, /analysisMatchesPanel/u);
   assert.match(controller, /analysisMatchesStorageRequest/u);
   assert.match(controller, /storageRequired\?\.addEventListener\('change'/u);
@@ -82,7 +84,19 @@ test('Professional has exactly four customer steps and retains every engineering
   assert.match(controller, /wizard\.mountingHardwareTitle/u);
   assert.match(controller, /analysis\.storageRecommendation/u);
   assert.match(controller, /wizard\.storageRecommendationTitle/u);
+  assert.match(controller, /createEquipmentCatalog/u);
+  assert.match(controller, /card\.dataset\.recommendedProduct/u);
+  assert.match(controller, /card\.target = '_blank'/u);
+  assert.match(controller, /card\.rel = 'noopener noreferrer'/u);
   assert.doesNotMatch(controller, /issue === 'outline' \|\| issue === 'area'/u);
+});
+
+test('Professional product links preserve the recommendation ID in every locale', () => {
+  const productId = 'longi-hi-mo-x10-guardian-lr7-72hvdf';
+
+  assert.equal(equipmentProductHref(productId, 'hy-AM'), `/equipment/?product=${productId}`);
+  assert.equal(equipmentProductHref(productId, 'ru-RU'), `/ru/equipment/?product=${productId}`);
+  assert.equal(equipmentProductHref(productId, 'en-US'), `/en/equipment/?product=${productId}`);
 });
 
 test('one calculator exposes two modes and migrates historic routes safely', async () => {

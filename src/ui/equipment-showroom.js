@@ -301,6 +301,11 @@ const preloadProducts = (products) => {
     });
 };
 
+export const productFromDeepLink = (productById, fallbackProduct = null, search = '') => {
+  const requestedProductId = new URLSearchParams(search).get('product');
+  return productById.get(requestedProductId) ?? fallbackProduct;
+};
+
 export const initEquipmentShowroom = ({ data, copy, locale, gsap }) => {
   const root = $('[data-equipment-showroom]');
   if (!root || !data?.products?.length) return;
@@ -318,7 +323,8 @@ export const initEquipmentShowroom = ({ data, copy, locale, gsap }) => {
   const explorer = $('[data-product-explorer]');
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const animate = !reducedMotion;
-  let selectedProduct = products[0];
+  let selectedProduct = productFromDeepLink(productById, products[0], window.location.search);
+  if (!selectedProduct) return;
   let switching = false;
   let renderedCategory = null;
   const lastProductByCategory = new Map();
@@ -488,6 +494,11 @@ export const initEquipmentShowroom = ({ data, copy, locale, gsap }) => {
     $('[data-product-status]', root).textContent = `${product.brand} ${product.name}`;
     root.dataset.productCategory = product.category;
     syncNavigationState();
+    const url = new URL(window.location.href);
+    if (url.searchParams.get('product') !== product.id) {
+      url.searchParams.set('product', product.id);
+      window.history.replaceState(window.history.state, '', `${url.pathname}${url.search}${url.hash}`);
+    }
   };
 
   function selectProduct(productId) {

@@ -3,6 +3,7 @@ import test from 'node:test';
 
 import { getSolarPanelById } from '../src/data/equipment/calculator-catalog.js';
 import { getDefaultCalculatorSystem } from '../src/data/equipment/calculator-defaults.js';
+import { createEquipmentCatalog } from '../src/data/equipment/catalog.js';
 import { buildEquipmentRecommendation, buildSolarAnalysis } from '../src/domain/index.js';
 
 const source = { kind: 'provider', status: 'confirmed', provider: 'PVGIS fixture' };
@@ -47,6 +48,11 @@ test('final equipment recommendation resolves a calculated module, footprint and
   assert.ok(
     recommendation?.inverter?.selectedAcPowerKw >= recommendation?.inverter?.requiredDcCapacityKwp
   );
+  const displayProduct = createEquipmentCatalog('en').products.find(
+    ({ id }) => id === recommendation?.solarModule?.productId
+  );
+  assert.equal(displayProduct?.id, analysis.selectedScenario.system.equipment.panelId);
+  assert.ok(displayProduct?.image);
 });
 
 test('a roof-limited project recommends the actual roof-fit module quantity rather than the requested capacity', () => {
