@@ -1,13 +1,9 @@
-const positiveNumber = (value) => {
-  const number = Number(value);
-  return Number.isFinite(number) && number > 0 ? number : null;
-};
+import { getCalculatorInputNumber, isCalculatorInputInRange } from '../domain/calculator-inputs.js';
 
-const nonNegativeNumber = (value) => {
-  if (value === '' || value === null || value === undefined) return null;
-  const number = Number(value);
-  return Number.isFinite(number) && number >= 0 ? number : null;
-};
+const monthlyUsage = (value) => getCalculatorInputNumber(value, 'averageMonthlyConsumptionKwh');
+const monthlyBill = (value) => getCalculatorInputNumber(value, 'averageMonthlyBillAmd');
+const customTariff = (value) => getCalculatorInputNumber(value, 'customTariffAmdPerKwh');
+const profileMonth = (value) => getCalculatorInputNumber(value, 'monthlyProfileKwh');
 
 const demoMonthlyProfile = [320, 280, 310, 380, 450, 520, 600, 580, 470, 390, 330, 290];
 
@@ -65,18 +61,19 @@ export const initConsumptionInput = ({ root, strings, onChange = () => {} } = {}
 
   const getValues = () => {
     const mode = activeMode();
-    const usage = positiveNumber(root.querySelector('[data-consumption-usage]')?.value);
-    const tariff = positiveNumber(tariffInput?.value);
+    const usage = monthlyUsage(root.querySelector('[data-consumption-usage]')?.value);
+    const tariff = customTariff(tariffInput?.value);
     const monthly = [...root.querySelectorAll('[data-consumption-month]')].map((input) =>
-      nonNegativeNumber(input.value)
+      profileMonth(input.value)
     );
     let annual = null;
-    const bill = positiveNumber(root.querySelector('[data-consumption-bill]')?.value);
+    const bill = monthlyBill(root.querySelector('[data-consumption-bill]')?.value);
     if (mode === 'bill' && bill !== null && tariff !== null) annual = (bill / tariff) * 12;
     if (mode === 'usage' && usage !== null) annual = usage * 12;
     if (mode === 'monthly' && monthly.length === 12 && monthly.every((value) => value !== null)) {
       annual = monthly.reduce((total, value) => total + value, 0);
     }
+    if (!isCalculatorInputInRange(annual, 'annualConsumptionKwh')) annual = null;
     return { annual, bill, monthly, mode, tariff, usage };
   };
 
@@ -137,13 +134,17 @@ export const initConsumptionInput = ({ root, strings, onChange = () => {} } = {}
   };
 
   modeInputs.forEach((input) => input.addEventListener('change', updateMode));
-  root.querySelectorAll('input[type="number"]').forEach((input) => {
-    input.addEventListener('input', () => {
-      input.removeAttribute('aria-invalid');
-      updateAnnualOutput();
-      onChange();
+  root
+    .querySelectorAll(
+      '[data-consumption-bill], [data-consumption-usage], [data-consumption-month], [data-consumption-tariff]'
+    )
+    .forEach((input) => {
+      input.addEventListener('input', () => {
+        input.removeAttribute('aria-invalid');
+        updateAnnualOutput();
+        onChange();
+      });
     });
-  });
   fillAverageButton?.addEventListener('click', () => {
     const values = getValues();
     const monthlyInputs = [...root.querySelectorAll('[data-consumption-month]')];
@@ -187,13 +188,16 @@ export const initConsumptionInput = ({ root, strings, onChange = () => {} } = {}
 
   const inspect = () => {
     const mode = activeMode();
-    const tariff = positiveNumber(tariffInput?.value);
+    const tariff = customTariff(tariffInput?.value);
     const userTariff = tariff === null ? null : { rateAmdPerKwh: tariff };
     if (mode === 'bill') {
       const input = root.querySelector('[data-consumption-bill]');
-      const value = positiveNumber(input?.value);
+      const value = monthlyBill(input?.value);
       if (value === null) return invalidResult([input], strings.invalidBill);
       if (tariff === null) return invalidResult([tariffInput], strings.invalidTariff);
+      if (!isCalculatorInputInRange(value / tariff, 'averageMonthlyConsumptionKwh')) {
+        return invalidResult([input, tariffInput], strings.invalidBill);
+      }
       return {
         valid: true,
         value: { mode, averageMonthlyBillAmd: value },
@@ -203,18 +207,20 @@ export const initConsumptionInput = ({ root, strings, onChange = () => {} } = {}
 
     if (mode === 'usage') {
       const input = root.querySelector('[data-consumption-usage]');
-      const value = positiveNumber(input?.value);
+      const value = monthlyUsage(input?.value);
       return value === null
         ? invalidResult([input], strings.invalidUsage)
         : { valid: true, value: { mode, averageMonthlyKwh: value }, tariff: userTariff };
     }
 
     const inputs = [...root.querySelectorAll('[data-consumption-month]')];
-    const monthlyKwh = inputs.map((input) => nonNegativeNumber(input.value));
+    const monthlyKwh = inputs.map((input) => profileMonth(input.value));
+    const annualKwh = monthlyKwh.reduce((total, value) => total + (value ?? 0), 0);
     if (
       monthlyKwh.length !== 12 ||
       monthlyKwh.some((value) => value === null) ||
-      monthlyKwh.reduce((total, value) => total + value, 0) <= 0
+      annualKwh <= 0 ||
+      !isCalculatorInputInRange(annualKwh, 'annualConsumptionKwh')
     ) {
       return invalidResult(inputs, strings.incompleteMonths);
     }

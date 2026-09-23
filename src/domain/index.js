@@ -1,5 +1,11 @@
 export { ANALYSIS_STATUS, DATA_COMPLETENESS_LEVEL, SOURCE_KIND, SOURCE_STATUS } from './models.js';
 export { normalizeConsumption, isNormalizedConsumption } from './consumption.js';
+export { parseDecimalNumber, toFiniteNumberOrNull } from './numbers.js';
+export {
+  CALCULATOR_INPUT_LIMITS,
+  getCalculatorInputNumber,
+  isCalculatorInputInRange
+} from './calculator-inputs.js';
 export {
   getConfirmedTariffRate,
   getUsableSurplusCompensationRate,
@@ -9,6 +15,7 @@ export {
   selectEffectiveTariff,
   selectEffectiveSurplusCompensation,
   suggestStandardTariff,
+  tariffBracketIncludesMonthlyKwh,
   toIsoDate,
   createRegistryTariffSelection,
   createUserTariffSelection,

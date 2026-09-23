@@ -61,7 +61,8 @@ export const analyze = async ({ request, env, fetchImpl }) => {
       validatedInput: input,
       providerAnalysis: normalizedProviderAnalysis,
       tariffSelection: workflow.tariffSelection,
-      roofArea: workflow.roofArea
+      roofArea: workflow.roofArea,
+      calculatorSystem: workflow.calculatorSystem
     })
   };
 };

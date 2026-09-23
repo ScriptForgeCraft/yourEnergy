@@ -1,25 +1,19 @@
 import { ProductApiClient, ProductApiError } from '../services/api-client.js';
+import { getCalculatorInputNumber, isCalculatorInputInRange } from '../domain/calculator-inputs.js';
+import { tariffBracketIncludesMonthlyKwh } from '../domain/tariffs.js';
 import { formatConsumerCommercialRange } from './commercial-range.js';
 import { createAsyncRequestLifecycle } from './async-request-lifecycle.js';
 import { createCalculatorSession } from './calculator-session.js';
 
-const positive = (value) => {
-  const number = Number(value);
-  return Number.isFinite(number) && number > 0 ? number : null;
-};
+const monthlyUsage = (value) => getCalculatorInputNumber(value, 'averageMonthlyConsumptionKwh');
+const monthlyBill = (value) => getCalculatorInputNumber(value, 'averageMonthlyBillAmd');
+const customTariff = (value) => getCalculatorInputNumber(value, 'customTariffAmdPerKwh');
 
 const leadText = (value) => (typeof value === 'string' ? value.replace(/\s+/gu, ' ').trim() : '');
 const validLeadPhone = (value) => /^[+()\d\s-]{6,32}$/u.test(value) && /\d/u.test(value);
 
 const TARIFF_OPTION_CUSTOM = 'custom';
 const TARIFF_PERIODS = Object.freeze(['day', 'night']);
-
-const tariffRecordMatchesConsumption = (record, monthlyKwh) =>
-  record?.customerType === 'standard' &&
-  Number.isFinite(Number(monthlyKwh)) &&
-  Number(monthlyKwh) > 0 &&
-  Number(monthlyKwh) >= Number(record.minMonthlyKwh) &&
-  (record.maxMonthlyKwh === null || Number(monthlyKwh) <= Number(record.maxMonthlyKwh));
 
 const tariffOptionValue = (record, period) => `${record.id}:${period}`;
 
@@ -34,7 +28,7 @@ const formatTariffRate = (rate, locale) =>
 export const buildQuickTariffOptions = ({ records = [], monthlyKwh, copy = {}, locale } = {}) => {
   const activeRecords = Array.isArray(records) ? records.filter((record) => record?.id) : [];
   const suggested = activeRecords.find((record) =>
-    tariffRecordMatchesConsumption(record, monthlyKwh)
+    tariffBracketIncludesMonthlyKwh(record, monthlyKwh)
   );
   const standardRecords = suggested
     ? [suggested]
@@ -65,7 +59,7 @@ export const buildQuickTariffOptions = ({ records = [], monthlyKwh, copy = {}, l
 /** Returns a safe API descriptor; official rate values are resolved server-side. */
 export const readQuickTariffSelection = ({ value, manualRate, options = [] } = {}) => {
   if (value === TARIFF_OPTION_CUSTOM) {
-    const rate = positive(manualRate);
+    const rate = customTariff(manualRate);
     return rate === null ? null : { rateAmdPerKwh: rate };
   }
   const option = options.find((candidate) => candidate.value === value);
@@ -355,7 +349,7 @@ export const initQuickCalculator = ({ config = {} } = {}) => {
     usageWrap.hidden = billMode;
     bill.disabled = !billMode;
     usage.disabled = billMode;
-    const consumption = billMode ? positive(bill.value) : positive(usage.value);
+    const consumption = billMode ? monthlyBill(bill.value) : monthlyUsage(usage.value);
     const needsVisibleTariff = consumption !== null;
     populateTariffOptions({
       monthlyKwh: billMode ? null : consumption,
@@ -400,12 +394,21 @@ export const initQuickCalculator = ({ config = {} } = {}) => {
     const tariffSelection = selectedTariff();
     if (!selectedRegion) return { valid: false, field: region };
     if (currentMode === 'bill') {
-      const value = positive(bill.value);
+      const value = monthlyBill(bill.value);
       if (!value || !tariffSelection) {
         return {
           valid: false,
           field: !value ? bill : tariffSelect.value === TARIFF_OPTION_CUSTOM ? tariff : tariffSelect
         };
+      }
+      if (
+        tariffSelection.rateAmdPerKwh &&
+        !isCalculatorInputInRange(
+          value / tariffSelection.rateAmdPerKwh,
+          'averageMonthlyConsumptionKwh'
+        )
+      ) {
+        return { valid: false, field: tariff };
       }
       return {
         valid: true,
@@ -421,7 +424,7 @@ export const initQuickCalculator = ({ config = {} } = {}) => {
         }
       };
     }
-    const value = positive(usage.value);
+    const value = monthlyUsage(usage.value);
     if (!value) return { valid: false, field: usage };
     return {
       valid: true,

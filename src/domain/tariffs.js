@@ -1,6 +1,7 @@
 import { ARMENIA_TARIFF_DATASET } from '../data/tariffs/armenia.js';
 import { ARMENIA_SURPLUS_COMPENSATION_DATASET } from '../data/regulatory/armenia-surplus-compensation.js';
-import { cleanString, toPositiveNumberOrNull } from './numbers.js';
+import { getCalculatorInputNumber } from './calculator-inputs.js';
+import { cleanString, toFiniteNumberOrNull, toPositiveNumberOrNull } from './numbers.js';
 import { SOURCE_KIND, SOURCE_STATUS } from './models.js';
 
 const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/u;
@@ -43,7 +44,7 @@ const normalizeSource = (source = {}) => ({
 
 const nonNegativeNumberOrNull = (value) => {
   if (value === null || value === undefined || value === '') return null;
-  const number = Number(value);
+  const number = toFiniteNumberOrNull(value);
   return Number.isFinite(number) && number >= 0 ? number : null;
 };
 
@@ -60,6 +61,7 @@ const normalizeRecord = (record, currency) => ({
       ? record.period
       : null,
   minMonthlyKwh: nonNegativeNumberOrNull(record?.minMonthlyKwh),
+  minMonthlyKwhInclusive: record?.minMonthlyKwhInclusive !== false,
   maxMonthlyKwh: nonNegativeNumberOrNull(record?.maxMonthlyKwh),
   effectiveFrom: toIsoDate(record?.effectiveFrom),
   effectiveTo: toIsoDate(record?.effectiveTo),
@@ -312,24 +314,38 @@ export const listRegistryTariffOptions = (
   };
 };
 
+/**
+ * Uses the registry's explicit inclusive/exclusive lower boundary. This keeps
+ * decimal consumption continuous between adjacent tariff brackets.
+ */
+export const tariffBracketIncludesMonthlyKwh = (record, monthlyKwh) => {
+  const consumption = getCalculatorInputNumber(monthlyKwh, 'averageMonthlyConsumptionKwh');
+  const normalized = normalizeRecord(record, record?.currency);
+  if (
+    consumption === null ||
+    normalized.customerType !== 'standard' ||
+    normalized.minMonthlyKwh === null
+  ) {
+    return false;
+  }
+  const meetsMinimum = normalized.minMonthlyKwhInclusive
+    ? consumption >= normalized.minMonthlyKwh
+    : consumption > normalized.minMonthlyKwh;
+  return (
+    meetsMinimum && (normalized.maxMonthlyKwh === null || consumption <= normalized.maxMonthlyKwh)
+  );
+};
+
 /** Suggests the applicable standard bracket without choosing day/night. */
 export const suggestStandardTariff = (
   monthlyKwh,
   dataset = ARMENIA_TARIFF_DATASET,
   effectiveDate = new Date()
 ) => {
-  const consumption = toPositiveNumberOrNull(monthlyKwh);
-  if (consumption === null) return null;
   const options = listRegistryTariffOptions(dataset, effectiveDate);
   if (!options.available) return null;
   return (
-    options.records.find(
-      (record) =>
-        record.customerType === 'standard' &&
-        record.minMonthlyKwh !== null &&
-        consumption >= record.minMonthlyKwh &&
-        (record.maxMonthlyKwh === null || consumption <= record.maxMonthlyKwh)
-    ) ?? null
+    options.records.find((record) => tariffBracketIncludesMonthlyKwh(record, monthlyKwh)) ?? null
   );
 };
 
@@ -396,6 +412,7 @@ export const createRegistryTariffSelection = (
       customerType: record.customerType,
       period: normalizedPeriod,
       minMonthlyKwh: record.minMonthlyKwh,
+      minMonthlyKwhInclusive: record.minMonthlyKwhInclusive,
       maxMonthlyKwh: record.maxMonthlyKwh,
       effectiveFrom: record.effectiveFrom,
       effectiveTo: record.effectiveTo,
@@ -415,8 +432,9 @@ export const createRegistryTariffSelection = (
  * from a confirmed tariff-registry record in the Passport and source ledger.
  */
 export const createUserTariffSelection = (input = {}, effectiveDate = new Date()) => {
-  const rateAmdPerKwh = toPositiveNumberOrNull(
-    typeof input === 'object' && input !== null ? input.rateAmdPerKwh : input
+  const rateAmdPerKwh = getCalculatorInputNumber(
+    typeof input === 'object' && input !== null ? input.rateAmdPerKwh : input,
+    'customTariffAmdPerKwh'
   );
   const requestedDate = toIsoDate(effectiveDate);
   const source = {

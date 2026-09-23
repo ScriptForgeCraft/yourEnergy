@@ -1,6 +1,7 @@
 import {
   ANALYSIS_SCHEMA_VERSION,
   calculateRoofPlaneArea,
+  getCalculatorInputNumber,
   SolarPassportRepository
 } from '../domain/index.js';
 import { toFiniteNumberOrNull } from '../domain/numbers.js';
@@ -915,8 +916,8 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
     const areaMethod = activeAreaMethod(root);
     const tiltDegrees = number(roofTilt?.value, 0, 90);
     const azimuthDegrees = roofAzimuth();
-    const projectedAreaSqm = number(state.roof?.areaSqm, 0.01);
-    const planeAreaSqm = number(roofPlaneArea?.value, 0.01);
+    const projectedAreaSqm = getCalculatorInputNumber(state.roof?.areaSqm, 'roofAreaSqm');
+    const planeAreaSqm = getCalculatorInputNumber(roofPlaneArea?.value, 'roofAreaSqm');
     const effective = calculateRoofPlaneArea({
       areaMethod,
       projectedAreaSqm,

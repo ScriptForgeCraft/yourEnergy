@@ -1,10 +1,6 @@
 import { SOURCE_KIND, SOURCE_STATUS } from './models.js';
-import {
-  MONTHS_PER_YEAR,
-  sum,
-  toNonNegativeNumberOrNull,
-  toPositiveNumberOrNull
-} from './numbers.js';
+import { MONTHS_PER_YEAR, sum } from './numbers.js';
+import { getCalculatorInputNumber, isCalculatorInputInRange } from './calculator-inputs.js';
 import { getUsableTariffRate } from './tariffs.js';
 
 const unavailableSource = Object.freeze({
@@ -39,11 +35,14 @@ const normalizeMonthlyProfile = (value) => {
   if (!Array.isArray(value)) return { profile: null, issue: null };
   if (value.length !== MONTHS_PER_YEAR) return { profile: null, issue: 'MONTHLY_PROFILE_LENGTH' };
 
-  const profile = value.map(toNonNegativeNumberOrNull);
+  const profile = value.map((item) => getCalculatorInputNumber(item, 'monthlyProfileKwh'));
   if (profile.some((item) => item === null)) {
     return { profile: null, issue: 'MONTHLY_PROFILE_INVALID' };
   }
   if (sum(profile) <= 0) return { profile: null, issue: 'ZERO_CONSUMPTION' };
+  if (!isCalculatorInputInRange(sum(profile), 'annualConsumptionKwh')) {
+    return { profile: null, issue: 'MONTHLY_PROFILE_OUT_OF_RANGE' };
+  }
   return { profile, issue: null };
 };
 
@@ -78,7 +77,7 @@ export const normalizeConsumption = (input = {}, { tariff = null } = {}) => {
     };
   }
 
-  const annualKwh = toPositiveNumberOrNull(input.annualKwh);
+  const annualKwh = getCalculatorInputNumber(input.annualKwh, 'annualConsumptionKwh');
   if (annualKwh !== null) {
     return {
       normalized: true,
@@ -93,7 +92,10 @@ export const normalizeConsumption = (input = {}, { tariff = null } = {}) => {
     };
   }
 
-  const averageMonthlyKwh = toPositiveNumberOrNull(input.averageMonthlyKwh);
+  const averageMonthlyKwh = getCalculatorInputNumber(
+    input.averageMonthlyKwh,
+    'averageMonthlyConsumptionKwh'
+  );
   if (averageMonthlyKwh !== null) {
     return {
       normalized: true,
@@ -108,13 +110,19 @@ export const normalizeConsumption = (input = {}, { tariff = null } = {}) => {
     };
   }
 
-  const averageMonthlyBillAmd = toPositiveNumberOrNull(input.averageMonthlyBillAmd);
+  const averageMonthlyBillAmd = getCalculatorInputNumber(
+    input.averageMonthlyBillAmd,
+    'averageMonthlyBillAmd'
+  );
   if (averageMonthlyBillAmd !== null) {
     const rateAmdPerKwh = getUsableTariffRate(tariff);
     if (rateAmdPerKwh === null) {
       return unavailableConsumption([...issues, 'TARIFF_REQUIRED_FOR_BILL']);
     }
     const billKwh = averageMonthlyBillAmd / rateAmdPerKwh;
+    if (!isCalculatorInputInRange(billKwh, 'averageMonthlyConsumptionKwh')) {
+      return unavailableConsumption([...issues, 'CONSUMPTION_VALUE_OUT_OF_RANGE']);
+    }
     return {
       normalized: true,
       kind: 'monthly-bill',

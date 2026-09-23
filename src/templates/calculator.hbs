@@ -206,7 +206,7 @@
                     </svg><span>{{wizard.ui.uploadBill}}</span></label>
                 </fieldset>
                 <div class='consumption-panel' data-consumption-panel='bill'><label>{{product.consumption.billLabel}}
-                    <div class='input-with-unit'><input type='number' min='0.01' step='1' inputmode='decimal'
+                    <div class='input-with-unit'><input type='text' inputmode='decimal'
                         value='25000' data-consumption-bill /><span>AMD</span></div>
                   </label>
                   <p class='consumption-field-note'><svg aria-hidden='true'>
@@ -214,14 +214,14 @@
                     </svg>{{product.consumption.billHelp}}</p>
                 </div>
                 <div class='consumption-panel' data-consumption-panel='usage' hidden>
-                  <label>{{product.consumption.usageLabel}}<div class='input-with-unit'><input type='number' min='0.01'
-                        step='1' inputmode='decimal' data-consumption-usage /><span>kWh</span></div></label>
+                  <label>{{product.consumption.usageLabel}}<div class='input-with-unit'><input type='text'
+                        inputmode='decimal' data-consumption-usage /><span>kWh</span></div></label>
                 </div>
                 <div class='consumption-panel consumption-panel--months' data-consumption-panel='monthly' hidden>
-                  <div class='month-inputs'>{{#each passport.months}}<label>{{short}}<input type='number' min='0'
-                        step='1' inputmode='decimal' data-consumption-month /></label>{{/each}}</div>
+                  <div class='month-inputs'>{{#each passport.months}}<label>{{short}}<input type='text'
+                        inputmode='decimal' data-consumption-month /></label>{{/each}}</div>
                 </div><label><span data-consumption-tariff-label>{{product.consumption.tariffBillLabel}}</span>
-                  <div class='input-with-unit'><input type='number' min='0.01' step='0.01' inputmode='decimal'
+                  <div class='input-with-unit'><input type='text' inputmode='decimal'
                       value='46.48' data-consumption-tariff aria-describedby='consumption-tariff-help' required
                       aria-required='true' /><span>AMD/kWh</span></div>
                 </label>
@@ -337,8 +337,8 @@
                 </div><button class='button button--outline' type='button'
                   data-roof-reset>{{product.roof.reset}}</button>
               </section><label class='professional-roof-plane-input' data-roof-plane-area-wrap
-                hidden>{{product.roof.planeAreaLabel}}<div class='input-with-unit'><input type='number' min='0.01'
-                    step='0.1' inputmode='decimal' data-roof-plane-area /><span>m²</span></div></label>
+                hidden>{{product.roof.planeAreaLabel}}<div class='input-with-unit'><input type='text'
+                    inputmode='decimal' data-roof-plane-area /><span>m²</span></div></label>
               <section class='professional-roof-parameters' aria-labelledby='professional-roof-parameters'>
                 <h3 id='professional-roof-parameters'>{{wizard.engineering}}</h3>
                 <div class='wizard-form-grid'><label>{{product.roof.orientationLabel}}<select data-roof-orientation>
@@ -349,12 +349,12 @@
                       <option value='270'>{{product.roof.orientationOptions.west}}</option>
                       <option value='0'>{{product.roof.orientationOptions.north}}</option>
                       <option value='custom'>{{product.roof.orientationOptions.custom}}</option>
-                    </select></label><label>{{product.roof.tiltLabel}}<div class='input-with-unit'><input type='number'
-                        min='0' max='90' step='1' inputmode='decimal' value='30' data-roof-tilt /><span>°</span></div>
+                    </select></label><label>{{product.roof.tiltLabel}}<div class='input-with-unit'><input type='text'
+                        inputmode='decimal' value='30' data-roof-tilt /><span>°</span></div>
                   </label></div><label class='professional-calculation-panel'>{{wizard.calculationPanelLabel}}<select
                     data-calculation-panel></select><small>{{wizard.calculationPanelHelp}}</small></label><label
                   class='professional-storage-request'><input type='checkbox' data-storage-required /><span>{{wizard.storageRequestLabel}}</span><small>{{wizard.storageRequestHelp}}</small></label><label data-roof-orientation-custom hidden>{{product.roof.customOrientationLabel}}<input
-                    type='number' min='0' max='359' step='1' inputmode='decimal'
+                    type='text' inputmode='decimal'
                     data-roof-orientation-custom-input /></label><label
                   class='professional-roof-mounting-select'>{{product.roof.mountingModeLabel}}<select data-roof-mounting-mode>
                     <option value='roof-parallel'>{{product.roof.mountingModes.roofParallel}}</option>

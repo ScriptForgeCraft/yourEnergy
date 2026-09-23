@@ -23,6 +23,7 @@ const record = ({
   id,
   customerType,
   minMonthlyKwh = null,
+  minMonthlyKwhInclusive = true,
   maxMonthlyKwh = null,
   dayRate,
   nightRate
@@ -31,6 +32,7 @@ const record = ({
     id,
     customerType,
     minMonthlyKwh,
+    minMonthlyKwhInclusive,
     maxMonthlyKwh,
     dayRate,
     nightRate,
@@ -67,7 +69,8 @@ export const ARMENIA_TARIFF_DATASET = Object.freeze({
     record({
       id: 'standard-201-to-400',
       customerType: 'standard',
-      minMonthlyKwh: 201,
+      minMonthlyKwh: 200,
+      minMonthlyKwhInclusive: false,
       maxMonthlyKwh: 400,
       dayRate: 48.48,
       nightRate: 38.48
@@ -75,7 +78,8 @@ export const ARMENIA_TARIFF_DATASET = Object.freeze({
     record({
       id: 'standard-over-400',
       customerType: 'standard',
-      minMonthlyKwh: 401,
+      minMonthlyKwh: 400,
+      minMonthlyKwhInclusive: false,
       dayRate: 53.48,
       nightRate: 43.48
     })

@@ -9,6 +9,7 @@ import {
   toFiniteNumberOrNull,
   toPositiveNumberOrNull
 } from './numbers.js';
+import { getCalculatorInputNumber } from './calculator-inputs.js';
 import {
   getUsableSurplusCompensationRate,
   getUsableTariffRate,
@@ -111,8 +112,8 @@ export const calculateRoofPlaneArea = ({
   tiltDegrees
 } = {}) => {
   const method = validAreaMethod(areaMethod);
-  const measured = toPositiveNumberOrNull(planeAreaSqm);
-  const projected = toPositiveNumberOrNull(projectedAreaSqm);
+  const measured = getCalculatorInputNumber(planeAreaSqm, 'roofAreaSqm');
+  const projected = getCalculatorInputNumber(projectedAreaSqm, 'roofAreaSqm');
   const tilt = toFiniteNumberOrNull(tiltDegrees);
   if (method === 'measured-plane') return measured;
   if (
@@ -146,15 +147,15 @@ export const normalizeRoof = (input = {}) => {
   const polygonComplete = Boolean(input.polygonComplete);
   const areaMethod = validAreaMethod(input.areaMethod);
   const mountingMode = validMountingMode(input.mountingMode);
-  const projectedAreaSqm = toPositiveNumberOrNull(input.projectedAreaSqm);
-  const planeAreaSqm = toPositiveNumberOrNull(input.planeAreaSqm);
+  const projectedAreaSqm = getCalculatorInputNumber(input.projectedAreaSqm, 'roofAreaSqm');
+  const planeAreaSqm = getCalculatorInputNumber(input.planeAreaSqm, 'roofAreaSqm');
   const derivedPlaneArea = calculateRoofPlaneArea({
     areaMethod,
     projectedAreaSqm,
     planeAreaSqm,
     tiltDegrees
   });
-  const areaSqm = derivedPlaneArea ?? toPositiveNumberOrNull(input.areaSqm);
+  const areaSqm = derivedPlaneArea ?? getCalculatorInputNumber(input.areaSqm, 'roofAreaSqm');
   const hasRoofInput = Boolean(
     areaSqm ||
     projectedAreaSqm ||

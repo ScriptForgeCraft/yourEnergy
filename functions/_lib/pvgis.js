@@ -2,6 +2,7 @@ import { configuredUrl, envString, providerTimeoutMs } from './config.js';
 import { ApiError, isApiError } from './http.js';
 import { createPvgisCache } from './pvgis-cache.js';
 import { fetchJsonWithTimeout } from './provider.js';
+import { toFiniteNumberOrNull } from '../../src/domain/numbers.js';
 
 const numberInRange = (value, minimum, maximum) => {
   if (
@@ -12,7 +13,7 @@ const numberInRange = (value, minimum, maximum) => {
   ) {
     return null;
   }
-  const number = Number(value);
+  const number = toFiniteNumberOrNull(value);
   return Number.isFinite(number) && number >= minimum && number <= maximum ? number : null;
 };
 

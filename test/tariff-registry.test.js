@@ -7,7 +7,8 @@ import {
   createUserTariffSelection,
   getUsableTariffRate,
   normalizeConsumption,
-  suggestStandardTariff
+  suggestStandardTariff,
+  tariffBracketIncludesMonthlyKwh
 } from '../src/domain/index.js';
 
 const DATE = '2026-09-08';
@@ -26,14 +27,18 @@ test('the Armenia residential registry is versioned and exposes every official d
   );
 });
 
-test('standard tariff suggestion respects Armenia monthly-kWh boundaries without selecting a rate', () => {
+test('standard tariff suggestion covers every decimal monthly-kWh boundary without selecting a rate', () => {
   for (const [kwh, expectedId] of [
+    [199.99, 'standard-up-to-200'],
     [200, 'standard-up-to-200'],
-    [201, 'standard-201-to-400'],
+    [200.01, 'standard-201-to-400'],
+    [399.99, 'standard-201-to-400'],
     [400, 'standard-201-to-400'],
-    [401, 'standard-over-400']
+    [400.01, 'standard-over-400']
   ]) {
-    assert.equal(suggestStandardTariff(kwh, ARMENIA_TARIFF_DATASET, DATE)?.id, expectedId);
+    const suggestion = suggestStandardTariff(kwh, ARMENIA_TARIFF_DATASET, DATE);
+    assert.equal(suggestion?.id, expectedId);
+    assert.equal(tariffBracketIncludesMonthlyKwh(suggestion, kwh), true);
   }
   assert.equal(suggestStandardTariff(null, ARMENIA_TARIFF_DATASET, DATE), null);
 });

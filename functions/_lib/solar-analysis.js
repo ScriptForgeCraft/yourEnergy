@@ -8,6 +8,7 @@ import {
   createUserTariffSelection,
   normalizeConsumption
 } from '../../src/domain/index.js';
+import { getCalculatorInputNumber } from '../../src/domain/calculator-inputs.js';
 import {
   getCalculatorSystemForPanel,
   getDefaultCalculatorSystem
@@ -18,10 +19,18 @@ const cleanString = (value, maximum = 220) =>
   typeof value === 'string' ? value.replace(/\s+/gu, ' ').trim().slice(0, maximum) || null : null;
 
 // The browser may choose a stable catalogue ID, but never supplies technical
-// panel values. Unknown or malformed IDs safely retain the configured default.
-const calculatorSystemForBody = (body) =>
-  getCalculatorSystemForPanel(cleanString(body?.equipment?.panelId, 160) ?? undefined) ??
-  getDefaultCalculatorSystem();
+// panel values. Missing selection retains the configured default; a supplied
+// unknown or malformed ID is rejected rather than silently changing hardware.
+const calculatorSystemForBody = (body) => {
+  const rawPanelId = body?.equipment?.panelId;
+  if (rawPanelId === undefined || rawPanelId === null || rawPanelId === '') {
+    return getDefaultCalculatorSystem();
+  }
+  const panelId = cleanString(rawPanelId, 160);
+  const system = panelId ? getCalculatorSystemForPanel(panelId) : null;
+  if (!system) throw new ApiError('INVALID_INPUT');
+  return system;
+};
 
 const priceBookRepository = new PriceBookRepository();
 
@@ -30,10 +39,7 @@ const priceBookRepository = new PriceBookRepository();
 const PRELIMINARY_USABLE_ROOF_RATIO = 0.7;
 const MAX_PROJECTED_AREA_TILT_DEGREES = 75;
 
-const positiveNumber = (value) => {
-  const number = Number(value);
-  return Number.isFinite(number) && number > 0 ? number : null;
-};
+const positiveRoofArea = (value) => getCalculatorInputNumber(value, 'roofAreaSqm');
 
 const validAreaMethod = (value) =>
   value === 'map-projected' || value === 'measured-plane' ? value : null;
@@ -44,8 +50,8 @@ const validMountingMode = (value) =>
 const roofAreaFromBody = (body, validatedInput) => {
   const method = validAreaMethod(body?.roof?.areaMethod);
   const mountingMode = validMountingMode(body?.roof?.mountingMode);
-  const projectedAreaSqm = positiveNumber(body?.roof?.projectedAreaSqm ?? body?.roof?.areaSqm);
-  const measuredPlaneAreaSqm = positiveNumber(body?.roof?.planeAreaSqm);
+  const projectedAreaSqm = positiveRoofArea(body?.roof?.projectedAreaSqm ?? body?.roof?.areaSqm);
+  const measuredPlaneAreaSqm = positiveRoofArea(body?.roof?.planeAreaSqm);
   if (!method || !mountingMode) throw new ApiError('INVALID_INPUT');
 
   if (method === 'measured-plane') {
@@ -140,6 +146,7 @@ const confirmedRoof = (body, validatedInput, validatedArea = null) => {
 export const validateP0AnalysisWorkflow = (body, validatedInput) => {
   const tariffSelection = selectTariffForP1(body);
   const consumption = normalizeConsumption(body?.consumption, { tariff: tariffSelection });
+  const calculatorSystem = calculatorSystemForBody(body);
   const hasConfirmedProperty =
     body?.property?.confirmed === true &&
     (cleanString(body?.property?.address)?.length >= 5 || body?.property?.source === 'manual');
@@ -154,6 +161,7 @@ export const validateP0AnalysisWorkflow = (body, validatedInput) => {
   return {
     consumption,
     tariffSelection,
+    calculatorSystem,
     roofArea: roofAreaFromBody(body, validatedInput)
   };
 };
@@ -169,6 +177,7 @@ export const buildP0SolarAnalysis = ({
   providerAnalysis,
   tariffSelection,
   roofArea,
+  calculatorSystem,
   effectiveDate = new Date()
 }) => {
   const priceBook = priceBookRepository.getActive({
@@ -197,7 +206,7 @@ export const buildP0SolarAnalysis = ({
     // either an explicit official tariff ID + day/night choice or a rate the
     // visitor entered from a bill; missing selection remains unavailable.
     tariffSelection,
-    system: calculatorSystemForBody(body),
+    system: calculatorSystem ?? calculatorSystemForBody(body),
     storageRequired: body?.storageRequired === true,
     // The browser never controls capex. A dated server-side price book is the
     // only provisional commercial source used in this P1 route.
@@ -235,5 +244,6 @@ export const buildP0SolarAnalysis = ({
 
 export const __private__ = Object.freeze({
   MAX_PROJECTED_AREA_TILT_DEGREES,
+  calculatorSystemForBody,
   roofAreaFromBody
 });
