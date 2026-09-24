@@ -183,7 +183,7 @@ const renderExampleCard = ({ root, copy, locale }) => {
 };
 
 /** Updates existing semantic Hero markup from a SolarAnalysis snapshot. */
-export const renderHeroAnalysisCard = ({
+const renderHeroAnalysisCard = ({
   root,
   analysis,
   status = 'idle',

@@ -1,0 +1,10 @@
+{
+  "entry": [
+    "src/main.js",
+    "src/equipment.js",
+    "scripts/**/*.mjs",
+    "functions/api/*.js",
+    "test/**/*.test.js"
+  ],
+  "project": ["src/**/*.js", "functions/**/*.js", "scripts/**/*.mjs", "test/**/*.js"]
+}

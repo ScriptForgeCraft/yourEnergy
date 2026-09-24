@@ -1,6 +1,6 @@
 import { gsap } from 'gsap';
-import { EQUIPMENT_COPY } from './data/equipment/equipment-i18n.js';
-import { createEquipmentCatalog } from './data/equipment/catalog.js';
+import { EQUIPMENT_COPY } from './data/equipment/showroom/translations.js';
+import { createEquipmentCatalog } from './data/equipment/showroom/catalog.js';
 import { initEquipmentShowroom } from './ui/equipment-showroom.js';
 import { initNavigation } from './ui/navigation.js';
 

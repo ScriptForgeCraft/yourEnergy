@@ -5,7 +5,7 @@ import {
   PRELIMINARY_USABLE_ROOF_RATIO,
   calculatePreliminaryRoofCapacity
 } from '../src/domain/index.js';
-import { getDefaultCalculatorSystem } from '../src/data/equipment/calculator-defaults.js';
+import { getDefaultCalculatorSystem } from '../src/data/equipment/calculator/defaults.js';
 
 test('the Professional roof preview and analysis share catalog module fit', () => {
   const system = getDefaultCalculatorSystem();

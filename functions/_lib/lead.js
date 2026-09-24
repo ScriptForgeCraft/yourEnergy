@@ -73,7 +73,7 @@ const normalizeCalculatorContext = (value, locale) => {
   return Object.keys(context).length > 1 ? context : null;
 };
 
-export const validateLeadInput = (body) => {
+const validateLeadInput = (body) => {
   const name = normalizeText(body?.name);
   const phone = normalizeText(body?.phone);
   const email = normalizeText(body?.email);
@@ -109,7 +109,7 @@ export const validateLeadInput = (body) => {
   };
 };
 
-export const createTurnstileAdapter = (env, { fetchImpl = fetch } = {}) => {
+const createTurnstileAdapter = (env, { fetchImpl = fetch } = {}) => {
   const secret = envString(env, 'TURNSTILE_SECRET_KEY');
   if (!secret) {
     return null;
@@ -188,7 +188,7 @@ const truncateTelegramMessage = (message) => {
  * Produces one shared, plain-text representation for Telegram and email. The
  * lead was already normalized, so it cannot add headers or arbitrary objects.
  */
-export const formatLeadMessage = (lead) => {
+const formatLeadMessage = (lead) => {
   const lines = [
     'New YourEnergy lead',
     '',
@@ -212,7 +212,7 @@ export const formatLeadMessage = (lead) => {
 };
 
 /** Telegram Bot API adapter. The bot token is never included in a client response. */
-export const createTelegramAdapter = (env, { fetchImpl = fetch } = {}) => {
+const createTelegramAdapter = (env, { fetchImpl = fetch } = {}) => {
   const botToken = envString(env, 'TELEGRAM_BOT_TOKEN');
   const timeoutMs = providerTimeoutMs(env);
 
@@ -259,7 +259,7 @@ export const createTelegramAdapter = (env, { fetchImpl = fetch } = {}) => {
 };
 
 /** Cloudflare Email Service REST adapter. */
-export const createEmailAdapter = (env, { fetchImpl = fetch } = {}) => {
+const createEmailAdapter = (env, { fetchImpl = fetch } = {}) => {
   const apiToken = envString(env, 'CF_EMAIL_API_TOKEN');
   const accountId = envString(env, 'CF_ACCOUNT_ID');
   const contactEmail = envString(env, 'CONTACT_EMAIL');
@@ -350,7 +350,7 @@ const deliverySummary = (results) =>
  * least one channel has accepted it, but Promise.allSettled still waits for
  * every channel so the safe server-side summary is complete.
  */
-export const deliverLead = async (lead, env, { fetchImpl = fetch, signal } = {}) => {
+const deliverLead = async (lead, env, { fetchImpl = fetch, signal } = {}) => {
   const leadText = formatLeadMessage(lead);
   const telegram = createTelegramAdapter(env, { fetchImpl });
   const email = createEmailAdapter(env, { fetchImpl });
@@ -391,5 +391,3 @@ export const submitLead = async (body, env, { fetchImpl = fetch, signal, remoteI
     turnstile: turnstile ? 'verified' : 'not-configured'
   };
 };
-
-export const __private__ = Object.freeze({ normalizeCalculatorContext, truncateTelegramMessage });

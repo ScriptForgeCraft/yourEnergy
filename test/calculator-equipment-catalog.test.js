@@ -18,13 +18,10 @@ import {
   getMountingSystems,
   getResidentialEss,
   getSolarPanels
-} from '../src/data/equipment/calculator-catalog.js';
+} from '../src/data/equipment/calculator/catalog.js';
 
 const sourceProducts = JSON.parse(
-  await readFile(
-    new URL('../data/equipment/yourenergy-equipment-calculator.json', import.meta.url),
-    'utf8'
-  )
+  await readFile(new URL('../src/data/equipment/calculator/products.json', import.meta.url), 'utf8')
 );
 
 test('the calculation catalogue loads all source records through one adapter', () => {

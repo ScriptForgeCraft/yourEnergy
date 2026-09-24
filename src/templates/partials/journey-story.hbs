@@ -37,12 +37,7 @@
           aria-hidden='{{ariaHidden}}'
         >
           <picture class='process-state__background' aria-hidden='true'>
-            <img
-              src='/images/process-step-{{visual}}-bg.png'
-              alt=''
-              loading='lazy'
-              decoding='async'
-            />
+            <img src='/images/process-background.png' alt='' loading='lazy' decoding='async' />
           </picture>
 
           <picture class='process-state__media' aria-hidden='true' data-process-media>
@@ -68,7 +63,6 @@
             />
           </picture>
 
- 
           <div class='process-state__copy' data-process-copy>
             <h3 id='process-step-title-{{number}}' class='process-state__title'>
               {{#each headlineLines}}<span>{{this}}</span>{{#unless @last}}{{/unless}}{{/each}}

@@ -1,9 +1,6 @@
-import { productsInCategory } from '../data/equipment/catalog.js';
-import {
-  formatProductCount,
-  isWarrantyLabel,
-  SPEC_LABELS
-} from '../data/equipment/equipment-i18n.js';
+import { productsInCategory } from '../data/equipment/showroom/catalog.js';
+import { SPEC_LABELS } from '../data/equipment/showroom/translations.js';
+import { formatProductCount, isWarrantyLabel } from '../data/equipment/showroom/equipment-i18n.js';
 
 const CATEGORY_ICONS = Object.freeze({
   'solar-panels': 'sun',
@@ -497,7 +494,11 @@ export const initEquipmentShowroom = ({ data, copy, locale, gsap }) => {
     const url = new URL(window.location.href);
     if (url.searchParams.get('product') !== product.id) {
       url.searchParams.set('product', product.id);
-      window.history.replaceState(window.history.state, '', `${url.pathname}${url.search}${url.hash}`);
+      window.history.replaceState(
+        window.history.state,
+        '',
+        `${url.pathname}${url.search}${url.hash}`
+      );
     }
   };
 

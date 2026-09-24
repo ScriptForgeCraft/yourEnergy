@@ -1,4 +1,4 @@
-import { getDefaultCalculatorSystem } from '../data/equipment/calculator-defaults.js';
+import { getDefaultCalculatorSystem } from '../data/equipment/calculator/defaults.js';
 import { buildSolarAnalysis } from './solar-analysis.js';
 
 /**

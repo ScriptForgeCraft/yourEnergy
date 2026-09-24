@@ -118,7 +118,7 @@ export const ARMENIA_LOCALITIES = Object.freeze({
 
 // Reference centres are intentionally used only to position the map. They do
 // not confirm a property; the visitor still places the actual home point.
-export const ARMENIA_LOCALITY_CENTERS = Object.freeze({
+const ARMENIA_LOCALITY_CENTERS = Object.freeze({
   yerevan: Object.freeze({
     Ачапняк: { lat: 40.19917, lng: 44.47056 },
     Арабкир: { lat: 40.20549, lng: 44.50699 },

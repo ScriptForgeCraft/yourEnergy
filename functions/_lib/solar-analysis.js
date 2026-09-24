@@ -13,7 +13,7 @@ import { getCalculatorInputNumber } from '../../src/domain/calculator-inputs.js'
 import {
   getCalculatorSystemForPanel,
   getDefaultCalculatorSystem
-} from '../../src/data/equipment/calculator-defaults.js';
+} from '../../src/data/equipment/calculator/defaults.js';
 import { ApiError } from './http.js';
 
 const cleanString = (value, maximum = 220) =>
@@ -243,9 +243,3 @@ export const buildP0SolarAnalysis = ({
     ]
   });
 };
-
-export const __private__ = Object.freeze({
-  MAX_PROJECTED_AREA_TILT_DEGREES,
-  calculatorSystemForBody,
-  roofAreaFromBody
-});

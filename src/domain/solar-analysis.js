@@ -4,7 +4,6 @@ import { ANALYSIS_STATUS, DATA_COMPLETENESS_LEVEL, SOURCE_KIND, SOURCE_STATUS } 
 import {
   cleanString,
   MONTHS_PER_YEAR,
-  round,
   sum,
   toFiniteNumberOrNull,
   toPositiveNumberOrNull
@@ -31,13 +30,13 @@ export const ANALYSIS_SCHEMA_VERSION = '1.1.0';
  * recommendations. They only turn user-confirmed inputs into comparable
  * scenarios.
  */
-export const DEFAULT_SCENARIO_TARGETS = Object.freeze([
+const DEFAULT_SCENARIO_TARGETS = Object.freeze([
   Object.freeze({ id: 'conservative', targetCoverage: 0.7 }),
   Object.freeze({ id: 'balanced', targetCoverage: 0.9 }),
   Object.freeze({ id: 'maximum', targetCoverage: 1 })
 ]);
 
-export const ANALYSIS_ASSUMPTIONS = Object.freeze([
+const ANALYSIS_ASSUMPTIONS = Object.freeze([
   'NO_TARIFF_ESCALATION',
   'NO_PANEL_DEGRADATION',
   'NO_MAINTENANCE_FINANCING_DISCOUNTING_EXPORT_OR_TAXES',
@@ -80,7 +79,7 @@ const normalizeCoordinates = (coordinates) => {
 };
 
 /** @returns {import('./models.js').Property} */
-export const normalizeProperty = (input = {}) => {
+const normalizeProperty = (input = {}) => {
   const address = cleanString(input.address);
   const coordinates = normalizeCoordinates(input.coordinates);
   const confirmed = Boolean(input.confirmed) && Boolean(address || coordinates);
@@ -190,7 +189,7 @@ export const normalizeRoof = (input = {}) => {
   };
 };
 
-export const normalizeProduction = (input = {}) => {
+const normalizeProduction = (input = {}) => {
   const annualYieldKwhPerKwp = toPositiveNumberOrNull(input.annualYieldKwhPerKwp);
   const suppliedFactors = Array.isArray(input.monthlyYieldFactors)
     ? input.monthlyYieldFactors
@@ -248,7 +247,7 @@ const normalizeEquipment = (input, panelWatts, panelAreaSqm) => {
   };
 };
 
-export const normalizeSystem = (input = {}) => {
+const normalizeSystem = (input = {}) => {
   const system = input && typeof input === 'object' ? input : {};
   const panelWatts = toPositiveNumberOrNull(system.panelWatts);
   const panelAreaSqm = toPositiveNumberOrNull(system.panelAreaSqm);
@@ -259,7 +258,7 @@ export const normalizeSystem = (input = {}) => {
   };
 };
 
-export const normalizeInvestment = (input = {}) => ({
+const normalizeInvestment = (input = {}) => ({
   capexAmd: toPositiveNumberOrNull(input.capexAmd),
   quotedCapacityKwp: toPositiveNumberOrNull(input.quotedCapacityKwp),
   capexAmdPerKwp: toPositiveNumberOrNull(input.capexAmdPerKwp),
@@ -539,7 +538,7 @@ const catalogSource = (productId) => ({
  * Builds a transparent completeness score. It measures evidence available to
  * this calculation, rather than the physical quality of the proposed system.
  */
-export const calculateDataCompleteness = ({
+const calculateDataCompleteness = ({
   property,
   consumption,
   roof,
@@ -849,6 +848,3 @@ export const buildSolarAnalysis = (input = {}) => {
     ]
   };
 };
-
-/** A small helper for UI layers that want stable display values without NaN. */
-export const roundAnalysisValue = (value, precision = 2) => round(value, precision);

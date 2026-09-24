@@ -1,0 +1,1142 @@
+.tool-workspace__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(300px, 0.75fr);
+  gap: clamp(24px, 6vw, 92px);
+  align-items: start;
+}
+
+/* Consumer entry point. The quick estimate deliberately has no map, vertex
+   editor or hidden technical panel; refinement and professional modes load
+   those controls only after the visitor chooses them. */
+.quick-calculator {
+  background: #fbfcfa;
+}
+.quick-calculator__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+  gap: clamp(1.25rem, 4vw, 4rem);
+  align-items: start;
+}
+.quick-calculator__form {
+  position: sticky;
+  top: 5.5rem;
+}
+.quick-calculator__form fieldset label {
+  margin: 0;
+}
+.quick-result {
+  min-height: 0;
+}
+.quick-result__metrics {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+.quick-result__metrics > p {
+  grid-column: 1 / -1;
+  margin: 0;
+}
+.quick-result__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+}
+.quick-result__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem 1rem;
+  margin: 1rem 0 0;
+}
+
+.quick-lead-dialog {
+  width: min(32rem, calc(100% - 32px));
+  max-height: min(44rem, calc(100vh - 32px));
+  border: 0;
+  border-radius: var(--radius-lg);
+  padding: clamp(1.5rem, 5vw, 2.5rem);
+  color: var(--color-text);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-md);
+}
+
+.quick-lead-dialog::backdrop {
+  background: rgb(2 18 31 / 72%);
+  backdrop-filter: blur(4px);
+}
+
+.quick-lead-dialog .dialog-content {
+  display: grid;
+  gap: 0.9rem;
+}
+
+.quick-lead-dialog h2,
+.quick-lead-dialog p {
+  margin: 0;
+}
+
+.quick-lead-dialog form {
+  display: grid;
+  gap: 0.9rem;
+  margin-top: 0.35rem;
+}
+
+.quick-lead-dialog label {
+  display: grid;
+  gap: 0.4rem;
+  color: var(--color-text);
+  font-weight: 700;
+}
+
+.quick-lead-dialog input,
+.quick-lead-dialog textarea {
+  width: 100%;
+  min-height: 44px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: 0.7rem 0.8rem;
+  color: var(--color-text);
+  background: #fff;
+}
+
+.quick-lead-dialog textarea {
+  min-height: 6rem;
+  resize: vertical;
+}
+
+.quick-lead-dialog [aria-busy='true'] [data-quick-lead-submit] {
+  cursor: wait;
+}
+
+/* Calculator wizard: functional UI stays in normal document flow so a map or
+   result cannot appear on top of an unrelated hero card. */
+.tool-hero {
+  padding: calc(var(--header-height) + clamp(2.5rem, 5vw, 4.5rem)) 0 2rem;
+  background: linear-gradient(120deg, #071a2d 0%, #0d2c48 64%, #123650 100%);
+  color: #fff;
+}
+
+.tool-hero__inner {
+  max-width: 54rem;
+}
+
+.tool-hero h1 {
+  max-width: 20ch;
+  font-size: clamp(2.35rem, 4vw, 4.2rem);
+  overflow-wrap: break-word;
+}
+.tool-hero .section-disclosure {
+  color: #dbe8f1;
+  max-width: 62ch;
+}
+
+.wizard {
+  padding-top: 2rem;
+}
+.wizard__container {
+  max-width: 70rem;
+}
+.wizard-progress {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.45rem;
+  margin-bottom: 1.25rem;
+  padding: 0.6rem;
+  border: 1px solid var(--color-border);
+  border-radius: 1rem;
+  background: #fff;
+}
+.wizard-progress button {
+  min-height: 48px;
+  border: 0;
+  border-radius: 0.65rem;
+  background: transparent;
+  color: var(--color-muted);
+  cursor: pointer;
+  font: inherit;
+  text-align: left;
+}
+.wizard-progress button span {
+  display: inline-grid;
+  place-items: center;
+  width: 1.65rem;
+  height: 1.65rem;
+  margin-right: 0.38rem;
+  border-radius: 50%;
+  background: #edf1f4;
+  color: var(--color-navy);
+  font-size: 0.78rem;
+}
+
+.wizard-progress button strong {
+  font-size: 0.84rem;
+}
+.wizard-progress button[aria-current='step'] {
+  background: #eef5f8;
+  color: var(--color-navy);
+}
+.wizard-progress button[aria-current='step'] span {
+  background: var(--color-yellow-strong);
+}
+.wizard-progress button[data-step-state='complete'] {
+  color: var(--color-navy);
+}
+.wizard-progress button[data-step-state='complete'] span {
+  background: #bee6cf;
+}
+.wizard-progress button[data-step-state='unavailable'] span {
+  background: #fff0df;
+  color: #87420c;
+}
+.wizard-progress button[data-step-state='loading'] span {
+  background: #f5efdc;
+}
+.wizard-progress button:disabled,
+.wizard-progress button:disabled span {
+  cursor: not-allowed;
+}
+
+.wizard-mobile-progress {
+  display: none;
+  font-weight: 700;
+  color: var(--color-navy);
+}
+.wizard-status {
+  min-height: 1.4rem;
+  margin: 0 0 0.75rem;
+}
+.wizard-step {
+  padding: clamp(1.1rem, 3vw, 2.2rem);
+  border: 1px solid var(--color-border);
+  border-radius: 1.2rem;
+  background: #fff;
+  box-shadow: 0 12px 35px rgb(7 26 45 / 7%);
+}
+.wizard-step__heading {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.9rem;
+  align-items: start;
+  margin-bottom: 1.4rem;
+}
+.wizard-step__heading > div {
+  min-width: 0;
+}
+.wizard-step__heading > span {
+  display: grid;
+  place-items: center;
+  width: 2.55rem;
+  height: 2.55rem;
+  border-radius: 0.75rem;
+  background: var(--color-navy);
+  color: var(--color-yellow-strong);
+  font-weight: 800;
+}
+.wizard-step__heading h2 {
+  margin: 0.1rem 0 0.45rem;
+  color: var(--color-navy);
+}
+.wizard-step label {
+  display: block;
+  margin: 1rem 0;
+  color: var(--color-navy);
+  font-weight: 650;
+}
+.wizard-step label span {
+  color: var(--color-muted);
+  font-weight: 400;
+}
+.wizard-step input:not([type='radio']):not([type='checkbox']),
+.wizard-step select {
+  width: 100%;
+  min-height: 48px;
+  margin-top: 0.35rem;
+}
+.input-help {
+  max-width: 70ch;
+  color: var(--color-muted);
+  font-size: 0.92rem;
+}
+.wizard-map-wrap {
+  width: 100%;
+  min-height: 380px;
+  margin-top: 1rem;
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+  border-radius: 1rem;
+  background: #e7eef1;
+}
+.wizard-map.property-map {
+  /*
+   * .property-map was originally an absolute hero overlay. The calculator
+   * moves the same Leaflet node between two normal-flow step containers, so
+   * it must contribute its height instead of being positioned against the
+   * document. Without this override the Roof map can render above the step.
+   */
+  position: relative;
+  z-index: auto;
+  inset: auto;
+  width: 100%;
+  height: clamp(320px, 42vw, 500px);
+  min-height: 320px;
+  z-index: 1;
+}
+[data-roof-map-host] {
+  min-height: clamp(320px, 42vw, 500px);
+  scroll-margin-top: 5.5rem;
+}
+.point-confirmation,
+.async-card,
+.finance-empty,
+.result-budget,
+.result-notice {
+  margin-top: 1rem;
+  padding: 1rem;
+  border-radius: 0.85rem;
+  background: #f2f7f8;
+}
+.point-confirmation {
+  display: grid;
+  gap: 0.6rem;
+  border: 1px solid #b6d9df;
+}
+.point-confirmation output {
+  font-variant-numeric: tabular-nums;
+}
+.point-confirmation > div,
+.flow-actions,
+.roof-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+}
+.wizard-details {
+  margin-top: 1rem;
+  padding: 0 0.9rem 0.9rem;
+  border: 1px solid var(--color-border);
+  border-radius: 0.75rem;
+}
+.wizard-details summary {
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  font-weight: 700;
+  color: var(--color-navy);
+}
+.professional-panel {
+  margin-top: 1.25rem;
+  padding: 1rem;
+  border: 1px solid var(--color-border);
+  border-radius: 0.85rem;
+  background: #f7f9fa;
+}
+.professional-panel > h3 {
+  margin: 0 0 0.6rem;
+  color: var(--color-navy);
+  font-size: 1rem;
+}
+.professional-panel .async-card {
+  background: #fff;
+}
+.wizard-coordinates,
+.wizard-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.9rem;
+  align-items: end;
+}
+.wizard-coordinates .button {
+  margin: 1rem 0;
+}
+.wizard-kpis {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.7rem;
+}
+.wizard-kpis > div,
+.result-metric {
+  padding: 0.9rem;
+  border-radius: 0.75rem;
+  background: #f7f9fa;
+}
+.wizard-kpis dt,
+.result-metric dt {
+  color: var(--color-muted);
+  font-size: 0.78rem;
+}
+.wizard-kpis dd,
+.result-metric dd {
+  margin: 0.35rem 0 0;
+  color: var(--color-navy);
+  font-size: 1.1rem;
+  font-weight: 800;
+}
+.wizard-chart {
+  margin: 1.2rem 0 0;
+  padding: 1rem;
+  border: 1px solid var(--color-border);
+  border-radius: 0.85rem;
+}
+.wizard-chart figcaption {
+  margin-bottom: 0.8rem;
+  color: var(--color-navy);
+  font-weight: 750;
+}
+.chart-bars {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(2rem, 1fr));
+  align-items: end;
+  gap: 0.35rem;
+  min-height: 180px;
+  overflow-x: auto;
+  padding-top: 1.5rem;
+}
+.chart-bar {
+  display: grid;
+  grid-template-rows: minmax(1.5rem, auto) minmax(24px, var(--bar-height)) 1.3rem;
+  align-items: end;
+  min-width: 2rem;
+  min-height: 44px;
+  padding: 0;
+  border: 0;
+  background: linear-gradient(
+    to top,
+    var(--color-yellow-strong) 0 var(--bar-height),
+    transparent var(--bar-height)
+  );
+  color: var(--color-navy);
+  cursor: help;
+  font: inherit;
+}
+.chart-bar__value {
+  align-self: start;
+  font-size: 0.7rem;
+  white-space: nowrap;
+  transform: rotate(-45deg);
+  transform-origin: left bottom;
+}
+.chart-bar__label {
+  align-self: end;
+  text-align: center;
+  font-size: 0.72rem;
+}
+.roof-controls {
+  margin: 1rem 0;
+}
+.roof-area-readout {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  padding: 0.8rem;
+  border-radius: 0.7rem;
+  background: #f7f9fa;
+}
+.mounting-cards {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.8rem;
+  border: 0;
+  padding: 0;
+}
+.mounting-cards > label {
+  margin: 0;
+}
+.mounting-cards input {
+  position: absolute;
+  width: 1px;
+  min-height: 1px;
+  height: 1px;
+  margin: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+.mounting-cards span {
+  display: grid;
+  gap: 0.4rem;
+  min-height: 112px;
+  padding: 1rem;
+  border: 2px solid var(--color-border);
+  border-radius: 0.8rem;
+}
+.mounting-cards input:checked + span {
+  border-color: var(--color-yellow-strong);
+  box-shadow: 0 0 0 3px rgb(245 189 24 / 22%);
+}
+.mounting-cards small {
+  color: var(--color-muted);
+  font-weight: 400;
+}
+.month-inputs {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.65rem;
+}
+.file-upload {
+  margin-top: 1.2rem;
+  padding: 1rem;
+  border-radius: 0.85rem;
+  background: #f7f9fa;
+}
+.file-drop {
+  display: grid !important;
+  place-items: center;
+  min-height: 90px;
+  border: 1px dashed #88a0ae;
+  border-radius: 0.7rem;
+  cursor: pointer;
+}
+.file-drop input {
+  position: absolute;
+  width: 1px !important;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+}
+.result-kpis {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+.refine-comparison {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin-top: 1rem;
+}
+.result-budget {
+  background: var(--color-navy);
+  color: #fff;
+}
+.result-budget h3 {
+  margin-top: 0;
+  color: var(--color-yellow-strong);
+}
+.result-budget small {
+  color: #cfdee7;
+}
+.result-notice--warning {
+  border-left: 4px solid var(--color-yellow-strong);
+}
+
+.result-energy-balance h3,
+.result-roof-capacity h3 {
+  margin: 0 0 0.75rem;
+  color: var(--color-navy);
+  font-size: 0.95rem;
+}
+
+.result-energy-balance .wizard-kpis,
+.result-roof-capacity .wizard-kpis {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.result-roof-capacity small,
+.result-environmental__source {
+  display: block;
+  margin-top: 0.65rem;
+  color: var(--color-muted);
+  font-size: 0.75rem;
+  line-height: 1.45;
+}
+.passport-ledger {
+  display: grid;
+  gap: 0.65rem;
+}
+
+@media (max-width: 780px) {
+  .wizard-progress {
+    display: none;
+  }
+  .wizard-mobile-progress {
+    display: block;
+  }
+  .wizard-step {
+    padding: 1rem;
+    border-radius: 0.9rem;
+  }
+  .wizard-map-wrap {
+    min-height: 320px;
+  }
+  .wizard-map {
+    height: 340px;
+  }
+  .wizard-kpis,
+  .result-kpis,
+  .refine-comparison,
+  .wizard-form-grid,
+  .wizard-coordinates,
+  .mounting-cards {
+    grid-template-columns: 1fr;
+  }
+  .month-inputs {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .chart-bars {
+    min-width: 0;
+    gap: 0.2rem;
+  }
+  .chart-bar {
+    min-width: 1.75rem;
+  }
+}
+
+.tool-workspace {
+  background: #fbfcfa;
+}
+
+.tool-form {
+  display: grid;
+  gap: 10px;
+  border: 1px solid #d8e2e8;
+  border-radius: var(--radius-lg);
+  padding: clamp(20px, 3vw, 40px);
+  background: #fff;
+  box-shadow: var(--shadow-sm);
+}
+
+.tool-form h2,
+.tool-result h2 {
+  margin: 0 0 12px;
+  color: var(--color-navy);
+  font-size: clamp(1.45rem, 2vw, 2rem);
+  line-height: 1.1;
+}
+
+.tool-form label,
+.tool-form legend {
+  color: #293c4b;
+  font-size: 0.82rem;
+  font-weight: 800;
+}
+
+.tool-form input:not([type='checkbox']):not([type='radio']),
+.tool-form select {
+  width: 100%;
+  min-height: 52px;
+  border: 1px solid #cbd7de;
+  border-radius: 10px;
+  padding: 0 14px;
+  color: var(--color-text);
+  background: #fff;
+}
+
+.tool-form small {
+  margin-top: -4px;
+  color: var(--color-muted);
+  font-size: 0.76rem;
+}
+
+.tool-form fieldset {
+  display: grid;
+  gap: 10px;
+  min-width: 0;
+  margin: 16px 0 0;
+  border: 0;
+  border-top: 1px solid #e1e8eb;
+  padding: 18px 0 0;
+}
+
+.tool-form fieldset > label {
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid #e1e8eb;
+  border-radius: 10px;
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+.tool-form fieldset input[type='checkbox'] {
+  width: 20px;
+  min-width: 20px;
+  min-height: 20px;
+  accent-color: var(--color-navy);
+}
+
+.tool-form .form-status {
+  min-height: 1.4em;
+  margin: 8px 0 0;
+}
+
+.tool-result {
+  border: 1px solid #d8e2e8;
+  border-radius: var(--radius-lg);
+  padding: clamp(22px, 3vw, 36px);
+  background: rgb(255 255 255 / 92%);
+  box-shadow: var(--shadow-sm);
+  min-height: 260px;
+}
+
+.tool-result > p {
+  color: var(--color-muted);
+}
+
+.tool-result dl {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin: 24px 0;
+}
+
+.tool-result dl > div {
+  border-radius: 12px;
+  padding: 14px;
+  background: #f2f6f7;
+}
+
+.tool-result dt {
+  color: var(--color-muted);
+  font-size: 0.72rem;
+  font-weight: 750;
+}
+
+.tool-result dd {
+  margin: 6px 0 0;
+  color: var(--color-navy);
+  font-size: 1.08rem;
+  font-weight: 850;
+}
+
+.tool-result h3 {
+  margin: 22px 0 8px;
+  color: #354d60;
+  font-size: 0.9rem;
+}
+
+.tool-result ul {
+  display: grid;
+  gap: 7px;
+  margin: 0;
+  padding-left: 20px;
+  color: var(--color-muted);
+  font-size: 0.86rem;
+}
+
+.tool-result .button {
+  margin-top: 24px;
+}
+
+@media (max-width: 860px) {
+  .tool-workspace__grid {
+    grid-template-columns: 1fr;
+  }
+  .quick-calculator__grid {
+    grid-template-columns: 1fr;
+  }
+  .quick-calculator__form {
+    position: static;
+  }
+}
+
+@media (max-width: 560px) {
+  .tool-hero,
+  .tool-workspace {
+    padding-inline: 0;
+  }
+
+  .tool-form .flow-actions .button {
+    width: 100%;
+  }
+
+  .tool-result dl {
+    grid-template-columns: 1fr;
+  }
+
+  .quick-result__metrics {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tool-page *,
+  .tool-page *::before,
+  .tool-page *::after,
+  .calculator-page *,
+  .calculator-page *::before,
+  .calculator-page *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}
+
+/* Unified calculator redesign ------------------------------------------------
+   Quick is deliberately compact; the professional shell reuses the same
+   visual system but only loads its map and engineering controls on demand. */
+.calculator-page {
+  background:
+    radial-gradient(circle at 88% 8%, rgb(179 221 255 / 46%), transparent 23rem),
+    linear-gradient(180deg, #f5faff 0, #fff 38rem);
+}
+
+.calculator-hero.section {
+  padding: calc(var(--header-height) + clamp(2.35rem, 5vw, 4.8rem)) 0 2.3rem;
+  color: var(--color-navy);
+}
+
+.calculator-hero__inner {
+  max-width: 74rem;
+}
+
+.calculator-hero__eyebrow,
+.result-kicker {
+  margin: 0 0 0.7rem;
+  color: #52708b;
+  font-size: 0.76rem;
+  font-weight: 850;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.calculator-hero h1 {
+  max-width: 18ch;
+  margin: 0;
+  font-size: clamp(2.45rem, 5vw, 4.75rem);
+  letter-spacing: -0.055em;
+  line-height: 0.98;
+}
+
+.calculator-hero h1 + p {
+  max-width: 42rem;
+  margin: 1rem 0 0;
+  color: #45617d;
+  font-size: clamp(1rem, 1.7vw, 1.18rem);
+}
+
+.calculator-mode-switch {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  width: min(100%, 47rem);
+  gap: 0.7rem;
+  margin-top: 2rem;
+}
+
+.calculator-mode-switch a {
+  display: grid;
+  gap: 0.18rem;
+  min-height: 76px;
+  border: 1px solid #d6e5f2;
+  border-radius: 1rem;
+  padding: 1rem 1.15rem;
+  color: #26445f;
+  background: rgb(255 255 255 / 82%);
+  box-shadow: 0 10px 28px rgb(32 91 133 / 7%);
+  text-decoration: none;
+}
+
+.calculator-mode-switch a:hover,
+.calculator-mode-switch a:focus-visible {
+  border-color: #1677f0;
+  box-shadow: 0 0 0 4px rgb(22 119 240 / 14%);
+}
+
+.calculator-mode-switch a.is-active {
+  border-color: #1677f0;
+  color: #062e68;
+  background: linear-gradient(135deg, #fff 0%, #edf7ff 100%);
+}
+
+.calculator-mode-switch strong {
+  font-size: 1.04rem;
+}
+
+.calculator-mode-switch span {
+  color: #56708a;
+  font-size: 0.86rem;
+  line-height: 1.35;
+}
+
+.quick-calculator.section {
+  padding-top: 0;
+  padding-bottom: clamp(46px, 6vw, 86px);
+  background: transparent;
+}
+
+.quick-calculator__grid {
+  gap: clamp(1.25rem, 3vw, 2.25rem);
+}
+
+.quick-calculator .tool-form,
+.quick-result,
+.wizard-step {
+  border-color: #dceaf5;
+  border-radius: 1.15rem;
+  box-shadow: 0 18px 55px rgb(23 82 122 / 8%);
+}
+
+.quick-calculator .tool-form {
+  gap: 0.85rem;
+}
+
+.quick-calculator .tool-form fieldset > label {
+  transition:
+    border-color 160ms ease,
+    background 160ms ease;
+}
+
+.quick-calculator .tool-form fieldset > label:has(input:checked) {
+  border-color: #1677f0;
+  background: #f1f8ff;
+}
+
+.quick-calculator .button,
+.wizard .button:not(.button--outline) {
+  min-height: 50px;
+  border: 0;
+  color: #062143;
+  background: linear-gradient(135deg, #ffd647, #f7b900);
+  box-shadow: 0 11px 20px rgb(247 185 0 / 22%);
+}
+
+.quick-calculator .button:hover,
+.wizard .button:not(.button--outline):hover {
+  background: linear-gradient(135deg, #ffe171, #ffc510);
+}
+
+.quick-result {
+  min-height: 100%;
+  background: rgb(255 255 255 / 91%);
+}
+
+.quick-result__metrics > div,
+.wizard-kpis > div,
+.result-metric {
+  border: 1px solid #edf3f7;
+  background: linear-gradient(145deg, #fff, #f3f9ff);
+}
+
+.quick-result__actions .button {
+  margin-top: 0;
+}
+
+.calculator-hero--professional.section {
+  padding-bottom: 1.5rem;
+}
+
+.wizard.section {
+  padding-top: 0.5rem;
+  padding-bottom: clamp(46px, 6vw, 86px);
+}
+
+.wizard__container {
+  max-width: 88rem;
+}
+
+.wizard-progress {
+  position: relative;
+  max-width: 48rem;
+  margin: 0 auto 1.4rem;
+  border: 0;
+  background: transparent;
+}
+
+.wizard-progress::before {
+  position: absolute;
+  top: 1.85rem;
+  right: 13%;
+  left: 13%;
+  height: 2px;
+  background: #000508;
+  content: '';
+}
+
+.wizard-progress button {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  justify-items: center;
+  gap: 0.3rem;
+  min-height: 64px;
+  text-align: center;
+}
+
+.wizard-progress button span {
+  width: 2.7rem;
+  height: 2.7rem;
+  margin: 0;
+  border: 3px solid #f2f7fc;
+  background: #eaf2fa;
+  font-size: 0.9rem;
+}
+
+.wizard-progress button[aria-current='step'] {
+  background: transparent;
+  color: #155396;
+}
+
+.wizard-progress button[aria-current='step'] span {
+  color: #fff;
+  background: #1677f0;
+}
+
+.wizard-progress button[data-step-state='complete'] span {
+  color: #fff;
+  background: #1677f0;
+}
+
+.wizard-step {
+  background: rgb(255 255 255 / 94%);
+}
+
+.wizard-step__heading > span {
+  border-radius: 50%;
+  background: #1677f0;
+  color: #fff;
+}
+
+.wizard-step__heading h2 {
+  font-size: clamp(1.7rem, 2.6vw, 2.35rem);
+  letter-spacing: -0.04em;
+  overflow-wrap: anywhere;
+}
+
+.wizard-step__heading p {
+  margin: 0;
+  color: #4d6982;
+  overflow-wrap: anywhere;
+}
+
+.professional-panel,
+.file-upload,
+.wizard-chart,
+.finance-empty,
+.result-notice {
+  border-color: #dceaf5;
+  background: linear-gradient(135deg, #f7fbff, #eef7ff);
+}
+
+.wizard-map-wrap {
+  border-color: #d6e5f2;
+  box-shadow: 0 12px 28px rgb(23 82 122 / 9%);
+}
+
+.wizard-map.property-map {
+  height: clamp(350px, 35vw, 520px);
+}
+
+.result-budget {
+  border: 1px solid #113a67;
+  background: linear-gradient(135deg, #07284a, #0b3f6e);
+}
+
+.result-environmental {
+  margin-top: 1.25rem;
+  padding: 1rem;
+  border: 1px solid #d7f0dc;
+  border-radius: 0.85rem;
+  background: linear-gradient(135deg, #f5fff7, #edfbf1);
+}
+
+.result-environmental h3 {
+  margin: 0 0 0.8rem;
+  color: #155d35;
+}
+
+.result-dashboard > .wizard-chart {
+  margin-top: 1.25rem;
+}
+
+.migration-page {
+  display: grid;
+  min-height: 100vh;
+  place-items: center;
+}
+
+.migration-page__card,
+.calculator-mode-error__card {
+  max-width: 38rem;
+  border: 1px solid #dceaf5;
+  border-radius: 1.15rem;
+  padding: clamp(1.5rem, 5vw, 3rem);
+  background: #fff;
+  box-shadow: 0 18px 55px rgb(23 82 122 / 10%);
+}
+
+.calculator-mode-error__card h1 {
+  margin-top: 0;
+}
+
+@media (min-width: 960px) {
+  .wizard-step[data-wizard-step='0'],
+  .wizard-step[data-wizard-step='2'] {
+    display: grid;
+    grid-template-columns: minmax(0, 0.91fr) minmax(26rem, 1.09fr);
+    column-gap: clamp(1.4rem, 3vw, 2.5rem);
+    align-items: start;
+  }
+
+  .wizard-step[data-wizard-step='0'] .wizard-step__heading,
+  .wizard-step[data-wizard-step='2'] .wizard-step__heading {
+    grid-column: 1 / -1;
+  }
+
+  .wizard-step[data-wizard-step='0'] .wizard-map-wrap,
+  .wizard-step[data-wizard-step='2'] .wizard-map-wrap {
+    grid-column: 2;
+    grid-row: 2 / span 8;
+    margin-top: 0;
+  }
+
+  .wizard-step[data-wizard-step='0'] > :not(.wizard-step__heading):not(.wizard-map-wrap),
+  .wizard-step[data-wizard-step='2'] > :not(.wizard-step__heading):not(.wizard-map-wrap) {
+    grid-column: 1;
+  }
+
+  .wizard-step[data-wizard-step='0'] .flow-actions,
+  .wizard-step[data-wizard-step='2'] .flow-actions {
+    align-self: end;
+  }
+
+  .wizard-step[data-wizard-step='1'] {
+    max-width: 72rem;
+    margin-inline: auto;
+  }
+
+  .wizard-step[data-wizard-step='3'] {
+    max-width: 82rem;
+    margin-inline: auto;
+  }
+}
+
+@media (max-width: 780px) {
+  .calculator-hero {
+    padding-top: calc(var(--header-height) + 1.8rem);
+  }
+
+  .calculator-hero h1 {
+    font-size: clamp(2.25rem, 11vw, 3.2rem);
+  }
+
+  .calculator-mode-switch {
+    gap: 0.5rem;
+  }
+
+  .calculator-mode-switch a {
+    min-height: 88px;
+    padding: 0.8rem;
+  }
+
+  .calculator-mode-switch span {
+    font-size: 0.78rem;
+  }
+
+  .wizard-progress {
+    display: none;
+  }
+}
+
+@media (max-width: 860px) {
+  .quick-calculator__grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .quick-calculator__form,
+  .quick-result {
+    min-width: 0;
+  }
+}
+
+@media (max-width: 380px) {
+  .calculator-mode-switch {
+    grid-template-columns: 1fr;
+  }
+
+  .calculator-mode-switch a {
+    min-height: 58px;
+  }
+}

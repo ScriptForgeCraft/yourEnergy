@@ -11,7 +11,7 @@ import {
   normalizeRoof,
   parseDecimalNumber
 } from '../src/domain/index.js';
-import { getDefaultCalculatorSystem } from '../src/data/equipment/calculator-defaults.js';
+import { getDefaultCalculatorSystem } from '../src/data/equipment/calculator/defaults.js';
 
 const validP0Body = () => ({
   property: {

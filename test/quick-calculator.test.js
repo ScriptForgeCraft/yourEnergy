@@ -13,8 +13,8 @@ import {
   createUserTariffSelection,
   getArmeniaRegionalBenchmark
 } from '../src/domain/index.js';
-import { getDefaultCalculatorSystem } from '../src/data/equipment/calculator-defaults.js';
-import { getSolarPanels } from '../src/data/equipment/calculator-catalog.js';
+import { getDefaultCalculatorSystem } from '../src/data/equipment/calculator/defaults.js';
+import { getSolarPanels } from '../src/data/equipment/calculator/catalog.js';
 import { calculatorModes } from '../src/content/calculator-modes.js';
 import { createCalculatorSession } from '../src/ui/calculator-session.js';
 import { formatConsumerCommercialRange } from '../src/ui/commercial-range.js';
@@ -138,7 +138,7 @@ test('Quick result presents only homeowner metrics and gates savings on a financ
 test('Quick excludes equipment, environmental and provenance blocks while Professional keeps equipment', async () => {
   const [quick, professional] = await Promise.all([
     readFile(resolve(root, 'src/ui/quick-calculator.js'), 'utf8'),
-    readFile(resolve(root, 'src/ui/calculator-wizard.js'), 'utf8')
+    readFile(resolve(root, 'src/ui/calculator/results-view.js'), 'utf8')
   ]);
 
   for (const forbidden of [

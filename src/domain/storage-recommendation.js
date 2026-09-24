@@ -1,4 +1,4 @@
-import { getBatteries } from '../data/equipment/calculator-catalog.js';
+import { getBatteries } from '../data/equipment/calculator/catalog.js';
 import { round, toPositiveNumberOrNull } from './numbers.js';
 
 export const STORAGE_RECOMMENDATION_STATUS = Object.freeze({

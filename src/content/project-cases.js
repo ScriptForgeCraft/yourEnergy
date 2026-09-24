@@ -116,8 +116,7 @@ const modernHomeYerevan = Object.freeze({
     category: 'Private home',
     location: 'Yerevan, Armenia',
     title: 'Modern home with a solar system',
-    intro:
-      'A completed residential solar system with a published installed capacity of 8.4 kWp.',
+    intro: 'A completed residential solar system with a published installed capacity of 8.4 kWp.',
     imageAlt: 'Modern home with a solar system in Yerevan',
     photoCaption: 'Published photograph of the site',
     metricsTitle: 'Published results',

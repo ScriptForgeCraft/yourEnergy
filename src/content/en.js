@@ -553,8 +553,18 @@ export default {
         status: 'system',
         chart: true,
         cards: [
-          { icon: 'zap', label: 'System size', value: 'Based on consumption and solar resource', data: 'system-size' },
-          { icon: 'sun', label: 'Solar panels', value: 'Count based on capacity and selected panel', data: 'panel-count' },
+          {
+            icon: 'zap',
+            label: 'System size',
+            value: 'Based on consumption and solar resource',
+            data: 'system-size'
+          },
+          {
+            icon: 'sun',
+            label: 'Solar panels',
+            value: 'Count based on capacity and selected panel',
+            data: 'panel-count'
+          },
           {
             icon: 'shield-check',
             label: 'Inverter',
@@ -612,7 +622,11 @@ export default {
         cards: [
           { icon: 'pin', label: 'Site review', value: 'Property parameters confirmed on site' },
           { icon: 'calculator', label: 'Final design', value: 'Approved system configuration' },
-          { icon: 'sun', label: 'Equipment preparation', value: 'Specified for the approved design' }
+          {
+            icon: 'sun',
+            label: 'Equipment preparation',
+            value: 'Specified for the approved design'
+          }
         ],
         timeline: [
           { number: '1', label: 'Site preparation' },
@@ -630,8 +644,16 @@ export default {
         headline: 'Your system keeps working for you',
         copy: 'After installation, keep system information, generation data and service contacts together in one place.',
         cards: [
-          { icon: 'file', label: 'Solar Passport', value: 'Inputs and assumptions from the current calculation' },
-          { icon: 'shield-check', label: 'System information', value: 'Design and technical documentation' },
+          {
+            icon: 'file',
+            label: 'Solar Passport',
+            value: 'Inputs and assumptions from the current calculation'
+          },
+          {
+            icon: 'shield-check',
+            label: 'System information',
+            value: 'Design and technical documentation'
+          },
           { icon: 'cycle', label: 'Generation', value: 'Monitoring data when available' },
           { icon: 'support', label: 'Support', value: 'YOURENERGY service and contact options' }
         ],

@@ -375,7 +375,7 @@
   will-change: transform, opacity;
   top: 1rem;
 }
- 
+
 .process-metrics {
   position: relative;
   z-index: 5;
@@ -592,7 +592,6 @@
   overflow: visible;
   pointer-events: none;
 }
-
 
 .process-state--photo .process-state__copy,
 .process-state--photo .process-visual {

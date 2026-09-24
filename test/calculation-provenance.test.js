@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 
-import { getDefaultCalculatorSystem } from '../src/data/equipment/calculator-defaults.js';
+import { getDefaultCalculatorSystem } from '../src/data/equipment/calculator/defaults.js';
 import { ARMENIA_TARIFF_DATASET } from '../src/data/tariffs/armenia.js';
 import {
   CALCULATION_BASIS_SOURCE_TYPE,

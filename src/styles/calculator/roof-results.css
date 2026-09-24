@@ -1,0 +1,1364 @@
+/* Professional calculator — roof and results --------------------------------
+   Both steps share the same airy white-card canvas as the consumption screen,
+   while keeping the existing polygon and analysis controls fully usable. */
+@media (min-width: 961px) {
+  .calculator-page--professional .wizard-step[data-wizard-step='2'] {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(27rem, 0.9fr) minmax(34rem, 1.1fr);
+    column-gap: clamp(0.85rem, 1.4vw, 1.3rem);
+    align-items: stretch;
+    max-width: none;
+    margin: 0;
+    border: 0;
+    padding: 0;
+    background: transparent;
+    box-shadow: none;
+  }
+
+  .calculator-page--professional .wizard-step[data-wizard-step='2']::before {
+    position: absolute;
+    z-index: 0;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: calc(45% - 0.38rem);
+    border: 1px solid #dceaf5;
+    border-radius: 0.85rem;
+    background: rgb(255 255 255 / 96%);
+    box-shadow: 0 13px 34px rgb(23 82 122 / 7%);
+    content: '';
+  }
+
+  .calculator-page--professional .wizard-step[data-wizard-step='2'] > .wizard-step__heading {
+    position: relative;
+    z-index: 1;
+    grid-column: 1;
+    grid-row: 1;
+    margin: 0;
+    padding: 1.12rem 1.3rem 0;
+  }
+
+  .calculator-page--professional .professional-roof-form {
+    position: relative;
+    z-index: 1;
+    grid-column: 1;
+    grid-row: 2;
+    border: 0;
+    border-radius: 0;
+    padding: 0.95rem 1.3rem 1rem;
+    background: transparent;
+    box-shadow: none;
+  }
+
+  .calculator-page--professional .wizard-step[data-wizard-step='2'] > .professional-roof-map {
+    position: relative;
+    z-index: 1;
+    grid-column: 2;
+    grid-row: 1 / span 2;
+  }
+
+  .calculator-page--professional .wizard-step[data-wizard-step='3'] {
+    max-width: none;
+    margin: 0;
+    border: 0;
+    padding: 0;
+    background: transparent;
+    box-shadow: none;
+  }
+}
+
+.professional-roof-form {
+  display: grid;
+  align-content: start;
+  border: 1px solid #dceaf5;
+  border-radius: 0.85rem;
+  padding: 1.12rem 1.3rem 1rem;
+  background: rgb(255 255 255 / 96%);
+  box-shadow: 0 13px 34px rgb(23 82 122 / 7%);
+}
+
+.professional-roof-methods {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.06rem;
+  margin: 0;
+  border: 0;
+  border-radius: 0.58rem;
+  padding: 0;
+  background: #f4f7fb;
+}
+
+.professional-roof-methods legend {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.professional-roof-methods > label {
+  position: relative;
+  display: flex;
+  min-height: 3.3rem;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  margin: 0;
+  border: 1px solid transparent;
+  border-radius: 0.54rem;
+  padding: 0.45rem;
+  color: #4d6685;
+  background: transparent;
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.69rem;
+  font-weight: 760;
+  text-align: center;
+}
+
+.professional-roof-methods input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+}
+
+.professional-roof-methods svg {
+  width: 1.2rem;
+  height: 1.2rem;
+  flex: 0 0 auto;
+  color: #55718f;
+}
+
+.professional-roof-methods label:has(input:checked) {
+  z-index: 1;
+  border-color: #167af3;
+  color: #076deb;
+  background: #fff;
+  box-shadow: 0 4px 12px rgb(20 105 220 / 7%);
+}
+
+.professional-roof-methods label:has(input:checked) svg {
+  color: #0877ef;
+}
+
+.professional-roof-notice {
+  display: grid;
+  grid-template-columns: 1.38rem minmax(0, 1fr);
+  gap: 0.52rem;
+  align-items: start;
+  margin-top: 0.75rem;
+  border-radius: 0.56rem;
+  padding: 0.7rem 0.78rem;
+  color: #173259;
+  background: linear-gradient(105deg, #edf7ff, #f4f9ff);
+}
+
+.professional-roof-notice > svg {
+  width: 1.28rem;
+  height: 1.28rem;
+  color: #0877ef;
+}
+
+.professional-roof-notice p,
+.professional-roof-notice small {
+  display: block;
+  margin: 0;
+  font-size: 0.7rem;
+  line-height: 1.35;
+}
+
+.professional-roof-notice small {
+  margin-top: 0.16rem;
+  color: #5b7390;
+}
+
+.professional-roof-capacity {
+  grid-column: 1 / -1;
+  margin-top: 0.1rem;
+  padding: 0.8rem;
+  border: 1px solid #dceaf5;
+  border-radius: 0.72rem;
+  background: #f8fcff;
+}
+
+.professional-roof-capacity > strong {
+  display: block;
+  color: #173259;
+  font-size: 0.78rem;
+}
+
+.professional-roof-capacity dl {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.55rem;
+  margin: 0.65rem 0;
+}
+
+.professional-roof-capacity dl > div {
+  min-width: 0;
+}
+
+.professional-roof-capacity dt,
+.professional-roof-capacity small {
+  color: #5b7390;
+  font-size: 0.68rem;
+  line-height: 1.35;
+}
+
+.professional-roof-capacity dd,
+.professional-roof-capacity p {
+  margin: 0.18rem 0 0;
+  color: #173259;
+  font-size: 0.76rem;
+  line-height: 1.35;
+}
+
+.professional-roof-capacity small {
+  display: block;
+  margin-top: 0.42rem;
+}
+
+.professional-roof-notice.is-error {
+  border: 1px solid #ef9a9a;
+  color: #8b1721;
+  background: #fff2f3;
+  box-shadow: 0 0 0 3px rgb(214 47 58 / 8%);
+}
+
+.professional-roof-notice.is-error > svg {
+  color: #d62f3a;
+}
+
+.professional-roof-form .roof-controls {
+  justify-content: flex-start;
+  gap: 0.35rem;
+  margin: 0.58rem 0 0;
+}
+
+.professional-roof-form .roof-controls .button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  min-height: 2.25rem;
+  padding: 0.35rem 0.58rem;
+  font-size: 0.62rem;
+  box-shadow: none;
+}
+
+.professional-roof-form .roof-controls svg {
+  width: 0.9rem;
+  height: 0.9rem;
+}
+
+.professional-roof-area {
+  display: grid;
+  grid-template-columns: 3.35rem minmax(0, 1fr) auto;
+  gap: 0.65rem;
+  align-items: center;
+  margin-top: 0.85rem;
+  border-radius: 0.62rem;
+  padding: 0.68rem 0.8rem;
+  background: linear-gradient(115deg, #f4f9ff, #eef7ff);
+}
+
+.professional-roof-area > span {
+  display: grid;
+  width: 3.35rem;
+  height: 3.35rem;
+  place-items: center;
+  border-radius: 50%;
+  color: #0875ed;
+  background: #e3f1ff;
+}
+
+.professional-roof-area > span svg {
+  width: 1.7rem;
+  height: 1.7rem;
+}
+
+.professional-roof-area div {
+  display: grid;
+  gap: 0.18rem;
+}
+
+.professional-roof-area small {
+  color: #213a60;
+  font-size: 0.69rem;
+  font-weight: 700;
+}
+
+.professional-roof-area strong {
+  color: #112a50;
+  font-size: 1.4rem;
+  letter-spacing: -0.03em;
+}
+
+.professional-roof-area .button {
+  min-height: 2.35rem;
+  border-color: #d4e0eb;
+  padding: 0.35rem 0.58rem;
+  color: #263e60;
+  background: #fff;
+  box-shadow: none;
+  font-size: 0.65rem;
+}
+
+.professional-roof-plane-input {
+  margin-top: 0.85rem;
+  color: #173259;
+  font-size: 0.72rem;
+  font-weight: 760;
+}
+
+.professional-roof-plane-input .input-with-unit {
+  min-height: 2.85rem;
+  margin-top: 0.32rem;
+  border: 1px solid #d2dfec;
+  border-radius: 0.52rem;
+  background: #fff;
+}
+
+.professional-roof-plane-input input {
+  min-height: 2.75rem;
+  border: 0;
+  padding-inline: 0.75rem;
+  background: transparent;
+}
+
+.professional-roof-plane-input:has(input[aria-invalid='true']) .input-with-unit,
+.professional-roof-parameters select[aria-invalid='true'],
+.professional-roof-parameters input[aria-invalid='true'] {
+  border-color: #d62f3a;
+  box-shadow: 0 0 0 3px rgb(214 47 58 / 11%);
+}
+
+.professional-roof-parameters {
+  margin-top: 0;
+}
+
+.professional-roof-parameters h3 {
+  margin: 0 0 0.55rem;
+  color: #11294e;
+  font-size: 0.8rem;
+}
+
+.calculator-page--professional .professional-roof-parameters .wizard-form-grid {
+  gap: 0.65rem;
+}
+
+.calculator-page--professional .professional-roof-parameters label {
+  margin: 0;
+  color: #536c8a;
+  font-size: 0.69rem;
+  font-weight: 720;
+}
+
+.calculator-page--professional .professional-roof-parameters select,
+.calculator-page--professional .professional-roof-parameters .input-with-unit {
+  min-height: 2.88rem;
+  margin-top: 0.3rem;
+  border: 1px solid #d2dfec;
+  border-radius: 0.52rem;
+  background: #fff;
+}
+
+.calculator-page--professional .professional-roof-parameters select {
+  padding-inline: 0.7rem 2rem;
+  color: #172d52;
+  font-size: 0.74rem;
+  font-weight: 760;
+}
+
+.calculator-page--professional .professional-roof-parameters input {
+  min-height: 2.75rem;
+  border: 0;
+  padding-inline: 0.72rem;
+  color: #172d52;
+  background: transparent;
+  font-size: 0.75rem;
+  font-weight: 760;
+}
+
+.calculator-page--professional .professional-roof-parameters .mounting-cards {
+  grid-template-columns: 1fr;
+  gap: 0;
+  margin: 0.75rem 0 0;
+}
+
+.calculator-page--professional .professional-roof-parameters .mounting-cards legend {
+  margin-bottom: 0.33rem;
+  color: #536c8a;
+  font-size: 0.69rem;
+  font-weight: 720;
+}
+
+.calculator-page--professional .professional-roof-parameters .mounting-cards > label + label {
+  display: none;
+}
+
+.calculator-page--professional .professional-roof-parameters .mounting-cards span {
+  min-height: 2.88rem;
+  grid-template-columns: 1.4rem minmax(0, 1fr);
+  align-items: center;
+  gap: 0.4rem;
+  border: 1px solid #d2dfec;
+  border-radius: 0.52rem;
+  padding: 0.45rem 0.72rem;
+  color: #172d52;
+  background: #fff;
+}
+
+.calculator-page--professional .professional-roof-parameters .mounting-cards span::before {
+  color: #607895;
+  content: '⌁';
+  font-size: 1.45rem;
+}
+
+.calculator-page--professional .professional-roof-parameters .mounting-cards small {
+  display: none;
+}
+
+.calculator-page--professional .professional-roof-mounting-select {
+  display: grid;
+  margin-top: 0.75rem;
+  color: #536c8a;
+  font-size: 0.69rem;
+  font-weight: 720;
+}
+
+.calculator-page--professional .professional-storage-request {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  column-gap: 0.55rem;
+  margin-top: 0.85rem;
+  color: #294968;
+  font-size: 0.73rem;
+  font-weight: 720;
+}
+
+.calculator-page--professional .professional-storage-request input {
+  grid-row: span 2;
+  align-self: start;
+  width: 1rem;
+  height: 1rem;
+  margin: 0.08rem 0 0;
+  accent-color: #1e7b62;
+}
+
+.calculator-page--professional .professional-storage-request small {
+  margin-top: 0.2rem;
+  color: #607895;
+  font-size: 0.67rem;
+  font-weight: 540;
+  line-height: 1.35;
+}
+
+.calculator-page--professional .professional-roof-mounting-select select {
+  min-height: 2.88rem;
+  margin-top: 0.3rem;
+  border: 1px solid #d2dfec;
+  border-radius: 0.52rem;
+  padding-inline: 0.7rem 2rem;
+  color: #172d52;
+  background: #fff;
+  font: inherit;
+  font-size: 0.74rem;
+  font-weight: 760;
+}
+
+.professional-roof-actions {
+  justify-content: space-between;
+  margin-top: 1rem;
+}
+
+.professional-roof-actions .button {
+  min-height: 3rem;
+  gap: 0.48rem;
+  padding-inline: 0.85rem;
+  font-size: 0.76rem;
+}
+
+.professional-roof-actions .button svg {
+  width: 1.05rem;
+  height: 1.05rem;
+}
+
+.professional-roof-actions .button--outline {
+  border-color: #d4e0eb;
+  color: #10294e;
+  background: #fff;
+  box-shadow: none;
+}
+
+.professional-roof-actions .button:not(.button--outline) {
+  color: #fff;
+  background: linear-gradient(135deg, #087af4, #0069ef);
+  box-shadow: 0 10px 20px rgb(0 104 237 / 22%);
+}
+
+.professional-roof-map {
+  position: relative;
+  min-height: 38rem;
+  margin: 0;
+  overflow: hidden;
+  border: 1px solid #e0ebf4;
+  border-radius: 0.85rem;
+  background: #dfe8ed;
+  box-shadow: 0 13px 34px rgb(23 82 122 / 8%);
+}
+
+.professional-roof-map [data-roof-map-host] {
+  position: absolute;
+  inset: 0;
+  min-height: 0;
+}
+
+.professional-roof-map .wizard-map.property-map {
+  height: 100%;
+  min-height: 0;
+}
+
+.professional-roof-map__layers,
+.professional-roof-map__analysis,
+.professional-roof-map__tip {
+  position: absolute;
+  z-index: 3;
+}
+
+.professional-roof-map__layers {
+  top: 1rem;
+  left: 4rem;
+  display: inline-flex;
+  overflow: hidden;
+  border: 1px solid #dde6ef;
+  border-radius: 0.52rem;
+  background: rgb(255 255 255 / 94%);
+  box-shadow: 0 6px 16px rgb(13 43 74 / 16%);
+  & button {
+    cursor: pointer;
+  }
+}
+.professional-roof-map__layers button {
+  min-height: 2.35rem;
+  border: 0;
+  padding: 0 0.75rem;
+  color: #344c6a;
+  background: transparent;
+  font: inherit;
+  font-size: 0.7rem;
+  font-weight: 750;
+}
+
+.professional-roof-map__layers .is-active {
+  color: #096fe9;
+  background: #fff;
+}
+
+.professional-roof-map__analysis {
+  top: 1rem;
+  right: 1rem;
+  width: min(14.6rem, calc(100% - 2rem));
+  overflow: hidden;
+  border-radius: 0.72rem;
+  padding: 0.78rem 0.88rem;
+  background: rgb(255 255 255 / 94%);
+  box-shadow: 0 10px 25px rgb(12 39 69 / 21%);
+}
+
+.professional-roof-map__analysis header {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin-bottom: 0.72rem;
+  color: #183054;
+  font-size: 0.73rem;
+}
+
+.professional-roof-map__analysis header svg {
+  width: 1.16rem;
+  height: 1.16rem;
+  color: #0877ef;
+}
+
+.professional-roof-map__analysis > div {
+  display: grid;
+  grid-template-columns: 2.25rem minmax(0, 1fr);
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.professional-roof-map__analysis > div + div {
+  margin-top: 0.64rem;
+}
+
+.professional-roof-map__analysis > div > span {
+  display: grid;
+  width: 2.25rem;
+  height: 2.25rem;
+  place-items: center;
+  border-radius: 0.48rem;
+  color: #0877ef;
+  background: #eaf4ff;
+  font-size: 1.25rem;
+}
+
+.professional-roof-map__analysis > div:nth-of-type(2) > span {
+  color: #f0ac00;
+  background: #fff4d8;
+}
+
+.professional-roof-map__analysis p {
+  display: grid;
+  gap: 0.08rem;
+  margin: 0;
+}
+
+.professional-roof-map__analysis strong {
+  color: #112c52;
+  font-size: 0.76rem;
+}
+
+.professional-roof-map__analysis small {
+  color: #5b7390;
+  font-size: 0.63rem;
+}
+
+.professional-roof-map__analysis svg {
+  width: 1.22rem;
+  height: 1.22rem;
+}
+
+.professional-roof-map__tip {
+  right: 0.7rem;
+  bottom: 0.7rem;
+  left: 0.7rem;
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  border-radius: 0.58rem;
+  padding: 0.64rem 0.75rem;
+  color: #345270;
+  background: rgb(244 250 255 / 94%);
+  font-size: 0.63rem;
+}
+
+.professional-roof-map__tip svg {
+  width: 1.25rem;
+  height: 1.25rem;
+  flex: 0 0 auto;
+  color: #0877ef;
+}
+
+.professional-roof-map__tip strong {
+  color: #173258;
+}
+
+.professional-results-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.28fr) minmax(23rem, 0.92fr);
+  gap: 0.82rem;
+}
+
+.calculator-page--professional .wizard-step[data-wizard-step='3'] {
+  position: relative;
+}
+
+.calculator-page--professional .wizard-step[data-wizard-step='3'] > .wizard-step__heading > span {
+  display: none;
+}
+
+.professional-results-restart {
+  position: absolute;
+  top: 0;
+  right: 0;
+  min-height: 2.65rem;
+  gap: 0.48rem;
+  padding-inline: 1rem;
+  color: #0877ef;
+  font-size: 0.72rem;
+}
+
+.professional-results-restart svg {
+  width: 1.12rem;
+  height: 1.12rem;
+}
+
+.professional-results-hero {
+  position: relative;
+  min-height: 18.9rem;
+  overflow: hidden;
+  border-radius: 0.82rem;
+  padding: 2rem 1.8rem;
+  color: #fff;
+  background:
+    linear-gradient(90deg, rgb(3 23 48 / 86%) 0%, rgb(4 30 55 / 56%) 51%, rgb(4 33 58 / 11%) 100%),
+    url('/images/professional-results-house.png') center / cover;
+  box-shadow: 0 13px 34px rgb(23 82 122 / 10%);
+}
+
+.professional-results-hero > div {
+  position: relative;
+  z-index: 1;
+  max-width: 17rem;
+}
+
+.professional-results-hero small {
+  color: #dce8f4;
+  font-size: 0.66rem;
+  font-weight: 760;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.professional-results-hero h3 {
+  margin: 0.85rem 0 0.85rem;
+  color: #fff;
+  font-size: clamp(1.65rem, 2.5vw, 2.35rem);
+  letter-spacing: -0.048em;
+  line-height: 1.03;
+}
+
+.professional-results-hero p {
+  margin: 0;
+  color: #f1f7fd;
+  font-size: 0.83rem;
+  line-height: 1.45;
+}
+
+.professional-results-grid > .result-dashboard {
+  display: contents;
+}
+
+.professional-results-grid .result-kpis {
+  grid-column: 1;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.42rem;
+  margin: -0.25rem 0 0;
+  padding: 0.68rem 0.78rem 0.78rem;
+  border: 1px solid #e0ebf4;
+  border-radius: 0 0 0.82rem 0.82rem;
+  background: #fff;
+  box-shadow: 0 13px 34px rgb(23 82 122 / 7%);
+  min-height: 6.6rem;
+}
+
+.professional-results-grid .result-kpis > div {
+  display: grid;
+  grid-template-columns: 2.5rem minmax(0, 1fr);
+  align-items: center;
+  min-width: 0;
+  min-height: 4.6rem;
+  border-radius: 0.55rem;
+  padding: 0.55rem 0.45rem;
+  background: linear-gradient(135deg, #f2f9ff, #f8fcff);
+  text-align: left;
+}
+
+.professional-results-grid .result-kpis > div::before {
+  display: grid;
+  grid-column: 1;
+  grid-row: 1 / span 2;
+  width: 2.2rem;
+  height: 2.2rem;
+  place-items: center;
+  border-radius: 50%;
+  color: #09ad4b;
+  background: #def9e7;
+  font-size: 1.25rem;
+  font-weight: 900;
+  content: '⚡';
+}
+
+.professional-results-grid .result-kpis > .result-metric--consumption::before {
+  content: '⌂';
+}
+
+.professional-results-grid .result-kpis > .result-metric--savings::before {
+  color: #0a8a57;
+  content: '◉';
+}
+
+.professional-results-grid .result-kpis > .result-metric--co2::before {
+  color: #0b9d48;
+  content: '⌁';
+}
+
+.professional-results-grid .result-kpis dt {
+  grid-column: 2;
+  grid-row: 2;
+  color: #506c8b;
+  font-size: 0.62rem;
+  line-height: 1.18;
+}
+
+.professional-results-grid .result-kpis dd {
+  grid-column: 2;
+  grid-row: 1;
+  margin-top: 0.14rem;
+  color: #10284d;
+  font-size: 0.88rem;
+  font-weight: 800;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+.professional-results-grid .result-dashboard > .wizard-chart {
+  grid-column: 2;
+  grid-row: 1;
+  min-height: 17.15rem;
+  align-self: start;
+  margin: 0;
+  border: 1px solid #dceaf5;
+  border-radius: 0.82rem;
+  padding: 1rem 1.12rem;
+  background: #fff;
+  box-shadow: 0 13px 34px rgb(23 82 122 / 7%);
+}
+
+.professional-results-grid .result-dashboard > .wizard-chart figcaption {
+  color: #10274c;
+  font-size: 0.94rem;
+  font-weight: 800;
+}
+
+.professional-results-grid .result-dashboard > .wizard-chart .chart-bars {
+  align-items: stretch;
+  min-height: 11.2rem;
+  gap: 0.22rem;
+  padding-top: 0.8rem;
+}
+
+.professional-results-grid .result-dashboard > .wizard-chart .chart-bar {
+  --result-bar-height: clamp(24px, var(--bar-height), calc(100% - 3rem));
+
+  position: relative;
+  display: block;
+  height: 100%;
+  min-width: 0;
+  background: transparent;
+}
+
+.professional-results-grid .result-dashboard > .wizard-chart .chart-bar::before {
+  position: absolute;
+  right: 0;
+  bottom: 1.3rem;
+  left: 0;
+  height: var(--result-bar-height);
+  border-radius: 0.18rem 0.18rem 0 0;
+  background: linear-gradient(180deg, #75b7f7, #4c9bec);
+  content: '';
+}
+
+.professional-results-grid .result-dashboard > .wizard-chart .chart-bar__value {
+  position: absolute;
+  bottom: calc(1.45rem + var(--result-bar-height));
+  left: 50%;
+  color: #173056;
+  font-size: 0.55rem;
+  transform: translateX(-50%);
+}
+
+.professional-results-grid .result-dashboard > .wizard-chart .chart-bar__label {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  color: #506b8a;
+  font-size: 0.54rem;
+  transform: translateX(-50%);
+}
+
+.professional-results-grid .result-environmental {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  align-self: end;
+  min-height: 7.8rem;
+  margin: 0;
+  border: 1px solid #e0ebf4;
+  border-radius: 0.82rem;
+  padding: 0.9rem 1.12rem;
+  background: #fff;
+  box-shadow: 0 13px 34px rgb(23 82 122 / 7%);
+}
+
+.professional-results-grid .result-environmental h3 {
+  margin: 0 0 0.7rem;
+  color: #10274c;
+  font-size: 0.88rem;
+}
+
+.professional-results-grid .result-environmental .wizard-kpis {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.5rem;
+}
+
+.professional-results-grid .result-environmental .wizard-kpis > div {
+  padding: 0;
+  background: transparent;
+}
+
+.professional-results-grid .result-environmental dt {
+  color: #5a7390;
+  font-size: 0.6rem;
+}
+
+.professional-results-grid .result-environmental dd {
+  color: #153058;
+  font-size: 0.82rem;
+}
+
+.professional-results-grid .result-budget,
+.professional-results-grid .result-notice {
+  grid-column: 1;
+  margin: 0;
+}
+
+.professional-results-grid .calculation-basis {
+  grid-column: 1;
+  margin: 0;
+  background: linear-gradient(135deg, #f7fbff, #eef7ff);
+}
+
+.professional-results-grid .result-equipment {
+  display: grid;
+  grid-column: 1 / -1;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.7rem;
+  margin: 0;
+}
+
+.result-equipment > h3,
+.result-equipment__engineering-note {
+  grid-column: 1 / -1;
+  margin: 0;
+}
+
+.result-equipment > h3 {
+  color: #10274c;
+  font-size: 1.02rem;
+}
+
+.result-equipment__engineering-note {
+  color: #5a7390;
+  font-size: 0.71rem;
+  line-height: 1.45;
+}
+
+.result-equipment-card {
+  display: grid;
+  grid-template-columns: minmax(7.5rem, 33%) minmax(0, 1fr);
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid #dbe9f3;
+  border-radius: 0.82rem;
+  color: inherit;
+  background: #fff;
+  box-shadow: 0 10px 28px rgb(23 82 122 / 7%);
+  text-decoration: none;
+  transition:
+    border-color 180ms ease,
+    box-shadow 180ms ease,
+    transform 180ms ease;
+}
+
+.result-equipment-card[href]:hover {
+  border-color: #8cc9ee;
+  box-shadow: 0 15px 32px rgb(23 82 122 / 13%);
+  transform: translateY(-2px);
+}
+
+.result-equipment-card[href]:focus-visible {
+  outline: 3px solid #0b8eea;
+  outline-offset: 3px;
+}
+
+.result-equipment-card__media {
+  display: grid;
+  min-height: 10.3rem;
+  place-items: center;
+  overflow: hidden;
+  padding: 0.75rem;
+  background: linear-gradient(145deg, #edf7fd, #f9fcff);
+}
+
+.result-equipment-card__media img {
+  width: 100%;
+  height: 100%;
+  max-height: 10rem;
+  object-fit: contain;
+}
+
+.result-equipment-card__image-unavailable {
+  max-width: 8rem;
+  color: #607895;
+  font-size: 0.69rem;
+  line-height: 1.4;
+  text-align: center;
+}
+
+.result-equipment-card__content {
+  display: grid;
+  align-content: start;
+  gap: 0.24rem;
+  padding: 0.9rem 0.95rem;
+}
+
+.result-equipment-card__content > * {
+  margin: 0;
+}
+
+.result-equipment-card__label,
+.result-equipment-card__status {
+  color: #0877ef;
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.result-equipment-card__brand {
+  margin-top: 0.22rem !important;
+  color: #536c8a;
+  font-size: 0.71rem;
+  font-weight: 720;
+}
+
+.result-equipment-card h4 {
+  color: #10274c;
+  font-size: 1rem;
+  line-height: 1.15;
+}
+
+.result-equipment-card__model,
+.result-equipment-card__reason {
+  color: #5b7390;
+  font-size: 0.7rem;
+  line-height: 1.4;
+}
+
+.result-equipment-card__value {
+  margin-top: 0.26rem !important;
+  color: #173259;
+  font-size: 0.76rem;
+  font-weight: 780;
+  line-height: 1.35;
+}
+
+.result-equipment-card__status {
+  margin-top: 0.28rem !important;
+}
+
+.result-equipment-card__cta {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  gap: 0.35rem;
+  margin-top: 0.3rem !important;
+  color: #076fc3;
+  font-size: 0.72rem;
+  font-weight: 800;
+}
+
+.result-equipment-card__cta::after {
+  content: '→';
+}
+
+.result-equipment-card--unlinked {
+  border-style: dashed;
+}
+
+.calculation-basis .passport-ledger {
+  padding: 0 0 0.9rem;
+}
+
+.professional-results-explainer,
+.professional-next-steps {
+  border: 1px solid #e0ebf4;
+  border-radius: 0.82rem;
+  padding: 1rem 1.15rem;
+  background: rgb(255 255 255 / 96%);
+  box-shadow: 0 13px 34px rgb(23 82 122 / 7%);
+}
+
+.professional-results-explainer {
+  grid-column: 1;
+  min-height: 10rem;
+}
+
+.professional-results-explainer h3 {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0;
+  color: #10274c;
+  font-size: 0.85rem;
+}
+
+.professional-results-explainer h3 span {
+  display: grid;
+  width: 2.2rem;
+  height: 2.2rem;
+  place-items: center;
+  border-radius: 50%;
+  color: #0877ef;
+  background: #e8f3ff;
+}
+
+.professional-results-explainer h3 svg {
+  width: 1.18rem;
+  height: 1.18rem;
+}
+
+.professional-results-explainer p {
+  max-width: 35rem;
+  margin: 0.82rem 0 0;
+  color: #516b89;
+  font-size: 0.73rem;
+  line-height: 1.55;
+}
+
+.professional-next-steps {
+  grid-column: 2;
+  grid-row: span 2;
+  min-height: 10rem;
+}
+
+.professional-next-steps h3 {
+  margin: 0 0 0.55rem;
+  color: #10274c;
+  font-size: 0.87rem;
+}
+
+.professional-next-steps ol {
+  display: grid;
+  gap: 0.36rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.professional-next-steps li {
+  display: grid;
+  grid-template-columns: 1.8rem minmax(0, 1fr);
+  gap: 0.52rem;
+  align-items: start;
+}
+
+.professional-next-steps li > span {
+  display: grid;
+  width: 1.75rem;
+  height: 1.75rem;
+  place-items: center;
+  border-radius: 50%;
+  color: #0877ef;
+  background: #e5f1ff;
+  font-size: 0.72rem;
+  font-weight: 800;
+}
+
+.professional-next-steps p {
+  display: grid;
+  gap: 0.08rem;
+  margin: 0;
+}
+
+.professional-next-steps strong {
+  color: #173057;
+  font-size: 0.69rem;
+}
+
+.professional-next-steps small {
+  color: #5a7390;
+  font-size: 0.59rem;
+  line-height: 1.35;
+}
+
+.professional-next-steps .button {
+  float: right;
+  min-height: 2.7rem;
+  gap: 0.42rem;
+  margin-top: 0.72rem;
+  padding: 0.45rem 0.74rem;
+  color: #142a4c;
+  background: linear-gradient(135deg, #ffcc17, #f6b900);
+  box-shadow: none;
+  font-size: 0.69rem;
+}
+
+.professional-next-steps .button svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+.professional-finance {
+  margin-top: 0.8rem;
+  border: 1px solid #dceaf5;
+  border-radius: 0.82rem;
+  padding: 1rem 1.12rem;
+  background: #fff;
+  box-shadow: 0 13px 34px rgb(23 82 122 / 7%);
+}
+
+.professional-finance h3 {
+  margin: 0 0 0.6rem;
+  color: #10274c;
+  font-size: 0.9rem;
+}
+
+.professional-finance dl {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.5rem;
+  margin: 0;
+}
+
+.professional-finance dl > div {
+  border-radius: 0.55rem;
+  padding: 0.65rem;
+  background: #f4f9ff;
+}
+
+.professional-results-actions {
+  justify-content: flex-start;
+  margin-top: 0.8rem;
+}
+
+.professional-results-actions .button {
+  min-height: 2.75rem;
+  gap: 0.46rem;
+  font-size: 0.7rem;
+}
+
+.professional-results-actions .button--outline {
+  border-color: #d3e0ec;
+  color: #173056;
+  background: #fff;
+  box-shadow: none;
+}
+
+@media (max-width: 960px) {
+  .calculator-page--professional .wizard-step[data-wizard-step='2'] {
+    display: grid;
+    gap: 1rem;
+    border: 0;
+    padding: 0;
+    background: transparent;
+    box-shadow: none;
+  }
+
+  .professional-roof-map {
+    min-height: 31rem;
+  }
+
+  .professional-results-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .professional-results-grid .result-kpis,
+  .professional-results-grid .result-dashboard > .wizard-chart,
+  .professional-results-grid .result-environmental,
+  .professional-results-grid .result-budget,
+  .professional-results-grid .result-notice,
+  .professional-results-grid .result-equipment,
+  .professional-results-explainer,
+  .professional-next-steps {
+    grid-column: 1;
+    grid-row: auto;
+  }
+
+  .professional-next-steps {
+    min-height: 0;
+  }
+}
+
+@media (max-width: 620px) {
+  .professional-results-restart {
+    position: static;
+    width: 100%;
+    justify-content: center;
+    margin: 0 0 0.9rem;
+  }
+
+  .professional-roof-form {
+    padding: 0.9rem;
+  }
+
+  .professional-roof-methods {
+    grid-template-columns: 1fr;
+  }
+
+  .professional-roof-area {
+    grid-template-columns: 2.9rem minmax(0, 1fr);
+  }
+
+  .professional-roof-area > span {
+    width: 2.9rem;
+    height: 2.9rem;
+  }
+
+  .professional-roof-area .button {
+    grid-column: 1 / -1;
+  }
+
+  .calculator-page--professional .professional-roof-parameters .wizard-form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .professional-roof-map {
+    min-height: 28rem;
+  }
+
+  .professional-roof-map__analysis {
+    top: auto;
+    bottom: 3.65rem;
+    left: 0.7rem;
+    width: calc(100% - 1.4rem);
+  }
+
+  .professional-roof-map__analysis > div {
+    display: none;
+  }
+
+  .professional-roof-map__analysis > div:first-of-type {
+    display: grid;
+  }
+
+  .professional-roof-map__tip span {
+    display: none;
+  }
+
+  .professional-results-hero {
+    min-height: 16rem;
+    padding: 1.4rem;
+  }
+
+  .professional-results-grid .result-kpis {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .professional-results-grid .result-dashboard > .wizard-chart {
+    padding: 0.85rem;
+  }
+
+  .professional-results-grid .result-equipment {
+    grid-template-columns: 1fr;
+  }
+
+  .result-equipment-card {
+    grid-template-columns: 1fr;
+  }
+
+  .result-equipment-card__media {
+    min-height: 12rem;
+  }
+
+  .professional-finance dl {
+    grid-template-columns: 1fr;
+  }
+}

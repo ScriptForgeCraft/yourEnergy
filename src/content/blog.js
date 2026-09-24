@@ -201,7 +201,7 @@ export const loadBlogArticles = async () => {
       /ARTICLE \d+\r?\n=+\r?\n([\s\S]*?)(?=\r?\n=+\r?\n(?:ARTICLE \d+\r?\n=+|VERIFIED FACTS USED IN THE ARTICLES|END OF FILE)|\s*$)/gu
     )
   ];
-  if (blocks.length !== 5) throw new Error(`Expected 5 blog articles, found ${blocks.length}.`);
+  if (!blocks.length) throw new Error('Blog source contains no articles.');
 
   return blocks.map((match, articleIndex) => {
     const articleBlock = match[1];

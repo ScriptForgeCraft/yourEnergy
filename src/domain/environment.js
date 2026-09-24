@@ -23,7 +23,7 @@ const nonNegativeIntegerOrNull = (value) => {
  * all supplied. This prevents an environmental equivalence from silently
  * becoming a product claim while the owner has not approved a source.
  */
-export const normalizeGridEmissionFactor = (input = {}, { at = new Date() } = {}) => {
+const normalizeGridEmissionFactor = (input = {}, { at = new Date() } = {}) => {
   const valueKgCo2PerKwh = toPositiveNumberOrNull(input?.valueKgCo2PerKwh);
   const effectiveFrom = validAt(input?.effectiveFrom);
   const effectiveTo = input?.effectiveTo ? validAt(input.effectiveTo) : null;
@@ -59,7 +59,7 @@ export const normalizeGridEmissionFactor = (input = {}, { at = new Date() } = {}
 };
 
 /** A separate, versioned communication equivalency—not an emissions factor. */
-export const normalizeTreeEquivalency = (input = {}) => {
+const normalizeTreeEquivalency = (input = {}) => {
   const metricTonsCo2PerTreePerYear = toPositiveNumberOrNull(input?.metricTonsCo2PerTreePerYear);
   const sourceUrl = stringOrNull(input?.sourceUrl);
   const verifiedAt = validAt(input?.verifiedAt);
@@ -81,7 +81,7 @@ export const normalizeTreeEquivalency = (input = {}) => {
   };
 };
 
-export const buildTreeEquivalence = ({ avoidedCo2Tons, treeEquivalency } = {}) => {
+const buildTreeEquivalence = ({ avoidedCo2Tons, treeEquivalency } = {}) => {
   const avoided = toFiniteNumberOrNull(avoidedCo2Tons);
   const factor = normalizeTreeEquivalency(treeEquivalency);
   const treeEquivalent =

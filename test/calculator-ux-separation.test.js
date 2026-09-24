@@ -2,10 +2,14 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import test from 'node:test';
-import { equipmentProductHref } from '../src/ui/calculator-wizard.js';
+import { readStylesheet } from './helpers/styles.js';
+import { equipmentProductHref } from '../src/ui/calculator/results-view.js';
 
 const root = resolve(import.meta.dirname, '..');
-const source = (path) => readFile(resolve(root, path), 'utf8');
+const source = (path) =>
+  path.endsWith('.css')
+    ? readStylesheet(new URL(`../${path}`, import.meta.url))
+    : readFile(resolve(root, path), 'utf8');
 
 test('Quick keeps maps and professional fields out of its initial markup', async () => {
   const quick = await source('src/templates/calculator-quick.hbs');
@@ -28,9 +32,10 @@ test('Quick keeps maps and professional fields out of its initial markup', async
 });
 
 test('Professional has exactly four customer steps and retains every engineering input', async () => {
-  const [professional, controller] = await Promise.all([
+  const [professional, controller, resultsView] = await Promise.all([
     source('src/templates/calculator.hbs'),
-    source('src/ui/calculator-wizard.js')
+    source('src/ui/calculator-wizard.js'),
+    source('src/ui/calculator/results-view.js')
   ]);
   assert.equal((professional.match(/data-wizard-step='/gu) ?? []).length, 4);
   assert.doesNotMatch(professional, /System configuration|Best choice|Most popular/u);
@@ -78,16 +83,16 @@ test('Professional has exactly four customer steps and retains every engineering
   assert.match(controller, /analysisMatchesPanel/u);
   assert.match(controller, /analysisMatchesStorageRequest/u);
   assert.match(controller, /storageRequired\?\.addEventListener\('change'/u);
-  assert.match(controller, /analysis\.inverterRecommendation/u);
-  assert.match(controller, /wizard\.inverterRecommendationTitle/u);
-  assert.match(controller, /analysis\.mountingHardwareRecommendation/u);
-  assert.match(controller, /wizard\.mountingHardwareTitle/u);
-  assert.match(controller, /analysis\.storageRecommendation/u);
-  assert.match(controller, /wizard\.storageRecommendationTitle/u);
+  assert.match(resultsView, /analysis\.inverterRecommendation/u);
+  assert.match(resultsView, /wizard\.inverterRecommendationTitle/u);
+  assert.match(resultsView, /analysis\.mountingHardwareRecommendation/u);
+  assert.match(resultsView, /wizard\.mountingHardwareTitle/u);
+  assert.match(resultsView, /analysis\.storageRecommendation/u);
+  assert.match(resultsView, /wizard\.storageRecommendationTitle/u);
   assert.match(controller, /createEquipmentCatalog/u);
-  assert.match(controller, /card\.dataset\.recommendedProduct/u);
-  assert.match(controller, /card\.target = '_blank'/u);
-  assert.match(controller, /card\.rel = 'noopener noreferrer'/u);
+  assert.match(resultsView, /card\.dataset\.recommendedProduct/u);
+  assert.match(resultsView, /card\.target = '_blank'/u);
+  assert.match(resultsView, /card\.rel = 'noopener noreferrer'/u);
   assert.doesNotMatch(controller, /issue === 'outline' \|\| issue === 'area'/u);
 });
 
@@ -104,7 +109,7 @@ test('one calculator exposes two modes and migrates historic routes safely', asy
     source('src/templates/calculator-quick.hbs'),
     source('src/templates/calculator-migration.hbs'),
     source('src/ui/calculator-mode.js'),
-    source('scripts/generate-pages.mjs')
+    source('scripts/build/page-contexts.mjs')
   ]);
   assert.match(quick, /data-calculator-mode-stage/u);
   assert.equal((quick.match(/data-calculator-mode=/gu) ?? []).length >= 2, true);
@@ -133,11 +138,10 @@ test('Professional restores completed results and keeps inactive steps out of la
 });
 
 test('Professional location actions are honest, searchable and recoverable', async () => {
-  const [template, controller, config, headers] = await Promise.all([
+  const [template, controller, config] = await Promise.all([
     source('src/templates/calculator.hbs'),
     source('src/ui/calculator-wizard.js'),
-    source('vite.config.js'),
-    source('public/_headers')
+    source('vite.config.js')
   ]);
 
   assert.match(template, /data-location-search-results/u);
@@ -149,7 +153,6 @@ test('Professional location actions are honest, searchable and recoverable', asy
   assert.match(controller, /navigator\.geolocation\.getCurrentPosition/u);
   assert.match(controller, /locationSearchResults\.hidden = false/u);
   assert.match(config, /Permissions-Policy:.*geolocation=\(self\)/u);
-  assert.match(headers, /Permissions-Policy:.*geolocation=\(self\)/u);
   assert.doesNotMatch(
     controller,
     /data-use-current-location[\s\S]*setLocationAtCenter/u,

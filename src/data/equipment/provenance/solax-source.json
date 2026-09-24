@@ -1,0 +1,697 @@
+{
+  "source_pages": 68,
+  "note": "All names, variants and factual claims in this package are derived from the uploaded 68-page SolaX catalog. Where the catalog only shows an ecosystem component in diagrams and does not provide a dedicated product sheet, it is listed under ecosystem_components instead of primary_products.",
+  "primary_products": [
+    {
+      "id": "x1-mini-g4",
+      "name": "X1-MINI G4",
+      "category": "grid_tied_inverter_single_phase",
+      "pages": [1, 2],
+      "variants": ["0.6kW", "0.7kW", "0.8kW", "1.1kW", "1.5kW", "2.0kW", "2.5kW", "3.0kW", "3.3kW"],
+      "features": [
+        "200% PV oversizing",
+        "16A max PV input current",
+        "Ultra-wide MPPT range",
+        "Global MPP scan",
+        "Export control",
+        "Optional AFCI and Type II SPD",
+        "EV charger integration",
+        "Datahub/Modbus extensibility"
+      ],
+      "image": "assets/images/equipment/products/solax/x1-mini-g4.png",
+      "source_pack_image": "images/products/x1-mini-g4.png",
+      "document": "assets/documents/equipment/solax/solax-x1-mini-g4-catalog-en.pdf"
+    },
+    {
+      "id": "x1-boost-g4",
+      "name": "X1-BOOST G4",
+      "category": "grid_tied_inverter_single_phase",
+      "pages": [3, 4],
+      "variants": ["2.5kW", "3.0kW", "3.3kW", "3.6kW", "4.0kW", "4.2kW", "5.0kW", "6.0kW"],
+      "features": [
+        "200% PV oversizing",
+        "16A input current",
+        "50V startup voltage",
+        "Global MPP scan",
+        "WiFi/APP configuration",
+        "Optional RSD/AFCI",
+        "Export control",
+        "EV charger and heat-pump integration"
+      ],
+      "image": "assets/images/equipment/products/solax/x1-boost-g4.png",
+      "source_pack_image": "images/products/x1-boost-g4.png",
+      "document": "assets/documents/equipment/solax/solax-x1-boost-g4-catalog-en.pdf"
+    },
+    {
+      "id": "x1-smart-g2",
+      "name": "X1-SMART G2",
+      "category": "grid_tied_inverter_single_phase",
+      "pages": [5, 6],
+      "variants": ["5kW", "6kW", "7kW", "8kW", "9kW", "10kW"],
+      "features": [
+        "3 MPPT trackers",
+        "20A PV input current",
+        "200% PV oversizing",
+        "110% AC overloading",
+        "10s cloud data refresh",
+        "24h consumption monitoring",
+        "Parallel operation",
+        "Global MPP scan",
+        "I-V curve diagnostics",
+        "Optional RSD/AFCI"
+      ],
+      "image": "assets/images/equipment/products/solax/x1-smart-g2.png",
+      "source_pack_image": "images/products/x1-smart-g2.png",
+      "document": "assets/documents/equipment/solax/solax-x1-smart-g2-catalog-en.pdf"
+    },
+    {
+      "id": "x3-mic-g2",
+      "name": "X3-MIC G2",
+      "category": "grid_tied_inverter_three_phase",
+      "pages": [7, 8],
+      "variants": ["3kW", "4kW", "5kW", "6kW", "8kW", "10kW", "12kW", "15kW"],
+      "features": [
+        "Max efficiency 98.3%",
+        "200% PV oversizing",
+        "110% output overloading except 15kW",
+        "Global MPP scan",
+        "IP66",
+        "AC/DC SPD",
+        "Export control",
+        "Remote setting and upgrading",
+        "Optional WiFi/LAN/4G"
+      ],
+      "image": "assets/images/equipment/products/solax/x3-mic-g2.png",
+      "source_pack_image": "images/products/x3-mic-g2.png",
+      "document": "assets/documents/equipment/solax/solax-x3-mic-g2-catalog-en.pdf"
+    },
+    {
+      "id": "x3-pro-g2",
+      "name": "X3-PRO G2",
+      "category": "grid_tied_inverter_three_phase",
+      "pages": [9, 10],
+      "variants": ["8kW", "10kW", "12kW", "15kW", "17kW", "20kW", "25kW", "30kW"],
+      "features": [
+        "Max efficiency up to 98.5%",
+        "150% DC oversizing",
+        "110% AC overloading",
+        "Global MPP scan",
+        "IP66",
+        "Type II SPD AC/DC",
+        "Optional ARC protection",
+        "Up to 3 MPPTs",
+        "Master/Slave parallel function"
+      ],
+      "image": "assets/images/equipment/products/solax/x3-pro-g2.png",
+      "source_pack_image": "images/products/x3-pro-g2.png",
+      "document": "assets/documents/equipment/solax/solax-x3-pro-g2-catalog-en.pdf"
+    },
+    {
+      "id": "x3-mega-g2",
+      "name": "X3-MEGA G2",
+      "category": "commercial_grid_tied_inverter",
+      "pages": [11, 12],
+      "variants": ["40kW", "50kW", "60kW"],
+      "features": [
+        "Max efficiency 98.4%",
+        "180-1000V MPPT range",
+        "Up to 6 MPPTs, 2 strings per MPPT",
+        "150% PV oversizing",
+        "110% output overloading",
+        "32A MPPT current",
+        "Smart I-V curve diagnosis",
+        "IP66",
+        "Optional AFCI"
+      ],
+      "image": "assets/images/equipment/products/solax/x3-mega-g2.png",
+      "source_pack_image": "images/products/x3-mega-g2.png",
+      "document": "assets/documents/equipment/solax/solax-x3-mega-g2-catalog-en.pdf"
+    },
+    {
+      "id": "x3-forth",
+      "name": "X3-FORTH",
+      "category": "commercial_grid_tied_inverter",
+      "pages": [13, 14],
+      "variants": ["75kW", "80kW", "100kW", "110kW", "120kW", "125kW", "136kW", "150kW"],
+      "features": [
+        "Max efficiency up to 99%",
+        "180-1000V MPPT range",
+        "Up to 12 MPPTs",
+        "150% PV oversizing",
+        "110% overloading",
+        "32A MPPT current",
+        "IP66",
+        "Optional AFCI",
+        "AC terminal temperature detection",
+        "Optional PLC"
+      ],
+      "image": "assets/images/equipment/products/solax/x3-forth.png",
+      "source_pack_image": "images/products/x3-forth.png",
+      "document": "assets/documents/equipment/solax/solax-x3-forth-catalog-en.pdf"
+    },
+    {
+      "id": "x3-grand-hv",
+      "name": "X3-GRAND HV",
+      "category": "utility_grid_tied_inverter",
+      "pages": [15, 16],
+      "variants": ["300kW", "320kW", "333kW", "350kW"],
+      "features": [
+        "Max efficiency up to 99%",
+        "460-1500V MPPT range",
+        "Up to 6 MPPTs, 5 strings per MPPT",
+        "75A MPPT current",
+        "IP66 / NEMA4X",
+        "Optional AFCI",
+        "AC terminal temperature detection",
+        "24h operation monitoring",
+        "Optional PLC"
+      ],
+      "image": "assets/images/equipment/products/solax/x3-grand-hv.png",
+      "source_pack_image": "images/products/x3-grand-hv.png",
+      "document": "assets/documents/equipment/solax/solax-x3-grand-hv-catalog-en.pdf"
+    },
+    {
+      "id": "x1-micro-2in1",
+      "name": "X1-Micro (2-in-1)",
+      "category": "microinverter",
+      "pages": [17, 18],
+      "variants": ["X1-Micro 800", "X1-Micro 900", "X1-Micro 1000", "X1-Micro 1200"],
+      "features": [
+        "Up to 1200VA output",
+        "2 independent MPPTs",
+        "Up to 20A DC input",
+        "Industrial-grade Wi-Fi",
+        "Micro-grid and AC-coupling support",
+        "Reactive power control",
+        "Rapid shutdown",
+        "IP67"
+      ],
+      "image": "assets/images/equipment/products/solax/x1-micro-2in1.png",
+      "source_pack_image": "images/products/x1-micro-2in1.png",
+      "document": "assets/documents/equipment/solax/solax-x1-micro-2in1-catalog-en.pdf"
+    },
+    {
+      "id": "x1-micro-4in1",
+      "name": "X1-Micro (4-in-1)",
+      "category": "microinverter",
+      "pages": [19],
+      "variants": [
+        "X1-Micro 1300",
+        "X1-Micro 1500",
+        "X1-Micro 1600",
+        "X1-Micro 1800",
+        "X1-Micro 2000",
+        "X1-Micro 2200"
+      ],
+      "features": [
+        "Up to 2200VA output",
+        "4 independent MPPTs",
+        "Up to 20A DC input",
+        "Wi-Fi",
+        "Micro-grid and AC-coupling support",
+        "Reactive power control",
+        "Rapid shutdown",
+        "IP67"
+      ],
+      "image": "assets/images/equipment/products/solax/x1-micro-4in1.png",
+      "source_pack_image": "images/products/x1-micro-4in1.png",
+      "document": "assets/documents/equipment/solax/solax-x1-micro-4in1-catalog-en.pdf"
+    },
+    {
+      "id": "microinverter-accessories",
+      "name": "SolaX Microinverter Cable System",
+      "category": "microinverter_accessories",
+      "pages": [20, 21, 22],
+      "variants": [
+        "Field Connector",
+        "Plug and Play Cable",
+        "AC Trunk End Cap",
+        "AC Trunk Cable",
+        "AC Trunk Connector-M",
+        "AC Trunk Connector-F",
+        "AC End Cable-M"
+      ],
+      "features": [
+        "Plug-and-play cabling",
+        "Up to 600V cable system",
+        "Up to 40A trunk current",
+        "Compatible with SolaX microinverters",
+        "Single- and multi-microinverter solutions"
+      ],
+      "source_pack_image": "images/products/microinverter-accessories.jpg",
+      "document": "assets/documents/equipment/solax/solax-microinverter-accessories-catalog-en.pdf"
+    },
+    {
+      "id": "hyper-ev-charger",
+      "name": "Hyper EV Charger",
+      "category": "ev_charger",
+      "pages": [23, 24],
+      "variants": ["X1-HAC-7 (1.4-7.2kW)", "X3-HAC-11 (1.4-11kW)", "X3-HAC-22 (1.4-22kW)"],
+      "features": [
+        "Green charging with PV",
+        "Automatic phase switching",
+        "Dynamic load balance",
+        "SolaX APP control",
+        "WiFi/Ethernet/4G optional/RS485",
+        "OCPP 1.6j and Modbus",
+        "ISO 15118 optional",
+        "IP65 / IK08"
+      ],
+      "image": "assets/images/equipment/products/solax/hyper-ev-charger.png",
+      "source_pack_image": "images/products/hyper-ev-charger.png",
+      "document": "assets/documents/equipment/solax/solax-hyper-ev-charger-catalog-en.pdf"
+    },
+    {
+      "id": "x1-hyb-lv",
+      "name": "X1-HYB-LV",
+      "category": "hybrid_inverter_low_voltage_single_phase",
+      "pages": [25, 26],
+      "variants": ["3.0kW", "3.7kW", "4.0kW", "4.6kW", "5.0kW", "6.0kW"],
+      "features": [
+        "200% PV oversizing",
+        "Up to 110% AC output",
+        "200% peak EPS for 10s",
+        "Shadow tracking",
+        "<10ms UPS switching",
+        "Up to 120A charge/discharge",
+        "Generator compatible",
+        "48V battery",
+        "IP65",
+        "Optional AFCI"
+      ],
+      "image": "assets/images/equipment/products/solax/x1-hyb-lv.png",
+      "source_pack_image": "images/products/x1-hyb-lv.png",
+      "document": "assets/documents/equipment/solax/solax-x1-hyb-lv-catalog-en.pdf"
+    },
+    {
+      "id": "x1-lite-lv",
+      "name": "X1-Lite-LV",
+      "category": "hybrid_inverter_low_voltage_single_phase",
+      "pages": [27, 28],
+      "variants": ["8.0kW", "10.0kW", "12.0kW"],
+      "features": [
+        "200% PV oversizing",
+        "Up to 110% AC output",
+        "200% peak EPS for 10s",
+        "Shadow tracking",
+        "<4ms UPS switching",
+        "Up to 250A charge/discharge",
+        "Generator compatible",
+        "48V battery",
+        "IP65",
+        "Optional AFCI"
+      ],
+      "source_pack_image": "images/products/x1-lite-lv.png"
+    },
+    {
+      "id": "x3-neo-lv",
+      "name": "X3-NEO-LV",
+      "category": "hybrid_inverter_low_voltage_three_phase",
+      "pages": [29, 30],
+      "variants": ["5.0kW", "8.0kW", "10.0kW", "12.0kW", "15.0kW"],
+      "features": [
+        "200% PV oversizing",
+        "Up to 110% AC output",
+        "200% peak EPS for 10s",
+        "Shadow tracking",
+        "<6ms switching",
+        "Up to 300A charge/discharge",
+        "Generator compatible",
+        "IP65",
+        "Optional AFCI"
+      ],
+      "image": "assets/images/equipment/products/solax/x3-neo-lv.png",
+      "source_pack_image": "images/products/x3-neo-lv.png",
+      "document": "assets/documents/equipment/solax/solax-x3-neo-lv-catalog-en.pdf"
+    },
+    {
+      "id": "tbat-lv-d53",
+      "name": "T-BAT-SYS-LV D53",
+      "category": "low_voltage_battery",
+      "pages": [31, 32],
+      "variants": [
+        "T-BAT LD53",
+        "LD106",
+        "LD159",
+        "LD212",
+        "LD265",
+        "LD318",
+        "LD371",
+        "LD424",
+        "LD477",
+        "LD530",
+        "LD583",
+        "LD636",
+        "LD689",
+        "LD742",
+        "LD795",
+        "LD848"
+      ],
+      "features": [
+        "Modular 1-16 units",
+        "5.3-85.1kWh nominal capacity",
+        "LFP chemistry",
+        "AI-driven monitoring/diagnostics",
+        "Remote OTA upgrades",
+        "IP65",
+        "10-year warranty",
+        ">6000 cycles",
+        "CAN / RS485"
+      ],
+      "source_pack_image": "images/products/tbat-lv-d53.png"
+    },
+    {
+      "id": "tbat-lv-d150",
+      "name": "T-BAT-SYS-LV D150",
+      "category": "low_voltage_battery",
+      "pages": [33, 34],
+      "variants": ["T-BAT-SYS-LV D150"],
+      "features": [
+        "15.0kWh nominal / 13.5kWh usable (90% DoD)",
+        "LiFePO4",
+        "155A max charge/discharge",
+        "310A peak discharge for 10s",
+        "Up to 16 units parallel",
+        ">6000 cycles",
+        "IP65",
+        "CAN / RS485",
+        "5-year warranty"
+      ],
+      "image": "assets/images/equipment/products/solax/tbat-lv-d150.png",
+      "source_pack_image": "images/products/tbat-lv-d150.png",
+      "document": "assets/documents/equipment/solax/solax-t-bat-lv-d150-catalog-en.pdf"
+    },
+    {
+      "id": "x1-ies",
+      "name": "X1-IES",
+      "category": "integrated_residential_ess_single_phase",
+      "pages": [35, 36, 37, 38, 39, 40, 41, 42],
+      "variants": [
+        "X1-IES-2.5K",
+        "X1-IES-3K",
+        "X1-IES-3.7K",
+        "X1-IES-4.6K",
+        "X1-IES-5K",
+        "X1-IES-6K",
+        "X1-IES-8K"
+      ],
+      "features": [
+        "All-in-one residential ESS",
+        "Single-phase hybrid inverter",
+        "5-20kWh extensible battery range",
+        "200% PV input",
+        "Up to 50A charge/discharge",
+        "<10ms backup switching",
+        "Battery heating down to -30°C environment",
+        "VPP / micro-grid / smart scene / schedules",
+        "IP66"
+      ],
+      "image": "assets/images/equipment/products/solax/x1-ies.png",
+      "source_pack_image": "images/products/x1-ies.png",
+      "document": "assets/documents/equipment/solax/solax-x1-ies-catalog-en.pdf"
+    },
+    {
+      "id": "x3-ies",
+      "name": "X3-IES",
+      "category": "integrated_residential_ess_three_phase",
+      "pages": [43, 44, 45, 46, 47, 48, 49, 50],
+      "variants": [
+        "X3-IES-4K",
+        "X3-IES-5K",
+        "X3-IES-6K",
+        "X3-IES-8K",
+        "X3-IES-10K",
+        "X3-IES-12K",
+        "X3-IES-15K"
+      ],
+      "features": [
+        "All-in-one residential ESS",
+        "Three-phase hybrid inverter",
+        "10-30kWh extensible battery range",
+        "200% PV input",
+        "<10ms backup switching",
+        "Battery heating down to -30°C environment",
+        "VPP / micro-grid / smart scene / schedules",
+        "Wireless meter support",
+        "IP66"
+      ],
+      "image": "assets/images/equipment/products/solax/x3-ies.png",
+      "source_pack_image": "images/products/x3-ies.png",
+      "document": "assets/documents/equipment/solax/solax-x3-ies-catalog-en.pdf"
+    },
+    {
+      "id": "x3-ultra",
+      "name": "X3-ULTRA",
+      "category": "hybrid_inverter_three_phase",
+      "pages": [51, 52],
+      "variants": ["X3-ULT-15K", "X3-ULT-19.9K", "X3-ULT-20K", "X3-ULT-25K", "X3-ULT-30K"],
+      "features": [
+        "200% PV input",
+        "36A input current per MPPT",
+        "<10ms backup switching",
+        "Up to 200% EPS for 10s",
+        "EPS operation without battery",
+        "VPP / micro-grid / smart scene",
+        "Dual independent battery ports",
+        "Wireless meter support",
+        "IP65"
+      ],
+      "image": "assets/images/equipment/products/solax/x3-ultra.png",
+      "source_pack_image": "images/products/x3-ultra.png",
+      "document": "assets/documents/equipment/solax/solax-x3-ultra-catalog-en.pdf"
+    },
+    {
+      "id": "tbat-hv-s25",
+      "name": "T-BAT-SYS-HV-S2.5",
+      "category": "high_voltage_battery",
+      "pages": [53, 54],
+      "variants": [
+        "HS5.0",
+        "HS7.5",
+        "HS10.0",
+        "HS12.5",
+        "HS15.0",
+        "HS17.5",
+        "HS20.0",
+        "HS22.5",
+        "HS25.0",
+        "HS27.5",
+        "HS30.0",
+        "HS32.5"
+      ],
+      "features": [
+        "5.1-33.2kWh range",
+        "45A max charge/discharge",
+        "LFP cells",
+        "Battery heating",
+        "IP65 indoor/outdoor",
+        ">6000 cycles",
+        "Stackable modules",
+        "Remote diagnosis and update"
+      ],
+      "image": "assets/images/equipment/products/solax/tbat-hv-s25.png",
+      "source_pack_image": "images/products/tbat-hv-s25.png",
+      "document": "assets/documents/equipment/solax/solax-t-bat-hv-s25-catalog-en.pdf"
+    },
+    {
+      "id": "tbat-hv-s36",
+      "name": "T-BAT-SYS-HV-S3.6",
+      "category": "high_voltage_battery",
+      "pages": [55, 56],
+      "variants": [
+        "HS7.2",
+        "HS10.8",
+        "HS14.4",
+        "HS18.0",
+        "HS21.6",
+        "HS25.2",
+        "HS28.8",
+        "HS32.4",
+        "HS36.0",
+        "HS39.6",
+        "HS43.2",
+        "HS46.8"
+      ],
+      "features": [
+        "7.3-47.9kWh range",
+        "50A max charge/discharge",
+        "LFP cells",
+        "Battery heating",
+        "IP65 indoor/outdoor",
+        ">6000 cycles",
+        "Stackable modules",
+        "Remote diagnosis and update"
+      ],
+      "image": "assets/images/equipment/products/solax/tbat-hv-s36.png",
+      "source_pack_image": "images/products/tbat-hv-s36.png",
+      "document": "assets/documents/equipment/solax/solax-t-bat-hv-s36-catalog-en.pdf"
+    },
+    {
+      "id": "ess-aelio",
+      "name": "ESS-AELIO",
+      "category": "commercial_industrial_ess_cabinet",
+      "pages": [57, 58, 59],
+      "variants": ["AELIO-P50B100", "AELIO-P50B200", "AELIO-P60B100", "AELIO-P60B200"],
+      "features": [
+        "Hybrid C&I ESS cabinet",
+        "50/60kW inverter configurations",
+        "100/200kWh battery configurations",
+        "On-grid/off-grid",
+        "<10ms backup switching",
+        "Four-level fire safety",
+        "IP66 inverter / IP54 cabinet",
+        "200% PV oversizing",
+        "Advanced LFP battery",
+        "Expandable to MWh"
+      ],
+      "image": "assets/images/equipment/products/solax/ess-aelio.png",
+      "source_pack_image": "images/products/ess-aelio.png",
+      "document": "assets/documents/equipment/solax/solax-ess-aelio-catalog-en.pdf"
+    },
+    {
+      "id": "x3-aelio",
+      "name": "X3-AELIO Inverter",
+      "category": "commercial_hybrid_inverter",
+      "pages": [60, 61],
+      "variants": ["X3-AELIO-49.9K", "X3-AELIO-50K", "X3-AELIO-60K", "X3-AELIO-61K"],
+      "features": [
+        "49.9-61kW output range",
+        "Battery voltage 180-820V",
+        "160A max charge/discharge",
+        "<10ms EPS switching",
+        "98% max efficiency",
+        "IP66",
+        "Smart air cooling",
+        "RS485/CAN/USB/DI/DO/DRM"
+      ],
+      "image": "assets/images/equipment/products/solax/x3-aelio.png",
+      "source_pack_image": "images/products/x3-aelio.png",
+      "document": "assets/documents/equipment/solax/solax-x3-aelio-catalog-en.pdf"
+    },
+    {
+      "id": "tb-hr140",
+      "name": "TB-HR140 Battery Pack",
+      "category": "commercial_battery_pack",
+      "pages": [62, 67],
+      "variants": ["TB-HR140"],
+      "features": [
+        "LFP 280Ah",
+        "14.3kWh per pack",
+        "51.2V rated voltage",
+        "115kg",
+        "<=0.5C charge/discharge rate",
+        "CAN communication",
+        "IP20"
+      ],
+      "image": "assets/images/equipment/products/solax/tb-hr140.png",
+      "source_pack_image": "images/products/tb-hr140.png",
+      "document": "assets/documents/equipment/solax/solax-tb-hr140-catalog-en.pdf"
+    },
+    {
+      "id": "ess-trene",
+      "name": "ESS-TRENE",
+      "category": "commercial_industrial_ess_cabinet",
+      "pages": [63, 64, 65],
+      "variants": ["TRENE-P100B215I"],
+      "features": [
+        "C&I ESS cabinet",
+        "100kW AC rated power",
+        "215kWh LFP battery",
+        "Smart air cooling",
+        "Four-level fire protection",
+        "On-grid/off-grid",
+        "SolaX Cloud BMS/EMS",
+        "Cell-level balance and temperature control",
+        "Expandable to MWh",
+        "IP55 cabinet"
+      ],
+      "image": "assets/images/equipment/products/solax/ess-trene.png",
+      "source_pack_image": "images/products/ess-trene.png",
+      "document": "assets/documents/equipment/solax/solax-ess-trene-catalog-en.pdf"
+    },
+    {
+      "id": "x3-trene-100ki",
+      "name": "X3-TRENE-100KI PCS",
+      "category": "power_conversion_system",
+      "pages": [66],
+      "variants": ["X3-TRENE-100KI"],
+      "features": [
+        "100kW rated AC power",
+        "110kVA max apparent power for 10 min",
+        "Battery voltage 630-900V",
+        "140A max charge/discharge",
+        "98% max efficiency",
+        "IP20",
+        "Forced-air cooling",
+        "RS485/CAN/Ethernet/DI"
+      ],
+      "image": "assets/images/equipment/products/solax/x3-trene-100ki.png",
+      "source_pack_image": "images/products/x3-trene-100ki.png",
+      "document": "assets/documents/equipment/solax/solax-x3-trene-100ki-catalog-en.pdf"
+    }
+  ],
+  "ecosystem_components": [
+    {
+      "name": "SolaX Cloud / X-CLOUD",
+      "type": "cloud_monitoring",
+      "pages": [39, 40, 47, 48, 49, 51]
+    },
+    {
+      "name": "Datahub",
+      "type": "monitoring_gateway",
+      "pages": [1, 3, 48, 51]
+    },
+    {
+      "name": "Pocket-X",
+      "type": "communication_dongle",
+      "pages": [37, 45]
+    },
+    {
+      "name": "Pocket WiFi / LAN / 4G",
+      "type": "communication_dongles",
+      "pages": [2, 4, 8, 10, 12, 14]
+    },
+    {
+      "name": "Matebox G2",
+      "type": "backup_distribution_accessory",
+      "pages": [39, 47]
+    },
+    {
+      "name": "Adapter Box G2",
+      "type": "load_control_heat_pump_accessory",
+      "pages": [39, 47, 51, 52]
+    },
+    {
+      "name": "ATS Box",
+      "type": "automatic_transfer_switch_accessory",
+      "pages": [40, 49, 52]
+    },
+    {
+      "name": "Meter",
+      "type": "energy_metering",
+      "pages": [39, 40, 47, 48, 49, 51, 52]
+    },
+    {
+      "name": "CT",
+      "type": "current_transformer_metering",
+      "pages": [39, 40, 47, 48, 49, 51, 52]
+    },
+    {
+      "name": "EPS parallel box",
+      "type": "backup_parallel_accessory",
+      "pages": [51, 52]
+    },
+    {
+      "name": "Heat Pump integration",
+      "type": "smart_load_integration",
+      "pages": [39, 47, 51, 52]
+    },
+    {
+      "name": "Generator integration",
+      "type": "generator_integration",
+      "pages": [40]
+    }
+  ],
+  "source_pack_file": "SolaX_catalog_68_pages.pdf",
+  "canonical_catalog": "assets/documents/equipment/solax/solax-product-catalog-en.pdf"
+}

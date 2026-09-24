@@ -1,7 +1,7 @@
-import { getEquipmentById, getSolarPanelById } from '../data/equipment/calculator-catalog.js';
+import { getEquipmentById, getSolarPanelById } from '../data/equipment/calculator/catalog.js';
 import { round, toNonNegativeNumberOrNull, toPositiveNumberOrNull } from './numbers.js';
 
-export const EQUIPMENT_RECOMMENDATION_COMPATIBILITY_LIMITATIONS = Object.freeze([
+const EQUIPMENT_RECOMMENDATION_COMPATIBILITY_LIMITATIONS = Object.freeze([
   'MODULE_STRING_DESIGN_AND_ROOF_LAYOUT_REQUIRE_ENGINEERING_CONFIRMATION'
 ]);
 

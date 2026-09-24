@@ -1,9 +1,6 @@
 dist
+.generated
 node_modules
-public/images
-index.html
-ru/**/*.html
-privacy/**/*.html
-terms/**/*.html
-soon/**/*.html
+reports
+.codex
 src/templates/*.hbs

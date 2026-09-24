@@ -1,11 +1,11 @@
-import { getMountingSystems } from '../data/equipment/calculator-catalog.js';
+import { getMountingSystems } from '../data/equipment/calculator/catalog.js';
 
 export const MOUNTING_HARDWARE_RECOMMENDATION_STATUS = Object.freeze({
   MATCHED: 'matched',
   NO_CATALOG_MATCH: 'no-catalog-match'
 });
 
-export const MOUNTING_HARDWARE_COMPATIBILITY_LIMITATIONS = Object.freeze([
+const MOUNTING_HARDWARE_COMPATIBILITY_LIMITATIONS = Object.freeze([
   'MOUNTING_HARDWARE_AND_ROOF_STRUCTURE_REQUIRE_ENGINEERING_CONFIRMATION',
   'CATALOG_INCLINATION_DOES_NOT_REPLACE_SITE_LAYOUT_OR_WIND_LOAD_DESIGN'
 ]);

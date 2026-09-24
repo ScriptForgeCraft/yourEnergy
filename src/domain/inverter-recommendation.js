@@ -1,4 +1,4 @@
-import { getGridInverters, getHybridInverters } from '../data/equipment/calculator-catalog.js';
+import { getGridInverters, getHybridInverters } from '../data/equipment/calculator/catalog.js';
 import { toPositiveNumberOrNull } from './numbers.js';
 
 export const INVERTER_TECHNOLOGY = Object.freeze({

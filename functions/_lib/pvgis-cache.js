@@ -144,5 +144,3 @@ export const createPvgisCache = (
     }
   };
 };
-
-export const __private__ = Object.freeze({ stableCacheInput, parseRecord, normalizeStoredRecord });

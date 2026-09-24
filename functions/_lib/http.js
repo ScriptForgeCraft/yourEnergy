@@ -156,19 +156,19 @@ export class ApiError extends Error {
 
 export const isApiError = (error) => error instanceof ApiError;
 
-export const toApiError = (error) => (isApiError(error) ? error : new ApiError('INTERNAL'));
+const toApiError = (error) => (isApiError(error) ? error : new ApiError('INTERNAL'));
 
-export const apiHeaders = (additional = {}) => new Headers({ ...JSON_HEADERS, ...additional });
+const apiHeaders = (additional = {}) => new Headers({ ...JSON_HEADERS, ...additional });
 
-export const json = (body, { status = 200, headers = {} } = {}) =>
+const json = (body, { status = 200, headers = {} } = {}) =>
   new Response(JSON.stringify(body), {
     status,
     headers: apiHeaders(headers)
   });
 
-export const success = (data, options) => json({ ok: true, data }, options);
+const success = (data, options) => json({ ok: true, data }, options);
 
-export const failure = (error, options = {}) => {
+const failure = (error, options = {}) => {
   const normalized = toApiError(error);
   return json(
     {
@@ -255,5 +255,3 @@ export const handlePost = async (context, handler) => {
     return failure(error);
   }
 };
-
-export const errorCodes = Object.freeze(Object.keys(ERROR_DEFINITIONS));

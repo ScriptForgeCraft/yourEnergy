@@ -1,7 +1,7 @@
 import { cloneSerializable, cleanString, deepFreeze } from './numbers.js';
 import { ANALYSIS_SCHEMA_VERSION } from './solar-analysis.js';
 
-export const SOLAR_PASSPORT_SCHEMA_VERSION = '1.0.0';
+const SOLAR_PASSPORT_SCHEMA_VERSION = '1.0.0';
 
 let passportSequence = 0;
 
@@ -15,7 +15,7 @@ const toIsoTimestamp = (value) => {
  * Generates a process-local ID suitable only for the P0 in-memory repository.
  * It is deliberately not a stable public URL or persistent record identifier.
  */
-export const createSolarPassportId = (createdAt = new Date()) => {
+const createSolarPassportId = (createdAt = new Date()) => {
   const timestamp = toIsoTimestamp(createdAt).replace(/[-:.TZ]/gu, '');
   passportSequence += 1;
   return `passport-${timestamp}-${passportSequence}`;

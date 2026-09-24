@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 
-import { getMountingSystems } from '../src/data/equipment/calculator-catalog.js';
+import { getMountingSystems } from '../src/data/equipment/calculator/catalog.js';
 import {
   MOUNTING_HARDWARE_RECOMMENDATION_STATUS,
   recommendMountingHardware,

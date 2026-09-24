@@ -1,0 +1,706 @@
+/* Professional calculator — consumption step ------------------------------- */
+@media (min-width: 961px) {
+  .calculator-page--professional .wizard-step[data-wizard-step='1'] {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1.18fr) minmax(25rem, 0.82fr);
+    column-gap: clamp(1rem, 1.45vw, 1.45rem);
+    max-width: none;
+    border: 0;
+    border-radius: 0;
+    padding: 0;
+    background: transparent;
+    box-shadow: none;
+  }
+
+  .calculator-page--professional .wizard-step[data-wizard-step='1']::before {
+    position: absolute;
+    z-index: 0;
+    inset: 0 auto 0 0;
+    width: calc(58.5% - 0.35rem);
+    border: 1px solid #dceaf5;
+    border-radius: 0.85rem;
+    background: rgb(255 255 255 / 96%);
+    box-shadow: 0 13px 34px rgb(23 82 122 / 7%);
+    content: '';
+  }
+
+  .calculator-page--professional .wizard-step[data-wizard-step='1'] > .wizard-step__heading,
+  .calculator-page--professional
+    .wizard-step[data-wizard-step='1']
+    > .professional-consumption-form,
+  .calculator-page--professional
+    .wizard-step[data-wizard-step='1']
+    > .professional-consumption-aside {
+    position: relative;
+    z-index: 1;
+  }
+
+  .calculator-page--professional .wizard-step[data-wizard-step='1'] > .wizard-step__heading {
+    grid-column: 1;
+    grid-row: 1;
+    margin: 0;
+    padding: 1.12rem 1.3rem 0;
+  }
+
+  .calculator-page--professional
+    .wizard-step[data-wizard-step='1']
+    > .professional-consumption-form {
+    grid-column: 1;
+    grid-row: 2;
+    padding: 0 1.3rem 1.1rem;
+  }
+
+  .calculator-page--professional
+    .wizard-step[data-wizard-step='1']
+    > .professional-consumption-aside {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+  }
+}
+
+.professional-consumption-form {
+  position: relative;
+  display: grid;
+  align-content: start;
+}
+
+.calculator-page--professional .consumption-inputs {
+  display: grid;
+  grid-template-columns: minmax(0, 0.98fr) minmax(0, 1.02fr);
+  column-gap: 1.35rem;
+  row-gap: 0;
+}
+
+.calculator-page--professional .consumption-inputs fieldset {
+  display: grid;
+  grid-column: 1 / -1;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.08rem;
+  margin: 0;
+  border: 0;
+  border-radius: 0.62rem;
+  padding: 0;
+  background: #f4f7fb;
+}
+
+.calculator-page--professional .consumption-inputs fieldset legend {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.calculator-page--professional .consumption-inputs fieldset > label,
+.professional-upload-tab {
+  position: relative;
+  display: flex !important;
+  min-height: 3.68rem;
+  align-items: center;
+  justify-content: center;
+  gap: 0.52rem;
+  margin: 0;
+  border: 1px solid transparent;
+  border-radius: 0.58rem;
+  padding: 0.55rem 0.6rem;
+  color: #4d6685;
+  background: transparent;
+  cursor: pointer;
+  font-size: 0.74rem;
+  font-weight: 760;
+  white-space: nowrap;
+}
+
+.calculator-page--professional .consumption-mode-icon {
+  width: 1.28rem;
+  height: 1.28rem;
+  flex: 0 0 auto;
+  color: #58718f;
+}
+
+.calculator-page--professional .consumption-inputs fieldset > label:has(input:checked) {
+  z-index: 1;
+  border-color: #167af3;
+  color: #076deb;
+  background: #fff;
+  box-shadow: 0 4px 12px rgb(20 105 220 / 7%);
+}
+
+.calculator-page--professional
+  .consumption-inputs
+  fieldset
+  > label:has(input:checked)
+  .consumption-mode-icon {
+  color: #0877ef;
+}
+
+.calculator-page--professional .consumption-inputs fieldset input[type='radio'] {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+}
+
+.professional-upload-tab {
+  color: #4d6685;
+}
+
+.professional-upload-tab > svg {
+  width: 1.3rem;
+  height: 1.3rem;
+  color: #58718f;
+}
+
+.professional-upload-tab::before {
+  display: none;
+}
+
+/* Calculator symbols use the shared outline icon set. The original template
+   omitted the inherited stroke, so browsers painted the SVG paths black. */
+.calculator-page--professional [data-calculator-wizard] svg:not(.leaflet-zoom-animated) {
+  fill: none;
+  stroke: currentcolor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.85;
+}
+
+.calculator-page--professional .consumption-panel {
+  grid-column: 1;
+  margin-top: 1.12rem;
+}
+
+.calculator-page--professional .consumption-panel--months {
+  grid-column: 1 / -1;
+}
+
+.calculator-page--professional .month-inputs {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 0.58rem;
+}
+
+.calculator-page--professional .month-inputs label {
+  display: grid;
+  gap: 0.22rem;
+  margin: 0;
+  color: #59718e;
+  font-size: 0.66rem;
+  font-weight: 720;
+}
+
+.calculator-page--professional .month-inputs input {
+  width: 100%;
+  min-width: 0;
+  min-height: 2.72rem;
+  border: 1px solid #d2dfec;
+  border-radius: 0.48rem;
+  padding: 0 0.55rem;
+  background: #fff;
+  font-size: 0.78rem;
+}
+
+.calculator-page--professional .consumption-panel > label,
+.calculator-page--professional .consumption-inputs > label:has([data-consumption-tariff]) {
+  margin: 0;
+  color: #162b50;
+  font-size: 0.77rem;
+  font-weight: 780;
+}
+
+.calculator-page--professional .consumption-inputs > label:has([data-consumption-tariff]) {
+  grid-column: 2;
+  margin-top: 1.12rem;
+}
+
+.calculator-page--professional .consumption-panel .input-with-unit,
+.calculator-page--professional
+  .consumption-inputs
+  > label:has([data-consumption-tariff])
+  .input-with-unit {
+  min-height: 3.1rem;
+  margin-top: 0.34rem;
+  border: 1px solid #d2dfec;
+  border-radius: 0.56rem;
+  background: #fff;
+}
+
+.calculator-page--professional .consumption-panel input,
+.calculator-page--professional .consumption-inputs > label:has([data-consumption-tariff]) input {
+  min-height: 3rem;
+  margin: 0;
+  border: 0;
+  padding: 0 0.82rem;
+  color: #10284d;
+  background: transparent;
+  font-size: 0.9rem;
+  font-weight: 800;
+}
+
+.calculator-page--professional .consumption-panel .input-with-unit span,
+.calculator-page--professional
+  .consumption-inputs
+  > label:has([data-consumption-tariff])
+  .input-with-unit
+  span {
+  min-height: 3rem;
+  display: inline-flex;
+  align-items: center;
+  border-left: 1px solid #dce6ee;
+  padding: 0 0.8rem;
+  color: #1e385d;
+  font-size: 0.7rem;
+  font-weight: 800;
+}
+
+.calculator-page--professional .consumption-field-note {
+  display: flex;
+  align-items: start;
+  gap: 0.42rem;
+  margin: 0.7rem 0 0;
+  color: #58718f;
+  font-size: 0.67rem;
+  line-height: 1.42;
+}
+
+.calculator-page--professional .consumption-field-note svg {
+  width: 1.1rem;
+  height: 1.1rem;
+  flex: 0 0 auto;
+  color: #0877ef;
+}
+
+.calculator-page--professional
+  .consumption-inputs
+  > label:has([data-consumption-tariff])
+  .input-with-unit {
+  position: relative;
+  display: flex;
+  padding-right: 2.15rem;
+}
+
+.calculator-page--professional
+  .consumption-inputs
+  > label:has([data-consumption-tariff])
+  .input-with-unit
+  span {
+  display: none;
+}
+
+.calculator-page--professional
+  .consumption-inputs
+  > label:has([data-consumption-tariff])
+  .input-with-unit::after {
+  position: absolute;
+  right: 0.9rem;
+  top: 50%;
+  width: 0.52rem;
+  height: 0.52rem;
+  border-right: 2px solid #14305a;
+  border-bottom: 2px solid #14305a;
+  content: '';
+  transform: translateY(-65%) rotate(45deg);
+}
+
+.calculator-page--professional .consumption-inputs > .input-help {
+  grid-column: 2;
+  margin: 0.5rem 0 0;
+  color: #5c7491;
+  font-size: 0.67rem;
+  line-height: 1.4;
+}
+
+.calculator-page--professional .consumption-estimate {
+  grid-column: 1 / -1;
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  min-height: 5.3rem;
+  margin: 1.35rem 0 0;
+  border-radius: 0.65rem;
+  padding: 0.78rem 0.92rem;
+  color: #18325a;
+  background: linear-gradient(115deg, #f1f9ff, #edf7ff);
+}
+
+.calculator-page--professional .consumption-estimate__icon {
+  display: grid;
+  width: 3.6rem;
+  height: 3.6rem;
+  flex: 0 0 auto;
+  place-items: center;
+  border-radius: 50%;
+  color: #08bd4b;
+  background: #ddf9e8;
+}
+
+.calculator-page--professional .consumption-estimate__icon svg {
+  width: 1.85rem;
+  height: 1.85rem;
+}
+
+.calculator-page--professional .consumption-estimate__copy {
+  display: grid;
+  min-width: 0;
+  gap: 0.22rem;
+}
+
+.calculator-page--professional .consumption-estimate__label {
+  color: #142a50;
+  font-size: 0.76rem;
+  font-weight: 760;
+}
+
+.calculator-page--professional .consumption-estimate__value {
+  display: flex;
+  align-items: baseline;
+  gap: 0.34rem;
+  color: #10264c;
+  font-size: 1.38rem;
+  font-weight: 850;
+  line-height: 1;
+}
+
+.calculator-page--professional .consumption-estimate__value output {
+  font: inherit;
+}
+
+.calculator-page--professional .consumption-estimate__value span {
+  color: #4d6685;
+  font-size: 0.76rem;
+  font-weight: 720;
+}
+
+.calculator-page--professional .consumption-estimate__badge {
+  max-width: 13rem;
+  margin-left: auto;
+  border-radius: 0.48rem;
+  padding: 0.58rem 0.72rem;
+  color: #17843d;
+  background: #dcf9e5;
+  font-size: 0.67rem;
+  font-weight: 780;
+  text-align: center;
+}
+
+.calculator-page--professional .professional-consumption-form .file-upload {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.professional-consumption-actions {
+  justify-content: space-between;
+  margin-top: 1.9rem;
+}
+
+.professional-consumption-actions .button {
+  gap: 0.52rem;
+  min-height: 3.05rem;
+  padding: 0.55rem 0.9rem;
+  font-size: 0.8rem;
+}
+
+.professional-consumption-actions .button svg {
+  width: 1.15rem;
+  height: 1.15rem;
+}
+
+.professional-consumption-actions .button--outline {
+  min-width: 7rem;
+  border-color: #d4e0eb;
+  color: #10294e;
+  background: #fff;
+  box-shadow: none;
+}
+
+.professional-consumption-actions .button:not(.button--outline) {
+  min-width: min(13rem, 46%);
+  color: #fff;
+  background: linear-gradient(135deg, #087af4, #0069ef);
+  box-shadow: 0 10px 20px rgb(0 104 237 / 22%);
+}
+
+.professional-consumption-aside {
+  display: grid;
+  align-content: start;
+  gap: 1rem;
+}
+
+.consumption-chart-card,
+.consumption-tips {
+  border: 1px solid #dceaf5;
+  border-radius: 0.82rem;
+  padding: 1.12rem 1.32rem;
+  background: rgb(255 255 255 / 96%);
+  box-shadow: 0 13px 34px rgb(23 82 122 / 7%);
+}
+
+.consumption-chart-card__heading {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 0.7rem;
+  padding-bottom: 0.85rem;
+  border-bottom: 1px solid #e8eff5;
+}
+
+.consumption-chart-card h3,
+.consumption-tips h3 {
+  margin: 0;
+  color: #10264b;
+  font-size: 0.95rem;
+  letter-spacing: -0.025em;
+}
+
+.consumption-chart-card h3 span {
+  color: #5d7693;
+  font-weight: 600;
+}
+
+.consumption-chart-card__heading p {
+  margin: 0.22rem 0 0;
+  color: #526c8b;
+  font-size: 0.68rem;
+}
+
+.chart-unit-toggle {
+  display: inline-flex;
+  overflow: hidden;
+  flex: 0 0 auto;
+  border: 1px solid #dbe5ef;
+  border-radius: 0.45rem;
+  background: #f7f9fc;
+}
+
+.chart-unit-toggle button {
+  min-height: 2.25rem;
+  min-width: 3.25rem;
+  border: 0;
+  padding: 0 0.55rem;
+  color: #3e5777;
+  background: transparent;
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.68rem;
+  font-weight: 750;
+}
+
+.chart-unit-toggle button.is-active {
+  margin: 0.16rem;
+  border-radius: 0.3rem;
+  color: #fff;
+  background: #0877ef;
+  box-shadow: 0 4px 9px rgb(1 102 235 / 23%);
+}
+
+.consumption-profile-chart {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 0.28rem;
+  height: 12.4rem;
+  align-items: end;
+  padding: 1rem 0.18rem 0;
+  border-bottom: 1px solid #dce8f1;
+}
+
+.consumption-profile-chart__item {
+  display: grid;
+  grid-template-rows: 1rem 1fr 1rem;
+  height: 100%;
+  align-items: end;
+  gap: 0.22rem;
+  text-align: center;
+}
+
+.consumption-profile-chart__item output {
+  color: #162e54;
+  font-size: 0.58rem;
+  font-weight: 800;
+}
+
+.consumption-profile-chart__bar {
+  min-height: 0.15rem;
+  align-self: end;
+  border-radius: 0.24rem 0.24rem 0 0;
+  background: linear-gradient(180deg, #84c0fb, #4f9ef1);
+  height: var(--chart-height);
+  transition: height 180ms ease;
+}
+
+.consumption-profile-chart__item small {
+  color: #526c8c;
+  font-size: 0.58rem;
+}
+
+.consumption-fill-average {
+  display: flex;
+  width: 100%;
+  min-height: 2.65rem;
+  align-items: center;
+  justify-content: center;
+  gap: 0.48rem;
+  margin-top: 0.9rem;
+  border: 1px solid #d5e1ec;
+  border-radius: 0.45rem;
+  color: #066fe9;
+  background: #fff;
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.72rem;
+  font-weight: 800;
+}
+
+.consumption-fill-average svg {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.consumption-tips h3 {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.8rem;
+}
+
+.consumption-tips h3 svg {
+  width: 1.5rem;
+  height: 1.5rem;
+  color: #f5b700;
+}
+
+.consumption-tips > div {
+  display: grid;
+  grid-template-columns: 2.55rem minmax(0, 1fr);
+  gap: 0.62rem;
+  align-items: center;
+  border-radius: 0.58rem;
+  padding: 0.54rem;
+  background: linear-gradient(100deg, #f7fbff, #f2f8fe);
+}
+
+.consumption-tips > div + div {
+  margin-top: 0.46rem;
+}
+
+.consumption-tips > div > span {
+  display: grid;
+  width: 2.55rem;
+  height: 2.55rem;
+  place-items: center;
+  border-radius: 50%;
+  color: #087af2;
+  background: #e6f2ff;
+}
+
+.consumption-tips svg {
+  width: 1.35rem;
+  height: 1.35rem;
+}
+
+.consumption-tips p {
+  display: grid;
+  gap: 0.12rem;
+  margin: 0;
+}
+
+.consumption-tips strong {
+  color: #14294b;
+  font-size: 0.7rem;
+}
+
+.consumption-tips small {
+  color: #607895;
+  font-size: 0.62rem;
+  line-height: 1.32;
+}
+
+@media (max-width: 960px) {
+  .calculator-page--professional .wizard-step[data-wizard-step='1'] {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .professional-consumption-form,
+  .professional-consumption-aside {
+    border: 1px solid #dceaf5;
+    border-radius: 0.82rem;
+    padding: 1rem;
+    background: rgb(255 255 255 / 96%);
+    box-shadow: 0 13px 34px rgb(23 82 122 / 7%);
+  }
+
+  .calculator-page--professional .wizard-step[data-wizard-step='1'] > .wizard-step__heading {
+    margin-bottom: -0.3rem;
+  }
+}
+
+@media (max-width: 620px) {
+  .calculator-page--professional .consumption-inputs {
+    grid-template-columns: 1fr;
+  }
+
+  .calculator-page--professional .consumption-inputs fieldset {
+    grid-template-columns: 1fr;
+  }
+
+  .calculator-page--professional .consumption-panel,
+  .calculator-page--professional .consumption-inputs > label:has([data-consumption-tariff]),
+  .calculator-page--professional .consumption-inputs > .input-help {
+    grid-column: 1;
+  }
+
+  .calculator-page--professional .consumption-panel--months {
+    grid-column: 1;
+  }
+
+  .calculator-page--professional .month-inputs {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .calculator-page--professional .consumption-inputs > label:has([data-consumption-tariff]) {
+    margin-top: 0.85rem;
+  }
+
+  .calculator-page--professional .consumption-estimate {
+    flex-wrap: wrap;
+  }
+
+  .calculator-page--professional .consumption-estimate__icon {
+    width: 3rem;
+    height: 3rem;
+  }
+
+  .calculator-page--professional .consumption-estimate__badge {
+    width: 100%;
+    max-width: none;
+    margin-left: 0;
+  }
+
+  .professional-consumption-actions .button {
+    flex: 1 1 auto;
+  }
+
+  .consumption-chart-card,
+  .consumption-tips {
+    padding: 0.92rem;
+  }
+
+  .consumption-chart-card__heading {
+    display: grid;
+  }
+
+  .consumption-profile-chart {
+    gap: 0.13rem;
+  }
+}

@@ -1,7 +1,7 @@
 import { ANALYSIS_SCHEMA_VERSION } from '../domain/solar-analysis.js';
 
 export const PROFESSIONAL_ANALYSIS_SCOPE = 'manual-roof-plane';
-export const PROFESSIONAL_ANALYSIS_CALCULATION_VERSION = ANALYSIS_SCHEMA_VERSION;
+const PROFESSIONAL_ANALYSIS_CALCULATION_VERSION = ANALYSIS_SCHEMA_VERSION;
 
 const finiteNumber = (value) => (Number.isFinite(Number(value)) ? Number(value) : null);
 

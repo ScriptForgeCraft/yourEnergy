@@ -1,0 +1,636 @@
+/* Reference-scale calculator UI: compact copy, equal cards and the same
+   blue/yellow/green hierarchy as the approved calculator composition. */
+.calculator-hero--quick .calculator-hero__inner,
+.quick-calculator > .container,
+.quick-benefits > .container {
+  width: min(calc(100% - 5rem), 90rem);
+  max-width: none;
+}
+
+.calculator-hero--quick h1 {
+  max-width: 13ch;
+  font-size: clamp(2.7rem, 4.6vw, 4.25rem);
+  line-height: 0.98;
+}
+
+.calculator-hero--quick h1 + p {
+  max-width: 35rem;
+  margin-top: 0.65rem;
+  font-size: clamp(0.95rem, 1.35vw, 1.08rem);
+  line-height: 1.42;
+}
+
+.calculator-hero--quick .calculator-mode-switch {
+  width: min(100%, 36.5rem);
+  gap: 0.65rem;
+  margin-top: 1.55rem;
+}
+
+.calculator-hero--quick .calculator-mode-switch a {
+  display: grid;
+  grid-template-columns: 2.65rem minmax(0, 1fr);
+  align-items: center;
+  gap: 0.72rem;
+  min-height: 4.75rem;
+  padding: 0.68rem 0.85rem;
+}
+
+.calculator-mode-switch__icon {
+  display: grid;
+  width: 2.65rem;
+  aspect-ratio: 1;
+  place-items: center;
+  border-radius: 999px;
+  color: #59728b;
+  background: #edf3f8;
+}
+
+.calculator-mode-switch__icon .inline-icon {
+  width: 1.45rem;
+  height: 1.45rem;
+}
+
+.calculator-mode-switch a.is-active .calculator-mode-switch__icon {
+  color: #147df0;
+  background: #e3f2ff;
+}
+
+.calculator-mode-switch__copy {
+  display: grid;
+  gap: 0.14rem;
+  min-width: 0;
+}
+
+.calculator-mode-switch__copy strong {
+  font-size: 0.98rem;
+  line-height: 1.15;
+}
+
+.calculator-mode-switch__copy small {
+  color: #59728b;
+  font-size: 0.75rem;
+  font-weight: 650;
+  line-height: 1.3;
+}
+
+.quick-calculator__grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.quick-calculator .tool-form,
+.quick-result {
+  border-color: #e5edf3;
+  border-radius: 1.05rem;
+  box-shadow: 0 12px 34px rgb(20 69 109 / 7%);
+}
+
+.quick-calculator .tool-form,
+.quick-result {
+  padding: clamp(1.05rem, 2vw, 1.35rem);
+}
+
+.quick-calculator .tool-form {
+  gap: 0.9rem;
+}
+
+.quick-step {
+  gap: 0.65rem;
+  padding-bottom: 0.95rem;
+}
+
+.quick-step__heading {
+  gap: 0.62rem;
+}
+
+.quick-step__number {
+  width: 2.15rem;
+  font-size: 1rem;
+}
+
+.quick-step__heading h2 {
+  font-size: clamp(1rem, 1.25vw, 1.18rem);
+  line-height: 1.12;
+}
+
+.quick-step__heading p {
+  margin-top: 0.14rem;
+  font-size: 0.76rem;
+}
+
+.quick-field {
+  gap: 0.32rem;
+}
+
+.quick-field > .quick-field__label {
+  color: #1f3b59;
+  font-size: 0.75rem;
+}
+
+.quick-field > .quick-field__control {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  min-height: 3.15rem;
+  border: 1px solid #d9e5ee;
+  border-radius: 0.7rem;
+  padding-left: 0.8rem;
+  color: #1784f2;
+  background: #fff;
+}
+
+.quick-field > .quick-field__control .inline-icon {
+  width: 1.2rem;
+  height: 1.2rem;
+}
+
+.quick-calculator .quick-field__control select {
+  min-height: 3rem;
+  border: 0;
+  padding: 0.5rem 2.2rem 0.5rem 0.65rem;
+  box-shadow: none;
+}
+
+.quick-calculator .quick-field__control:focus-within {
+  border-color: #1685ff;
+  box-shadow: 0 0 0 4px rgb(22 133 255 / 12%);
+}
+
+.quick-mode-options {
+  gap: 0.6rem;
+}
+
+.quick-calculator .tool-form .quick-mode-option {
+  min-height: 5.5rem;
+  padding: 0.68rem;
+}
+
+.quick-mode-option > span {
+  display: grid;
+  grid-template-columns: 1.8rem minmax(0, 1fr);
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.quick-mode-option > span > .inline-icon {
+  width: 1.45rem;
+  height: 1.45rem;
+  color: #294c6e;
+}
+
+.quick-mode-option > span > span {
+  display: grid;
+  gap: 0.12rem;
+}
+
+.quick-mode-option strong {
+  font-size: 0.78rem;
+}
+
+.quick-mode-option small {
+  font-size: 0.68rem;
+}
+
+.quick-input-with-unit {
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  min-height: 3.15rem;
+  padding-left: 0.8rem;
+}
+
+.quick-input-with-unit .inline-icon {
+  width: 1.18rem;
+  height: 1.18rem;
+  margin-right: 0.5rem;
+  color: #2c4a69;
+}
+
+.quick-input-with-unit input {
+  min-height: 3rem;
+  padding-inline: 0.25rem;
+}
+
+.quick-calculator [data-quick-submit] {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.55rem;
+  min-height: 3.25rem;
+  padding-inline: 1rem;
+  font-size: 0.9rem;
+}
+
+.quick-calculator [data-quick-submit] .inline-icon {
+  width: 1.12rem;
+  height: 1.12rem;
+}
+
+.quick-result {
+  min-height: 100%;
+}
+
+.quick-result__loading {
+  display: grid;
+  flex: 1;
+  min-height: clamp(18rem, 34vw, 28rem);
+  place-items: center;
+}
+
+.quick-result__loading[hidden],
+.quick-result__content[hidden] {
+  display: none;
+}
+
+.quick-result__loader {
+  position: relative;
+  display: grid;
+  width: 4.4rem;
+  aspect-ratio: 1;
+  place-items: center;
+  border: 3px solid #e0f0ff;
+  border-top-color: #1685ff;
+  border-right-color: #ffbf13;
+  border-radius: 999px;
+  color: #f2ae00;
+  animation: quick-result-spin 1s linear infinite;
+}
+
+.quick-result__loader::before {
+  position: absolute;
+  inset: 0.32rem;
+  border: 1px solid #dceffc;
+  border-radius: inherit;
+  content: '';
+}
+
+.quick-result__loader .inline-icon {
+  position: relative;
+  width: 1.9rem;
+  height: 1.9rem;
+  animation: quick-result-counter-spin 1s linear infinite;
+}
+
+@keyframes quick-result-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes quick-result-counter-spin {
+  to {
+    transform: rotate(-360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .quick-result__loader,
+  .quick-result__loader .inline-icon {
+    animation: none;
+  }
+}
+
+.quick-result h2 {
+  font-size: clamp(1.18rem, 1.65vw, 1.45rem) !important;
+  line-height: 1.13 !important;
+}
+
+.quick-result__heading p:not(.result-kicker) {
+  margin-top: 0.28rem;
+  font-size: 0.78rem;
+}
+
+.quick-result__scope {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  max-width: 10rem;
+  padding: 0.4rem 0.58rem;
+  font-size: 0.64rem;
+}
+
+.quick-result__scope .inline-icon {
+  width: 0.9rem;
+  height: 0.9rem;
+}
+
+.quick-result__metrics {
+  gap: 0.58rem;
+  margin-top: 0.95rem;
+}
+
+.quick-result__metrics > .quick-result__metric {
+  grid-template-columns: 2.25rem minmax(0, 1fr);
+  gap: 0.55rem;
+  min-height: 5rem;
+  border-radius: 0.72rem;
+  padding: 0.62rem;
+}
+
+.quick-result__metric-icon {
+  width: 2.25rem;
+  color: #1784f2;
+  font-size: 0;
+}
+
+.quick-result__metric-icon::before,
+.quick-result__metric-icon[data-icon]::before {
+  content: none;
+}
+
+.quick-result__metric-icon .inline-icon {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.quick-result__metric dd {
+  font-size: clamp(0.98rem, 1.35vw, 1.2rem);
+}
+
+.quick-result__metric dt {
+  margin-top: 0.2rem;
+  font-size: 0.66rem;
+}
+
+.quick-production {
+  margin-top: 0.95rem;
+  padding-top: 0.85rem;
+}
+
+.quick-production__heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.8rem;
+}
+
+.quick-production figcaption {
+  font-size: 0.82rem;
+}
+
+.quick-production__unit {
+  border-radius: 999px;
+  padding: 0.3rem 0.6rem;
+  color: #fff;
+  background: #1685ff;
+  font-size: 0.68rem;
+  font-weight: 800;
+}
+
+.quick-production__bars {
+  min-height: 7rem;
+  margin-top: 0.6rem;
+}
+
+.quick-production__item {
+  grid-template-rows: 5.15rem auto;
+  gap: 0.25rem;
+}
+
+.quick-result__actions {
+  display: grid;
+  gap: 0.65rem;
+  margin-top: 0.95rem;
+  border: 0;
+  padding: 0;
+  background: transparent;
+}
+
+.quick-result__upgrade {
+  display: grid;
+  grid-template-columns: 2.5rem minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.62rem;
+  margin: 0;
+  border: 1px solid #d5f0df;
+  border-radius: 0.78rem;
+  padding: 0.75rem;
+  background: linear-gradient(130deg, #effcf3, #f8fffb);
+}
+
+.quick-result__upgrade-icon {
+  display: grid;
+  width: 2.5rem;
+  aspect-ratio: 1;
+  place-items: center;
+  border-radius: 999px;
+  color: #15964b;
+  background: #dcf9e7;
+}
+
+.quick-result__upgrade-icon .inline-icon {
+  width: 1.3rem;
+  height: 1.3rem;
+}
+
+.quick-result__upgrade h3,
+.quick-result__upgrade p {
+  margin: 0;
+}
+
+.quick-result__upgrade h3 {
+  color: #173a30;
+  font-size: 0.75rem;
+  line-height: 1.22;
+}
+
+.quick-result__upgrade p {
+  margin-top: 0.18rem;
+  color: #4e7165;
+  font-size: 0.64rem;
+  line-height: 1.35;
+}
+
+.quick-result__professional {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  min-height: 2.45rem;
+  border: 1px solid #a6ddbc;
+  border-radius: 0.55rem;
+  padding: 0.45rem 0.65rem;
+  color: #14643a;
+  background: #fff;
+  box-shadow: 0 5px 12px rgb(30 139 75 / 10%);
+  font-size: 0.67rem;
+  font-weight: 850;
+  text-align: center;
+  text-decoration: none;
+}
+
+.quick-result__professional .inline-icon {
+  width: 0.9rem;
+  height: 0.9rem;
+}
+
+.quick-result__offer-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.7rem;
+}
+
+.quick-result__offer-row .quick-result__offer {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  flex: 1 1 auto;
+  min-height: 2.8rem;
+  margin: 0;
+  font-size: 0.79rem;
+}
+
+.quick-result__offer .inline-icon,
+.quick-result__offer-row .text-link .inline-icon {
+  width: 1rem;
+  height: 1rem;
+}
+
+.quick-result__offer-row .text-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.32rem;
+  padding: 0.3rem;
+  font-size: 0.72rem;
+}
+
+.quick-result .section-disclosure {
+  margin-top: 0.75rem;
+  font-size: 0.68rem;
+}
+
+.quick-benefits {
+  padding: 0 0 clamp(2.6rem, 5vw, 4.25rem);
+}
+
+.quick-benefits__grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  border: 1px solid #e4f0f8;
+  border-radius: 1rem;
+  background: linear-gradient(105deg, #f4fbff, #eaf6ff);
+  box-shadow: 0 10px 30px rgb(24 91 143 / 5%);
+}
+
+.quick-benefits__grid article {
+  display: grid;
+  grid-template-columns: 2.45rem minmax(0, 1fr);
+  align-items: center;
+  gap: 0.6rem;
+  min-width: 0;
+  padding: 0.9rem;
+}
+
+.quick-benefits__grid article + article {
+  border-left: 1px solid #dcebf5;
+}
+
+.quick-benefits__icon {
+  display: grid;
+  width: 2.45rem;
+  aspect-ratio: 1;
+  place-items: center;
+  border-radius: 999px;
+  color: #1685ff;
+  background: #e4f2ff;
+}
+
+.quick-benefits__grid article:first-child .quick-benefits__icon {
+  color: #15964b;
+  background: #def8e8;
+}
+
+.quick-benefits__icon .inline-icon {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.quick-benefits__grid p {
+  display: grid;
+  gap: 0.16rem;
+  margin: 0;
+}
+
+.quick-benefits__grid strong {
+  color: #143253;
+  font-size: 0.75rem;
+  line-height: 1.2;
+}
+
+.quick-benefits__grid small {
+  color: #607b95;
+  font-size: 0.65rem;
+  line-height: 1.32;
+}
+
+.quick-benefits__signature {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.8rem;
+  margin: 1.25rem 0 0;
+  color: #5c7690;
+  font-size: 0.78rem;
+  font-weight: 750;
+  text-align: center;
+}
+
+.quick-benefits__signature::before,
+.quick-benefits__signature::after {
+  width: 1.5rem;
+  height: 1px;
+  background: #bdd2e2;
+  content: '';
+}
+
+@media (max-width: 860px) {
+  .calculator-hero--quick .calculator-hero__inner,
+  .quick-calculator > .container,
+  .quick-benefits > .container {
+    width: min(calc(100% - 2rem), 44rem);
+  }
+
+  .quick-calculator__grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 620px) {
+  .calculator-hero--quick h1 {
+    font-size: clamp(2.15rem, 9.5vw, 2.85rem);
+  }
+
+  .calculator-hero--quick .calculator-mode-switch a {
+    grid-template-columns: 2.35rem minmax(0, 1fr);
+    min-height: 4.6rem;
+    padding: 0.58rem;
+  }
+
+  .calculator-mode-switch__icon {
+    width: 2.35rem;
+  }
+
+  .quick-result__upgrade {
+    grid-template-columns: 2.35rem minmax(0, 1fr);
+  }
+
+  .quick-result__professional {
+    grid-column: 1 / -1;
+  }
+
+  .quick-benefits__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .quick-benefits__grid article + article {
+    border-left: 0;
+  }
+
+  .quick-benefits__grid article:nth-child(even) {
+    border-left: 1px solid #dcebf5;
+  }
+
+  .quick-benefits__grid article:nth-child(n + 3) {
+    border-top: 1px solid #dcebf5;
+  }
+}

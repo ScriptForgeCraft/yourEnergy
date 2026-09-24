@@ -5,14 +5,14 @@ import {
   getGridInverters,
   getHybridInverters,
   getMicroinverters
-} from '../src/data/equipment/calculator-catalog.js';
+} from '../src/data/equipment/calculator/catalog.js';
 import {
   INVERTER_COMPATIBILITY_LIMITATIONS,
   INVERTER_TECHNOLOGY,
   recommendInverter
 } from '../src/domain/inverter-recommendation.js';
 import { buildSolarAnalysis } from '../src/domain/index.js';
-import { getDefaultCalculatorSystem } from '../src/data/equipment/calculator-defaults.js';
+import { getDefaultCalculatorSystem } from '../src/data/equipment/calculator/defaults.js';
 
 const source = { kind: 'provider', status: 'confirmed', provider: 'PVGIS fixture' };
 

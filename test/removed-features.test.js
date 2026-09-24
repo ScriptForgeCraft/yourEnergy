@@ -2,9 +2,13 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import test from 'node:test';
+import { readStylesheet } from './helpers/styles.js';
 
 const root = resolve(import.meta.dirname, '..');
-const source = (path) => readFile(resolve(root, path), 'utf8');
+const source = (path) =>
+  path.endsWith('.css')
+    ? readStylesheet(new URL(`../${path}`, import.meta.url))
+    : readFile(resolve(root, path), 'utf8');
 
 test('obsolete public sections, routes and selectors are absent from the active source tree', async () => {
   const files = await Promise.all(
@@ -18,7 +22,8 @@ test('obsolete public sections, routes and selectors are absent from the active 
       'src/ui/scrollers.js',
       'src/styles/sections.css',
       'src/styles/tools.css',
-      'scripts/generate-pages.mjs',
+      'scripts/build/generate-pages.mjs',
+      'scripts/build/page-contexts.mjs',
       'public/robots.txt'
     ].map(source)
   );
@@ -46,20 +51,23 @@ test('obsolete public sections, routes and selectors are absent from the active 
 });
 
 test('page generator only emits useful support routes', async () => {
-  const generator = await source('scripts/generate-pages.mjs');
-  assert.match(generator, /'privacy\/index\.html'/u);
-  assert.match(generator, /'terms\/index\.html'/u);
+  const { createPageRegistry } = await import('../src/config/routes.js');
+  const pages = await createPageRegistry();
+  assert.ok(pages.some(({ file }) => file === 'privacy/index.html'));
+  assert.ok(pages.some(({ file }) => file === 'terms/index.html'));
+  const generator = await source('scripts/build/generate-pages.mjs');
   assert.doesNotMatch(generator, /soon/iu);
 });
 
 test('every project CTA generates a local project case route', async () => {
   const [generator, projectsTemplate, projectCaseTemplate] = await Promise.all([
-    source('scripts/generate-pages.mjs'),
+    source('scripts/build/page-contexts.mjs'),
     source('src/templates/projects.hbs'),
     source('src/templates/project-case.hbs')
   ]);
 
-  assert.match(generator, /const FEATURED_PROJECT_CASE_SLUG = 'modern-home-yerevan'/u);
+  const { FEATURED_PROJECT_CASE_SLUG } = await import('../src/content/projects.js');
+  assert.equal(FEATURED_PROJECT_CASE_SLUG, 'modern-home-yerevan');
   assert.match(
     generator,
     /href: projectCasePath\(content\.locale, GALLERY_PROJECT_CASE_SLUGS\[index\]\)/u
@@ -81,7 +89,7 @@ test('every published page composes the shared cinematic header and footer', asy
       'src/templates/calculator-quick.hbs',
       'src/templates/calculator.hbs',
       'src/templates/support.hbs',
-      'src/templates/placeholder.hbs'
+      'src/templates/contacts.hbs'
     ].map(async (path) => [path, await source(path)])
   );
 

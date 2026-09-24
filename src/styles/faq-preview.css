@@ -18,14 +18,13 @@
 }
 
 .faq-preview::before {
-  background:
-    linear-gradient(
-      90deg,
-      #fbfaf63b 0%,
-      rgba(251, 250, 246, 0.764) 40%,
-      rgba(251, 250, 246, 0.275) 60%,
-      rgba(251, 250, 246, 0.145) 100%
-    );
+  background: linear-gradient(
+    90deg,
+    #fbfaf63b 0%,
+    rgba(251, 250, 246, 0.764) 40%,
+    rgba(251, 250, 246, 0.275) 60%,
+    rgba(251, 250, 246, 0.145) 100%
+  );
 }
 
 .faq-preview::after {
@@ -191,7 +190,7 @@
 }
 
 .faq-preview__footer p a {
-  color:#0c75b2;
+  color: #0c75b2;
   font-weight: 800;
   text-decoration: underline;
   text-underline-offset: 3px;

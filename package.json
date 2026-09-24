@@ -4,19 +4,21 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "content:generate": "node --import ./scripts/register-json-loader.mjs scripts/generate-pages.mjs",
-    "assets:build": "node scripts/build-images.mjs",
-    "dev": "npm run content:generate -- development && vite --host 127.0.0.1",
+    "content:generate": "node --import ./scripts/loaders/register-json-loader.mjs scripts/build/generate-pages.mjs",
+    "assets:build": "node scripts/build/build-images.mjs",
+    "dev": "npm run assets:build && npm run content:generate -- development && vite --host 127.0.0.1",
     "prebuild": "npm run assets:build",
     "build": "npm run content:generate -- production && vite build",
     "preview": "vite preview --host 127.0.0.1",
     "lint": "eslint .",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "test": "node --import ./scripts/register-json-loader.mjs --test",
-    "verify:build": "node scripts/verify-build.mjs",
-    "screenshots:extract": "node scripts/extract-lighthouse-screenshot.mjs",
-    "check": "npm test && npm run lint && npm run format:check && npm run build && npm run verify:build"
+    "test": "node --import ./scripts/loaders/register-json-loader.mjs --test test/*.test.js",
+    "verify:build": "node scripts/build/verify-build.mjs",
+    "screenshots:extract": "node scripts/dev/extract-lighthouse-screenshot.mjs",
+    "check": "npm test && npm run lint && npm run format:check && npm run build && npm run verify:build",
+    "pretest": "npm run content:generate",
+    "verify:clean": "node scripts/dev/verify-reproducibility.mjs"
   },
   "dependencies": {
     "gsap": "^3.15.0",

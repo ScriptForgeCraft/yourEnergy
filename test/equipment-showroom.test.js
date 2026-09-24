@@ -1,50 +1,51 @@
 import assert from 'node:assert/strict';
-import { readdir, readFile, stat } from 'node:fs/promises';
-import { relative } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { readFile, stat } from 'node:fs/promises';
 import test from 'node:test';
-import { createEquipmentCatalog } from '../src/data/equipment/catalog.js';
+import staticAssets from '../src/config/static-assets.json';
+import { createEquipmentCatalog } from '../src/data/equipment/showroom/catalog.js';
+import { EQUIPMENT_COPY } from '../src/data/equipment/showroom/translations.js';
 import {
-  EQUIPMENT_COPY,
   findUnlocalizedStrings,
   missingEquipmentTranslations
-} from '../src/data/equipment/equipment-i18n.js';
+} from '../src/data/equipment/showroom/equipment-i18n.js';
 import { productFromDeepLink } from '../src/ui/equipment-showroom.js';
 
 const existingData = JSON.parse(
-  await readFile(new URL('../src/data/equipment/equipment-data.json', import.meta.url), 'utf8')
+  await readFile(
+    new URL('../src/data/equipment/showroom/equipment-data.json', import.meta.url),
+    'utf8'
+  )
 );
 const solaxData = JSON.parse(
-  await readFile(new URL('../src/data/equipment/solax-products.json', import.meta.url), 'utf8')
+  await readFile(
+    new URL('../src/data/equipment/showroom/solax-products.json', import.meta.url),
+    'utf8'
+  )
 );
 const solaxSource = JSON.parse(
-  await readFile(new URL('../src/data/equipment/solax-source.json', import.meta.url), 'utf8')
+  await readFile(
+    new URL('../src/data/equipment/provenance/solax-source.json', import.meta.url),
+    'utf8'
+  )
 );
 const data = {
   ...existingData,
   categories: solaxData.categories,
   products: [...existingData.products, ...solaxData.products]
 };
-const localAsset = (path) => new URL(`../public${path}`, import.meta.url);
-const publicRoot = new URL('../public/', import.meta.url);
+const assetsByUrl = new Map(
+  staticAssets.flatMap((asset) => asset.urls.map((url) => [url, asset.source]))
+);
+const localAsset = (url) => {
+  const source = assetsByUrl.get(url);
+  assert.ok(source, `No canonical source registered for ${url}`);
+  return new URL(`../${source}`, import.meta.url);
+};
 const documentContents = new Map();
 const loadDocument = (url) => {
   if (!documentContents.has(url)) documentContents.set(url, readFile(localAsset(url)));
   return documentContents.get(url);
 };
-const listFiles = async (directory) => {
-  const entries = await readdir(directory, { withFileTypes: true });
-  return (
-    await Promise.all(
-      entries.map((entry) => {
-        const path = new URL(`${entry.name}${entry.isDirectory() ? '/' : ''}`, directory);
-        return entry.isDirectory() ? listFiles(path) : [path];
-      })
-    )
-  ).flat();
-};
-const publicPath = (file) =>
-  `/${relative(fileURLToPath(publicRoot), fileURLToPath(file)).replaceAll('\\', '/')}`;
 
 test('equipment products have unique ids and complete interactive content', () => {
   assert.equal(new Set(data.products.map(({ id }) => id)).size, data.products.length);
@@ -82,8 +83,7 @@ test('equipment images and customer-named PDF downloads exist and fit the static
   }
 });
 
-test('every published showroom asset exists in the public equipment collection', async () => {
-  const publicAssets = await listFiles(new URL('assets/equipment/', publicRoot));
+test('every published showroom URL resolves to a canonical source', async () => {
   const referencedAssets = new Set([
     data.hero.background,
     ...data.products.flatMap((product) => [
@@ -92,7 +92,7 @@ test('every published showroom asset exists in the public equipment collection',
       ...product.documents.map(({ url }) => url)
     ])
   ]);
-  const publicAssetPaths = new Set(publicAssets.map(publicPath));
+  const publicAssetPaths = new Set(assetsByUrl.keys());
   assert.ok([...referencedAssets].every((path) => publicAssetPaths.has(path)));
 });
 
@@ -191,7 +191,10 @@ test('equipment keeps a flat interactive hotspot layer and no pointer-follow par
 });
 
 test('equipment has a complete static first product before JavaScript runs', async () => {
-  const html = await readFile(new URL('../equipment/index.html', import.meta.url), 'utf8');
+  const html = await readFile(
+    new URL('../.generated/site/equipment/index.html', import.meta.url),
+    'utf8'
+  );
   const [product] = createEquipmentCatalog('hy').products;
 
   assert.match(

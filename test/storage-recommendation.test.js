@@ -5,8 +5,8 @@ import {
   getBatteries,
   getCommercialEss,
   getResidentialEss
-} from '../src/data/equipment/calculator-catalog.js';
-import { getDefaultCalculatorSystem } from '../src/data/equipment/calculator-defaults.js';
+} from '../src/data/equipment/calculator/catalog.js';
+import { getDefaultCalculatorSystem } from '../src/data/equipment/calculator/defaults.js';
 import { buildSolarAnalysis } from '../src/domain/index.js';
 import {
   STORAGE_COMPATIBILITY_LIMITATIONS,

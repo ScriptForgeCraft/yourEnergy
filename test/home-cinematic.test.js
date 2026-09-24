@@ -167,7 +167,7 @@ test('Hero count-up uses explicit numeric values, including decimal CO₂ figure
 
 test('the cinematic header uses one compact language control and retains normal language links', async () => {
   const header = await source('src/templates/partials/site-header.hbs');
-  const generator = await source('scripts/generate-pages.mjs');
+  const generator = await source('scripts/build/page-contexts.mjs');
   const template = await source('src/templates/home.hbs');
   assert.match(header, /details class='language-menu'/u);
   assert.match(header, /href='\{\{navLinks\.calculator\}\}'/u);
@@ -183,7 +183,10 @@ test('the cinematic header uses one compact language control and retains normal 
 test('hero copy is localized and keeps example data visibly separate from a visitor result', () => {
   const expected = new Map([
     [hy, ['Յուրովի տնօրինիր քո արևը։', 'քան կարծում եք։', 'Հաշվել իմ տան համար']],
-    [ru, ['Управляй своей солнечной энергией по-своему.', 'чем вы думаете.', 'Рассчитать для дома']],
+    [
+      ru,
+      ['Управляй своей солнечной энергией по-своему.', 'чем вы думаете.', 'Рассчитать для дома']
+    ],
     [en, ['Manage your solar energy your way.', 'than you think.', 'Calculate my home']]
   ]);
   for (const [content, [eyebrow, accent, cta]] of expected) {

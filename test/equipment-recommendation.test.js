@@ -1,9 +1,9 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 
-import { getSolarPanelById } from '../src/data/equipment/calculator-catalog.js';
-import { getDefaultCalculatorSystem } from '../src/data/equipment/calculator-defaults.js';
-import { createEquipmentCatalog } from '../src/data/equipment/catalog.js';
+import { getSolarPanelById } from '../src/data/equipment/calculator/catalog.js';
+import { getDefaultCalculatorSystem } from '../src/data/equipment/calculator/defaults.js';
+import { createEquipmentCatalog } from '../src/data/equipment/showroom/catalog.js';
 import { buildEquipmentRecommendation, buildSolarAnalysis } from '../src/domain/index.js';
 
 const source = { kind: 'provider', status: 'confirmed', provider: 'PVGIS fixture' };

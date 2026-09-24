@@ -5,7 +5,7 @@
  * a visitor's house coordinates.  A property-level analysis always requires
  * a point confirmed by the visitor in the refinement or professional flow.
  */
-export const ARMENIA_REGIONAL_BENCHMARKS_VERSION = 'v1.0.0';
+const ARMENIA_REGIONAL_BENCHMARKS_VERSION = 'v1.0.0';
 
 export const ARMENIA_REGIONAL_BENCHMARKS = Object.freeze(
   [

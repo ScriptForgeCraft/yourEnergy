@@ -1,8 +1,8 @@
 import { ARMENIA_PRICEBOOKS } from '../data/pricebooks/armenia.js';
 import { cleanString, cloneSerializable, deepFreeze, toPositiveNumberOrNull } from './numbers.js';
 
-export const PRICEBOOK_SYSTEM_TYPE = 'residential-grid-tied';
-export const PRICEBOOK_STATUS = Object.freeze({
+const PRICEBOOK_SYSTEM_TYPE = 'residential-grid-tied';
+const PRICEBOOK_STATUS = Object.freeze({
   TEMPORARY: 'temporary',
   CONFIRMED: 'confirmed'
 });
@@ -31,7 +31,7 @@ const normalizeSource = (source = {}) => ({
   verifiedAt: toIsoDate(source.verifiedAt)
 });
 
-export const normalizePriceBook = (input = {}) => {
+const normalizePriceBook = (input = {}) => {
   if (!input || typeof input !== 'object' || Array.isArray(input)) return null;
   const rates = input?.ratesAmdPerWp ?? {};
   const p25 = toPositiveNumberOrNull(rates.p25);
@@ -68,7 +68,7 @@ export const normalizePriceBook = (input = {}) => {
   });
 };
 
-export const isPriceBookActive = (priceBook, at = new Date()) => {
+const isPriceBookActive = (priceBook, at = new Date()) => {
   const normalized = normalizePriceBook(priceBook);
   const date = toIsoDate(at);
   return Boolean(

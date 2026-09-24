@@ -27,7 +27,7 @@ const pvgisAspectToCompass = (aspectDegrees) => {
   return Object.is(compass, -0) ? 0 : compass;
 };
 
-export const PVGIS_MOUNTING_PLACE = Object.freeze({
+const PVGIS_MOUNTING_PLACE = Object.freeze({
   BUILDING: 'building',
   FREE: 'free'
 });
@@ -35,13 +35,13 @@ export const PVGIS_MOUNTING_PLACE = Object.freeze({
 // Professional Calculator semantics distinguish an array that follows the
 // building roof face from an elevated/free-standing structure. PVGIS models
 // those conditions through `mountingplace`, separately from tilt and aspect.
-export const pvgisMountingPlaceFor = (mountingMode) =>
+const pvgisMountingPlaceFor = (mountingMode) =>
   mountingMode === 'elevated' ? PVGIS_MOUNTING_PLACE.FREE : PVGIS_MOUNTING_PLACE.BUILDING;
 
 // PVGIS has a public no-key API. Keeping the request server-side prevents the
 // browser from gaining a direct provider dependency and leaves a single point
 // for future endpoint/version changes.
-export const DEFAULT_PVGIS_ENDPOINT = 'https://re.jrc.ec.europa.eu/api/v5_3/PVcalc';
+const DEFAULT_PVGIS_ENDPOINT = 'https://re.jrc.ec.europa.eu/api/v5_3/PVcalc';
 
 /**
  * The client sends compass azimuth (0 north, 90 east, 180 south, 270 west).

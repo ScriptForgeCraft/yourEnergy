@@ -1,0 +1,386 @@
+[
+  {
+    "id": "icons-apple-touch-icon",
+    "source": "assets/icons/apple-touch-icon.png",
+    "urls": ["/apple-touch-icon.png"]
+  },
+  {
+    "id": "documents-equipment-mounting-energy-stock-aluminium-mounting-price-list-hy",
+    "source": "assets/documents/equipment/mounting/energy-stock-aluminium-mounting-price-list-hy.pdf",
+    "urls": ["/assets/equipment/docs/Energy-Stock-Aluminium-Mounting-Price-List-HY.pdf"]
+  },
+  {
+    "id": "documents-equipment-longi-longi-hi-mo-x10-guardian-lr7-72hvdf-640-665w-en",
+    "source": "assets/documents/equipment/longi/longi-hi-mo-x10-guardian-lr7-72hvdf-640-665w-en.pdf",
+    "urls": [
+      "/assets/equipment/docs/LONGi-Hi-MO-X10-Guardian-LR7-72HVDF-640-665W-EN.pdf",
+      "/documents/longi-lr7-72hvdf-640-665m.pdf"
+    ]
+  },
+  {
+    "id": "documents-equipment-longi-longi-hi-mo-x10-scientist-lr8-66hvd-640-665w-en",
+    "source": "assets/documents/equipment/longi/longi-hi-mo-x10-scientist-lr8-66hvd-640-665w-en.pdf",
+    "urls": [
+      "/assets/equipment/docs/LONGi-Hi-MO-X10-Scientist-LR8-66HVD-640-665W-EN.pdf",
+      "/documents/longi-lr8-66hvd-640-665m.pdf"
+    ]
+  },
+  {
+    "id": "documents-equipment-solax-solax-product-catalog-en",
+    "source": "assets/documents/equipment/solax/solax-product-catalog-en.pdf",
+    "urls": ["/assets/equipment/docs/SolaX-Product-Catalog-EN.pdf"]
+  },
+  {
+    "id": "documents-equipment-solax-solax-t-bat-sys-lv-d53-datasheet-en",
+    "source": "assets/documents/equipment/solax/solax-t-bat-sys-lv-d53-datasheet-en.pdf",
+    "urls": [
+      "/assets/equipment/docs/SolaX-T-BAT-SYS-LV-D53-Datasheet-EN.pdf",
+      "/documents/solax-t-bat-sys-lv-d53-v1-2.pdf"
+    ]
+  },
+  {
+    "id": "documents-equipment-solax-solax-x1-lite-lv-8-12kw-datasheet-en",
+    "source": "assets/documents/equipment/solax/solax-x1-lite-lv-8-12kw-datasheet-en.pdf",
+    "urls": [
+      "/assets/equipment/docs/SolaX-X1-Lite-LV-8-12kW-Datasheet-EN.pdf",
+      "/documents/solax-x1-lite-lv-datasheet-v1-5.pdf"
+    ]
+  },
+  {
+    "id": "documents-equipment-znshine-znshine-zxnr-bd132-620-650w-datasheet-en",
+    "source": "assets/documents/equipment/znshine/znshine-zxnr-bd132-620-650w-datasheet-en.pdf",
+    "urls": ["/assets/equipment/docs/ZNShine-ZXNR-BD132-620-650W-Datasheet-EN.pdf"]
+  },
+  {
+    "id": "documents-equipment-solax-solax-t-bat-hv-s25-catalog-en",
+    "source": "assets/documents/equipment/solax/solax-t-bat-hv-s25-catalog-en.pdf",
+    "urls": ["/assets/equipment/docs/solax/SolaX-T-BAT-hv-s25-Catalog-EN.pdf"]
+  },
+  {
+    "id": "documents-equipment-solax-solax-t-bat-hv-s36-catalog-en",
+    "source": "assets/documents/equipment/solax/solax-t-bat-hv-s36-catalog-en.pdf",
+    "urls": ["/assets/equipment/docs/solax/SolaX-T-BAT-hv-s36-Catalog-EN.pdf"]
+  },
+  {
+    "id": "documents-equipment-solax-solax-t-bat-lv-d150-catalog-en",
+    "source": "assets/documents/equipment/solax/solax-t-bat-lv-d150-catalog-en.pdf",
+    "urls": ["/assets/equipment/docs/solax/SolaX-T-BAT-lv-d150-Catalog-EN.pdf"]
+  },
+  {
+    "id": "documents-equipment-solax-solax-ess-aelio-catalog-en",
+    "source": "assets/documents/equipment/solax/solax-ess-aelio-catalog-en.pdf",
+    "urls": ["/assets/equipment/docs/solax/SolaX-ess-aelio-Catalog-EN.pdf"]
+  },
+  {
+    "id": "documents-equipment-solax-solax-ess-trene-catalog-en",
+    "source": "assets/documents/equipment/solax/solax-ess-trene-catalog-en.pdf",
+    "urls": ["/assets/equipment/docs/solax/SolaX-ess-trene-Catalog-EN.pdf"]
+  },
+  {
+    "id": "documents-equipment-solax-solax-hyper-ev-charger-catalog-en",
+    "source": "assets/documents/equipment/solax/solax-hyper-ev-charger-catalog-en.pdf",
+    "urls": ["/assets/equipment/docs/solax/SolaX-hyper-ev-charger-Catalog-EN.pdf"]
+  },
+  {
+    "id": "documents-equipment-solax-solax-microinverter-accessories-catalog-en",
+    "source": "assets/documents/equipment/solax/solax-microinverter-accessories-catalog-en.pdf",
+    "urls": ["/assets/equipment/docs/solax/SolaX-microinverter-accessories-Catalog-EN.pdf"]
+  },
+  {
+    "id": "documents-equipment-solax-solax-tb-hr140-catalog-en",
+    "source": "assets/documents/equipment/solax/solax-tb-hr140-catalog-en.pdf",
+    "urls": ["/assets/equipment/docs/solax/SolaX-tb-hr140-Catalog-EN.pdf"]
+  },
+  {
+    "id": "documents-equipment-solax-solax-x1-boost-g4-catalog-en",
+    "source": "assets/documents/equipment/solax/solax-x1-boost-g4-catalog-en.pdf",
+    "urls": ["/assets/equipment/docs/solax/SolaX-x1-boost-g4-Catalog-EN.pdf"]
+  },
+  {
+    "id": "documents-equipment-solax-solax-x1-hyb-lv-catalog-en",
+    "source": "assets/documents/equipment/solax/solax-x1-hyb-lv-catalog-en.pdf",
+    "urls": ["/assets/equipment/docs/solax/SolaX-x1-hyb-lv-Catalog-EN.pdf"]
+  },
+  {
+    "id": "documents-equipment-solax-solax-x1-ies-catalog-en",
+    "source": "assets/documents/equipment/solax/solax-x1-ies-catalog-en.pdf",
+    "urls": ["/assets/equipment/docs/solax/SolaX-x1-ies-Catalog-EN.pdf"]
+  },
+  {
+    "id": "documents-equipment-solax-solax-x1-micro-2in1-catalog-en",
+    "source": "assets/documents/equipment/solax/solax-x1-micro-2in1-catalog-en.pdf",
+    "urls": ["/assets/equipment/docs/solax/SolaX-x1-micro-2in1-Catalog-EN.pdf"]
+  },
+  {
+    "id": "documents-equipment-solax-solax-x1-micro-4in1-catalog-en",
+    "source": "assets/documents/equipment/solax/solax-x1-micro-4in1-catalog-en.pdf",
+    "urls": ["/assets/equipment/docs/solax/SolaX-x1-micro-4in1-Catalog-EN.pdf"]
+  },
+  {
+    "id": "documents-equipment-solax-solax-x1-mini-g4-catalog-en",
+    "source": "assets/documents/equipment/solax/solax-x1-mini-g4-catalog-en.pdf",
+    "urls": ["/assets/equipment/docs/solax/SolaX-x1-mini-g4-Catalog-EN.pdf"]
+  },
+  {
+    "id": "documents-equipment-solax-solax-x1-smart-g2-catalog-en",
+    "source": "assets/documents/equipment/solax/solax-x1-smart-g2-catalog-en.pdf",
+    "urls": ["/assets/equipment/docs/solax/SolaX-x1-smart-g2-Catalog-EN.pdf"]
+  },
+  {
+    "id": "documents-equipment-solax-solax-x3-aelio-catalog-en",
+    "source": "assets/documents/equipment/solax/solax-x3-aelio-catalog-en.pdf",
+    "urls": ["/assets/equipment/docs/solax/SolaX-x3-aelio-Catalog-EN.pdf"]
+  },
+  {
+    "id": "documents-equipment-solax-solax-x3-forth-catalog-en",
+    "source": "assets/documents/equipment/solax/solax-x3-forth-catalog-en.pdf",
+    "urls": ["/assets/equipment/docs/solax/SolaX-x3-forth-Catalog-EN.pdf"]
+  },
+  {
+    "id": "documents-equipment-solax-solax-x3-grand-hv-catalog-en",
+    "source": "assets/documents/equipment/solax/solax-x3-grand-hv-catalog-en.pdf",
+    "urls": ["/assets/equipment/docs/solax/SolaX-x3-grand-hv-Catalog-EN.pdf"]
+  },
+  {
+    "id": "documents-equipment-solax-solax-x3-ies-catalog-en",
+    "source": "assets/documents/equipment/solax/solax-x3-ies-catalog-en.pdf",
+    "urls": ["/assets/equipment/docs/solax/SolaX-x3-ies-Catalog-EN.pdf"]
+  },
+  {
+    "id": "documents-equipment-solax-solax-x3-mega-g2-catalog-en",
+    "source": "assets/documents/equipment/solax/solax-x3-mega-g2-catalog-en.pdf",
+    "urls": ["/assets/equipment/docs/solax/SolaX-x3-mega-g2-Catalog-EN.pdf"]
+  },
+  {
+    "id": "documents-equipment-solax-solax-x3-mic-g2-catalog-en",
+    "source": "assets/documents/equipment/solax/solax-x3-mic-g2-catalog-en.pdf",
+    "urls": ["/assets/equipment/docs/solax/SolaX-x3-mic-g2-Catalog-EN.pdf"]
+  },
+  {
+    "id": "documents-equipment-solax-solax-x3-neo-lv-catalog-en",
+    "source": "assets/documents/equipment/solax/solax-x3-neo-lv-catalog-en.pdf",
+    "urls": ["/assets/equipment/docs/solax/SolaX-x3-neo-lv-Catalog-EN.pdf"]
+  },
+  {
+    "id": "documents-equipment-solax-solax-x3-pro-g2-catalog-en",
+    "source": "assets/documents/equipment/solax/solax-x3-pro-g2-catalog-en.pdf",
+    "urls": ["/assets/equipment/docs/solax/SolaX-x3-pro-g2-Catalog-EN.pdf"]
+  },
+  {
+    "id": "documents-equipment-solax-solax-x3-trene-100ki-catalog-en",
+    "source": "assets/documents/equipment/solax/solax-x3-trene-100ki-catalog-en.pdf",
+    "urls": ["/assets/equipment/docs/solax/SolaX-x3-trene-100ki-Catalog-EN.pdf"]
+  },
+  {
+    "id": "documents-equipment-solax-solax-x3-ultra-catalog-en",
+    "source": "assets/documents/equipment/solax/solax-x3-ultra-catalog-en.pdf",
+    "urls": ["/assets/equipment/docs/solax/SolaX-x3-ultra-Catalog-EN.pdf"]
+  },
+  {
+    "id": "images-equipment-hero-hero-bg",
+    "source": "assets/images/equipment/hero/hero-bg.png",
+    "urls": ["/assets/equipment/hero/hero-bg.png"]
+  },
+  {
+    "id": "images-equipment-products-longi-hi-mo-x10-guardian-lr7-72hvdf",
+    "source": "assets/images/equipment/products/longi-hi-mo-x10-guardian-lr7-72hvdf.png",
+    "urls": [
+      "/assets/equipment/products/longi-hi-mo-x10-guardian-lr7-72hvdf.png",
+      "/assets/equipment/products/1.png"
+    ]
+  },
+  {
+    "id": "images-equipment-products-longi-hi-mo-x10-scientist-lr8-66hvd",
+    "source": "assets/images/equipment/products/longi-hi-mo-x10-scientist-lr8-66hvd.png",
+    "urls": [
+      "/assets/equipment/products/longi-hi-mo-x10-scientist-lr8-66hvd.png",
+      "/assets/equipment/products/2.png"
+    ]
+  },
+  {
+    "id": "images-equipment-products-solax-x1-lite-lv",
+    "source": "assets/images/equipment/products/solax-x1-lite-lv.png",
+    "urls": ["/assets/equipment/products/solax-x1-lite-lv.png", "/assets/equipment/products/3.png"]
+  },
+  {
+    "id": "images-equipment-products-solax-t-bat-sys-lv-d53",
+    "source": "assets/images/equipment/products/solax-t-bat-sys-lv-d53.png",
+    "urls": [
+      "/assets/equipment/products/solax-t-bat-sys-lv-d53.png",
+      "/assets/equipment/products/4.png"
+    ]
+  },
+  {
+    "id": "images-equipment-products-gck-triangle-2200",
+    "source": "assets/images/equipment/products/gck-triangle-2200.png",
+    "urls": ["/assets/equipment/products/gck-triangle-2200.png"]
+  },
+  {
+    "id": "images-equipment-products-solax-ess-aelio",
+    "source": "assets/images/equipment/products/solax/ess-aelio.png",
+    "urls": ["/assets/equipment/products/solax/ess-aelio.png"]
+  },
+  {
+    "id": "images-equipment-products-solax-ess-trene",
+    "source": "assets/images/equipment/products/solax/ess-trene.png",
+    "urls": ["/assets/equipment/products/solax/ess-trene.png"]
+  },
+  {
+    "id": "images-equipment-products-solax-hyper-ev-charger",
+    "source": "assets/images/equipment/products/solax/hyper-ev-charger.png",
+    "urls": ["/assets/equipment/products/solax/hyper-ev-charger.png"]
+  },
+  {
+    "id": "images-equipment-products-solax-tb-hr140",
+    "source": "assets/images/equipment/products/solax/tb-hr140.png",
+    "urls": ["/assets/equipment/products/solax/tb-hr140.png"]
+  },
+  {
+    "id": "images-equipment-products-solax-tbat-hv-s25",
+    "source": "assets/images/equipment/products/solax/tbat-hv-s25.png",
+    "urls": ["/assets/equipment/products/solax/tbat-hv-s25.png"]
+  },
+  {
+    "id": "images-equipment-products-solax-tbat-hv-s36",
+    "source": "assets/images/equipment/products/solax/tbat-hv-s36.png",
+    "urls": ["/assets/equipment/products/solax/tbat-hv-s36.png"]
+  },
+  {
+    "id": "images-equipment-products-solax-tbat-lv-d150",
+    "source": "assets/images/equipment/products/solax/tbat-lv-d150.png",
+    "urls": ["/assets/equipment/products/solax/tbat-lv-d150.png"]
+  },
+  {
+    "id": "images-equipment-products-solax-x1-boost-g4",
+    "source": "assets/images/equipment/products/solax/x1-boost-g4.png",
+    "urls": ["/assets/equipment/products/solax/x1-boost-g4.png"]
+  },
+  {
+    "id": "images-equipment-products-solax-x1-hyb-lv",
+    "source": "assets/images/equipment/products/solax/x1-hyb-lv.png",
+    "urls": ["/assets/equipment/products/solax/x1-hyb-lv.png"]
+  },
+  {
+    "id": "images-equipment-products-solax-x1-ies",
+    "source": "assets/images/equipment/products/solax/x1-ies.png",
+    "urls": ["/assets/equipment/products/solax/x1-ies.png"]
+  },
+  {
+    "id": "images-equipment-products-solax-x1-micro-2in1",
+    "source": "assets/images/equipment/products/solax/x1-micro-2in1.png",
+    "urls": ["/assets/equipment/products/solax/x1-micro-2in1.png"]
+  },
+  {
+    "id": "images-equipment-products-solax-x1-micro-4in1",
+    "source": "assets/images/equipment/products/solax/x1-micro-4in1.png",
+    "urls": ["/assets/equipment/products/solax/x1-micro-4in1.png"]
+  },
+  {
+    "id": "images-equipment-products-solax-x1-mini-g4",
+    "source": "assets/images/equipment/products/solax/x1-mini-g4.png",
+    "urls": ["/assets/equipment/products/solax/x1-mini-g4.png"]
+  },
+  {
+    "id": "images-equipment-products-solax-x1-smart-g2",
+    "source": "assets/images/equipment/products/solax/x1-smart-g2.png",
+    "urls": ["/assets/equipment/products/solax/x1-smart-g2.png"]
+  },
+  {
+    "id": "images-equipment-products-solax-x3-aelio",
+    "source": "assets/images/equipment/products/solax/x3-aelio.png",
+    "urls": ["/assets/equipment/products/solax/x3-aelio.png"]
+  },
+  {
+    "id": "images-equipment-products-solax-x3-forth",
+    "source": "assets/images/equipment/products/solax/x3-forth.png",
+    "urls": ["/assets/equipment/products/solax/x3-forth.png"]
+  },
+  {
+    "id": "images-equipment-products-solax-x3-grand-hv",
+    "source": "assets/images/equipment/products/solax/x3-grand-hv.png",
+    "urls": ["/assets/equipment/products/solax/x3-grand-hv.png"]
+  },
+  {
+    "id": "images-equipment-products-solax-x3-ies",
+    "source": "assets/images/equipment/products/solax/x3-ies.png",
+    "urls": ["/assets/equipment/products/solax/x3-ies.png"]
+  },
+  {
+    "id": "images-equipment-products-solax-x3-mega-g2",
+    "source": "assets/images/equipment/products/solax/x3-mega-g2.png",
+    "urls": ["/assets/equipment/products/solax/x3-mega-g2.png"]
+  },
+  {
+    "id": "images-equipment-products-solax-x3-mic-g2",
+    "source": "assets/images/equipment/products/solax/x3-mic-g2.png",
+    "urls": ["/assets/equipment/products/solax/x3-mic-g2.png"]
+  },
+  {
+    "id": "images-equipment-products-solax-x3-neo-lv",
+    "source": "assets/images/equipment/products/solax/x3-neo-lv.png",
+    "urls": ["/assets/equipment/products/solax/x3-neo-lv.png"]
+  },
+  {
+    "id": "images-equipment-products-solax-x3-pro-g2",
+    "source": "assets/images/equipment/products/solax/x3-pro-g2.png",
+    "urls": ["/assets/equipment/products/solax/x3-pro-g2.png"]
+  },
+  {
+    "id": "images-equipment-products-solax-x3-trene-100ki",
+    "source": "assets/images/equipment/products/solax/x3-trene-100ki.png",
+    "urls": ["/assets/equipment/products/solax/x3-trene-100ki.png"]
+  },
+  {
+    "id": "images-equipment-products-solax-x3-ultra",
+    "source": "assets/images/equipment/products/solax/x3-ultra.png",
+    "urls": ["/assets/equipment/products/solax/x3-ultra.png"]
+  },
+  {
+    "id": "images-equipment-products-znshine-zxnr-bd132",
+    "source": "assets/images/equipment/products/znshine-zxnr-bd132.png",
+    "urls": ["/assets/equipment/products/znshine-zxnr-bd132.png"]
+  },
+  {
+    "id": "icons-favicon",
+    "source": "assets/icons/favicon.ico",
+    "urls": ["/favicon.ico"]
+  },
+  {
+    "id": "fonts-caveat-500",
+    "source": "assets/fonts/caveat-500.ttf",
+    "urls": ["/fonts/caveat-500.ttf"]
+  },
+  {
+    "id": "fonts-poqrik-dzeragir",
+    "source": "assets/fonts/poqrik-dzeragir.ttf",
+    "urls": ["/fonts/poqrik-dzeragir.ttf"]
+  },
+  {
+    "id": "icons-icons",
+    "source": "assets/icons/icons.svg",
+    "urls": ["/icons.svg"]
+  },
+  {
+    "id": "images-process-process-background",
+    "source": "assets/images/process/process-background.png",
+    "urls": [
+      "/images/process-background.png",
+      "/images/process-step-analysis-bg.png",
+      "/images/process-step-design-bg.png",
+      "/images/process-step-inspection-bg.png",
+      "/images/process-step-installation-bg.png",
+      "/images/process-step-proposal-bg.png",
+      "/images/process-step-support-bg.png"
+    ]
+  },
+  {
+    "id": "images-calculator-professional-results-house",
+    "source": "assets/images/calculator/professional-results-house.png",
+    "urls": ["/images/professional-results-house.png"]
+  },
+  {
+    "id": "icons-yourenergy-mark",
+    "source": "assets/icons/yourenergy-mark.svg",
+    "urls": ["/yourenergy-mark.svg"]
+  }
+]

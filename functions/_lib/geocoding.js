@@ -55,7 +55,7 @@ const replaceTemplateToken = (url, token, value) =>
     .replaceAll(`{${token}}`, encodeURIComponent(value))
     .replaceAll(`%7B${token}%7D`, encodeURIComponent(value));
 
-export const buildGeocodingUrl = (endpoint, input, env) => {
+const buildGeocodingUrl = (endpoint, input, env) => {
   const serializedEndpoint = endpoint.toString();
   const provider = (envString(env, 'GEOCODING_PROVIDER') ?? '').toLowerCase();
   const isNominatim = provider === 'nominatim' || endpoint.hostname === PUBLIC_NOMINATIM_HOST;

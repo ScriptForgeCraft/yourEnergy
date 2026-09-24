@@ -7,8 +7,8 @@ import { onRequest as leadOnRequest } from '../functions/api/lead.js';
 import { onRequest as potentialOnRequest } from '../functions/api/potential.js';
 import { providerTimeoutMs } from '../functions/_lib/config.js';
 import { buildP0SolarAnalysis } from '../functions/_lib/solar-analysis.js';
-import { getDefaultCalculatorSystem } from '../src/data/equipment/calculator-defaults.js';
-import { getSolarPanels } from '../src/data/equipment/calculator-catalog.js';
+import { getDefaultCalculatorSystem } from '../src/data/equipment/calculator/defaults.js';
+import { getSolarPanels } from '../src/data/equipment/calculator/catalog.js';
 import {
   createGeocodingAdapter,
   normalizeGeocodingCandidate,

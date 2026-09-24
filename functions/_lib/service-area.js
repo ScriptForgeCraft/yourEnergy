@@ -61,5 +61,3 @@ export const assertArmeniaServiceArea = (coordinates) => {
     throw new ApiError('OUTSIDE_SERVICE_AREA');
   }
 };
-
-export { ARMENIA_SERVICE_POLYGON };

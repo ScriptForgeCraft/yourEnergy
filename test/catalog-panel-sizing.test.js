@@ -6,8 +6,8 @@ import {
   getCalculatorSystemForPanel,
   getDefaultCalculatorSystem,
   getSolarPanelCalculationProfile
-} from '../src/data/equipment/calculator-defaults.js';
-import { getSolarPanelById, getSolarPanels } from '../src/data/equipment/calculator-catalog.js';
+} from '../src/data/equipment/calculator/defaults.js';
+import { getSolarPanelById, getSolarPanels } from '../src/data/equipment/calculator/catalog.js';
 import { buildSolarAnalysis } from '../src/domain/index.js';
 
 const source = { kind: 'provider', status: 'confirmed', provider: 'PVGIS fixture' };

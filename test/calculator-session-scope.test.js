@@ -49,15 +49,18 @@ test('a fresh Professional session has a neutral roof identity', () => {
 
   assert.equal(freshSession.roof, null);
   assert.doesNotThrow(() => createProfessionalAnalysisIdentity({ roof: freshSession.roof }));
-  assert.deepEqual(JSON.parse(createProfessionalAnalysisIdentity({ roof: freshSession.roof })).roof, {
-    areaMethod: null,
-    mountingMode: null,
-    projectedAreaSqm: null,
-    planeAreaSqm: null,
-    polygonComplete: false,
-    tiltDegrees: null,
-    azimuthDegrees: null
-  });
+  assert.deepEqual(
+    JSON.parse(createProfessionalAnalysisIdentity({ roof: freshSession.roof })).roof,
+    {
+      areaMethod: null,
+      mountingMode: null,
+      projectedAreaSqm: null,
+      planeAreaSqm: null,
+      polygonComplete: false,
+      tiltDegrees: null,
+      azimuthDegrees: null
+    }
+  );
 });
 
 test('Professional roof identity treats null and invalid roof values as empty', () => {

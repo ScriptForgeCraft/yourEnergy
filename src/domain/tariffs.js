@@ -6,7 +6,7 @@ import { SOURCE_KIND, SOURCE_STATUS } from './models.js';
 
 const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/u;
 
-export const TARIFF_PERIOD = Object.freeze({
+const TARIFF_PERIOD = Object.freeze({
   DAY: 'day',
   NIGHT: 'night',
   CUSTOM: 'custom'
@@ -26,7 +26,7 @@ const isIsoDate = (value) => {
   return Number.isFinite(date.getTime()) && date.toISOString().slice(0, 10) === value;
 };
 
-export const toIsoDate = (value) => {
+const toIsoDate = (value) => {
   if (typeof value === 'string' && isIsoDate(value)) return value;
   if (value instanceof Date && Number.isFinite(value.getTime())) {
     return value.toISOString().slice(0, 10);
@@ -297,7 +297,7 @@ export const selectEffectiveTariff = (
  * public data to present choices, but the API repeats the same selection by
  * ID and period so a client cannot supply its own registry rate.
  */
-export const listRegistryTariffOptions = (
+const listRegistryTariffOptions = (
   dataset = ARMENIA_TARIFF_DATASET,
   effectiveDate = new Date()
 ) => {
@@ -502,6 +502,3 @@ export const getUsableTariffRate = (selectionOrTariff) => {
   }
   return getConfirmedTariffRate(selectionOrTariff);
 };
-
-export const isConfirmedTariff = (selectionOrTariff) =>
-  getConfirmedTariffRate(selectionOrTariff) !== null;
