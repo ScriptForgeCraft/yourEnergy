@@ -3,7 +3,7 @@ const EARTH_RADIUS_METERS = 6_371_008.8;
 // Begin with a useful roof overview. Higher levels are fetched progressively;
 // an unavailable level leaves the last successful imagery in place.
 const ROOF_INITIAL_ZOOM = 18;
-const ROOF_EDIT_ZOOM = 22;
+const ROOF_EDIT_ZOOM = 23;
 const REFINEMENT_IDLE_DELAY = 320;
 const REFINEMENT_RETRY_DELAY = 90_000;
 const MIN_ARCGIS_REFINEMENT_BYTES = 4_096;
