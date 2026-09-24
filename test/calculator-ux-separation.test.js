@@ -96,6 +96,9 @@ test('Professional has exactly four customer steps and retains every engineering
   assert.match(controller, /storageRequired\?\.addEventListener\('change'/u);
   assert.match(controller, /buildProfessionalLeadContext/u);
   assert.match(controller, /professionalLeadForm\.setAttribute\('aria-busy', 'true'\)/u);
+  assert.match(controller, /wizard\.lead\?\.resultUnavailable/u);
+  assert.match(controller, /wizard\.lead\?\.formUnavailable/u);
+  assert.match(controller, /professionalLeadDialog\.setAttribute\('open', ''\)/u);
   assert.match(resultsView, /analysis\.inverterRecommendation/u);
   assert.match(resultsView, /wizard\.inverterRecommendationTitle/u);
   assert.match(resultsView, /analysis\.mountingHardwareRecommendation/u);

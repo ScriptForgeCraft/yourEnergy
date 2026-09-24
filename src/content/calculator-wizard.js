@@ -192,7 +192,7 @@ const copy = {
       eyebrow: 'Անհատական առաջարկ',
       open: 'Քննարկել հաշվարկը ինժեների հետ',
       title: 'Ուղարկել հաշվարկը ինժեներին',
-      copy: 'Ուղարկեք հայտը, և ինժեները կստանա ձեր կոնտակտները, օբյեկտի տվյալները, սպառումը, տանիքի պարամետրերը և նախնական հաշվարկը՝ ընթեռնելի կառուցվածքով։',
+      copy: 'Լրացրեք անունն ու հեռախոսահամարը․ հաշվարկի տվյալները, օբյեկտի տվյալները, սպառումը և տանիքի պարամետրերը ինժեներին կուղարկվեն ավտոմատ՝ ընթեռնելի կառուցվածքով։',
       privacy:
         'Հայտն ուղարկելով՝ այս տվյալները փոխանցում եք միայն YOURENERGY-ի թիմին՝ առաջարկ պատրաստելու համար։',
       name: 'Անուն',
@@ -204,6 +204,8 @@ const copy = {
       loading: 'Հայտն ուղարկվում է…',
       success: 'Հայտն ընդունվել է։ Ինժեները կկապվի ձեզ հետ։',
       unavailable: 'Հայտը հիմա չի ուղարկվում։ Զանգահարեք ինժեներին՝ առաջարկ ստանալու համար։',
+      resultUnavailable: 'Հաշվարկն այլևս հասանելի չէ։ Կրկին գործարկեք հաշվարկը և փորձեք նորից։',
+      formUnavailable: 'Չհաջողվեց բացել հայտի ձևը։ Թարմացրեք էջը և փորձեք նորից։',
       invalid: 'Նշեք ձեր անունը և ճիշտ հեռախոսահամարը։',
       close: 'Փակել'
     },
@@ -460,7 +462,7 @@ const copy = {
       eyebrow: 'Персональное предложение',
       open: 'Обсудить расчёт с инженером',
       title: 'Отправить расчёт инженеру',
-      copy: 'Отправьте заявку — инженер получит ваши контакты, данные объекта, потребление, параметры крыши и предварительный расчёт в понятном структурированном виде.',
+      copy: 'Укажите имя и телефон — данные расчёта, объекта, потребления и крыши будут автоматически приложены к заявке в понятном структурированном виде.',
       privacy:
         'Отправляя заявку, вы передаёте эти данные только команде YOURENERGY для подготовки предложения.',
       name: 'Имя',
@@ -473,6 +475,8 @@ const copy = {
       success: 'Заявка принята. Инженер свяжется с вами.',
       unavailable:
         'Сейчас не удалось отправить заявку. Позвоните инженеру, чтобы получить предложение.',
+      resultUnavailable: 'Расчёт больше недоступен. Запустите его снова и повторите отправку.',
+      formUnavailable: 'Не удалось открыть форму заявки. Обновите страницу и попробуйте ещё раз.',
       invalid: 'Укажите имя и корректный номер телефона.',
       close: 'Закрыть'
     },
@@ -729,7 +733,7 @@ const copy = {
       eyebrow: 'Personal proposal',
       open: 'Discuss this estimate with an engineer',
       title: 'Send this estimate to an engineer',
-      copy: 'Send your request and the engineer will receive your contact details, property details, consumption, roof parameters and preliminary calculation in a clear structured format.',
+      copy: 'Enter your name and phone number. The calculation, property, consumption and roof details will be attached to the request automatically in a clear structured format.',
       privacy:
         'By sending this request, you share these details only with the YOURENERGY team to prepare your proposal.',
       name: 'Name',
@@ -741,6 +745,9 @@ const copy = {
       loading: 'Sending your request…',
       success: 'Your request was accepted. An engineer will contact you.',
       unavailable: 'Your request cannot be sent right now. Call an engineer to get a proposal.',
+      resultUnavailable:
+        'The calculation is no longer available. Run it again and retry your request.',
+      formUnavailable: 'We could not open the request form. Refresh the page and try again.',
       invalid: 'Enter your name and a valid phone number.',
       close: 'Close'
     },

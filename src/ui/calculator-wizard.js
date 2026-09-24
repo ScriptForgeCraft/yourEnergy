@@ -190,6 +190,9 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
   const financeValues = root.querySelector('[data-finance-values]');
   const downloadPdfButton = root.querySelector('[data-download-pdf]');
   const professionalLeadOpen = root.querySelector('[data-professional-lead-open]');
+  const professionalLeadTriggerStatus = root.querySelector(
+    '[data-professional-lead-trigger-status]'
+  );
   const professionalLeadDialog = document.querySelector('[data-professional-lead-dialog]');
   const professionalLeadForm = professionalLeadDialog?.querySelector(
     '[data-professional-lead-form]'
@@ -1412,6 +1415,11 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
     professionalLeadStatus.textContent = message ?? '';
     professionalLeadStatus.classList.toggle('is-error', invalid);
   };
+  const setProfessionalLeadTriggerStatus = (message, invalid = false) => {
+    if (!professionalLeadTriggerStatus) return;
+    professionalLeadTriggerStatus.textContent = message ?? '';
+    professionalLeadTriggerStatus.classList.toggle('is-error', invalid);
+  };
   const resetProfessionalLeadDialog = () => {
     if (!lifecycle.isActive()) return;
     professionalLeadRequest?.abort();
@@ -1431,14 +1439,38 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
     ].forEach((field) => field?.removeAttribute('aria-invalid'));
   };
   const closeProfessionalLeadDialog = () => {
-    if (professionalLeadDialog?.open) professionalLeadDialog.close();
+    if (!professionalLeadDialog?.open) return;
+    if (typeof professionalLeadDialog.close === 'function') professionalLeadDialog.close();
+    else professionalLeadDialog.removeAttribute('open');
   };
   professionalLeadOpen?.addEventListener('click', () => {
-    if (!lifecycle.isActive() || !state.analysis) return;
-    if (typeof professionalLeadDialog?.showModal !== 'function') return;
+    if (!lifecycle.isActive()) return;
+    if (!state.analysis) {
+      setProfessionalLeadTriggerStatus(wizard.lead?.resultUnavailable, true);
+      return;
+    }
+    if (!professionalLeadDialog) {
+      setProfessionalLeadTriggerStatus(wizard.lead?.formUnavailable, true);
+      return;
+    }
     professionalLeadTrigger = professionalLeadOpen;
     resetProfessionalLeadDialog();
-    professionalLeadDialog.showModal();
+    setProfessionalLeadTriggerStatus('');
+    try {
+      if (!professionalLeadDialog.open && typeof professionalLeadDialog.showModal === 'function') {
+        professionalLeadDialog.showModal();
+      } else if (!professionalLeadDialog.open) {
+        // Older browsers without the dialog API still receive a visible form
+        // instead of an unresponsive button.
+        professionalLeadDialog.setAttribute('open', '');
+      }
+    } catch {
+      professionalLeadDialog.setAttribute('open', '');
+    }
+    if (!professionalLeadDialog.open) {
+      setProfessionalLeadTriggerStatus(wizard.lead?.formUnavailable, true);
+      return;
+    }
     professionalLeadName?.focus();
   });
   professionalLeadDialog
