@@ -1318,11 +1318,11 @@ h3 {
 }
 
 .property-map__marker--roof > span {
-  width: 28px;
-  height: 28px;
+  width: 24px;
+  height: 24px;
   color: #fff;
   background: #0d3554;
-  font-size: 0.72rem;
+  font-size: 0.68rem;
   font-weight: 850;
   line-height: 1;
   cursor: grab;

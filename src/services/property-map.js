@@ -1,9 +1,10 @@
 const YEREVAN_OVERVIEW = Object.freeze([40.1792, 44.4991]);
 const EARTH_RADIUS_METERS = 6_371_008.8;
-// Standard OSM raster tiles are reliably available through zoom 19. This is
-// the most detailed practical starting view without requesting unavailable
-// tiles or pretending that OSM is an aerial roof survey.
-const ROOF_EDIT_ZOOM = 19;
+// The satellite layer supports close roof inspection. Keep the base-map tiles
+// at their native limit below, but allow the roof editor to zoom further so a
+// visitor can place and adjust vertices precisely.
+const ROOF_EDIT_ZOOM = 22;
+const BASE_MAP_NATIVE_ZOOM = 19;
 
 const clampLatitude = (latitude) => Math.max(-85, Math.min(85, Number(latitude)));
 
@@ -49,7 +50,7 @@ const importLeaflet = () =>
 const mapOptions = {
   attributionControl: true,
   zoomControl: true,
-  scrollWheelZoom: false,
+  scrollWheelZoom: true,
   doubleClickZoom: false,
   keyboard: true,
   minZoom: 3,
@@ -99,8 +100,8 @@ export const createPropertyMap = async ({
     L.divIcon({
       className: 'property-map__marker property-map__marker--roof',
       html: `<span aria-hidden="true">${index + 1}</span>`,
-      iconSize: [28, 28],
-      iconAnchor: [14, 14]
+      iconSize: [24, 24],
+      iconAnchor: [12, 12]
     });
 
   const invalidateSizeAfterLayout = () => {
@@ -133,6 +134,7 @@ export const createPropertyMap = async ({
     tileLayers.map = L.tileLayer(tileUrl, {
       attribution: tileAttribution,
       maxZoom: ROOF_EDIT_ZOOM,
+      maxNativeZoom: BASE_MAP_NATIVE_ZOOM,
       crossOrigin: true
     });
   }
