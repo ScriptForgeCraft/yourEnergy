@@ -401,6 +401,7 @@ export const initProcessStory = ({ config = {} } = {}) => {
         let mobileNavigating = false;
         let mobileTransition = null;
         let mobileScrollBehaviorFrame = 0;
+        let mobileProgressFrame = 0;
         let mobileSavedScrollBehavior = null;
         let touchStartY = null;
         let touchDirection = 0;
@@ -432,6 +433,29 @@ export const initProcessStory = ({ config = {} } = {}) => {
           const bounds = state.getBoundingClientRect();
           const offset = mobileScrollOffset();
           return bounds.top <= offset + 24 && bounds.bottom > offset + 24;
+        };
+
+        const syncMobileProgress = () => {
+          mobileProgressFrame = 0;
+          if (mobileNavigating) return;
+
+          const stageBounds = root.getBoundingClientRect();
+          const activationLine = mobileScrollOffset() + 24;
+          if (stageBounds.bottom <= activationLine || stageBounds.top >= window.innerHeight) return;
+
+          const nextIndex = states.findIndex((state) => {
+            const bounds = state.getBoundingClientRect();
+            return bounds.top <= activationLine && bounds.bottom > activationLine;
+          });
+          if (nextIndex < 0 || nextIndex === activeIndex) return;
+
+          setProgress(nextIndex);
+          animateStepMetrics(nextIndex);
+        };
+
+        const queueMobileProgressSync = () => {
+          if (mobileProgressFrame) return;
+          mobileProgressFrame = window.requestAnimationFrame(syncMobileProgress);
         };
 
         const animateMobileStep = (index, direction) => {
@@ -482,6 +506,7 @@ export const initProcessStory = ({ config = {} } = {}) => {
 
           mobileNavigationTimer = window.setTimeout(() => {
             mobileNavigating = false;
+            queueMobileProgressSync();
           }, 560);
         };
 
@@ -559,18 +584,21 @@ export const initProcessStory = ({ config = {} } = {}) => {
         };
         mobileObserver = new IntersectionObserver(
           (entries) => {
+            let hasVisibleStep = false;
             entries.forEach((entry) => {
               if (!entry.isIntersecting) return;
-              const index = states.indexOf(entry.target);
+              hasVisibleStep = true;
               entry.target.classList.add('is-in-view');
-              if (!mobileNavigating) setProgress(index);
-              animateStepMetrics(index);
             });
+            if (hasVisibleStep) queueMobileProgressSync();
           },
           { rootMargin: '-18% 0px -32%', threshold: 0.12 }
         );
         states.forEach((state) => mobileObserver.observe(state));
         progressSteps.forEach((step) => step.addEventListener('click', onProgressStepClick));
+        window.addEventListener('scroll', queueMobileProgressSync, { passive: true });
+        window.addEventListener('resize', queueMobileProgressSync);
+        queueMobileProgressSync();
         if (reducedMotion) states.forEach((_, index) => animateStepMetrics(index));
         else {
           story.addEventListener('wheel', onMobileWheel, { passive: false });
@@ -586,10 +614,13 @@ export const initProcessStory = ({ config = {} } = {}) => {
           window.clearTimeout(mobileNavigationTimer);
           window.clearTimeout(mobileWheelBurstTimer);
           window.cancelAnimationFrame(mobileScrollBehaviorFrame);
+          window.cancelAnimationFrame(mobileProgressFrame);
           if (mobileSavedScrollBehavior !== null) {
             document.documentElement.style.scrollBehavior = mobileSavedScrollBehavior;
           }
           progressSteps.forEach((step) => step.removeEventListener('click', onProgressStepClick));
+          window.removeEventListener('scroll', queueMobileProgressSync);
+          window.removeEventListener('resize', queueMobileProgressSync);
           story.removeEventListener('wheel', onMobileWheel);
           story.removeEventListener('touchstart', onMobileTouchStart);
           story.removeEventListener('touchmove', onMobileTouchMove);
