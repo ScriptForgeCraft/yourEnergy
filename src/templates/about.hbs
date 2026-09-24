@@ -73,23 +73,60 @@
         </div>
       </section>
 
-      <section class='about-certification about-section' aria-labelledby='about-certification-title'>
-        <div class='container about-certification__head' data-about-reveal>
-          <div class='about-copy'>
-            <span class='about-kicker'>{{aboutPage.certification.eyebrow}}</span>
-            <h2 id='about-certification-title'>{{aboutPage.certification.title}}</h2>
-            <p>{{aboutPage.certification.copy}}</p>
-            <p>{{aboutPage.certification.copySecond}}</p>
-            <p>{{aboutPage.certification.copyThird}}</p>
+      <section class='about-principles about-section' aria-labelledby='about-principles-title'>
+        <div class='container'>
+          <div class='about-copy about-principles__head' data-about-reveal>
+            <span class='about-kicker'>{{aboutPage.principles.eyebrow}}</span>
+            <h2 id='about-principles-title'>{{aboutPage.principles.title}}</h2>
+          </div>
+          <div class='about-principles__grid'>
+            {{#each aboutPage.principles.items}}
+              <article class='about-principle' data-about-reveal>
+                <span class='about-principle__icon'><svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#{{icon}}'></use></svg></span>
+                <div><h3>{{title}}</h3><p>{{copy}}</p></div>
+              </article>
+            {{/each}}
           </div>
         </div>
-        <div class='container about-certification__gallery'>
-          {{#each aboutPage.certification.items}}
-            <button class='about-certification__gallery-item about-certification__gallery-item--{{layout}}' type='button' data-about-reveal data-about-certification-item data-src='{{image}}' data-alt='{{alt}}' data-caption='{{caption}}' aria-label='{{../aboutPage.certification.openImage}}: {{caption}}'>
-              <img src='{{image}}' alt='{{alt}}' loading='lazy' decoding='async' />
-              <span>{{caption}}</span>
-            </button>
-          {{/each}}
+      </section>
+
+      <section class='about-certification about-section' aria-labelledby='about-certification-title'>
+        <div class='container about-certification__layout'>
+          <div class='about-certification__head' data-about-reveal>
+            <div class='about-copy'>
+              <span class='about-kicker'>{{aboutPage.certification.eyebrow}}</span>
+              <h2 id='about-certification-title'>{{aboutPage.certification.title}}</h2>
+              <p>{{aboutPage.certification.copy}}</p>
+            </div>
+          </div>
+          <div class='about-certification__gallery'>
+            {{#each aboutPage.certification.items}}
+              <button class='about-certification__gallery-item about-certification__gallery-item--{{layout}}' type='button' data-about-reveal data-about-certification-item data-src='{{image}}' data-alt='{{alt}}' data-caption='{{caption}}' aria-label='{{../aboutPage.certification.openImage}}: {{caption}}'>
+                <img src='{{image}}' alt='{{alt}}' loading='lazy' decoding='async' />
+                <span>{{caption}}</span>
+              </button>
+            {{/each}}
+          </div>
+        </div>
+      </section>
+
+      <section class='about-partners about-section' aria-labelledby='about-partners-title'>
+        <div class='container about-partners__head' data-about-reveal>
+          <div class='about-copy'>
+            <span class='about-kicker'>{{aboutPage.partners.eyebrow}}</span>
+            <h2 id='about-partners-title'>{{aboutPage.partners.title}}</h2>
+            <p>{{aboutPage.partners.copy}}</p>
+          </div>
+        </div>
+        <div class='container'>
+          <div class='about-partners__track'>
+            {{#each aboutPage.partners.items}}
+              <article class='about-partner-card' data-about-reveal>
+                <div class='about-partner-card__logo about-partner-card__logo--{{tone}}'><img src='{{logo}}' alt='{{name}}' loading='lazy' decoding='async' /></div>
+                <div><strong>{{name}}</strong><span>{{detail}}</span>{{#if subdetail}}<small>{{subdetail}}</small>{{/if}}</div>
+              </article>
+            {{/each}}
+          </div>
         </div>
       </section>
 
@@ -109,51 +146,6 @@
             <div class='about-company-record__address'><span>{{aboutPage.company.addressLabel}}</span><strong>{{aboutPage.company.address}}</strong></div>
             <footer><span>{{aboutPage.company.source}}</span><span>{{aboutPage.company.verification}}</span></footer>
           </article>
-        </div>
-      </section>
-
-      <section class='about-partners about-section' aria-labelledby='about-partners-title'>
-        <div class='container about-partners__head' data-about-reveal>
-          <div class='about-copy'>
-            <span class='about-kicker'>{{aboutPage.partners.eyebrow}}</span>
-            <h2 id='about-partners-title'>{{aboutPage.partners.title}}</h2>
-            <p>{{aboutPage.partners.copy}}</p>
-            <p>{{aboutPage.partners.intro}}</p>
-          </div>
-          <div class='about-partners__controls'>
-            <button type='button' data-about-partners-direction='-1' aria-label='{{aboutPage.partners.previous}}'><svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#arrow-left'></use></svg></button>
-            <button type='button' data-about-partners-direction='1' aria-label='{{aboutPage.partners.next}}'><svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#arrow-right'></use></svg></button>
-          </div>
-        </div>
-        <div class='container about-partners__viewport'>
-          <div class='about-partners__track' data-about-partners-track>
-            {{#each aboutPage.partners.items}}
-              <article class='about-partner-card' data-about-reveal>
-                <div class='about-partner-card__logo about-partner-card__logo--{{tone}}'><img src='{{logo}}' alt='{{name}}' loading='lazy' decoding='async' /></div>
-                <div><strong>{{name}}</strong><span>{{detail}}</span>{{#if subdetail}}<small>{{subdetail}}</small>{{/if}}</div>
-              </article>
-            {{/each}}
-          </div>
-        </div>
-        <div class='container'>
-          <p class='about-partners__note' data-about-reveal>{{aboutPage.partners.note}}</p>
-        </div>
-      </section>
-
-      <section class='about-principles about-section' aria-labelledby='about-principles-title'>
-        <div class='container'>
-          <div class='about-copy about-principles__head' data-about-reveal>
-            <span class='about-kicker'>{{aboutPage.principles.eyebrow}}</span>
-            <h2 id='about-principles-title'>{{aboutPage.principles.title}}</h2>
-          </div>
-          <div class='about-principles__grid'>
-            {{#each aboutPage.principles.items}}
-              <article class='about-principle' data-about-reveal>
-                <span class='about-principle__icon'><svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#{{icon}}'></use></svg></span>
-                <div><h3>{{title}}</h3><p>{{copy}}</p></div>
-              </article>
-            {{/each}}
-          </div>
         </div>
       </section>
 

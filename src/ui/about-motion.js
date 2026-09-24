@@ -51,35 +51,6 @@ const initHeroParallax = (page) => {
   update();
 };
 
-const initPartnerRail = (page) => {
-  const track = page.querySelector('[data-about-partners-track]');
-  const buttons = [...page.querySelectorAll('[data-about-partners-direction]')];
-  if (!track || !buttons.length) return;
-
-  const sync = () => {
-    const max = Math.max(0, track.scrollWidth - track.clientWidth);
-    buttons.forEach((button) => {
-      const direction = Number(button.dataset.aboutPartnersDirection);
-      button.disabled =
-        max <= 1 || (direction < 0 ? track.scrollLeft <= 1 : track.scrollLeft >= max - 1);
-    });
-  };
-
-  buttons.forEach((button) => {
-    button.addEventListener('click', () => {
-      const direction = Number(button.dataset.aboutPartnersDirection);
-      track.scrollBy({
-        left: direction * Math.max(280, track.clientWidth * 0.7),
-        behavior: reducedMotion() ? 'auto' : 'smooth'
-      });
-    });
-  });
-
-  track.addEventListener('scroll', sync, { passive: true });
-  if (typeof ResizeObserver !== 'undefined') new ResizeObserver(sync).observe(track);
-  sync();
-};
-
 const initCertificationLightbox = (page) => {
   const lightbox = document.querySelector('[data-about-lightbox]');
   const image = lightbox?.querySelector('[data-about-lightbox-image]');
@@ -146,6 +117,5 @@ export const initAboutMotion = () => {
 
   initReveal(page);
   initHeroParallax(page);
-  initPartnerRail(page);
   initCertificationLightbox(page);
 };

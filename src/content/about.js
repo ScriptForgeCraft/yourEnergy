@@ -91,9 +91,9 @@ const gallery = {
 
 const company = {
   ru: {
-    eyebrow: 'ДАННЫЕ КОМПАНИИ',
-    title: 'Юридическая прозрачность',
-    copy: 'YOURENERGY — официально зарегистрированная в Армении компания. Основные юридические сведения открыто представлены для клиентов и партнёров.',
+    eyebrow: 'ОФИЦИАЛЬНЫЕ ДАННЫЕ',
+    title: 'Данные компании',
+    copy: 'YOURENERGY — официально зарегистрированная компания в Армении.',
     recordLabel: 'Данные государственной регистрации',
     facts: [
       { label: 'Юридическое наименование', value: 'ООО «ЮР ЭНЕРДЖИ»' },
@@ -107,9 +107,9 @@ const company = {
     verification: 'Контрольный номер: RBE4-88FA-4C78-8ECF.'
   },
   hy: {
-    eyebrow: 'ԸՆԿԵՐՈՒԹՅԱՆ ՏՎՅԱԼՆԵՐ',
-    title: 'Իրավաբանական թափանցիկություն',
-    copy: 'YOURENERGY-ն Հայաստանում պաշտոնապես գրանցված ընկերություն է։ Մեր իրավաբանական տվյալները ներկայացնում ենք բաց և հստակ՝ հաճախորդների և գործընկերների համար։',
+    eyebrow: 'ՊԱՇՏՈՆԱԿԱՆ ՏՎՅԱԼՆԵՐ',
+    title: 'Ընկերության տվյալներ',
+    copy: 'YOURENERGY-ն Հայաստանում պաշտոնապես գրանցված ընկերություն է։',
     recordLabel: 'Պետական գրանցման տվյալներ',
     facts: [
       { label: 'Իրավաբանական անվանում', value: '«ՅՈՒՐ ԷՆԵՐՋԻ» ՍՊԸ' },
@@ -123,9 +123,9 @@ const company = {
     verification: 'Վերահսկիչ համար՝ RBE4-88FA-4C78-8ECF։'
   },
   en: {
-    eyebrow: 'COMPANY INFORMATION',
-    title: 'Legal transparency',
-    copy: 'YOURENERGY is an officially registered company in Armenia. We make our core legal information openly available to clients and partners.',
+    eyebrow: 'OFFICIAL INFORMATION',
+    title: 'Company details',
+    copy: 'YOURENERGY is an officially registered company in Armenia.',
     recordLabel: 'State registration details',
     facts: [
       { label: 'Legal name', value: 'YOUR ENERGY LLC' },
@@ -151,7 +151,7 @@ const aboutPageCopy = {
     hero: {
       titleLead: 'О компании',
       titleAccent: 'YOUR ENERGY',
-      copy: 'Солнечные энергетические решения для домов и бизнеса — с инженерным расчётом, правильно подобранным оборудованием и полной реализацией проекта.',
+      copy: 'Проектируем и реализуем солнечные энергосистемы в Армении для частных домов и бизнеса.',
       signals: [
         { icon: 'faq-settings', title: 'Инженерный', copy: 'подход' },
         { icon: 'chart-bars', title: 'Понятные', copy: 'решения' },
@@ -164,30 +164,21 @@ const aboutPageCopy = {
       titleAccent: 'YOUR ENERGY',
       copy: 'YOURENERGY — компания в сфере солнечной энергетики в Армении. Мы проектируем и реализуем солнечные системы для частных домов и бизнеса.',
       copySecond:
-        'В одном процессе мы объединяем обследование объекта, анализ энергопотребления, расчёт системы, проектирование, подбор оборудования, монтаж, запуск и дальнейшую поддержку.',
+        'В одном процессе объединяем оценку объекта, расчёт, подбор оборудования, проектирование, монтаж, запуск и дальнейшую поддержку.',
       copyThird:
-        'Наша задача — не просто установить солнечные панели. Каждую систему мы подбираем на основе реального потребления, технических особенностей объекта и целей клиента, чтобы решение было эффективным, понятным и рассчитанным на долгосрочную работу.'
+        'Каждое решение выбираем с учётом реального потребления, технических возможностей объекта и целей клиента.'
     },
     certification: {
       eyebrow: 'СЕРТИФИКАЦИЯ И ОПЫТ',
-      title: 'Профессиональный подход, подтверждённый работой',
-      copy: 'Для YOURENERGY важен не только конечный результат, но и качество каждого этапа проекта.',
-      copySecond:
-        'Мы работаем с учётом технических требований производителей, развиваем профессиональную экспертизу и строим проекты на обоснованных инженерных решениях.',
-      copyThird:
-        'Материалы сертификации LONGi отражают часть нашей профессиональной подготовки и работы с современными технологиями солнечной энергетики.',
+      title: 'Профессиональный опыт, подтверждённый реальной работой',
+      copy: 'Мы работаем в соответствии с техническими требованиями производителей, развиваем профессиональный опыт и строим каждый проект на обоснованных инженерных решениях.',
       ...gallery.ru
     },
     company: company.ru,
     partners: {
       eyebrow: 'НАШИ ПАРТНЁРЫ',
-      title: 'Технологические и финансовые партнёры',
-      copy: 'Надёжный солнечный проект требует не только точного расчёта, но и качественного оборудования, технологической поддержки и удобных вариантов финансирования.',
-      intro:
-        'YOURENERGY работает с международными технологическими брендами солнечной энергетики и финансовыми организациями Армении, объединяя оборудование и финансовые инструменты в рамках одного проекта.',
-      note: 'Конкретные модели оборудования и условия финансирования подбираются индивидуально в соответствии с техническими и финансовыми параметрами проекта.',
-      previous: 'Предыдущие карточки',
-      next: 'Следующие карточки',
+      title: 'Международные бренды и финансовые партнёры',
+      copy: 'Мы сотрудничаем с производителями солнечных технологий и финансовыми организациями, чтобы подобрать подходящее решение для проекта.',
       items: [
         {
           name: 'LONGi',
@@ -222,18 +213,23 @@ const aboutPageCopy = {
       items: [
         {
           icon: 'faq-settings',
-          title: 'Начинаем с объекта и реального потребления',
-          copy: 'Изучаем потребление электроэнергии, особенности объекта, параметры крыши или доступной территории и задачи клиента. На основе этих данных определяем необходимую мощность и конфигурацию системы.'
+          title: 'Обследование объекта',
+          copy: 'Изучаем потребление, крышу или доступную площадь и задачи проекта.'
         },
         {
           icon: 'file',
-          title: 'Рассчитываем и объясняем решение',
-          copy: 'Показываем основные параметры системы, ожидаемую выработку и логику выбора оборудования, чтобы клиент понимал не только результат, но и основания предложенного решения.'
+          title: 'Расчёт и проектирование',
+          copy: 'Определяем мощность системы, ожидаемую выработку и состав оборудования.'
         },
         {
           icon: 'shield-check',
-          title: 'Реализуем и продолжаем поддерживать',
-          copy: 'Организуем монтаж, запуск и мониторинг системы и остаёмся на связи после ввода оборудования в эксплуатацию.'
+          title: 'Монтаж и запуск',
+          copy: 'Выполняем установку, подключение и ввод системы в эксплуатацию.'
+        },
+        {
+          icon: 'chart-bars',
+          title: 'Мониторинг и поддержка',
+          copy: 'Контролируем работу системы и поддерживаем её в период эксплуатации.'
         }
       ]
     },
@@ -255,7 +251,7 @@ const aboutPageCopy = {
     hero: {
       titleLead: 'Մեր մասին',
       titleAccent: 'YOUR ENERGY',
-      copy: 'Արևային էներգիայի լուծումներ տների և բիզնեսի համար՝ ինժեներական հաշվարկով, ճիշտ ընտրված սարքավորումներով և ամբողջական իրականացմամբ։',
+      copy: 'Արևային էներգիայի նախագծում և իրականացում Հայաստանում՝ մասնավոր տների և բիզնեսի համար։',
       signals: [
         { icon: 'faq-settings', title: 'Ինժեներական', copy: 'մոտեցում' },
         { icon: 'chart-bars', title: 'Հասկանալի', copy: 'լուծումներ' },
@@ -268,30 +264,21 @@ const aboutPageCopy = {
       titleAccent: 'YOUR ENERGY-ը',
       copy: 'YOURENERGY-ն արևային էներգետիկայի ընկերություն է Հայաստանում, որը նախագծում և իրականացնում է արևային համակարգեր մասնավոր տների և բիզնեսի համար։',
       copySecond:
-        'Մենք մեկ ամբողջական գործընթացում միավորում ենք օբյեկտի գնահատումը, էներգասպառման վերլուծությունը, համակարգի հաշվարկը, նախագծումը, սարքավորումների ընտրությունը, մոնտաժը, գործարկումը և հետագա աջակցությունը։',
+        'Մեկ գործընթացում միավորում ենք օբյեկտի գնահատումը, հաշվարկը, սարքավորումների ընտրությունը, նախագծումը, մոնտաժը, գործարկումը և հետագա աջակցությունը։',
       copyThird:
-        'Մեր նպատակը պարզապես արևային վահանակներ տեղադրելը չէ։ Յուրաքանչյուր համակարգ ընտրում ենք տվյալ օբյեկտի իրական սպառման, տեխնիկական հնարավորությունների և հաճախորդի նպատակների հիման վրա, որպեսզի լուծումը լինի արդյունավետ, հասկանալի և երկարաժամկետ։'
+        'Յուրաքանչյուր լուծում ընտրում ենք իրական սպառման, օբյեկտի տեխնիկական հնարավորությունների և հաճախորդի նպատակների հիման վրա։'
     },
     certification: {
       eyebrow: 'ՀԱՎԱՍՏԱԳՐՈՒՄ ԵՎ ՓՈՐՁ',
-      title: 'Մասնագիտական մոտեցում՝ հաստատված աշխատանքով',
-      copy: 'YOURENERGY-ի համար կարևոր է ոչ միայն վերջնական արդյունքը, այլ նաև այն ճանապարհը, որով հասնում ենք դրան։',
-      copySecond:
-        'Մենք աշխատում ենք արտադրողների տեխնիկական պահանջներին համապատասխան, զարգացնում ենք մեր մասնագիտական փորձը և յուրաքանչյուր նախագիծ կառուցում ենք հաշվարկված ինժեներական որոշումների վրա։',
-      copyThird:
-        'LONGi-ի հավաստագրման նյութերը ներկայացնում են մեր մասնագիտական աշխատանքի և տեխնոլոգիական գիտելիքների զարգացման մի մասը։',
+      title: 'Մասնագիտական փորձ՝ հաստատված իրական աշխատանքով',
+      copy: 'Մենք աշխատում ենք արտադրողների տեխնիկական պահանջներին համապատասխան, զարգացնում ենք մասնագիտական փորձը և յուրաքանչյուր նախագիծ կառուցում հաշվարկված ինժեներական որոշումների վրա։',
       ...gallery.hy
     },
     company: company.hy,
     partners: {
       eyebrow: 'ՄԵՐ ԳՈՐԾԸՆԿԵՐՆԵՐԸ',
-      title: 'Տեխնոլոգիական և ֆինանսական գործընկերներ',
-      copy: 'Հուսալի արևային նախագիծը պահանջում է ոչ միայն ճիշտ հաշվարկ, այլ նաև որակյալ սարքավորումներ, տեխնոլոգիական աջակցություն և հարմար ֆինանսավորման հնարավորություններ։',
-      intro:
-        'YOURENERGY-ն աշխատում է արևային էներգետիկայի միջազգային տեխնոլոգիական բրենդների և Հայաստանում գործող ֆինանսական կազմակերպությունների հետ՝ նախագծերի համար առաջարկելով ամբողջական տեխնիկական և ֆինանսական լուծումներ։',
-      note: 'Սարքավորումների կոնկրետ մոդելները և ֆինանսավորման պայմանները ընտրվում են յուրաքանչյուր նախագծի պահանջներին համապատասխան։',
-      previous: 'Նախորդ քարտերը',
-      next: 'Հաջորդ քարտերը',
+      title: 'Միջազգային բրենդներ և ֆինանսական գործընկերներ',
+      copy: 'Համագործակցում ենք արևային տեխնոլոգիաների արտադրողների և ֆինանսական կազմակերպությունների հետ՝ նախագծի համար համապատասխան լուծում ընտրելու նպատակով։',
       items: [
         {
           name: 'LONGi',
@@ -326,18 +313,23 @@ const aboutPageCopy = {
       items: [
         {
           icon: 'faq-settings',
-          title: 'Սկսում ենք օբյեկտից և իրական սպառումից',
-          copy: 'Ուսումնասիրում ենք էլեկտրաէներգիայի սպառումը, օբյեկտի առանձնահատկությունները, տանիքը կամ հասանելի տարածքը և հաճախորդի նպատակները։ Այդ տվյալների հիման վրա որոշում ենք համակարգի անհրաժեշտ հզորությունն ու կազմը։'
+          title: 'Օբյեկտի ուսումնասիրություն',
+          copy: 'Ուսումնասիրում ենք սպառումը, տանիքը կամ հասանելի տարածքը և նախագծի նպատակները։'
         },
         {
           icon: 'file',
-          title: 'Հաշվարկում և հիմնավորում ենք լուծումը',
-          copy: 'Ներկայացնում ենք համակարգի հիմնական պարամետրերը, սպասվող արտադրությունը և սարքավորումների ընտրության տրամաբանությունը, որպեսզի հաճախորդը հասկանա, թե ինչ է ստանում և ինչու։'
+          title: 'Հաշվարկ և նախագծում',
+          copy: 'Որոշում ենք համակարգի հզորությունը, սպասվող արտադրությունը և սարքավորումների կազմը։'
         },
         {
           icon: 'shield-check',
-          title: 'Իրականացնում և աջակցում ենք',
-          copy: 'Կազմակերպում ենք մոնտաժը, համակարգի գործարկումն ու մոնիթորինգը և շարունակում ենք աջակցել նաև շահագործման ընթացքում։'
+          title: 'Մոնտաժ և գործարկում',
+          copy: 'Իրականացնում ենք տեղադրումը, միացումը և համակարգի գործարկումը։'
+        },
+        {
+          icon: 'chart-bars',
+          title: 'Մոնիթորինգ և աջակցություն',
+          copy: 'Վերահսկում ենք համակարգի աշխատանքը և աջակցում շահագործման ընթացքում։'
         }
       ]
     },
@@ -359,7 +351,7 @@ const aboutPageCopy = {
     hero: {
       titleLead: 'About',
       titleAccent: 'YOUR ENERGY',
-      copy: 'Solar energy solutions for homes and businesses — backed by engineering calculations, carefully selected equipment and complete project delivery.',
+      copy: 'Solar energy system design and delivery in Armenia for private homes and businesses.',
       signals: [
         { icon: 'faq-settings', title: 'Engineering', copy: 'approach' },
         { icon: 'chart-bars', title: 'Clear', copy: 'solutions' },
@@ -372,30 +364,21 @@ const aboutPageCopy = {
       titleAccent: 'YOUR ENERGY?',
       copy: 'YOURENERGY is a solar energy company in Armenia that designs and delivers solar power systems for private homes and businesses.',
       copySecond:
-        'We bring site assessment, energy-consumption analysis, system sizing, engineering, equipment selection, installation, commissioning and ongoing support into one complete process.',
+        'We bring site assessment, system sizing, equipment selection, engineering, installation, commissioning and ongoing support into one process.',
       copyThird:
-        "Our goal is not simply to install solar panels. Every system is designed around actual energy consumption, the technical characteristics of the property and the client's objectives, creating a solution that is efficient, understandable and built for long-term operation."
+        "Every solution is selected around actual energy use, the property's technical potential and the client's goals."
     },
     certification: {
       eyebrow: 'CERTIFICATION & EXPERIENCE',
-      title: 'Professional expertise backed by real work',
-      copy: 'At YOURENERGY, the quality of the process matters just as much as the final result.',
-      copySecond:
-        "We work in accordance with manufacturers' technical requirements, continuously develop our professional expertise and base every project on informed engineering decisions.",
-      copyThird:
-        'Our LONGi certification materials represent part of our professional development and experience with modern solar technologies.',
+      title: 'Professional experience backed by real work',
+      copy: "We work in accordance with manufacturers' technical requirements, develop our expertise and build every project on informed engineering decisions.",
       ...gallery.en
     },
     company: company.en,
     partners: {
       eyebrow: 'OUR PARTNERS',
-      title: 'Technology and financial partners',
-      copy: 'A reliable solar project requires more than accurate engineering. It also depends on quality equipment, technology support and practical financing options.',
-      intro:
-        'YOURENERGY works with international solar technology brands and financial organizations in Armenia to bring equipment and financing solutions together within a complete project.',
-      note: 'Specific equipment models and financing terms are selected according to the technical and financial requirements of each project.',
-      previous: 'Previous cards',
-      next: 'Next cards',
+      title: 'International brands and financial partners',
+      copy: 'We work with solar technology manufacturers and financial organizations to select the right solution for each project.',
       items: [
         {
           name: 'LONGi',
@@ -430,18 +413,23 @@ const aboutPageCopy = {
       items: [
         {
           icon: 'faq-settings',
-          title: 'We start with the property and actual energy use',
-          copy: "We analyse electricity consumption, site characteristics, available roof or ground area and the client's objectives. These inputs determine the required system capacity and configuration."
+          title: 'Site assessment',
+          copy: 'We review energy use, the roof or available area, and the project goals.'
         },
         {
           icon: 'file',
-          title: 'We calculate and explain the solution',
-          copy: 'We present the main system parameters, expected energy production and the reasoning behind the equipment selection, so the client understands both the solution and the logic behind it.'
+          title: 'Sizing and design',
+          copy: 'We determine system capacity, expected production and the equipment configuration.'
         },
         {
           icon: 'shield-check',
-          title: 'We deliver and continue to support',
-          copy: 'We manage installation, commissioning and monitoring and continue supporting the system after it becomes operational.'
+          title: 'Installation and commissioning',
+          copy: 'We install, connect and commission the solar system.'
+        },
+        {
+          icon: 'chart-bars',
+          title: 'Monitoring and support',
+          copy: 'We monitor system performance and support its operation.'
         }
       ]
     },
