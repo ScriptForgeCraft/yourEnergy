@@ -299,6 +299,13 @@ const roofPanelLimit = (roof, system) => {
   );
 };
 
+// A fractional remainder of 0.5 or less does not require another module.
+// This keeps preliminary estimates from adding a panel for small shortfalls.
+const roundPanelCount = (requestedPanelCount) => {
+  const wholePanels = Math.floor(requestedPanelCount);
+  return requestedPanelCount - wholePanels > 0.5 ? wholePanels + 1 : wholePanels;
+};
+
 const getScenarioCapex = (investment, capacityKwp) => {
   if (investment.capexAmdPerKwp !== null) return capacityKwp * investment.capexAmdPerKwp;
   if (
@@ -425,7 +432,7 @@ export const calculateSolarScenario = ({
   const requestedCapacityKwp = (consumption.annualKwh * target) / production.annualYieldKwhPerKwp;
   const maxPanelCount = roofPanelLimit(roof, system);
   const requestedPanelCount = system.panelWatts
-    ? Math.ceil((requestedCapacityKwp * 1000) / system.panelWatts)
+    ? roundPanelCount((requestedCapacityKwp * 1000) / system.panelWatts)
     : null;
   const panelCount =
     requestedPanelCount === null

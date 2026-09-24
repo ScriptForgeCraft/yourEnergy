@@ -160,7 +160,7 @@ test('an expired price book hides the preliminary price and payback even with a 
   assert.equal(analysis.commercialEstimate.reason, 'PRICEBOOK_EXPIRED');
   assert.equal(scenario.commercialEstimate.available, false);
   assert.equal(scenario.financial.capexAmd, null);
-  assert.equal(scenario.financial.annualSavingsAmd, 588_120);
+  assert.equal(scenario.financial.annualSavingsAmd, 542_880);
   assert.equal(scenario.financial.paybackYears, null);
   assert.deepEqual(scenario.financial.timeline, []);
   assertFiniteTree(analysis);

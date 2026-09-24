@@ -9,8 +9,8 @@ import {
 } from '../src/domain/index.js';
 
 // This fixture is the UI-refactor contract.  It uses deterministic provider
-// data so the presentation layer can be rebuilt without changing a single
-// calculation, normalization or rounding rule.
+// data so the presentation layer can be rebuilt without changing the
+// calculation, normalization or rounding contract.
 const FIXTURE = Object.freeze({
   effectiveDate: '2026-08-31',
   property: {
@@ -36,7 +36,7 @@ const FIXTURE = Object.freeze({
   priceBook: TEMPORARY_YOURENERGY_PRICEBOOK,
   tariffSelection: createUserTariffSelection({ rateAmdPerKwh: 52 }, '2026-08-31')
 });
-test('consumer and engineering UI share the unchanged calculation contract', () => {
+test('consumer and engineering UI share the calculation contract', () => {
   const analysis = buildSolarAnalysis(FIXTURE);
   const scenario = analysis.selectedScenario;
   const passport = new SolarPassportRepository({
@@ -46,19 +46,19 @@ test('consumer and engineering UI share the unchanged calculation contract', () 
 
   assert.deepEqual(analysis.production.monthlyYieldFactors, Array(12).fill(1 / 12));
   assert.equal(analysis.production.annualYieldKwhPerKwp, 1_500);
-  assert.equal(scenario.system.capacityKwp, 7.54);
-  assert.equal(scenario.system.panelCount, 13);
+  assert.equal(scenario.system.capacityKwp, 6.96);
+  assert.equal(scenario.system.panelCount, 12);
   assert.equal(analysis.roof.areaSqm, 100);
   assert.deepEqual(scenario.limitations, []);
   assert.deepEqual(scenario.commercialEstimate.rangeAmd, {
-    p25: 1_370_000,
-    p50: 1_460_000,
-    p75: 1_560_000
+    p25: 1_270_000,
+    p50: 1_350_000,
+    p75: 1_440_000
   });
-  assert.equal(scenario.generation.annualKwh, 11_310);
-  assert.equal(scenario.financial.annualSavingsAmd, 588_120);
-  assert.equal(scenario.financial.paybackYears, 2.482486567367204);
-  assert.equal(scenario.financial.timeline.at(-1).netAmd, 13_243_000);
-  assert.equal(passport.analysis.selectedScenario.generation.annualKwh, 11_310);
-  assert.equal(passport.analysis.commercialEstimate.primaryAmd, 1_460_000);
+  assert.equal(scenario.generation.annualKwh, 10_440);
+  assert.equal(scenario.financial.annualSavingsAmd, 542_880);
+  assert.equal(scenario.financial.paybackYears, 2.486737400530504);
+  assert.equal(scenario.financial.timeline.at(-1).netAmd, 12_222_000);
+  assert.equal(passport.analysis.selectedScenario.generation.annualKwh, 10_440);
+  assert.equal(passport.analysis.commercialEstimate.primaryAmd, 1_350_000);
 });

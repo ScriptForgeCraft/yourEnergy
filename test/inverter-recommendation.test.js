@@ -68,9 +68,9 @@ test('a medium PV capacity is selected from a real grid-tied AC variant after si
   });
   const recommendation = analysis.inverterRecommendation;
 
-  assert.equal(analysis.selectedScenario.system.capacityKwp, 10.4);
-  assert.equal(recommendation?.productId, 'solax-x3-mic-g2');
-  assert.equal(recommendation?.selectedAcPowerKw, 12);
+  assert.equal(analysis.selectedScenario.system.capacityKwp, 9.75);
+  assert.equal(recommendation?.productId, 'solax-x1-smart-g2');
+  assert.equal(recommendation?.selectedAcPowerKw, 10);
   assert.ok(recommendation.selectedAcPowerKw >= analysis.selectedScenario.system.capacityKwp);
 });
 

@@ -57,7 +57,7 @@ test('PDF report is a self-contained escaped calculation snapshot with both char
   assert.ok(html);
   assert.match(html, /<h1>Solar report<\/h1>/u);
   assert.match(html, /Home &lt;private&gt;/u);
-  assert.match(html, /11,310 kWh/u);
+  assert.match(html, /10,440 kWh/u);
   assert.equal((html.match(/<rect /gu) ?? []).length, 12);
   assert.match(html, /<polyline /u);
   assert.doesNotMatch(html, /<script/iu);

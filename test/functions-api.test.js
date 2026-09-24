@@ -388,18 +388,18 @@ test('analysis joins real PVGIS yield with confirmed inputs, suppresses unselect
   assert.equal(response.status, 200);
   assert.equal(analysis.mode, 'real-analysis');
   assert.equal(analysis.property.confirmed, true);
-  assert.equal(analysis.selectedScenario.system.capacityKwp, 7.8);
-  assert.equal(analysis.selectedScenario.system.panelCount, 12);
-  assert.equal(analysis.selectedScenario.generation.annualKwh, 11_700);
+  assert.equal(analysis.selectedScenario.system.capacityKwp, 7.15);
+  assert.equal(analysis.selectedScenario.system.panelCount, 11);
+  assert.equal(analysis.selectedScenario.generation.annualKwh, 10_725);
   assert.equal(analysis.selectedScenario.financial.annualSavingsAmd, null);
   assert.equal(analysis.selectedScenario.financial.grossSavings25YearsAmd, null);
   assert.equal(analysis.selectedScenario.financial.paybackYears, null);
   assert.deepEqual(analysis.selectedScenario.financial.timeline, []);
   assert.equal(analysis.environmental.factor.status, 'verified-historical');
   assert.equal(analysis.environmental.factor.dataYear, 2022);
-  assert.equal(analysis.environmental.avoidedCo2Tons, 2.141);
+  assert.equal(analysis.environmental.avoidedCo2Tons, 1.963);
   assert.equal(analysis.environmental.treeEquivalency.metricTonsCo2PerTreePerYear, 0.06);
-  assert.equal(analysis.environmental.treeEquivalent, 35.683);
+  assert.equal(analysis.environmental.treeEquivalent, 32.717);
   assert.equal(analysis.financial.tariff.kind, 'unavailable');
   assert.equal(analysis.financial.tariff.rateAmdPerKwh, null);
   assert.equal(analysis.commercialEstimate.available, true);
@@ -443,7 +443,7 @@ test('analysis accepts a manual point and user tariff but ignores client-side ca
   assert.equal(response.status, 200);
   assert.equal(analysis.property.address, null);
   assert.equal(analysis.financial.tariff.kind, 'user');
-  assert.equal(analysis.selectedScenario.financial.annualSavingsAmd, 526_500);
+  assert.equal(analysis.selectedScenario.financial.annualSavingsAmd, 482_625);
   assert.notEqual(analysis.selectedScenario.financial.capexAmd, 1);
   assert.ok(analysis.assumptions.includes('USER_PROVIDED_TARIFF'));
 });
@@ -471,7 +471,7 @@ test('the server selects the dated P1 price book instead of accepting a client p
   });
 
   assert.equal(analysis.priceBook.version, 'v0.1');
-  assert.equal(analysis.selectedScenario.financial.capexAmd, 1_510_000);
+  assert.equal(analysis.selectedScenario.financial.capexAmd, 1_390_000);
   assert.notEqual(analysis.selectedScenario.financial.capexAmd, 1);
   assert.equal(analysis.financial.price.kind, 'temporary');
 });

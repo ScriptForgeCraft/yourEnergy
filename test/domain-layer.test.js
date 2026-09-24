@@ -75,6 +75,21 @@ test('blank numeric fields do not become a false zero, while an explicit zero re
   assert.equal(toFiniteNumberOrNull(0), 0);
 });
 
+test('panel count increases only when the fractional remainder exceeds one half', () => {
+  const panelCountForAnnualConsumption = (annualKwh) =>
+    calculateSolarScenario({
+      id: 'panel-rounding',
+      targetCoverage: 1,
+      consumption: { annualKwh },
+      production: { annualYieldKwhPerKwp: 1_000 },
+      system: { panelWatts: 1_000, panelAreaSqm: 2 }
+    }).system.panelCount;
+
+  assert.equal(panelCountForAnnualConsumption(12_400), 12);
+  assert.equal(panelCountForAnnualConsumption(12_500), 12);
+  assert.equal(panelCountForAnnualConsumption(12_600), 13);
+});
+
 test('selectEffectiveTariff selects legacy dated records and requires an explicit period for Armenia registry records', () => {
   const historic = selectEffectiveTariff(TEST_TARIFF_DATASET, '2025-06-01');
   const current = selectEffectiveTariff(TEST_TARIFF_DATASET, '2026-08-28');
