@@ -1,11 +1,18 @@
 const YEREVAN_OVERVIEW = Object.freeze([40.1792, 44.4991]);
 const EARTH_RADIUS_METERS = 6_371_008.8;
-// Both configured raster sources have dependable coverage through level 19.
-// Leaflet scales those final tiles for closer roof editing instead of
-// requesting a higher level that the provider may not have for this property.
+// Begin with a useful roof overview. Higher levels are fetched progressively;
+// an unavailable level leaves the last successful imagery in place.
 const ROOF_INITIAL_ZOOM = 18;
 const ROOF_EDIT_ZOOM = 22;
-const BASE_MAP_NATIVE_ZOOM = 19;
+const REFINEMENT_IDLE_DELAY = 320;
+const REFINEMENT_RETRY_DELAY = 90_000;
+const MIN_ARCGIS_REFINEMENT_BYTES = 4_096;
+
+const isArcGisWorldImagery = (tileUrl) =>
+  /arcgisonline\.com\/arcgis\/rest\/services\/world_imagery/i.test(tileUrl);
+
+const refinementAreaKey = (center) =>
+  `${Math.round(Number(center.lat) * 500) / 500}:${Math.round(Number(center.lng) * 500) / 500}`;
 
 const clampLatitude = (latitude) => Math.max(-85, Math.min(85, Number(latitude)));
 
@@ -129,32 +136,167 @@ export const createPropertyMap = async ({
   }
   map.whenReady(invalidateSizeAfterLayout);
 
-  const tileLayers = {};
-  let activeTileLayer = null;
-  if (tileUrl) {
-    tileLayers.map = L.tileLayer(tileUrl, {
-      attribution: tileAttribution,
+  const createTileLayer = (source, nativeZoom, { opacity = 1 } = {}) =>
+    L.tileLayer(source.url, {
+      attribution: source.attribution,
       maxZoom: ROOF_EDIT_ZOOM,
-      maxNativeZoom: BASE_MAP_NATIVE_ZOOM,
-      crossOrigin: true
+      maxNativeZoom: nativeZoom,
+      crossOrigin: true,
+      opacity,
+      updateWhenIdle: true,
+      updateWhenZooming: false,
+      updateInterval: REFINEMENT_IDLE_DELAY,
+      keepBuffer: 2
     });
-  }
-  if (imageryTileUrl) {
-    tileLayers.satellite = L.tileLayer(imageryTileUrl, {
-      attribution: imageryTileAttribution,
-      maxZoom: ROOF_EDIT_ZOOM,
-      maxNativeZoom: BASE_MAP_NATIVE_ZOOM,
-      crossOrigin: true
+
+  const createRefinementTileLayer = (source, targetZoom) => {
+    const layer = createTileLayer(source, targetZoom, { opacity: 0 });
+    if (!source.validateTilePayload || typeof fetch !== 'function') return layer;
+
+    // The World Imagery service can return a small JPEG that says “Map data
+    // not yet available” with HTTP 200. Validate the payload before allowing
+    // that tile to replace the last successful image.
+    layer.createTile = (coords, done) => {
+      const tile = document.createElement('img');
+      const controller = new AbortController();
+      let objectUrl = '';
+      let settled = false;
+      const finish = (error) => {
+        if (settled) return;
+        settled = true;
+        if (objectUrl) URL.revokeObjectURL(objectUrl);
+        // A later zoom can remove this hidden candidate while its request is
+        // still in flight. Its eventual response is no longer relevant.
+        if (!layer._map) return;
+        done(error, tile);
+      };
+
+      tile.alt = '';
+      tile.crossOrigin = 'anonymous';
+      tile._abortRefinementRequest = () => controller.abort();
+      tile.onload = () => finish(null);
+      tile.onerror = () => finish(new Error('Unable to load map tile'));
+
+      fetch(layer.getTileUrl(coords), { signal: controller.signal })
+        .then((response) => {
+          if (!response.ok) throw new Error(`Map tile request failed: ${response.status}`);
+          return response.blob();
+        })
+        .then((blob) => {
+          if (!blob.type.startsWith('image/') || blob.size < MIN_ARCGIS_REFINEMENT_BYTES)
+            throw new Error('Map tile has no usable imagery');
+          objectUrl = URL.createObjectURL(blob);
+          tile.src = objectUrl;
+        })
+        .catch((error) => finish(error));
+
+      return tile;
+    };
+    return layer;
+  };
+
+  const createTileSource = (url, attribution) => {
+    const source = {
+      url,
+      attribution,
+      nativeZoom: ROOF_INITIAL_ZOOM,
+      layer: null,
+      candidate: null,
+      timer: null,
+      failedRefinements: new Map(),
+      validateTilePayload: isArcGisWorldImagery(url)
+    };
+    source.layer = createTileLayer(source, source.nativeZoom);
+    return source;
+  };
+
+  const tileSources = {};
+  if (tileUrl) tileSources.map = createTileSource(tileUrl, tileAttribution);
+  if (imageryTileUrl)
+    tileSources.satellite = createTileSource(imageryTileUrl, imageryTileAttribution);
+
+  let activeTileSource = null;
+
+  const removeCandidate = (source) => {
+    if (source.timer !== null) clearTimeout(source.timer);
+    source.timer = null;
+    if (!source.candidate) return;
+    Object.values(source.candidate._tiles).forEach(({ el }) => el._abortRefinementRequest?.());
+    map.removeLayer(source.candidate);
+    source.candidate = null;
+  };
+
+  const startRefinement = (source, targetZoom, areaKey) => {
+    if (destroyed || source !== activeTileSource || targetZoom <= source.nativeZoom) return;
+
+    const candidate = createRefinementTileLayer(source, targetZoom);
+    let failed = false;
+    source.candidate = candidate;
+    candidate.on('tileerror', () => {
+      failed = true;
     });
-  }
+    candidate.once('load', () => {
+      // Leaflet emits `load` from inside its own tile-completion handler.
+      // Defer changing layers until that handler has released its map object.
+      setTimeout(() => {
+        if (source.candidate !== candidate || source !== activeTileSource) return;
+        source.candidate = null;
+        if (failed) {
+          source.failedRefinements.set(areaKey, { targetZoom, at: Date.now() });
+          map.removeLayer(candidate);
+          return;
+        }
+
+        const previousLayer = source.layer;
+        source.layer = candidate;
+        source.nativeZoom = targetZoom;
+        candidate.setOpacity(1);
+        map.removeLayer(previousLayer);
+      }, 0);
+    });
+    candidate.addTo(map);
+  };
+
+  const scheduleRefinement = () => {
+    const source = activeTileSource;
+    if (!source || destroyed) return;
+    const targetZoom = Math.round(map.getZoom());
+    if (targetZoom <= source.nativeZoom) return;
+
+    const areaKey = refinementAreaKey(map.getCenter());
+    const failedAt = source.failedRefinements.get(areaKey);
+    if (
+      failedAt &&
+      targetZoom >= failedAt.targetZoom &&
+      Date.now() - failedAt.at < REFINEMENT_RETRY_DELAY
+    )
+      return;
+
+    removeCandidate(source);
+    source.timer = setTimeout(() => {
+      source.timer = null;
+      startRefinement(source, targetZoom, areaKey);
+    }, REFINEMENT_IDLE_DELAY);
+  };
+
   const setLayer = (nextLayer) => {
-    const next = tileLayers[nextLayer] ?? tileLayers.map ?? tileLayers.satellite;
+    const next = tileSources[nextLayer] ?? tileSources.map ?? tileSources.satellite;
     if (!next) return false;
-    if (activeTileLayer && activeTileLayer !== next) map.removeLayer(activeTileLayer);
-    if (!map.hasLayer(next)) next.addTo(map);
-    activeTileLayer = next;
+    if (activeTileSource === next) return true;
+    if (activeTileSource) {
+      removeCandidate(activeTileSource);
+      map.removeLayer(activeTileSource.layer);
+    }
+    activeTileSource = next;
+    if (!map.hasLayer(next.layer)) next.layer.addTo(map);
+    scheduleRefinement();
     return true;
   };
+
+  map.on('movestart', () => {
+    if (activeTileSource) removeCandidate(activeTileSource);
+  });
+  map.on('moveend zoomend', scheduleRefinement);
   setLayer('satellite');
 
   const emitRoof = () => {
@@ -389,6 +531,7 @@ export const createPropertyMap = async ({
       destroyed = true;
       if (resizeFrame) cancelAnimationFrame(resizeFrame);
       resizeObserver?.disconnect();
+      Object.values(tileSources).forEach(removeCandidate);
       map.remove();
     }
   };

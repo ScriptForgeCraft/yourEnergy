@@ -1298,14 +1298,15 @@ h3 {
   display: grid;
   place-items: center;
   box-sizing: border-box;
-  border: 3px solid #fff;
+  border: 1px solid #fff;
   border-radius: 50%;
   box-shadow: 0 3px 10px rgb(3 24 42 / 46%);
+  padding-inline-start: 1px;
 }
 
 .property-map__marker--location > span {
-  width: 34px;
-  height: 34px;
+  width: 24px;
+  height: 24px;
   background: #f5bd18;
 }
 
@@ -1318,15 +1319,16 @@ h3 {
 }
 
 .property-map__marker--roof > span {
-  width: 24px;
-  height: 24px;
+  width: 20px;
+  height: 20px;
   color: #fff;
   background: #0d3554;
-  font-size: 0.68rem;
-  font-weight: 850;
+  font-size: 0.58rem;
+  font-weight: 450;
   line-height: 1;
   cursor: grab;
   touch-action: none;
+  padding-top:1px ;
 }
 
 .property-map__marker--roof > span:active {
