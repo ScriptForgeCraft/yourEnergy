@@ -1,8 +1,9 @@
 const YEREVAN_OVERVIEW = Object.freeze([40.1792, 44.4991]);
 const EARTH_RADIUS_METERS = 6_371_008.8;
-// The satellite layer supports close roof inspection. Keep the base-map tiles
-// at their native limit below, but allow the roof editor to zoom further so a
-// visitor can place and adjust vertices precisely.
+// Both configured raster sources have dependable coverage through level 19.
+// Leaflet scales those final tiles for closer roof editing instead of
+// requesting a higher level that the provider may not have for this property.
+const ROOF_INITIAL_ZOOM = 18;
 const ROOF_EDIT_ZOOM = 22;
 const BASE_MAP_NATIVE_ZOOM = 19;
 
@@ -142,6 +143,7 @@ export const createPropertyMap = async ({
     tileLayers.satellite = L.tileLayer(imageryTileUrl, {
       attribution: imageryTileAttribution,
       maxZoom: ROOF_EDIT_ZOOM,
+      maxNativeZoom: BASE_MAP_NATIVE_ZOOM,
       crossOrigin: true
     });
   }
@@ -238,7 +240,7 @@ export const createPropertyMap = async ({
       title: locationPointLabel,
       alt: locationPointLabel
     }).addTo(map);
-    if (fit) map.setView(location, ROOF_EDIT_ZOOM, { animate: false });
+    if (fit) map.setView(location, ROOF_INITIAL_ZOOM, { animate: false });
     if (notify) onLocationChange(location);
     return true;
   };
