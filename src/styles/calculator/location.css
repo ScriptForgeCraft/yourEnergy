@@ -898,3 +898,643 @@
     border-left: 0;
   }
 }
+
+/* Professional result — present the customer-facing decision first, then the
+   supporting production, equipment and engineering details. */
+.calculator-page--professional .wizard-step[data-wizard-step='3'] {
+  max-width: none;
+}
+
+.professional-results-grid {
+  grid-template-columns: minmax(0, 1.08fr) minmax(20rem, 0.92fr);
+  gap: 1rem;
+  align-items: start;
+}
+
+.professional-results-grid > .professional-results-hero {
+  grid-column: 1;
+  grid-row: 2;
+  min-height: 18.25rem;
+  border-radius: 1rem;
+  padding: clamp(1.4rem, 2.3vw, 2.15rem);
+  background:
+    linear-gradient(105deg, rgb(3 24 48 / 92%) 0%, rgb(5 38 70 / 69%) 54%, rgb(5 38 70 / 10%) 100%),
+    url('/images/professional-results-house.png') center / cover;
+  box-shadow: 0 18px 42px rgb(17 73 117 / 14%);
+}
+
+.professional-results-hero > div {
+  max-width: 19rem;
+}
+
+.professional-results-hero h3 {
+  max-width: 14rem;
+  margin-block: 0.75rem;
+  font-size: clamp(1.75rem, 2.6vw, 2.55rem);
+  line-height: 1.02;
+}
+
+.professional-results-hero p {
+  max-width: 17.5rem;
+  font-size: 0.79rem;
+  line-height: 1.5;
+}
+
+.professional-results-grid > .result-dashboard {
+  display: contents;
+}
+
+.professional-results-grid .result-dashboard > .result-overview {
+  display: grid;
+  grid-column: 1 / -1;
+  grid-row: 1;
+  grid-template-columns: minmax(13.5rem, 0.72fr) minmax(0, 2.28fr);
+  gap: clamp(1rem, 2vw, 2rem);
+  align-items: center;
+  overflow: hidden;
+  border: 1px solid #cfe6f6;
+  border-radius: 1rem;
+  padding: clamp(1.1rem, 2.1vw, 1.6rem);
+  background:
+    radial-gradient(circle at 0% 0%, rgb(217 243 255 / 90%), transparent 39%),
+    linear-gradient(110deg, #f9fdff 0%, #edf8ff 100%);
+  box-shadow: 0 16px 38px rgb(23 82 122 / 9%);
+}
+
+.result-overview__heading > * {
+  margin: 0;
+}
+
+.result-overview__eyebrow {
+  color: #0877ef;
+  font-size: 0.64rem;
+  font-weight: 800;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+
+.result-overview__heading h3 {
+  max-width: 15rem;
+  margin-top: 0.35rem;
+  color: #10294e;
+  font-size: clamp(1.15rem, 1.9vw, 1.5rem);
+  letter-spacing: -0.035em;
+  line-height: 1.08;
+}
+
+.result-overview__copy {
+  max-width: 17rem;
+  margin-top: 0.55rem !important;
+  color: #59738f;
+  font-size: 0.7rem;
+  line-height: 1.45;
+}
+
+.professional-results-grid .result-overview .result-kpis {
+  display: grid;
+  grid-column: auto;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.55rem;
+  min-height: 0;
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+  padding: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.professional-results-grid .result-overview .result-kpis > .result-overview__metric {
+  display: grid;
+  grid-template-columns: 2.55rem minmax(0, 1fr);
+  grid-template-rows: auto auto;
+  column-gap: 0.45rem;
+  min-width: 0;
+  min-height: 5.5rem;
+  border: 1px solid rgb(207 229 244 / 95%);
+  border-radius: 0.75rem;
+  padding: 0.65rem 0.55rem;
+  background: rgb(255 255 255 / 86%);
+  box-shadow: 0 8px 18px rgb(36 103 148 / 5%);
+}
+
+.professional-results-grid .result-overview .result-kpis > .result-overview__metric::before {
+  display: none;
+  content: none;
+}
+
+.result-overview__icon {
+  display: grid;
+  grid-column: 1;
+  grid-row: 1 / span 2;
+  width: 2.3rem;
+  height: 2.3rem;
+  place-items: center;
+  align-self: center;
+  border-radius: 0.7rem;
+  color: #0a7cf0;
+  background: #e4f3ff;
+}
+
+.result-overview__icon svg {
+  width: 1.22rem;
+  height: 1.22rem;
+}
+
+.professional-results-grid .result-overview .result-kpis dt {
+  grid-column: 2;
+  grid-row: 1;
+  align-self: end;
+  color: #58738e;
+  font-size: 0.61rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.professional-results-grid .result-overview .result-kpis dd {
+  grid-column: 2;
+  grid-row: 2;
+  align-self: start;
+  margin: 0.22rem 0 0;
+  color: #102a4e;
+  font-size: clamp(0.8rem, 1vw, 0.96rem);
+  font-weight: 850;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  white-space: normal;
+}
+
+.result-overview__metric--potential .result-overview__icon {
+  color: #db9700;
+  background: #fff3cc;
+}
+
+.result-overview__metric--power .result-overview__icon {
+  color: #0877ef;
+  background: #e1f1ff;
+}
+
+.result-overview__metric--panels .result-overview__icon {
+  color: #355e87;
+  background: #eaf2fb;
+}
+
+.result-overview__metric--production .result-overview__icon {
+  color: #099d4c;
+  background: #ddf9e7;
+}
+
+.professional-results-grid .result-dashboard > .wizard-chart {
+  grid-column: 2;
+  grid-row: 2;
+  min-height: 18.25rem;
+  margin: 0;
+  border-color: #dceaf5;
+  border-radius: 1rem;
+  padding: 1.15rem 1.2rem;
+  background: #fff;
+  box-shadow: 0 16px 38px rgb(23 82 122 / 8%);
+}
+
+.professional-results-grid .result-dashboard > .wizard-chart figcaption {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.45rem;
+  color: #10294e;
+  font-size: 0.94rem;
+}
+
+.professional-results-grid .result-dashboard > .wizard-chart figcaption::before {
+  width: 0.48rem;
+  height: 0.48rem;
+  border-radius: 50%;
+  background: #f7bd00;
+  content: '';
+}
+
+.professional-results-grid .result-dashboard > .wizard-chart .chart-bars {
+  min-height: 12.1rem;
+  gap: 0.32rem;
+  padding: 0.85rem 0.25rem 0 0;
+}
+
+.professional-results-grid .result-dashboard > .wizard-chart .chart-bar::before {
+  border-radius: 0.32rem 0.32rem 0 0;
+  background: linear-gradient(180deg, #7bc5fa, #177ee8);
+}
+
+.professional-results-grid .result-dashboard > .result-outcomes {
+  display: grid;
+  grid-column: 1 / -1;
+  grid-template-columns: minmax(13.5rem, 0.72fr) minmax(0, 2.28fr);
+  gap: clamp(1rem, 2vw, 2rem);
+  align-items: center;
+  margin: 0;
+  border: 1px solid #dceaf5;
+  border-radius: 0.95rem;
+  padding: 1rem 1.2rem;
+  background: #fff;
+  box-shadow: 0 12px 30px rgb(23 82 122 / 6%);
+}
+
+.result-outcomes > h3 {
+  margin: 0;
+  color: #10294e;
+  font-size: 1rem;
+  letter-spacing: -0.025em;
+}
+
+.result-outcomes__metrics {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.5rem;
+  margin: 0;
+}
+
+.result-outcomes__metric {
+  display: grid;
+  grid-template-columns: 2.15rem minmax(0, 1fr);
+  grid-template-rows: auto auto;
+  column-gap: 0.4rem;
+  min-width: 0;
+  padding: 0.5rem;
+}
+
+.result-outcomes__metric .result-overview__icon {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+}
+
+.result-outcomes__metric .result-overview__icon svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+.result-outcomes__metric dt {
+  grid-column: 2;
+  grid-row: 1;
+  align-self: end;
+  color: #5d7690;
+  font-size: 0.59rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.result-outcomes__metric dd {
+  grid-column: 2;
+  grid-row: 2;
+  margin: 0.16rem 0 0;
+  color: #173157;
+  font-size: 0.83rem;
+  font-weight: 830;
+  line-height: 1.2;
+}
+
+.result-outcomes__metric--savings .result-overview__icon {
+  color: #bc8100;
+  background: #fff3cf;
+}
+
+.result-outcomes__metric--co2 .result-overview__icon {
+  color: #0b9d4b;
+  background: #ddf9e6;
+}
+
+.professional-results-grid .result-dashboard > .result-notice,
+.professional-results-grid .result-dashboard > .result-budget,
+.professional-results-grid .result-dashboard > .calculation-basis,
+.professional-results-grid .result-dashboard > .result-environmental,
+.professional-results-grid .result-dashboard > .result-equipment {
+  grid-column: 1 / -1;
+  grid-row: auto;
+  margin: 0;
+}
+
+.professional-results-grid .result-dashboard > .result-notice,
+.professional-results-grid .result-dashboard > .calculation-basis {
+  border-radius: 0.9rem;
+  padding: 1rem 1.15rem;
+}
+
+.professional-results-grid .result-dashboard > .result-energy-balance,
+.professional-results-grid .result-dashboard > .result-roof-capacity {
+  display: grid;
+  grid-template-columns: minmax(12rem, 0.55fr) minmax(0, 1.45fr);
+  column-gap: 1.25rem;
+  align-items: start;
+}
+
+.professional-results-grid .result-energy-balance > h3,
+.professional-results-grid .result-roof-capacity > h3 {
+  margin: 0.15rem 0 0;
+  color: #10294e;
+  font-size: 0.95rem;
+}
+
+.professional-results-grid .result-energy-balance > .wizard-kpis,
+.professional-results-grid .result-roof-capacity > .wizard-kpis {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.5rem;
+  margin: 0;
+}
+
+.professional-results-grid .result-energy-balance > .wizard-kpis > div,
+.professional-results-grid .result-roof-capacity > .wizard-kpis > div {
+  padding: 0.55rem;
+  border-radius: 0.56rem;
+  background: rgb(255 255 255 / 78%);
+}
+
+.professional-results-grid .result-energy-balance > p,
+.professional-results-grid .result-energy-balance > small,
+.professional-results-grid .result-roof-capacity > p,
+.professional-results-grid .result-roof-capacity > small {
+  grid-column: 2;
+  margin: 0.2rem 0 0;
+  color: #526e8b;
+  font-size: 0.69rem;
+  line-height: 1.45;
+}
+
+.professional-results-grid .result-dashboard > .result-environmental {
+  display: grid;
+  grid-template-columns: minmax(12rem, 0.55fr) minmax(0, 1.45fr);
+  gap: 1.25rem;
+  min-height: 0;
+  border: 1px solid #d8eee0;
+  border-radius: 0.9rem;
+  padding: 1rem 1.15rem;
+  background: linear-gradient(112deg, #f3fff7, #fbfffc);
+  box-shadow: 0 12px 30px rgb(23 82 122 / 5%);
+}
+
+.professional-results-grid .result-environmental h3 {
+  margin: 0.15rem 0 0;
+  color: #165d39;
+  font-size: 0.95rem;
+}
+
+.professional-results-grid .result-environmental .wizard-kpis {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-self: start;
+  margin: 0;
+}
+
+.professional-results-grid .result-environmental__source {
+  grid-column: 2;
+  margin-top: -0.4rem;
+}
+
+.professional-results-grid .professional-results-explainer,
+.professional-results-grid .professional-next-steps {
+  grid-row: auto;
+  min-height: 0;
+  border-radius: 0.9rem;
+  padding: 1.15rem 1.2rem;
+}
+
+.professional-results-grid .professional-results-explainer {
+  grid-column: 1;
+}
+
+.professional-results-grid .professional-next-steps {
+  grid-column: 2;
+}
+
+.professional-results-grid .result-equipment {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.professional-results-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.65rem;
+  margin-top: 1rem;
+}
+
+.professional-results-actions .button {
+  width: auto;
+}
+
+.professional-results-actions .button svg {
+  width: 1.05rem;
+  height: 1.05rem;
+  flex: 0 0 auto;
+}
+
+.professional-technology {
+  margin-top: 2.5rem;
+  border: 1px solid #dceaf5;
+  border-radius: 1rem;
+  padding: clamp(1.2rem, 2.4vw, 1.7rem);
+  background: linear-gradient(125deg, #f9fdff, #eff9ff);
+  box-shadow: 0 14px 34px rgb(23 82 122 / 7%);
+}
+
+.professional-technology__heading {
+  display: grid;
+  grid-template-columns: 3rem minmax(0, 1fr);
+  gap: 0.75rem;
+  align-items: center;
+  max-width: 43rem;
+}
+
+.professional-technology__heading > span {
+  display: grid;
+  width: 3rem;
+  height: 3rem;
+  place-items: center;
+  border-radius: 0.85rem;
+  color: #c88600;
+  background: #fff2c9;
+}
+
+.professional-technology__heading svg {
+  width: 1.45rem;
+  height: 1.45rem;
+}
+
+.professional-technology__heading p,
+.professional-technology__heading h2,
+.professional-technology__heading small {
+  margin: 0;
+}
+
+.professional-technology__heading p {
+  color: #0877ef;
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.professional-technology__heading h2 {
+  margin-top: 0.18rem;
+  color: #10294e;
+  font-size: clamp(1.05rem, 1.8vw, 1.35rem);
+  letter-spacing: -0.035em;
+}
+
+.professional-technology__heading small {
+  display: block;
+  margin-top: 0.28rem;
+  color: #5c7690;
+  font-size: 0.7rem;
+  line-height: 1.45;
+}
+
+.professional-technology .professional-benefits {
+  margin: 1.2rem 0 0;
+  border-color: #d9ebf6;
+  border-radius: 0.8rem;
+  background: rgb(255 255 255 / 72%);
+  box-shadow: none;
+}
+
+.professional-technology__privacy {
+  display: flex;
+  align-items: center;
+  gap: 0.42rem;
+  margin: 0.85rem 0 0;
+  color: #55728d;
+  font-size: 0.67rem;
+  line-height: 1.4;
+}
+
+.professional-technology__privacy svg {
+  width: 1rem;
+  height: 1rem;
+  flex: 0 0 auto;
+  color: #0b9d4b;
+}
+
+@media (max-width: 960px) {
+  .professional-results-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .professional-results-grid > .professional-results-hero,
+  .professional-results-grid .result-dashboard > .result-overview,
+  .professional-results-grid .result-dashboard > .wizard-chart,
+  .professional-results-grid .result-dashboard > .result-outcomes,
+  .professional-results-grid .result-dashboard > .result-notice,
+  .professional-results-grid .result-dashboard > .result-budget,
+  .professional-results-grid .result-dashboard > .calculation-basis,
+  .professional-results-grid .result-dashboard > .result-environmental,
+  .professional-results-grid .result-dashboard > .result-equipment,
+  .professional-results-grid .professional-results-explainer,
+  .professional-results-grid .professional-next-steps {
+    grid-column: 1;
+    grid-row: auto;
+  }
+
+  .professional-results-grid .result-dashboard > .result-overview,
+  .professional-results-grid .result-dashboard > .result-outcomes {
+    grid-template-columns: 1fr;
+  }
+
+  .professional-results-grid .result-dashboard > .wizard-chart {
+    min-height: 17rem;
+  }
+
+  .professional-results-grid .result-dashboard > .result-energy-balance,
+  .professional-results-grid .result-dashboard > .result-roof-capacity,
+  .professional-results-grid .result-dashboard > .result-environmental {
+    grid-template-columns: 1fr;
+  }
+
+  .professional-results-grid .result-energy-balance > p,
+  .professional-results-grid .result-energy-balance > small,
+  .professional-results-grid .result-roof-capacity > p,
+  .professional-results-grid .result-roof-capacity > small,
+  .professional-results-grid .result-environmental__source {
+    grid-column: 1;
+  }
+
+  .professional-results-grid > .professional-results-hero {
+    order: 2;
+  }
+
+  .professional-results-grid .result-dashboard > .result-overview {
+    order: 1;
+  }
+
+  .professional-results-grid .result-dashboard > .wizard-chart {
+    order: 3;
+  }
+
+  .professional-results-grid .result-dashboard > .result-outcomes {
+    order: 4;
+  }
+
+  .professional-results-grid .result-dashboard > .result-notice,
+  .professional-results-grid .result-dashboard > .result-budget,
+  .professional-results-grid .result-dashboard > .calculation-basis,
+  .professional-results-grid .result-dashboard > .result-environmental,
+  .professional-results-grid .result-dashboard > .result-equipment {
+    order: 5;
+  }
+
+  .professional-results-grid .professional-results-explainer {
+    order: 6;
+  }
+
+  .professional-results-grid .professional-next-steps {
+    order: 7;
+  }
+}
+
+@media (max-width: 700px) {
+  .professional-results-grid .result-overview .result-kpis {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .result-outcomes__metrics {
+    grid-template-columns: 1fr;
+  }
+
+  .professional-results-grid .result-dashboard > .result-energy-balance > .wizard-kpis,
+  .professional-results-grid .result-dashboard > .result-roof-capacity > .wizard-kpis {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 520px) {
+  .professional-results-grid .result-overview .result-kpis,
+  .professional-results-grid .result-dashboard > .result-energy-balance > .wizard-kpis,
+  .professional-results-grid .result-dashboard > .result-roof-capacity > .wizard-kpis,
+  .professional-results-grid .result-environmental .wizard-kpis,
+  .professional-results-grid .result-equipment {
+    grid-template-columns: 1fr;
+  }
+
+  .professional-results-grid > .professional-results-hero,
+  .professional-results-grid .result-dashboard > .wizard-chart {
+    min-height: 16rem;
+  }
+
+  .professional-results-grid .result-dashboard > .result-overview,
+  .professional-results-grid .result-dashboard > .result-outcomes,
+  .professional-results-grid .result-dashboard > .result-notice,
+  .professional-results-grid .result-dashboard > .result-environmental {
+    padding: 0.95rem;
+  }
+
+  .professional-technology {
+    margin-top: 1.6rem;
+    padding: 1rem;
+  }
+
+  .professional-technology__heading {
+    grid-template-columns: 2.65rem minmax(0, 1fr);
+  }
+
+  .professional-technology__heading > span {
+    width: 2.65rem;
+    height: 2.65rem;
+  }
+}

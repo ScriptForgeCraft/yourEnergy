@@ -236,11 +236,17 @@ const common = {
         intro: 'Ահա ձեր տանիքի նախնական արևային ներուժը՝ ըստ մուտքագրված տվյալների։',
         restart: 'Սկսել նորից',
         potential: 'Ձեր արևային ներուժը',
-        heroLines: ['Ավելի մաքուր,', 'ավելի պայծառ ապագան', 'սկսվում է այստեղ'],
+        heroLines: ['Ձեր արևային համակարգը', 'հասկանալի թվերով'],
         heroCopy:
-          'Տեսեք ձեր տանիքի համար հաշվարկված արևային արտադրությունն ու հնարավոր խնայողությունը։',
+          'Սկզբում՝ հիմնական ցուցանիշները, ապա՝ արտադրությունը, սարքավորումը և հաշվարկի մանրամասները։',
         monthlyProduction: 'Ամսական արտադրություն',
         impactTitle: 'Ձեր բնապահպանական ազդեցությունը',
+        overviewEyebrow: 'Ձեր նախնական համակարգը',
+        overviewTitle: 'Հիմնական ցուցանիշները՝ մեկ հայացքով',
+        overviewCopy: 'Հաշվարկը հիմնված է ձեր տեղադրության, տանիքի և սպառման տվյալների վրա։',
+        outcomesTitle: 'Ինչ է սա տալիս ձեր տանը',
+        potentialUnit: 'kWh/kWp տարեկան',
+        annualGenerationUnit: 'kWh/տարի',
         calculationTitle: 'Ինչպես է հաշվարկվել այս գնահատումը',
         calculationCopy:
           'Մենք օգտագործել ենք PVGIS-ի արևային ռեսուրսի տվյալները, ձեր տեղադրությունը, էլեկտրաէներգիայի սպառումը և տանիքի բնութագրերը՝ արևային ներուժը գնահատելու համար։',
@@ -261,33 +267,40 @@ const common = {
         ],
         offer: 'Ստանալ մանրամասն առաջարկ',
         metrics: {
+          solarPotential: 'Արևային ներուժ',
+          recommendedPower: 'Առաջարկվող հզորություն',
+          panelCount: 'Պանելների քանակ',
           annualProduction: 'Տարեկան արտադրություն',
           selfConsumption: 'Սեփական սպառում',
           annualSavings: 'Տարեկան խնայողություն',
           co2Reduction: 'CO₂ կրճատում տարեկան'
         },
         impact: { co2: 'CO₂ կրճատում տարեկան', trees: 'Ծառերի համարժեք' },
-        benefitsLabel: 'Արևային հաշվիչի առավելությունները',
+        benefitsLabel: 'Մեր հաշվարկի հիմքը',
+        technologyTitle: 'Տեխնոլոգիաները, որոնք մենք օգտագործում ենք',
+        technologyCopy:
+          'Աղբյուրները և գործիքները միասին տալիս են ավելի թափանցիկ նախնական գնահատում։',
+        privacyNote: 'Ձեր անձնական տվյալները չեն պահվում․ գաղտնիությունը կարևոր է մեզ համար։',
         benefits: [
           {
             icon: 'shield-check',
-            title: 'Հուսալի տվյալներ',
-            copy: 'Հիմնված է PVGIS-ի արևային ռեսուրսի տվյալների վրա'
+            title: 'PVGIS արևային տվյալներ',
+            copy: 'Արևային ռեսուրսի տարեկան և ամսական գնահատում'
           },
           {
             icon: 'chart-bars',
-            title: 'Օբյեկտին համապատասխան գնահատում',
-            copy: 'Հաշվի է առնում տեղադրությունն ու տանիքի մուտքագրված տվյալները'
+            title: 'Համակարգի հաշվարկ',
+            copy: 'Սպառումը, հզորությունը և պանելների քանակը դիտարկվում են միասին'
           },
           {
             icon: 'leaf',
-            title: 'Անձնական տվյալներ չենք պահում',
-            copy: 'Ձեր գաղտնիությունը մեզ համար կարևոր է'
+            title: 'Սարքավորումների կատալոգ',
+            copy: 'Նախնական առաջարկը հիմնված է իրական մոդելների վրա'
           },
           {
             icon: 'support',
-            title: 'Մասնագիտական աջակցություն',
-            copy: 'Ձեզ հետ ենք յուրաքանչյուր քայլում'
+            title: 'Ինժեներական ստուգում',
+            copy: 'Մասնագետը հաստատում է վերջնական սխեման տեղազննությունից հետո'
           }
         ]
       },
@@ -491,10 +504,16 @@ const common = {
         intro: 'Вот предварительная оценка солнечного потенциала вашей крыши по введённым данным.',
         restart: 'Начать заново',
         potential: 'Ваш солнечный потенциал',
-        heroLines: ['Более чистое,', 'более светлое будущее', 'начинается здесь'],
-        heroCopy: 'Посмотрите расчётную выработку и возможную экономию для вашей крыши.',
+        heroLines: ['Ваша солнечная система', 'в понятных цифрах'],
+        heroCopy: 'Сначала — главные показатели, затем выработка, оборудование и детали расчёта.',
         monthlyProduction: 'Выработка по месяцам',
         impactTitle: 'Ваш вклад в окружающую среду',
+        overviewEyebrow: 'Ваша предварительная система',
+        overviewTitle: 'Главные показатели — с первого взгляда',
+        overviewCopy: 'Расчёт основан на данных о местоположении, крыше и потреблении.',
+        outcomesTitle: 'Что это даёт вашему дому',
+        potentialUnit: 'kWh/kWp в год',
+        annualGenerationUnit: 'kWh/год',
         calculationTitle: 'Как рассчитана эта оценка',
         calculationCopy:
           'Мы использовали данные PVGIS о солнечном ресурсе, местоположение, потребление электроэнергии и характеристики крыши, чтобы оценить солнечный потенциал.',
@@ -515,30 +534,41 @@ const common = {
         ],
         offer: 'Получить подробное предложение',
         metrics: {
+          solarPotential: 'Солнечный потенциал',
+          recommendedPower: 'Рекомендуемая мощность',
+          panelCount: 'Количество панелей',
           annualProduction: 'Годовая выработка',
           selfConsumption: 'Самопотребление',
           annualSavings: 'Расчётная экономия в год',
           co2Reduction: 'Снижение CO₂ в год'
         },
         impact: { co2: 'Снижение CO₂ в год', trees: 'Эквивалент деревьев' },
-        benefitsLabel: 'Преимущества калькулятора',
+        benefitsLabel: 'Основа расчёта',
+        technologyTitle: 'Технологии, которые мы используем',
+        technologyCopy:
+          'Источники данных и инструменты работают вместе, чтобы сделать предварительную оценку прозрачной.',
+        privacyNote: 'Мы не храним ваши личные данные: конфиденциальность важна для нас.',
         benefits: [
           {
             icon: 'shield-check',
-            title: 'Надёжные данные',
-            copy: 'На основе данных PVGIS о солнечном ресурсе'
+            title: 'Данные PVGIS',
+            copy: 'Годовая и месячная оценка солнечного ресурса'
           },
           {
             icon: 'chart-bars',
-            title: 'Оценка по вашему объекту',
-            copy: 'На основе местоположения и параметров крыши'
+            title: 'Расчёт системы',
+            copy: 'Потребление, мощность и количество панелей рассматриваются вместе'
           },
           {
             icon: 'leaf',
-            title: 'Личные данные не хранятся',
-            copy: 'Ваша конфиденциальность важна для нас'
+            title: 'Каталог оборудования',
+            copy: 'Предварительная рекомендация опирается на реальные модели'
           },
-          { icon: 'support', title: 'Поддержка экспертов', copy: 'Мы рядом на каждом этапе' }
+          {
+            icon: 'support',
+            title: 'Инженерная проверка',
+            copy: 'Специалист подтверждает финальную схему после осмотра объекта'
+          }
         ]
       },
       quick: 'Вернуться к быстрому калькулятору'
@@ -731,11 +761,17 @@ const common = {
         intro: 'Here is the preliminary solar potential of your roof based on the inputs provided.',
         restart: 'Start over',
         potential: 'Your solar potential',
-        heroLines: ['A cleaner,', 'brighter future', 'starts here'],
+        heroLines: ['Your solar system', 'in clear numbers'],
         heroCopy:
-          'See how your roof could contribute to clean-energy generation and estimated savings.',
+          'Start with the key figures, then review generation, equipment and the calculation details.',
         monthlyProduction: 'Monthly production',
         impactTitle: 'Your environmental impact',
+        overviewEyebrow: 'Your preliminary system',
+        overviewTitle: 'The key figures at a glance',
+        overviewCopy: 'Calculated from your location, roof and consumption inputs.',
+        outcomesTitle: 'What this means for your home',
+        potentialUnit: 'kWh/kWp per year',
+        annualGenerationUnit: 'kWh/year',
         calculationTitle: 'How this estimate was calculated',
         calculationCopy:
           'We used PVGIS solar-resource data, your location, electricity consumption and roof characteristics to estimate your solar potential.',
@@ -756,30 +792,41 @@ const common = {
         ],
         offer: 'Get a detailed offer',
         metrics: {
+          solarPotential: 'Solar potential',
+          recommendedPower: 'Recommended power',
+          panelCount: 'Panel count',
           annualProduction: 'Annual production',
           selfConsumption: 'Self-consumption',
           annualSavings: 'Estimated annual savings',
           co2Reduction: 'CO₂ reduction per year'
         },
         impact: { co2: 'CO₂ reduction per year', trees: 'Trees equivalent' },
-        benefitsLabel: 'Calculator benefits',
+        benefitsLabel: 'What powers the estimate',
+        technologyTitle: 'Technologies we use',
+        technologyCopy:
+          'Connected data sources and tools make the preliminary estimate easier to understand and verify.',
+        privacyNote: 'We do not store your personal data; your privacy matters to us.',
         benefits: [
           {
             icon: 'shield-check',
-            title: 'Reliable data',
-            copy: 'Based on PVGIS solar-resource data'
+            title: 'PVGIS solar data',
+            copy: 'Annual and monthly solar-resource estimates'
           },
           {
             icon: 'chart-bars',
-            title: 'Property-specific estimate',
-            copy: 'Based on your location and roof inputs'
+            title: 'System sizing',
+            copy: 'Consumption, capacity and panel count are considered together'
           },
           {
             icon: 'leaf',
-            title: 'No personal data stored',
-            copy: 'Your privacy is important to us'
+            title: 'Equipment catalogue',
+            copy: 'Preliminary recommendations use real product models'
           },
-          { icon: 'support', title: 'Expert support', copy: 'We’re here to help at every step' }
+          {
+            icon: 'support',
+            title: 'Engineering review',
+            copy: 'A specialist confirms the final configuration after a site review'
+          }
         ]
       },
       quick: 'Back to quick calculator'

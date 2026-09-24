@@ -59,6 +59,8 @@ test('Professional has exactly four customer steps and retains every engineering
   assert.match(professional, /data-wizard-restart/u);
   assert.match(professional, /wizard\.results\.calculationTitle/u);
   assert.match(professional, /wizard\.results\.benefits/u);
+  assert.match(professional, /professional-technology/u);
+  assert.match(professional, /wizard\.results\.technologyTitle/u);
   assert.match(professional, /<select\b[^>]*\bdata-roof-mounting-mode\b/u);
   assert.match(professional, /class='consumption-estimate'/u);
   assert.match(
@@ -89,6 +91,10 @@ test('Professional has exactly four customer steps and retains every engineering
   assert.match(resultsView, /wizard\.mountingHardwareTitle/u);
   assert.match(resultsView, /analysis\.storageRecommendation/u);
   assert.match(resultsView, /wizard\.storageRecommendationTitle/u);
+  assert.match(resultsView, /result-overview__metric/u);
+  assert.match(resultsView, /metrics\?\.solarPotential/u);
+  assert.match(resultsView, /metrics\?\.recommendedPower/u);
+  assert.match(resultsView, /metrics\?\.panelCount/u);
   assert.match(controller, /createEquipmentCatalog/u);
   assert.match(resultsView, /card\.dataset\.recommendedProduct/u);
   assert.match(resultsView, /card\.target = '_blank'/u);

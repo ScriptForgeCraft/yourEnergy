@@ -44,6 +44,23 @@ export const createCalculatorResultsView = ({
     return wrapper;
   };
 
+  const resultIcon = (name) => {
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.setAttribute('aria-hidden', 'true');
+    const use = document.createElementNS('http://www.w3.org/2000/svg', 'use');
+    use.setAttribute('href', `/icons.svg#${name}`);
+    svg.append(use);
+    return svg;
+  };
+
+  const overviewMetric = ({ label, value, icon, kind }) => {
+    const wrapper = element('div', `result-overview__metric result-overview__metric--${kind}`);
+    const symbol = element('span', 'result-overview__icon');
+    symbol.append(resultIcon(icon));
+    wrapper.append(symbol, element('dt', '', label), element('dd', '', value));
+    return wrapper;
+  };
+
   const calculationBasisDetail = (basis) => {
     if (!basis) return null;
     const basisCopy = wizard.calculationBasis ?? {};
@@ -323,36 +340,92 @@ export const createCalculatorResultsView = ({
     const displayedSavings = number(annualSavings, 0) ?? retailOffsetValueAmd;
     const savingsAreOffsetOnly = number(annualSavings, 0) === null && retailOffsetValueAmd !== null;
     resultDashboard.replaceChildren();
-    const metrics = element('dl', 'wizard-kpis result-kpis');
-    metrics.append(
-      dashboardMetric(
-        wizard.results?.metrics?.annualProduction ?? wizard.metrics?.annualGeneration ?? 'kWh/year',
-        `${format(scenario.generation?.annualKwh, locale)} kWh`,
-        'production'
-      ),
-      dashboardMetric(
-        wizard.results?.metrics?.selfConsumption ?? wizard.metrics?.coverage ?? 'Coverage',
-        `≈ ${format(scenario.coveragePercent, locale, { maximumFractionDigits: 0 })}%`,
-        'consumption'
-      ),
-      dashboardMetric(
-        savingsAreOffsetOnly
-          ? (wizard.retailOffsetSavings ?? 'Savings from covered consumption')
-          : (wizard.results?.metrics?.annualSavings ??
-              wizard.metrics?.annualSavings ??
-              'Annual savings'),
-        displayedSavings === null ? '—' : `≈ ${format(displayedSavings, locale)} ֏`,
-        'savings'
-      ),
-      dashboardMetric(
-        wizard.results?.metrics?.co2Reduction ?? wizard.environmental?.co2 ?? 'CO₂ reduction',
-        Number.isFinite(Number(avoidedCo2))
-          ? `≈ ${format(avoidedCo2, locale, { maximumFractionDigits: 1 })} t`
-          : '—',
-        'co2'
+    const resultsCopy = wizard.results ?? {};
+    const overview = element('section', 'result-overview');
+    const overviewHeading = element('div', 'result-overview__heading');
+    overviewHeading.append(
+      element('p', 'result-overview__eyebrow', resultsCopy.overviewEyebrow ?? 'Your solar system'),
+      element('h3', '', resultsCopy.overviewTitle ?? 'The key figures at a glance'),
+      element(
+        'p',
+        'result-overview__copy',
+        resultsCopy.overviewCopy ??
+          'A preliminary system size based on your property and consumption.'
       )
     );
-    resultDashboard.append(metrics);
+    const primaryMetrics = element('dl', 'wizard-kpis result-kpis');
+    primaryMetrics.append(
+      overviewMetric({
+        label: resultsCopy.metrics?.solarPotential ?? 'Solar potential',
+        value: `${format(analysis.production?.annualYieldKwhPerKwp, locale)} ${
+          resultsCopy.potentialUnit ?? 'kWh/kWp per year'
+        }`,
+        icon: 'sun',
+        kind: 'potential'
+      }),
+      overviewMetric({
+        label: resultsCopy.metrics?.recommendedPower ?? 'Recommended power',
+        value: `${format(scenario.system?.capacityKwp, locale, {
+          maximumFractionDigits: 2
+        })} kWp`,
+        icon: 'zap',
+        kind: 'power'
+      }),
+      overviewMetric({
+        label: resultsCopy.metrics?.panelCount ?? 'Panel count',
+        value: `${format(scenario.system?.panelCount, locale)} × ${format(
+          scenario.system?.panelWatts,
+          locale
+        )} W`,
+        icon: 'solar-mount',
+        kind: 'panels'
+      }),
+      overviewMetric({
+        label:
+          resultsCopy.metrics?.annualProduction ?? wizard.metrics?.annualGeneration ?? 'kWh/year',
+        value: `${format(scenario.generation?.annualKwh, locale)} ${
+          resultsCopy.annualGenerationUnit ?? 'kWh/year'
+        }`,
+        icon: 'chart-bars',
+        kind: 'production'
+      })
+    );
+    overview.append(overviewHeading, primaryMetrics);
+    resultDashboard.append(overview);
+
+    const outcomes = element('section', 'result-outcomes');
+    outcomes.append(
+      element('h3', '', resultsCopy.outcomesTitle ?? 'What this means for your home')
+    );
+    const outcomeMetrics = element('dl', 'result-outcomes__metrics');
+    outcomeMetrics.append(
+      overviewMetric({
+        label: resultsCopy.metrics?.selfConsumption ?? wizard.metrics?.coverage ?? 'Coverage',
+        value: `≈ ${format(scenario.coveragePercent, locale, { maximumFractionDigits: 0 })}%`,
+        icon: 'faq-home',
+        kind: 'coverage'
+      }),
+      overviewMetric({
+        label: savingsAreOffsetOnly
+          ? (wizard.retailOffsetSavings ?? 'Savings from covered consumption')
+          : (resultsCopy.metrics?.annualSavings ??
+            wizard.metrics?.annualSavings ??
+            'Annual savings'),
+        value: displayedSavings === null ? '—' : `≈ ${format(displayedSavings, locale)} ֏`,
+        icon: 'calculator',
+        kind: 'savings'
+      }),
+      overviewMetric({
+        label: resultsCopy.metrics?.co2Reduction ?? wizard.environmental?.co2 ?? 'CO₂ reduction',
+        value: Number.isFinite(Number(avoidedCo2))
+          ? `≈ ${format(avoidedCo2, locale, { maximumFractionDigits: 1 })} t`
+          : '—',
+        icon: 'leaf',
+        kind: 'co2'
+      })
+    );
+    outcomes.append(outcomeMetrics);
+    resultDashboard.append(outcomes);
     if (annualConsumptionKwh !== null || offsetEnergyKwh !== null || surplusEnergyKwh !== null) {
       const balance = element('section', 'result-notice result-energy-balance');
       balance.append(element('h3', '', wizard.energyBalanceTitle ?? 'Energy balance'));

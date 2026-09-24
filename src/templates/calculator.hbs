@@ -455,13 +455,26 @@
                 data-wizard-back='2'><svg aria-hidden='true'>
                   <use href='/icons.svg#arrow-left'></use>
                 </svg>{{wizard.back}}</button></div>
+            <section class='professional-technology' aria-labelledby='professional-technology-title'>
+              <div class='professional-technology__heading'><span><svg aria-hidden='true'>
+                    <use href='/icons.svg#sun'></use>
+                  </svg></span>
+                <div>
+                  <p>{{wizard.results.benefitsLabel}}</p>
+                  <h2 id='professional-technology-title'>{{wizard.results.technologyTitle}}</h2>
+                  <small>{{wizard.results.technologyCopy}}</small>
+                </div>
+              </div>
+              <div class='professional-benefits'>{{#each wizard.results.benefits}}<div><span><svg aria-hidden='true'>
+                      <use href='/icons.svg#{{icon}}'></use>
+                    </svg></span>
+                  <p><strong>{{title}}</strong><small>{{copy}}</small></p>
+                </div>{{/each}}</div>
+              <p class='professional-technology__privacy'><svg aria-hidden='true'>
+                  <use href='/icons.svg#shield-check'></use>
+                </svg>{{wizard.results.privacyNote}}</p>
+            </section>
           </section>
-          <section class='professional-benefits' aria-label='{{wizard.results.benefitsLabel}}'>{{#each
-            wizard.results.benefits}}<div><span><svg aria-hidden='true'>
-                  <use href='/icons.svg#{{icon}}'></use>
-                </svg></span>
-              <p><strong>{{title}}</strong><small>{{copy}}</small></p>
-            </div>{{/each}}</section>
         </div>
       </section>
     </div>
