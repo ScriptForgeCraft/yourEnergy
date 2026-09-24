@@ -3,6 +3,9 @@
   <div class='process-stage__frame'>
     <div class='process-stage__ambient' aria-hidden='true'><span></span><span></span><span
       ></span></div>
+    <picture class='process-stage__background' aria-hidden='true'>
+      <img src='/images/process-background.png' alt='' loading='lazy' decoding='async' />
+    </picture>
 
     <nav class='process-progress' aria-label='{{processStory.progressLabel}}'>
       <span class='process-progress__track' aria-hidden='true'><i
@@ -36,10 +39,6 @@
           aria-labelledby='process-step-title-{{number}}'
           aria-hidden='{{ariaHidden}}'
         >
-          <picture class='process-state__background' aria-hidden='true'>
-            <img src='/images/process-background.png' alt='' loading='lazy' decoding='async' />
-          </picture>
-
           <picture class='process-state__media' aria-hidden='true' data-process-media>
             <source
               type='image/avif'

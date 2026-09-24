@@ -38,6 +38,7 @@
 .process-stage__frame {
   position: relative;
   isolation: isolate;
+  contain: paint;
   height: 100svh;
   min-height: 650px;
   overflow: clip;
@@ -101,6 +102,10 @@
 .process-state {
   position: absolute;
   inset: 0;
+}
+
+.process-stage__states {
+  z-index: 1;
 }
 
 .process-state {
@@ -451,21 +456,21 @@
   color: #d6b65f;
 }
 
-/* 01–06 — a blurred scene sits behind the framed step photograph. */
+/* One shared, fixed backdrop sits behind all six framed step photographs. */
 .process-state--photo {
   isolation: isolate;
 }
 
-.process-state__background {
-  position: absolute;
+.process-stage__background {
+  position: fixed;
   z-index: 0;
-  inset: -32px;
+  inset: 0;
   display: block;
   overflow: hidden;
   pointer-events: none;
 }
 
-.process-state__background::after {
+.process-stage__background::after {
   content: '';
   position: absolute;
   inset: 0;
@@ -484,7 +489,7 @@
     );
 }
 
-.process-state__background img {
+.process-stage__background img {
   display: block;
   width: 100%;
   height: 100%;
@@ -912,10 +917,23 @@
     overflow: clip;
   }
   .process-stage__frame {
+    contain: none;
     height: auto;
     min-height: 0;
     overflow: visible;
     background: linear-gradient(90deg, #020c14d9, transparent 70%);
+  }
+  /* A viewport-fixed child escapes the section on mobile. Keep the one shared
+     backdrop within the natural six-step document flow instead. */
+  .process-stage__background {
+    position: absolute;
+    inset: 0;
+    overflow: visible;
+  }
+  .process-stage__background img {
+    position: sticky;
+    top: 0;
+    height: 100svh;
   }
   .process-stage__ambient {
     position: absolute;
@@ -936,18 +954,8 @@
     visibility: visible;
     pointer-events: auto;
   }
-  .process-state__background {
-    inset: -22px;
-  }
-  .process-state__background::after {
-    background:
-      linear-gradient(
-        180deg,
-        rgba(2, 12, 20, 0.7) 0%,
-        rgba(2, 12, 20, 0.38) 42%,
-        rgba(2, 12, 20, 0.76) 100%
-      ),
-      linear-gradient(90deg, rgba(2, 12, 20, 0.28), rgba(2, 12, 20, 0.28));
+  .process-stage__background::after {
+    display: none;
   }
   .process-state + .process-state {
     border-top: 1px solid #ffffff12;
