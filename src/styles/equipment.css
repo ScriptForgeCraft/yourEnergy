@@ -1047,8 +1047,8 @@
 }
 
 .product-card:hover {
-  border-color: rgb(255 255 255 / 30%);
-  transform: translateY(-2px);
+  border-color: #078c63;
+ 
 }
 
 .product-card[aria-pressed='true'] {
