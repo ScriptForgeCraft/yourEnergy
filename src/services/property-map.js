@@ -92,6 +92,7 @@ export const createPropertyMap = async ({
   let roofFinished = false;
   let mode = 'location';
   let resizeFrame = null;
+  let centerFrame = null;
   let resizeObserver = null;
   let destroyed = false;
 
@@ -124,6 +125,24 @@ export const createPropertyMap = async ({
         if (!destroyed) map.invalidateSize({ pan: false, debounceMoveend: true });
       });
     });
+  };
+
+  const centerAfterLayout = (candidate) => {
+    if (!isFinitePoint(candidate) || destroyed) return false;
+    const location = normalizePoint(candidate);
+    if (centerFrame) cancelAnimationFrame(centerFrame);
+    // The roof step has a different-sized map host. Recenter only after that
+    // host has its final dimensions, otherwise Leaflet retains the old view's
+    // pixel offset and can leave the selected property off-screen.
+    centerFrame = requestAnimationFrame(() => {
+      centerFrame = requestAnimationFrame(() => {
+        centerFrame = null;
+        if (destroyed) return;
+        map.invalidateSize({ pan: false, debounceMoveend: true });
+        map.setView(location, map.getZoom(), { animate: false });
+      });
+    });
+    return true;
   };
 
   if (typeof ResizeObserver === 'function') {
@@ -450,6 +469,7 @@ export const createPropertyMap = async ({
     },
     setLocation,
     focusLocation,
+    centerAfterLayout,
     clearLocation,
     setMode(nextMode) {
       mode = nextMode === 'roof' ? 'roof' : 'location';
@@ -530,6 +550,7 @@ export const createPropertyMap = async ({
     destroy() {
       destroyed = true;
       if (resizeFrame) cancelAnimationFrame(resizeFrame);
+      if (centerFrame) cancelAnimationFrame(centerFrame);
       resizeObserver?.disconnect();
       Object.values(tileSources).forEach(removeCandidate);
       map.remove();

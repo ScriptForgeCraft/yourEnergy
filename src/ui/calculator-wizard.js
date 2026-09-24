@@ -775,6 +775,8 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
         mapController?.setRoofPoints(state.roof.points, { complete: state.roof.complete });
       }
       mapController?.resize();
+      if (mode === 'roof' && state.confirmedProperty)
+        mapController?.centerAfterLayout(state.confirmedProperty);
       return mapController;
     } catch {
       mapControllerPromise = null;
