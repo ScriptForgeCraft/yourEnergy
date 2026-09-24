@@ -25,6 +25,18 @@
 *::after {
   box-sizing: border-box;
 }
+p,
+span,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  word-break: normal;
+  overflow-wrap: normal;
+  hyphens: none;
+}
 
 [hidden] {
   display: none !important;

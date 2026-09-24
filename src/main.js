@@ -81,7 +81,14 @@ if (document.querySelector('[data-office-map]')) {
 }
 
 if (document.querySelector('[data-about-page]')) {
-  void import('./ui/about-motion.js').then(({ initAboutMotion }) => initAboutMotion());
+  void import('./ui/about-motion.js')
+    .then(({ initAboutMotion }) => {
+      document.querySelector('[data-about-page]')?.classList.add('about-motion-ready');
+      initAboutMotion();
+    })
+    .catch(() =>
+      document.querySelector('[data-about-page]')?.classList.remove('about-motion-ready')
+    );
 }
 
 if (document.querySelector('[data-blog-page], [data-blog-article]')) {
