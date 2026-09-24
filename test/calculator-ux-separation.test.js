@@ -61,6 +61,15 @@ test('Professional has exactly four customer steps and retains every engineering
   assert.match(professional, /wizard\.results\.benefits/u);
   assert.match(professional, /professional-technology/u);
   assert.match(professional, /wizard\.results\.technologyTitle/u);
+  for (const marker of [
+    'data-professional-lead-open',
+    'data-professional-lead-dialog',
+    'data-professional-lead-form',
+    'data-professional-lead-status',
+    'data-professional-lead-success'
+  ]) {
+    assert.ok(professional.includes(marker), `missing Professional lead marker: ${marker}`);
+  }
   assert.match(professional, /<select\b[^>]*\bdata-roof-mounting-mode\b/u);
   assert.match(professional, /class='consumption-estimate'/u);
   assert.match(
@@ -85,6 +94,8 @@ test('Professional has exactly four customer steps and retains every engineering
   assert.match(controller, /analysisMatchesPanel/u);
   assert.match(controller, /analysisMatchesStorageRequest/u);
   assert.match(controller, /storageRequired\?\.addEventListener\('change'/u);
+  assert.match(controller, /buildProfessionalLeadContext/u);
+  assert.match(controller, /professionalLeadForm\.setAttribute\('aria-busy', 'true'\)/u);
   assert.match(resultsView, /analysis\.inverterRecommendation/u);
   assert.match(resultsView, /wizard\.inverterRecommendationTitle/u);
   assert.match(resultsView, /analysis\.mountingHardwareRecommendation/u);

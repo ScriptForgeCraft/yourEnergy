@@ -1303,6 +1303,34 @@
   grid-column: 2;
 }
 
+.professional-next-steps__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.55rem 0.85rem;
+  margin-top: 0.82rem;
+}
+
+.professional-next-steps__actions .button {
+  float: none;
+  margin-top: 0;
+}
+
+.professional-next-steps__actions .text-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.32rem;
+  color: #315673;
+  font-size: 0.68rem;
+  font-weight: 750;
+}
+
+.professional-next-steps__actions .text-link svg {
+  width: 0.95rem;
+  height: 0.95rem;
+  color: #0877ef;
+}
+
 .professional-results-grid .result-equipment {
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 0.75rem;
@@ -1485,6 +1513,10 @@
 
   .professional-results-grid .professional-next-steps {
     order: 7;
+  }
+
+  .professional-next-steps__actions {
+    align-items: flex-start;
   }
 }
 

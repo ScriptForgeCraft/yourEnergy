@@ -789,7 +789,7 @@ test('lead endpoint sends the same normalized Quick Calculator lead to Telegram 
   assert.match(telegramRequests[0].payload.text, /Name: Arman Petrosyan/);
   assert.match(telegramRequests[0].payload.text, /Phone: \+374 91 095950/);
   assert.match(telegramRequests[0].payload.text, /Email: arman@example\.test/);
-  assert.match(telegramRequests[0].payload.text, /Locale: ru/);
+  assert.match(telegramRequests[0].payload.text, /Language: ru/);
 
   const emailRequest = received.find(({ url }) => url.startsWith('https://api.cloudflare.com/'));
   assert.equal(
@@ -802,13 +802,100 @@ test('lead endpoint sends the same normalized Quick Calculator lead to Telegram 
   assert.equal(emailRequest.payload.reply_to, 'arman@example.test');
   assert.equal('replyTo' in emailRequest.payload, false);
   assert.equal(emailRequest.payload.text, telegramRequests[0].payload.text);
-  assert.match(emailRequest.payload.text, /Calculator context:/);
+  assert.match(emailRequest.payload.text, /Quick Calculator summary/);
   assert.match(emailRequest.payload.text, /Please call after 18:00/);
   assert.equal(emailRequest.payload.text.includes('coordinates'), false);
   assert.equal(emailRequest.payload.text.includes('"roof"'), false);
   assert.equal(emailRequest.payload.text.includes('"tariff"'), false);
-  assert.match(emailRequest.payload.text, /"region": "yerevan"/);
-  assert.match(emailRequest.payload.text, /"annualGenerationKwh": 10440/);
+  assert.match(emailRequest.payload.text, /Region: yerevan/);
+  assert.match(emailRequest.payload.text, /Annual generation: 10\D*440 kWh/);
+  assert.doesNotMatch(emailRequest.payload.text, /"annualGenerationKwh"/);
+});
+
+test('lead endpoint sends a readable Professional Calculator report with submitted inputs and results', async () => {
+  const received = [];
+  const response = await leadOnRequest({
+    request: postJson('/lead', {
+      name: 'Arman Petrosyan',
+      phone: '+374 91 095950',
+      email: 'arman@example.test',
+      message: 'Please prepare an offer with installation.',
+      locale: 'ru-RU',
+      calculatorContext: {
+        kind: 'professional',
+        property: { address: 'Arabkir, Yerevan', latitude: 40.20512, longitude: 44.51234 },
+        consumption: {
+          mode: 'monthly',
+          monthlyKwh: [600, 580, 550, 520, 500, 480, 460, 470, 510, 560, 620, 650],
+          annualKwh: 6500
+        },
+        tariffAmdPerKwh: 46.48,
+        roof: {
+          areaMethod: 'map-projected',
+          areaSqm: 42.4,
+          projectedAreaSqm: 40.2,
+          azimuthDegrees: 180,
+          tiltDegrees: 30,
+          mountingMode: 'roof-parallel',
+          outlinePoints: [
+            { lat: 40.2051, lng: 44.5123 },
+            { lat: 40.2052, lng: 44.5124 },
+            { lat: 40.205, lng: 44.5125 }
+          ]
+        },
+        storageRequested: true,
+        result: {
+          solarYieldKwhPerKwp: 1495,
+          capacityKwp: 7.15,
+          panelCount: 11,
+          panelWatts: 650,
+          annualGenerationKwh: 10686,
+          monthlyGenerationKwh: [295, 360, 428, 472, 516, 574, 605, 598, 553, 448, 366, 268],
+          annualConsumptionKwh: 6500,
+          coveredConsumptionKwh: 6500,
+          surplusGenerationKwh: 4186,
+          coveragePercent: 164.4,
+          annualSavingsAmd: 302120,
+          avoidedCo2Tons: 2.2,
+          source: 'PVGIS'
+        },
+        equipment: {
+          solarModule: 'LONGi Hi-MO X10 Guardian LR7-72HVDF · 650 W',
+          inverter: 'SolaX X3-MIC G2 · 4 kW AC',
+          storage: 'SolaX battery · 10 kWh',
+          mounting: 'Roof mount · 30°'
+        },
+        billFileName: 'electricity-bill.pdf'
+      }
+    }),
+    env: leadDeliveryEnv,
+    fetch: async (url, init) => {
+      received.push({ url: String(url), payload: JSON.parse(init.body) });
+      return String(url).startsWith('https://api.telegram.org/')
+        ? telegramSuccess()
+        : emailSuccess();
+    }
+  });
+  const body = await readJson(response);
+
+  assert.equal(response.status, 200);
+  assert.equal(body.data.accepted, true);
+  const telegram = received.find(({ url }) => url.startsWith('https://api.telegram.org/'));
+  const email = received.find(({ url }) => url.startsWith('https://api.cloudflare.com/'));
+  assert.equal(email.payload.subject, 'New YourEnergy Professional Calculator request');
+  assert.equal(email.payload.text, telegram.payload.text);
+  assert.match(email.payload.text, /Professional Calculator report/);
+  assert.match(email.payload.text, /Property/);
+  assert.match(email.payload.text, /Arabkir, Yerevan/);
+  assert.match(email.payload.text, /Entered consumption/);
+  assert.match(email.payload.text, /Roof outline: 3 points/);
+  assert.match(email.payload.text, /Calculated result/);
+  assert.match(email.payload.text, /11 × 650 W/);
+  assert.match(email.payload.text, /Recommended equipment/);
+  assert.match(email.payload.text, /LONGi Hi-MO X10 Guardian/);
+  assert.match(email.payload.text, /electricity-bill\.pdf \(not attached\)/);
+  assert.match(email.payload.text, /Customer message/);
+  assert.doesNotMatch(email.payload.text, /"monthlyGenerationKwh"/);
 });
 
 test('lead delivery accepts Email-only success and waits for both attempts to settle', async () => {

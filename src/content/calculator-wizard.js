@@ -188,6 +188,25 @@ const copy = {
       footer:
         'Հաշվետվությունը նախնական է և չի փոխարինում տեղազննությանը, ինժեներական նախագծին կամ առևտրային առաջարկին։'
     },
+    lead: {
+      eyebrow: 'Անհատական առաջարկ',
+      open: 'Քննարկել հաշվարկը ինժեների հետ',
+      title: 'Ուղարկել հաշվարկը ինժեներին',
+      copy: 'Ուղարկեք հայտը, և ինժեները կստանա ձեր կոնտակտները, օբյեկտի տվյալները, սպառումը, տանիքի պարամետրերը և նախնական հաշվարկը՝ ընթեռնելի կառուցվածքով։',
+      privacy:
+        'Հայտն ուղարկելով՝ այս տվյալները փոխանցում եք միայն YOURENERGY-ի թիմին՝ առաջարկ պատրաստելու համար։',
+      name: 'Անուն',
+      phoneLabel: 'Հեռախոս',
+      phone: 'Զանգել ինժեներին',
+      email: 'Էլ. փոստ (ըստ ցանկության)',
+      comment: 'Մեկնաբանություն',
+      submit: 'Ուղարկել հայտը',
+      loading: 'Հայտն ուղարկվում է…',
+      success: 'Հայտն ընդունվել է։ Ինժեները կկապվի ձեզ հետ։',
+      unavailable: 'Հայտը հիմա չի ուղարկվում։ Զանգահարեք ինժեներին՝ առաջարկ ստանալու համար։',
+      invalid: 'Նշեք ձեր անունը և ճիշտ հեռախոսահամարը։',
+      close: 'Փակել'
+    },
     stepMobile: 'Քայլ {step} 4-ից · {title}',
     mapApproximate:
       'Քարտեզի ուրվագիծը մոտավոր է։ Տեղային ստվերը և կոնստրուկցիան հաստատում է ինժեները։',
@@ -437,6 +456,26 @@ const copy = {
       footer:
         'Отчёт предварительный и не заменяет выезд инженера, инженерный проект или коммерческое предложение.'
     },
+    lead: {
+      eyebrow: 'Персональное предложение',
+      open: 'Обсудить расчёт с инженером',
+      title: 'Отправить расчёт инженеру',
+      copy: 'Отправьте заявку — инженер получит ваши контакты, данные объекта, потребление, параметры крыши и предварительный расчёт в понятном структурированном виде.',
+      privacy:
+        'Отправляя заявку, вы передаёте эти данные только команде YOURENERGY для подготовки предложения.',
+      name: 'Имя',
+      phoneLabel: 'Телефон',
+      phone: 'Позвонить инженеру',
+      email: 'Эл. почта (необязательно)',
+      comment: 'Комментарий',
+      submit: 'Отправить заявку',
+      loading: 'Отправляем заявку…',
+      success: 'Заявка принята. Инженер свяжется с вами.',
+      unavailable:
+        'Сейчас не удалось отправить заявку. Позвоните инженеру, чтобы получить предложение.',
+      invalid: 'Укажите имя и корректный номер телефона.',
+      close: 'Закрыть'
+    },
     stepMobile: 'Шаг {step} из 4 · {title}',
     mapApproximate:
       'Контур на карте приблизительный. Локальное затенение и конструкцию подтвердит инженер.',
@@ -685,6 +724,25 @@ const copy = {
       popupBlocked: 'Allow the browser pop-up to open the PDF report.',
       footer:
         'This report is preliminary and does not replace a site survey, engineering design or commercial offer.'
+    },
+    lead: {
+      eyebrow: 'Personal proposal',
+      open: 'Discuss this estimate with an engineer',
+      title: 'Send this estimate to an engineer',
+      copy: 'Send your request and the engineer will receive your contact details, property details, consumption, roof parameters and preliminary calculation in a clear structured format.',
+      privacy:
+        'By sending this request, you share these details only with the YOURENERGY team to prepare your proposal.',
+      name: 'Name',
+      phoneLabel: 'Phone',
+      phone: 'Call an engineer',
+      email: 'Email (optional)',
+      comment: 'Comment',
+      submit: 'Send request',
+      loading: 'Sending your request…',
+      success: 'Your request was accepted. An engineer will contact you.',
+      unavailable: 'Your request cannot be sent right now. Call an engineer to get a proposal.',
+      invalid: 'Enter your name and a valid phone number.',
+      close: 'Close'
     },
     stepMobile: 'Step {step} of 4 · {title}',
     mapApproximate:

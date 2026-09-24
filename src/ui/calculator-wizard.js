@@ -23,6 +23,7 @@ import { initConsumptionInput } from './consumption-input.js';
 import { initFileUpload } from './file-upload.js';
 import { createAsyncRequestLifecycle } from './async-request-lifecycle.js';
 import { createCalculatorSession } from './calculator-session.js';
+import { buildProfessionalLeadContext, validateProfessionalLeadForm } from './professional-lead.js';
 import {
   createProfessionalAnalysisIdentity,
   isRestorableProfessionalAnalysis
@@ -188,6 +189,32 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
   const financeResult = root.querySelector('[data-finance-result]');
   const financeValues = root.querySelector('[data-finance-values]');
   const downloadPdfButton = root.querySelector('[data-download-pdf]');
+  const professionalLeadOpen = root.querySelector('[data-professional-lead-open]');
+  const professionalLeadDialog = document.querySelector('[data-professional-lead-dialog]');
+  const professionalLeadForm = professionalLeadDialog?.querySelector(
+    '[data-professional-lead-form]'
+  );
+  const professionalLeadName = professionalLeadDialog?.querySelector(
+    '[data-professional-lead-name]'
+  );
+  const professionalLeadPhone = professionalLeadDialog?.querySelector(
+    '[data-professional-lead-phone]'
+  );
+  const professionalLeadEmail = professionalLeadDialog?.querySelector(
+    '[data-professional-lead-email]'
+  );
+  const professionalLeadMessage = professionalLeadDialog?.querySelector(
+    '[data-professional-lead-message]'
+  );
+  const professionalLeadSubmit = professionalLeadDialog?.querySelector(
+    '[data-professional-lead-submit]'
+  );
+  const professionalLeadStatus = professionalLeadDialog?.querySelector(
+    '[data-professional-lead-status]'
+  );
+  const professionalLeadSuccess = professionalLeadDialog?.querySelector(
+    '[data-professional-lead-success]'
+  );
   const passportDialog = document.querySelector('[data-passport-dialog]');
   const passportContent = document.querySelector('[data-passport-dialog-content]');
   const heroTitle = root.querySelector('#calculator-title');
@@ -254,6 +281,9 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
   let lastPotential = null;
   let lastAnalysis = null;
   let passportOpener = null;
+  let professionalLeadRequest = null;
+  let professionalLeadTrigger = null;
+  let professionalLeadComplete = false;
   let professionalAnalysisIdentity = restoredAnalysis
     ? savedSession.professionalAnalysisIdentity
     : null;
@@ -1377,6 +1407,112 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
     session.clear();
     window.location.reload();
   });
+  const setProfessionalLeadStatus = (message, invalid = false) => {
+    if (!professionalLeadStatus) return;
+    professionalLeadStatus.textContent = message ?? '';
+    professionalLeadStatus.classList.toggle('is-error', invalid);
+  };
+  const resetProfessionalLeadDialog = () => {
+    if (!lifecycle.isActive()) return;
+    professionalLeadRequest?.abort();
+    professionalLeadRequest = null;
+    professionalLeadComplete = false;
+    professionalLeadForm?.reset();
+    professionalLeadForm?.removeAttribute('aria-busy');
+    if (professionalLeadSubmit) professionalLeadSubmit.disabled = false;
+    if (professionalLeadSuccess) professionalLeadSuccess.hidden = true;
+    if (professionalLeadForm) professionalLeadForm.hidden = false;
+    setProfessionalLeadStatus('');
+    [
+      professionalLeadName,
+      professionalLeadPhone,
+      professionalLeadEmail,
+      professionalLeadMessage
+    ].forEach((field) => field?.removeAttribute('aria-invalid'));
+  };
+  const closeProfessionalLeadDialog = () => {
+    if (professionalLeadDialog?.open) professionalLeadDialog.close();
+  };
+  professionalLeadOpen?.addEventListener('click', () => {
+    if (!lifecycle.isActive() || !state.analysis) return;
+    if (typeof professionalLeadDialog?.showModal !== 'function') return;
+    professionalLeadTrigger = professionalLeadOpen;
+    resetProfessionalLeadDialog();
+    professionalLeadDialog.showModal();
+    professionalLeadName?.focus();
+  });
+  professionalLeadDialog
+    ?.querySelectorAll('[data-professional-lead-close]')
+    .forEach((control) => control.addEventListener('click', closeProfessionalLeadDialog));
+  professionalLeadDialog?.addEventListener('close', () => {
+    const trigger = professionalLeadTrigger;
+    if (!lifecycle.isActive()) {
+      professionalLeadTrigger = null;
+      return;
+    }
+    resetProfessionalLeadDialog();
+    professionalLeadTrigger = null;
+    trigger?.focus?.();
+  });
+  professionalLeadForm?.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    if (!lifecycle.isActive() || professionalLeadRequest || professionalLeadComplete) return;
+    const validated = validateProfessionalLeadForm({
+      name: professionalLeadName?.value,
+      phone: professionalLeadPhone?.value,
+      email: professionalLeadEmail?.value,
+      message: professionalLeadMessage?.value
+    });
+    if (!validated.valid) {
+      const field = {
+        name: professionalLeadName,
+        phone: professionalLeadPhone,
+        email: professionalLeadEmail,
+        message: professionalLeadMessage
+      }[validated.field];
+      field?.setAttribute('aria-invalid', 'true');
+      field?.focus();
+      setProfessionalLeadStatus(wizard.lead?.invalid, true);
+      return;
+    }
+    if (!state.analysis) {
+      setProfessionalLeadStatus(wizard.lead?.unavailable, true);
+      return;
+    }
+    const controller = lifecycle.createController();
+    professionalLeadRequest = controller;
+    if (professionalLeadSubmit) professionalLeadSubmit.disabled = true;
+    professionalLeadForm.setAttribute('aria-busy', 'true');
+    setProfessionalLeadStatus(wizard.lead?.loading);
+    try {
+      await api.submitLead(
+        {
+          ...validated.values,
+          locale,
+          calculatorContext: buildProfessionalLeadContext({ analysis: state.analysis, state })
+        },
+        { signal: controller.signal }
+      );
+      if (!lifecycle.canCommit(controller, professionalLeadRequest)) return;
+      professionalLeadComplete = true;
+      professionalLeadForm.hidden = true;
+      if (professionalLeadSuccess) professionalLeadSuccess.hidden = false;
+      setProfessionalLeadStatus(wizard.lead?.success);
+    } catch (error) {
+      if (!lifecycle.canCommit(controller, professionalLeadRequest)) return;
+      if (error instanceof ProductApiError && error.code === 'ABORTED') return;
+      setProfessionalLeadStatus(wizard.lead?.unavailable, true);
+    } finally {
+      const ownsRequest = professionalLeadRequest === controller;
+      if (ownsRequest) professionalLeadRequest = null;
+      lifecycle.release(controller);
+      if (lifecycle.isActive() && ownsRequest) {
+        if (!professionalLeadComplete && professionalLeadSubmit)
+          professionalLeadSubmit.disabled = false;
+        professionalLeadForm.removeAttribute('aria-busy');
+      }
+    }
+  });
   downloadPdfButton?.addEventListener('click', () => {
     const opened = openCalculatorPdfReport({
       analysis: state.analysis,
@@ -1424,9 +1560,13 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
     stopAddressSearch();
     stopPotential();
     stopAnalysis();
+    professionalLeadRequest?.abort();
+    professionalLeadRequest = null;
+    professionalLeadTrigger = null;
     mapController?.destroy();
     mapController = null;
     if (passportDialog?.open) passportDialog.close();
+    if (professionalLeadDialog?.open) professionalLeadDialog.close();
   };
   return { state, getSelectedBillFile: () => fileUpload.getFile(), destroy };
 };
