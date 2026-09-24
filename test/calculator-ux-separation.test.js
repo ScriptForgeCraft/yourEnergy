@@ -59,7 +59,7 @@ test('Professional has exactly four customer steps and retains every engineering
   assert.match(professional, /data-wizard-restart/u);
   assert.match(professional, /wizard\.results\.calculationTitle/u);
   assert.match(professional, /wizard\.results\.benefits/u);
-  assert.match(professional, /<select data-roof-mounting-mode>/u);
+  assert.match(professional, /<select\b[^>]*\bdata-roof-mounting-mode\b/u);
   assert.match(professional, /class='consumption-estimate'/u);
   assert.match(
     professional,

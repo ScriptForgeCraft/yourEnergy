@@ -40,7 +40,7 @@
             <div class='equipment-categories' data-category-list aria-label='{{equipmentCopy.product.categories}}'>{{#each equipmentSsr.categories}}<button class='equipment-category' type='button' data-category='{{id}}' aria-pressed='{{isSelected}}'{{#unless isAvailable}} disabled{{/unless}}><span class='equipment-category__icon'><svg class='equipment-icon' aria-hidden='true'><use href='/icons.svg#{{icon}}'></use></svg></span><span class='equipment-category__copy'><strong>{{label}}</strong><small>{{productCount}}</small></span></button>{{/each}}</div>
             <div class='equipment-model-picker'>
               <label for='equipment-model'>{{equipmentCopy.product.modelInCategory}} <span data-category-product-count>1 / {{equipmentSsr.categoryProducts.length}}</span></label>
-              <select id='equipment-model' data-product-select>{{#each equipmentSsr.categoryProducts}}<option value='{{id}}'{{#if isSelected}} selected{{/if}}>{{brand}} {{name}} · {{powerRange}}</option>{{/each}}</select>
+              <select id='equipment-model' name='equipment-model' autocomplete='off' data-product-select>{{#each equipmentSsr.categoryProducts}}<option value='{{id}}'{{#if isSelected}} selected{{/if}}>{{brand}} {{name}} · {{powerRange}}</option>{{/each}}</select>
             </div>
           </section>
           <section class='product-viewer' aria-label='{{equipmentCopy.product.interactiveView}}' data-viewer>

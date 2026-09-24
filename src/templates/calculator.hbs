@@ -91,7 +91,7 @@
                 for='wizard-address'><span class='visually-hidden'>{{wizard.addressLabel}}</span><svg
                   aria-hidden='true'>
                   <use href='/icons.svg#search'></use>
-                </svg><input id='wizard-address' data-wizard-address maxlength='220' autocomplete='street-address'
+                </svg><input id='wizard-address' name='address' data-wizard-address maxlength='220' autocomplete='street-address'
                   placeholder='{{hero.addressPlaceholder}}' /><button class='location-address-field__clear'
                   type='button' data-clear-address aria-label='{{product.common.cancel}}'><svg aria-hidden='true'>
                   <use href='/icons.svg#close'></use>
@@ -101,10 +101,10 @@
                   href='https://www.openstreetmap.org/copyright' target='_blank' rel='noopener'>© OpenStreetMap contributors</a></small>
               <div class='location-search-results' data-location-search-results aria-live='polite' hidden></div>
               <div class='location-picker-grid'>
-                <label class='location-picker'><span>{{product.location.regionLabel}}</span><select
-                    data-location-region>{{#each product.location.regions}}<option value='{{id}}'>{{label}}</option>{{/each}}</select></label>
-                <label class='location-picker'><span>{{product.location.localityLabel}}</span><select
-                    data-location-locality aria-describedby='location-picker-help' disabled></select></label>
+                <label class='location-picker'><span>{{product.location.regionLabel}}</span><select id='location-region'
+                    name='region' autocomplete='off' data-location-region>{{#each product.location.regions}}<option value='{{id}}'>{{label}}</option>{{/each}}</select></label>
+                <label class='location-picker'><span>{{product.location.localityLabel}}</span><select id='location-locality'
+                    name='locality' autocomplete='off' data-location-locality aria-describedby='location-picker-help' disabled></select></label>
               </div>
               <small class='location-picker-help' id='location-picker-help'>{{product.location.localityHelp}}</small>
               <section class='professional-panel professional-panel--coordinates'
@@ -115,10 +115,10 @@
                       <use href='/icons.svg#map-pin'></use>
                     </svg>{{wizard.showOnMap}}</button>
                 </div>
-                <div class='wizard-coordinates'><label>{{product.location.latitudeLabel}}<input type='number' step='any'
-                      inputmode='decimal' value='40.1811'
+                <div class='wizard-coordinates'><label>{{product.location.latitudeLabel}}<input id='location-latitude' name='latitude' type='number' step='any'
+                      inputmode='decimal' autocomplete='off' value='40.1811'
                       data-location-latitude /></label><label>{{product.location.longitudeLabel}}<input type='number'
-                      step='any' inputmode='decimal' value='44.5136' data-location-longitude /></label></div>
+                      id='location-longitude' name='longitude' step='any' inputmode='decimal' autocomplete='off' value='44.5136' data-location-longitude /></label></div>
               </section>
               <div class='point-confirmation' data-point-confirmation hidden>
                 <strong>{{wizard.selectedPoint}}</strong><output data-pending-coordinates>—</output>
@@ -192,13 +192,13 @@
               <div data-consumption-inputs class='consumption-inputs'>
                 <fieldset>
                   <legend>{{product.consumption.title}}</legend><label><input type='radio' name='consumption-mode'
-                      value='bill' checked /><svg class='consumption-mode-icon' aria-hidden='true'>
+                      value='bill' autocomplete='off' checked /><svg class='consumption-mode-icon' aria-hidden='true'>
                       <use href='/icons.svg#file'></use>
                     </svg><span>{{product.consumption.modes.bill}}</span></label><label><input type='radio'
-                      name='consumption-mode' value='usage' /><svg class='consumption-mode-icon' aria-hidden='true'>
+                      name='consumption-mode' value='usage' autocomplete='off' /><svg class='consumption-mode-icon' aria-hidden='true'>
                       <use href='/icons.svg#zap'></use>
                     </svg><span>{{product.consumption.modes.usage}}</span></label><label><input type='radio'
-                      name='consumption-mode' value='monthly' data-consumption-switch-monthly /><svg class='consumption-mode-icon' aria-hidden='true'>
+                      name='consumption-mode' value='monthly' autocomplete='off' data-consumption-switch-monthly /><svg class='consumption-mode-icon' aria-hidden='true'>
                       <use href='/icons.svg#chart-bars'></use>
                     </svg><span>{{product.consumption.modes.monthly}}</span></label><label class='professional-upload-tab'
                     for='bill-file'><svg aria-hidden='true'>
@@ -206,23 +206,23 @@
                     </svg><span>{{wizard.ui.uploadBill}}</span></label>
                 </fieldset>
                 <div class='consumption-panel' data-consumption-panel='bill'><label>{{product.consumption.billLabel}}
-                    <div class='input-with-unit'><input type='text' inputmode='decimal'
-                        value='25000' data-consumption-bill /><span>AMD</span></div>
+                    <div class='input-with-unit'><input id='consumption-bill' name='bill' type='text' inputmode='decimal'
+                        autocomplete='off' value='25000' data-consumption-bill /><span>AMD</span></div>
                   </label>
                   <p class='consumption-field-note'><svg aria-hidden='true'>
                       <use href='/icons.svg#info'></use>
                     </svg>{{product.consumption.billHelp}}</p>
                 </div>
                 <div class='consumption-panel' data-consumption-panel='usage' hidden>
-                  <label>{{product.consumption.usageLabel}}<div class='input-with-unit'><input type='text'
-                        inputmode='decimal' data-consumption-usage /><span>kWh</span></div></label>
+                  <label>{{product.consumption.usageLabel}}<div class='input-with-unit'><input id='consumption-usage' name='usage' type='text'
+                        inputmode='decimal' autocomplete='off' data-consumption-usage /><span>kWh</span></div></label>
                 </div>
                 <div class='consumption-panel consumption-panel--months' data-consumption-panel='monthly' hidden>
-                  <div class='month-inputs'>{{#each passport.months}}<label>{{short}}<input type='text'
-                        inputmode='decimal' data-consumption-month /></label>{{/each}}</div>
+                  <div class='month-inputs'>{{#each passport.months}}<label>{{short}}<input id='consumption-month-{{@index}}' name='consumption-month-{{@index}}' type='text'
+                        inputmode='decimal' autocomplete='off' data-consumption-month /></label>{{/each}}</div>
                 </div><label><span data-consumption-tariff-label>{{product.consumption.tariffBillLabel}}</span>
-                  <div class='input-with-unit'><input type='text' inputmode='decimal'
-                      value='46.48' data-consumption-tariff aria-describedby='consumption-tariff-help' required
+                  <div class='input-with-unit'><input id='consumption-tariff' name='tariff' type='text' inputmode='decimal'
+                      autocomplete='off' value='46.48' data-consumption-tariff aria-describedby='consumption-tariff-help' required
                       aria-required='true' /><span>AMD/kWh</span></div>
                 </label>
                 <p class='input-help' id='consumption-tariff-help' data-consumption-tariff-help>
@@ -238,8 +238,8 @@
               <section class='professional-panel file-upload' data-optional-upload
                 aria-labelledby='professional-file-title'>
                 <h3 id='professional-file-title'>{{hero.uploadTitle}}</h3>
-                <p>{{hero.uploadHelp}}</p><label class='file-drop' data-file-drop for='bill-file'><input id='bill-file'
-                    type='file'
+                <p>{{hero.uploadHelp}}</p><label class='file-drop' data-file-drop for='bill-file'><input id='bill-file' name='bill-file'
+                    type='file' autocomplete='off'
                     accept='.pdf,.jpg,.jpeg,.png,application/pdf,image/jpeg,image/png' /><span>{{hero.uploadPrompt}}</span></label>
                 <p class='form-status' data-file-status aria-live='polite'></p>
                 <div data-file-meta hidden><strong data-file-name></strong><button type='button'
@@ -314,10 +314,10 @@
             <div class='professional-roof-form'>
               <fieldset class='professional-roof-methods'>
                 <legend>{{product.roof.areaMethodTitle}}</legend><label><input type='radio' name='roof-area-method'
-                    value='map-projected' checked data-roof-area-method /><svg aria-hidden='true'>
+                    value='map-projected' autocomplete='off' checked data-roof-area-method /><svg aria-hidden='true'>
                     <use href='/icons.svg#file-up'></use>
                   </svg><span>{{product.roof.areaMethods.mapProjected}}</span></label><label><input type='radio'
-                    name='roof-area-method' value='measured-plane' data-roof-area-method /><svg aria-hidden='true'>
+                    name='roof-area-method' value='measured-plane' autocomplete='off' data-roof-area-method /><svg aria-hidden='true'>
                     <use href='/icons.svg#calculator'></use>
                   </svg><span>{{product.roof.areaMethods.measuredPlane}}</span></label>
               </fieldset>
@@ -337,11 +337,11 @@
                 </div><button class='button button--outline' type='button'
                   data-roof-reset>{{product.roof.reset}}</button>
               </section><label class='professional-roof-plane-input' data-roof-plane-area-wrap
-                hidden>{{product.roof.planeAreaLabel}}<div class='input-with-unit'><input type='text'
-                    inputmode='decimal' data-roof-plane-area /><span>m²</span></div></label>
+                hidden>{{product.roof.planeAreaLabel}}<div class='input-with-unit'><input id='roof-plane-area' name='roof-plane-area' type='text'
+                    inputmode='decimal' autocomplete='off' data-roof-plane-area /><span>m²</span></div></label>
               <section class='professional-roof-parameters' aria-labelledby='professional-roof-parameters'>
                 <h3 id='professional-roof-parameters'>{{wizard.engineering}}</h3>
-                <div class='wizard-form-grid'><label>{{product.roof.orientationLabel}}<select data-roof-orientation>
+                <div class='wizard-form-grid'><label>{{product.roof.orientationLabel}}<select id='roof-orientation' name='orientation' autocomplete='off' data-roof-orientation>
                       <option value='180'>{{product.roof.orientationOptions.south}}</option>
                       <option value='135'>{{product.roof.orientationOptions.southEast}}</option>
                       <option value='225'>{{product.roof.orientationOptions.southWest}}</option>
@@ -349,13 +349,13 @@
                       <option value='270'>{{product.roof.orientationOptions.west}}</option>
                       <option value='0'>{{product.roof.orientationOptions.north}}</option>
                       <option value='custom'>{{product.roof.orientationOptions.custom}}</option>
-                    </select></label><label>{{product.roof.tiltLabel}}<div class='input-with-unit'><input type='text'
-                        inputmode='decimal' value='30' data-roof-tilt /><span>°</span></div>
+                    </select></label><label>{{product.roof.tiltLabel}}<div class='input-with-unit'><input id='roof-tilt' name='tilt' type='text'
+                        inputmode='decimal' autocomplete='off' value='30' data-roof-tilt /><span>°</span></div>
                   </label></div><section class='professional-roof-capacity' data-roof-capacity-preview hidden aria-live='polite'><strong>{{wizard.roofCapacityTitle}}</strong><dl><div><dt>{{wizard.roofAreaForSizing}}</dt><dd data-roof-capacity-area>—</dd></div><div><dt>{{wizard.preliminaryUsableRoofArea}}</dt><dd data-roof-capacity-usable>—</dd></div><div><dt>{{wizard.maximumPanelsForRoof}}</dt><dd data-roof-capacity-panels>—</dd></div></dl><p data-roof-capacity-panel></p><p data-roof-capacity-system></p><small data-roof-capacity-assumption></small></section><label
-                  class='professional-storage-request'><input type='checkbox' data-storage-required /><span>{{wizard.storageRequestLabel}}</span><small>{{wizard.storageRequestHelp}}</small></label><label data-roof-orientation-custom hidden>{{product.roof.customOrientationLabel}}<input
-                    type='text' inputmode='decimal'
+                  class='professional-storage-request'><input id='storage-required' name='storage-required' type='checkbox' autocomplete='off' data-storage-required /><span>{{wizard.storageRequestLabel}}</span><small>{{wizard.storageRequestHelp}}</small></label><label data-roof-orientation-custom hidden>{{product.roof.customOrientationLabel}}<input
+                    id='roof-orientation-custom' name='custom-orientation' type='text' inputmode='decimal' autocomplete='off'
                     data-roof-orientation-custom-input /></label><label
-                  class='professional-roof-mounting-select'>{{product.roof.mountingModeLabel}}<select data-roof-mounting-mode>
+                  class='professional-roof-mounting-select'>{{product.roof.mountingModeLabel}}<select data-roof-mounting-mode id='roof-mounting-mode' name='mounting-mode' autocomplete='off'>
                     <option value='roof-parallel'>{{product.roof.mountingModes.roofParallel}}</option>
                     <option value='elevated'>{{product.roof.mountingModes.elevated}}</option>
                   </select></label>

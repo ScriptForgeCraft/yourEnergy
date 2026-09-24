@@ -84,7 +84,13 @@
                   <svg class='inline-icon' aria-hidden='true'><use
                       href='/icons.svg#map-pin'
                     ></use></svg>
-                  <select id='process-region' name='region' required data-process-region>
+                  <select
+                    id='process-region'
+                    name='region'
+                    autocomplete='off'
+                    required
+                    data-process-region
+                  >
                     <option value=''>{{@root.processStory.form.chooseRegion}}</option>
                     {{#each @root.processStory.regions}}<option
                         value='{{id}}'
@@ -93,9 +99,14 @@
                 </div>
                 <fieldset class='process-form__modes' data-process-consumption>
                   <legend class='visually-hidden'>{{@root.processStory.form.consumption}}</legend>
-                  <label><input type='radio' name='mode' value='bill' checked /><span
-                    >{{@root.processStory.form.bill}}</span></label>
-                  <label><input type='radio' name='mode' value='usage' /><span
+                  <label><input
+                      type='radio'
+                      name='mode'
+                      value='bill'
+                      autocomplete='off'
+                      checked
+                    /><span>{{@root.processStory.form.bill}}</span></label>
+                  <label><input type='radio' name='mode' value='usage' autocomplete='off' /><span
                     >{{@root.processStory.form.usage}}</span></label>
                 </fieldset>
                 <label
@@ -109,6 +120,7 @@
                     id='process-amount'
                     name='amount'
                     type='number'
+                    autocomplete='off'
                     inputmode='decimal'
                     min='0.01'
                     step='any'
