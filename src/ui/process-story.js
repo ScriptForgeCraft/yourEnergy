@@ -378,14 +378,15 @@ export const initProcessStory = ({ config = {} } = {}) => {
   media.add(
     {
       desktop: '(min-width: 768px) and (min-height: 650px)',
+      mobile: '(max-width: 767px), (max-height: 649px)',
       reduce: '(prefers-reduced-motion: reduce)'
     },
     (context) => {
-      const { desktop, reduce: reducedMotion } = context.conditions;
+      const { mobile, reduce: reducedMotion } = context.conditions;
       mobileObserver?.disconnect();
       mobileObserver = null;
 
-      if (!desktop || reducedMotion) {
+      if (mobile || reducedMotion) {
         states.forEach((state) => {
           state.removeAttribute('aria-hidden');
           gsap.set(state, { clearProps: 'all' });
@@ -396,15 +397,11 @@ export const initProcessStory = ({ config = {} } = {}) => {
         setProgress(0);
 
         let mobileNavigationTimer = 0;
-        let mobileWheelBurstTimer = 0;
-        let mobileWheelBurst = false;
         let mobileNavigating = false;
         let mobileTransition = null;
         let mobileScrollBehaviorFrame = 0;
         let mobileProgressFrame = 0;
         let mobileSavedScrollBehavior = null;
-        let touchStartY = null;
-        let touchDirection = 0;
 
         const mobileScrollOffset = () => {
           const header = document.querySelector('.site-header');
@@ -425,14 +422,6 @@ export const initProcessStory = ({ config = {} } = {}) => {
             mobileSavedScrollBehavior = null;
             mobileScrollBehaviorFrame = 0;
           });
-        };
-
-        const activeStateOwnsViewport = () => {
-          const state = states[activeIndex];
-          if (!state) return false;
-          const bounds = state.getBoundingClientRect();
-          const offset = mobileScrollOffset();
-          return bounds.top <= offset + 24 && bounds.bottom > offset + 24;
         };
 
         const syncMobileProgress = () => {
@@ -510,78 +499,12 @@ export const initProcessStory = ({ config = {} } = {}) => {
           }, 560);
         };
 
-        const mobileStepByDirection = (direction) => {
-          const targetIndex = activeIndex + direction;
-          if (targetIndex < 0 || targetIndex >= states.length) return false;
-          scrollToMobileStep(targetIndex, direction);
-          return true;
-        };
-
         const onProgressStepClick = (event) => {
           const targetIndex = Number(event.currentTarget.dataset.processProgressStep);
           if (!Number.isInteger(targetIndex) || targetIndex === activeIndex) return;
           scrollToMobileStep(targetIndex, targetIndex > activeIndex ? 1 : -1);
         };
 
-        const wheelDirection = (event) => {
-          const primary =
-            Math.abs(event.deltaY) >= Math.abs(event.deltaX) ? event.deltaY : event.deltaX;
-          return primary === 0 ? 0 : primary > 0 ? 1 : -1;
-        };
-
-        const onMobileWheel = (event) => {
-          if (reducedMotion || event.ctrlKey || !activeStateOwnsViewport()) return;
-          const direction = wheelDirection(event);
-          if (!direction) return;
-
-          const targetIndex = activeIndex + direction;
-          if (targetIndex < 0 || targetIndex >= states.length) return;
-
-          event.preventDefault();
-          window.clearTimeout(mobileWheelBurstTimer);
-          mobileWheelBurstTimer = window.setTimeout(() => {
-            mobileWheelBurst = false;
-          }, 140);
-          if (mobileNavigating || mobileWheelBurst) {
-            mobileWheelBurst = true;
-            return;
-          }
-          mobileWheelBurst = true;
-          mobileStepByDirection(direction);
-        };
-
-        const onMobileTouchStart = (event) => {
-          if (reducedMotion || event.touches.length !== 1 || !activeStateOwnsViewport()) return;
-          touchStartY = event.touches[0].clientY;
-          touchDirection = 0;
-        };
-
-        const onMobileTouchMove = (event) => {
-          if (reducedMotion || touchStartY === null || event.touches.length !== 1) return;
-          if (mobileNavigating || touchDirection) {
-            if (event.cancelable) event.preventDefault();
-            return;
-          }
-
-          const delta = touchStartY - event.touches[0].clientY;
-          if (Math.abs(delta) < 1) return;
-          const direction = delta > 0 ? 1 : -1;
-          const targetIndex = activeIndex + direction;
-          if (targetIndex < 0 || targetIndex >= states.length) {
-            touchStartY = null;
-            return;
-          }
-
-          if (event.cancelable) event.preventDefault();
-          touchDirection = direction;
-        };
-
-        const onMobileTouchEnd = () => {
-          const direction = touchDirection;
-          touchStartY = null;
-          touchDirection = 0;
-          if (direction && !mobileNavigating) mobileStepByDirection(direction);
-        };
         mobileObserver = new IntersectionObserver(
           (entries) => {
             let hasVisibleStep = false;
@@ -600,19 +523,11 @@ export const initProcessStory = ({ config = {} } = {}) => {
         window.addEventListener('resize', queueMobileProgressSync);
         queueMobileProgressSync();
         if (reducedMotion) states.forEach((_, index) => animateStepMetrics(index));
-        else {
-          story.addEventListener('wheel', onMobileWheel, { passive: false });
-          story.addEventListener('touchstart', onMobileTouchStart, { passive: true });
-          story.addEventListener('touchmove', onMobileTouchMove, { passive: false });
-          story.addEventListener('touchend', onMobileTouchEnd, { passive: true });
-          story.addEventListener('touchcancel', onMobileTouchEnd, { passive: true });
-        }
 
         return () => {
           mobileObserver?.disconnect();
           mobileTransition?.kill();
           window.clearTimeout(mobileNavigationTimer);
-          window.clearTimeout(mobileWheelBurstTimer);
           window.cancelAnimationFrame(mobileScrollBehaviorFrame);
           window.cancelAnimationFrame(mobileProgressFrame);
           if (mobileSavedScrollBehavior !== null) {
@@ -621,11 +536,6 @@ export const initProcessStory = ({ config = {} } = {}) => {
           progressSteps.forEach((step) => step.removeEventListener('click', onProgressStepClick));
           window.removeEventListener('scroll', queueMobileProgressSync);
           window.removeEventListener('resize', queueMobileProgressSync);
-          story.removeEventListener('wheel', onMobileWheel);
-          story.removeEventListener('touchstart', onMobileTouchStart);
-          story.removeEventListener('touchmove', onMobileTouchMove);
-          story.removeEventListener('touchend', onMobileTouchEnd);
-          story.removeEventListener('touchcancel', onMobileTouchEnd);
           states.forEach((state) => {
             gsap.set(state.querySelector('[data-process-copy]'), { clearProps: 'all' });
             gsap.set(state.querySelector('[data-process-visual]'), { clearProps: 'all' });
