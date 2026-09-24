@@ -8,6 +8,7 @@ import {
 } from '../domain/index.js';
 import { number, format, text, element, localeCode } from './calculator/view-helpers.js';
 import { createCalculatorResultsView } from './calculator/results-view.js';
+import { openCalculatorPdfReport } from './calculator/pdf-report.js';
 import { ProductApiClient, ProductApiError } from '../services/api-client.js';
 import { createPropertyMap } from '../services/property-map.js';
 import {
@@ -186,6 +187,7 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
   const financeEmpty = root.querySelector('[data-finance-empty]');
   const financeResult = root.querySelector('[data-finance-result]');
   const financeValues = root.querySelector('[data-finance-values]');
+  const downloadPdfButton = root.querySelector('[data-download-pdf]');
   const passportDialog = document.querySelector('[data-passport-dialog]');
   const passportContent = document.querySelector('[data-passport-dialog-content]');
   const heroTitle = root.querySelector('#calculator-title');
@@ -1372,6 +1374,17 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
   root.querySelector('[data-wizard-restart]')?.addEventListener('click', () => {
     session.clear();
     window.location.reload();
+  });
+  downloadPdfButton?.addEventListener('click', () => {
+    const opened = openCalculatorPdfReport({
+      analysis: state.analysis,
+      passport: state.solarPassport,
+      state,
+      wizard,
+      product,
+      locale
+    });
+    if (!opened) writeStatus(wizard.pdfReport?.popupBlocked ?? product.result?.unavailable, true);
   });
   root.querySelector('[data-open-passport]')?.addEventListener('click', (event) => {
     if (!passportDialog || typeof passportDialog.showModal !== 'function') return;

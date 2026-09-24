@@ -1242,6 +1242,13 @@
   box-shadow: none;
 }
 
+.professional-results-actions .professional-results-download {
+  border-color: #93c8f3;
+  color: #fff;
+  background: linear-gradient(135deg, #087af4, #0069ef);
+  box-shadow: 0 10px 20px rgb(0 104 237 / 20%);
+}
+
 @media (max-width: 960px) {
   .calculator-page--professional .wizard-step[data-wizard-step='2'] {
     display: grid;

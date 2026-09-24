@@ -448,7 +448,10 @@
               <dl data-finance-values></dl>
               <p class='section-disclosure'>{{finance.disclaimer}}</p>
             </section>
-            <div class='flow-actions professional-results-actions'><button class='button button--outline' type='button'
+            <div class='flow-actions professional-results-actions'><button class='button button--outline professional-results-download' type='button'
+                data-download-pdf><svg aria-hidden='true'>
+                  <use href='/icons.svg#file'></use>
+                </svg>{{wizard.pdfReport.download}}</button><button class='button button--outline' type='button'
                 data-wizard-back='2'><svg aria-hidden='true'>
                   <use href='/icons.svg#arrow-left'></use>
                 </svg>{{wizard.back}}</button></div>
