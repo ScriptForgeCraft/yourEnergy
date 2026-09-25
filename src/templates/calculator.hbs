@@ -144,7 +144,7 @@
                 </dl>
                 <figure class='wizard-chart'>
                   <figcaption>{{product.potential.annualYieldLabel}} · kWh/kWp</figcaption>
-                  <div class='chart-bars' data-potential-chart></div>
+                  <div class='chart-bars potential-chart' data-potential-chart></div>
                   <details>
                     <summary>{{passport.tableTitle}}</summary>
                     <table>
@@ -254,6 +254,23 @@
                   </svg></button></div>
             </div>
             <aside class='professional-consumption-aside'>
+              <section class='site-potential-card' data-potential-summary hidden aria-labelledby='potential-summary-title'>
+                <header class='site-potential-card__heading'>
+                  <span class='site-potential-card__icon' aria-hidden='true'><svg><use href='/icons.svg#sun'></use></svg></span>
+                  <div><h3 id='potential-summary-title'>{{product.potential.title}}</h3><p>{{product.potential.annualYieldLabel}}</p></div>
+                  <output data-potential-summary-yield>—</output>
+                </header>
+                <dl class='site-potential-card__metrics'>
+                  <div><dt>{{product.potential.orientationLabel}}</dt><dd data-potential-summary-azimuth>—</dd></div>
+                  <div><dt>{{product.potential.tiltLabel}}</dt><dd data-potential-summary-tilt>—</dd></div>
+                </dl>
+                <figure class='site-potential-card__chart'>
+                  <figcaption>{{product.potential.annualYieldLabel}} · kWh/kWp</figcaption>
+                  <div class='chart-bars potential-chart' data-potential-summary-chart></div>
+                </figure>
+                <p class='site-potential-card__source' data-potential-summary-source></p>
+                <p class='site-potential-card__disclosure'>{{product.potential.disclosure}}</p>
+              </section>
               <section class='consumption-chart-card'>
                 <div class='consumption-chart-card__heading'>
                   <div>

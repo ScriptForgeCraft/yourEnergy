@@ -80,12 +80,16 @@ test('Professional has exactly four customer steps and retains every engineering
   assert.doesNotMatch(professional, /data-roof-enter-area/u);
   assert.match(professional, /data-location-region/u);
   assert.match(professional, /data-location-locality/u);
+  assert.match(professional, /data-potential-summary/u);
+  assert.match(professional, /data-potential-summary-chart/u);
   assert.match(controller, /ARMENIA_REGION_CENTERS/u);
   assert.match(controller, /localitiesForRegion/u);
   assert.match(controller, /localityCenter/u);
   assert.match(controller, /locateSelectedLocality/u);
   assert.match(controller, /map\?\.focusLocation\(center\)/u);
   assert.match(controller, /mapController\?\.finishRoof\(\)/u);
+  assert.match(controller, /if \(state\.sitePotential\) renderPotential\(state\.sitePotential\)/u);
+  assert.match(controller, /renderBars\(potentialSummaryChart/u);
   assert.doesNotMatch(professional, /data-calculation-panel/u);
   assert.match(controller, /getDefaultCalculatorSystem/u);
   assert.match(controller, /equipment: \{ panelId: recommendedPanelId \}/u);

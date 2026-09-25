@@ -160,6 +160,8 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
   const potentialSkip = root.querySelector('[data-potential-skip]');
   const potentialChart = root.querySelector('[data-potential-chart]');
   const potentialTable = root.querySelector('[data-potential-table]');
+  const potentialSummary = root.querySelector('[data-potential-summary]');
+  const potentialSummaryChart = root.querySelector('[data-potential-summary-chart]');
   const roofArea = root.querySelector('[data-roof-area]');
   const roofAreaLabel = root.querySelector('[data-roof-area-label]');
   const roofMapArea = root.querySelector('[data-roof-map-area]');
@@ -490,6 +492,7 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
     stopPotential();
     setPotentialOutcome({ status: WIZARD_STEP_STATUSES.LOCKED });
     if (potentialResult) potentialResult.hidden = true;
+    if (potentialSummary) potentialSummary.hidden = true;
     if (potentialRetry) potentialRetry.hidden = true;
     if (potentialSkip) potentialSkip.hidden = true;
     if (potentialLoading) potentialLoading.textContent = '';
@@ -819,7 +822,7 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
     }
   };
 
-  const renderBars = (container, values, months, unit) => {
+  const renderBars = (container, values, months, unit, { compactValues = false } = {}) => {
     if (!container) return;
     container.replaceChildren();
     const maximum = Math.max(...values.map(Number).filter(Number.isFinite), 1);
@@ -829,8 +832,12 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
       button.type = 'button';
       button.style.setProperty('--bar-height', `${Math.max(3, (numeric / maximum) * 100)}%`);
       const month = months[index] ?? {};
-      const display = `${format(numeric, locale, { maximumFractionDigits: 0 })} ${unit}`;
-      button.setAttribute('aria-label', `${month.name ?? month.short ?? index + 1}: ${display}`);
+      const valueText = format(numeric, locale, { maximumFractionDigits: 0 });
+      const display = compactValues ? valueText : `${valueText} ${unit}`;
+      button.setAttribute(
+        'aria-label',
+        `${month.name ?? month.short ?? index + 1}: ${valueText} ${unit}`
+      );
       button.title = button.getAttribute('aria-label');
       button.append(
         element('span', 'chart-bar__value', display),
@@ -857,15 +864,15 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
 
   const renderPotential = (potential) => {
     const months = product.passport?.months ?? [];
-    root.querySelector('[data-potential-yield]').textContent =
-      `${format(potential.annualYieldKwhPerKwp, locale, { maximumFractionDigits: 0 })} kWh/kWp`;
-    root.querySelector('[data-potential-azimuth]').textContent = compass(
-      potential.orientation?.azimuthDegrees,
-      product.potential?.directions
-    );
-    root.querySelector('[data-potential-tilt]').textContent =
-      `${format(potential.orientation?.tiltDegrees, locale, { maximumFractionDigits: 0 })}°`;
-    renderBars(potentialChart, potential.monthlyYieldKwhPerKwp ?? [], months, 'kWh/kWp');
+    const annualYield = `${format(potential.annualYieldKwhPerKwp, locale, { maximumFractionDigits: 0 })} kWh/kWp`;
+    const azimuth = compass(potential.orientation?.azimuthDegrees, product.potential?.directions);
+    const tilt = `${format(potential.orientation?.tiltDegrees, locale, { maximumFractionDigits: 0 })}°`;
+    root.querySelector('[data-potential-yield]').textContent = annualYield;
+    root.querySelector('[data-potential-azimuth]').textContent = azimuth;
+    root.querySelector('[data-potential-tilt]').textContent = tilt;
+    renderBars(potentialChart, potential.monthlyYieldKwhPerKwp ?? [], months, 'kWh/kWp', {
+      compactValues: true
+    });
     potentialTable?.replaceChildren();
     (potential.monthlyYieldKwhPerKwp ?? []).forEach((value, index) => {
       const row = document.createElement('tr');
@@ -883,10 +890,17 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
             )
           })
         : product.potential?.cacheMiss;
-    root.querySelector('[data-potential-source]').textContent = [product.potential?.source, cache]
-      .filter(Boolean)
-      .join(' ');
+    const source = [product.potential?.source, cache].filter(Boolean).join(' ');
+    root.querySelector('[data-potential-source]').textContent = source;
+    root.querySelector('[data-potential-summary-yield]').textContent = annualYield;
+    root.querySelector('[data-potential-summary-azimuth]').textContent = azimuth;
+    root.querySelector('[data-potential-summary-tilt]').textContent = tilt;
+    root.querySelector('[data-potential-summary-source]').textContent = source;
+    renderBars(potentialSummaryChart, potential.monthlyYieldKwhPerKwp ?? [], months, 'kWh/kWp', {
+      compactValues: true
+    });
     if (potentialResult) potentialResult.hidden = false;
+    if (potentialSummary) potentialSummary.hidden = false;
     if (potentialRetry) potentialRetry.hidden = true;
     if (potentialSkip) potentialSkip.hidden = true;
   };
@@ -913,6 +927,7 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
     setPotentialOutcome({ status: WIZARD_STEP_STATUSES.LOADING });
     if (potentialLoading) potentialLoading.textContent = product.potential?.loading ?? '';
     if (potentialResult) potentialResult.hidden = true;
+    if (potentialSummary) potentialSummary.hidden = true;
     if (potentialRetry) potentialRetry.hidden = true;
     if (potentialSkip) potentialSkip.hidden = true;
     writeStatus('');
@@ -1574,6 +1589,7 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
 
   populateLocalityOptions();
   syncRoofControls({ preserveAnalysis: true });
+  if (state.sitePotential) renderPotential(state.sitePotential);
   if (state.analysis) renderResult(state.analysis);
   const restoredStep = Number.isInteger(savedSession.currentStep) ? savedSession.currentStep : 0;
   setStep(restoredStep, { focus: false });

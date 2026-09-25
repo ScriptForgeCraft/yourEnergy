@@ -436,6 +436,168 @@
   gap: 1rem;
 }
 
+.site-potential-card {
+  border: 1px solid #cfe4fa;
+  border-radius: 0.82rem;
+  padding: 1.08rem 1.18rem;
+  background: linear-gradient(145deg, #f7fbff, #eaf5ff);
+  box-shadow: 0 13px 34px rgb(23 82 122 / 7%);
+}
+
+.site-potential-card__heading {
+  display: grid;
+  grid-template-columns: 2.35rem minmax(0, 1fr) auto;
+  gap: 0.65rem;
+  align-items: center;
+}
+
+.site-potential-card__icon {
+  display: grid;
+  width: 2.35rem;
+  height: 2.35rem;
+  place-items: center;
+  border-radius: 50%;
+  color: #0877ef;
+  background: #dceeff;
+}
+
+.site-potential-card__icon svg {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.site-potential-card h3,
+.site-potential-card p,
+.site-potential-card figure {
+  margin: 0;
+}
+
+.site-potential-card h3 {
+  color: #10294e;
+  font-size: 0.82rem;
+  letter-spacing: -0.02em;
+}
+
+.site-potential-card__heading p {
+  margin-top: 0.13rem;
+  color: #5a7492;
+  font-size: 0.61rem;
+  line-height: 1.3;
+}
+
+.site-potential-card__heading output {
+  color: #096fe8;
+  font-size: 0.96rem;
+  font-weight: 850;
+  letter-spacing: -0.035em;
+  white-space: nowrap;
+}
+
+.site-potential-card__metrics {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.52rem;
+  margin: 0.92rem 0 0;
+}
+
+.site-potential-card__metrics > div {
+  min-width: 0;
+  border: 1px solid #d7e9fa;
+  border-radius: 0.52rem;
+  padding: 0.52rem 0.58rem;
+  background: rgb(255 255 255 / 68%);
+}
+
+.site-potential-card__metrics dt {
+  color: #597390;
+  font-size: 0.58rem;
+  line-height: 1.3;
+}
+
+.site-potential-card__metrics dd {
+  margin: 0.25rem 0 0;
+  overflow: hidden;
+  color: #10294e;
+  font-size: 0.74rem;
+  font-weight: 800;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.site-potential-card__chart {
+  margin-top: 0.92rem !important;
+  border-top: 1px solid #d8e9f8;
+  padding-top: 0.78rem;
+}
+
+.site-potential-card__chart figcaption {
+  color: #17395e;
+  font-size: 0.67rem;
+  font-weight: 800;
+}
+
+.site-potential-card__source,
+.site-potential-card__disclosure {
+  color: #58718e;
+  font-size: 0.59rem;
+  line-height: 1.4;
+}
+
+.site-potential-card__source {
+  margin-top: 0.72rem !important;
+}
+
+.site-potential-card__disclosure {
+  margin-top: 0.42rem !important;
+}
+
+/* PVGIS values stay readable at every width: blue bars, numbers above and
+   month abbreviations beneath the baseline. */
+.potential-chart.chart-bars {
+  min-height: 9.1rem;
+  gap: 0.18rem;
+  overflow: visible;
+  padding: 0.75rem 0.08rem 0;
+  border-bottom: 1px solid #cfe3f5;
+}
+
+.potential-chart .chart-bar {
+  grid-template-rows: 0.8rem minmax(1.8rem, var(--bar-height)) 1rem;
+  min-width: 0;
+  min-height: 0;
+  background: transparent;
+  cursor: default;
+}
+
+.potential-chart .chart-bar::before {
+  grid-row: 2;
+  align-self: end;
+  height: var(--bar-height);
+  border-radius: 0.22rem 0.22rem 0 0;
+  background: linear-gradient(180deg, #78bcfb, #1478e9);
+  content: '';
+}
+
+.potential-chart .chart-bar__value {
+  overflow: visible;
+  color: #315675;
+  font-size: clamp(0.44rem, 0.52vw, 0.56rem);
+  font-weight: 800;
+  line-height: 1;
+  text-align: center;
+  transform: none;
+  transform-origin: center;
+}
+
+.potential-chart .chart-bar__label {
+  overflow: hidden;
+  color: #52708d;
+  font-size: clamp(0.44rem, 0.52vw, 0.56rem);
+  font-weight: 750;
+  line-height: 1;
+  text-overflow: ellipsis;
+}
+
 .consumption-chart-card,
 .consumption-tips {
   border: 1px solid #dceaf5;
