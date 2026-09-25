@@ -12,7 +12,17 @@
 }
 
 .process-state--inspection .process-metric > small:not(:empty) {
-  color: #edcf78;
+  color: #f4d883;
+}
+
+.process-state--inspection .process-metric > small {
+  overflow: visible;
+  color: #f4d883;
+  font-size: clamp(9px, 0.68vw, 11px);
+  font-weight: 550;
+  line-height: 1.25;
+  text-overflow: clip;
+  white-space: normal;
 }
 
 /* Sequential reveal. CSS animation intentionally overrides the very short generic
@@ -114,7 +124,7 @@
     column-gap: 9px;
     align-items: center;
     width: clamp(132px, 10.6vw, 178px);
-    min-height: 72px;
+    min-height: 86px;
     padding: 9px 11px 8px 10px;
     border: 1px solid rgba(241, 244, 246, 0.34);
     border-radius: 13px;
@@ -173,8 +183,9 @@
     min-height: 0;
     margin-top: 3px;
     overflow: visible;
-    color: #e9c96f;
-    font-size: clamp(6.5px, 0.48vw, 8px);
+    color: #f4d883;
+    font-size: clamp(9px, 0.68vw, 11px);
+    font-weight: 550;
     line-height: 1.1;
     white-space: normal;
   }
@@ -277,7 +288,7 @@
 
 @media (min-width: 1180px) and (min-height: 650px) and (max-height: 800px) {
   .process-state--inspection .process-metric {
-    min-height: 66px;
+    min-height: 80px;
     padding-block: 7px;
   }
 
@@ -292,6 +303,10 @@
 }
 
 @media (max-width: 767px), (max-height: 649px) {
+  .process-state--inspection .process-metric {
+    min-height: 84px;
+  }
+
   .process-state--inspection.is-active .process-metric:nth-child(1) {
     animation-delay: 0.08s;
   }
@@ -306,6 +321,16 @@
   }
   .process-state--inspection.is-active .process-metric:nth-child(5) {
     animation-delay: 0.72s;
+  }
+}
+
+@media (max-width: 520px) {
+  .process-state--inspection .process-metric {
+    min-height: 80px;
+  }
+
+  .process-state--inspection .process-metric > small {
+    font-size: 9px;
   }
 }
 

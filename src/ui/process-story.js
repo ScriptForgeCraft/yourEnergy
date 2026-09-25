@@ -260,7 +260,10 @@ export const initProcessStory = ({ config = {} } = {}) => {
         : saved;
     const presentation = buildProcessPresentation(visibleState);
 
-    root.querySelectorAll('[data-process-value]').forEach((element) => {
+    // The inspection scene owns its five live values. Its renderer uses the
+    // persisted roof/survey data and localized compass labels, so this generic
+    // process renderer must not overwrite them with numeric presentation data.
+    root.querySelectorAll('.process-state:not(.process-state--inspection) [data-process-value]').forEach((element) => {
       const descriptor = metricDescriptor(
         element.dataset.processValue,
         presentation,

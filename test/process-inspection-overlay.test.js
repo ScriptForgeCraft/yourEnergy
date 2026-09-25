@@ -2,8 +2,10 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import {
   buildProcessInspectionValues,
+  formatInspectionCardNote,
   formatInspectionOrientation
 } from '../src/ui/process-inspection-overlay.js';
+import { processStoryCopy } from '../src/content/process-story.js';
 
 test('inspection orientation is localized to the nearest compass direction', () => {
   assert.equal(formatInspectionOrientation(180, 'en'), 'South');
@@ -11,6 +13,17 @@ test('inspection orientation is localized to the nearest compass direction', () 
   assert.equal(formatInspectionOrientation(180, 'hy'), 'Հարավ');
   assert.equal(formatInspectionOrientation(44, 'en'), 'North-east');
   assert.equal(formatInspectionOrientation(359, 'en'), 'North');
+});
+
+test('inspection cards retain their localized on-site description beside a data source note', () => {
+  assert.equal(
+    formatInspectionCardNote('Measured on site', 'From calculator'),
+    'Measured on site · From calculator'
+  );
+  assert.equal(
+    formatInspectionCardNote('Проверяются условия подключения'),
+    'Проверяются условия подключения'
+  );
 });
 
 test('inspection values use calculator roof data when it exists', () => {
@@ -59,4 +72,17 @@ test('future on-site shading and electrical data override fallbacks without chan
   assert.equal(values['electrical-panel'].text, 'Պետք է վերազինել');
   assert.equal(values['electrical-panel'].source, 'verified');
   assert.equal(values['electrical-panel'].note, 'Ստուգված է տեղում');
+});
+
+test('the second process step exposes the inspection value schema in every locale', () => {
+  const expectedKeys = ['roof-area', 'orientation', 'tilt', 'shading', 'electrical-panel'];
+
+  for (const locale of ['en', 'ru', 'hy']) {
+    const step = processStoryCopy[locale].steps[1];
+    assert.equal(step.visual, 'inspection');
+    assert.deepEqual(
+      step.cards.map(({ data }) => data),
+      expectedKeys
+    );
+  }
 });

@@ -9,14 +9,6 @@ const INSPECTION_KEYS = Object.freeze([
   'electrical-panel'
 ]);
 
-const INSPECTION_ICONS = Object.freeze({
-  'roof-area': 'inspection-roof',
-  orientation: 'inspection-compass',
-  tilt: 'inspection-tilt',
-  shading: 'inspection-shading',
-  'electrical-panel': 'inspection-panel'
-});
-
 // Normalized to the overlay's 1000 × 600 SVG viewBox. The multi-segment paths
 // intentionally resemble technical callouts rather than decorative straight lines.
 const CONNECTORS = Object.freeze([
@@ -105,6 +97,12 @@ export const formatInspectionOrientation = (degrees, locale = 'en') => {
   const directionIndex = Math.round(normalized / 45) % 8;
   return copy.directions[directionIndex];
 };
+
+export const formatInspectionCardNote = (description, sourceNote = '') =>
+  [description, sourceNote]
+    .map((value) => (typeof value === 'string' ? value.trim() : ''))
+    .filter(Boolean)
+    .join(' · ');
 
 const item = (text, source, copy) => ({
   text,
@@ -266,17 +264,15 @@ export const initProcessInspectionOverlay = ({ config = {} } = {}) => {
       removeMetricAnimationState(element);
       if (element.textContent !== descriptor.text) element.textContent = descriptor.text;
 
+      const note = inspection.querySelector(`[data-process-value-note="${metricKey}"]`);
+      const noteText = formatInspectionCardNote(element.dataset.default, descriptor.note);
+      if (note && note.textContent !== noteText) note.textContent = noteText;
+
       const card = element.closest('[data-process-card]');
       if (card) {
         card.dataset.inspectionSource = descriptor.source;
         card.dataset.inspectionKey = metricKey;
-        const use = card.querySelector('.inline-icon use');
-        const icon = INSPECTION_ICONS[metricKey];
-        if (use && icon) use.setAttribute('href', `/icons.svg#${icon}`);
       }
-
-      // The original localized inspection description is rendered by Handlebars
-      // in a separate element. Do not overwrite it with calculator/fallback status text.
     }
   };
 

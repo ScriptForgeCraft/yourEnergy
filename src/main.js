@@ -29,8 +29,13 @@ if (processStory) {
   const loadProcessStory = () => {
     if (storyStarted) return;
     storyStarted = true;
-    void import('./ui/process-story.js').then(({ initProcessStory }) => {
-      initProcessStory({ config: { ...config, ...processConfig } });
+    void Promise.all([
+      import('./ui/process-story.js'),
+      import('./ui/process-inspection-overlay.js')
+    ]).then(([{ initProcessStory }, { initProcessInspectionOverlay }]) => {
+      const processOptions = { config: { ...config, ...processConfig } };
+      initProcessStory(processOptions);
+      initProcessInspectionOverlay(processOptions);
       if (window.location.hash === '#process') {
         window.requestAnimationFrame(() => {
           window.requestAnimationFrame(() => processStory.scrollIntoView({ block: 'start' }));
