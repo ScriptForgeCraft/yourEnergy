@@ -110,11 +110,12 @@
               <section class='professional-panel professional-panel--coordinates'
                 aria-labelledby='professional-location-parameters'>
                 <div class='professional-panel__title'>
-                  <h3 id='professional-location-parameters'>{{wizard.engineering}}</h3><button class='text-button'
+                  <h3 id='professional-location-parameters'>{{wizard.exactCoordinates}}</h3><button class='text-button'
                     type='button' data-use-map-coordinates><svg aria-hidden='true'>
                       <use href='/icons.svg#map-pin'></use>
                     </svg>{{wizard.showOnMap}}</button>
                 </div>
+                <p class='input-help'>{{wizard.coordinatesHelp}}</p>
                 <div class='wizard-coordinates'><label>{{product.location.latitudeLabel}}<input id='location-latitude' name='latitude' type='number' step='any'
                       inputmode='decimal' autocomplete='off' value='40.1811'
                       data-location-latitude /></label><label>{{product.location.longitudeLabel}}<input type='number'
@@ -128,6 +129,7 @@
               <div class='async-card' data-potential-loading data-potential-status data-step-state='locked'
                 aria-live='polite'></div>
               <div data-potential-result hidden>
+                <h3 class='potential-reference-title'>{{product.potential.title}}</h3>
                 <dl class='wizard-kpis'>
                   <div>
                     <dt>{{product.potential.annualYieldLabel}}</dt>
@@ -142,11 +144,11 @@
                     <dd data-potential-tilt>—</dd>
                   </div>
                 </dl>
-                <figure class='wizard-chart'>
+                <details class='wizard-details potential-monthly-details'>
+                  <summary>{{wizard.monthlyPvgisData}}</summary>
+                  <figure class='wizard-chart'>
                   <figcaption>{{product.potential.annualYieldLabel}} · kWh/kWp</figcaption>
                   <div class='chart-bars potential-chart' data-potential-chart></div>
-                  <details>
-                    <summary>{{passport.tableTitle}}</summary>
                     <table>
                       <thead>
                         <tr>
@@ -156,8 +158,8 @@
                       </thead>
                       <tbody data-potential-table></tbody>
                     </table>
-                  </details>
-                </figure>
+                  </figure>
+                </details>
                 <p class='input-help' data-potential-source></p>
                 <p class='section-disclosure'>{{product.potential.disclosure}}</p>
               </div>
@@ -200,10 +202,7 @@
                     </svg><span>{{product.consumption.modes.usage}}</span></label><label><input type='radio'
                       name='consumption-mode' value='monthly' autocomplete='off' data-consumption-switch-monthly /><svg class='consumption-mode-icon' aria-hidden='true'>
                       <use href='/icons.svg#chart-bars'></use>
-                    </svg><span>{{product.consumption.modes.monthly}}</span></label><label class='professional-upload-tab'
-                    for='bill-file'><svg aria-hidden='true'>
-                      <use href='/icons.svg#file-up'></use>
-                    </svg><span>{{wizard.ui.uploadBill}}</span></label>
+                    </svg><span>{{product.consumption.modes.monthly}}</span></label>
                 </fieldset>
                 <div class='consumption-panel' data-consumption-panel='bill'><label>{{product.consumption.billLabel}}
                     <div class='input-with-unit'><input id='consumption-bill' name='bill' type='text' inputmode='decimal'
@@ -235,16 +234,6 @@
                   <span class='consumption-estimate__badge'>{{wizard.ui.estimateBadge}}</span>
                 </div>
               </div>
-              <section class='professional-panel file-upload' data-optional-upload
-                aria-labelledby='professional-file-title'>
-                <h3 id='professional-file-title'>{{hero.uploadTitle}}</h3>
-                <p>{{hero.uploadHelp}}</p><label class='file-drop' data-file-drop for='bill-file'><input id='bill-file' name='bill-file'
-                    type='file' autocomplete='off'
-                    accept='.pdf,.jpg,.jpeg,.png,application/pdf,image/jpeg,image/png' /><span>{{hero.uploadPrompt}}</span></label>
-                <p class='form-status' data-file-status aria-live='polite'></p>
-                <div data-file-meta hidden><strong data-file-name></strong><button type='button'
-                    class='button button--outline' data-file-remove>{{product.common.cancel}}</button></div>
-              </section>
               <div class='flow-actions professional-consumption-actions'><button class='button button--outline'
                   type='button' data-wizard-back='0'><svg aria-hidden='true'>
                     <use href='/icons.svg#arrow-left'></use>
@@ -254,22 +243,13 @@
                   </svg></button></div>
             </div>
             <aside class='professional-consumption-aside'>
-              <section class='site-potential-card' data-potential-summary hidden aria-labelledby='potential-summary-title'>
+              <section class='site-potential-card site-potential-card--compact' data-potential-summary hidden aria-labelledby='potential-summary-title'>
                 <header class='site-potential-card__heading'>
                   <span class='site-potential-card__icon' aria-hidden='true'><svg><use href='/icons.svg#sun'></use></svg></span>
-                  <div><h3 id='potential-summary-title'>{{product.potential.title}}</h3><p>{{product.potential.annualYieldLabel}}</p></div>
+                  <div><h3 id='potential-summary-title'>{{wizard.locationSolarData}}</h3><p>{{wizard.pvgisAvailable}}</p></div>
                   <output data-potential-summary-yield>—</output>
                 </header>
-                <dl class='site-potential-card__metrics'>
-                  <div><dt>{{product.potential.orientationLabel}}</dt><dd data-potential-summary-azimuth>—</dd></div>
-                  <div><dt>{{product.potential.tiltLabel}}</dt><dd data-potential-summary-tilt>—</dd></div>
-                </dl>
-                <figure class='site-potential-card__chart'>
-                  <figcaption>{{product.potential.annualYieldLabel}} · kWh/kWp</figcaption>
-                  <div class='chart-bars potential-chart' data-potential-summary-chart></div>
-                </figure>
                 <p class='site-potential-card__source' data-potential-summary-source></p>
-                <p class='site-potential-card__disclosure'>{{product.potential.disclosure}}</p>
               </section>
               <section class='consumption-chart-card'>
                 <div class='consumption-chart-card__heading'>
@@ -292,10 +272,10 @@
                     <use href='/icons.svg#chart-bars'></use>
                   </svg>{{wizard.ui.consumption.fillAverage}}</button>
               </section>
-              <section class='consumption-tips'>
-                <h3><svg aria-hidden='true'>
+              <details class='consumption-tips'>
+                <summary><svg aria-hidden='true'>
                     <use href='/icons.svg#sun'></use>
-                  </svg>{{wizard.ui.consumption.tipsTitle}}</h3>
+                  </svg>{{wizard.ui.consumption.tipsTitle}}</summary>
                 <div><span><svg aria-hidden='true'>
                       <use href='/icons.svg#file'></use>
                     </svg></span>
@@ -317,7 +297,7 @@
                     <strong>{{wizard.ui.consumption.tipTariffTitle}}</strong><small>{{wizard.ui.consumption.tipTariffCopy}}</small>
                   </p>
                 </div>
-              </section>
+              </details>
             </aside>
           </section>
 
@@ -351,8 +331,7 @@
                     <use href='/icons.svg#faq-home'></use>
                   </svg></span>
                 <div><small data-roof-area-label>{{product.roof.areaLabel}}</small><strong data-roof-area>—</strong>
-                </div><button class='button button--outline' type='button'
-                  data-roof-reset>{{product.roof.reset}}</button>
+                </div>
               </section><label class='professional-roof-plane-input' data-roof-plane-area-wrap
                 hidden>{{product.roof.planeAreaLabel}}<div class='input-with-unit'><input id='roof-plane-area' name='roof-plane-area' type='text'
                     inputmode='decimal' autocomplete='off' data-roof-plane-area /><span>m²</span></div></label>
@@ -368,14 +347,18 @@
                       <option value='custom'>{{product.roof.orientationOptions.custom}}</option>
                     </select></label><label>{{product.roof.tiltLabel}}<div class='input-with-unit'><input id='roof-tilt' name='tilt' type='text'
                         inputmode='decimal' autocomplete='off' value='30' data-roof-tilt /><span>°</span></div>
-                  </label></div><section class='professional-roof-capacity' data-roof-capacity-preview hidden aria-live='polite'><strong>{{wizard.roofCapacityTitle}}</strong><dl><div><dt>{{wizard.roofAreaForSizing}}</dt><dd data-roof-capacity-area>—</dd></div><div><dt>{{wizard.preliminaryUsableRoofArea}}</dt><dd data-roof-capacity-usable>—</dd></div><div><dt>{{wizard.maximumPanelsForRoof}}</dt><dd data-roof-capacity-panels>—</dd></div></dl><p data-roof-capacity-panel></p><p data-roof-capacity-system></p><small data-roof-capacity-assumption></small></section><label
-                  class='professional-storage-request'><input id='storage-required' name='storage-required' type='checkbox' autocomplete='off' data-storage-required /><span>{{wizard.storageRequestLabel}}</span><small>{{wizard.storageRequestHelp}}</small></label><label data-roof-orientation-custom hidden>{{product.roof.customOrientationLabel}}<input
+                  </label></div><section class='professional-roof-capacity' data-roof-capacity-preview hidden aria-live='polite'><strong>{{wizard.roofCapacityTitle}}</strong><dl><div><dt>{{wizard.roofAreaForSizing}}</dt><dd data-roof-capacity-area>—</dd></div><div><dt>{{wizard.preliminaryUsableRoofArea}}</dt><dd data-roof-capacity-usable>—</dd></div><div><dt>{{wizard.maximumPanelsForRoof}}</dt><dd data-roof-capacity-panels>—</dd></div></dl><p data-roof-capacity-panel></p><p data-roof-capacity-system></p><small data-roof-capacity-assumption></small></section><section class='roof-reference-comparison' data-roof-reference-comparison hidden aria-live='polite'><h4>{{wizard.roofReferenceComparison}}</h4><dl><div><dt>{{wizard.actualRoof}}</dt><dd data-roof-reference-actual>—</dd></div><div><dt>{{wizard.pvgisReference}}</dt><dd data-roof-reference-pvgis>—</dd></div></dl><p>{{wizard.roofReferenceHelp}}</p></section><label
+                  data-roof-orientation-custom hidden>{{product.roof.customOrientationLabel}}<input
                     id='roof-orientation-custom' name='custom-orientation' type='text' inputmode='decimal' autocomplete='off'
                     data-roof-orientation-custom-input /></label><label
                   class='professional-roof-mounting-select'>{{product.roof.mountingModeLabel}}<select data-roof-mounting-mode id='roof-mounting-mode' name='mounting-mode' autocomplete='off'>
                     <option value='roof-parallel'>{{product.roof.mountingModes.roofParallel}}</option>
                     <option value='elevated'>{{product.roof.mountingModes.elevated}}</option>
                   </select></label>
+                <section class='professional-additional-preferences' aria-labelledby='additional-system-preferences'>
+                  <h3 id='additional-system-preferences'>{{wizard.additionalSystemPreferences}}</h3>
+                  <label class='professional-storage-request'><input id='storage-required' name='storage-required' type='checkbox' autocomplete='off' data-storage-required /><span>{{wizard.storageRequestLabel}}</span><small>{{wizard.storageRequestHelp}}</small></label>
+                </section>
               </section>
  
               <div class='flow-actions professional-roof-actions'><button class='button button--outline' type='button'

@@ -47,7 +47,6 @@ test('Professional has exactly four customer steps and retains every engineering
     'data-roof-orientation',
     'data-roof-mounting-mode',
     'data-storage-required',
-    'data-optional-upload',
     'data-consumption-switch-monthly',
     "data-consumption-unit='amd'",
     'professional-roof-mounting-select',
@@ -81,7 +80,9 @@ test('Professional has exactly four customer steps and retains every engineering
   assert.match(professional, /data-location-region/u);
   assert.match(professional, /data-location-locality/u);
   assert.match(professional, /data-potential-summary/u);
-  assert.match(professional, /data-potential-summary-chart/u);
+  assert.match(professional, /potential-monthly-details/u);
+  assert.doesNotMatch(professional, /data-potential-summary-chart/u);
+  assert.doesNotMatch(professional, /data-optional-upload/u);
   assert.match(controller, /ARMENIA_REGION_CENTERS/u);
   assert.match(controller, /localitiesForRegion/u);
   assert.match(controller, /localityCenter/u);
@@ -89,7 +90,7 @@ test('Professional has exactly four customer steps and retains every engineering
   assert.match(controller, /map\?\.focusLocation\(center\)/u);
   assert.match(controller, /mapController\?\.finishRoof\(\)/u);
   assert.match(controller, /if \(state\.sitePotential\) renderPotential\(state\.sitePotential\)/u);
-  assert.match(controller, /renderBars\(potentialSummaryChart/u);
+  assert.doesNotMatch(controller, /renderBars\(potentialSummaryChart/u);
   assert.doesNotMatch(professional, /data-calculation-panel/u);
   assert.match(controller, /getDefaultCalculatorSystem/u);
   assert.match(controller, /equipment: \{ panelId: recommendedPanelId \}/u);
@@ -110,7 +111,7 @@ test('Professional has exactly four customer steps and retains every engineering
   assert.match(resultsView, /analysis\.storageRecommendation/u);
   assert.match(resultsView, /wizard\.storageRecommendationTitle/u);
   assert.match(resultsView, /result-overview__metric/u);
-  assert.match(resultsView, /metrics\?\.solarPotential/u);
+  assert.match(resultsView, /metrics\?\.annualCoverage/u);
   assert.match(resultsView, /metrics\?\.recommendedPower/u);
   assert.match(resultsView, /metrics\?\.panelCount/u);
   assert.match(controller, /createEquipmentCatalog/u);
@@ -126,6 +127,28 @@ test('Professional product links preserve the recommendation ID in every locale'
   assert.equal(equipmentProductHref(productId, 'hy-AM'), `/equipment/?product=${productId}`);
   assert.equal(equipmentProductHref(productId, 'ru-RU'), `/ru/equipment/?product=${productId}`);
   assert.equal(equipmentProductHref(productId, 'en-US'), `/en/equipment/?product=${productId}`);
+});
+
+test('Professional results use coverage terminology and retain the two PVGIS yield contexts', async () => {
+  const [resultsView, modes, wizard, en, ru, hy] = await Promise.all([
+    source('src/ui/calculator/results-view.js'),
+    source('src/content/calculator-modes.js'),
+    source('src/content/calculator-wizard.js'),
+    source('src/content/en.js'),
+    source('src/content/ru.js'),
+    source('src/content/hy.js')
+  ]);
+
+  assert.match(resultsView, /monthlyComparisonChart/u);
+  assert.match(resultsView, /annualNetSurplusHelp/u);
+  assert.match(resultsView, /roofCapacityNotLimiting/u);
+  assert.doesNotMatch(modes, /selfConsumption/u);
+  assert.match(modes, /annualCoverage/u);
+  assert.match(wizard, /pvgisReferenceYield/u);
+  for (const content of [en, ru, hy]) {
+    assert.doesNotMatch(content, /cacheHit|cacheMiss/u);
+    assert.match(content, /PVGIS/u);
+  }
 });
 
 test('one calculator exposes two modes and migrates historic routes safely', async () => {
@@ -172,7 +195,7 @@ test('Professional location actions are honest, searchable and recoverable', asy
   assert.match(template, /data-clear-address/u);
   assert.match(template, /addressSearchDisclosure/u);
   assert.match(template, /addressSearchAttribution/u);
-  assert.match(template, /fieldset[\s\S]*professional-upload-tab/u);
+  assert.doesNotMatch(template, /professional-upload-tab|data-optional-upload/u);
   assert.match(controller, /api\.geocode\(\{ query, locale \}/u);
   assert.match(controller, /navigator\.geolocation\.getCurrentPosition/u);
   assert.match(controller, /locationSearchResults\.hidden = false/u);

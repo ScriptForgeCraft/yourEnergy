@@ -505,27 +505,6 @@
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 0.65rem;
 }
-.file-upload {
-  margin-top: 1.2rem;
-  padding: 1rem;
-  border-radius: 0.85rem;
-  background: #f7f9fa;
-}
-.file-drop {
-  display: grid !important;
-  place-items: center;
-  min-height: 90px;
-  border: 1px dashed #88a0ae;
-  border-radius: 0.7rem;
-  cursor: pointer;
-}
-.file-drop input {
-  position: absolute;
-  width: 1px !important;
-  height: 1px;
-  overflow: hidden;
-  clip: rect(0 0 0 0);
-}
 .result-kpis {
   grid-template-columns: repeat(5, minmax(0, 1fr));
 }
@@ -1028,7 +1007,6 @@
 }
 
 .professional-panel,
-.file-upload,
 .wizard-chart,
 .finance-empty,
 .result-notice {

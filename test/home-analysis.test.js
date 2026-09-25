@@ -14,7 +14,6 @@ import {
   formatNumber,
   isFiniteDisplayValue
 } from '../src/utils/format.js';
-import { MAX_UPLOAD_BYTES, validateUploadFile } from '../src/ui/file-upload.js';
 
 function contentShape(value) {
   if (Array.isArray(value)) return value.map(contentShape);
@@ -58,22 +57,6 @@ test('all locale dictionaries have the same template data shape', () => {
   );
   assert.deepEqual(contentShape(calculatorWizard.en.ui), contentShape(calculatorWizard.hy.ui));
   assert.deepEqual(contentShape(calculatorWizard.en.ui), contentShape(calculatorWizard.ru.ui));
-});
-
-test('bill upload validation permits supported files through 10 MiB only', () => {
-  assert.equal(
-    validateUploadFile({ name: 'bill.pdf', type: 'application/pdf', size: MAX_UPLOAD_BYTES }),
-    null
-  );
-  assert.equal(validateUploadFile({ name: 'roof.JPG', type: '', size: 1024 }), null);
-  assert.equal(
-    validateUploadFile({ name: 'bill.txt', type: 'text/plain', size: 1024 }),
-    'INVALID_FILE'
-  );
-  assert.equal(
-    validateUploadFile({ name: 'bill.png', type: 'image/png', size: MAX_UPLOAD_BYTES + 1 }),
-    'FILE_TOO_LARGE'
-  );
 });
 
 test('formatters use Armenian and Russian locale conventions and never leak NaN/Infinity', () => {

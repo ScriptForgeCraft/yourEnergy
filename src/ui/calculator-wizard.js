@@ -20,7 +20,6 @@ import {
   WIZARD_STEP_STATUSES
 } from './calculator-wizard-state.js';
 import { initConsumptionInput } from './consumption-input.js';
-import { initFileUpload } from './file-upload.js';
 import { createAsyncRequestLifecycle } from './async-request-lifecycle.js';
 import { createCalculatorSession } from './calculator-session.js';
 import { buildProfessionalLeadContext, validateProfessionalLeadForm } from './professional-lead.js';
@@ -71,8 +70,8 @@ const describeError = (error, product) => {
   if (!(error instanceof ProductApiError)) return product.result?.unavailable ?? '';
   const messages = {
     OUTSIDE_SERVICE_AREA: product.status?.outsideServiceArea,
-    PVGIS_CACHE_NOT_CONFIGURED: product.status?.cacheNotConfigured,
-    PVGIS_CACHE_UNAVAILABLE: product.status?.cacheUnavailable,
+    PVGIS_CACHE_NOT_CONFIGURED: product.potential?.unavailable,
+    PVGIS_CACHE_UNAVAILABLE: product.potential?.unavailable,
     ROOF_AREA_REQUIRES_MEASURED_PLANE: product.status?.roofAreaRequiresMeasured,
     PVGIS_TIMEOUT: product.potential?.unavailable,
     PVGIS_UNAVAILABLE: product.potential?.unavailable
@@ -161,7 +160,6 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
   const potentialChart = root.querySelector('[data-potential-chart]');
   const potentialTable = root.querySelector('[data-potential-table]');
   const potentialSummary = root.querySelector('[data-potential-summary]');
-  const potentialSummaryChart = root.querySelector('[data-potential-summary-chart]');
   const roofArea = root.querySelector('[data-roof-area]');
   const roofAreaLabel = root.querySelector('[data-roof-area-label]');
   const roofMapArea = root.querySelector('[data-roof-map-area]');
@@ -185,6 +183,9 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
   const roofCapacityPanel = root.querySelector('[data-roof-capacity-panel]');
   const roofCapacitySystem = root.querySelector('[data-roof-capacity-system]');
   const roofCapacityAssumption = root.querySelector('[data-roof-capacity-assumption]');
+  const roofReferenceComparison = root.querySelector('[data-roof-reference-comparison]');
+  const roofReferenceActual = root.querySelector('[data-roof-reference-actual]');
+  const roofReferencePvgis = root.querySelector('[data-roof-reference-pvgis]');
   const resultDashboard = root.querySelector('[data-result-dashboard]');
   const resultSummary = root.querySelector('[data-result-summary]');
   const financeEmpty = root.querySelector('[data-finance-empty]');
@@ -496,6 +497,7 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
     if (potentialRetry) potentialRetry.hidden = true;
     if (potentialSkip) potentialSkip.hidden = true;
     if (potentialLoading) potentialLoading.textContent = '';
+    if (roofReferenceComparison) roofReferenceComparison.hidden = true;
     state.roof = null;
     mapController?.resetRoof();
     clearAnalysis();
@@ -734,6 +736,32 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
       });
   };
 
+  const updateRoofReferenceComparison = (roof) => {
+    const reference = state.sitePotential;
+    if (!roofReferenceComparison) return;
+    if (
+      !reference ||
+      roof.azimuthDegrees === null ||
+      roof.tiltDegrees === null ||
+      number(reference.orientation?.azimuthDegrees) === null ||
+      number(reference.orientation?.tiltDegrees) === null
+    ) {
+      roofReferenceComparison.hidden = true;
+      return;
+    }
+    roofReferenceComparison.hidden = false;
+    if (roofReferenceActual)
+      roofReferenceActual.textContent = `${format(roof.azimuthDegrees, locale, {
+        maximumFractionDigits: 0
+      })}° / ${format(roof.tiltDegrees, locale, { maximumFractionDigits: 0 })}°`;
+    if (roofReferencePvgis)
+      roofReferencePvgis.textContent = `${format(reference.orientation.azimuthDegrees, locale, {
+        maximumFractionDigits: 0
+      })}° / ${format(reference.orientation.tiltDegrees, locale, {
+        maximumFractionDigits: 0
+      })}°`;
+  };
+
   const updateRoofAreaSummary = () => {
     const roof = roofGeometry();
     if (roofAreaLabel) {
@@ -763,6 +791,7 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
     if (roofMapTilt && roof.tiltDegrees !== null)
       roofMapTilt.textContent = `${format(roof.tiltDegrees, locale)}°`;
     updateRoofCapacityPreview(roof);
+    updateRoofReferenceComparison(roof);
   };
 
   const mountMap = async (mode) => {
@@ -882,25 +911,17 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
       );
       potentialTable?.append(row);
     });
-    const cache =
-      potential.cache?.state === 'hit'
-        ? text(product.potential?.cacheHit, {
-            date: new Intl.DateTimeFormat(locale, { dateStyle: 'medium' }).format(
-              new Date(potential.cache.providerRetrievedAt)
-            )
-          })
-        : product.potential?.cacheMiss;
-    const source = [product.potential?.source, cache].filter(Boolean).join(' ');
+    // Cache state remains an implementation detail. The customer only needs
+    // the PVGIS source and the stated preliminary loss assumption.
+    const source = product.potential?.source ?? '';
     root.querySelector('[data-potential-source]').textContent = source;
-    root.querySelector('[data-potential-summary-yield]').textContent = annualYield;
-    root.querySelector('[data-potential-summary-azimuth]').textContent = azimuth;
-    root.querySelector('[data-potential-summary-tilt]').textContent = tilt;
-    root.querySelector('[data-potential-summary-source]').textContent = source;
-    renderBars(potentialSummaryChart, potential.monthlyYieldKwhPerKwp ?? [], months, 'kWh/kWp', {
-      compactValues: true
-    });
+    const potentialSummaryYield = root.querySelector('[data-potential-summary-yield]');
+    const potentialSummarySource = root.querySelector('[data-potential-summary-source]');
+    if (potentialSummaryYield) potentialSummaryYield.textContent = annualYield;
+    if (potentialSummarySource) potentialSummarySource.textContent = source;
     if (potentialResult) potentialResult.hidden = false;
     if (potentialSummary) potentialSummary.hidden = false;
+    updateRoofReferenceComparison(roofGeometry());
     if (potentialRetry) potentialRetry.hidden = true;
     if (potentialSkip) potentialSkip.hidden = true;
   };
@@ -1160,7 +1181,6 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
     writeStatus(product.result?.preparing ?? '');
     updateProgress();
     try {
-      // selectedBillFile is deliberately not part of this payload.
       const response = await api.analyze(payload, { signal: controller.signal });
       if (!lifecycle.canCommit(controller, analysisRequest)) return;
       state.analysis = response?.analysis ?? null;
@@ -1260,14 +1280,6 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
       updateProgress();
     }
   });
-  const fileUpload = initFileUpload({
-    root,
-    status: config.status ?? {},
-    onChange: (file) => {
-      state.selectedBillFile = file;
-    }
-  });
-
   root
     .querySelector('[data-open-location-map]')
     ?.addEventListener('click', () => void searchAddress());
@@ -1616,5 +1628,5 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
     if (passportDialog?.open) passportDialog.close();
     if (professionalLeadDialog?.open) professionalLeadDialog.close();
   };
-  return { state, getSelectedBillFile: () => fileUpload.getFile(), destroy };
+  return { state, destroy };
 };

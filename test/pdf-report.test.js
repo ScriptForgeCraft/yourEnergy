@@ -39,7 +39,17 @@ test('PDF report is a self-contained escaped calculation snapshot with both char
   const html = createCalculatorPdfReportHtml({
     analysis: createAnalysis(),
     passport: { id: 'passport-test', createdAt: '2026-08-31T12:00:00.000Z' },
-    state: { addressNote: 'Home <private>', roof: null, consumption: null, userTariff: null },
+    state: {
+      addressNote: 'Home <private>',
+      roof: null,
+      consumption: null,
+      userTariff: null,
+      sitePotential: {
+        annualYieldKwhPerKwp: 1520,
+        monthlyYieldKwhPerKwp: Array(12).fill(126.67),
+        orientation: { azimuthDegrees: 180, tiltDegrees: 30 }
+      }
+    },
     wizard: {
       pdfReport: { title: 'Solar report', inputs: 'Your inputs', results: 'Results' },
       steps: ['Property', 'Consumption', 'Roof'],
@@ -58,7 +68,9 @@ test('PDF report is a self-contained escaped calculation snapshot with both char
   assert.match(html, /<h1>Solar report<\/h1>/u);
   assert.match(html, /Home &lt;private&gt;/u);
   assert.match(html, /10,440 kWh/u);
-  assert.equal((html.match(/<rect /gu) ?? []).length, 12);
+  assert.match(html, /PVGIS reference yield/u);
+  assert.match(html, /Physical DC capacity limit/u);
+  assert.equal((html.match(/<rect /gu) ?? []).length, 24);
   assert.match(html, /<polyline /u);
   assert.doesNotMatch(html, /<script/iu);
 });

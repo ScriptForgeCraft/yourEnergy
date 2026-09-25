@@ -33,7 +33,6 @@ export const createCalculatorWizardState = (overrides = {}) => ({
   consumption: null,
   userTariff: null,
   storageRequired: false,
-  selectedBillFile: null,
   analysis: null,
   analysisStatus: WIZARD_STEP_STATUSES.LOCKED,
   solarPassport: null,

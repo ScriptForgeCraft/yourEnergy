@@ -61,6 +61,42 @@ export const createCalculatorResultsView = ({
     return wrapper;
   };
 
+  const monthlyComparisonChart = ({ consumption, generation, months }) => {
+    const chart = element('figure', 'wizard-chart monthly-comparison-chart');
+    chart.append(
+      element(
+        'figcaption',
+        '',
+        wizard.results?.monthlyComparison ?? 'Monthly consumption vs solar production'
+      )
+    );
+    const legend = element('p', 'monthly-comparison-chart__legend');
+    legend.append(
+      element('span', 'monthly-comparison-chart__legend-consumption', wizard.monthlyConsumption ?? 'Consumption'),
+      element('span', 'monthly-comparison-chart__legend-generation', wizard.production ?? 'Solar production')
+    );
+    const values = [...consumption, ...generation].map((value) => number(value, 0) ?? 0);
+    const maximum = Math.max(...values, 1);
+    const bars = element('div', 'monthly-comparison-chart__bars');
+    months.forEach((month, index) => {
+      const item = element('div', 'monthly-comparison-chart__item');
+      const pair = element('div', 'monthly-comparison-chart__pair');
+      const consumptionValue = number(consumption[index], 0) ?? 0;
+      const generationValue = number(generation[index], 0) ?? 0;
+      const consumptionBar = element('span', 'monthly-comparison-chart__bar monthly-comparison-chart__bar--consumption');
+      consumptionBar.style.setProperty('--chart-height', `${(consumptionValue / maximum) * 100}%`);
+      consumptionBar.setAttribute('title', `${month?.name ?? index + 1}: ${format(consumptionValue, locale)} kWh`);
+      const generationBar = element('span', 'monthly-comparison-chart__bar monthly-comparison-chart__bar--generation');
+      generationBar.style.setProperty('--chart-height', `${(generationValue / maximum) * 100}%`);
+      generationBar.setAttribute('title', `${month?.name ?? index + 1}: ${format(generationValue, locale)} kWh`);
+      pair.append(consumptionBar, generationBar);
+      item.append(pair, element('small', '', month?.short ?? String(index + 1)));
+      bars.append(item);
+    });
+    chart.append(legend, bars);
+    return chart;
+  };
+
   const calculationBasisDetail = (basis) => {
     if (!basis) return null;
     const basisCopy = wizard.calculationBasis ?? {};
@@ -331,38 +367,37 @@ export const createCalculatorResultsView = ({
     if (!scenario || !resultDashboard) return;
     const monthly = scenario.generation?.monthlyKwh ?? [];
     const annualSavings = scenario.financial?.annualSavingsAmd;
-    const avoidedCo2 = analysis.environmental?.avoidedCo2Tons;
     const annualConsumptionKwh = number(scenario.energyBalance?.annualConsumptionKwh, 0);
-    const offsetEnergyKwh = number(scenario.energyBalance?.offsetEnergyKwh, 0);
+    const annualGenerationKwh = number(scenario.generation?.annualKwh, 0);
     const surplusEnergyKwh = number(scenario.energyBalance?.surplusEnergyKwh, 0);
     const retailOffsetValueAmd = number(scenario.financial?.retailOffsetValueAmd, 0);
     const surplusCompensationValueAmd = number(scenario.financial?.surplusCompensationValueAmd, 0);
     const displayedSavings = number(annualSavings, 0) ?? retailOffsetValueAmd;
     const savingsAreOffsetOnly = number(annualSavings, 0) === null && retailOffsetValueAmd !== null;
+    const remainingGridDemandKwh =
+      annualConsumptionKwh === null || annualGenerationKwh === null
+        ? null
+        : Math.max(annualConsumptionKwh - annualGenerationKwh, 0);
     resultDashboard.replaceChildren();
     const resultsCopy = wizard.results ?? {};
     const overview = element('section', 'result-overview');
     const overviewHeading = element('div', 'result-overview__heading');
     overviewHeading.append(
-      element('p', 'result-overview__eyebrow', resultsCopy.overviewEyebrow ?? 'Your solar system'),
-      element('h3', '', resultsCopy.overviewTitle ?? 'The key figures at a glance'),
+      element(
+        'p',
+        'result-overview__eyebrow',
+        resultsCopy.overviewEyebrow ?? 'Recommended solar system'
+      ),
+      element('h3', '', resultsCopy.overviewTitle ?? 'Recommended solar system'),
       element(
         'p',
         'result-overview__copy',
         resultsCopy.overviewCopy ??
-          'A preliminary system size based on your property and consumption.'
+          'Sized from your location, annual consumption and actual roof inputs.'
       )
     );
     const primaryMetrics = element('dl', 'wizard-kpis result-kpis');
     primaryMetrics.append(
-      overviewMetric({
-        label: resultsCopy.metrics?.solarPotential ?? 'Solar potential',
-        value: `${format(analysis.production?.annualYieldKwhPerKwp, locale)} ${
-          resultsCopy.potentialUnit ?? 'kWh/kWp per year'
-        }`,
-        icon: 'sun',
-        kind: 'potential'
-      }),
       overviewMetric({
         label: resultsCopy.metrics?.recommendedPower ?? 'Recommended power',
         value: `${format(scenario.system?.capacityKwp, locale, {
@@ -388,19 +423,12 @@ export const createCalculatorResultsView = ({
         }`,
         icon: 'chart-bars',
         kind: 'production'
-      })
-    );
-    overview.append(overviewHeading, primaryMetrics);
-    resultDashboard.append(overview);
-
-    const outcomes = element('section', 'result-outcomes');
-    outcomes.append(
-      element('h3', '', resultsCopy.outcomesTitle ?? 'What this means for your home')
-    );
-    const outcomeMetrics = element('dl', 'result-outcomes__metrics');
-    outcomeMetrics.append(
+      }),
       overviewMetric({
-        label: resultsCopy.metrics?.selfConsumption ?? wizard.metrics?.coverage ?? 'Coverage',
+        label:
+          resultsCopy.metrics?.annualCoverage ??
+          wizard.annualCoverage ??
+          'Annual consumption coverage',
         value: `≈ ${format(scenario.coveragePercent, locale, { maximumFractionDigits: 0 })}%`,
         icon: 'faq-home',
         kind: 'coverage'
@@ -414,19 +442,11 @@ export const createCalculatorResultsView = ({
         value: displayedSavings === null ? '—' : `≈ ${format(displayedSavings, locale)} ֏`,
         icon: 'calculator',
         kind: 'savings'
-      }),
-      overviewMetric({
-        label: resultsCopy.metrics?.co2Reduction ?? wizard.environmental?.co2 ?? 'CO₂ reduction',
-        value: Number.isFinite(Number(avoidedCo2))
-          ? `≈ ${format(avoidedCo2, locale, { maximumFractionDigits: 1 })} t`
-          : '—',
-        icon: 'leaf',
-        kind: 'co2'
       })
     );
-    outcomes.append(outcomeMetrics);
-    resultDashboard.append(outcomes);
-    if (annualConsumptionKwh !== null || offsetEnergyKwh !== null || surplusEnergyKwh !== null) {
+    overview.append(overviewHeading, primaryMetrics);
+    resultDashboard.append(overview);
+    if (annualConsumptionKwh !== null || annualGenerationKwh !== null) {
       const balance = element('section', 'result-notice result-energy-balance');
       balance.append(element('h3', '', wizard.energyBalanceTitle ?? 'Energy balance'));
       const values = element('dl', 'wizard-kpis');
@@ -439,15 +459,15 @@ export const createCalculatorResultsView = ({
           wizard.results?.metrics?.annualProduction ??
             wizard.metrics?.annualGeneration ??
             'kWh/year',
-          `${format(scenario.generation?.annualKwh, locale)} kWh`
+          `${format(annualGenerationKwh, locale)} kWh`
         ),
         dashboardMetric(
-          wizard.coveredConsumption ?? 'Covered consumption',
-          offsetEnergyKwh === null ? '—' : `${format(offsetEnergyKwh, locale)} kWh`
+          wizard.annualCoverage ?? 'Annual consumption coverage',
+          `≈ ${format(scenario.coveragePercent, locale, { maximumFractionDigits: 0 })}%`
         ),
         dashboardMetric(
-          wizard.surplusEnergy ?? 'Surplus generation',
-          surplusEnergyKwh === null ? '—' : `${format(surplusEnergyKwh, locale)} kWh`
+          wizard.remainingGridDemand ?? 'Remaining annual grid demand',
+          remainingGridDemandKwh === null ? '—' : `${format(remainingGridDemandKwh, locale)} kWh`
         )
       );
       balance.append(values);
@@ -479,9 +499,97 @@ export const createCalculatorResultsView = ({
               : `${wizard.surplusCompensationValue ?? 'Surplus compensation'}: ${surplusCopy}`
           )
         );
+        balance.append(
+          element(
+            'small',
+            '',
+            wizard.annualNetSurplusHelp ??
+              'This compares annual totals; it is not an hourly export calculation.'
+          )
+        );
       }
       resultDashboard.append(balance);
     }
+    const projectSummary = element('section', 'result-project-summary');
+    projectSummary.append(
+      element('h3', '', wizard.projectSummaryTitle ?? 'Your project summary')
+    );
+    const projectValues = element('dl', 'wizard-kpis');
+    const coordinates = analysis.property?.coordinates ?? state.confirmedProperty;
+    const referencePotential = state.sitePotential;
+    const consumptionMode = state.consumption?.mode;
+    const consumptionModeLabel = consumptionMode
+      ? product.consumption?.modes?.[consumptionMode] ?? consumptionMode
+      : '—';
+    const tariffRate = analysis.financial?.tariff?.rateAmdPerKwh ?? state.userTariff?.rateAmdPerKwh;
+    const roofMounting =
+      analysis.roof?.mountingMode === 'elevated'
+        ? (wizard.elevated ?? 'Elevated structure')
+        : (wizard.parallel ?? 'Roof parallel');
+    projectValues.append(
+      dashboardMetric(
+        wizard.projectLocation ?? 'Location',
+        state.addressNote ||
+          (coordinates
+            ? `${format(coordinates.lat, locale, { maximumFractionDigits: 5 })}, ${format(coordinates.lng, locale, { maximumFractionDigits: 5 })}`
+            : '—')
+      ),
+      dashboardMetric(
+        wizard.exactCoordinates ?? 'Coordinates',
+        coordinates
+          ? `${format(coordinates.lat, locale, { maximumFractionDigits: 5 })}, ${format(coordinates.lng, locale, { maximumFractionDigits: 5 })}`
+          : '—'
+      ),
+      dashboardMetric(
+        wizard.pvgisReferenceYield ?? 'PVGIS reference yield',
+        referencePotential
+          ? `${format(referencePotential.annualYieldKwhPerKwp, locale)} kWh/kWp/year`
+          : '—'
+      ),
+      dashboardMetric(
+        wizard.annualConsumption ?? 'Annual consumption',
+        `${format(annualConsumptionKwh, locale)} kWh · ${consumptionModeLabel}`
+      ),
+      dashboardMetric(
+        wizard.metrics?.tariff ?? 'Tariff',
+        tariffRate === null || tariffRate === undefined
+          ? '—'
+          : `${format(tariffRate, locale, { maximumFractionDigits: 2 })} AMD/kWh`
+      ),
+      dashboardMetric(
+        wizard.roofSummary ?? 'Roof',
+        `${format(analysis.roof?.areaSqm, locale, { maximumFractionDigits: 1 })} m² · ${format(analysis.roof?.orientationDegrees, locale, { maximumFractionDigits: 0 })}° · ${format(analysis.roof?.tiltDegrees, locale, { maximumFractionDigits: 0 })}° · ${roofMounting}`
+      )
+    );
+    projectSummary.append(projectValues);
+    resultDashboard.append(projectSummary);
+    const yieldDetail = element('details', 'wizard-details result-yield-comparison');
+    yieldDetail.append(
+      element('summary', '', wizard.roofYieldDetails ?? 'Location and roof yield details')
+    );
+    const yieldValues = element('dl', 'passport-ledger');
+    yieldValues.append(
+      dashboardMetric(
+        wizard.pvgisReferenceYield ?? 'PVGIS reference at location',
+        referencePotential
+          ? `${format(referencePotential.annualYieldKwhPerKwp, locale)} kWh/kWp/year · ${format(referencePotential.orientation?.azimuthDegrees, locale, { maximumFractionDigits: 0 })}° / ${format(referencePotential.orientation?.tiltDegrees, locale, { maximumFractionDigits: 0 })}°`
+          : '—'
+      ),
+      dashboardMetric(
+        wizard.roofSystemYield ?? 'Estimated specific yield for your roof',
+        `${format(analysis.production?.annualYieldKwhPerKwp, locale)} kWh/kWp/year`
+      )
+    );
+    yieldDetail.append(
+      yieldValues,
+      element(
+        'p',
+        '',
+        wizard.roofYieldExplanation ??
+          'The difference can result from the actual roof orientation, tilt and calculation assumptions.'
+      )
+    );
+    resultDashboard.append(yieldDetail);
     const equipmentRecommendation = analysis.equipmentRecommendation;
     const renderedEquipmentCards = equipmentRecommendationCards(equipmentRecommendation);
     if (renderedEquipmentCards) resultDashboard.append(renderedEquipmentCards);
@@ -543,7 +651,7 @@ export const createCalculatorResultsView = ({
     });
     if (roofCapacity) {
       const roofFit = element('section', 'result-notice result-roof-capacity');
-      roofFit.append(element('h3', '', wizard.roofCapacityTitle ?? 'Preliminary roof fit'));
+      roofFit.append(element('h3', '', wizard.roofCapacityTitle ?? 'Physical roof capacity'));
       const values = element('dl', 'wizard-kpis');
       values.append(
         dashboardMetric(
@@ -557,6 +665,22 @@ export const createCalculatorResultsView = ({
         dashboardMetric(
           wizard.maximumPanelsForRoof ?? 'Maximum with the selected module',
           format(roofCapacity.maximumPanelCount, locale)
+        ),
+        dashboardMetric(
+          wizard.physicalDcCapacityLimit ?? 'Physical DC capacity limit',
+          `${format(roofCapacity.maximumCapacityKwp, locale, { maximumFractionDigits: 2 })} kWp`
+        ),
+        dashboardMetric(
+          wizard.roofOrientation ?? 'Roof orientation',
+          `${format(analysis.roof?.orientationDegrees, locale, { maximumFractionDigits: 0 })}°`
+        ),
+        dashboardMetric(
+          wizard.roofTilt ?? 'Roof tilt',
+          `${format(analysis.roof?.tiltDegrees, locale, { maximumFractionDigits: 0 })}° · ${
+            analysis.roof?.mountingMode === 'elevated'
+              ? (wizard.elevated ?? 'Elevated structure')
+              : (wizard.parallel ?? 'Roof parallel')
+          }`
         )
       );
       roofFit.append(
@@ -579,6 +703,20 @@ export const createCalculatorResultsView = ({
               maximumFractionDigits: 0
             })
           })
+        ),
+        element(
+          'p',
+          'result-roof-capacity__status',
+          scenario.limitations?.includes('ROOF_CAPACITY_LIMIT')
+            ? (wizard.roofCapacityLimiting ??
+              'The physical roof limit constrains the recommended system size.')
+            : (wizard.roofCapacityNotLimiting ?? 'Roof capacity is not a limiting factor.')
+        ),
+        element(
+          'small',
+          '',
+          wizard.roofCapacityExplanation ??
+            'The physical roof limit is not the recommended system size; the recommendation is sized from consumption, solar yield and the other calculation inputs.'
         )
       );
       resultDashboard.append(roofFit);
@@ -808,12 +946,35 @@ export const createCalculatorResultsView = ({
       }
       resultDashboard.append(impact);
     }
-    const chart = element('figure', 'wizard-chart');
-    chart.append(element('figcaption', '', wizard.results?.monthlyProduction ?? wizard.production));
-    const bars = element('div', 'chart-bars');
-    renderBars(bars, monthly, product.passport?.months ?? [], 'kWh');
-    chart.append(bars);
-    resultDashboard.append(chart);
+    const actualMonthlyConsumption =
+      state.consumption?.mode === 'monthly' &&
+      Array.isArray(analysis.consumption?.monthlyKwh) &&
+      analysis.consumption.monthlyKwh.length === 12 &&
+      analysis.consumption.monthlyKwh.every((value) => number(value, 0) !== null)
+        ? analysis.consumption.monthlyKwh
+        : null;
+    if (actualMonthlyConsumption && monthly.length === 12) {
+      resultDashboard.append(
+        monthlyComparisonChart({
+          consumption: actualMonthlyConsumption,
+          generation: monthly,
+          months: product.passport?.months ?? []
+        })
+      );
+    } else {
+      const chart = element('figure', 'wizard-chart');
+      chart.append(
+        element(
+          'figcaption',
+          '',
+          wizard.results?.monthlyProduction ?? wizard.production ?? 'Monthly solar production'
+        )
+      );
+      const bars = element('div', 'chart-bars');
+      renderBars(bars, monthly, product.passport?.months ?? [], 'kWh');
+      chart.append(bars);
+      resultDashboard.append(chart);
+    }
     if (resultSummary)
       resultSummary.textContent = wizard.results?.intro ?? product.result?.ready ?? '';
     if (financeEmpty) financeEmpty.hidden = true;

@@ -94,8 +94,7 @@
   white-space: nowrap;
 }
 
-.calculator-page--professional .consumption-inputs fieldset > label,
-.professional-upload-tab {
+.calculator-page--professional .consumption-inputs fieldset > label {
   position: relative;
   display: flex !important;
   min-height: 3.68rem;
@@ -144,20 +143,6 @@
   overflow: hidden;
   clip: rect(0 0 0 0);
   clip-path: inset(50%);
-}
-
-.professional-upload-tab {
-  color: #4d6685;
-}
-
-.professional-upload-tab > svg {
-  width: 1.3rem;
-  height: 1.3rem;
-  color: #58718f;
-}
-
-.professional-upload-tab::before {
-  display: none;
 }
 
 /* Calculator symbols use the shared outline icon set. The original template
@@ -388,16 +373,6 @@
   text-align: center;
 }
 
-.calculator-page--professional .professional-consumption-form .file-upload {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  overflow: hidden;
-  clip: rect(0 0 0 0);
-  clip-path: inset(50%);
-  white-space: nowrap;
-}
-
 .professional-consumption-actions {
   justify-content: space-between;
   margin-top: 1.9rem;
@@ -493,51 +468,7 @@
   white-space: nowrap;
 }
 
-.site-potential-card__metrics {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0.52rem;
-  margin: 0.92rem 0 0;
-}
-
-.site-potential-card__metrics > div {
-  min-width: 0;
-  border: 1px solid #d7e9fa;
-  border-radius: 0.52rem;
-  padding: 0.52rem 0.58rem;
-  background: rgb(255 255 255 / 68%);
-}
-
-.site-potential-card__metrics dt {
-  color: #597390;
-  font-size: 0.58rem;
-  line-height: 1.3;
-}
-
-.site-potential-card__metrics dd {
-  margin: 0.25rem 0 0;
-  overflow: hidden;
-  color: #10294e;
-  font-size: 0.74rem;
-  font-weight: 800;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.site-potential-card__chart {
-  margin-top: 0.92rem !important;
-  border-top: 1px solid #d8e9f8;
-  padding-top: 0.78rem;
-}
-
-.site-potential-card__chart figcaption {
-  color: #17395e;
-  font-size: 0.67rem;
-  font-weight: 800;
-}
-
-.site-potential-card__source,
-.site-potential-card__disclosure {
+.site-potential-card__source {
   color: #58718e;
   font-size: 0.59rem;
   line-height: 1.4;
@@ -545,10 +476,6 @@
 
 .site-potential-card__source {
   margin-top: 0.72rem !important;
-}
-
-.site-potential-card__disclosure {
-  margin-top: 0.42rem !important;
 }
 
 /* PVGIS values stay readable at every width: blue bars, numbers above and
@@ -617,7 +544,7 @@
 }
 
 .consumption-chart-card h3,
-.consumption-tips h3 {
+.consumption-tips summary {
   margin: 0;
   color: #10264b;
   font-size: 0.95rem;
@@ -727,14 +654,20 @@
   height: 1.25rem;
 }
 
-.consumption-tips h3 {
+.consumption-tips summary {
   display: flex;
   align-items: center;
   gap: 0.5rem;
   margin-bottom: 0.8rem;
+  cursor: pointer;
+  list-style: none;
 }
 
-.consumption-tips h3 svg {
+.consumption-tips summary::-webkit-details-marker {
+  display: none;
+}
+
+.consumption-tips summary svg {
   width: 1.5rem;
   height: 1.5rem;
   color: #f5b700;

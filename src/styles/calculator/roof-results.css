@@ -224,6 +224,46 @@
   margin-top: 0.42rem;
 }
 
+.roof-reference-comparison {
+  grid-column: 1 / -1;
+  margin-top: 0.2rem;
+  border: 1px solid #d7e9fa;
+  border-radius: 0.62rem;
+  padding: 0.72rem;
+  background: #f7fbff;
+}
+
+.roof-reference-comparison h4,
+.roof-reference-comparison p {
+  margin: 0;
+}
+
+.roof-reference-comparison h4 {
+  color: #173259;
+  font-size: 0.74rem;
+}
+
+.roof-reference-comparison dl {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.5rem;
+  margin: 0.55rem 0;
+}
+
+.roof-reference-comparison dt,
+.roof-reference-comparison p {
+  color: #5b7390;
+  font-size: 0.64rem;
+  line-height: 1.35;
+}
+
+.roof-reference-comparison dd {
+  margin: 0.16rem 0 0;
+  color: #173259;
+  font-size: 0.75rem;
+  font-weight: 800;
+}
+
 .professional-roof-notice.is-error {
   border: 1px solid #ef9a9a;
   color: #8b1721;

@@ -119,7 +119,7 @@ test('calculator instances expose destroy and the mode manager tears down before
   ]);
 
   assert.match(quick, /return \{ session, clearAnalysis, destroy \}/u);
-  assert.match(professional, /getSelectedBillFile: \(\) => fileUpload\.getFile\(\), destroy/u);
+  assert.match(professional, /return \{ state, destroy \}/u);
   assert.match(quick, /lifecycle\.canCommit\(controller, request\)/u);
   assert.match(professional, /lifecycle\.canCommit\(controller, analysisRequest\)/u);
   assert.match(modes, /currentInstance\?\.destroy\?\.\(\)/u);

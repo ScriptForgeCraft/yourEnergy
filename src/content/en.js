@@ -82,16 +82,14 @@ export default {
     },
     potential: {
       eyebrow: 'Step 2 · Site potential',
-      title: 'Solar benchmark for the selected point',
+      title: 'PVGIS location reference',
       loading: 'Requesting PVGIS for the confirmed point…',
-      annualYieldLabel: 'Expected generation per 1 kWp each year',
-      orientationLabel: 'Optimum direction for a free-standing system',
-      tiltLabel: 'Optimum tilt for a free-standing system',
+      annualYieldLabel: 'PVGIS reference yield',
+      orientationLabel: 'Reference optimal direction',
+      tiltLabel: 'Reference optimal tilt',
       source: 'Source: PVGIS · preliminary 14% system-loss assumption',
-      cacheHit: 'The PVGIS response came from the protected cache; source date: {date}.',
-      cacheMiss: 'PVGIS responded now; the cache protects the service from repeated requests.',
       disclosure:
-        'This is a PVGIS benchmark for a fixed free-standing system at the chosen point. It is not a survey of your roof or an installation recommendation for it.',
+        'PVGIS values describe the solar resource at this location for a reference 1 kWp fixed system. Your actual roof is analysed in Step 3.',
       roofDisclosure:
         'The direction, pitch, area, shading and structural suitability of the actual roof must be entered below and confirmed by an engineer.',
       unavailable:
@@ -126,8 +124,7 @@ export default {
       tariffBillLabel: 'Tariff AMD/kWh — required to calculate consumption',
       tariffBillHelp: 'Enter the rate from your bill to convert AMD to kWh.',
       tariffOptionalLabel: 'Tariff AMD/kWh — optional',
-      tariffOptionalHelp:
-        'Only needed for savings and payback; system sizing and generation work without it.',
+      tariffOptionalHelp: 'Used to estimate your annual financial savings.',
       usageLabel: 'Average monthly consumption',
       usageHelp: 'Enter the average monthly consumption in kWh.',
       monthlyTitle: 'Consumption over 12 months',
@@ -340,9 +337,6 @@ export default {
         'The solar-analysis service is not connected or is temporarily unavailable.',
       outsideServiceArea:
         'This free preliminary calculator currently serves points in Armenia only.',
-      cacheNotConfigured:
-        'PVGIS analysis is not enabled yet because its protected cache is not configured.',
-      cacheUnavailable: 'The protected PVGIS cache is temporarily unavailable. Try again later.',
       roofAreaRequiresMeasured:
         'For a very steep roof, enter a measured roof-face area instead of a top-view area.',
       potentialCooldown: 'A repeat request for this point will be available in {seconds} s.',
@@ -373,11 +367,6 @@ export default {
     addressSearchAttribution: 'Address-search data:',
     analyze: 'Open point selection',
     openCalculator: 'Calculate my home',
-    uploadTitle: 'Attach an electricity bill (optional)',
-    uploadPrompt: 'Choose a file or drag it here',
-    uploadHelp:
-      'PDF, JPG or PNG up to 10 MB. The file stays out of the server and is not read automatically; enter values manually.',
-    removeFile: 'Remove file',
     signatureLead: 'Your solar energy,',
     signatureTail: 'your way.',
     dashboardAriaLabel: 'Solar calculation summary',

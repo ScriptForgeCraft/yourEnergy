@@ -31,7 +31,7 @@ const compactEquipment = (item, details = '') => {
 
 /**
  * Creates the explicit Professional Calculator handoff. It deliberately uses
- * only values already shown to the visitor and never includes file contents.
+ * only values already shown to the visitor.
  * The API validates this shape again before it is delivered to an engineer.
  */
 export const buildProfessionalLeadContext = ({ analysis, state } = {}) => {
@@ -47,7 +47,6 @@ export const buildProfessionalLeadContext = ({ analysis, state } = {}) => {
   const inverter = analysis?.inverterRecommendation;
   const storage = analysis?.storageRecommendation;
   const mounting = analysis?.mountingHardwareRecommendation;
-  const billFile = state?.selectedBillFile;
 
   return {
     kind: 'professional',
@@ -117,8 +116,7 @@ export const buildProfessionalLeadContext = ({ analysis, state } = {}) => {
           ? `${mounting.practicalInclinationDeg}°`
           : ''
       )
-    },
-    billFileName: cleanText(billFile?.name) || null
+    }
   };
 };
 

@@ -56,8 +56,7 @@ test('Professional lead context includes entered inputs, calculated result and e
           { lat: 40.205, lng: 44.5125 }
         ]
       },
-      storageRequired: true,
-      selectedBillFile: { name: 'electricity-bill.pdf' }
+      storageRequired: true
     },
     analysis: {
       property: { coordinates: { lat: 40.20512, lng: 44.51234 } },
@@ -104,5 +103,5 @@ test('Professional lead context includes entered inputs, calculated result and e
   assert.equal(context.result.monthlyGenerationKwh.length, 12);
   assert.equal(context.equipment.solarModule, 'LONGi Hi-MO X10 · 650 W');
   assert.equal(context.equipment.inverter, 'SolaX X3-MIC · 4 kW AC');
-  assert.equal(context.billFileName, 'electricity-bill.pdf');
+  assert.equal('billFileName' in context, false);
 });

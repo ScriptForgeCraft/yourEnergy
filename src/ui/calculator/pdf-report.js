@@ -1,3 +1,5 @@
+import { calculatePreliminaryRoofCapacity } from '../../domain/roof-capacity.js';
+
 const asNumber = (value) => {
   const number = Number(value);
   return Number.isFinite(number) ? number : null;
@@ -212,12 +214,15 @@ export const createCalculatorPdfReportHtml = ({
     finance: wizard.pdfReport?.finance ?? 'Financial estimate',
     sources: wizard.pdfReport?.sourcesTitle ?? 'Sources and assumptions',
     monthly: wizard.pdfReport?.monthly ?? wizard.production ?? 'Monthly generation',
+    monthlyLocationReference:
+      wizard.pdfReport?.monthlyLocationReference ?? 'Monthly PVGIS reference yield',
     cashflow: wizard.pdfReport?.cashflow ?? 'Financial outlook',
     limitations: wizard.pdfReport?.limitations ?? 'Assumptions and limitations',
     property: wizard.pdfReport?.property ?? wizard.steps?.[0] ?? 'Property',
     coordinates:
       wizard.pdfReport?.coordinates ?? wizard.calculationBasis?.coordinates ?? 'Coordinates',
     consumption: wizard.pdfReport?.consumption ?? wizard.annualConsumption ?? 'Annual consumption',
+    inputMethod: wizard.pdfReport?.inputMethod ?? 'Consumption input method',
     monthlyConsumption: wizard.pdfReport?.monthlyConsumption ?? 'Monthly consumption profile',
     tariff: wizard.pdfReport?.tariff ?? wizard.metrics?.tariff ?? 'Tariff',
     storageRequest:
@@ -226,6 +231,12 @@ export const createCalculatorPdfReportHtml = ({
     no: wizard.pdfReport?.no ?? 'No',
     roof: wizard.pdfReport?.roof ?? wizard.steps?.[2] ?? 'Roof',
     mounting: wizard.pdfReport?.mounting ?? 'Mounting',
+    usableArea: wizard.pdfReport?.usableArea ?? 'Usable module area',
+    physicalModuleLimit: wizard.pdfReport?.physicalModuleLimit ?? 'Physical module limit',
+    physicalCapacity: wizard.pdfReport?.physicalCapacity ?? 'Physical DC capacity limit',
+    pvgisReferenceYield: wizard.pdfReport?.pvgisReferenceYield ?? 'PVGIS reference yield',
+    pvgisReferenceOrientation:
+      wizard.pdfReport?.pvgisReferenceOrientation ?? 'PVGIS reference orientation / tilt',
     capacity: wizard.pdfReport?.capacity ?? 'System capacity',
     panels: wizard.pdfReport?.panels ?? wizard.metrics?.panels ?? 'Panels',
     annualProduction:
@@ -252,6 +263,13 @@ export const createCalculatorPdfReportHtml = ({
   const tariff = analysis.financial?.tariff ?? state.userTariff ?? {};
   const financial = scenario.financial ?? {};
   const estimate = scenario.commercialEstimate ?? analysis.commercialEstimate ?? {};
+  const referencePotential = state.sitePotential ?? null;
+  const roofCapacity = calculatePreliminaryRoofCapacity({
+    roofAreaSqm: roof.areaSqm,
+    usableAreaRatio: roof.usableAreaRatio,
+    panelAreaSqm: scenario.system?.panelAreaSqm,
+    panelWatts: scenario.system?.panelWatts
+  });
   const sourceCopy = { sources: copy.sourcesByKey, unavailable: copy.unavailable };
   const inputRows = [
     [copy.property, state.addressNote || null],
@@ -262,6 +280,7 @@ export const createCalculatorPdfReportHtml = ({
         : null
     ],
     [copy.consumption, `${displayNumber(consumption.annualKwh, locale)} kWh`],
+    [copy.inputMethod, consumption.mode ?? state.consumption?.mode ?? null],
     [
       copy.monthlyConsumption,
       Array.isArray(consumption.monthlyKwh)
@@ -276,6 +295,18 @@ export const createCalculatorPdfReportHtml = ({
     ],
     [copy.storageRequest, state.storageRequired ? copy.yes : copy.no],
     [
+      copy.pvgisReferenceYield,
+      referencePotential
+        ? `${displayNumber(referencePotential.annualYieldKwhPerKwp, locale)} kWh/kWp/year`
+        : null
+    ],
+    [
+      copy.pvgisReferenceOrientation,
+      referencePotential
+        ? `${displayNumber(referencePotential.orientation?.azimuthDegrees, locale, { maximumFractionDigits: 1 })}° / ${displayNumber(referencePotential.orientation?.tiltDegrees, locale, { maximumFractionDigits: 1 })}°`
+        : null
+    ],
+    [
       copy.roof,
       `${displayNumber(roof.areaSqm, locale, { maximumFractionDigits: 1 })} m² · ${displayNumber(roof.orientationDegrees, locale, { maximumFractionDigits: 1 })}° · ${displayNumber(roof.tiltDegrees, locale, { maximumFractionDigits: 1 })}°`
     ],
@@ -284,6 +315,22 @@ export const createCalculatorPdfReportHtml = ({
       roof.mountingMode === 'elevated'
         ? (wizard.elevated ?? 'Elevated')
         : (wizard.parallel ?? 'Roof parallel')
+    ],
+    [
+      copy.usableArea,
+      roofCapacity
+        ? `${displayNumber(roofCapacity.usableRoofAreaSqm, locale, { maximumFractionDigits: 1 })} m²`
+        : null
+    ],
+    [
+      copy.physicalModuleLimit,
+      roofCapacity ? `${displayNumber(roofCapacity.maximumPanelCount, locale)} modules` : null
+    ],
+    [
+      copy.physicalCapacity,
+      roofCapacity
+        ? `${displayNumber(roofCapacity.maximumCapacityKwp, locale, { maximumFractionDigits: 2 })} kWp`
+        : null
     ]
   ];
   const resultRows = [
@@ -304,7 +351,18 @@ export const createCalculatorPdfReportHtml = ({
       copy.coveredConsumption,
       `${displayNumber(scenario.energyBalance?.offsetEnergyKwh, locale)} kWh`
     ],
-    [copy.surplus, `${displayNumber(scenario.energyBalance?.surplusEnergyKwh, locale)} kWh`]
+    [copy.surplus, `${displayNumber(scenario.energyBalance?.surplusEnergyKwh, locale)} kWh`],
+    [
+      wizard.remainingGridDemand ?? 'Remaining annual grid demand',
+      `${displayNumber(
+        Math.max(
+          0,
+          Number(scenario.energyBalance?.annualConsumptionKwh ?? 0) -
+            Number(scenario.energyBalance?.annualGenerationKwh ?? 0)
+        ),
+        locale
+      )} kWh`
+    ]
   ];
   const financeRows = [
     [copy.annualSavings, `${displayNumber(financial.annualSavingsAmd, locale)} AMD`],
@@ -356,6 +414,7 @@ export const createCalculatorPdfReportHtml = ({
     ${reportSection({ title: copy.results, rows: resultRows })}
     ${reportSection({ title: copy.equipment, rows: equipmentRows({ analysis, scenario, copy, locale }) })}
     ${reportSection({ title: copy.finance, rows: financeRows })}
+    ${monthlyChart({ values: referencePotential?.monthlyYieldKwhPerKwp ?? [], months: product.passport?.months ?? [], locale, title: copy.monthlyLocationReference, unit: 'kWh/kWp' })}
     ${monthlyChart({ values: scenario.generation?.monthlyKwh ?? [], months: product.passport?.months ?? [], locale, title: copy.monthly, unit: 'kWh' })}
     ${financialChart({ timeline: financial.timeline ?? [], locale, title: copy.cashflow, unit: 'AMD' })}
     ${reportSection({ title: copy.sources, rows: sourceRows({ analysis, copy: sourceCopy }), className: 'report-section--wide' })}
