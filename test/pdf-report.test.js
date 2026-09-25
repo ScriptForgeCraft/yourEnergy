@@ -1,76 +1,124 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 
-import {
-  TEMPORARY_YOURENERGY_PRICEBOOK,
-  buildSolarAnalysis,
-  createUserTariffSelection
-} from '../src/domain/index.js';
+import wizardCopy from '../src/content/calculator-wizard.js';
 import { createCalculatorPdfReportHtml } from '../src/ui/calculator/pdf-report.js';
 
-const createAnalysis = () =>
-  buildSolarAnalysis({
-    effectiveDate: '2026-08-31',
-    property: {
-      coordinates: { lat: 40.18, lng: 44.51 },
-      confirmed: true,
-      source: { kind: 'manual', status: 'confirmed' }
-    },
-    consumption: { annualKwh: 12_000 },
+const months = [
+  'Հնվ',
+  'Փտր',
+  'Մրտ',
+  'Ապր',
+  'Մյս',
+  'Հնս',
+  'Հլս',
+  'Օգս',
+  'Սեպ',
+  'Հոկ',
+  'Նոյ',
+  'Դեկ'
+].map((short) => ({ short }));
+
+const createOptions = () => ({
+  analysis: {
+    property: { coordinates: { lat: 40.1813, lng: 44.51388 } },
+    consumption: { annualKwh: 6454, mode: 'bill' },
     roof: {
-      areaSqm: 100,
+      areaSqm: 118.9,
       usableAreaRatio: 0.7,
       orientationDegrees: 180,
       tiltDegrees: 30,
-      polygonComplete: true,
-      source: { kind: 'manual', status: 'confirmed' }
+      mountingMode: 'parallel'
     },
-    production: {
-      annualYieldKwhPerKwp: 1_500,
-      monthlyYieldFactors: Array(12).fill(1),
-      source: { kind: 'provider', status: 'confirmed', provider: 'PVGIS fixture' }
+    production: { annualYieldKwhPerKwp: 1411 },
+    environmental: { avoidedCo2Tons: 1.01 },
+    equipmentRecommendation: {
+      solarModule: { panelBrand: 'LONGi', panelModel: 'LR7-72HVDF', watts: 650 },
+      inverter: { brand: 'SolaX', productName: 'X1-HYB-LV', selectedAcPowerKw: 4 }
     },
-    system: { panelWatts: 580, panelAreaSqm: 2 },
-    priceBook: TEMPORARY_YOURENERGY_PRICEBOOK,
-    tariffSelection: createUserTariffSelection({ rateAmdPerKwh: 52 }, '2026-08-31')
-  });
-
-test('PDF report is a self-contained escaped calculation snapshot with both charts', () => {
-  const html = createCalculatorPdfReportHtml({
-    analysis: createAnalysis(),
-    passport: { id: 'passport-test', createdAt: '2026-08-31T12:00:00.000Z' },
-    state: {
-      addressNote: 'Home <private>',
-      roof: null,
-      consumption: null,
-      userTariff: null,
-      sitePotential: {
-        annualYieldKwhPerKwp: 1520,
-        monthlyYieldKwhPerKwp: Array(12).fill(126.67),
-        orientation: { azimuthDegrees: 180, tiltDegrees: 30 }
-      }
-    },
-    wizard: {
-      pdfReport: { title: 'Solar report', inputs: 'Your inputs', results: 'Results' },
-      steps: ['Property', 'Consumption', 'Roof'],
-      metrics: { annualGeneration: 'Annual generation', coverage: 'Coverage' }
-    },
-    product: {
-      passport: {
-        months: Array.from({ length: 12 }, (_value, index) => ({ short: `${index + 1}` }))
+    selectedScenario: {
+      limitations: [],
+      system: { capacityKwp: 3.9, panelCount: 6, panelWatts: 650, panelAreaSqm: 2.77 },
+      generation: {
+        annualKwh: 5504,
+        monthlyKwh: [295, 360, 428, 472, 536, 574, 605, 598, 553, 448, 366, 268]
       },
-      ledger: { sources: {}, assumptions: {} }
-    },
-    locale: 'en-US'
-  });
+      energyBalance: { annualConsumptionKwh: 6454, annualGenerationKwh: 5504 },
+      coveragePercent: 85,
+      financial: {
+        annualSavingsAmd: 255811,
+        paybackYears: 3,
+        grossSavings25YearsAmd: 6395276
+      },
+      commercialEstimate: {
+        available: true,
+        primaryAmd: 760000,
+        rangeAmd: { p25: 710000, p75: 810000 }
+      }
+    }
+  },
+  passport: { id: 'passport-20260925100140877-1', createdAt: '2026-09-25T10:01:00.000Z' },
+  state: {
+    addressNote: 'Home <private>',
+    storageRequired: true,
+    consumption: { annualKwh: 6454, mode: 'bill' },
+    userTariff: { rateAmdPerKwh: 46.48 },
+    sitePotential: {
+      annualYieldKwhPerKwp: 1481,
+      monthlyYieldKwhPerKwp: [81, 99, 116, 126, 141, 150, 160, 160, 150, 123, 101, 74],
+      orientation: { azimuthDegrees: 182, tiltDegrees: 35 }
+    }
+  },
+  wizard: wizardCopy.hy,
+  product: { passport: { months } },
+  locale: 'hy-AM'
+});
+
+test('PDF report renders the approved four-page A4 structure', () => {
+  const html = createCalculatorPdfReportHtml(createOptions());
 
   assert.ok(html);
-  assert.match(html, /<h1>Solar report<\/h1>/u);
-  assert.match(html, /Home &lt;private&gt;/u);
-  assert.match(html, /10,440 kWh/u);
-  assert.match(html, /PVGIS reference yield/u);
-  assert.match(html, /Physical DC capacity limit/u);
-  assert.equal((html.match(/<rect /gu) ?? []).length, 24);
-  assert.match(html, /<polyline /u);
+  assert.equal((html.match(/class="pdf-page pdf-page--/gu) ?? []).length, 4);
+  assert.match(html, /@page \{ size: A4; margin: 0; \}/u);
+  assert.match(html, /3\.9 kWp/u);
+  assert.match(html, /5,504 kWh/u);
+  assert.match(html, /1,481 kWh\/kWp\/տարի/u);
+  assert.match(html, /30 մոդուլ/u);
+  assert.match(html, /19\.5 kWp/u);
+  assert.match(html, /data-monthly-chart="production"/u);
+  assert.match(html, /data-monthly-chart="pvgis"/u);
+  assert.equal((html.match(/data-monthly-bar=/gu) ?? []).length, 24);
+  assert.doesNotMatch(html, /<polyline/iu);
   assert.doesNotMatch(html, /<script/iu);
+  assert.doesNotMatch(html, /about:blank/iu);
+});
+
+test('Armenian PDF localizes internal input values and roof-specific yield', () => {
+  const html = createCalculatorPdfReportHtml(createOptions());
+
+  assert.match(html, /Միջին հաշիվ/u);
+  assert.doesNotMatch(html, />bill</u);
+  assert.match(html, /Տանիքի գնահատված տեսակարար արտադրություն/u);
+  assert.doesNotMatch(html, /Տանիքի գնահատված yield/iu);
+  assert.doesNotMatch(html, /CAPEX_REQUIRED/u);
+  assert.doesNotMatch(html, /SURPLUS_COMPENSATION_NOT_CONFIGURED/u);
+  assert.doesNotMatch(html, /VERIFIED_HISTORICAL_GRID_FACTOR_2022/u);
+});
+
+test('PDF report escapes localized copy before rendering HTML', () => {
+  const options = createOptions();
+  options.wizard = {
+    ...options.wizard,
+    pdfReport: {
+      ...options.wizard.pdfReport,
+      title: '<b>Unsafe title</b>',
+      subtitle: 'A & B'
+    }
+  };
+
+  const html = createCalculatorPdfReportHtml(options);
+
+  assert.match(html, /&lt;b&gt;Unsafe title&lt;\/b&gt;/u);
+  assert.match(html, /A &amp; B/u);
+  assert.doesNotMatch(html, /<b>Unsafe title<\/b>/u);
 });
