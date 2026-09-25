@@ -633,6 +633,7 @@ export const initProcessStory = ({ config = {} } = {}) => {
         const incomingCopy = copies[nextIndex];
         const incomingVisual = visuals[nextIndex];
         const incomingMedia = mediaFrames[nextIndex];
+        const outgoingCards = cardsFor(previousIndex);
         const incomingCards = cardsFor(nextIndex);
         const forward = direction >= 0;
 
@@ -646,9 +647,26 @@ export const initProcessStory = ({ config = {} } = {}) => {
         gsap.set(outgoingCopy, { autoAlpha: 1, y: 0 });
         gsap.set(outgoingVisual, { autoAlpha: 1, scale: 1 });
         gsap.set(outgoingMedia, { autoAlpha: 1, scale: 1 });
+        gsap.set(incoming, { autoAlpha: 1 });
+        gsap.set(incomingCopy, { autoAlpha: 0, y: forward ? 26 : -26 });
+        gsap.set(incomingVisual, { autoAlpha: 0, scale: 1.03 });
+        gsap.set(incomingMedia, { autoAlpha: 0, scale: 1.03 });
+        gsap.set(incomingCards, {
+          autoAlpha: 0,
+          y: forward ? 16 : -16,
+          z: -24
+        });
 
         root.dataset.processInitialized = 'true';
         animateSceneToStep(nextIndex);
+        setProgress(nextIndex);
+        states.forEach((state, stateIndex) => {
+          const active = stateIndex === nextIndex;
+          state.classList.toggle('is-active', active);
+          state.classList.toggle('is-before', stateIndex < nextIndex);
+          state.setAttribute('aria-hidden', String(!active));
+        });
+        animateStepMetrics(nextIndex);
 
         transition = gsap
           .timeline({
@@ -658,34 +676,12 @@ export const initProcessStory = ({ config = {} } = {}) => {
           .to(outgoingCopy, { autoAlpha: 0, y: forward ? -20 : 20, duration: 0.24 }, 0)
           .to(outgoingVisual, { autoAlpha: 0, scale: 1.025, duration: 0.28 }, 0)
           .to(outgoingMedia, { autoAlpha: 0, scale: 1.025, duration: 0.28 }, 0)
+          .to(outgoingCards, { autoAlpha: 0, y: forward ? -12 : 12, duration: 0.22, stagger: 0.02 }, 0)
           .set(outgoing, { autoAlpha: 0 }, 0.28)
-          .call(
-            () => {
-              setProgress(nextIndex);
-              states.forEach((state, stateIndex) => {
-                const visible = stateIndex === nextIndex;
-                state.classList.toggle('is-active', visible);
-                state.classList.toggle('is-before', stateIndex < nextIndex);
-                state.setAttribute('aria-hidden', String(!visible));
-              });
-              gsap.set(incoming, { autoAlpha: 1 });
-              gsap.set(incomingCopy, { autoAlpha: 0, y: forward ? 26 : -26 });
-              gsap.set(incomingVisual, { autoAlpha: 0, scale: 1.03 });
-              gsap.set(incomingMedia, { autoAlpha: 0, scale: 1.03 });
-              gsap.set(incomingCards, {
-                autoAlpha: 0,
-                y: forward ? 16 : -16,
-                z: -24
-              });
-              animateStepMetrics(nextIndex);
-            },
-            [],
-            0.29
-          )
-          .to(incomingCopy, { autoAlpha: 1, y: 0, duration: 0.34 }, 0.3)
-          .to(incomingVisual, { autoAlpha: 1, scale: 1, duration: 0.48 }, 0.3)
-          .to(incomingMedia, { autoAlpha: 1, scale: 1, duration: 0.48 }, 0.3)
-          .to(incomingCards, { autoAlpha: 1, y: 0, z: 0, duration: 0.32, stagger: 0.035 }, 0.42);
+          .to(incomingCopy, { autoAlpha: 1, y: 0, duration: 0.34 }, 0.08)
+          .to(incomingVisual, { autoAlpha: 1, scale: 1, duration: 0.48 }, 0.04)
+          .to(incomingMedia, { autoAlpha: 1, scale: 1, duration: 0.48 }, 0.04)
+          .to(incomingCards, { autoAlpha: 1, y: 0, z: 0, duration: 0.32, stagger: 0.035 }, 0.2);
         return true;
       };
 

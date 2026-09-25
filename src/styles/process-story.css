@@ -47,6 +47,27 @@
     linear-gradient(0deg, #020b12e8, transparent 34%);
 }
 
+/* This wash belongs to the pinned scene, not an individual step. Keeping it
+   outside the animated articles prevents the backdrop from disappearing
+   between the outgoing and incoming steps. */
+.process-stage__frame::before {
+  content: '';
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(
+      90deg,
+      rgba(2, 12, 20, 0.86) 0%,
+      rgba(2, 12, 20, 0.74) 24%,
+      rgba(2, 12, 20, 0.4) 42%,
+      rgba(2, 12, 20, 0.12) 58%,
+      transparent 72%
+    ),
+    linear-gradient(0deg, rgba(2, 11, 18, 0.72) 0%, rgba(2, 11, 18, 0.2) 22%, transparent 42%);
+}
+
 .process-stage__ambient {
   position: absolute;
   z-index: -2;
@@ -105,7 +126,7 @@
 }
 
 .process-stage__states {
-  z-index: 1;
+  z-index: 2;
 }
 
 .process-state {
@@ -567,9 +588,10 @@
   object-position: 60% 50%;
 }
 
-/* Keep the copy readable against the soft background. */
+/* On desktop the readability wash is shared by the whole pinned scene. The
+   per-step pseudo-element remains only as the mobile fallback below. */
 .process-state--photo::before {
-  content: '';
+  content: none;
   position: absolute;
   inset: 0;
   z-index: 1;
@@ -923,6 +945,9 @@
     overflow: visible;
     background: linear-gradient(90deg, #020c14d9, transparent 70%);
   }
+  .process-stage__frame::before {
+    content: none;
+  }
   /* A viewport-fixed child escapes the section on mobile. Keep the one shared
      backdrop within the natural six-step document flow instead. */
   .process-stage__background {
@@ -956,6 +981,9 @@
   }
   .process-stage__background::after {
     display: none;
+  }
+  .process-state--photo::before {
+    content: '';
   }
   .process-state + .process-state {
     border-top: 1px solid #ffffff12;
