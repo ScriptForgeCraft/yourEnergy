@@ -38,6 +38,15 @@ h6 {
   hyphens: none;
 }
 
+img,
+picture,
+video,
+canvas,
+svg {
+ user-select: none !important;
+}
+
+
 [hidden] {
   display: none !important;
 }
