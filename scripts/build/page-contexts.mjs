@@ -348,23 +348,47 @@ export const createPageContextBuilder = ({ publicEnv, pages }) => {
         id,
         label: regionLabels[content.locale][id]
       })),
-      steps: processCopy.steps.map((step, index) => ({
-        ...step,
-        index,
-        image: createProcessImageContext(step.visual),
-        headlineLines: step.headline.split('\n'),
-        stateClass: index === 0 ? 'is-active' : '',
-        ariaHidden: index === 0 ? 'false' : 'true',
-        progressClass: index === 0 ? 'is-active' : 'is-future',
-        isAnalysis: index === 0,
-        isInspection: index === 1,
-        isDesign: index === 2,
-        isProposal: index === 3,
-        isInstallation: index === 4,
-        isSupport: index === 5,
-        designPanels: index === 2 ? Array.from({ length: 12 }, (_, panel) => panel) : null,
-        installPanels: index === 4 ? Array.from({ length: 9 }, (_, panel) => panel) : null
-      }))
+      steps: processCopy.steps.map((step, index) => {
+        const timelineLength = step.timeline?.length ?? 0;
+        const installationIcons = [
+          'file-text',
+          'faq-home',
+          'faq-settings',
+          'file-text',
+          'wrench',
+          'shield-check'
+        ];
+
+        return {
+          ...step,
+          index,
+          image: createProcessImageContext(step.visual),
+          headlineLines: step.headline.split('\n'),
+          stateClass: index === 0 ? 'is-active' : '',
+          ariaHidden: index === 0 ? 'false' : 'true',
+          progressClass: index === 0 ? 'is-active' : 'is-future',
+          isAnalysis: index === 0,
+          isInspection: index === 1,
+          isDesign: index === 2,
+          isProposal: index === 3,
+          isInstallation: index === 4,
+          isSupport: index === 5,
+          designPanels: index === 2 ? Array.from({ length: 12 }, (_, panel) => panel) : null,
+          installPanels: index === 4 ? Array.from({ length: 9 }, (_, panel) => panel) : null,
+          timeline: step.timeline?.map((timelineStep, timelineIndex) => ({
+            ...timelineStep,
+            icon: installationIcons[timelineIndex] ?? 'check',
+            isCurrent: timelineIndex === timelineLength - 2,
+            isComplete: timelineIndex === timelineLength - 1,
+            timelineClass:
+              timelineIndex === timelineLength - 1
+                ? 'is-complete'
+                : timelineIndex === timelineLength - 2
+                  ? 'is-current'
+                  : ''
+          }))
+        };
+      })
     };
 
     return {

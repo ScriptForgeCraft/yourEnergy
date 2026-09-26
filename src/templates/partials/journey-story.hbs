@@ -184,8 +184,13 @@
 
             {{#if timeline}}
               <ol class='process-installation-timeline'>{{#each timeline}}<li
+                    class='{{timelineClass}}'
                     data-process-install-step
-                  ><b>{{number}}</b><span>{{label}}</span></li>{{/each}}</ol>
+                  ><span class='process-installation-timeline__node' aria-hidden='true'><svg
+                        class='inline-icon'
+                      ><use href='/icons.svg#{{icon}}'></use></svg></span><span
+                      class='process-installation-timeline__label'
+                    >{{label}}</span></li>{{/each}}</ol>
             {{/if}}
           </div>
         </article>

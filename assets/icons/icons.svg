@@ -27,6 +27,7 @@
     <symbol id="chart-bars" viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></symbol>
     <symbol id="pin" viewBox="0 0 24 24"><path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2"/></symbol>
     <symbol id="file" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8zM14 2v6h6M12 18v-6m-3 3 3-3 3 3"/></symbol>
+    <symbol id="file-text" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8zM14 2v6h6M16 13H8M16 17H8M10 9H8"/></symbol>
     <symbol id="satellite" viewBox="0 0 24 24"><path d="m7 17 10-10M5 10l-2-2 5-5 2 2M14 19l2 2 5-5-2-2M8 8l8 8"/><path d="M12 3v3M3 12h3M18 12h3M12 18v3"/></symbol>
     <symbol id="calculator" viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M8 6h8M8 11h1M12 11h1M16 11h1M8 15h1M12 15h1M16 15h1M8 18h1M12 18h1M16 18h1"/></symbol>
     <symbol id="shield" viewBox="0 0 24 24"><path d="M20 13c0 5-3.5 7.5-8 9-4.5-1.5-8-4-8-9V5l8-3 8 3zM9 12l2 2 4-4"/></symbol>
@@ -40,6 +41,7 @@
     <symbol id="heart" viewBox="0 0 24 24"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8l1.1 1.1L12 21l7.8-7.5 1.1-1.1a5.5 5.5 0 0 0-.1-7.8Z"/></symbol>
     <symbol id="quote" viewBox="0 0 24 24"><path d="M10 11H5a4 4 0 0 0 4 4v4a6 6 0 0 1-6-6V9a2 2 0 0 1 2-2h5Zm11 0h-5a4 4 0 0 0 4 4v4a6 6 0 0 1-6-6V9a2 2 0 0 1 2-2h5Z"/></symbol>
     <symbol id="solar-mount" viewBox="0 0 24 24"><path d="m3 16 16-11 2 3-16 11zM5 19h16M18 10v9M10 14v5M3 21h4M17 21h5"/></symbol>
+    <symbol id="wrench" viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.77 3.77Z"/></symbol>
     <symbol id="download" viewBox="0 0 24 24"><path d="M12 3v12m-5-5 5 5 5-5M4 16v5h16v-5"/></symbol>
   </defs>
 </svg>
