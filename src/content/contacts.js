@@ -52,7 +52,8 @@ export const contactPageCopy = Object.freeze({
         icon: 'calendar',
         title: 'Պլանավորել հանդիպում',
         value: 'Առցանց կամ գրասենյակում',
-        href: '#contact-form'
+        href: '#contact-form',
+        meeting: true
       }
     ],
     officesEyebrow: 'Մեր գրասենյակները',
@@ -84,6 +85,17 @@ export const contactPageCopy = Object.freeze({
     email: 'Էլ․ փոստ',
     topic: 'Թեմա',
     message: 'Ձեր հաղորդագրությունը',
+    meeting: {
+      title: 'Պլանավորել հանդիպում',
+      copy: 'Ընտրեք ձեզ հարմար օրն ու ժամը։',
+      selectDate: 'Ընտրեք օրը',
+      selectTime: 'Ընտրեք ժամը',
+      previousMonth: 'Նախորդ ամիս',
+      nextMonth: 'Հաջորդ ամիս',
+      selectedDate: 'Ընտրված օր',
+      close: 'Փակել',
+      message: 'Կցանկանայի հանդիպում պլանավորել {date}-ին՝ {time}-ին (առցանց կամ գրասենյակում)։'
+    },
     topicOptions: ['Համակարգի հաշվարկ', 'Տեղազննում', 'Սարքավորումներ', 'Այլ հարց'],
     consent: {
       before: 'Համաձայն եմ ',
@@ -153,7 +165,8 @@ export const contactPageCopy = Object.freeze({
         icon: 'calendar',
         title: 'Запланировать встречу',
         value: 'Онлайн или в офисе',
-        href: '#contact-form'
+        href: '#contact-form',
+        meeting: true
       }
     ],
     officesEyebrow: 'Наши офисы',
@@ -185,6 +198,17 @@ export const contactPageCopy = Object.freeze({
     email: 'Эл. почта',
     topic: 'Тема обращения',
     message: 'Ваше сообщение',
+    meeting: {
+      title: 'Запланировать встречу',
+      copy: 'Выберите удобные день и время.',
+      selectDate: 'Выберите день',
+      selectTime: 'Выберите время',
+      previousMonth: 'Предыдущий месяц',
+      nextMonth: 'Следующий месяц',
+      selectedDate: 'Выбранный день',
+      close: 'Закрыть',
+      message: 'Хочу запланировать встречу на {date} в {time} (онлайн или в офисе).'
+    },
     topicOptions: ['Расчёт системы', 'Выезд специалиста', 'Оборудование', 'Другой вопрос'],
     consent: {
       before: 'Я согласен(-на) с ',
@@ -248,7 +272,8 @@ export const contactPageCopy = Object.freeze({
         icon: 'calendar',
         title: 'Book a meeting',
         value: 'Online or in our office',
-        href: '#contact-form'
+        href: '#contact-form',
+        meeting: true
       }
     ],
     officesEyebrow: 'Our offices',
@@ -280,6 +305,17 @@ export const contactPageCopy = Object.freeze({
     email: 'Эл. почта',
     topic: 'Topic',
     message: 'Your message',
+    meeting: {
+      title: 'Book a meeting',
+      copy: 'Choose a convenient day and time.',
+      selectDate: 'Choose a day',
+      selectTime: 'Choose a time',
+      previousMonth: 'Previous month',
+      nextMonth: 'Next month',
+      selectedDate: 'Selected day',
+      close: 'Close',
+      message: 'I would like to book a meeting for {date} at {time} (online or at the office).'
+    },
     topicOptions: ['System estimate', 'Site visit', 'Equipment', 'Other question'],
     consent: {
       before: 'I agree to the ',

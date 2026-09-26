@@ -81,6 +81,12 @@ if (document.querySelector('[data-contact-form]')) {
   );
 }
 
+if (document.querySelector('[data-meeting-dialog]')) {
+  void import('./ui/meeting-scheduler.js').then(({ initMeetingScheduler }) =>
+    initMeetingScheduler({ config: contactConfig })
+  );
+}
+
 if (document.querySelector('[data-office-map]')) {
   void import('./ui/contact-map.js').then(({ initContactMap }) => initContactMap());
 }

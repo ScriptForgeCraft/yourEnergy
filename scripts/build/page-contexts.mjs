@@ -781,7 +781,8 @@ export const createPageContextBuilder = ({ publicEnv, pages }) => {
         copy: {
           invalid: contactPage.invalid,
           sending: contactPage.sending,
-          unavailable: contactPage.unavailable
+          unavailable: contactPage.unavailable,
+          meeting: contactPage.meeting
         }
       })
     };

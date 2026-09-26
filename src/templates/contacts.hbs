@@ -46,6 +46,7 @@
           <div class='contacts-channels'>{{#each contactPage.channels}}<a
                 class='contacts-channel'
                 href='{{href}}'
+                {{#if meeting}}data-meeting-open{{/if}}
                 {{#if external}}target='_blank' rel='noopener noreferrer'{{/if}}
               ><span class='contacts-channel__icon'><svg aria-hidden='true'><use href='/icons.svg#{{icon}}'></use></svg></span><span><strong>{{title}}</strong><small>{{value}}</small></span></a>{{/each}}</div>
         </div>
@@ -63,6 +64,30 @@
         <div class='container contact-benefits'>{{#each contactPage.benefits}}<article><span><svg aria-hidden='true'><use href='/icons.svg#{{icon}}'></use></svg></span><div><h3>{{title}}</h3><p>{{copy}}</p></div></article>{{/each}}</div>
       </section>
     </main>
+    <dialog class='meeting-dialog' data-meeting-dialog aria-labelledby='meeting-dialog-title' aria-describedby='meeting-dialog-copy'>
+      <button class='meeting-dialog__close' type='button' data-meeting-dialog-close aria-label='{{contactPage.meeting.close}}'>×</button>
+      <div class='meeting-dialog__content'>
+        <p class='meeting-dialog__eyebrow'>{{contactPage.meeting.title}}</p>
+        <h2 id='meeting-dialog-title'>{{contactPage.meeting.title}}</h2>
+        <p id='meeting-dialog-copy'>{{contactPage.meeting.copy}}</p>
+        <section class='meeting-picker' aria-labelledby='meeting-date-title'>
+          <h3 id='meeting-date-title'>{{contactPage.meeting.selectDate}}</h3>
+          <div class='meeting-calendar__toolbar'>
+            <button type='button' data-meeting-calendar-previous aria-label='{{contactPage.meeting.previousMonth}}'>‹</button>
+            <p data-meeting-calendar-month aria-live='polite'></p>
+            <button type='button' data-meeting-calendar-next aria-label='{{contactPage.meeting.nextMonth}}'>›</button>
+          </div>
+          <div class='meeting-calendar__weekdays' data-meeting-calendar-weekdays aria-hidden='true'></div>
+          <div class='meeting-calendar__days' data-meeting-calendar-days></div>
+        </section>
+        <section class='meeting-picker meeting-picker--time' data-meeting-time-step aria-labelledby='meeting-time-title' hidden>
+          <h3 id='meeting-time-title'>{{contactPage.meeting.selectTime}}</h3>
+          <p class='meeting-picker__date' data-meeting-selected-date></p>
+          <div class='meeting-times' data-meeting-times role='group' aria-labelledby='meeting-time-title'></div>
+        </section>
+        <p class='meeting-dialog__selection' data-meeting-selection aria-live='polite'></p>
+      </div>
+    </dialog>
     {{> site-footer}}
     <script id='contact-page-config' type='application/json'>{{{contactPageConfig}}}</script>
     <script type='module' src='/src/main.js'></script>

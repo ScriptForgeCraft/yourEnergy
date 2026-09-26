@@ -636,6 +636,251 @@
   font-weight: 700;
 }
 
+.meeting-dialog {
+  width: min(560px, calc(100% - 28px));
+  max-height: min(720px, calc(100vh - 28px));
+  overflow: auto;
+  border: 0;
+  border-radius: 18px;
+  padding: clamp(24px, 4vw, 36px);
+  color: #152b3e;
+  background: #fff;
+  box-shadow: 0 28px 82px rgb(7 28 43 / 30%);
+}
+
+.meeting-dialog::backdrop {
+  background: rgb(2 18 31 / 70%);
+  backdrop-filter: blur(4px);
+}
+
+.meeting-dialog__close {
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  border: 0;
+  border-radius: 50%;
+  padding: 0;
+  color: #4d6071;
+  background: #edf3f1;
+  font-size: 1.45rem;
+  line-height: 1;
+  cursor: pointer;
+  transition:
+    color 160ms ease,
+    background 160ms ease;
+}
+
+.meeting-dialog__close:hover,
+.meeting-dialog__close:focus-visible {
+  color: #fff;
+  background: #16804b;
+}
+
+.meeting-dialog__content {
+  display: grid;
+  gap: 21px;
+}
+
+.meeting-dialog__eyebrow {
+  margin: 0;
+  color: #16804b;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+
+.meeting-dialog h2,
+.meeting-dialog h3,
+.meeting-dialog__content > p:not(.meeting-dialog__eyebrow, .meeting-dialog__selection),
+.meeting-picker__date {
+  margin: 0;
+}
+
+.meeting-dialog h2 {
+  max-width: 15ch;
+  margin-top: -13px;
+  color: #102337;
+  font-size: clamp(1.7rem, 4vw, 2.3rem);
+  line-height: 1;
+  letter-spacing: -0.05em;
+}
+
+.meeting-dialog__content > p:not(.meeting-dialog__eyebrow, .meeting-dialog__selection) {
+  max-width: 36rem;
+  margin-top: -12px;
+  color: #627185;
+  font-size: 0.88rem;
+  line-height: 1.45;
+}
+
+.meeting-picker {
+  border-top: 1px solid #e1e9e7;
+  padding-top: 19px;
+}
+
+.meeting-picker h3 {
+  color: #1b344a;
+  font-size: 0.92rem;
+  line-height: 1.25;
+}
+
+.meeting-calendar__toolbar {
+  display: grid;
+  grid-template-columns: 36px 1fr 36px;
+  align-items: center;
+  gap: 9px;
+  margin-top: 15px;
+}
+
+.meeting-calendar__toolbar p {
+  margin: 0;
+  color: #18344b;
+  font-size: 0.86rem;
+  font-weight: 800;
+  text-align: center;
+}
+
+.meeting-calendar__toolbar button {
+  width: 36px;
+  height: 36px;
+  border: 1px solid #cee0d8;
+  border-radius: 9px;
+  padding: 0 0 3px;
+  color: #177744;
+  background: #fff;
+  font-size: 1.3rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.meeting-calendar__toolbar button:hover:not(:disabled),
+.meeting-calendar__toolbar button:focus-visible:not(:disabled) {
+  color: #fff;
+  background: #16804b;
+}
+
+.meeting-calendar__toolbar button:disabled {
+  color: #a8b6bd;
+  border-color: #e5ebea;
+  background: #f5f8f7;
+  cursor: not-allowed;
+}
+
+.meeting-calendar__weekdays,
+.meeting-calendar__days {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 5px;
+  text-align: center;
+}
+
+.meeting-calendar__weekdays {
+  margin-top: 15px;
+  color: #738093;
+  font-size: 0.64rem;
+  font-weight: 800;
+}
+
+.meeting-calendar__days {
+  margin-top: 7px;
+}
+
+.meeting-calendar__day {
+  aspect-ratio: 1;
+  min-width: 0;
+  border: 1px solid transparent;
+  border-radius: 9px;
+  padding: 0;
+  color: #193449;
+  background: transparent;
+  font: inherit;
+  font-size: 0.78rem;
+  font-weight: 720;
+  cursor: pointer;
+  transition:
+    color 150ms ease,
+    border-color 150ms ease,
+    background 150ms ease;
+}
+
+.meeting-calendar__day:hover:not(:disabled),
+.meeting-calendar__day:focus-visible:not(:disabled) {
+  border-color: #66ba8c;
+  color: #146d40;
+  background: #eff9f2;
+}
+
+.meeting-calendar__day.is-today {
+  border-color: #bddaca;
+}
+
+.meeting-calendar__day.is-selected {
+  border-color: #16804b;
+  color: #fff;
+  background: #16804b;
+}
+
+.meeting-calendar__day:disabled {
+  color: #c3cccf;
+  cursor: not-allowed;
+}
+
+.meeting-picker--time {
+  display: grid;
+  gap: 12px;
+}
+
+.meeting-picker--time[hidden] {
+  display: none;
+}
+
+.meeting-picker__date {
+  color: #5e7080;
+  font-size: 0.77rem;
+  line-height: 1.4;
+}
+
+.meeting-times {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.meeting-times__button {
+  min-height: 42px;
+  border: 1px solid #c8e0d2;
+  border-radius: 9px;
+  color: #176d41;
+  background: #f5fbf7;
+  font: inherit;
+  font-size: 0.78rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition:
+    color 150ms ease,
+    background 150ms ease,
+    transform 150ms ease;
+}
+
+.meeting-times__button:hover,
+.meeting-times__button:focus-visible {
+  color: #fff;
+  background: #16804b;
+  transform: translateY(-1px);
+}
+
+.meeting-dialog__selection {
+  min-height: 1.2em;
+  margin: -8px 0 0;
+  color: #5e7080;
+  font-size: 0.75rem;
+}
+
 .contact-energy-card {
   min-height: 455px;
   position: relative;
@@ -689,8 +934,6 @@
   color: rgb(255 255 255 / 82%);
   font-size: 0.83rem;
 }
-
- 
 
 .contact-benefits {
   display: grid;
