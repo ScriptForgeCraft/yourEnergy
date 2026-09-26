@@ -70,7 +70,7 @@
         <p class='meeting-dialog__eyebrow'>{{contactPage.meeting.title}}</p>
         <h2 id='meeting-dialog-title'>{{contactPage.meeting.title}}</h2>
         <p id='meeting-dialog-copy'>{{contactPage.meeting.copy}}</p>
-        <section class='meeting-picker' aria-labelledby='meeting-date-title'>
+        <section class='meeting-picker' data-meeting-date-step aria-labelledby='meeting-date-title'>
           <h3 id='meeting-date-title'>{{contactPage.meeting.selectDate}}</h3>
           <div class='meeting-calendar__toolbar'>
             <button type='button' data-meeting-calendar-previous aria-label='{{contactPage.meeting.previousMonth}}'>‹</button>
@@ -86,6 +86,17 @@
           <div class='meeting-times' data-meeting-times role='group' aria-labelledby='meeting-time-title'></div>
         </section>
         <p class='meeting-dialog__selection' data-meeting-selection aria-live='polite'></p>
+        <form class='meeting-picker contact-form' data-meeting-contact-step aria-labelledby='meeting-contact-title' hidden novalidate>
+          <h3 id='meeting-contact-title'>{{contactPage.meeting.contactTitle}}</h3>
+          <p class='meeting-picker__date'>{{contactPage.meeting.contactCopy}}</p>
+          <div class='contact-form__fields'>
+            <label for='meeting-name'><span>{{contactPage.name}}</span><input id='meeting-name' name='name' type='text' autocomplete='name' maxlength='100' required placeholder='{{contactPage.name}} *' /></label>
+            <label for='meeting-phone'><span>{{contactPage.phone}}</span><input id='meeting-phone' name='phone' type='tel' autocomplete='tel' inputmode='tel' maxlength='32' required placeholder='{{contactPage.phone}} *' /></label>
+          </div>
+          <button class='contact-form__submit' type='submit' data-meeting-submit><span>{{contactPage.meeting.submit}}</span><svg aria-hidden='true'><use href='/icons.svg#arrow-right'></use></svg></button>
+          <p class='contact-form__status' data-meeting-status aria-live='polite'></p>
+          <p class='contact-form__success' data-meeting-success hidden tabindex='-1'>{{contactPage.meeting.success}}</p>
+        </form>
       </div>
     </dialog>
     {{> site-footer}}
