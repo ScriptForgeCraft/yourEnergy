@@ -50,6 +50,7 @@ html {
   scroll-behavior: smooth;
   overflow-y: auto;
   overflow-x: hidden;
+  scrollbar-gutter: stable;
 
   scrollbar-width: thin;
   scrollbar-color: #6a6b92 transparent;
@@ -66,10 +67,27 @@ html::-webkit-scrollbar-track {
 html::-webkit-scrollbar-thumb {
   background: #6a6b92;
   border-radius: 999px;
+  transition: background-color 220ms ease;
 }
 
 html::-webkit-scrollbar-thumb:hover {
   background: #55567d;
+}
+
+/* The process scene visually removes the page scrollbar without changing its
+   width. Keeping the gutter avoids the horizontal jump that `scrollbar-width:
+   none` or toggling overflow would otherwise cause. */
+html.process-chrome-active {
+  scrollbar-color: transparent transparent;
+}
+
+html.process-chrome-active::-webkit-scrollbar-thumb,
+html.process-chrome-active::-webkit-scrollbar-thumb:hover {
+  background: transparent;
+}
+
+html.site-menu-open {
+  overflow: hidden;
 }
 
 [hidden] {
@@ -223,8 +241,10 @@ textarea {
   box-shadow: none;
   backdrop-filter: blur(10px);
   transition:
-    box-shadow 180ms ease,
-    border-color 180ms ease;
+    background-color 360ms ease,
+    backdrop-filter 360ms ease,
+    box-shadow 260ms ease,
+    border-color 260ms ease;
 }
 
 .site-header.is-scrolled {
@@ -246,6 +266,7 @@ textarea {
 }
 
 .header-row {
+  position: relative;
   min-height: 74px;
   display: flex;
   align-items: center;
@@ -484,6 +505,39 @@ textarea {
   display: none;
 }
 
+.mobile-menu__backdrop,
+.mobile-menu__brand {
+  display: none;
+}
+
+.mobile-menu__links {
+  display: grid;
+  gap: 4px;
+}
+
+.mobile-menu__links .inline-icon {
+  width: 18px;
+  height: 18px;
+  flex: 0 0 auto;
+  color: var(--color-yellow);
+}
+
+.mobile-menu__footer {
+  display: grid;
+  gap: 10px;
+  padding-top: 8px;
+  border-top: 1px solid rgb(255 255 255 / 10%);
+}
+
+.mobile-menu__cta {
+  width: 100%;
+}
+
+.mobile-menu__cta::after {
+  margin-left: 10px;
+  content: '→';
+}
+
 .section {
   padding-block: clamp(46px, 6vw, 86px);
 }
@@ -669,6 +723,23 @@ h1 mark {
   .mobile-menu summary span {
     height: 2px;
     background: #fff;
+    transform-origin: center;
+    transition:
+      transform 220ms ease,
+      opacity 180ms ease;
+  }
+
+  .mobile-menu[open] summary span:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+  }
+
+  .mobile-menu[open] summary span:nth-child(2) {
+    opacity: 0;
+    transform: scaleX(0.2);
+  }
+
+  .mobile-menu[open] summary span:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
   }
 
   .mobile-menu nav {
@@ -690,6 +761,7 @@ h1 mark {
     min-height: 44px;
     display: flex;
     align-items: center;
+    gap: 11px;
     border-radius: 8px;
     padding: 0 12px;
     transition:
@@ -717,12 +789,325 @@ h1 mark {
     padding: 0;
   }
 
+  .mobile-menu nav .mobile-menu__cta {
+    justify-content: center;
+    color: var(--color-navy);
+    background: var(--color-yellow);
+  }
+
+  .mobile-menu nav .mobile-menu__cta:hover,
+  .mobile-menu nav .mobile-menu__cta:focus-visible {
+    color: var(--color-navy);
+    background: #ffd14b;
+  }
+
   .hero-grid {
     grid-template-columns: 1fr;
   }
 
   .hero-copy {
     max-width: 780px;
+  }
+}
+
+@media (min-width: 1181px) and (min-height: 650px) {
+  .page-home .mobile-menu {
+    position: absolute;
+    z-index: 4;
+    top: 50%;
+    right: 0;
+    display: block;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: translate(12px, -50%) scale(0.86);
+    transform-origin: center;
+    transition:
+      opacity 220ms ease,
+      transform 360ms cubic-bezier(0.22, 1, 0.36, 1),
+      visibility 0s linear 360ms;
+  }
+
+  .page-home .mobile-menu summary {
+    position: relative;
+    z-index: 4;
+    width: 48px;
+    height: 48px;
+    display: grid;
+    align-content: center;
+    gap: 5px;
+    border: 1px solid rgb(255 255 255 / 28%);
+    border-radius: 50%;
+    padding: 12px;
+    color: #fff;
+    background: rgb(5 20 31 / 68%);
+    box-shadow: 0 10px 34px rgb(0 0 0 / 22%);
+    backdrop-filter: blur(14px);
+    list-style: none;
+    cursor: pointer;
+    transition:
+      border-color 220ms ease,
+      background-color 220ms ease,
+      box-shadow 220ms ease,
+      transform 220ms ease;
+  }
+
+  .page-home .mobile-menu summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .page-home .mobile-menu summary:hover,
+  .page-home .mobile-menu summary:focus-visible {
+    border-color: rgb(245 189 24 / 72%);
+    background: rgb(7 26 45 / 86%);
+    box-shadow: 0 12px 36px rgb(0 0 0 / 28%), 0 0 0 1px rgb(245 189 24 / 14%);
+  }
+
+  .page-home .mobile-menu summary span {
+    height: 2px;
+    border-radius: 999px;
+    background: #fff;
+    transform-origin: center;
+    transition:
+      transform 220ms ease,
+      opacity 180ms ease;
+  }
+
+  .page-home .mobile-menu[open] summary span:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+  }
+
+  .page-home .mobile-menu[open] summary span:nth-child(2) {
+    opacity: 0;
+    transform: scaleX(0.2);
+  }
+
+  .page-home .mobile-menu[open] summary span:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+  }
+
+  .page-home .mobile-menu__backdrop {
+    position: fixed;
+    z-index: 1;
+    inset: 0;
+    display: block;
+    background: rgb(1 8 13 / 62%);
+    backdrop-filter: blur(3px);
+    cursor: default;
+    animation: process-menu-backdrop-in 220ms ease both;
+  }
+
+  .page-home .mobile-menu nav {
+    position: fixed;
+    z-index: 2;
+    top: 14px;
+    right: clamp(24px, 4vw, 76px);
+    width: min(370px, calc(100vw - 48px));
+    max-height: calc(100svh - 28px);
+    display: grid;
+    gap: 16px;
+    overflow-y: auto;
+    border: 1px solid rgb(255 255 255 / 14%);
+    border-radius: 24px;
+    padding: 22px;
+    color: #fff;
+    background: rgb(4 21 35 / 96%);
+    box-shadow: 0 28px 90px rgb(0 0 0 / 42%);
+    backdrop-filter: blur(24px);
+    transform-origin: top right;
+    animation: process-menu-panel-in 320ms cubic-bezier(0.22, 1, 0.36, 1) both;
+    overscroll-behavior: contain;
+  }
+
+  .page-home .mobile-menu.is-closing nav {
+    animation: process-menu-panel-out 200ms cubic-bezier(0.4, 0, 1, 1) both;
+  }
+
+  .page-home .mobile-menu.is-closing .mobile-menu__backdrop {
+    animation: process-menu-backdrop-out 200ms ease both;
+  }
+
+  .page-home .mobile-menu__brand {
+    min-height: 48px;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    width: max-content;
+    padding-right: 54px;
+    color: #fff;
+    font-size: 1.1rem;
+    font-weight: 850;
+    letter-spacing: -0.045em;
+  }
+
+  .page-home .mobile-menu__brand img {
+    width: 39px;
+    height: 39px;
+  }
+
+  .page-home .mobile-menu__brand strong {
+    color: var(--color-yellow);
+  }
+
+  .page-home .mobile-menu__links {
+    gap: 3px;
+  }
+
+  .page-home .mobile-menu__links > a {
+    min-height: 48px;
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    border-radius: 12px;
+    padding: 0 12px;
+    color: rgb(255 255 255 / 88%);
+    font-size: 0.92rem;
+    font-weight: 680;
+    transition:
+      color 180ms ease,
+      background-color 180ms ease,
+      transform 180ms ease;
+  }
+
+  .page-home .mobile-menu__links > a:hover,
+  .page-home .mobile-menu__links > a:focus-visible,
+  .page-home .mobile-menu__links > a.is-active {
+    color: #fff;
+    background: rgb(255 255 255 / 8%);
+    transform: translateX(3px);
+  }
+
+  .page-home .mobile-menu__links .inline-icon {
+    color: var(--color-yellow);
+  }
+
+  .page-home .mobile-menu__footer {
+    gap: 12px;
+    padding-top: 14px;
+  }
+
+  .page-home .mobile-menu__footer .mobile-language-switcher {
+    padding: 0;
+  }
+
+  .page-home .mobile-menu__footer .language-link {
+    min-width: 48px;
+    min-height: 42px;
+    color: #fff;
+    border-color: rgb(255 255 255 / 20%);
+  }
+
+  .page-home .mobile-menu__cta {
+    min-height: 50px;
+    justify-content: center;
+    border-radius: 14px;
+    color: var(--color-navy);
+    background: var(--color-yellow);
+  }
+
+  .process-chrome-active .page-home .site-header {
+    border-color: transparent;
+    background-color: rgb(4 21 35 / 16%);
+    box-shadow: none;
+    backdrop-filter: blur(4px);
+  }
+
+  .page-home .desktop-nav a,
+  .page-home .header-actions > * {
+    transform-origin: center;
+    transition:
+      color 180ms ease,
+      opacity 240ms ease,
+      filter 300ms ease,
+      transform 360ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .process-chrome-active .page-home .desktop-nav,
+  .process-chrome-active .page-home .header-actions {
+    pointer-events: none;
+  }
+
+  .process-chrome-active .page-home .desktop-nav a,
+  .process-chrome-active .page-home .header-actions > * {
+    opacity: 0;
+    filter: blur(4px);
+    transform: translateX(24px) scale(0.96);
+  }
+
+  .process-chrome-active .page-home .desktop-nav a:nth-child(1) {
+    transition-delay: 0ms;
+  }
+  .process-chrome-active .page-home .desktop-nav a:nth-child(2) {
+    transition-delay: 18ms;
+  }
+  .process-chrome-active .page-home .desktop-nav a:nth-child(3) {
+    transition-delay: 36ms;
+  }
+  .process-chrome-active .page-home .desktop-nav a:nth-child(4) {
+    transition-delay: 54ms;
+  }
+  .process-chrome-active .page-home .desktop-nav a:nth-child(5) {
+    transition-delay: 72ms;
+  }
+  .process-chrome-active .page-home .desktop-nav a:nth-child(6) {
+    transition-delay: 90ms;
+  }
+  .process-chrome-active .page-home .desktop-nav a:nth-child(7) {
+    transition-delay: 108ms;
+  }
+  .process-chrome-active .page-home .header-actions > :nth-child(1) {
+    transition-delay: 126ms;
+  }
+  .process-chrome-active .page-home .header-actions > :nth-child(2) {
+    transition-delay: 144ms;
+  }
+
+  .process-chrome-active .page-home .mobile-menu {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: translate(0, -50%) scale(1);
+    transition-delay: 110ms, 110ms, 0s;
+  }
+}
+
+@keyframes process-menu-panel-in {
+  from {
+    opacity: 0;
+    transform: translate3d(18px, -8px, 0) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+@keyframes process-menu-panel-out {
+  from {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translate3d(14px, -6px, 0) scale(0.98);
+  }
+}
+
+@keyframes process-menu-backdrop-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes process-menu-backdrop-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
   }
 }
 

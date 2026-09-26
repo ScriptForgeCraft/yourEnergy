@@ -165,6 +165,26 @@ test('Hero count-up uses explicit numeric values, including decimal CO₂ figure
   assert.equal(getHeroCounterTarget(''), null);
 });
 
+test('desktop process mode collapses global navigation into an accessible burger without layout shift', async () => {
+  const [header, navigation, processStory, mainCss] = await Promise.all([
+    source('src/templates/partials/site-header.hbs'),
+    source('src/ui/navigation.js'),
+    source('src/ui/process-story.js'),
+    source('src/styles/main.css')
+  ]);
+
+  assert.match(header, /data-mobile-menu-backdrop/u);
+  assert.match(header, /mobile-menu__brand/u);
+  assert.match(header, /mobile-menu__cta/u);
+  assert.match(navigation, /solar:process-chrome/u);
+  assert.match(navigation, /process-chrome-active/u);
+  assert.match(navigation, /element\.inert = active/u);
+  assert.match(processStory, /setProcessChromeActive\(true\)/u);
+  assert.match(processStory, /setProcessChromeActive\(false\)/u);
+  assert.match(mainCss, /scrollbar-gutter:\s*stable/u);
+  assert.match(mainCss, /html\.process-chrome-active::-webkit-scrollbar-thumb/u);
+});
+
 test('the cinematic header uses one compact language control and retains normal language links', async () => {
   const header = await source('src/templates/partials/site-header.hbs');
   const generator = await source('scripts/build/page-contexts.mjs');

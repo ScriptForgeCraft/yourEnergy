@@ -177,6 +177,12 @@ export const initProcessStory = ({ config = {} } = {}) => {
   let disposed = false;
   let hasEditedInput = false;
 
+  const setProcessChromeActive = (active) => {
+    window.dispatchEvent(
+      new CustomEvent('solar:process-chrome', { detail: { active: Boolean(active) } })
+    );
+  };
+
   const setProgress = (index) => {
     activeIndex = clamp(index, 0, states.length - 1);
     root.dataset.processActive = String(activeIndex + 1);
@@ -390,6 +396,7 @@ export const initProcessStory = ({ config = {} } = {}) => {
       mobileObserver = null;
 
       if (mobile || reducedMotion) {
+        setProcessChromeActive(false);
         states.forEach((state) => {
           state.removeAttribute('aria-hidden');
           gsap.set(state, { clearProps: 'all' });
@@ -857,6 +864,7 @@ export const initProcessStory = ({ config = {} } = {}) => {
         invalidateOnRefresh: true,
         onUpdate: syncStepWithScrollbar,
         onEnter: () => {
+          setProcessChromeActive(true);
           if (programmaticScroll) return;
           transition?.kill();
           transitionInProgress = false;
@@ -866,6 +874,7 @@ export const initProcessStory = ({ config = {} } = {}) => {
           window.requestAnimationFrame(() => setScrollTop(stepScrollTop(0)));
         },
         onEnterBack: () => {
+          setProcessChromeActive(true);
           if (programmaticScroll) return;
           transition?.kill();
           transitionInProgress = false;
@@ -875,10 +884,12 @@ export const initProcessStory = ({ config = {} } = {}) => {
           window.requestAnimationFrame(() => setScrollTop(stepScrollTop(states.length - 1)));
         },
         onLeave: () => {
+          setProcessChromeActive(false);
           setExclusiveState(states.length - 1);
           animateSceneToStep(states.length - 1, true);
         },
         onLeaveBack: () => {
+          setProcessChromeActive(false);
           setExclusiveState(0);
           animateSceneToStep(0, true);
         }
@@ -893,6 +904,7 @@ export const initProcessStory = ({ config = {} } = {}) => {
       progressSteps.forEach((step) => step.addEventListener('click', onProgressStepClick));
 
       return () => {
+        setProcessChromeActive(false);
         transition?.kill();
         sceneTween?.kill();
         pinTrigger?.kill();
@@ -929,6 +941,7 @@ export const initProcessStory = ({ config = {} } = {}) => {
 
   return () => {
     disposed = true;
+    setProcessChromeActive(false);
     mobileObserver?.disconnect();
     media.revert();
     metricAnimations.forEach((animation) => animation.kill());

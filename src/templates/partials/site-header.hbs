@@ -34,34 +34,61 @@
     </div>
     <details class='mobile-menu' data-mobile-menu>
       <summary aria-label='{{aria.menu}}'><span></span><span></span><span></span></summary>
+      <span class='mobile-menu__backdrop' data-mobile-menu-backdrop aria-hidden='true'></span>
       <nav aria-label='{{aria.mobileNav}}'>
-        <a class='{{activeNavigation.home}}' href='{{navLinks.home}}'>{{nav.home}}</a><a
-          class='{{activeNavigation.calculator}}'
-          href='{{navLinks.calculator}}'
-        >{{nav.calculator}}</a><a
-          class='{{activeNavigation.projects}}'
-          href='{{navLinks.projects}}'
-        >{{nav.projects}}</a><a
-          class='{{activeNavigation.equipment}}'
-          href='{{navLinks.equipment}}'
-        >{{nav.equipment}}</a><a
-          class='{{activeNavigation.contacts}}'
-          href='{{navLinks.contacts}}'
-        >{{nav.contacts}}</a><a
-          class='{{activeNavigation.about}}'
-          href='{{navLinks.about}}'
-        >{{nav.about}}</a><a
-          class='{{activeNavigation.blog}}'
-          href='{{navLinks.blog}}'
-        >{{nav.blog}}</a>
-        <div class='mobile-language-switcher' role='group' aria-label='{{aria.languageNav}}'>{{#each
-            languageLinks
-          }}<a
-              class='language-link'
-              href='{{{href}}}'
-              hreflang='{{hreflang}}'
-              aria-label='{{label}} — {{name}}'
-            >{{label}}</a>{{/each}}</div>
+        <a class='mobile-menu__brand' href='{{homeHref}}' aria-label='{{aria.logo}}'>
+          <img src='/yourenergy-mark.svg' alt='' aria-hidden='true' />
+          <span>YOUR</span><strong>ENERGY</strong>
+        </a>
+        <div class='mobile-menu__links'>
+          <a class='{{activeNavigation.home}}' href='{{navLinks.home}}'>
+            <svg class='inline-icon' aria-hidden='true'><use
+                href='/icons.svg#faq-home'
+              ></use></svg>
+            <span>{{nav.home}}</span>
+          </a>
+          <a class='{{activeNavigation.calculator}}' href='{{navLinks.calculator}}'>
+            <svg class='inline-icon' aria-hidden='true'><use
+                href='/icons.svg#calculator'
+              ></use></svg>
+            <span>{{nav.calculator}}</span>
+          </a>
+          <a class='{{activeNavigation.projects}}' href='{{navLinks.projects}}'>
+            <svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#file'></use></svg>
+            <span>{{nav.projects}}</span>
+          </a>
+          <a class='{{activeNavigation.equipment}}' href='{{navLinks.equipment}}'>
+            <svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#wrench'></use></svg>
+            <span>{{nav.equipment}}</span>
+          </a>
+          <a class='{{activeNavigation.contacts}}' href='{{navLinks.contacts}}'>
+            <svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#phone'></use></svg>
+            <span>{{nav.contacts}}</span>
+          </a>
+          <a class='{{activeNavigation.about}}' href='{{navLinks.about}}'>
+            <svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#info'></use></svg>
+            <span>{{nav.about}}</span>
+          </a>
+          <a class='{{activeNavigation.blog}}' href='{{navLinks.blog}}'>
+            <svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#file-text'></use></svg>
+            <span>{{nav.blog}}</span>
+          </a>
+        </div>
+        <div class='mobile-menu__footer'>
+          <div
+            class='mobile-language-switcher'
+            role='group'
+            aria-label='{{aria.languageNav}}'
+          >{{#each languageLinks}}<a
+                class='language-link'
+                href='{{{href}}}'
+                hreflang='{{hreflang}}'
+                aria-label='{{label}} — {{name}}'
+              >{{label}}</a>{{/each}}</div>
+          <a class='button button--small mobile-menu__cta' href='{{headerCtaHref}}'>
+            {{headerCtaLabel}}
+          </a>
+        </div>
       </nav>
     </details>
   </div>
