@@ -1,30 +1,117 @@
 const bindProjectScroller = (trackSelector, buttonSelector) => {
   const track = document.querySelector(trackSelector);
+
   if (!track) {
     return;
   }
+
   const buttons = [...document.querySelectorAll(buttonSelector)];
-  const syncButtons = () => {
-    const maxScroll = Math.max(0, track.scrollWidth - track.clientWidth);
+  const tolerance = 2;
+
+  // Пока идёт smooth-scroll, здесь хранится его конечная позиция.
+  let pendingTarget = null;
+
+  const getCards = () => [...track.querySelectorAll('.portfolio-project-card')];
+
+  const getMaxScroll = () => Math.max(0, track.scrollWidth - track.clientWidth);
+
+  const syncButtons = (scrollPosition = track.scrollLeft) => {
+    const maxScroll = getMaxScroll();
+
+    const atStart = maxScroll <= tolerance || scrollPosition <= tolerance;
+
+    const atEnd = maxScroll <= tolerance || scrollPosition >= maxScroll - tolerance;
+
     for (const button of buttons) {
       const direction = Number(button.dataset.projectDirection);
-      button.disabled =
-        maxScroll <= 1 ||
-        (direction < 0 ? track.scrollLeft <= 1 : track.scrollLeft >= maxScroll - 1);
+
+      button.disabled = direction < 0 ? atStart : atEnd;
     }
+  };
+
+  const getStep = () => {
+    const cards = getCards();
+
+    if (!cards.length) {
+      return 0;
+    }
+
+    const styles = getComputedStyle(track);
+    const gap = parseFloat(styles.columnGap || styles.gap) || 0;
+
+    return cards[0].getBoundingClientRect().width + gap;
   };
 
   buttons.forEach((button) => {
     button.addEventListener('click', () => {
-      track.scrollBy({
-        left: Number(button.dataset.projectDirection) * Math.max(240, track.clientWidth * 0.72),
+      const step = getStep();
+
+      if (!step) {
+        return;
+      }
+
+      const direction = Number(button.dataset.projectDirection);
+
+      const maxScroll = getMaxScroll();
+
+      const targetScroll = Math.min(maxScroll, Math.max(0, track.scrollLeft + direction * step));
+
+      pendingTarget = targetScroll;
+
+      syncButtons(targetScroll);
+
+      track.scrollTo({
+        left: targetScroll,
         behavior: 'smooth'
       });
     });
   });
 
-  track.addEventListener('scroll', syncButtons, { passive: true });
-  new ResizeObserver(syncButtons).observe(track);
+  track.addEventListener(
+    'scroll',
+    () => {
+      if (pendingTarget !== null) {
+        syncButtons(pendingTarget);
+
+        const reachedTarget = Math.abs(track.scrollLeft - pendingTarget) <= tolerance;
+
+        if (reachedTarget) {
+          pendingTarget = null;
+          syncButtons();
+        }
+
+        return;
+      }
+
+      syncButtons();
+    },
+    {
+      passive: true
+    }
+  );
+
+  const cancelPendingScroll = () => {
+    pendingTarget = null;
+    syncButtons();
+  };
+
+  track.addEventListener('pointerdown', cancelPendingScroll, {
+    passive: true
+  });
+
+  track.addEventListener('wheel', cancelPendingScroll, {
+    passive: true
+  });
+
+  track.addEventListener('touchstart', cancelPendingScroll, {
+    passive: true
+  });
+
+  new ResizeObserver(() => {
+    pendingTarget = null;
+    syncButtons();
+  }).observe(track);
+
   syncButtons();
 };
 
