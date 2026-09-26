@@ -637,15 +637,34 @@
 }
 
 .meeting-dialog {
+  --meeting-scroll-top: 10px;
+  --meeting-scroll-height: 0px;
+  --meeting-scroll-visible: 0;
+
   width: min(560px, calc(100% - 28px));
   max-height: min(720px, calc(100vh - 28px));
-  overflow: auto;
+  overflow: hidden;
   border: 0;
   border-radius: 18px;
-  padding: clamp(24px, 4vw, 36px);
+  padding: 0;
   color: #152b3e;
   background: #fff;
   box-shadow: 0 28px 82px rgb(7 28 43 / 30%);
+}
+
+.meeting-dialog::after {
+  width: 4px;
+  height: var(--meeting-scroll-height);
+  position: absolute;
+  z-index: 3;
+  top: var(--meeting-scroll-top);
+  right: 3px;
+  border-radius: 999px;
+  background: rgb(22 128 75 / 58%);
+  opacity: var(--meeting-scroll-visible);
+  pointer-events: none;
+  content: '';
+  transition: opacity 140ms ease;
 }
 
 .meeting-dialog::backdrop {
@@ -659,6 +678,7 @@
   display: grid;
   place-items: center;
   position: absolute;
+  z-index: 4;
   top: 14px;
   right: 14px;
   border: 0;
@@ -681,8 +701,20 @@
 }
 
 .meeting-dialog__content {
+  max-height: min(720px, calc(100vh - 28px));
   display: grid;
   gap: 21px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: clamp(24px, 4vw, 36px);
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.meeting-dialog__content::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  display: none;
 }
 
 .meeting-dialog__eyebrow {

@@ -1,3 +1,4 @@
+import './meeting-scrollbar.js';
 import { ProductApiClient, ProductApiError } from '../services/api-client.js';
 
 const DEFAULT_SCHEDULE_URL = '/data/meeting-schedule.json';
