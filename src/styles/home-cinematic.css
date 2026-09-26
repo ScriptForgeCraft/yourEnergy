@@ -924,7 +924,6 @@ html[lang='hy'] .page-home .hero-signature {
   z-index: 1;
   top: 15px;
   left: 16px;
-  min-height: 38px;
   display: inline-flex;
   align-items: center;
   gap: 7px;
@@ -932,7 +931,8 @@ html[lang='hy'] .page-home .hero-signature {
   overflow: hidden;
   border: 1px solid rgb(255 255 255 / 17%);
   border-radius: 999px;
-  padding: 7px 14px;
+  padding:8px 7px;
+  padding-inline-end: 10px;
   color: #fff;
   background: rgb(5 31 49 / 70%);
   box-shadow: inset 0 1px 0 rgb(255 255 255 / 10%);
@@ -948,7 +948,6 @@ html[lang='hy'] .page-home .hero-signature {
   width: 15px;
   height: 15px;
   flex: 0 0 auto;
-  fill: currentcolor;
   stroke: #fff;
   stroke-width: 1.7;
 }
