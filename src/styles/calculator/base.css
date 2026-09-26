@@ -318,7 +318,6 @@
   min-height: clamp(320px, 42vw, 500px);
   scroll-margin-top: 5.5rem;
 }
-.point-confirmation,
 .async-card,
 .finance-empty,
 .result-budget,
@@ -328,21 +327,7 @@
   border-radius: 0.85rem;
   background: #f2f7f8;
 }
-.point-confirmation {
-  display: grid;
-  gap: 0.6rem;
-  border: 1px solid #b6d9df;
-}
-.point-confirmation output {
-  font-variant-numeric: tabular-nums;
-}
-.point-confirmation > div,
-.flow-actions,
-.roof-controls {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.65rem;
-}
+
 .wizard-details {
   margin-top: 1rem;
   padding: 0 0.9rem 0.9rem;

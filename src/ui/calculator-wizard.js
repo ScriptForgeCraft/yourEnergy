@@ -150,7 +150,6 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
   const mapElement = root.querySelector('[data-property-map]');
   const locationMapWrap = root.querySelector('[data-location-map-wrap]');
   const roofMapHost = root.querySelector('[data-roof-map-host]');
-  const pointConfirmation = root.querySelector('[data-point-confirmation]');
   const pendingCoordinates = root.querySelector('[data-pending-coordinates]');
   const potentialLoading = root.querySelector('[data-potential-loading]');
   const potentialStatus = root.querySelector('[data-potential-status]');
@@ -514,7 +513,6 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
     clearPotentialAndBelow();
     if (pendingCoordinates)
       pendingCoordinates.textContent = `${format(lat, locale, { maximumFractionDigits: 5 })}, ${format(lng, locale, { maximumFractionDigits: 5 })}`;
-    if (pointConfirmation) pointConfirmation.hidden = false;
     updateProgress();
     return true;
   };
@@ -597,7 +595,6 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
     if (lat === null || lng === null) return false;
     state.pendingLocation = null;
     state.confirmedProperty = null;
-    if (pointConfirmation) pointConfirmation.hidden = true;
     clearPotentialAndBelow();
     syncLocationCoordinates({ lat, lng });
     updateProgress();
@@ -994,7 +991,6 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
     state.addressNote = address?.value.trim() ?? '';
     state.confirmedProperty = { ...state.pendingLocation };
     setPotentialOutcome({ status: WIZARD_STEP_STATUSES.AVAILABLE });
-    pointConfirmation.hidden = true;
     await mountMap('location');
     if (!lifecycle.isActive()) return;
     mapController?.setLocation(state.confirmedProperty, { notify: false });
@@ -1325,7 +1321,6 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
     if (address) address.value = '';
     state.pendingLocation = null;
     state.confirmedProperty = null;
-    pointConfirmation.hidden = true;
     clearPotentialAndBelow();
     syncLocationCoordinates(center);
     updateProgress();
