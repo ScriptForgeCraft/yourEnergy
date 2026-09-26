@@ -850,14 +850,27 @@ html[lang='hy'] .page-home .hero-signature {
 
 .page-home .portfolio-projects__rail {
   position: relative;
-  width: min(calc(100% - 48px), var(--container));
+  width: calc(100% - clamp(16px, 2vw, 32px));
   margin: clamp(35px, 4.2vw, 58px) auto 0;
-  padding-inline: clamp(20px, 2vw, 36px);
+  padding-inline: 0;
+}
+
+.page-home .portfolio-projects__slider {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: clamp(10px, 1vw, 16px);
+}
+
+.page-home .portfolio-projects__slider > .portfolio-projects__arrow {
+  align-self: center;
+  justify-self: center;
 }
 
 .page-home .portfolio-projects__track {
+  min-width: 0;
   display: grid;
-  grid-auto-columns: clamp(280px, 21.4vw, 388px);
+  grid-auto-columns: calc((100% - 36px) / 4);
   grid-auto-flow: column;
   gap: 12px;
   overflow-x: auto;
@@ -865,6 +878,7 @@ html[lang='hy'] .page-home .hero-signature {
   padding: 1px 0 5px;
   scroll-behavior: smooth;
   scroll-snap-type: x mandatory;
+  scroll-padding-inline: 0;
   scrollbar-width: none;
 }
 
@@ -886,6 +900,7 @@ html[lang='hy'] .page-home .hero-signature {
   background: linear-gradient(160deg, rgb(5 37 57 / 96%), rgb(2 22 38 / 98%));
   box-shadow: 0 17px 38px rgb(0 0 0 / 16%);
   scroll-snap-align: start;
+  scroll-snap-stop: always;
   transition:
     border-color 190ms ease,
     box-shadow 190ms ease,
@@ -931,7 +946,7 @@ html[lang='hy'] .page-home .hero-signature {
   overflow: hidden;
   border: 1px solid rgb(255 255 255 / 17%);
   border-radius: 999px;
-  padding:8px 7px;
+  padding: 8px 7px;
   padding-inline-end: 10px;
   color: #fff;
   background: rgb(5 31 49 / 70%);
@@ -1099,12 +1114,6 @@ html[lang='hy'] .page-home .hero-signature {
   stroke-width: 1.75;
 }
 
-.page-home .portfolio-projects__arrows {
-  display: flex;
-  flex: 0 0 auto;
-  gap: 12px;
-}
-
 .page-home .portfolio-projects__arrow {
   width: 52px;
   height: 52px;
@@ -1127,34 +1136,28 @@ html[lang='hy'] .page-home .hero-signature {
   width: 25px;
   height: 25px;
 }
-
-.page-home .portfolio-projects__arrow--next {
+.page-home .portfolio-projects__arrow:not(:disabled) {
   color: #082036;
   background: linear-gradient(135deg, #ffe163, #efb313);
   box-shadow:
     0 9px 19px rgb(0 0 0 / 17%),
     inset 0 1px 0 rgb(255 255 255 / 50%);
 }
-
 .page-home .portfolio-projects__arrow:disabled {
   cursor: default;
   opacity: 0.34;
 }
 
 @media (hover: hover) and (pointer: fine) {
-  .page-home .portfolio-projects__button:hover,
-  .page-home .portfolio-projects__arrow:hover:not(:disabled) {
+  .page-home .portfolio-projects__button:hover {
     transform: translateY(-3px);
   }
 
-  .page-home .portfolio-projects__button--primary:hover,
-  .page-home .portfolio-projects__arrow--next:hover:not(:disabled) {
-    color: #031729;
-    background: #ffe16a;
-    box-shadow:
-      0 16px 28px rgb(0 0 0 / 25%),
-      inset 0 1px 0 rgb(255 255 255 / 58%);
+  .page-home .portfolio-projects__slider > .portfolio-projects__arrow:hover:not(:disabled) {
+    transform: scale(1.06);
   }
+
+ 
 
   .page-home .portfolio-projects__button--secondary:hover {
     border-color: #fff;
@@ -1164,7 +1167,6 @@ html[lang='hy'] .page-home .hero-signature {
   .page-home .portfolio-project-card:hover {
     border-color: rgb(255 225 99 / 57%);
     box-shadow: 0 24px 46px rgb(0 0 0 / 26%);
-    transform: translateY(-5px);
   }
 
   .page-home .portfolio-project-card:hover .portfolio-project-card__media img {
@@ -1541,6 +1543,19 @@ html[lang='hy'] .page-home .hero-signature {
   }
 }
 
+/* Project carousel: show only whole cards at each responsive range. */
+@media (max-width: 1399px) {
+  .page-home .portfolio-projects__track {
+    grid-auto-columns: calc((100% - 24px) / 3);
+  }
+}
+
+@media (max-width: 999px) {
+  .page-home .portfolio-projects__track {
+    grid-auto-columns: calc((100% - 12px) / 2);
+  }
+}
+
 @media (max-width: 1220px) {
   .page-home .portfolio-projects__header {
     align-items: flex-start;
@@ -1559,10 +1574,6 @@ html[lang='hy'] .page-home .hero-signature {
 
   .page-home .portfolio-projects__button {
     width: 100%;
-  }
-
-  .page-home .portfolio-projects__track {
-    grid-auto-columns: clamp(290px, 30.5vw, 388px);
   }
 }
 
@@ -1608,11 +1619,14 @@ html[lang='hy'] .page-home .hero-signature {
 
   .page-home .portfolio-projects__rail {
     margin-top: 36px;
-    padding-inline: 16px;
+  }
+
+  .page-home .portfolio-projects__slider {
+    gap: 8px;
   }
 
   .page-home .portfolio-projects__track {
-    grid-auto-columns: min(82vw, 390px);
+    grid-auto-columns: 100%;
     gap: 10px;
   }
 
@@ -1645,10 +1659,6 @@ html[lang='hy'] .page-home .hero-signature {
   .page-home .portfolio-projects__rail-meta p .inline-icon {
     width: 21px;
     height: 21px;
-  }
-
-  .page-home .portfolio-projects__arrows {
-    gap: 8px;
   }
 
   .page-home .portfolio-projects__arrow {
