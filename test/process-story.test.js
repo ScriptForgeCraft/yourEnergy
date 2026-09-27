@@ -26,7 +26,7 @@ const analysis = {
   environmental: { avoidedCo2Tons: 6.1 }
 };
 
-test('process presentation reads completed SolarAnalysis values without deriving new results', () => {
+test('process presentation reads completed SolarAnalysis values without exposing the PVGIS provider', () => {
   assert.deepEqual(
     buildProcessPresentation({
       version: 3,
@@ -42,7 +42,7 @@ test('process presentation reads completed SolarAnalysis values without deriving
       consumptionMode: 'usage',
       consumptionValue: 900,
       solarResource: 1538,
-      source: 'PVGIS',
+      source: null,
       roofArea: 74.5,
       orientation: 180,
       tilt: 28,

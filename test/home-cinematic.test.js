@@ -181,8 +181,9 @@ test('desktop process mode collapses global navigation into an accessible burger
   assert.match(navigation, /element\.inert = active/u);
   assert.match(processStory, /setProcessChromeActive\(true\)/u);
   assert.match(processStory, /setProcessChromeActive\(false\)/u);
-  assert.match(mainCss, /scrollbar-gutter:\s*stable/u);
-  assert.match(mainCss, /html\.process-chrome-active::-webkit-scrollbar-thumb/u);
+  assert.match(mainCss, /scrollbar-gutter:\s*auto/u);
+  assert.match(mainCss, /scrollbar-width:\s*none/u);
+  assert.match(mainCss, /html::-webkit-scrollbar/u);
 });
 
 test('the cinematic header uses one compact language control and retains normal language links', async () => {
