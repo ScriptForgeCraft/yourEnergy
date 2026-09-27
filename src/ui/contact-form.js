@@ -21,7 +21,9 @@ export const initContactForm = ({ config = {} } = {}) => {
   const consent = form.elements.namedItem('consent');
   const submit = form.querySelector('[data-contact-submit]');
   const status = form.querySelector('[data-contact-status]');
-  const success = form.querySelector('[data-contact-success]');
+  const preSubmit = form.closest('[data-contact-pre-submit]');
+  const success = preSubmit?.parentElement?.querySelector('[data-contact-success]');
+  const successClose = preSubmit?.parentElement?.querySelector('[data-contact-success-close]');
   const copy = config.copy ?? {};
   const api = new ProductApiClient();
   let request = null;
@@ -34,6 +36,18 @@ export const initContactForm = ({ config = {} } = {}) => {
   };
   const invalid = (field, state) => field?.setAttribute('aria-invalid', String(state));
   const clearInvalid = (field) => field?.removeAttribute('aria-invalid');
+  const reset = () => {
+    request?.abort();
+    request = null;
+    complete = false;
+    form.reset();
+    [name, phone, email, message, consent].forEach(clearInvalid);
+    submit.disabled = false;
+    form.removeAttribute('aria-busy');
+    setStatus('');
+    if (success) success.hidden = true;
+    if (preSubmit) preSubmit.hidden = false;
+  };
 
   [name, phone, email, message].forEach((field) =>
     field?.addEventListener('input', () => clearInvalid(field))
@@ -89,8 +103,11 @@ export const initContactForm = ({ config = {} } = {}) => {
       complete = true;
       form.reset();
       setStatus('');
-      success.hidden = false;
-      success.focus();
+      if (preSubmit) preSubmit.hidden = true;
+      if (success) {
+        success.hidden = false;
+        success.focus();
+      }
     } catch (error) {
       if (error instanceof ProductApiError && error.code === 'ABORTED') return;
       setStatus(copy.unavailable, true);
@@ -101,5 +118,7 @@ export const initContactForm = ({ config = {} } = {}) => {
     }
   });
 
-  return { form };
+  successClose?.addEventListener('click', reset);
+
+  return { form, reset };
 };

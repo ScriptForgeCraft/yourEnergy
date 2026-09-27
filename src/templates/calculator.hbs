@@ -482,8 +482,8 @@
       </section>
       <dialog class='professional-lead-dialog' data-professional-lead-dialog aria-labelledby='professional-lead-title'
         aria-describedby='professional-lead-copy'>
-        <button class='round-button dialog-close' type='button' data-professional-lead-close aria-label='{{aria.close}}'>×</button>
-        <div class='dialog-content'><p class='professional-lead-dialog__eyebrow'>{{wizard.lead.eyebrow}}</p>
+        <button class='round-button dialog-close' type='button' data-professional-lead-close data-professional-lead-dismiss aria-label='{{aria.close}}'>×</button>
+        <div class='dialog-content' data-professional-lead-content><p class='professional-lead-dialog__eyebrow'>{{wizard.lead.eyebrow}}</p>
           <h2 id='professional-lead-title'>{{wizard.lead.title}}</h2>
           <p id='professional-lead-copy'>{{wizard.lead.copy}}</p>
           <p class='professional-lead-dialog__privacy'><svg aria-hidden='true'>
@@ -504,9 +504,9 @@
               </svg>{{wizard.lead.submit}}</button><p class='form-status' id='professional-lead-status'
               data-professional-lead-status aria-live='polite'></p>
           </form>
-          <div data-professional-lead-success hidden><p class='form-status is-success'>{{wizard.lead.success}}</p><button
-              class='button button--outline' type='button' data-professional-lead-close>{{wizard.lead.close}}</button></div>
         </div>
+        <section class='dialog-content form-success' data-professional-lead-success hidden tabindex='-1' aria-labelledby='professional-lead-success-title'><h2 id='professional-lead-success-title'>{{wizard.lead.success.title}}</h2><p>{{wizard.lead.success.text}}</p><button
+            class='button button--outline' type='button' data-professional-lead-close>{{wizard.lead.success.close}}</button></section>
       </dialog>
     </div>
   </main>

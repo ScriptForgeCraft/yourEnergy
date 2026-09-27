@@ -63,6 +63,12 @@ test('meeting flow supplies a localized back control in every site language', ()
   assert.equal(contactPageCopy.en.meeting.back, 'Back');
 });
 
+test('contact and meeting forms use the shared localized success state', () => {
+  assert.deepEqual(contactPageCopy.hy.success, contactPageCopy.hy.meeting.success);
+  assert.deepEqual(contactPageCopy.ru.success, contactPageCopy.ru.meeting.success);
+  assert.deepEqual(contactPageCopy.en.success, contactPageCopy.en.meeting.success);
+});
+
 test('meeting notifications use Armenian operational copy', () => {
   const message = buildEngineerMeetingMessage(new Date(2026, 8, 29), '10:00');
 

@@ -482,6 +482,8 @@ test('Quick lead form has accessible loading, success, error and double-submit s
     'data-quick-lead-form',
     'data-quick-lead-status',
     'data-quick-lead-success',
+    'data-quick-lead-content',
+    'data-quick-lead-dismiss',
     "aria-live='polite'"
   ]) {
     assert.ok(template.includes(marker), `missing lead form marker: ${marker}`);
@@ -489,6 +491,9 @@ test('Quick lead form has accessible loading, success, error and double-submit s
   assert.match(controller, /if \(leadRequest \|\| leadComplete\) return;/u);
   assert.match(controller, /leadForm\.setAttribute\('aria-busy', 'true'\)/u);
   assert.match(controller, /leadSuccess\.hidden = false/u);
+  assert.match(controller, /leadContent\.hidden = true/u);
+  assert.match(controller, /leadDismiss\.hidden = true/u);
+  assert.match(controller, /leadSuccess\.focus\(\)/u);
   assert.match(controller, /setLeadStatus\(copy\.lead\?\.unavailable, true\)/u);
 });
 

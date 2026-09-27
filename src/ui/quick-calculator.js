@@ -328,7 +328,9 @@ export const initQuickCalculator = ({ config = {} } = {}) => {
   const leadMessage = root.querySelector('[data-quick-lead-message]');
   const leadSubmit = root.querySelector('[data-quick-lead-submit]');
   const leadStatus = root.querySelector('[data-quick-lead-status]');
+  const leadContent = root.querySelector('[data-quick-lead-content]');
   const leadSuccess = root.querySelector('[data-quick-lead-success]');
+  const leadDismiss = root.querySelector('[data-quick-lead-dismiss]');
   let request = null;
   let leadRequest = null;
   let leadTrigger = null;
@@ -658,7 +660,11 @@ export const initQuickCalculator = ({ config = {} } = {}) => {
     leadForm?.removeAttribute('aria-busy');
     if (leadSubmit) leadSubmit.disabled = false;
     if (leadSuccess) leadSuccess.hidden = true;
+    if (leadDismiss) leadDismiss.hidden = false;
+    if (leadContent) leadContent.hidden = false;
     if (leadForm) leadForm.hidden = false;
+    leadDialog?.setAttribute('aria-labelledby', 'quick-lead-title');
+    leadDialog?.setAttribute('aria-describedby', 'quick-lead-copy');
     setLeadStatus('');
     [leadName, leadPhone, leadMessage].forEach((field) => field?.removeAttribute('aria-invalid'));
   };
@@ -738,8 +744,15 @@ export const initQuickCalculator = ({ config = {} } = {}) => {
       if (!lifecycle.canCommit(controller, leadRequest)) return;
       leadComplete = true;
       leadForm.hidden = true;
-      leadSuccess.hidden = false;
-      setLeadStatus(copy.lead?.success);
+      if (leadContent) leadContent.hidden = true;
+      if (leadDismiss) leadDismiss.hidden = true;
+      if (leadSuccess) {
+        leadSuccess.hidden = false;
+        leadSuccess.focus();
+      }
+      leadDialog?.setAttribute('aria-labelledby', 'quick-lead-success-title');
+      leadDialog?.removeAttribute('aria-describedby');
+      setLeadStatus('');
     } catch (error) {
       if (!lifecycle.canCommit(controller, leadRequest)) return;
       if (error instanceof ProductApiError && error.code === 'ABORTED') return;

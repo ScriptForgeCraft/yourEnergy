@@ -291,7 +291,11 @@ const copy = {
       comment: 'Մեկնաբանություն',
       submit: 'Ուղարկել հայտը',
       loading: 'Հայտն ուղարկվում է…',
-      success: 'Հայտն ընդունվել է։ Ինժեները կկապվի ձեզ հետ։',
+      success: {
+        title: 'Շնորհակալություն։ Ձեր հայտը ուղարկված է։',
+        text: 'Ինժեները շուտով կկապվի ձեզ հետ։',
+        close: 'Փակել'
+      },
       unavailable: 'Հայտը հիմա չի ուղարկվում։ Զանգահարեք ինժեներին՝ առաջարկ ստանալու համար։',
       resultUnavailable: 'Հաշվարկն այլևս հասանելի չէ։ Կրկին գործարկեք հաշվարկը և փորձեք նորից։',
       formUnavailable: 'Չհաջողվեց բացել հայտի ձևը։ Թարմացրեք էջը և փորձեք նորից։',
@@ -649,7 +653,11 @@ const copy = {
       comment: 'Комментарий',
       submit: 'Отправить заявку',
       loading: 'Отправляем заявку…',
-      success: 'Заявка принята. Инженер свяжется с вами.',
+      success: {
+        title: 'Спасибо! Ваша заявка отправлена.',
+        text: 'Инженер скоро свяжется с вами.',
+        close: 'Закрыть'
+      },
       unavailable:
         'Сейчас не удалось отправить заявку. Позвоните инженеру, чтобы получить предложение.',
       resultUnavailable: 'Расчёт больше недоступен. Запустите его снова и повторите отправку.',
@@ -1010,7 +1018,11 @@ const copy = {
       comment: 'Comment',
       submit: 'Send request',
       loading: 'Sending your request…',
-      success: 'Your request was accepted. An engineer will contact you.',
+      success: {
+        title: 'Thank you! Your request has been sent.',
+        text: 'An engineer will contact you shortly.',
+        close: 'Close'
+      },
       unavailable: 'Your request cannot be sent right now. Call an engineer to get a proposal.',
       resultUnavailable:
         'The calculation is no longer available. Run it again and retry your request.',

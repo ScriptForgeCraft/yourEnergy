@@ -103,8 +103,11 @@ export const contactPageCopy = Object.freeze({
       invalidSelection: 'Սկզբում ընտրեք օրը և ժամը։',
       unavailable:
         'Չհաջողվեց ուղարկել հանդիպման հայտը։ Խնդրում ենք փորձել ավելի ուշ կամ զանգահարել մեզ։',
-      success:
-        'Շնորհակալություն։ Հանդիպման հայտը ուղարկված է։ Մեր ինժեները շուտով կկապվի ձեզ հետ։',
+      success: {
+        title: 'Շնորհակալություն։ Ձեր հայտը ուղարկված է։',
+        text: 'Ինժեները շուտով կկապվի ձեզ հետ։',
+        close: 'Փակել'
+      },
       noTimes: 'Այս օրվա համար հասանելի ժամեր չկան։',
       close: 'Փակել',
       message: 'Կցանկանայի հանդիպում պլանավորել {date}-ին՝ {time}-ին (առցանց կամ գրասենյակում)։'
@@ -120,7 +123,11 @@ export const contactPageCopy = Object.freeze({
     invalid: 'Լրացրեք անունը, հեռախոսը և համաձայնությունը։',
     unavailable:
       'Չհաջողվեց ուղարկել հաղորդագրությունը։ Խնդրում ենք փորձել ավելի ուշ կամ զանգահարել մեզ։',
-    success: 'Շնորհակալություն։ Ձեր հաղորդագրությունն ընդունվել է, շուտով կկապվենք։',
+    success: {
+      title: 'Շնորհակալություն։ Ձեր հայտը ուղարկված է։',
+      text: 'Ինժեները շուտով կկապվի ձեզ հետ։',
+      close: 'Փակել'
+    },
     cardTitle: 'Միասին՝\nմաքուր էներգիայի\nճանապարհին',
     cardCopy: 'Խորհրդատվություն · Հաշվարկ · Նախագիծ · Տեղադրում',
     benefits: [
@@ -228,7 +235,11 @@ export const contactPageCopy = Object.freeze({
       invalid: 'Укажите имя и корректный номер телефона.',
       invalidSelection: 'Сначала выберите день и время.',
       unavailable: 'Не удалось отправить заявку на встречу. Попробуйте позже или позвоните нам.',
-      success: 'Спасибо! Заявка на встречу отправлена. Инженер скоро свяжется с вами.',
+      success: {
+        title: 'Спасибо! Ваша заявка отправлена.',
+        text: 'Инженер скоро свяжется с вами.',
+        close: 'Закрыть'
+      },
       noTimes: 'На этот день свободного времени нет.',
       close: 'Закрыть',
       message: 'Хочу запланировать встречу на {date} в {time} (онлайн или в офисе).'
@@ -243,7 +254,11 @@ export const contactPageCopy = Object.freeze({
     sending: 'Отправляем сообщение…',
     invalid: 'Укажите имя, телефон и согласие на обработку данных.',
     unavailable: 'Не удалось отправить сообщение. Попробуйте позже или позвоните нам.',
-    success: 'Спасибо! Сообщение принято — мы скоро свяжемся с вами.',
+    success: {
+      title: 'Спасибо! Ваша заявка отправлена.',
+      text: 'Инженер скоро свяжется с вами.',
+      close: 'Закрыть'
+    },
     cardTitle: 'Вместе\nк чистой энергии',
     cardCopy: 'Консультация · Расчёт · Проект · Установка',
     benefits: [
@@ -346,7 +361,11 @@ export const contactPageCopy = Object.freeze({
       invalid: 'Enter your name and a valid phone number.',
       invalidSelection: 'Choose a day and time first.',
       unavailable: 'We could not send the meeting request. Please try again later or call us.',
-      success: 'Thank you. Your meeting request was sent and an engineer will contact you shortly.',
+      success: {
+        title: 'Thank you! Your request has been sent.',
+        text: 'An engineer will contact you shortly.',
+        close: 'Close'
+      },
       noTimes: 'There are no available times for this day.',
       close: 'Close',
       message: 'I would like to book a meeting for {date} at {time} (online or at the office).'
@@ -361,7 +380,11 @@ export const contactPageCopy = Object.freeze({
     sending: 'Sending message…',
     invalid: 'Enter your name, phone number and consent.',
     unavailable: 'We could not send your message. Please try again later or call us.',
-    success: 'Thank you. Your message was accepted and we will contact you shortly.',
+    success: {
+      title: 'Thank you! Your request has been sent.',
+      text: 'An engineer will contact you shortly.',
+      close: 'Close'
+    },
     cardTitle: 'Together\ntoward clean energy',
     cardCopy: 'Consultation · Estimate · Design · Installation',
     benefits: [

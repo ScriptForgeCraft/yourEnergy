@@ -65,7 +65,9 @@ test('Professional has exactly four customer steps and retains every engineering
     'data-professional-lead-dialog',
     'data-professional-lead-form',
     'data-professional-lead-status',
-    'data-professional-lead-success'
+    'data-professional-lead-success',
+    'data-professional-lead-content',
+    'data-professional-lead-dismiss'
   ]) {
     assert.ok(professional.includes(marker), `missing Professional lead marker: ${marker}`);
   }
@@ -101,6 +103,9 @@ test('Professional has exactly four customer steps and retains every engineering
   assert.match(controller, /storageRequired\?\.addEventListener\('change'/u);
   assert.match(controller, /buildProfessionalLeadContext/u);
   assert.match(controller, /professionalLeadForm\.setAttribute\('aria-busy', 'true'\)/u);
+  assert.match(controller, /professionalLeadContent\.hidden = true/u);
+  assert.match(controller, /professionalLeadDismiss\.hidden = true/u);
+  assert.match(controller, /professionalLeadSuccess\.focus\(\)/u);
   assert.match(controller, /wizard\.lead\?\.resultUnavailable/u);
   assert.match(controller, /wizard\.lead\?\.formUnavailable/u);
   assert.match(controller, /professionalLeadDialog\.setAttribute\('open', ''\)/u);

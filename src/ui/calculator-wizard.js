@@ -217,8 +217,14 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
   const professionalLeadStatus = professionalLeadDialog?.querySelector(
     '[data-professional-lead-status]'
   );
+  const professionalLeadContent = professionalLeadDialog?.querySelector(
+    '[data-professional-lead-content]'
+  );
   const professionalLeadSuccess = professionalLeadDialog?.querySelector(
     '[data-professional-lead-success]'
+  );
+  const professionalLeadDismiss = professionalLeadDialog?.querySelector(
+    '[data-professional-lead-dismiss]'
   );
   const passportDialog = document.querySelector('[data-passport-dialog]');
   const passportContent = document.querySelector('[data-passport-dialog-content]');
@@ -1442,7 +1448,11 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
     professionalLeadForm?.removeAttribute('aria-busy');
     if (professionalLeadSubmit) professionalLeadSubmit.disabled = false;
     if (professionalLeadSuccess) professionalLeadSuccess.hidden = true;
+    if (professionalLeadDismiss) professionalLeadDismiss.hidden = false;
+    if (professionalLeadContent) professionalLeadContent.hidden = false;
     if (professionalLeadForm) professionalLeadForm.hidden = false;
+    professionalLeadDialog?.setAttribute('aria-labelledby', 'professional-lead-title');
+    professionalLeadDialog?.setAttribute('aria-describedby', 'professional-lead-copy');
     setProfessionalLeadStatus('');
     [
       professionalLeadName,
@@ -1541,8 +1551,15 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
       if (!lifecycle.canCommit(controller, professionalLeadRequest)) return;
       professionalLeadComplete = true;
       professionalLeadForm.hidden = true;
-      if (professionalLeadSuccess) professionalLeadSuccess.hidden = false;
-      setProfessionalLeadStatus(wizard.lead?.success);
+      if (professionalLeadContent) professionalLeadContent.hidden = true;
+      if (professionalLeadDismiss) professionalLeadDismiss.hidden = true;
+      if (professionalLeadSuccess) {
+        professionalLeadSuccess.hidden = false;
+        professionalLeadSuccess.focus();
+      }
+      professionalLeadDialog?.setAttribute('aria-labelledby', 'professional-lead-success-title');
+      professionalLeadDialog?.removeAttribute('aria-describedby');
+      setProfessionalLeadStatus('');
     } catch (error) {
       if (!lifecycle.canCommit(controller, professionalLeadRequest)) return;
       if (error instanceof ProductApiError && error.code === 'ABORTED') return;

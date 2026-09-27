@@ -330,13 +330,15 @@ export const initMeetingScheduler = ({ config = {} } = {}) => {
   const times = dialog.querySelector('[data-meeting-times]');
   const selection = dialog.querySelector('[data-meeting-selection]');
   const contactStep = dialog.querySelector('[data-meeting-contact-step]');
+  const flow = dialog.querySelector('[data-meeting-flow]');
   const back = dialog.querySelector('[data-meeting-back]');
   const close = dialog.querySelector('[data-meeting-dialog-close]');
   const name = contactStep?.elements.namedItem('name');
   const phone = contactStep?.elements.namedItem('phone');
   const submit = contactStep?.querySelector('[data-meeting-submit]');
   const status = contactStep?.querySelector('[data-meeting-status]');
-  const success = contactStep?.querySelector('[data-meeting-success]');
+  const success = dialog.querySelector('[data-meeting-success]');
+  const successClose = dialog.querySelector('[data-meeting-success-close]');
 
   if (
     !dateStep ||
@@ -350,6 +352,7 @@ export const initMeetingScheduler = ({ config = {} } = {}) => {
     !times ||
     !selection ||
     !contactStep ||
+    !flow ||
     !back ||
     !close ||
     !name ||
@@ -523,6 +526,9 @@ export const initMeetingScheduler = ({ config = {} } = {}) => {
   };
 
   const onDialogClose = () => {
+    request?.abort();
+    request = null;
+    resetDialog();
     const closedTrigger = trigger;
     trigger = null;
     closedTrigger?.focus();
@@ -550,6 +556,9 @@ export const initMeetingScheduler = ({ config = {} } = {}) => {
     selectedDateText.textContent = '';
     selection.textContent = '';
     resetContactStep();
+    flow.hidden = false;
+    dialog.setAttribute('aria-labelledby', 'meeting-dialog-title');
+    dialog.setAttribute('aria-describedby', 'meeting-dialog-copy');
     showDateStep();
     renderCalendar();
   };
@@ -631,8 +640,11 @@ export const initMeetingScheduler = ({ config = {} } = {}) => {
       complete = true;
       setStatus('');
       setMeetingFormDisabled(true);
+      flow.hidden = true;
       success.hidden = false;
       success.focus();
+      dialog.setAttribute('aria-labelledby', 'meeting-success-title');
+      dialog.removeAttribute('aria-describedby');
     } catch (error) {
       if (error instanceof ProductApiError && error.code === 'ABORTED') return;
       setStatus(copy.unavailable, true);
@@ -666,6 +678,7 @@ export const initMeetingScheduler = ({ config = {} } = {}) => {
     }
   });
   close.addEventListener('click', closeDialog);
+  successClose?.addEventListener('click', closeDialog);
   dialog.addEventListener('close', onDialogClose);
   dialog.addEventListener('click', (event) => {
     if (event.target === dialog) closeDialog();

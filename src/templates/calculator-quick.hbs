@@ -42,16 +42,16 @@
             <div data-quick-result-values hidden></div><div class='quick-result__actions' data-quick-result-actions hidden><aside class='quick-result__upgrade'><span class='quick-result__upgrade-icon'><svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#leaf'></use></svg></span><div><h3>{{quick.proTitle}}</h3><p>{{quick.proCopy}}</p></div><a class='quick-result__professional' data-calculator-mode='professional' href='{{{professionalHref}}}'><span>{{quick.proAction}}</span><svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#arrow-right'></use></svg></a></aside><div class='quick-result__offer-row'><button class='button quick-result__offer' type='button' data-quick-lead-open><svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#message-square'></use></svg><span>{{quick.contact}}</span></button><a class='text-link' href='{{contact.phoneHref}}'><svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#phone'></use></svg>{{quick.phone}}</a></div></div><p class='section-disclosure'>{{quick.disclaimer}}</p>
           </div>
           <dialog class='quick-lead-dialog' data-quick-lead-dialog aria-labelledby='quick-lead-title' aria-describedby='quick-lead-copy'>
-            <button class='round-button dialog-close' type='button' data-quick-lead-close aria-label='{{aria.close}}'>×</button>
-            <div class='dialog-content'><h2 id='quick-lead-title'>{{quick.lead.title}}</h2><p id='quick-lead-copy'>{{quick.lead.copy}}</p>
+            <button class='round-button dialog-close' type='button' data-quick-lead-close data-quick-lead-dismiss aria-label='{{aria.close}}'>×</button>
+            <div class='dialog-content' data-quick-lead-content><h2 id='quick-lead-title'>{{quick.lead.title}}</h2><p id='quick-lead-copy'>{{quick.lead.copy}}</p>
               <form data-quick-lead-form novalidate aria-describedby='quick-lead-status'>
                 <label for='quick-lead-name'>{{quick.lead.name}}<input id='quick-lead-name' name='name' data-quick-lead-name autocomplete='name' maxlength='100' required /></label>
                 <label for='quick-lead-phone'>{{quick.lead.phone}}<input id='quick-lead-phone' name='phone' data-quick-lead-phone type='tel' autocomplete='tel' inputmode='tel' maxlength='32' required /></label>
                 <label for='quick-lead-message'>{{quick.lead.comment}} <span>{{product.common.optional}}</span><textarea id='quick-lead-message' name='message' autocomplete='off' data-quick-lead-message maxlength='2000' rows='3'></textarea></label>
                 <button class='button' type='submit' data-quick-lead-submit>{{quick.lead.submit}}</button><p class='form-status' id='quick-lead-status' data-quick-lead-status aria-live='polite'></p>
               </form>
-              <div data-quick-lead-success hidden><p class='form-status is-success'>{{quick.lead.success}}</p><button class='button button--outline' type='button' data-quick-lead-close>{{quick.lead.close}}</button></div>
             </div>
+            <section class='dialog-content form-success' data-quick-lead-success hidden tabindex='-1' aria-labelledby='quick-lead-success-title'><h2 id='quick-lead-success-title'>{{quick.lead.success.title}}</h2><p>{{quick.lead.success.text}}</p><button class='button button--outline' type='button' data-quick-lead-close>{{quick.lead.success.close}}</button></section>
           </dialog>
         </section>
       </div></section>

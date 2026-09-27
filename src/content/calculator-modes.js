@@ -136,7 +136,11 @@ const common = {
         comment: 'Մեկնաբանություն',
         submit: 'Ուղարկել հարցումը',
         loading: 'Ուղարկում ենք հարցումը…',
-        success: 'Հարցումն ընդունվել է։ Ինժեները կկապվի ձեզ հետ։',
+        success: {
+          title: 'Շնորհակալություն։ Ձեր հայտը ուղարկված է։',
+          text: 'Ինժեները շուտով կկապվի ձեզ հետ։',
+          close: 'Փակել'
+        },
         unavailable: 'Հարցումը հիմա չի ուղարկվում։ Զանգահարեք ինժեներին՝ ստանալու համար առաջարկ։',
         invalid: 'Մուտքագրեք անուն և ճիշտ հեռախոսահամար։',
         close: 'Փակել'
@@ -403,7 +407,11 @@ const common = {
         comment: 'Комментарий',
         submit: 'Отправить запрос',
         loading: 'Отправляем запрос…',
-        success: 'Запрос принят. Инженер свяжется с вами.',
+        success: {
+          title: 'Спасибо! Ваша заявка отправлена.',
+          text: 'Инженер скоро свяжется с вами.',
+          close: 'Закрыть'
+        },
         unavailable:
           'Сейчас запрос не отправляется. Позвоните инженеру, чтобы получить предложение.',
         invalid: 'Введите имя и корректный номер телефона.',
@@ -670,7 +678,11 @@ const common = {
         comment: 'Comment',
         submit: 'Send request',
         loading: 'Sending your request…',
-        success: 'Your request was accepted. An engineer will contact you.',
+        success: {
+          title: 'Thank you! Your request has been sent.',
+          text: 'An engineer will contact you shortly.',
+          close: 'Close'
+        },
         unavailable: 'Your request cannot be sent right now. Call an engineer to get a proposal.',
         invalid: 'Enter your name and a valid phone number.',
         close: 'Close'

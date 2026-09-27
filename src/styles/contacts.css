@@ -217,7 +217,7 @@
 }
 
 .contact-section-heading > div > p:last-child,
-.contact-form-copy > p {
+.contact-form-copy [data-contact-pre-submit] > p {
   max-width: 38rem;
   margin: 12px 0 0;
   color: #647287;
@@ -628,12 +628,39 @@
 }
 
 .contact-form__success {
+  display: grid;
+  gap: 12px;
   border: 1px solid #a6dfbb;
   border-radius: 10px;
   padding: 12px 14px;
   color: #157342;
   background: #effbf3;
+}
+
+.contact-form__success[hidden] {
+  display: none;
+}
+
+.contact-form__success h2,
+.contact-form__success p {
+  margin: 0;
+}
+
+.contact-form__success h2 {
+  color: #156b3d;
+  font-size: clamp(1.4rem, 2.5vw, 2rem);
+  line-height: 1.1;
+  letter-spacing: -0.035em;
+}
+
+.contact-form__success p {
+  font-size: 0.86rem;
   font-weight: 700;
+  line-height: 1.45;
+}
+
+.contact-form__success .contact-form__submit {
+  margin-top: 0;
 }
 
 .meeting-dialog {
@@ -712,6 +739,30 @@
   display: grid;
   gap: 17px;
   padding: clamp(24px, 4vw, 36px);
+}
+
+.meeting-dialog__content.form-success {
+  justify-items: start;
+}
+
+.meeting-dialog__content.form-success[hidden] {
+  display: none;
+}
+
+.meeting-dialog__content.form-success > h2 {
+  max-width: 18ch;
+  margin: 0;
+  color: #156b3d;
+  font-size: clamp(1.5rem, 4vw, 2rem);
+  line-height: 1.1;
+}
+
+.meeting-dialog__content.form-success > p {
+  margin: 0;
+  color: #5e7080;
+  font-size: 0.88rem;
+  font-weight: 700;
+  line-height: 1.45;
 }
 
 .meeting-dialog__eyebrow {
