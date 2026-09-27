@@ -9,6 +9,7 @@ import {
   getMeetingSlots,
   isMeetingDateAvailable
 } from '../src/ui/meeting-scheduler.js';
+import { contactPageCopy } from '../src/content/contacts.js';
 
 test('meeting scheduler offers only configured working-day slots', () => {
   assert.deepEqual(getMeetingSlots(new Date(2026, 8, 28)), [
@@ -54,6 +55,12 @@ test('meeting calendar uses the site language for all three locales', () => {
   assert.equal(formatMeetingDate(date, 'ru-RU'), 'среда, 30 сентября 2026 г.');
   assert.equal(formatMeetingMonth(date, 'en-US'), 'September 2026');
   assert.equal(formatMeetingDate(date, 'en-US'), 'Wednesday, September 30, 2026');
+});
+
+test('meeting flow supplies a localized back control in every site language', () => {
+  assert.equal(contactPageCopy.hy.meeting.back, 'Հետ');
+  assert.equal(contactPageCopy.ru.meeting.back, 'Назад');
+  assert.equal(contactPageCopy.en.meeting.back, 'Back');
 });
 
 test('meeting notifications use Armenian operational copy', () => {

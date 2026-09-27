@@ -1,4 +1,3 @@
-import './meeting-scrollbar.js';
 import { ProductApiClient, ProductApiError } from '../services/api-client.js';
 
 const DEFAULT_SCHEDULE_URL = '/data/meeting-schedule.json';
@@ -320,6 +319,7 @@ export const initMeetingScheduler = ({ config = {} } = {}) => {
 
   const copy = config.copy?.meeting ?? {};
   const locale = config.locale ?? document.documentElement.lang ?? 'hy-AM';
+  const dateStep = dialog.querySelector('[data-meeting-date-step]');
   const previous = dialog.querySelector('[data-meeting-calendar-previous]');
   const next = dialog.querySelector('[data-meeting-calendar-next]');
   const month = dialog.querySelector('[data-meeting-calendar-month]');
@@ -330,6 +330,7 @@ export const initMeetingScheduler = ({ config = {} } = {}) => {
   const times = dialog.querySelector('[data-meeting-times]');
   const selection = dialog.querySelector('[data-meeting-selection]');
   const contactStep = dialog.querySelector('[data-meeting-contact-step]');
+  const back = dialog.querySelector('[data-meeting-back]');
   const close = dialog.querySelector('[data-meeting-dialog-close]');
   const name = contactStep?.elements.namedItem('name');
   const phone = contactStep?.elements.namedItem('phone');
@@ -338,6 +339,7 @@ export const initMeetingScheduler = ({ config = {} } = {}) => {
   const success = contactStep?.querySelector('[data-meeting-success]');
 
   if (
+    !dateStep ||
     !previous ||
     !next ||
     !month ||
@@ -348,6 +350,7 @@ export const initMeetingScheduler = ({ config = {} } = {}) => {
     !times ||
     !selection ||
     !contactStep ||
+    !back ||
     !close ||
     !name ||
     !phone ||
@@ -375,6 +378,30 @@ export const initMeetingScheduler = ({ config = {} } = {}) => {
   const invalid = (field, state) => field?.setAttribute('aria-invalid', String(state));
   const clearInvalid = (field) => field?.removeAttribute('aria-invalid');
 
+  const showDateStep = () => {
+    dateStep.hidden = false;
+    timeStep.hidden = true;
+    contactStep.hidden = true;
+    selection.hidden = true;
+    back.hidden = true;
+  };
+
+  const showTimeStep = () => {
+    dateStep.hidden = true;
+    timeStep.hidden = false;
+    contactStep.hidden = true;
+    selection.hidden = true;
+    back.hidden = false;
+  };
+
+  const showContactStep = () => {
+    dateStep.hidden = true;
+    timeStep.hidden = true;
+    contactStep.hidden = false;
+    selection.hidden = false;
+    back.hidden = false;
+  };
+
   const renderWeekdays = () => {
     weekdays.replaceChildren();
     for (let index = 0; index < 7; index += 1) {
@@ -391,6 +418,7 @@ export const initMeetingScheduler = ({ config = {} } = {}) => {
     const available = getAvailableMeetingSlots(selectedDate, schedule, new Date());
     if (!available.length) {
       selection.textContent = copy.noTimes ?? '';
+      selection.hidden = false;
       contactStep.hidden = true;
       selectedTime = '';
       return;
@@ -467,14 +495,13 @@ export const initMeetingScheduler = ({ config = {} } = {}) => {
   const selectDate = (date) => {
     selectedDate = date;
     selectedTime = '';
-    timeStep.hidden = false;
+    showTimeStep();
     selectedDateText.textContent = `${copy.selectedDate}: ${formatMeetingDate(date, locale)}`;
     selection.textContent = '';
     resetContactStep();
     renderCalendar();
     renderTimes();
     window.requestAnimationFrame(() => {
-      timeStep.scrollIntoView({ block: 'nearest' });
       times.querySelector('button')?.focus();
     });
   };
@@ -487,12 +514,10 @@ export const initMeetingScheduler = ({ config = {} } = {}) => {
     const label = copy.selectedMeeting ?? '';
     const value = `${formatMeetingDate(selectedDate, locale)} · ${time}`;
     selection.textContent = [label, value].filter(Boolean).join(': ');
-
-    contactStep.hidden = false;
+    showContactStep();
     success.hidden = true;
     setStatus('');
     window.requestAnimationFrame(() => {
-      contactStep.scrollIntoView({ block: 'nearest' });
       name.focus();
     });
   };
@@ -522,10 +547,10 @@ export const initMeetingScheduler = ({ config = {} } = {}) => {
     selectedTime = '';
     const today = atStartOfDay(new Date());
     displayedMonth = new Date(today.getFullYear(), today.getMonth(), 1);
-    timeStep.hidden = true;
     selectedDateText.textContent = '';
     selection.textContent = '';
     resetContactStep();
+    showDateStep();
     renderCalendar();
   };
 
@@ -556,11 +581,11 @@ export const initMeetingScheduler = ({ config = {} } = {}) => {
       !selectedTime ||
       !getAvailableMeetingSlots(selectedDate, schedule, new Date()).includes(selectedTime)
     ) {
-      setStatus(copy.invalidSelection, true);
-      contactStep.hidden = true;
-      timeStep.hidden = false;
+      showTimeStep();
       renderCalendar();
       renderTimes();
+      selection.textContent = copy.invalidSelection;
+      selection.hidden = false;
       times.querySelector('button')?.focus();
       return;
     }
@@ -626,6 +651,20 @@ export const initMeetingScheduler = ({ config = {} } = {}) => {
     displayedMonth = new Date(displayedMonth.getFullYear(), displayedMonth.getMonth() + 1, 1);
     renderCalendar();
   });
+  back.addEventListener('click', () => {
+    if (!contactStep.hidden) {
+      showTimeStep();
+      renderTimes();
+      (times.querySelector('[aria-pressed="true"]') ?? times.querySelector('button'))?.focus();
+      return;
+    }
+
+    if (!timeStep.hidden) {
+      showDateStep();
+      renderCalendar();
+      (days.querySelector('.is-selected') ?? days.querySelector('button:not(:disabled)'))?.focus();
+    }
+  });
   close.addEventListener('click', closeDialog);
   dialog.addEventListener('close', onDialogClose);
   dialog.addEventListener('click', (event) => {
@@ -641,10 +680,9 @@ export const initMeetingScheduler = ({ config = {} } = {}) => {
     if (selectedDate && !isMeetingDateAvailable(selectedDate, new Date(), schedule)) {
       selectedDate = null;
       selectedTime = '';
-      timeStep.hidden = true;
-      contactStep.hidden = true;
       selectedDateText.textContent = '';
       selection.textContent = '';
+      showDateStep();
     }
     renderCalendar();
     if (selectedDate) renderTimes();
