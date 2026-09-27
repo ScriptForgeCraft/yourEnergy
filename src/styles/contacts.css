@@ -906,6 +906,12 @@
   transform: translateY(-1px);
 }
 
+.meeting-times__button[aria-pressed='true'] {
+  border-color: #16804b;
+  color: #fff;
+  background: #16804b;
+}
+
 .meeting-dialog__selection {
   min-height: 1.2em;
   margin: -8px 0 0;

@@ -149,25 +149,166 @@ export const loadMeetingSchedule = async (url = DEFAULT_SCHEDULE_URL) => {
   }
 };
 
-const formatMonth = (date, locale) =>
-  new Intl.DateTimeFormat(locale, { month: 'long', year: 'numeric' }).format(date);
-const formatWeekday = (date, locale) =>
-  new Intl.DateTimeFormat(locale, { weekday: 'short' }).format(date);
-const formatDate = (date, locale) =>
-  new Intl.DateTimeFormat(locale, {
-    weekday: 'long',
-    day: 'numeric',
-    month: 'long',
-    year: 'numeric'
-  }).format(date);
-const capitalize = (value) => value.charAt(0).toLocaleUpperCase() + value.slice(1);
+const CALENDAR_COPY = Object.freeze({
+  hy: Object.freeze({
+    months: Object.freeze([
+      'Հունվար',
+      'Փետրվար',
+      'Մարտ',
+      'Ապրիլ',
+      'Մայիս',
+      'Հունիս',
+      'Հուլիս',
+      'Օգոստոս',
+      'Սեպտեմբեր',
+      'Հոկտեմբեր',
+      'Նոյեմբեր',
+      'Դեկտեմբեր'
+    ]),
+    dateMonths: Object.freeze([
+      'հունվարի',
+      'փետրվարի',
+      'մարտի',
+      'ապրիլի',
+      'մայիսի',
+      'հունիսի',
+      'հուլիսի',
+      'օգոստոսի',
+      'սեպտեմբերի',
+      'հոկտեմբերի',
+      'նոյեմբերի',
+      'դեկտեմբերի'
+    ]),
+    weekdays: Object.freeze([
+      'կիրակի',
+      'երկուշաբթի',
+      'երեքշաբթի',
+      'չորեքշաբթի',
+      'հինգշաբթի',
+      'ուրբաթ',
+      'շաբաթ'
+    ]),
+    shortWeekdays: Object.freeze(['Կիր', 'Երկ', 'Երք', 'Չրք', 'Հնգ', 'Ուրբ', 'Շբթ'])
+  }),
+  ru: Object.freeze({
+    months: Object.freeze([
+      'Январь',
+      'Февраль',
+      'Март',
+      'Апрель',
+      'Май',
+      'Июнь',
+      'Июль',
+      'Август',
+      'Сентябрь',
+      'Октябрь',
+      'Ноябрь',
+      'Декабрь'
+    ]),
+    dateMonths: Object.freeze([
+      'января',
+      'февраля',
+      'марта',
+      'апреля',
+      'мая',
+      'июня',
+      'июля',
+      'августа',
+      'сентября',
+      'октября',
+      'ноября',
+      'декабря'
+    ]),
+    weekdays: Object.freeze([
+      'воскресенье',
+      'понедельник',
+      'вторник',
+      'среда',
+      'четверг',
+      'пятница',
+      'суббота'
+    ]),
+    shortWeekdays: Object.freeze(['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'])
+  }),
+  en: Object.freeze({
+    months: Object.freeze([
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December'
+    ]),
+    dateMonths: Object.freeze([
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December'
+    ]),
+    weekdays: Object.freeze([
+      'Sunday',
+      'Monday',
+      'Tuesday',
+      'Wednesday',
+      'Thursday',
+      'Friday',
+      'Saturday'
+    ]),
+    shortWeekdays: Object.freeze(['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'])
+  })
+});
+
+const calendarLocale = (locale) => {
+  const language = typeof locale === 'string' ? locale.toLowerCase().split(/[-_]/u)[0] : '';
+  return CALENDAR_COPY[language] ? language : 'hy';
+};
+
+const calendarLabels = (locale) => CALENDAR_COPY[calendarLocale(locale)];
+
+export const formatMeetingMonth = (date, locale) => {
+  const labels = calendarLabels(locale);
+  return `${labels.months[date.getMonth()]} ${date.getFullYear()}`;
+};
+
+export const formatMeetingWeekday = (date, locale) =>
+  calendarLabels(locale).shortWeekdays[date.getDay()];
+
+export const formatMeetingDate = (date, locale) => {
+  const labels = calendarLabels(locale);
+  const day = date.getDate();
+  const month = date.getMonth();
+  const year = date.getFullYear();
+  const weekday = labels.weekdays[date.getDay()];
+
+  if (calendarLocale(locale) === 'hy') {
+    return `${year} թ. ${labels.dateMonths[month]} ${day}, ${weekday}`;
+  }
+  if (calendarLocale(locale) === 'ru') {
+    return `${weekday}, ${day} ${labels.dateMonths[month]} ${year} г.`;
+  }
+  return `${weekday}, ${labels.dateMonths[month]} ${day}, ${year}`;
+};
 
 // The notification is operational copy for the engineer, not visitor-facing
 // copy, so it stays Armenian even when the page uses another language.
 export const buildEngineerMeetingMessage = (date, time) =>
   [
     'Հանդիպման հայտ',
-    `• Ամսաթիվ: ${formatDate(date, 'hy-AM')}`,
+    `• Ամսաթիվ: ${formatMeetingDate(date, 'hy-AM')}`,
     `• Ժամ: ${time}`,
     '• Ձևաչափ: Առցանց կամ գրասենյակում'
   ].join('\n');
@@ -238,7 +379,7 @@ export const initMeetingScheduler = ({ config = {} } = {}) => {
     weekdays.replaceChildren();
     for (let index = 0; index < 7; index += 1) {
       const label = document.createElement('span');
-      label.textContent = capitalize(formatWeekday(new Date(2024, 0, 1 + index), locale));
+      label.textContent = formatMeetingWeekday(new Date(2024, 0, 1 + index), locale);
       weekdays.append(label);
     }
   };
@@ -268,7 +409,7 @@ export const initMeetingScheduler = ({ config = {} } = {}) => {
 
   const renderCalendar = () => {
     const today = atStartOfDay(new Date());
-    month.textContent = capitalize(formatMonth(displayedMonth, locale));
+    month.textContent = formatMeetingMonth(displayedMonth, locale);
     previous.disabled =
       displayedMonth.getFullYear() === today.getFullYear() &&
       displayedMonth.getMonth() === today.getMonth();
@@ -293,7 +434,7 @@ export const initMeetingScheduler = ({ config = {} } = {}) => {
       button.className = 'meeting-calendar__day';
       button.textContent = String(day);
       button.disabled = !available;
-      button.setAttribute('aria-label', formatDate(date, locale));
+      button.setAttribute('aria-label', formatMeetingDate(date, locale));
       button.setAttribute(
         'aria-pressed',
         String(selectedDate ? sameDay(selectedDate, date) : false)
@@ -327,7 +468,7 @@ export const initMeetingScheduler = ({ config = {} } = {}) => {
     selectedDate = date;
     selectedTime = '';
     timeStep.hidden = false;
-    selectedDateText.textContent = `${copy.selectedDate}: ${formatDate(date, locale)}`;
+    selectedDateText.textContent = `${copy.selectedDate}: ${formatMeetingDate(date, locale)}`;
     selection.textContent = '';
     resetContactStep();
     renderCalendar();
@@ -344,7 +485,7 @@ export const initMeetingScheduler = ({ config = {} } = {}) => {
     renderTimes();
 
     const label = copy.selectedMeeting ?? '';
-    const value = `${formatDate(selectedDate, locale)} · ${time}`;
+    const value = `${formatMeetingDate(selectedDate, locale)} · ${time}`;
     selection.textContent = [label, value].filter(Boolean).join(': ');
 
     contactStep.hidden = false;

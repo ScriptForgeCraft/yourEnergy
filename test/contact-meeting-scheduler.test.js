@@ -4,6 +4,8 @@ import test from 'node:test';
 import {
   buildEngineerMeetingMessage,
   buildMeetingMessage,
+  formatMeetingDate,
+  formatMeetingMonth,
   getMeetingSlots,
   isMeetingDateAvailable
 } from '../src/ui/meeting-scheduler.js';
@@ -41,6 +43,17 @@ test('meeting scheduler substitutes the selected date and time into the lead mes
     buildMeetingMessage('Meeting: {date}, {time}.', 'Tuesday, 29 September 2026', '10:00'),
     'Meeting: Tuesday, 29 September 2026, 10:00.'
   );
+});
+
+test('meeting calendar uses the site language for all three locales', () => {
+  const date = new Date(2026, 8, 30);
+
+  assert.equal(formatMeetingMonth(date, 'hy-AM'), 'Սեպտեմբեր 2026');
+  assert.equal(formatMeetingDate(date, 'hy-AM'), '2026 թ. սեպտեմբերի 30, չորեքշաբթի');
+  assert.equal(formatMeetingMonth(date, 'ru-RU'), 'Сентябрь 2026');
+  assert.equal(formatMeetingDate(date, 'ru-RU'), 'среда, 30 сентября 2026 г.');
+  assert.equal(formatMeetingMonth(date, 'en-US'), 'September 2026');
+  assert.equal(formatMeetingDate(date, 'en-US'), 'Wednesday, September 30, 2026');
 });
 
 test('meeting notifications use Armenian operational copy', () => {
