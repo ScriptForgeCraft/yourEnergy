@@ -168,11 +168,14 @@
               <ul class='process-metrics' role='list'>
                 {{#each cards}}
                   <li class='process-metric' data-process-card>
-                    <svg class='inline-icon' aria-hidden='true'><use
-                        href='/icons.svg#{{icon}}'
-                      ></use></svg>
-                    <span>{{label}}</span>
+                    <div class='process-metric__heading'>
+                      <span class='process-metric__title'>{{label}}</span>
+                      <svg class='inline-icon' aria-hidden='true'><use
+                          href='/icons.svg#{{icon}}'
+                        ></use></svg>
+                    </div>
                     <strong
+                      class='process-metric__description'
                       data-process-value='{{data}}'
                       data-default='{{value}}'
                     >{{value}}</strong>
