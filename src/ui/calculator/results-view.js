@@ -62,7 +62,10 @@ export const createCalculatorResultsView = ({
   };
 
   const monthlyComparisonChart = ({ consumption, generation, months }) => {
-    const chart = element('figure', 'wizard-chart monthly-comparison-chart');
+    const chart = element(
+      'figure',
+      'wizard-chart monthly-comparison-chart result-production-chart'
+    );
     chart.append(
       element(
         'figcaption',
@@ -72,8 +75,16 @@ export const createCalculatorResultsView = ({
     );
     const legend = element('p', 'monthly-comparison-chart__legend');
     legend.append(
-      element('span', 'monthly-comparison-chart__legend-consumption', wizard.monthlyConsumption ?? 'Consumption'),
-      element('span', 'monthly-comparison-chart__legend-generation', wizard.production ?? 'Solar production')
+      element(
+        'span',
+        'monthly-comparison-chart__legend-consumption',
+        wizard.monthlyConsumption ?? 'Consumption'
+      ),
+      element(
+        'span',
+        'monthly-comparison-chart__legend-generation',
+        wizard.production ?? 'Solar production'
+      )
     );
     const values = [...consumption, ...generation].map((value) => number(value, 0) ?? 0);
     const maximum = Math.max(...values, 1);
@@ -83,12 +94,24 @@ export const createCalculatorResultsView = ({
       const pair = element('div', 'monthly-comparison-chart__pair');
       const consumptionValue = number(consumption[index], 0) ?? 0;
       const generationValue = number(generation[index], 0) ?? 0;
-      const consumptionBar = element('span', 'monthly-comparison-chart__bar monthly-comparison-chart__bar--consumption');
+      const consumptionBar = element(
+        'span',
+        'monthly-comparison-chart__bar monthly-comparison-chart__bar--consumption'
+      );
       consumptionBar.style.setProperty('--chart-height', `${(consumptionValue / maximum) * 100}%`);
-      consumptionBar.setAttribute('title', `${month?.name ?? index + 1}: ${format(consumptionValue, locale)} kWh`);
-      const generationBar = element('span', 'monthly-comparison-chart__bar monthly-comparison-chart__bar--generation');
+      consumptionBar.setAttribute(
+        'title',
+        `${month?.name ?? index + 1}: ${format(consumptionValue, locale)} kWh`
+      );
+      const generationBar = element(
+        'span',
+        'monthly-comparison-chart__bar monthly-comparison-chart__bar--generation'
+      );
       generationBar.style.setProperty('--chart-height', `${(generationValue / maximum) * 100}%`);
-      generationBar.setAttribute('title', `${month?.name ?? index + 1}: ${format(generationValue, locale)} kWh`);
+      generationBar.setAttribute(
+        'title',
+        `${month?.name ?? index + 1}: ${format(generationValue, locale)} kWh`
+      );
       pair.append(consumptionBar, generationBar);
       item.append(pair, element('small', '', month?.short ?? String(index + 1)));
       bars.append(item);
@@ -446,10 +469,75 @@ export const createCalculatorResultsView = ({
     );
     overview.append(overviewHeading, primaryMetrics);
     resultDashboard.append(overview);
+    const commercialEstimate = analysis.commercialEstimate ?? scenario.commercialEstimate;
+    const financial = scenario.financial ?? {};
+    const budgetRange = commercialEstimate?.available
+      ? `${format(commercialEstimate.rangeAmd?.p25, locale)} – ${format(
+          commercialEstimate.rangeAmd?.p75,
+          locale
+        )} ֏`
+      : '—';
+    const financialSummary = element('section', 'result-financial-summary');
+    const financialHeading = element('div', 'result-financial-summary__heading');
+    financialHeading.append(
+      element('h3', '', resultsCopy.financialTitle ?? 'Financial result'),
+      element(
+        'p',
+        '',
+        resultsCopy.financialCopy ??
+          'A preliminary view of the investment, savings and simple payback.'
+      )
+    );
+    const financialValues = element('dl', 'result-financial-summary__metrics');
+    financialValues.append(
+      dashboardMetric(
+        resultsCopy.financial?.budget ?? wizard.budget ?? 'Preliminary budget range',
+        budgetRange,
+        'budget'
+      ),
+      dashboardMetric(
+        resultsCopy.metrics?.annualSavings ?? wizard.metrics?.annualSavings ?? 'Annual savings',
+        displayedSavings === null ? '—' : `≈ ${format(displayedSavings, locale)} ֏`,
+        'savings'
+      ),
+      dashboardMetric(
+        resultsCopy.financial?.payback ?? wizard.metrics?.payback ?? 'Payback period',
+        Number.isFinite(Number(financial.paybackYears))
+          ? `≈ ${format(financial.paybackYears, locale, { maximumFractionDigits: 1 })} ${
+              wizard.years ?? 'years'
+            }`
+          : '—',
+        'payback'
+      ),
+      dashboardMetric(
+        resultsCopy.financial?.twentyFiveYears ?? '25-year value',
+        Number.isFinite(Number(financial.grossSavings25YearsAmd))
+          ? `≈ ${format(financial.grossSavings25YearsAmd, locale)} ֏`
+          : '—',
+        'lifetime'
+      )
+    );
+    financialSummary.append(financialHeading, financialValues);
+    if (displayedSavings === null) {
+      financialSummary.append(
+        element(
+          'p',
+          'result-financial-summary__notice',
+          wizard.tariffNeeded ?? 'Add your electricity tariff to see savings and payback.'
+        )
+      );
+    }
+    resultDashboard.append(financialSummary);
     if (annualConsumptionKwh !== null || annualGenerationKwh !== null) {
       const balance = element('section', 'result-notice result-energy-balance');
-      balance.append(element('h3', '', wizard.energyBalanceTitle ?? 'Energy balance'));
-      const values = element('dl', 'wizard-kpis');
+      balance.append(
+        element(
+          'h3',
+          '',
+          resultsCopy.energy?.title ?? wizard.energyBalanceTitle ?? 'Energy balance'
+        )
+      );
+      const values = element('dl', 'result-energy-balance__primary');
       values.append(
         dashboardMetric(
           wizard.annualConsumption ?? 'Annual consumption',
@@ -460,17 +548,38 @@ export const createCalculatorResultsView = ({
             wizard.metrics?.annualGeneration ??
             'kWh/year',
           `${format(annualGenerationKwh, locale)} kWh`
+        )
+      );
+      const coverage = Math.max(0, Math.min(100, number(scenario.coveragePercent, 0) ?? 0));
+      const coverageMeter = element('div', 'result-energy-balance__meter');
+      coverageMeter.setAttribute('role', 'progressbar');
+      coverageMeter.setAttribute('aria-valuemin', '0');
+      coverageMeter.setAttribute('aria-valuemax', '100');
+      coverageMeter.setAttribute('aria-valuenow', String(Math.round(coverage)));
+      coverageMeter.setAttribute(
+        'aria-label',
+        resultsCopy.metrics?.annualCoverage ??
+          wizard.annualCoverage ??
+          'Annual consumption coverage'
+      );
+      const coverageFill = element('span', 'result-energy-balance__meter-fill');
+      coverageFill.style.setProperty('--coverage', `${coverage}%`);
+      coverageFill.append(
+        element('strong', '', `≈ ${format(coverage, locale, { maximumFractionDigits: 0 })}%`)
+      );
+      coverageMeter.append(coverageFill);
+      const breakdown = element('dl', 'result-energy-balance__breakdown');
+      breakdown.append(
+        dashboardMetric(
+          resultsCopy.energy?.solar ?? 'Solar production',
+          annualGenerationKwh === null ? '—' : `${format(annualGenerationKwh, locale)} kWh`
         ),
         dashboardMetric(
-          wizard.annualCoverage ?? 'Annual consumption coverage',
-          `≈ ${format(scenario.coveragePercent, locale, { maximumFractionDigits: 0 })}%`
-        ),
-        dashboardMetric(
-          wizard.remainingGridDemand ?? 'Remaining annual grid demand',
+          resultsCopy.energy?.grid ?? wizard.remainingGridDemand ?? 'Remaining grid demand',
           remainingGridDemandKwh === null ? '—' : `${format(remainingGridDemandKwh, locale)} kWh`
         )
       );
-      balance.append(values);
+      balance.append(values, coverageMeter, breakdown);
       if (retailOffsetValueAmd !== null)
         balance.append(
           element(
@@ -511,15 +620,13 @@ export const createCalculatorResultsView = ({
       resultDashboard.append(balance);
     }
     const projectSummary = element('section', 'result-project-summary');
-    projectSummary.append(
-      element('h3', '', wizard.projectSummaryTitle ?? 'Your project summary')
-    );
+    projectSummary.append(element('h3', '', wizard.projectSummaryTitle ?? 'Your project summary'));
     const projectValues = element('dl', 'wizard-kpis');
     const coordinates = analysis.property?.coordinates ?? state.confirmedProperty;
     const referencePotential = state.sitePotential;
     const consumptionMode = state.consumption?.mode;
     const consumptionModeLabel = consumptionMode
-      ? product.consumption?.modes?.[consumptionMode] ?? consumptionMode
+      ? (product.consumption?.modes?.[consumptionMode] ?? consumptionMode)
       : '—';
     const tariffRate = analysis.financial?.tariff?.rateAmdPerKwh ?? state.userTariff?.rateAmdPerKwh;
     const roofMounting =
@@ -709,7 +816,7 @@ export const createCalculatorResultsView = ({
           'result-roof-capacity__status',
           scenario.limitations?.includes('ROOF_CAPACITY_LIMIT')
             ? (wizard.roofCapacityLimiting ??
-              'The physical roof limit constrains the recommended system size.')
+                'The physical roof limit constrains the recommended system size.')
             : (wizard.roofCapacityNotLimiting ?? 'Roof capacity is not a limiting factor.')
         ),
         element(
@@ -962,7 +1069,7 @@ export const createCalculatorResultsView = ({
         })
       );
     } else {
-      const chart = element('figure', 'wizard-chart');
+      const chart = element('figure', 'wizard-chart result-production-chart');
       chart.append(
         element(
           'figcaption',

@@ -249,6 +249,18 @@ const common = {
         overviewEyebrow: 'Առաջարկվող արևային համակարգ',
         overviewTitle: 'Առաջարկվող արևային համակարգ',
         overviewCopy: 'Հաշվարկը հիմնված է ձեր տեղադրության, տանիքի և սպառման տվյալների վրա։',
+        financialTitle: 'Ֆինանսական արդյունք',
+        financialCopy: 'Նախնական արժեքը, տարեկան խնայողությունը և հետգնման ժամկետը։',
+        financial: {
+          budget: 'Նախնական արժեքի միջակայք',
+          payback: 'Հետգնման ժամկետ',
+          twentyFiveYears: 'Արժեքը 25 տարում'
+        },
+        energy: {
+          title: 'Էներգետիկ հաշվեկշիռ',
+          solar: 'Արևից',
+          grid: 'Մնացորդը ցանցից'
+        },
         outcomesTitle: 'Ինչ է սա տալիս ձեր տանը',
         potentialUnit: 'kWh/kWp տարեկան',
         annualGenerationUnit: 'kWh/տարի',
@@ -329,7 +341,8 @@ const common = {
     },
     proMeta: {
       title: 'Профессиональный солнечный калькулятор | YOURENERGY',
-      description: 'Прозрачный расчёт с данными о солнечном ресурсе, параметрами крыши и источниками.',
+      description:
+        'Прозрачный расчёт с данными о солнечном ресурсе, параметрами крыши и источниками.',
       ogTitle: 'Профессиональный калькулятор | YOURENERGY',
       ogDescription: 'Детальный предварительный анализ.'
     },
@@ -375,7 +388,8 @@ const common = {
       proAction: 'Перейти в профессиональный режим',
       waiting: 'Выберите регион и введите потребление.',
       loading: 'Получаем региональные солнечные данные…',
-      unavailable: 'Солнечные данные сейчас недоступны. Мы не подставили примерные цифры. Попробуйте снова.',
+      unavailable:
+        'Солнечные данные сейчас недоступны. Мы не подставили примерные цифры. Попробуйте снова.',
       cacheNotConfigured:
         'Солнечный расчёт ещё не включён: защищённый кэш сервиса не настроен. Свяжитесь с инженером.',
       providerNotConfigured: 'Сервис солнечного расчёта ещё не настроен. Свяжитесь с инженером.',
@@ -521,6 +535,18 @@ const common = {
         overviewEyebrow: 'Рекомендуемая солнечная система',
         overviewTitle: 'Рекомендуемая солнечная система',
         overviewCopy: 'Расчёт основан на данных о местоположении, крыше и потреблении.',
+        financialTitle: 'Финансовый результат',
+        financialCopy: 'Предварительная стоимость, годовая экономия и срок окупаемости.',
+        financial: {
+          budget: 'Предварительный диапазон стоимости',
+          payback: 'Срок окупаемости',
+          twentyFiveYears: 'Выгода за 25 лет'
+        },
+        energy: {
+          title: 'Энергетический баланс',
+          solar: 'От солнца',
+          grid: 'Останется из сети'
+        },
         outcomesTitle: 'Что это даёт вашему дому',
         potentialUnit: 'kWh/kWp в год',
         annualGenerationUnit: 'kWh/год',
@@ -600,7 +626,8 @@ const common = {
     },
     proMeta: {
       title: 'Professional solar calculator | YOURENERGY',
-      description: 'A transparent calculation using solar-resource data, roof parameters and sources.',
+      description:
+        'A transparent calculation using solar-resource data, roof parameters and sources.',
       ogTitle: 'Professional calculator | YOURENERGY',
       ogDescription: 'Detailed preliminary analysis.'
     },
@@ -784,6 +811,18 @@ const common = {
         overviewEyebrow: 'Recommended solar system',
         overviewTitle: 'Recommended solar system',
         overviewCopy: 'Calculated from your location, roof and consumption inputs.',
+        financialTitle: 'Financial result',
+        financialCopy: 'A preliminary cost, annual savings and simple payback view.',
+        financial: {
+          budget: 'Preliminary cost range',
+          payback: 'Payback period',
+          twentyFiveYears: '25-year value'
+        },
+        energy: {
+          title: 'Energy balance',
+          solar: 'From solar',
+          grid: 'Remaining from grid'
+        },
         outcomesTitle: 'What this means for your home',
         potentialUnit: 'kWh/kWp per year',
         annualGenerationUnit: 'kWh/year',
