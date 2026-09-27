@@ -50,41 +50,18 @@ html {
   scroll-behavior: smooth;
   overflow-y: auto;
   overflow-x: hidden;
-  scrollbar-gutter: stable;
-
-  scrollbar-width: thin;
-  scrollbar-color: #6a6b92 transparent;
+  scrollbar-gutter: auto;
+  scrollbar-width: none;
 }
 
 html::-webkit-scrollbar {
-  width: 6px;
+  width: 0;
+  height: 0;
+  display: none;
 }
 
-html::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-html::-webkit-scrollbar-thumb {
-  background: #6a6b92;
-  border-radius: 999px;
-  transition: background-color 220ms ease;
-}
-
-html::-webkit-scrollbar-thumb:hover {
-  background: #55567d;
-}
-
-/* The process scene visually removes the page scrollbar without changing its
-   width. Keeping the gutter avoids the horizontal jump that `scrollbar-width:
-   none` or toggling overflow would otherwise cause. */
-html.process-chrome-active {
-  scrollbar-color: transparent transparent;
-}
-
-html.process-chrome-active::-webkit-scrollbar-thumb,
-html.process-chrome-active::-webkit-scrollbar-thumb:hover {
-  background: transparent;
-}
+/* The native scrollbar is hidden for the entire page, so entering the process
+   scene never changes the viewport width or reserves an empty gutter. */
 
 html.site-menu-open {
   overflow: hidden;
