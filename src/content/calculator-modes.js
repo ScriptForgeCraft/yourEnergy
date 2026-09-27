@@ -253,6 +253,7 @@ const common = {
         financialCopy: 'Նախնական արժեքը, տարեկան խնայողությունը և հետգնման ժամկետը։',
         financial: {
           budget: 'Նախնական արժեքի միջակայք',
+          central: 'Կենտրոնական գնահատական',
           payback: 'Հետգնման ժամկետ',
           twentyFiveYears: 'Արժեքը 25 տարում'
         },
@@ -539,6 +540,7 @@ const common = {
         financialCopy: 'Предварительная стоимость, годовая экономия и срок окупаемости.',
         financial: {
           budget: 'Предварительный диапазон стоимости',
+          central: 'Ориентировочная цена',
           payback: 'Срок окупаемости',
           twentyFiveYears: 'Выгода за 25 лет'
         },
@@ -815,6 +817,7 @@ const common = {
         financialCopy: 'A preliminary cost, annual savings and simple payback view.',
         financial: {
           budget: 'Preliminary cost range',
+          central: 'Estimated cost',
           payback: 'Payback period',
           twentyFiveYears: '25-year value'
         },

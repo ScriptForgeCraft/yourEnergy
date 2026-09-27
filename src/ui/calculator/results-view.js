@@ -54,8 +54,8 @@ export const createCalculatorResultsView = ({
   };
 
   const overviewMetric = ({ label, value, icon, kind }) => {
-    const wrapper = element('div', `result-overview__metric result-overview__metric--${kind}`);
-    const symbol = element('span', 'result-overview__icon');
+    const wrapper = element('div', `pro-result-hero__metric pro-result-hero__metric--${kind}`);
+    const symbol = element('span', 'pro-result-hero__icon');
     symbol.append(resultIcon(icon));
     wrapper.append(symbol, element('dt', '', label), element('dd', '', value));
     return wrapper;
@@ -64,7 +64,7 @@ export const createCalculatorResultsView = ({
   const monthlyComparisonChart = ({ consumption, generation, months }) => {
     const chart = element(
       'figure',
-      'wizard-chart monthly-comparison-chart result-production-chart'
+      'pro-result-card pro-result-card--production pro-result-monthly'
     );
     chart.append(
       element(
@@ -259,23 +259,23 @@ export const createCalculatorResultsView = ({
     if (typeof productId !== 'string' || !productId) return null;
     const displayProduct = displayProductsById.get(productId) ?? null;
     const card = document.createElement(displayProduct ? 'a' : 'article');
-    card.className = 'result-equipment-card';
+    card.className = 'pro-result-equipment-card';
     card.dataset.recommendedProduct = productId;
     if (displayProduct) {
       card.href = equipmentProductHref(productId, locale);
       card.target = '_blank';
       card.rel = 'noopener noreferrer';
     } else {
-      card.classList.add('result-equipment-card--unlinked');
+      card.classList.add('pro-result-equipment-card--unlinked');
     }
 
     const displayName = displayProduct?.name ?? recommendation.productName ?? '';
     const displayModel = displayProduct?.model ?? recommendation.model ?? '';
     const displayBrand = displayProduct?.brand ?? recommendation.brand ?? '';
-    const media = element('div', 'result-equipment-card__media');
+    const media = element('div', 'pro-result-equipment-card__media');
     const imageUnavailable = element(
       'span',
-      'result-equipment-card__image-unavailable',
+      'pro-result-equipment-card__image-unavailable',
       wizard.equipmentImageUnavailable ?? 'Product image unavailable'
     );
     if (displayProduct?.image) {
@@ -294,23 +294,23 @@ export const createCalculatorResultsView = ({
       media.append(imageUnavailable);
     }
 
-    const content = element('div', 'result-equipment-card__content');
+    const content = element('div', 'pro-result-equipment-card__content');
     content.append(
-      element('p', 'result-equipment-card__label', title),
-      element('p', 'result-equipment-card__brand', displayBrand),
+      element('p', 'pro-result-equipment-card__label', title),
+      element('p', 'pro-result-equipment-card__brand', displayBrand),
       element('h4', '', displayName),
-      element('p', 'result-equipment-card__model', displayModel),
-      element('p', 'result-equipment-card__value', value),
-      element('p', 'result-equipment-card__reason', reason),
+      element('p', 'pro-result-equipment-card__model', displayModel),
+      element('p', 'pro-result-equipment-card__value', value),
+      element('p', 'pro-result-equipment-card__reason', reason),
       element(
         'p',
-        'result-equipment-card__status',
+        'pro-result-equipment-card__status',
         wizard.recommendationPreliminary ?? 'Preliminary recommendation'
       )
     );
     if (displayProduct)
       content.append(
-        element('span', 'result-equipment-card__cta', wizard.viewProduct ?? 'View product')
+        element('span', 'pro-result-equipment-card__cta', wizard.viewProduct ?? 'View product')
       );
     card.append(media, content);
     return card;
@@ -371,13 +371,13 @@ export const createCalculatorResultsView = ({
 
     const availableCards = cards.filter(Boolean);
     if (!availableCards.length) return null;
-    const section = element('section', 'result-equipment');
+    const section = element('section', 'pro-result-card pro-result-card--equipment');
     section.append(
       element('h3', '', wizard.recommendedSystemTitle ?? 'Recommended system'),
       ...availableCards,
       element(
         'p',
-        'result-equipment__engineering-note',
+        'pro-result-equipment__engineering-note',
         wizard.equipmentPreliminaryCopy ??
           'This selection is preliminary; an engineer confirms string design, electrical compatibility and site implementation.'
       )
@@ -403,23 +403,31 @@ export const createCalculatorResultsView = ({
         : Math.max(annualConsumptionKwh - annualGenerationKwh, 0);
     resultDashboard.replaceChildren();
     const resultsCopy = wizard.results ?? {};
-    const overview = element('section', 'result-overview');
-    const overviewHeading = element('div', 'result-overview__heading');
+    const overview = element('section', 'pro-result-hero');
+    const overviewHeading = element('div', 'pro-result-hero__content');
     overviewHeading.append(
       element(
         'p',
-        'result-overview__eyebrow',
+        'pro-result-hero__eyebrow',
         resultsCopy.overviewEyebrow ?? 'Recommended solar system'
       ),
       element('h3', '', resultsCopy.overviewTitle ?? 'Recommended solar system'),
       element(
         'p',
-        'result-overview__copy',
+        'pro-result-hero__system',
+        `${format(scenario.system?.panelCount, locale)} × ${format(
+          scenario.system?.panelWatts,
+          locale
+        )} W`
+      ),
+      element(
+        'p',
+        'pro-result-hero__copy',
         resultsCopy.overviewCopy ??
           'Sized from your location, annual consumption and actual roof inputs.'
       )
     );
-    const primaryMetrics = element('dl', 'wizard-kpis result-kpis');
+    const primaryMetrics = element('dl', 'pro-result-hero__metrics');
     primaryMetrics.append(
       overviewMetric({
         label: resultsCopy.metrics?.recommendedPower ?? 'Recommended power',
@@ -428,15 +436,6 @@ export const createCalculatorResultsView = ({
         })} kWp`,
         icon: 'zap',
         kind: 'power'
-      }),
-      overviewMetric({
-        label: resultsCopy.metrics?.panelCount ?? 'Panel count',
-        value: `${format(scenario.system?.panelCount, locale)} × ${format(
-          scenario.system?.panelWatts,
-          locale
-        )} W`,
-        icon: 'solar-mount',
-        kind: 'panels'
       }),
       overviewMetric({
         label:
@@ -477,8 +476,8 @@ export const createCalculatorResultsView = ({
           locale
         )} ֏`
       : '—';
-    const financialSummary = element('section', 'result-financial-summary');
-    const financialHeading = element('div', 'result-financial-summary__heading');
+    const financialSummary = element('section', 'pro-result-finance');
+    const financialHeading = element('div', 'pro-result-finance__heading');
     financialHeading.append(
       element('h3', '', resultsCopy.financialTitle ?? 'Financial result'),
       element(
@@ -488,12 +487,19 @@ export const createCalculatorResultsView = ({
           'A preliminary view of the investment, savings and simple payback.'
       )
     );
-    const financialValues = element('dl', 'result-financial-summary__metrics');
+    const financialValues = element('dl', 'pro-result-finance__metrics');
     financialValues.append(
       dashboardMetric(
         resultsCopy.financial?.budget ?? wizard.budget ?? 'Preliminary budget range',
         budgetRange,
         'budget'
+      ),
+      dashboardMetric(
+        resultsCopy.financial?.central ?? 'Estimated cost',
+        Number.isFinite(Number(commercialEstimate?.primaryAmd))
+          ? `≈ ${format(commercialEstimate.primaryAmd, locale)} ֏`
+          : '—',
+        'central'
       ),
       dashboardMetric(
         resultsCopy.metrics?.annualSavings ?? wizard.metrics?.annualSavings ?? 'Annual savings',
@@ -522,14 +528,14 @@ export const createCalculatorResultsView = ({
       financialSummary.append(
         element(
           'p',
-          'result-financial-summary__notice',
+          'pro-result-finance__notice',
           wizard.tariffNeeded ?? 'Add your electricity tariff to see savings and payback.'
         )
       );
     }
     resultDashboard.append(financialSummary);
     if (annualConsumptionKwh !== null || annualGenerationKwh !== null) {
-      const balance = element('section', 'result-notice result-energy-balance');
+      const balance = element('section', 'pro-result-card pro-result-card--energy');
       balance.append(
         element(
           'h3',
@@ -537,7 +543,7 @@ export const createCalculatorResultsView = ({
           resultsCopy.energy?.title ?? wizard.energyBalanceTitle ?? 'Energy balance'
         )
       );
-      const values = element('dl', 'result-energy-balance__primary');
+      const values = element('dl', 'pro-result-energy__primary');
       values.append(
         dashboardMetric(
           wizard.annualConsumption ?? 'Annual consumption',
@@ -551,7 +557,7 @@ export const createCalculatorResultsView = ({
         )
       );
       const coverage = Math.max(0, Math.min(100, number(scenario.coveragePercent, 0) ?? 0));
-      const coverageMeter = element('div', 'result-energy-balance__meter');
+      const coverageMeter = element('div', 'pro-result-energy__meter');
       coverageMeter.setAttribute('role', 'progressbar');
       coverageMeter.setAttribute('aria-valuemin', '0');
       coverageMeter.setAttribute('aria-valuemax', '100');
@@ -562,13 +568,13 @@ export const createCalculatorResultsView = ({
           wizard.annualCoverage ??
           'Annual consumption coverage'
       );
-      const coverageFill = element('span', 'result-energy-balance__meter-fill');
+      const coverageFill = element('span', 'pro-result-energy__meter-fill');
       coverageFill.style.setProperty('--coverage', `${coverage}%`);
       coverageFill.append(
         element('strong', '', `≈ ${format(coverage, locale, { maximumFractionDigits: 0 })}%`)
       );
       coverageMeter.append(coverageFill);
-      const breakdown = element('dl', 'result-energy-balance__breakdown');
+      const breakdown = element('dl', 'pro-result-energy__breakdown');
       breakdown.append(
         dashboardMetric(
           resultsCopy.energy?.solar ?? 'Solar production',
@@ -619,7 +625,7 @@ export const createCalculatorResultsView = ({
       }
       resultDashboard.append(balance);
     }
-    const projectSummary = element('section', 'result-project-summary');
+    const projectSummary = element('section', 'pro-result-details');
     projectSummary.append(element('h3', '', wizard.projectSummaryTitle ?? 'Your project summary'));
     const projectValues = element('dl', 'wizard-kpis');
     const coordinates = analysis.property?.coordinates ?? state.confirmedProperty;
@@ -670,7 +676,7 @@ export const createCalculatorResultsView = ({
     );
     projectSummary.append(projectValues);
     resultDashboard.append(projectSummary);
-    const yieldDetail = element('details', 'wizard-details result-yield-comparison');
+    const yieldDetail = element('details', 'pro-result-details pro-result-details--yield');
     yieldDetail.append(
       element('summary', '', wizard.roofYieldDetails ?? 'Location and roof yield details')
     );
@@ -702,7 +708,7 @@ export const createCalculatorResultsView = ({
     if (renderedEquipmentCards) resultDashboard.append(renderedEquipmentCards);
     const solarModule = equipmentRecommendation?.solarModule;
     if (!renderedEquipmentCards && solarModule) {
-      const recommendation = element('section', 'result-notice');
+      const recommendation = element('section', 'pro-result-details');
       recommendation.append(
         element('h3', '', wizard.moduleRecommendationTitle ?? 'Recommended solar module'),
         element('p', '', `${solarModule.brand} ${solarModule.productName}`),
@@ -744,7 +750,7 @@ export const createCalculatorResultsView = ({
         resultDashboard.append(
           element(
             'p',
-            'result-notice',
+            'pro-result-details',
             `${wizard.preliminarySizingBasis ?? 'Preliminary sizing basis'}: ${equipment.panelBrand} ${equipment.panelModel} · ${format(equipment.panelWatts, locale)} W`
           )
         );
@@ -757,7 +763,7 @@ export const createCalculatorResultsView = ({
       panelWatts: scenario.system?.panelWatts
     });
     if (roofCapacity) {
-      const roofFit = element('section', 'result-notice result-roof-capacity');
+      const roofFit = element('section', 'pro-result-card pro-result-card--roof');
       roofFit.append(element('h3', '', wizard.roofCapacityTitle ?? 'Physical roof capacity'));
       const values = element('dl', 'wizard-kpis');
       values.append(
@@ -813,7 +819,7 @@ export const createCalculatorResultsView = ({
         ),
         element(
           'p',
-          'result-roof-capacity__status',
+          'pro-result-roof__status',
           scenario.limitations?.includes('ROOF_CAPACITY_LIMIT')
             ? (wizard.roofCapacityLimiting ??
                 'The physical roof limit constrains the recommended system size.')
@@ -834,7 +840,7 @@ export const createCalculatorResultsView = ({
       inverter?.productId &&
       Number.isFinite(Number(inverter.selectedAcPowerKw))
     ) {
-      const recommendation = element('section', 'result-notice');
+      const recommendation = element('section', 'pro-result-details');
       recommendation.append(
         element('h3', '', wizard.inverterRecommendationTitle ?? 'Recommended inverter'),
         element(
@@ -867,7 +873,7 @@ export const createCalculatorResultsView = ({
       mountingHardware?.status === 'matched' &&
       mountingHardware.productId
     ) {
-      const recommendation = element('section', 'result-notice');
+      const recommendation = element('section', 'pro-result-details');
       const availableAngles = (mountingHardware.availableInclinationDeg ?? [])
         .map((angle) => format(angle, locale, { maximumFractionDigits: 1 }))
         .join(' / ');
@@ -929,7 +935,7 @@ export const createCalculatorResultsView = ({
       resultDashboard.append(
         element(
           'p',
-          'result-notice',
+          'pro-result-details',
           text(wizard.mountingHardwareNoMatchCopy, {
             optimum: format(mountingHardware.pvgisOptimumTiltDegrees, locale, {
               maximumFractionDigits: 1
@@ -940,7 +946,7 @@ export const createCalculatorResultsView = ({
     }
     const storage = analysis.storageRecommendation;
     if (!renderedEquipmentCards && storage) {
-      const recommendation = element('section', 'result-notice');
+      const recommendation = element('section', 'pro-result-details');
       recommendation.append(
         element('h3', '', wizard.storageRecommendationTitle ?? 'Energy-storage option')
       );
@@ -1003,7 +1009,7 @@ export const createCalculatorResultsView = ({
     const basis = calculationBasisDetail(analysis.calculationBasis);
     if (basis) resultDashboard.append(basis);
     if (scenario.limitations?.includes('ROOF_CAPACITY_LIMIT')) {
-      const limit = element('p', 'result-notice result-notice--warning', wizard.roofLimit);
+      const limit = element('p', 'pro-result-details pro-result-details--warning', wizard.roofLimit);
       limit.append(
         ` ${format(scenario.system?.requestedCapacityKwp, locale, { maximumFractionDigits: 2 })} kWp → ${format(scenario.system?.capacityKwp, locale, { maximumFractionDigits: 2 })} kWp; ${format(scenario.system?.maximumPanelCount, locale)} panels.`
       );
@@ -1011,7 +1017,7 @@ export const createCalculatorResultsView = ({
     }
     const environmental = analysis.environmental;
     if (Number.isFinite(Number(environmental?.avoidedCo2Tons))) {
-      const impact = element('section', 'result-environmental');
+      const impact = element('section', 'pro-result-card pro-result-card--impact');
       impact.append(
         element(
           'h3',
@@ -1042,7 +1048,7 @@ export const createCalculatorResultsView = ({
         impact.append(
           element(
             'small',
-            'result-environmental__source',
+            'pro-result-impact__source',
             `${wizard.environmentalFactorSource ?? 'Historical grid-emission factor'}${
               factor.dataYear ? ` (${factor.dataYear})` : ''
             }: ${format(factor.valueKgCo2PerKwh, locale, {
@@ -1069,7 +1075,7 @@ export const createCalculatorResultsView = ({
         })
       );
     } else {
-      const chart = element('figure', 'wizard-chart result-production-chart');
+      const chart = element('figure', 'pro-result-card pro-result-card--production');
       chart.append(
         element(
           'figcaption',
