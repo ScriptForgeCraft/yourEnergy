@@ -2033,3 +2033,72 @@
     width: 100%;
   }
 }
+
+/* Stable report canvas -----------------------------------------------------
+   Keep the hero, dynamic report and closing actions in separate layout
+   contexts.  The earlier iteration made the dynamic dashboard `display:
+   contents`, which allowed its cards to compete with the hero for parent-grid
+   placement. */
+.calculator-page--professional .professional-results-grid {
+  display: block;
+}
+
+.calculator-page--professional .professional-results-grid > .professional-results-hero {
+  display: block;
+  min-height: 20rem;
+  margin: 0;
+}
+
+.calculator-page--professional .professional-results-grid > .result-dashboard {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.calculator-page--professional .professional-results-grid .result-overview {
+  grid-column: 1 / -1;
+  margin: 0;
+}
+
+.calculator-page--professional .professional-results-grid .result-financial-summary,
+.calculator-page--professional .professional-results-grid .result-project-summary,
+.calculator-page--professional .professional-results-grid .result-yield-comparison,
+.calculator-page--professional .professional-results-grid .result-environmental,
+.calculator-page--professional .professional-results-grid .calculation-basis,
+.calculator-page--professional
+  .professional-results-grid
+  .result-dashboard
+  > .result-notice:not(.result-energy-balance):not(.result-roof-capacity),
+.calculator-page--professional .professional-results-grid .result-budget {
+  grid-column: 1 / -1;
+}
+
+.calculator-page--professional .professional-results-grid .result-energy-balance,
+.calculator-page--professional .professional-results-grid .result-equipment {
+  grid-column: 1;
+}
+
+.calculator-page--professional .professional-results-grid .result-production-chart,
+.calculator-page--professional .professional-results-grid .result-roof-capacity {
+  grid-column: 2;
+}
+
+.calculator-page--professional .professional-results-grid > .professional-results-explainer,
+.calculator-page--professional .professional-results-grid > .professional-next-steps {
+  width: 100%;
+  margin-top: 1rem;
+}
+
+@media (max-width: 960px) {
+  .calculator-page--professional .professional-results-grid > .result-dashboard {
+    grid-template-columns: 1fr;
+  }
+
+  .calculator-page--professional .professional-results-grid .result-energy-balance,
+  .calculator-page--professional .professional-results-grid .result-production-chart,
+  .calculator-page--professional .professional-results-grid .result-equipment,
+  .calculator-page--professional .professional-results-grid .result-roof-capacity {
+    grid-column: 1;
+  }
+}

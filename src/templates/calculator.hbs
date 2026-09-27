@@ -412,25 +412,19 @@
                 aria-hidden='true'>
                 <use href='/icons.svg#cycle'></use>
               </svg>{{wizard.results.restart}}</button>
-            <div class='professional-results-grid'>
-              <section class='professional-results-hero'>
-                <div><small>{{wizard.results.potential}}</small>
-                  <h3>{{#each wizard.results.heroLines}}{{this}}{{#unless @last}}<br />{{/unless}}{{/each}}</h3>
-                  <p>{{wizard.results.heroCopy}}</p>
+            <div class='pro-result-layout'>
+              <div class='pro-result-content' data-result-dashboard aria-live='polite'></div>
+              <section class='pro-result-next'>
+                <div class='pro-result-next__heading'><span><svg aria-hidden='true'>
+                      <use href='/icons.svg#arrow-right'></use>
+                    </svg></span><div>
+                    <h3>{{wizard.results.nextTitle}}</h3>
+                    <p>{{wizard.results.heroCopy}}</p>
+                  </div>
                 </div>
-              </section>
-              <div class='result-dashboard' data-result-dashboard aria-live='polite'></div>
-              <section class='professional-results-explainer'>
-                <h3><span><svg aria-hidden='true'>
-                      <use href='/icons.svg#chart-bars'></use>
-                    </svg></span>{{wizard.results.calculationTitle}}</h3>
-                <p>{{wizard.results.calculationCopy}}</p>
-              </section>
-              <section class='professional-next-steps'>
-                <h3>{{wizard.results.nextTitle}}</h3>
                 <ol>{{#each wizard.results.nextSteps}}<li><span>{{add @index 1}}</span>
                     <p><strong>{{title}}</strong><small>{{copy}}</small></p>
-                  </li>{{/each}}</ol><div class='professional-next-steps__actions'><button class='button' type='button'
+                  </li>{{/each}}</ol><div class='pro-result-next__actions'><button class='button' type='button'
                     data-professional-lead-open><svg aria-hidden='true'>
                       <use href='/icons.svg#message-square'></use>
                     </svg>{{wizard.lead.open}} <svg aria-hidden='true'>
@@ -438,7 +432,7 @@
                     </svg></button><a class='text-link' href='{{contact.phoneHref}}'><svg aria-hidden='true'>
                       <use href='/icons.svg#phone'></use>
                     </svg>{{wizard.lead.phone}}</a></div>
-                <p class='form-status professional-next-steps__lead-status' data-professional-lead-trigger-status
+                <p class='form-status pro-result-next__lead-status' data-professional-lead-trigger-status
                   aria-live='polite'></p>
               </section>
             </div>
