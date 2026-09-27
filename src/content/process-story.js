@@ -218,43 +218,43 @@ export const processStoryCopy = {
         nav: 'Monitoring & Service',
         visual: 'support',
         visualLabel: 'Monitoring and service',
-        headline: 'Your system is live.\nWe stay with you.',
-        copy: 'After commissioning, you get access to the monitoring app for your installed equipment to follow generation and system status. We help with setup, diagnostics and ongoing service.',
+        headline: 'Your system is up and running.\nStay connected every day.',
+        copy: 'After commissioning, we help set up monitoring so you can follow system performance and energy production.',
         cards: [
           {
-            icon: 'support',
-            label: 'Monitoring app',
-            value: 'Set up for your installed equipment',
+            icon: 'phone',
+            label: 'Monitoring',
+            value: 'Check your system from your phone.',
             data: 'monitoring-app'
           },
           {
-            icon: 'cycle',
-            label: 'Generation',
-            value: 'Current and historical data',
+            icon: 'chart-bars',
+            label: 'Energy production',
+            value: 'See how much energy you generate.',
             data: 'generation'
           },
           {
             icon: 'shield-check',
             label: 'System status',
-            value: 'Track inverter and system operation',
+            value: 'Keep track of system performance.',
             data: 'system-status'
           },
           {
             icon: 'bell',
             label: 'Notifications',
-            value: 'Alerts supported by the equipment',
+            value: 'Receive important alerts.',
             data: 'notifications'
           },
           {
             icon: 'satellite',
-            label: 'Remote diagnostics',
-            value: 'Available where supported by the equipment',
+            label: 'Remote checks',
+            value: 'Get remote assistance when needed.',
             data: 'remote-diagnostics'
           },
           {
-            icon: 'shield',
-            label: 'Service',
-            value: 'YOURENERGY technical support and maintenance',
+            icon: 'wrench',
+            label: 'Technical support',
+            value: 'YOURENERGY stays with you.',
             data: 'service'
           }
         ],
@@ -483,46 +483,46 @@ export const processStoryCopy = {
       },
       {
         number: '6',
-        nav: 'Мониторинг и обслуживание',
+        nav: 'Мониторинг и поддержка',
         visual: 'support',
         visualLabel: 'Визуализация мониторинга и обслуживания',
-        headline: 'Система запущена.\nМы остаёмся на связи.',
-        copy: 'После запуска вы получаете доступ к приложению мониторинга установленного оборудования, чтобы видеть выработку и состояние системы. Мы помогаем с настройкой, диагностикой и дальнейшим обслуживанием.',
+        headline: 'Ваша система уже работает.\nСледите за ней каждый день.',
+        copy: 'После запуска мы поможем настроить мониторинг, чтобы вы могли следить за работой системы и выработкой энергии.',
         cards: [
           {
-            icon: 'support',
-            label: 'Приложение мониторинга',
-            value: 'Настраивается для установленного оборудования',
+            icon: 'phone',
+            label: 'Мониторинг',
+            value: 'Следите за системой с телефона.',
             data: 'monitoring-app'
           },
           {
-            icon: 'cycle',
+            icon: 'chart-bars',
             label: 'Выработка',
-            value: 'Текущие и исторические данные',
+            value: 'Смотрите, сколько энергии произведено.',
             data: 'generation'
           },
           {
             icon: 'shield-check',
             label: 'Состояние системы',
-            value: 'Контроль работы инвертора и системы',
+            value: 'Контролируйте работу оборудования.',
             data: 'system-status'
           },
           {
             icon: 'bell',
             label: 'Уведомления',
-            value: 'Оповещения, поддерживаемые оборудованием',
+            value: 'Получайте важные оповещения.',
             data: 'notifications'
           },
           {
             icon: 'satellite',
-            label: 'Удалённая диагностика',
-            value: 'Доступна для поддерживаемого оборудования',
+            label: 'Удалённая проверка',
+            value: 'При необходимости поможем удалённо.',
             data: 'remote-diagnostics'
           },
           {
-            icon: 'shield',
-            label: 'Обслуживание',
-            value: 'Техническая поддержка и сервис YOURENERGY',
+            icon: 'wrench',
+            label: 'Техническая поддержка',
+            value: 'YOURENERGY остаётся рядом.',
             data: 'service'
           }
         ],
@@ -751,46 +751,46 @@ export const processStoryCopy = {
       },
       {
         number: '6',
-        nav: 'Մոնիտորինգ և սպասարկում',
+        nav: 'Մոնիթորինգ և աջակցություն',
         visual: 'support',
         visualLabel: 'Մոնիտորինգի և սպասարկման տեսապատկեր',
-        headline: 'Համակարգը գործարկված է։\nՄենք մնում ենք կապի մեջ։',
-        copy: 'Գործարկումից հետո ստանում եք հասանելիություն տեղադրված սարքավորման մոնիտորինգի հավելվածին՝ արտադրությունն ու համակարգի վիճակը վերահսկելու համար։ Մենք օգնում ենք կարգավորմանը, ախտորոշմանը և հետագա սպասարկմանը։',
+        headline: 'Ձեր համակարգն արդեն աշխատում է։\nՀետևեք դրան ամեն օր։',
+        copy: 'Համակարգի գործարկումից հետո կօգնենք կարգավորել մոնիթորինգը, որպեսզի կարողանաք հետևել դրա աշխատանքին և արտադրությանը։',
         cards: [
           {
-            icon: 'support',
-            label: 'Մոնիտորինգի հավելված',
-            value: 'Կարգավորվում է տեղադրված սարքավորման համար',
+            icon: 'phone',
+            label: 'Մոնիթորինգ',
+            value: 'Հետևեք համակարգին հեռախոսից։',
             data: 'monitoring-app'
           },
           {
-            icon: 'cycle',
+            icon: 'chart-bars',
             label: 'Արտադրություն',
-            value: 'Ընթացիկ և պատմական տվյալներ',
+            value: 'Տեսեք արտադրված էներգիան։',
             data: 'generation'
           },
           {
             icon: 'shield-check',
             label: 'Համակարգի վիճակ',
-            value: 'Ինվերտորի և համակարգի աշխատանքի վերահսկում',
+            value: 'Հետևեք համակարգի աշխատանքին։',
             data: 'system-status'
           },
           {
             icon: 'bell',
             label: 'Ծանուցումներ',
-            value: 'Սարքավորման կողմից աջակցվող ահազանգեր',
+            value: 'Ստացեք կարևոր տեղեկացումներ։',
             data: 'notifications'
           },
           {
             icon: 'satellite',
-            label: 'Հեռավար ախտորոշում',
-            value: 'Հասանելի է աջակցվող սարքավորումների դեպքում',
+            label: 'Հեռավար ստուգում',
+            value: 'Անհրաժեշտության դեպքում կօգնենք հեռավար։',
             data: 'remote-diagnostics'
           },
           {
-            icon: 'shield',
-            label: 'Սպասարկում',
-            value: 'YOURENERGY-ի տեխնիկական աջակցություն և սպասարկում',
+            icon: 'wrench',
+            label: 'Տեխնիկական աջակցություն',
+            value: 'YOURENERGY-ն մնում է ձեր կողքին։',
             data: 'service'
           }
         ],
