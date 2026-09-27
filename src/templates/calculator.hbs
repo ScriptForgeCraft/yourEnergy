@@ -460,26 +460,33 @@
       <dialog class='professional-lead-dialog' data-professional-lead-dialog aria-labelledby='professional-lead-title'
         aria-describedby='professional-lead-copy'>
         <button class='round-button dialog-close' type='button' data-professional-lead-close data-professional-lead-dismiss aria-label='{{aria.close}}'>×</button>
-        <div class='dialog-content' data-professional-lead-content><p class='professional-lead-dialog__eyebrow'>{{wizard.lead.eyebrow}}</p>
-          <h2 id='professional-lead-title'>{{wizard.lead.title}}</h2>
-          <p id='professional-lead-copy'>{{wizard.lead.copy}}</p>
+        <div class='dialog-content professional-lead-dialog__content' data-professional-lead-content>
+          <div class='professional-lead-dialog__header'>
+            <p class='professional-lead-dialog__eyebrow'>{{wizard.lead.eyebrow}}</p>
+            <h2 id='professional-lead-title'>{{wizard.lead.title}}</h2>
+            <p id='professional-lead-copy'>{{wizard.lead.copy}}</p>
+          </div>
           <p class='professional-lead-dialog__privacy'><svg aria-hidden='true'>
               <use href='/icons.svg#shield-check'></use>
             </svg>{{wizard.lead.privacy}}</p>
           <form data-professional-lead-form novalidate aria-describedby='professional-lead-status'>
-            <label for='professional-lead-name'>{{wizard.lead.name}}<input id='professional-lead-name' name='name'
-                data-professional-lead-name autocomplete='name' maxlength='100' required /></label>
-            <label for='professional-lead-phone'>{{wizard.lead.phoneLabel}}<input id='professional-lead-phone' name='phone'
-                data-professional-lead-phone type='tel' autocomplete='tel' inputmode='tel' maxlength='32' required /></label>
-            <label for='professional-lead-email'>{{wizard.lead.email}}<input id='professional-lead-email' name='email'
-                data-professional-lead-email type='email' autocomplete='email' maxlength='254' /></label>
-            <label for='professional-lead-message'>{{wizard.lead.comment}} <span>{{product.common.optional}}</span><textarea
+            <div class='professional-lead-dialog__field-grid'>
+              <label for='professional-lead-name'>{{wizard.lead.name}}<input id='professional-lead-name' name='name'
+                  data-professional-lead-name autocomplete='name' maxlength='100' required /></label>
+              <label for='professional-lead-phone'>{{wizard.lead.phoneLabel}}<input id='professional-lead-phone' name='phone'
+                  data-professional-lead-phone type='tel' autocomplete='tel' inputmode='tel' maxlength='32' required /></label>
+              <label for='professional-lead-email'>{{wizard.lead.email}}<input id='professional-lead-email' name='email'
+                  data-professional-lead-email type='email' autocomplete='email' maxlength='254' /></label>
+            </div>
+            <label class='professional-lead-dialog__message' for='professional-lead-message'>{{wizard.lead.comment}} <span>{{product.common.optional}}</span><textarea
                 id='professional-lead-message' name='message' autocomplete='off' data-professional-lead-message maxlength='2000'
                 rows='3'></textarea></label>
-            <button class='button' type='submit' data-professional-lead-submit><svg aria-hidden='true'>
-                <use href='/icons.svg#message-square'></use>
-              </svg>{{wizard.lead.submit}}</button><p class='form-status' id='professional-lead-status'
-              data-professional-lead-status aria-live='polite'></p>
+            <div class='professional-lead-dialog__actions'>
+              <button class='button' type='submit' data-professional-lead-submit><svg aria-hidden='true'>
+                  <use href='/icons.svg#message-square'></use>
+                </svg>{{wizard.lead.submit}}</button>
+              <p class='form-status' id='professional-lead-status' data-professional-lead-status aria-live='polite'></p>
+            </div>
           </form>
         </div>
         <section class='dialog-content form-success' data-professional-lead-success hidden tabindex='-1' aria-labelledby='professional-lead-success-title'><h2 id='professional-lead-success-title'>{{wizard.lead.success.title}}</h2><p>{{wizard.lead.success.text}}</p><button
