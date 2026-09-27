@@ -332,7 +332,6 @@ export const initEquipmentShowroom = ({ data, copy, locale, gsap }) => {
   $('[data-product-popular]', root).textContent = copy.product.popular;
   $('[data-request-price]', root).textContent = copy.product.requestPrice;
   $('[data-download-pdf]', root).textContent = copy.product.downloadPdf;
-  $('[data-rotate-hint-text]', root).textContent = copy.product.rotateHint;
   $('[data-fullscreen-open]', root).setAttribute('aria-label', copy.product.openFullscreen);
   $('[data-fullscreen-open]', root).title = copy.product.openFullscreen;
   $('[data-fullscreen-close]').setAttribute('aria-label', copy.product.closeFullscreen);

@@ -134,26 +134,31 @@
 }
 
 .equipment-shell {
+  --equipment-hero-height: max(100svh, 870px);
   width: min(calc(100% - clamp(48px, 7vw, 128px)), 1740px);
-  min-height: max(100svh, 870px);
+  min-height: var(--equipment-hero-height);
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  grid-template-rows: minmax(600px, 1fr) auto;
+  grid-template-rows: calc(var(--equipment-hero-height) - 104px) auto;
   margin-inline: auto;
-  padding-top: 104px;
+  padding-top: 60px;
 }
 
 .equipment-stage {
   min-height: 0;
   display: grid;
   grid-template-columns: minmax(440px, 0.95fr) minmax(440px, 1.05fr) minmax(400px, 1fr);
+  grid-template-rows: minmax(0, 1fr);
   align-items: center;
   gap: clamp(14px, 1.7vw, 30px);
   padding-bottom: 24px;
 }
 
 .equipment-intro {
-  align-self: center;
+  /* The category list can be taller than a short desktop viewport. Pin its
+     heading below the fixed header while the product and its panel stay
+     centered inside the first screen. */
+  align-self: start;
   max-width: 430px;
   padding: 4px 0 12px;
 }
@@ -161,11 +166,12 @@
 .equipment-intro h1 {
   max-width: 520px;
   margin: 0;
-  font-size: clamp(2.35rem, 3vw, 3.15rem);
+  font-size: clamp(1.35rem, 2vw, 2.15rem);
   font-weight: 670;
   letter-spacing: -0.052em;
   line-height: 0.98;
   text-wrap: balance;
+  padding-top: 50px;
 }
 
 .equipment-intro h1 mark {
@@ -183,7 +189,38 @@
 
 .equipment-categories {
   display: grid;
-  gap: 6px;
+  gap: 4px;
+  max-height: 56svh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior: contain;
+
+  scrollbar-width: thin;
+  scrollbar-color: #6fbf735e transparent;
+  &:hover {
+    scrollbar-color: #6fbf73cc transparent;
+  }
+}
+
+.equipment-categories::-webkit-scrollbar {
+  width: 6px;
+}
+
+.equipment-categories::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.equipment-categories::-webkit-scrollbar-thumb {
+  background: #6fbf73;
+  border-radius: 999px;
+}
+
+.equipment-categories::-webkit-scrollbar-thumb:hover {
+  background: #5eae63;
+}
+
+.equipment-categories::-webkit-scrollbar-button {
+  display: none;
 }
 
 .equipment-category {
@@ -1048,7 +1085,6 @@
 
 .product-card:hover {
   border-color: #078c63;
- 
 }
 
 .product-card[aria-pressed='true'] {
@@ -1375,6 +1411,7 @@
 
   .equipment-stage {
     grid-template-columns: minmax(240px, 0.8fr) minmax(340px, 1.2fr);
+    grid-template-rows: auto auto;
     grid-template-areas:
       'intro viewer'
       'panel panel';
@@ -1384,6 +1421,7 @@
 
   .equipment-intro {
     grid-area: intro;
+    align-self: center;
   }
 
   .product-viewer {
