@@ -190,6 +190,7 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
   const financeEmpty = root.querySelector('[data-finance-empty]');
   const financeResult = root.querySelector('[data-finance-result]');
   const financeValues = root.querySelector('[data-finance-values]');
+  const resultHeroActions = root.querySelector('[data-result-hero-actions]');
   const downloadPdfButton = root.querySelector('[data-download-pdf]');
   const professionalLeadOpen = root.querySelector('[data-professional-lead-open]');
   const professionalLeadTriggerStatus = root.querySelector(
@@ -889,6 +890,7 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
     financeEmpty,
     financeResult,
     financeValues,
+    resultHeroActions,
     passportContent,
     renderBars,
     state

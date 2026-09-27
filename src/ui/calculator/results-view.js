@@ -34,6 +34,7 @@ export const createCalculatorResultsView = ({
   financeEmpty,
   financeResult,
   financeValues,
+  resultHeroActions,
   passportContent,
   renderBars,
   state
@@ -403,6 +404,10 @@ export const createCalculatorResultsView = ({
         : Math.max(annualConsumptionKwh - annualGenerationKwh, 0);
     resultDashboard.replaceChildren();
     const resultsCopy = wizard.results ?? {};
+    const recommendedEquipment = analysis.equipment ?? scenario.system?.equipment;
+    const capacityKwp = format(scenario.system?.capacityKwp, locale, {
+      maximumFractionDigits: 2
+    });
     const overview = element('section', 'pro-result-hero');
     const overviewHeading = element('div', 'pro-result-hero__content');
     overviewHeading.append(
@@ -411,14 +416,15 @@ export const createCalculatorResultsView = ({
         'pro-result-hero__eyebrow',
         resultsCopy.overviewEyebrow ?? 'Recommended solar system'
       ),
-      element('h3', '', resultsCopy.overviewTitle ?? 'Recommended solar system'),
+      element(
+        'h3',
+        '',
+        `${resultsCopy.overviewTitle ?? 'Recommended solar system'} ${capacityKwp} kWp`
+      ),
       element(
         'p',
         'pro-result-hero__system',
-        `${format(scenario.system?.panelCount, locale)} × ${format(
-          scenario.system?.panelWatts,
-          locale
-        )} W`
+        `${format(scenario.system?.panelCount, locale)} × ${recommendedEquipment?.panelBrand ? `${recommendedEquipment.panelBrand} ` : ''}${format(scenario.system?.panelWatts, locale)} W`
       ),
       element(
         'p',
@@ -466,7 +472,15 @@ export const createCalculatorResultsView = ({
         kind: 'savings'
       })
     );
-    overview.append(overviewHeading, primaryMetrics);
+    const roofStatus = element(
+      'p',
+      'pro-result-hero__roof-status',
+      resultsCopy.roofStatus ?? 'Roof is suitable for the selected system'
+    );
+    roofStatus.prepend(resultIcon('check'));
+    if (resultHeroActions)
+      overview.append(overviewHeading, primaryMetrics, resultHeroActions, roofStatus);
+    else overview.append(overviewHeading, primaryMetrics, roofStatus);
     resultDashboard.append(overview);
     const commercialEstimate = analysis.commercialEstimate ?? scenario.commercialEstimate;
     const financial = scenario.financial ?? {};
@@ -1009,7 +1023,11 @@ export const createCalculatorResultsView = ({
     const basis = calculationBasisDetail(analysis.calculationBasis);
     if (basis) resultDashboard.append(basis);
     if (scenario.limitations?.includes('ROOF_CAPACITY_LIMIT')) {
-      const limit = element('p', 'pro-result-details pro-result-details--warning', wizard.roofLimit);
+      const limit = element(
+        'p',
+        'pro-result-details pro-result-details--warning',
+        wizard.roofLimit
+      );
       limit.append(
         ` ${format(scenario.system?.requestedCapacityKwp, locale, { maximumFractionDigits: 2 })} kWp → ${format(scenario.system?.capacityKwp, locale, { maximumFractionDigits: 2 })} kWp; ${format(scenario.system?.maximumPanelCount, locale)} panels.`
       );

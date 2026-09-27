@@ -56,7 +56,9 @@ test('Professional has exactly four customer steps and retains every engineering
   }
   assert.match(professional, /professional-roof-parameters/u);
   assert.match(professional, /data-wizard-restart/u);
-  assert.match(professional, /wizard\.results\.calculationTitle/u);
+  assert.match(professional, /pro-result-layout/u);
+  assert.match(professional, /data-result-hero-actions/u);
+  assert.match(professional, /data-download-pdf/u);
   assert.match(professional, /wizard\.results\.benefits/u);
   assert.match(professional, /professional-technology/u);
   assert.match(professional, /wizard\.results\.technologyTitle/u);
@@ -115,10 +117,10 @@ test('Professional has exactly four customer steps and retains every engineering
   assert.match(resultsView, /wizard\.mountingHardwareTitle/u);
   assert.match(resultsView, /analysis\.storageRecommendation/u);
   assert.match(resultsView, /wizard\.storageRecommendationTitle/u);
-  assert.match(resultsView, /result-overview__metric/u);
+  assert.match(resultsView, /pro-result-hero__metric/u);
   assert.match(resultsView, /metrics\?\.annualCoverage/u);
   assert.match(resultsView, /metrics\?\.recommendedPower/u);
-  assert.match(resultsView, /metrics\?\.panelCount/u);
+  assert.match(resultsView, /metrics\?\.annualSavings/u);
   assert.match(controller, /createEquipmentCatalog/u);
   assert.match(resultsView, /card\.dataset\.recommendedProduct/u);
   assert.match(resultsView, /card\.target = '_blank'/u);

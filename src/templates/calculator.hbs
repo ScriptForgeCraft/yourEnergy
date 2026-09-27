@@ -414,6 +414,19 @@
               </svg>{{wizard.results.restart}}</button>
             <div class='pro-result-layout'>
               <div class='pro-result-content' data-result-dashboard aria-live='polite'></div>
+              <div class='pro-result-hero-actions' data-result-hero-actions>
+                <button class='button' type='button' data-professional-lead-open><svg aria-hidden='true'>
+                    <use href='/icons.svg#message-square'></use>
+                  </svg>{{wizard.lead.open}} <svg aria-hidden='true'>
+                    <use href='/icons.svg#arrow-right'></use>
+                  </svg></button><button class='button button--outline professional-results-download' type='button'
+                  data-download-pdf><svg aria-hidden='true'>
+                    <use href='/icons.svg#file'></use>
+                  </svg>{{wizard.pdfReport.download}}</button><button class='button button--outline pro-result-hero__edit' type='button'
+                  data-wizard-back='2'><svg aria-hidden='true'>
+                    <use href='/icons.svg#faq-settings'></use>
+                  </svg>{{wizard.results.editData}}</button>
+              </div>
               <section class='pro-result-next'>
                 <div class='pro-result-next__heading'><span><svg aria-hidden='true'>
                       <use href='/icons.svg#arrow-right'></use>
@@ -424,12 +437,7 @@
                 </div>
                 <ol>{{#each wizard.results.nextSteps}}<li><span>{{add @index 1}}</span>
                     <p><strong>{{title}}</strong><small>{{copy}}</small></p>
-                  </li>{{/each}}</ol><div class='pro-result-next__actions'><button class='button' type='button'
-                    data-professional-lead-open><svg aria-hidden='true'>
-                      <use href='/icons.svg#message-square'></use>
-                    </svg>{{wizard.lead.open}} <svg aria-hidden='true'>
-                      <use href='/icons.svg#arrow-right'></use>
-                    </svg></button><a class='text-link' href='{{contact.phoneHref}}'><svg aria-hidden='true'>
+                  </li>{{/each}}</ol><div class='pro-result-next__actions'><a class='text-link' href='{{contact.phoneHref}}'><svg aria-hidden='true'>
                       <use href='/icons.svg#phone'></use>
                     </svg>{{wizard.lead.phone}}</a></div>
                 <p class='form-status pro-result-next__lead-status' data-professional-lead-trigger-status
@@ -445,13 +453,6 @@
               <dl data-finance-values></dl>
               <p class='section-disclosure'>{{finance.disclaimer}}</p>
             </section>
-            <div class='flow-actions professional-results-actions'><button class='button button--outline professional-results-download' type='button'
-                data-download-pdf><svg aria-hidden='true'>
-                  <use href='/icons.svg#file'></use>
-                </svg>{{wizard.pdfReport.download}}</button><button class='button button--outline' type='button'
-                data-wizard-back='2'><svg aria-hidden='true'>
-                  <use href='/icons.svg#arrow-left'></use>
-                </svg>{{wizard.back}}</button></div>
             <section class='professional-technology' aria-labelledby='professional-technology-title'>
               <div class='professional-technology__heading'><span><svg aria-hidden='true'>
                     <use href='/icons.svg#sun'></use>
