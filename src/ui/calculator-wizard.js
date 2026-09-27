@@ -1394,15 +1394,6 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
     .forEach((button) =>
       button.addEventListener('click', () => useRoofMap((map) => map.resetRoof()))
     );
-  root.querySelector('[data-roof-finish]')?.addEventListener('click', () =>
-    useRoofMap((map) => {
-      if (!map.finishRoof()) {
-        writeStatus(product.roof?.minimumPoints, true);
-        return;
-      }
-      writeStatus(product.roof?.finishHelp);
-    })
-  );
   root
     .querySelectorAll(
       '[data-roof-area-method], [data-roof-mounting-mode], [data-roof-tilt], [data-roof-plane-area], [data-roof-orientation], [data-roof-orientation-custom-input]'

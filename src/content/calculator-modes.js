@@ -57,7 +57,7 @@ const common = {
     },
     proMeta: {
       title: 'Պրոֆեսիոնալ արևային հաշվիչ | YOURENERGY',
-      description: 'PVGIS, տանիքի պարամետրեր և աղբյուրների թափանցիկ հաշվարկ։',
+      description: 'Արևային ռեսուրսի տվյալներ, տանիքի պարամետրեր և աղբյուրների թափանցիկ հաշվարկ։',
       ogTitle: 'Պրոֆեսիոնալ հաշվիչ | YOURENERGY',
       ogDescription: 'Մանրամասն նախնական վերլուծություն։'
     },
@@ -66,7 +66,7 @@ const common = {
       title: 'Պարզեք՝ ինչ արևային համակարգ կարող է համապատասխանել ձեր տանը',
       heroTitle: 'Արևային հաշվիչ',
       heroCopy:
-        'Ընտրեք ռեժիմը, նշեք տարածաշրջանն ու միջին սպառումը և ստացեք PVGIS-ի հիման վրա նախնական գնահատում։',
+        'Ընտրեք ռեժիմը, նշեք տարածաշրջանն ու միջին սպառումը և ստացեք արևային ռեսուրսի տվյալների հիման վրա նախնական գնահատում։',
       locationTitle: 'Տարածաշրջան',
       locationCopy: 'Ընտրեք տարածաշրջանը՝ նախնական արևային տվյալների համար',
       consumptionTitle: 'Էլեկտրաէներգիայի սպառում',
@@ -101,17 +101,17 @@ const common = {
       proCopy: 'Բացեք պրոֆեսիոնալ ռեժիմը տանիքի քարտեզագրման և խորացված վերլուծության համար։',
       proAction: 'Անցնել պրոֆեսիոնալ ռեժիմ',
       waiting: 'Լրացրեք տարածաշրջանն ու սպառումը։',
-      loading: 'PVGIS-ից ստանում ենք տարածաշրջանային արևային տվյալները…',
+      loading: 'Ստանում ենք տարածաշրջանային արևային տվյալները…',
       unavailable:
-        'PVGIS-ի տվյալն այս պահին հասանելի չէ։ Թվեր չենք փոխարինել օրինակով։ Փորձեք կրկին։',
+        'Արևային տվյալներն այս պահին հասանելի չեն։ Թվեր չենք փոխարինել օրինակով։ Փորձեք կրկին։',
       cacheNotConfigured:
         'Արևային հաշվարկը դեռ միացված չէ, քանի որ պաշտպանված ծառայության քեշը կարգավորված չէ։ Կապվեք ինժեների հետ։',
       providerNotConfigured:
         'Արևային հաշվարկի ծառայությունը դեռ կարգավորված չէ։ Կապվեք ինժեների հետ։',
-      retry: 'Կրկնել PVGIS հարցումը',
+      retry: 'Կրկնել արևային տվյալների հարցումը',
       regional: 'Տարածաշրջանային գնահատում',
       regionalCopy:
-        'PVGIS-ի տվյալը վերաբերում է ընտրված տարածաշրջանի ներկայացուցչական կետին, ոչ թե ձեր տան հասցեին կամ տանիքին։',
+        'Արևային տվյալները վերաբերում են ընտրված տարածաշրջանի ներկայացուցչական կետին, ոչ թե ձեր տան հասցեին կամ տանիքին։',
       resultsTitle: 'Ձեր նախնական արդյունքը',
       resultsCopy: 'Ընտրված տարածաշրջանի և ձեր էլեկտրաէներգիայի սպառման հիման վրա։',
       capacity: 'Առաջարկվող հզորություն',
@@ -164,7 +164,7 @@ const common = {
           copy: 'Ձեզ հետ ենք ամբողջ ճանապարհին'
         }
       ],
-      signature: 'Յուրովի տնօրինիր Քո արևը։',
+      signature: 'Մաքուր էներգիա։ Ավելի պայծառ վաղվա համար։',
       noJs: 'JavaScript-ի բացակայության դեպքում զանգահարեք ինժեներին՝ նախնական խորհրդատվության համար։'
     },
     refine: {
@@ -250,7 +250,7 @@ const common = {
         annualGenerationUnit: 'kWh/տարի',
         calculationTitle: 'Ինչպես է հաշվարկվել այս գնահատումը',
         calculationCopy:
-          'Մենք օգտագործել ենք PVGIS-ի արևային ռեսուրսի տվյալները, ձեր տեղադրությունը, էլեկտրաէներգիայի սպառումը և տանիքի բնութագրերը՝ արևային ներուժը գնահատելու համար։',
+          'Մենք օգտագործել ենք արևային ռեսուրսի տվյալները, ձեր տեղադրությունը, էլեկտրաէներգիայի սպառումը և տանիքի բնութագրերը՝ արևային ներուժը գնահատելու համար։',
         nextTitle: 'Ի՞նչ է հաջորդը',
         nextSteps: [
           {
@@ -285,7 +285,7 @@ const common = {
         benefits: [
           {
             icon: 'shield-check',
-            title: 'PVGIS արևային տվյալներ',
+            title: 'Արևային ռեսուրսի տվյալներ',
             copy: 'Արևային ռեսուրսի տարեկան և ամսական գնահատում'
           },
           {
@@ -325,7 +325,7 @@ const common = {
     },
     proMeta: {
       title: 'Профессиональный солнечный калькулятор | YOURENERGY',
-      description: 'Прозрачный расчёт с PVGIS, параметрами крыши и источниками.',
+      description: 'Прозрачный расчёт с данными о солнечном ресурсе, параметрами крыши и источниками.',
       ogTitle: 'Профессиональный калькулятор | YOURENERGY',
       ogDescription: 'Детальный предварительный анализ.'
     },
@@ -334,7 +334,7 @@ const common = {
       title: 'Узнайте, какая солнечная система может подойти вашему дому',
       heroTitle: 'Солнечный калькулятор',
       heroCopy:
-        'Выберите режим, регион и среднее потребление, чтобы получить предварительную оценку на основе PVGIS.',
+        'Выберите режим, регион и среднее потребление, чтобы получить предварительную оценку на основе данных о солнечном ресурсе.',
       locationTitle: 'Местоположение',
       locationCopy: 'Выберите регион для предварительных солнечных данных',
       consumptionTitle: 'Потребление электроэнергии',
@@ -370,15 +370,15 @@ const common = {
         'Откройте профессиональный режим для карты крыши и расширенного финансового анализа.',
       proAction: 'Перейти в профессиональный режим',
       waiting: 'Выберите регион и введите потребление.',
-      loading: 'Получаем региональные солнечные данные из PVGIS…',
-      unavailable: 'PVGIS сейчас недоступен. Мы не подставили примерные цифры. Попробуйте снова.',
+      loading: 'Получаем региональные солнечные данные…',
+      unavailable: 'Солнечные данные сейчас недоступны. Мы не подставили примерные цифры. Попробуйте снова.',
       cacheNotConfigured:
         'Солнечный расчёт ещё не включён: защищённый кэш сервиса не настроен. Свяжитесь с инженером.',
       providerNotConfigured: 'Сервис солнечного расчёта ещё не настроен. Свяжитесь с инженером.',
-      retry: 'Повторить запрос PVGIS',
+      retry: 'Повторить запрос солнечных данных',
       regional: 'Региональная оценка',
       regionalCopy:
-        'PVGIS-данные относятся к представительской точке выбранного региона, а не к вашему адресу или крыше.',
+        'Солнечные данные относятся к представительской точке выбранного региона, а не к вашему адресу или крыше.',
       resultsTitle: 'Ваш предварительный результат',
       resultsCopy: 'На основе выбранного региона и вашего потребления электроэнергии.',
       capacity: 'Рекомендуемая мощность',
@@ -518,7 +518,7 @@ const common = {
         annualGenerationUnit: 'kWh/год',
         calculationTitle: 'Как рассчитана эта оценка',
         calculationCopy:
-          'Мы использовали данные PVGIS о солнечном ресурсе, местоположение, потребление электроэнергии и характеристики крыши, чтобы оценить солнечный потенциал.',
+          'Мы использовали данные о солнечном ресурсе, местоположение, потребление электроэнергии и характеристики крыши, чтобы оценить солнечный потенциал.',
         nextTitle: 'Что дальше?',
         nextSteps: [
           {
@@ -553,7 +553,7 @@ const common = {
         benefits: [
           {
             icon: 'shield-check',
-            title: 'Данные PVGIS',
+            title: 'Данные о солнечном ресурсе',
             copy: 'Годовая и месячная оценка солнечного ресурса'
           },
           {
@@ -592,7 +592,7 @@ const common = {
     },
     proMeta: {
       title: 'Professional solar calculator | YOURENERGY',
-      description: 'A transparent PVGIS calculation with roof parameters and sources.',
+      description: 'A transparent calculation using solar-resource data, roof parameters and sources.',
       ogTitle: 'Professional calculator | YOURENERGY',
       ogDescription: 'Detailed preliminary analysis.'
     },
@@ -601,7 +601,7 @@ const common = {
       title: 'See what solar system may suit your home',
       heroTitle: 'Solar Calculator',
       heroCopy:
-        'Choose a mode, region and average consumption to get a preliminary PVGIS-based estimate.',
+        'Choose a mode, region and average consumption to get a preliminary estimate based on solar-resource data.',
       locationTitle: 'Location',
       locationCopy: 'Select a region for preliminary solar data',
       consumptionTitle: 'Electricity consumption',
@@ -635,17 +635,17 @@ const common = {
       proCopy: 'Open Professional mode for roof mapping and advanced financial analysis.',
       proAction: 'Switch to professional mode',
       waiting: 'Choose a region and enter consumption.',
-      loading: 'Getting regional solar data from PVGIS…',
+      loading: 'Getting regional solar data…',
       unavailable:
-        'PVGIS is unavailable right now. We did not substitute example figures. Try again.',
+        'Solar data is unavailable right now. We did not substitute example figures. Try again.',
       cacheNotConfigured:
         'Solar calculation is not enabled yet because the protected service cache is not configured. Contact an engineer.',
       providerNotConfigured:
         'The solar calculation service is not configured yet. Contact an engineer.',
-      retry: 'Retry PVGIS request',
+      retry: 'Retry solar-data request',
       regional: 'Regional estimate',
       regionalCopy:
-        'The PVGIS data applies to a representative point in the selected region, not to your address or roof.',
+        'The solar data applies to a representative point in the selected region, not to your address or roof.',
       resultsTitle: 'Your preliminary result',
       resultsCopy: 'Based on the selected region and your electricity consumption.',
       capacity: 'Recommended power',
@@ -777,7 +777,7 @@ const common = {
         annualGenerationUnit: 'kWh/year',
         calculationTitle: 'How this estimate was calculated',
         calculationCopy:
-          'We used PVGIS solar-resource data, your location, electricity consumption and roof characteristics to estimate your solar potential.',
+          'We used solar-resource data, your location, electricity consumption and roof characteristics to estimate your solar potential.',
         nextTitle: 'What’s next?',
         nextSteps: [
           {
@@ -812,7 +812,7 @@ const common = {
         benefits: [
           {
             icon: 'shield-check',
-            title: 'PVGIS solar data',
+            title: 'Solar-resource data',
             copy: 'Annual and monthly solar-resource estimates'
           },
           {

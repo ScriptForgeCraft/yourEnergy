@@ -82,20 +82,20 @@ export default {
     },
     potential: {
       eyebrow: 'Step 2 · Site potential',
-      title: 'PVGIS location reference',
-      loading: 'Requesting PVGIS for the confirmed point…',
-      annualYieldLabel: 'PVGIS reference yield',
+      title: 'Solar-resource reference',
+      loading: 'Getting solar-resource data for the confirmed point…',
+      annualYieldLabel: 'Solar-resource reference yield',
       orientationLabel: 'Reference optimal direction',
       tiltLabel: 'Reference optimal tilt',
-      source: 'Source: PVGIS · preliminary 14% system-loss assumption',
+      source: 'Source: European Commission Joint Research Centre · preliminary 14% system-loss assumption',
       disclosure:
-        'PVGIS values describe the solar resource at this location for a reference 1 kWp fixed system. Your actual roof is analysed in Step 3.',
+        'These values describe the solar resource at this location for a reference 1 kWp fixed system. Your actual roof is analysed in Step 3.',
       roofDisclosure:
         'The direction, pitch, area, shading and structural suitability of the actual roof must be entered below and confirmed by an engineer.',
       unavailable:
-        'PVGIS potential could not be retrieved. Retry or contact an engineer; no example figures will be substituted.',
+        'Solar-potential data could not be retrieved. Retry or contact an engineer; no example figures will be substituted.',
       contactPrefix: 'Need a manual check? Call an engineer:',
-      retry: 'Retry PVGIS potential',
+      retry: 'Retry solar-potential data',
       continue: 'Continue to my roof estimate',
       directions: {
         north: 'north',
@@ -160,7 +160,7 @@ export default {
       retry: 'Try search again',
       coordinatesTitle: 'Enter coordinates if the map is unavailable',
       coordinatesHelp:
-        'Latitude and longitude are used only for PVGIS. Check them before confirming.',
+        'Latitude and longitude are used only for the solar-resource calculation. Check them before confirming.',
       latitudeLabel: 'Latitude',
       longitudeLabel: 'Longitude',
       useCoordinates: 'Use these coordinates',
@@ -197,14 +197,14 @@ export default {
       reset: 'Clear outline',
       finish: 'Finish outline',
       finishHelp:
-        'Enter the roof-face parameters and consumption, then request a preliminary PVGIS calculation.',
+        'Enter the roof-face parameters and consumption, then request a preliminary solar calculation.',
       edit: 'Edit outline',
       pointsLabel: 'Points in outline: {count}',
       minimumPoints: 'Add at least 3 points to finish the outline.',
       areaLabel: 'Preliminary area from the outline',
       mountingModeLabel: 'Mounting approach',
       mountingModeHelp:
-        'PVGIS calculates the entered plane as building-mounted for roof-parallel systems and free-standing for elevated systems. A PVGIS optimum remains a separate benchmark.',
+        'The solar model calculates the entered plane as building-mounted for roof-parallel systems and free-standing for elevated systems. Its reference optimum remains a separate benchmark.',
       mountingModes: {
         roofParallel: 'Parallel to the roof face',
         elevated: 'Elevated / free-standing structure'
@@ -222,7 +222,7 @@ export default {
       planeAreaSummary: 'Preliminary roof-plane area used for calculation',
       orientationLabel: 'Roof-face direction',
       orientationHelp:
-        'Choose the roof-face direction. A roof-specific calculation cannot be made without it; the PVGIS benchmark above remains available.',
+        'Choose the roof-face direction. A roof-specific calculation cannot be made without it; the location reference above remains available.',
       customOrientationLabel: 'Custom orientation (0° = north, 180° = south)',
       customOrientationHelp: 'Enter a compass bearing from 0 to 359°.',
       tiltLabel: 'This roof-face tilt',
@@ -232,11 +232,11 @@ export default {
         'Enter the roof-face direction and tilt to create a roof-specific calculation.',
       angleGuideTitle: 'Visual check of the roof inputs',
       angleGuideCopy:
-        'The arrow shows the roof-face direction you entered. It is different from the PVGIS free-standing benchmark above.',
+        'The arrow shows the roof-face direction you entered. It is different from the free-standing reference above.',
       angleGuideOrientation: 'Roof-face direction',
       angleGuideTilt: 'Roof-face tilt',
-      benchmarkOrientation: 'PVGIS benchmark for a free-standing plane',
-      benchmarkTilt: 'PVGIS tilt benchmark for a free-standing plane',
+      benchmarkOrientation: 'Reference direction for a free-standing plane',
+      benchmarkTilt: 'Reference tilt for a free-standing plane',
       angleGuideUnknown: 'Not specified',
       pointSelectLabel: 'Remove point {index}',
       nudgeNorth: 'Move point north',
@@ -265,7 +265,7 @@ export default {
       unavailable: 'An analysis could not be prepared from the available data.',
       retry: 'Try calculation again',
       noTariff:
-        'No tariff was entered: capacity, PVGIS generation and a preliminary price remain available, but savings and payback are not shown.',
+        'No tariff was entered: capacity, calculated solar generation and a preliminary price remain available, but savings and payback are not shown.',
       priceUnavailable:
         'The temporary price book is unavailable or has expired. Request an engineer survey; savings and payback also require a tariff.',
       noSavings: 'There is not enough data to show savings and payback.',
@@ -306,7 +306,7 @@ export default {
         MISSING_EVIDENCE_SUPPRESSES_FINANCIAL_RESULT:
           'Missing verified evidence suppresses financial values.',
         PVGIS_SYSTEM_LOSS_14_PERCENT:
-          'PVGIS uses a 14% preliminary system-loss assumption; an engineer must confirm it.',
+          'The solar model uses a 14% preliminary system-loss assumption; an engineer must confirm it.',
         PRELIMINARY_ROOF_USABLE_AREA_70_PERCENT:
           'Preliminary capacity uses 70% of the outlined roof area. An engineer verifies actual usable area, setbacks and access paths.',
         PRELIMINARY_PANEL_FROM_EQUIPMENT_CATALOG:
@@ -326,7 +326,7 @@ export default {
         LOCAL_OBSTACLES_AND_STRUCTURE_NOT_MEASURED:
           'Local obstacles, shade, structural suitability and grid connection were not measured.',
         PVGIS_FREE_STANDING_BENCHMARK_FOR_ELEVATED_MOUNT:
-          'For an elevated structure, the PVGIS optimum is only a benchmark; an engineer confirms the design.',
+          'For an elevated structure, the calculated optimum is only a benchmark; an engineer confirms the design.',
         ROOF_PARALLEL_MOUNT_REQUIRES_ENGINEER_CONFIRMATION:
           'For a roof-parallel system, an engineer confirms the final parameters.'
       }
@@ -356,7 +356,7 @@ export default {
     homeCopy:
       'In a few steps, see your home’s solar potential, a preliminary system size and budget — plus savings when you enter your tariff.',
     calculatorCopy:
-      'First choose and confirm a point manually, then see its PVGIS potential. Roof and consumption data are only needed for the detailed estimate.',
+      'First choose and confirm a point manually, then see its solar potential. Roof and consumption data are only needed for the detailed estimate.',
     disclosure:
       'A preliminary result requires property confirmation and does not replace a site visit, engineering design or commercial proposal.',
     addressLabel: 'Property address',
@@ -437,7 +437,7 @@ export default {
     items: [
       {
         icon: 'satellite',
-        title: 'PVGIS data',
+        title: 'Solar-resource data',
         note: 'when the provider responds'
       },
       {
@@ -884,7 +884,7 @@ export default {
       ],
       [
         'What is the payback period?',
-        'Payback is shown only after PVGIS analysis and a tariff entered by you. The model excludes tariff growth, degradation, maintenance, financing, discounting, taxes and export rules.'
+        'Payback is shown only after the solar analysis and a tariff entered by you. The model excludes tariff growth, degradation, maintenance, financing, discounting, taxes and export rules.'
       ],
       [
         'Do solar panels need maintenance?',

@@ -626,7 +626,7 @@ const termsDocuments = {
         '3. Արևային հաշվիչ',
         paragraph('Կայքի հաշվիչը նախատեսված է նախնական գնահատական ստանալու համար։'),
         paragraph(
-          'Հաշվարկը կարող է հիմնվել օգտատիրոջ մուտքագրած տվյալների, տարածաշրջանային արևային տվյալների, PVGIS-ի տվյալների, սակագների և հաշվարկային ենթադրությունների վրա։'
+          'Հաշվարկը կարող է հիմնվել օգտատիրոջ մուտքագրած տվյալների, տարածաշրջանային արևային տվյալների, Եվրոպական հանձնաժողովի արևային ռեսուրսի տվյալների, սակագների և հաշվարկային ենթադրությունների վրա։'
         ),
         paragraph('Արդյունքները կարող են ներառել, օրինակ՝'),
         list(
@@ -788,7 +788,7 @@ const termsDocuments = {
         '3. Солнечный калькулятор',
         paragraph('Калькулятор на сайте предназначен для получения предварительной оценки.'),
         paragraph(
-          'Расчёт может основываться на данных, введённых пользователем, региональных солнечных данных, данных PVGIS, тарифах и расчётных предположениях.'
+          'Расчёт может основываться на данных, введённых пользователем, региональных солнечных данных, данных о солнечном ресурсе Европейской комиссии, тарифах и расчётных предположениях.'
         ),
         paragraph('Результаты могут включать, например:'),
         list(
@@ -952,7 +952,7 @@ const termsDocuments = {
         '3. Solar calculator',
         paragraph('The solar calculator is intended to provide a preliminary estimate.'),
         paragraph(
-          'Calculations may be based on information entered by the user, regional solar data, PVGIS data, electricity tariffs and calculation assumptions.'
+          'Calculations may be based on information entered by the user, regional solar data, European Commission solar-resource data, electricity tariffs and calculation assumptions.'
         ),
         paragraph('Results may include, for example:'),
         list(

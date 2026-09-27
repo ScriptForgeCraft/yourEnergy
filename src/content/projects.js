@@ -372,12 +372,12 @@ export const galleryProjectCaseCopy = Object.freeze({
       {
         label: 'Источник годовой выработки',
         value: 'Не опубликовано',
-        note: 'Годовой показатель опубликован в каталоге, но без ссылки на расчёт PVGIS или данные мониторинга.'
+        note: 'Годовой показатель опубликован в каталоге, но без ссылки на расчёт по данным солнечного ресурса или данные мониторинга.'
       }
     ],
     disclosureTitle: 'О данных проекта',
     disclosure:
-      'Показатели выше опубликованы в каталоге проектов YOURENERGY. В текущих публичных материалах нет источника и даты их измерения, поэтому годовая выработка не обозначается как PVGIS-расчёт или фактически измеренная выработка.',
+      'Показатели выше опубликованы в каталоге проектов YOURENERGY. В текущих публичных материалах нет источника и даты их измерения, поэтому годовая выработка не обозначается как расчёт по данным солнечного ресурса или фактически измеренная выработка.',
     back: 'Все проекты',
     calculatorAction: 'Рассчитать свой проект'
   },
@@ -408,12 +408,12 @@ export const galleryProjectCaseCopy = Object.freeze({
       {
         label: 'Տարեկան արտադրության աղբյուր',
         value: 'Չի հրապարակվել',
-        note: 'Տարեկան ցուցանիշը հրապարակված է կատալոգում, բայց առանց PVGIS հաշվարկի կամ մոնիթորինգի տվյալների հղման։'
+        note: 'Տարեկան ցուցանիշը հրապարակված է կատալոգում, բայց առանց արևային ռեսուրսի տվյալներով հաշվարկի կամ մոնիթորինգի տվյալների հղման։'
       }
     ],
     disclosureTitle: 'Նախագծի տվյալների մասին',
     disclosure:
-      'Վերոնշյալ ցուցանիշները հրապարակված են YOURENERGY նախագծերի կատալոգում։ Ընթացիկ հրապարակային նյութերը չեն պարունակում դրանց չափման աղբյուրն ու ամսաթիվը, ուստի տարեկան արտադրությունը չի ներկայացվում որպես PVGIS հաշվարկ կամ փաստացի չափված արտադրություն։',
+      'Վերոնշյալ ցուցանիշները հրապարակված են YOURENERGY նախագծերի կատալոգում։ Ընթացիկ հրապարակային նյութերը չեն պարունակում դրանց չափման աղբյուրն ու ամսաթիվը, ուստի տարեկան արտադրությունը չի ներկայացվում որպես արևային ռեսուրսի տվյալներով հաշվարկ կամ փաստացի չափված արտադրություն։',
     back: 'Բոլոր նախագծերը',
     calculatorAction: 'Հաշվարկել իմ նախագիծը'
   },
@@ -444,12 +444,12 @@ export const galleryProjectCaseCopy = Object.freeze({
       {
         label: 'Annual-production source',
         value: 'Not published',
-        note: 'The annual figure is published in the catalogue without a link to a PVGIS calculation or monitoring data.'
+        note: 'The annual figure is published in the catalogue without a link to a solar-resource calculation or monitoring data.'
       }
     ],
     disclosureTitle: 'About the project data',
     disclosure:
-      'The figures above are published in the YOURENERGY projects catalogue. The available public material does not provide a source or measurement date, so annual production is not labelled as a PVGIS estimate or measured generation.',
+      'The figures above are published in the YOURENERGY projects catalogue. The available public material does not provide a source or measurement date, so annual production is not labelled as a solar-resource estimate or measured generation.',
     back: 'All projects',
     calculatorAction: 'Estimate my project'
   }

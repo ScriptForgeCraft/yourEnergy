@@ -42,12 +42,12 @@ const modernHomeYerevan = Object.freeze({
       {
         label: 'Источник годовой выработки',
         value: 'Не опубликовано',
-        note: 'Показатель 8 420 kWh/год опубликован в каталоге, но без ссылки на расчёт PVGIS или данные мониторинга.'
+        note: 'Показатель 8 420 kWh/год опубликован в каталоге, но без ссылки на расчёт по данным солнечного ресурса или данные мониторинга.'
       }
     ],
     disclosureTitle: 'О данных проекта',
     disclosure:
-      'Показатели выше опубликованы в каталоге проектов YOURENERGY. В текущей записи нет источника и даты их измерения, поэтому годовая выработка не обозначается как расчёт PVGIS или фактически измеренная выработка.',
+      'Показатели выше опубликованы в каталоге проектов YOURENERGY. В текущей записи нет источника и даты их измерения, поэтому годовая выработка не обозначается как расчёт по данным солнечного ресурса или фактически измеренная выработка.',
     back: 'Все проекты',
     calculatorAction: 'Рассчитать свой проект'
   },
@@ -94,12 +94,12 @@ const modernHomeYerevan = Object.freeze({
       {
         label: 'Տարեկան արտադրության աղբյուր',
         value: 'Չի հրապարակվել',
-        note: '8 420 kWh/տարի ցուցանիշը հրապարակված է կատալոգում, բայց առանց PVGIS հաշվարկի կամ մոնիթորինգի տվյալների հղման։'
+        note: '8 420 kWh/տարի ցուցանիշը հրապարակված է կատալոգում, բայց առանց արևային ռեսուրսի տվյալներով հաշվարկի կամ մոնիթորինգի տվյալների հղման։'
       }
     ],
     disclosureTitle: 'Նախագծի տվյալների մասին',
     disclosure:
-      'Վերոնշյալ ցուցանիշները հրապարակված են YOURENERGY նախագծերի կատալոգում։ Ընթացիկ գրառումը չի պարունակում դրանց չափման աղբյուրն ու ամսաթիվը, ուստի տարեկան արտադրությունը չի ներկայացվում որպես PVGIS հաշվարկ կամ փաստացի չափված արտադրություն։',
+      'Վերոնշյալ ցուցանիշները հրապարակված են YOURENERGY նախագծերի կատալոգում։ Ընթացիկ գրառումը չի պարունակում դրանց չափման աղբյուրն ու ամսաթիվը, ուստի տարեկան արտադրությունը չի ներկայացվում որպես արևային ռեսուրսի տվյալներով հաշվարկ կամ փաստացի չափված արտադրություն։',
     back: 'Բոլոր նախագծերը',
     calculatorAction: 'Հաշվարկել իմ նախագիծը'
   },
@@ -145,12 +145,12 @@ const modernHomeYerevan = Object.freeze({
       {
         label: 'Annual-production source',
         value: 'Not published',
-        note: 'The catalogue publishes 8,420 kWh/year without a link to a PVGIS calculation or monitoring data.'
+        note: 'The catalogue publishes 8,420 kWh/year without a link to a solar-resource calculation or monitoring data.'
       }
     ],
     disclosureTitle: 'About the project data',
     disclosure:
-      'The figures above are published in the YOURENERGY projects catalogue. This record does not provide a source or measurement date, so annual production is not labelled as a PVGIS estimate or measured generation.',
+      'The figures above are published in the YOURENERGY projects catalogue. This record does not provide a source or measurement date, so annual production is not labelled as a solar-resource estimate or measured generation.',
     back: 'All projects',
     calculatorAction: 'Estimate my project'
   }

@@ -76,7 +76,8 @@ export const buildProcessPresentation = (state = {}) => {
     consumptionValue,
     solarResource: finite(analysis?.production?.annualYieldKwhPerKwp),
     source:
-      typeof analysis?.production?.source?.provider === 'string'
+      typeof analysis?.production?.source?.provider === 'string' &&
+      analysis.production.source.provider !== 'PVGIS'
         ? analysis.production.source.provider
         : null,
     roofArea: finite(roof?.areaSqm ?? roof?.planeAreaSqm ?? roof?.projectedAreaSqm),

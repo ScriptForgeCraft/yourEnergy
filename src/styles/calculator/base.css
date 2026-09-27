@@ -1075,7 +1075,10 @@
   .wizard-step[data-wizard-step='2'] > :not(.wizard-step__heading):not(.wizard-map-wrap) {
     grid-column: 1;
   }
-
+.flow-actions{
+  display: flex;
+  justify-content: space-between;
+}
   .wizard-step[data-wizard-step='0'] .flow-actions,
   .wizard-step[data-wizard-step='2'] .flow-actions {
     align-self: end;

@@ -138,7 +138,7 @@ export const createCalculatorResultsView = ({
           : ` · ${basisCopy.systemLoss ?? 'System loss'}: ${format(loss, locale, { maximumFractionDigits: 1 })}%`;
       add(
         basisCopy.solarYield ?? 'Solar yield',
-        `${solarYield.source?.provider ?? 'PVGIS'} · ${format(solarYield.annualYieldKwhPerKwp, locale)} kWh/kWp${lossCopy}`,
+        `${format(solarYield.annualYieldKwhPerKwp, locale)} kWh/kWp${lossCopy}`,
         solarYield.sourceType
       );
     }
@@ -328,7 +328,7 @@ export const createCalculatorResultsView = ({
           value: `${format(mounting.practicalInclinationDeg, locale, { maximumFractionDigits: 1 })}° · ${mounting.installationType === 'elevated' ? (wizard.elevated ?? 'Elevated structure') : (wizard.parallel ?? 'Parallel to roof')}`,
           reason:
             wizard.mountingHardwareReason ??
-            'The catalog-supported inclination nearest the PVGIS optimum was selected.'
+            'The catalog-supported inclination nearest the calculated optimum was selected.'
         })
       );
     }
@@ -541,7 +541,7 @@ export const createCalculatorResultsView = ({
           : '—'
       ),
       dashboardMetric(
-        wizard.pvgisReferenceYield ?? 'PVGIS reference yield',
+        wizard.pvgisReferenceYield ?? 'Solar-resource reference yield',
         referencePotential
           ? `${format(referencePotential.annualYieldKwhPerKwp, locale)} kWh/kWp/year`
           : '—'
@@ -570,7 +570,7 @@ export const createCalculatorResultsView = ({
     const yieldValues = element('dl', 'passport-ledger');
     yieldValues.append(
       dashboardMetric(
-        wizard.pvgisReferenceYield ?? 'PVGIS reference at location',
+        wizard.pvgisReferenceYield ?? 'Solar-resource reference at location',
         referencePotential
           ? `${format(referencePotential.annualYieldKwhPerKwp, locale)} kWh/kWp/year · ${format(referencePotential.orientation?.azimuthDegrees, locale, { maximumFractionDigits: 0 })}° / ${format(referencePotential.orientation?.tiltDegrees, locale, { maximumFractionDigits: 0 })}°`
           : '—'
@@ -806,7 +806,7 @@ export const createCalculatorResultsView = ({
           'p',
           '',
           wizard.mountingHardwareReason ??
-            'The catalog-supported inclination nearest the PVGIS optimum was selected.'
+            'The catalog-supported inclination nearest the calculated optimum was selected.'
         )
       );
       recommendation.append(
@@ -998,7 +998,7 @@ export const createCalculatorResultsView = ({
     );
     const pvgisLoss = analysis.calculationBasis?.solarYield?.configuration?.systemLossPercent;
     add(
-      wizard.metrics?.pvgis ?? 'PVGIS',
+      wizard.metrics?.pvgis ?? 'Solar data',
       `${format(analysis.production?.annualYieldKwhPerKwp, locale)} kWh/kWp · ${analysis.providerRetrievedAt ?? '—'}${pvgisLoss === null || pvgisLoss === undefined ? '' : ` · ${format(pvgisLoss, locale, { maximumFractionDigits: 1 })}%`}`
     );
     add(

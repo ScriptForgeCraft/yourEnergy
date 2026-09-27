@@ -30,7 +30,7 @@ const copy = {
     annualNetSurplusHelp: 'Սա տարեկան հանրագումարների համեմատություն է, ոչ թե ժամային արտահանման հաշվարկ։',
     projectSummaryTitle: 'Ձեր նախագծի ամփոփում',
     projectLocation: 'Տեղադրություն',
-    pvgisReferenceYield: 'PVGIS հղումային արտադրություն',
+    pvgisReferenceYield: 'Տեղանքի հղումային արևային արտադրություն',
     roofSystemYield: 'Ձեր տանիքի գնահատված տեսակարար արտադրություն',
     roofYieldDetails: 'Տեղանքի և տանիքի արտադրության մանրամասներ',
     roofYieldExplanation:
@@ -43,9 +43,9 @@ const copy = {
     roofCapacityLimiting: 'Տանիքի ֆիզիկական սահմանը սահմանափակում է առաջարկվող համակարգի հզորությունը։',
     roofCapacityExplanation:
       'Ֆիզիկական տանիքի սահմանը առաջարկվող հզորությունը չէ․ առաջարկը չափագրվում է ըստ սպառման, արևային արտադրության և այլ մուտքային տվյալների։',
-    roofReferenceComparison: 'Իրական տանիքը՝ համեմատած PVGIS հղման հետ',
+    roofReferenceComparison: 'Իրական տանիքը՝ համեմատած տեղանքի հղումային տվյալների հետ',
     actualRoof: 'Իրական տանիք՝ ուղղություն / թեքություն',
-    pvgisReference: 'PVGIS հղում՝ ուղղություն / թեքություն',
+    pvgisReference: 'Տեղանքի հղում՝ ուղղություն / թեքություն',
     roofReferenceHelp: 'Այս համեմատությունն օգնում է բացատրել, թե ինչու տանիքի արտադրությունը կարող է տարբերվել տեղանքի հղումից։',
     coveredConsumption: 'Ծածկվող սպառում',
     retailOffsetSavings: 'Խնայողություն ծածկվող սպառումից',
@@ -91,7 +91,7 @@ const copy = {
       sourceTypes: {
         'user-input': 'օգտատիրոջ մուտքագրում',
         'regional-reference': 'տարածաշրջանային հենակետ',
-        'pvgis-result': 'PVGIS արդյունք',
+        'pvgis-result': 'արևային տվյալների արդյունք',
         'catalog-technical-value': 'կատալոգի տեխնիկական արժեք',
         'calculator-assumption': 'հաշվիչի ենթադրություն',
         'registry-value': 'գրանցամատյանի արժեք',
@@ -107,11 +107,11 @@ const copy = {
       'Ընտրված է հաշվարկված PV DC հզորության համար։ Վերջնական լարային, MPPT և ցանցային համատեղելիությունը հաստատվում է ինժեներական փուլում։',
     mountingHardwareTitle: 'Կատալոգային ամրացման տարբերակ',
     mountingHardwareCopy:
-      'PVGIS օպտիմում՝ {optimum}° · հասանելի անկյուններ՝ {available}° · գործնական կատալոգային տարբերակ՝ {practical}°',
-    mountingHardwareReason: 'Ընտրված է կատալոգի PVGIS օպտիմումին ամենամոտ աջակցվող թեքությունը։',
+      'Հաշվարկային օպտիմում՝ {optimum}° · հասանելի անկյուններ՝ {available}° · գործնական կատալոգային տարբերակ՝ {practical}°',
+    mountingHardwareReason: 'Ընտրված է հաշվարկային օպտիմումին ամենամոտ աջակցվող թեքությունը կատալոգից։',
     mountingHardwareDimensionsCopy: 'Կոմպլեկտ՝ {kit} mm · ռելս՝ {rail} mm',
     mountingHardwareNoMatchCopy:
-      'PVGIS օպտիմումը {optimum}° է, սակայն կատալոգում նորմալացված աջակցվող անկյունով ամրացման տարբերակ չկա։',
+      'Հաշվարկային օպտիմումը {optimum}° է, սակայն կատալոգում նորմալացված աջակցվող անկյունով ամրացման տարբերակ չկա։',
     mountingHardwareEngineeringCopy:
       'Կատալոգային անկյունը չի փոխում հաշվարկված տանիքի հարթությունը։ Կոնստրուկցիան և քամու բեռը հաստատվում են ինժեների կողմից։',
     storageRecommendationTitle: 'Էներգիայի կուտակման տարբերակ',
@@ -133,11 +133,11 @@ const copy = {
     confirmPoint: 'Հաստատել այս կետը',
     coordinateAlternative: 'Գիտեմ կոորդինատները / քարտեզը հասանելի չէ',
     potentialReady:
-      'PVGIS-ը ֆոնային ռեժիմում գնահատում է ընտրված կետի արևային ռեսուրսը։ Այն տանիքը ավտոմատ չի չափում։',
-    potentialSkip: 'Շարունակել առանց PVGIS-ի',
-    monthlyPvgisData: 'Դիտել ամսական PVGIS տվյալները',
+      'Ֆոնային հաշվարկը գնահատում է ընտրված կետի արևային ռեսուրսը։ Այն տանիքը ավտոմատ չի չափում։',
+    potentialSkip: 'Շարունակել առանց արևային տվյալների',
+    monthlyPvgisData: 'Դիտել ամսական արևային տվյալները',
     locationSolarData: 'Տեղանքի արևային տվյալներ',
-    pvgisAvailable: 'PVGIS տվյալները հասանելի են',
+    pvgisAvailable: 'Արևային տվյալները հասանելի են',
     additionalSystemPreferences: 'Համակարգի լրացուցիչ նախընտրություններ',
     roofIntro: 'Նշեք տանիքի մակերեսն ու պարամետրերը՝ նախնական գնահատումը ճշգրտելու համար։',
     parallel: 'Տանիքին զուգահեռ',
@@ -155,7 +155,7 @@ const copy = {
       coverage: 'Ծածկույթ',
       annualSavings: 'Տարեկան խնայողություն',
       payback: 'Հետգնման ժամկետ',
-      pvgis: 'PVGIS',
+      pvgis: 'Արևային տվյալներ',
       system: 'Համակարգ',
       tariff: 'Սակագին'
     },
@@ -197,7 +197,7 @@ const copy = {
       property: 'Օբյեկտ',
       consumption: 'Սպառում',
       roof: 'Տանիք',
-      pvgisReferenceYield: 'PVGIS հղում',
+      pvgisReferenceYield: 'Տեղանքի արևային հղում',
       usableArea: 'Օգտակար մակերես',
       mounting: 'Տեղադրման եղանակ',
       disclaimer:
@@ -215,7 +215,7 @@ const copy = {
       energyBalanceTitle: 'Տարեկան էներգիայի հավասարակշռություն',
       solarProduction: 'Արևային արտադրություն',
       coverageSentence: '{value}% տարեկան սպառման ծածկույթ',
-      roofReferenceTitle: 'PVGIS հղումային ցուցանիշ և իրական տանիքի գնահատական',
+      roofReferenceTitle: 'Տեղանքի հղումային ցուցանիշ և իրական տանիքի գնահատական',
       roofSpecificYield: 'Տանիքի գնահատված տեսակարար արտադրություն',
       roofYieldExplanation:
         'Տարբերությունը պայմանավորված է տանիքի իրական ուղղությամբ, թեքությամբ և հաշվարկային ենթադրություններով։',
@@ -227,7 +227,7 @@ const copy = {
         'Սա նախնական գնային ուղեցույց է, ոչ պայմանագրային առաջարկ։ Վերջնական արժեքը հաստատվում է սարքավորումների և աշխատանքի ճշգրտումից հետո։',
       monthlyProductionTitle: 'Ամսական սպասվող էլեկտրաէներգիայի արտադրություն',
       monthlyProductionNote: 'Տարեկան ընդհանուր՝ {value} kWh · Ամսական արժեքները կլորացված են։',
-      pvgisMonthlyTitle: 'PVGIS ամսական հղումային արտադրություն',
+      pvgisMonthlyTitle: 'Ամսական հղումային արևային արտադրություն',
       pvgisMonthlyNote:
         'Հղումային ընդհանուր՝ {value} kWh/kWp/տարի · կիրառված է 14% համակարգային կորուստների նախնական ենթադրություն։',
       inputsTitle: 'Ձեր մուտքային տվյալները',
@@ -240,7 +240,7 @@ const copy = {
       calculationBasisTitle: 'Հաշվարկի հիմքը',
       pvgisReferenceOrientation: 'Հղումային ուղղություն',
       sourcesTitle: 'Աղբյուրներ',
-      sourcePvgis: 'PVGIS արևային տվյալներ',
+      sourcePvgis: 'Արևային տվյալներ — Եվրոպական հանձնաժողովի Համատեղ հետազոտական կենտրոն',
       sourceTariff: 'Սակագին',
       sourceEquipment: 'Սարքավորումների կատալոգ',
       sourcePricebook: 'Գնացուցակ',
@@ -251,7 +251,7 @@ const copy = {
       assumptionsTitle: 'Հիմնական ենթադրություններ և սահմանափակումներ',
       assumptionSolarTitle: 'Արևային մոդել',
       assumptionSolarText:
-        'PVGIS-ում կիրառված է 14% համակարգային կորուստների նախնական ենթադրություն։ Սակագնի աճը և վահանակների դեգրադացիան չեն մոդելավորվում։',
+        'Արևային մոդելում կիրառված է 14% համակարգային կորուստների նախնական ենթադրություն։ Սակագնի աճը և վահանակների դեգրադացիան չեն մոդելավորվում։',
       assumptionRoofTitle: 'Տանիք և տեղադրում',
       assumptionRoofText:
         'Օգտակար մակերեսի նախնական գործակիցը 70% է։ Ստվերումը, խոչընդոտները և կրողունակությունը տեղում չեն չափվել։',
@@ -340,7 +340,7 @@ const copy = {
         satellite: 'Արբանյակ',
         analysis: 'Տանիքի վերլուծություն',
         area: 'Տանիքի մակերես',
-        potential: 'Արևային ներուժ (PVGIS)',
+        potential: 'Արևային ներուժ',
         orientation: 'Կողմնորոշում',
         tilt: 'Թեքության անկյուն',
         tipsTitle: 'Լավագույն արդյունքի խորհուրդներ',
@@ -387,7 +387,7 @@ const copy = {
     annualNetSurplusHelp: 'Это сравнение годовых итогов, а не почасовой расчёт экспорта.',
     projectSummaryTitle: 'Сводка вашего проекта',
     projectLocation: 'Местоположение',
-    pvgisReferenceYield: 'Эталонная выработка PVGIS',
+    pvgisReferenceYield: 'Расчётная выработка для местоположения',
     roofSystemYield: 'Расчётная удельная выработка вашей крыши',
     roofYieldDetails: 'Детали выработки для местоположения и крыши',
     roofYieldExplanation:
@@ -400,9 +400,9 @@ const copy = {
     roofCapacityLimiting: 'Физический предел крыши ограничивает рекомендуемую мощность системы.',
     roofCapacityExplanation:
       'Физический предел крыши — не рекомендуемая мощность: система подбирается по потреблению, солнечной выработке и другим данным расчёта.',
-    roofReferenceComparison: 'Фактическая крыша и ориентир PVGIS',
+    roofReferenceComparison: 'Фактическая крыша и ориентир для местоположения',
     actualRoof: 'Фактическая крыша: направление / наклон',
-    pvgisReference: 'Ориентир PVGIS: направление / наклон',
+    pvgisReference: 'Ориентир для местоположения: направление / наклон',
     roofReferenceHelp: 'Сравнение помогает объяснить, почему выработка крыши может отличаться от ориентира для местоположения.',
     coveredConsumption: 'Покрываемое потребление',
     retailOffsetSavings: 'Экономия на покрытом потреблении',
@@ -449,7 +449,7 @@ const copy = {
       sourceTypes: {
         'user-input': 'ввод пользователя',
         'regional-reference': 'региональная опорная точка',
-        'pvgis-result': 'результат PVGIS',
+        'pvgis-result': 'результат по солнечным данным',
         'catalog-technical-value': 'техническое значение каталога',
         'calculator-assumption': 'допущение калькулятора',
         'registry-value': 'значение реестра',
@@ -465,11 +465,11 @@ const copy = {
       'Выбран для рассчитанной PV DC-мощности. Окончательную совместимость строк, MPPT и сети подтверждает инженер.',
     mountingHardwareTitle: 'Вариант крепления из каталога',
     mountingHardwareCopy:
-      'Оптимум PVGIS: {optimum}° · доступные углы: {available}° · практический вариант из каталога: {practical}°',
-    mountingHardwareReason: 'Выбран ближайший к оптимуму PVGIS поддерживаемый угол из каталога.',
+      'Расчётный оптимум: {optimum}° · доступные углы: {available}° · практический вариант из каталога: {practical}°',
+    mountingHardwareReason: 'Выбран ближайший к расчётному оптимуму поддерживаемый угол из каталога.',
     mountingHardwareDimensionsCopy: 'Комплект: {kit} мм · рельс: {rail} мм',
     mountingHardwareNoMatchCopy:
-      'Оптимум PVGIS — {optimum}°, но в каталоге нет крепления с нормализованным поддерживаемым углом.',
+      'Расчётный оптимум — {optimum}°, но в каталоге нет крепления с нормализованным поддерживаемым углом.',
     mountingHardwareEngineeringCopy:
       'Каталожный угол не меняет расчётную плоскость крыши. Конструкцию и ветровую нагрузку подтверждает инженер.',
     storageRecommendationTitle: 'Вариант накопления энергии',
@@ -491,11 +491,11 @@ const copy = {
     confirmPoint: 'Подтвердить эту точку',
     coordinateAlternative: 'Я знаю координаты / карта недоступна',
     potentialReady:
-      'PVGIS в фоне проверяет солнечный ресурс выбранной точки. Он не измеряет крышу автоматически.',
-    potentialSkip: 'Продолжить без PVGIS',
-    monthlyPvgisData: 'Посмотреть данные PVGIS по месяцам',
+      'Фоновый расчёт проверяет солнечный ресурс выбранной точки. Он не измеряет крышу автоматически.',
+    potentialSkip: 'Продолжить без солнечных данных',
+    monthlyPvgisData: 'Посмотреть солнечные данные по месяцам',
     locationSolarData: 'Солнечные данные местоположения',
-    pvgisAvailable: 'Данные PVGIS доступны',
+    pvgisAvailable: 'Солнечные данные получены',
     additionalSystemPreferences: 'Дополнительные предпочтения системы',
     roofIntro:
       'Задайте площадь и параметры крыши, чтобы уточнить предварительную оценку солнечного потенциала.',
@@ -514,7 +514,7 @@ const copy = {
       coverage: 'Покрытие',
       annualSavings: 'Экономия в год',
       payback: 'Окупаемость',
-      pvgis: 'PVGIS',
+      pvgis: 'Солнечные данные',
       system: 'Система',
       tariff: 'Тариф'
     },
@@ -555,7 +555,7 @@ const copy = {
       property: 'Объект',
       consumption: 'Потребление',
       roof: 'Крыша',
-      pvgisReferenceYield: 'Ориентир PVGIS',
+      pvgisReferenceYield: 'Ориентир солнечного ресурса',
       usableArea: 'Полезная площадь',
       mounting: 'Способ установки',
       disclaimer:
@@ -573,7 +573,7 @@ const copy = {
       energyBalanceTitle: 'Годовой энергетический баланс',
       solarProduction: 'Солнечная выработка',
       coverageSentence: '{value}% годового потребления покрывается',
-      roofReferenceTitle: 'Ориентир PVGIS и расчёт для реальной крыши',
+      roofReferenceTitle: 'Ориентир для местоположения и расчёт для реальной крыши',
       roofSpecificYield: 'Расчётная удельная выработка крыши',
       roofYieldExplanation:
         'Разница связана с фактической ориентацией, наклоном крыши и расчётными допущениями.',
@@ -585,7 +585,7 @@ const copy = {
         'Это предварительный ценовой ориентир, а не договорное предложение. Финальная стоимость подтверждается после уточнения оборудования и работ.',
       monthlyProductionTitle: 'Ожидаемая солнечная выработка по месяцам',
       monthlyProductionNote: 'Итого за год: {value} kWh · Месячные значения округлены.',
-      pvgisMonthlyTitle: 'Помесячный ориентир PVGIS',
+      pvgisMonthlyTitle: 'Помесячный ориентир солнечного ресурса',
       pvgisMonthlyNote:
         'Справочный итог: {value} kWh/kWp/год · применено предварительное допущение системных потерь 14%.',
       inputsTitle: 'Ваши исходные данные',
@@ -598,7 +598,7 @@ const copy = {
       calculationBasisTitle: 'Основа расчёта',
       pvgisReferenceOrientation: 'Ориентир направления',
       sourcesTitle: 'Источники',
-      sourcePvgis: 'Солнечные данные PVGIS',
+      sourcePvgis: 'Солнечные данные — Объединённый исследовательский центр Европейской комиссии',
       sourceTariff: 'Тариф',
       sourceEquipment: 'Каталог оборудования',
       sourcePricebook: 'Прайс-лист',
@@ -609,7 +609,7 @@ const copy = {
       assumptionsTitle: 'Основные допущения и ограничения',
       assumptionSolarTitle: 'Солнечная модель',
       assumptionSolarText:
-        'В PVGIS применено предварительное допущение системных потерь 14%. Рост тарифа и деградация панелей не моделируются.',
+        'В солнечной модели применено предварительное допущение системных потерь 14%. Рост тарифа и деградация панелей не моделируются.',
       assumptionRoofTitle: 'Крыша и монтаж',
       assumptionRoofText:
         'Предварительно используется 70% площади. Затенение, препятствия и несущая способность на объекте не измерялись.',
@@ -699,7 +699,7 @@ const copy = {
         satellite: 'Спутник',
         analysis: 'Анализ крыши',
         area: 'Площадь крыши',
-        potential: 'Солнечный потенциал (PVGIS)',
+        potential: 'Солнечный потенциал',
         orientation: 'Ориентация',
         tilt: 'Угол наклона',
         tipsTitle: 'Советы для лучшего результата',
@@ -748,7 +748,7 @@ const copy = {
       'This compares annual totals; it is not an hourly export calculation.',
     projectSummaryTitle: 'Your project summary',
     projectLocation: 'Location',
-    pvgisReferenceYield: 'PVGIS reference yield',
+    pvgisReferenceYield: 'Solar-resource reference yield',
     roofSystemYield: 'Estimated specific yield for your roof',
     roofYieldDetails: 'Location and roof yield details',
     roofYieldExplanation:
@@ -761,9 +761,9 @@ const copy = {
     roofCapacityLimiting: 'The physical roof limit constrains the recommended system size.',
     roofCapacityExplanation:
       'The physical roof limit is not the recommended system size; the recommendation is sized from consumption, solar yield and the other calculation inputs.',
-    roofReferenceComparison: 'Actual roof compared with the PVGIS reference',
+    roofReferenceComparison: 'Actual roof compared with the location reference',
     actualRoof: 'Actual roof: direction / tilt',
-    pvgisReference: 'PVGIS reference: direction / tilt',
+    pvgisReference: 'Location reference: direction / tilt',
     roofReferenceHelp:
       'This comparison helps explain why roof yield can differ from the location reference.',
     coveredConsumption: 'Covered consumption',
@@ -811,7 +811,7 @@ const copy = {
       sourceTypes: {
         'user-input': 'user input',
         'regional-reference': 'regional reference point',
-        'pvgis-result': 'PVGIS result',
+        'pvgis-result': 'solar-data result',
         'catalog-technical-value': 'catalog technical value',
         'calculator-assumption': 'calculator assumption',
         'registry-value': 'registry value',
@@ -826,12 +826,12 @@ const copy = {
       'Selected for the calculated PV DC capacity. Final string, MPPT and grid compatibility is confirmed during engineering.',
     mountingHardwareTitle: 'Catalog mounting option',
     mountingHardwareCopy:
-      'PVGIS optimum: {optimum}° · available mounting angles: {available}° · practical catalog option: {practical}°',
+      'Calculated optimum: {optimum}° · available mounting angles: {available}° · practical catalog option: {practical}°',
     mountingHardwareReason:
-      'The catalog-supported inclination nearest the PVGIS optimum was selected.',
+      'The catalog-supported inclination nearest the calculated optimum was selected.',
     mountingHardwareDimensionsCopy: 'Kit: {kit} mm · rail: {rail} mm',
     mountingHardwareNoMatchCopy:
-      'PVGIS optimum is {optimum}°, but no catalog mounting option has a normalized supported angle.',
+      'The calculated optimum is {optimum}°, but no catalog mounting option has a normalized supported angle.',
     mountingHardwareEngineeringCopy:
       'The catalog angle does not change the calculated roof plane. Structure and wind-load design are confirmed during engineering.',
     storageRecommendationTitle: 'Energy-storage option',
@@ -853,11 +853,11 @@ const copy = {
     confirmPoint: 'Confirm this point',
     coordinateAlternative: 'I know the coordinates / the map is unavailable',
     potentialReady:
-      'PVGIS checks the selected point’s solar resource in the background. It does not measure a roof automatically.',
-    potentialSkip: 'Continue without PVGIS',
-    monthlyPvgisData: 'View monthly PVGIS data',
+      'The background calculation checks the selected point’s solar resource. It does not measure a roof automatically.',
+    potentialSkip: 'Continue without solar data',
+    monthlyPvgisData: 'View monthly solar data',
     locationSolarData: 'Location solar data',
-    pvgisAvailable: 'PVGIS available',
+    pvgisAvailable: 'Solar data received',
     additionalSystemPreferences: 'Additional system preferences',
     roofIntro: 'Define your roof area and parameters to refine the preliminary estimate.',
     parallel: 'Parallel to roof',
@@ -875,7 +875,7 @@ const copy = {
       coverage: 'Coverage',
       annualSavings: 'Annual savings',
       payback: 'Payback',
-      pvgis: 'PVGIS',
+      pvgis: 'Solar data',
       system: 'System',
       tariff: 'Tariff'
     },
@@ -916,7 +916,7 @@ const copy = {
       property: 'Property',
       consumption: 'Consumption',
       roof: 'Roof',
-      pvgisReferenceYield: 'PVGIS reference',
+      pvgisReferenceYield: 'Solar-resource reference',
       usableArea: 'Usable area',
       mounting: 'Mounting approach',
       disclaimer:
@@ -934,7 +934,7 @@ const copy = {
       energyBalanceTitle: 'Annual energy balance',
       solarProduction: 'Solar production',
       coverageSentence: '{value}% annual consumption coverage',
-      roofReferenceTitle: 'PVGIS reference and actual roof estimate',
+      roofReferenceTitle: 'Location reference and actual roof estimate',
       roofSpecificYield: 'Estimated specific yield for the roof',
       roofYieldExplanation:
         'The difference reflects the actual roof orientation, tilt and calculation assumptions.',
@@ -946,7 +946,7 @@ const copy = {
         'This is a preliminary pricing guide, not a contractual offer. Final pricing is confirmed after equipment and installation scope are refined.',
       monthlyProductionTitle: 'Expected monthly solar production',
       monthlyProductionNote: 'Annual total: {value} kWh · Monthly values are rounded.',
-      pvgisMonthlyTitle: 'Monthly PVGIS reference yield',
+      pvgisMonthlyTitle: 'Monthly solar-resource reference yield',
       pvgisMonthlyNote:
         'Reference total: {value} kWh/kWp/year · preliminary 14% system-loss assumption applied.',
       inputsTitle: 'Your inputs',
@@ -959,7 +959,7 @@ const copy = {
       calculationBasisTitle: 'Calculation basis',
       pvgisReferenceOrientation: 'Reference direction',
       sourcesTitle: 'Sources',
-      sourcePvgis: 'PVGIS solar data',
+      sourcePvgis: 'Solar data — European Commission Joint Research Centre',
       sourceTariff: 'Tariff',
       sourceEquipment: 'Equipment catalogue',
       sourcePricebook: 'Price book',
@@ -970,7 +970,7 @@ const copy = {
       assumptionsTitle: 'Main assumptions and limitations',
       assumptionSolarTitle: 'Solar model',
       assumptionSolarText:
-        'A preliminary 14% system-loss assumption is applied in PVGIS. Tariff growth and panel degradation are not modelled.',
+        'A preliminary 14% system-loss assumption is applied in the solar model. Tariff growth and panel degradation are not modelled.',
       assumptionRoofTitle: 'Roof and installation',
       assumptionRoofText:
         'The preliminary usable-area factor is 70%. Shading, obstructions and structural capacity were not measured on site.',
@@ -1061,7 +1061,7 @@ const copy = {
         satellite: 'Satellite',
         analysis: 'Roof analysis',
         area: 'Roof area',
-        potential: 'Solar potential (PVGIS)',
+        potential: 'Solar potential',
         orientation: 'Orientation',
         tilt: 'Tilt angle',
         tipsTitle: 'Tips for best results',
