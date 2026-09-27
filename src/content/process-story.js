@@ -551,7 +551,7 @@ export const processStoryCopy = {
       amountBill: 'Միջին ամսական հաշիվ',
       amountUsage: 'Միջին ամսական սպառում',
       billHelp: 'Էլեկտրաէներգիայի սակագինը կհաստատեք հաշվիչում։',
-      usageHelp: 'Նշեք ձեր հաշվում նշված ամսական սպառումը։',
+      usageHelp: 'Նշեք Ձեր հաշվում նշված ամսական սպառումը։',
       continue: 'Շարունակել',
       submit: 'Սկսել իմ վերլուծությունը',
       full: 'Բացել ամբողջական հաշվիչը'
@@ -572,7 +572,7 @@ export const processStoryCopy = {
         visual: 'analysis',
         visualLabel: 'Արևային համակարգի վերլուծության տեսապատկեր',
         headline: 'Սկսում ենք թվերից։',
-        copy: 'Ձեր սպառումը, տեղադրությունը և արևային ռեսուրսի հասանելի տվյալները դառնում են ձեր համակարգի հստակ մեկնակետը։',
+        copy: 'Ձեր սպառումը, տեղադրությունը և արևային ռեսուրսի հասանելի տվյալները դառնում են Ձեր համակարգի հստակ մեկնակետը։',
         cards: [
           {
             icon: 'map-pin',
@@ -595,7 +595,7 @@ export const processStoryCopy = {
           {
             icon: 'calculator',
             label: 'Առաջարկվող համակարգ',
-            value: 'Ըստ ձեր սպառման և արևային ռեսուրսի',
+            value: 'Ըստ Ձեր սպառման և արևային ռեսուրսի',
             data: 'system-capacity'
           },
           {
@@ -790,7 +790,7 @@ export const processStoryCopy = {
           {
             icon: 'wrench',
             label: 'Տեխնիկական աջակցություն',
-            value: 'YOURENERGY-ն մնում է ձեր կողքին։',
+            value: 'YOURENERGY-ն մնում է Ձեր կողքին։',
             data: 'service'
           }
         ],

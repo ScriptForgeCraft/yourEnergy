@@ -12,7 +12,7 @@ const source = (path) => readFile(resolve(root, path), 'utf8');
 const successCopy = Object.freeze({
   hy: Object.freeze({
     title: 'Շնորհակալություն։ Ձեր հայտը ուղարկված է։',
-    text: 'Ինժեները շուտով կկապվի ձեզ հետ։',
+    text: 'Ինժեները շուտով կապ կհաստատի Ձեզ հետ։',
     close: 'Փակել'
   }),
   ru: Object.freeze({

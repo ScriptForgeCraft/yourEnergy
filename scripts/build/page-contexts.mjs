@@ -61,7 +61,7 @@ export const createPageContextBuilder = ({ publicEnv, pages }) => {
   const calculatorModeControl = Object.freeze({
     hy: {
       eyebrow: 'Արևային հաշվիչ',
-      title: 'Պարզեք ձեր արևային ներուժը',
+      title: 'Պարզեք Ձեր արևային ներուժը',
       label: 'Հաշվիչի ռեժիմ',
       quick: 'Արագ և պարզ',
       quickCopy: '2 քայլ, նախնական արդյունք',
