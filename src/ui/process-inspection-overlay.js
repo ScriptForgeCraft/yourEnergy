@@ -9,17 +9,16 @@ const INSPECTION_KEYS = Object.freeze([
   'electrical-panel'
 ]);
 
-// Normalized to the overlay's 1000 × 600 SVG viewBox. The multi-segment paths
-// intentionally resemble technical callouts rather than decorative straight lines.
+// Normalized to the overlay's 1000 × 600 SVG viewBox. Each line terminates on
+// the roof feature described by its corresponding callout card.
 const CONNECTORS = Object.freeze([
-  { key: 'roof-area', points: '205,111 302,111 381,157 482,181', target: [482, 181] },
-  { key: 'orientation', points: '585,103 585,145 571,181 566,211', target: [566, 211] },
-  { key: 'tilt', points: '811,256 770,256 733,245 706,245', target: [706, 245] },
-  { key: 'shading', points: '207,472 307,472 387,430 438,418', target: [438, 418] },
+  { key: 'roof-area', points: '205,112 290,112 495,260', target: [495, 260] },
+  { key: 'orientation', points: '590,105 590,252', target: [590, 252] },
+  { key: 'tilt', points: '811,260 770,260 690,240', target: [690, 240] },
   {
     key: 'electrical-panel',
-    points: '811,461 765,461 724,433 688,420',
-    target: [688, 420]
+    points: '815,480 775,480 735,405',
+    target: [735, 405]
   }
 ]);
 

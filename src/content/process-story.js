@@ -85,31 +85,31 @@ export const processStoryCopy = {
         copy: 'An engineer checks the roof, usable area, orientation, shading and electrical conditions.',
         cards: [
           {
-            icon: 'satellite',
+            icon: 'roof-measure',
             label: 'Roof area',
             value: 'Measured on site',
             data: 'roof-area'
           },
           {
-            icon: 'sun',
+            icon: 'compass',
             label: 'Orientation',
             value: 'Confirmed from the actual roof position',
             data: 'orientation'
           },
           {
-            icon: 'arrow-right',
+            icon: 'roof-tilt',
             label: 'Tilt',
             value: 'Measured on the roof',
             data: 'tilt'
           },
           {
-            icon: 'sun',
+            icon: 'sun-cloud',
             label: 'Shading',
             value: 'Potential shading is checked on site',
             data: 'shading'
           },
           {
-            icon: 'zap',
+            icon: 'electrical-panel',
             label: 'Electrical panel',
             value: 'Connection conditions are checked',
             data: 'electrical-panel'
@@ -348,31 +348,31 @@ export const processStoryCopy = {
         copy: 'Инженер проверяет крышу, полезную площадь, ориентацию, затенение и состояние электрики.',
         cards: [
           {
-            icon: 'satellite',
+            icon: 'roof-measure',
             label: 'Площадь крыши',
             value: 'Измеряется на объекте',
             data: 'roof-area'
           },
           {
-            icon: 'sun',
+            icon: 'compass',
             label: 'Ориентация',
             value: 'Уточняется по фактическому положению крыши',
             data: 'orientation'
           },
           {
-            icon: 'arrow-right',
+            icon: 'roof-tilt',
             label: 'Угол наклона',
             value: 'Измеряется на крыше',
             data: 'tilt'
           },
           {
-            icon: 'sun',
+            icon: 'sun-cloud',
             label: 'Затенение',
             value: 'Проверяются возможные зоны затенения',
             data: 'shading'
           },
           {
-            icon: 'zap',
+            icon: 'electrical-panel',
             label: 'Электрощит',
             value: 'Проверяются условия подключения',
             data: 'electrical-panel'
@@ -616,31 +616,31 @@ export const processStoryCopy = {
         copy: 'Ինժեները ստուգում է տանիքը, օգտագործելի մակերեսը, կողմնորոշումը, ստվերավորումը և էլեկտրական պայմանները։',
         cards: [
           {
-            icon: 'satellite',
+            icon: 'roof-measure',
             label: 'Տանիքի մակերես',
             value: 'Չափվում է օբյեկտում',
             data: 'roof-area'
           },
           {
-            icon: 'sun',
+            icon: 'compass',
             label: 'Կողմնորոշում',
             value: 'Որոշվում է տանիքի իրական դիրքով',
             data: 'orientation'
           },
           {
-            icon: 'arrow-right',
+            icon: 'roof-tilt',
             label: 'Թեքություն',
             value: 'Չափվում է տանիքի վրա',
             data: 'tilt'
           },
           {
-            icon: 'sun',
+            icon: 'sun-cloud',
             label: 'Ստվերավորում',
             value: 'Ստուգվում են հնարավոր ստվերները',
             data: 'shading'
           },
           {
-            icon: 'zap',
+            icon: 'electrical-panel',
             label: 'Էլեկտրական վահանակ',
             value: 'Ստուգվում են միացման պայմանները',
             data: 'electrical-panel'
