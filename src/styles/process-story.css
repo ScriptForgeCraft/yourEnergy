@@ -625,31 +625,31 @@
   position: relative;
   z-index: 4;
 }
+.process-visual.process-visual--installation{
+    backdrop-filter: blur(2px)  ;
+  }
 
 /* 05 — installation timeline kept as real HTML overlay */
 .process-installation-timeline {
-  --installation-gold: #f5b92b;
+  --installation-gold: #f5b82b9c;
   --installation-gold-bright: #ffcf52;
-  --installation-track: rgba(185, 202, 211, 0.3);
-  --installation-green: #42d391;
+  --installation-track: rgba(185, 202, 211, 0.288);
+  --installation-green: #42d3926e;
   --installation-node-size: clamp(46px, 3.5vw, 62px);
   position: relative;
   z-index: 5;
   display: grid;
   grid-template-columns: repeat(6, minmax(0, 1fr));
-  min-height: 184px;
   margin: 0;
-  padding: 27px clamp(16px, 3vw, 48px) 22px;
-  border: 1px solid rgba(197, 215, 224, 0.25);
+  padding:22px 17px ;
   border-radius: 28px;
-  background:
-    linear-gradient(118deg, rgba(17, 43, 56, 0.87), rgba(4, 20, 30, 0.94)),
-    radial-gradient(circle at 12% 0%, rgba(240, 179, 43, 0.16), transparent 28%);
+
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.1),
     0 18px 42px rgba(0, 0, 0, 0.46);
-  backdrop-filter: blur(16px);
-  list-style: none;
+    list-style: none;
+    backdrop-filter: blur(16px)  ;
+     
 }
 
 
@@ -670,27 +670,6 @@
   text-align: center;
 }
 
-.process-installation-timeline li::before,
-.process-installation-timeline li::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  height: 5px;
-  border-radius: 999px;
-}
-
-.process-installation-timeline li::before {
-  right: 12%;
-  left: 12%;
-  background: var(--installation-track);
-}
-
-.process-installation-timeline li::after {
-  left: 12%;
-  width: 29%;
-  background: var(--installation-gold);
-  box-shadow: 0 0 10px rgba(245, 185, 43, 0.24);
-}
 
 .process-installation-timeline__node {
   position: relative;
@@ -722,26 +701,18 @@
 
 
 
-.process-installation-timeline li.is-current::after {
-  width: 76%;
-  background: linear-gradient(90deg, var(--installation-gold), var(--installation-gold-bright));
-}
+
 
 .process-installation-timeline li.is-complete .process-installation-timeline__node {
   border-color: var(--installation-green);
-  background: radial-gradient(circle at 35% 28%, #5af0a5, #249d66 64%, #0c553b);
+  background: radial-gradient(circle at 35% 28%, #5af0a5b9, #249d67b0 64%, #0c553bdc);
   color: #ecfff5;
   box-shadow:
-    0 0 0 3px rgba(66, 211, 145, 0.14),
-    0 0 18px rgba(66, 211, 145, 0.54),
-    0 0 32px rgba(66, 211, 145, 0.22);
+    0 0 0 3px rgba(66, 211, 146, 0.048),
+    0 0 18px rgba(66, 211, 146, 0.068),
+    0 0 32px rgba(66, 211, 146, 0.041);
 }
 
-.process-installation-timeline li.is-complete::after {
-  width: 76%;
-  background: linear-gradient(90deg, #31b877, var(--installation-green));
-  box-shadow: 0 0 10px rgba(66, 211, 145, 0.32);
-}
 
 /* Persistent journey rail */
 .process-progress {
