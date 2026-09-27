@@ -157,7 +157,7 @@
   bottom: 5.05rem;
   left: clamp(1.1rem, 2.5vw, 2.25rem);
   display: grid;
-  grid-template-columns: repeat(4, minmax(8.5rem, 1fr));
+  grid-template-columns: repeat(5, minmax(0, 1fr));
   gap: 0.48rem;
   width: min(64%, 43rem);
   margin: 0;
@@ -179,6 +179,18 @@
   margin: 0;
   padding-inline: 0.95rem;
   font-size: 0.72rem;
+}
+
+.pro-result-hero-actions .button > svg,
+.pro-result-next__actions .button > svg {
+  width: 1.05rem;
+  height: 1.05rem;
+  flex: 0 0 auto;
+}
+
+.pro-result-hero-actions .button,
+.pro-result-next__actions .button {
+  gap: 0.42rem;
 }
 
 .pro-result-hero-actions .button--outline {
@@ -1183,7 +1195,10 @@
 }
 
 .pro-result-hero {
-  grid-template-columns: minmax(0, 0.49fr) minmax(23rem, 0.51fr);
+  grid-template-columns: minmax(0, 0.62fr) minmax(18rem, 0.38fr);
+  grid-template-rows: auto auto auto;
+  align-content: start;
+  row-gap: 0.5rem;
   min-height: 19.2rem;
   padding: 1.2rem 1.35rem;
   background:
@@ -1199,8 +1214,8 @@
 }
 
 .pro-result-hero h3 {
-  max-width: 18ch;
-  font-size: clamp(1.6rem, 2.55vw, 2.25rem);
+  max-width: 23ch;
+  font-size: clamp(1.5rem, 2.2vw, 2.05rem);
   line-height: 1.05;
 }
 
@@ -1219,15 +1234,15 @@
 }
 
 .pro-result-hero__metrics {
-  bottom: 4.3rem;
-  left: 1.35rem;
-  width: min(64%, 42rem);
+  position: static;
+  grid-column: 1;
+  width: 100%;
 }
 
 .pro-result-hero-actions {
-  bottom: 0.9rem;
-  left: 1.35rem;
-  width: min(64%, 42rem);
+  position: static;
+  grid-column: 1;
+  width: 100%;
 }
 
 .pro-result-hero__metric {
@@ -1513,6 +1528,42 @@
   font-weight: 800;
 }
 
+/* At the result step, the breadcrumb and progress rail are the only compact
+ * context needed above the dashboard. */
+.calculator-page--professional
+  [data-professional-calculator][data-current-step='3']
+  .calculator-hero--professional.section {
+  padding-top: calc(var(--header-height) + 0.8rem);
+  padding-bottom: 0.65rem;
+}
+
+.calculator-page--professional
+  [data-professional-calculator][data-current-step='3']
+  .professional-hero__inner {
+  display: block;
+}
+
+.calculator-page--professional
+  [data-professional-calculator][data-current-step='3']
+  .professional-hero__copy
+  > :not(.calculator-breadcrumb) {
+  display: none;
+}
+
+.calculator-page--professional
+  [data-professional-calculator][data-current-step='3']
+  .professional-hero__controls {
+  display: block;
+  padding-top: 0.3rem;
+}
+
+.calculator-page--professional
+  [data-professional-calculator][data-current-step='3']
+  .wizard-progress {
+  max-width: 44rem;
+  margin-inline: auto;
+}
+
 @media (max-width: 1100px) {
   .pro-result-finance {
     grid-template-columns: minmax(11.5rem, 0.8fr) minmax(0, 3.2fr);
@@ -1521,6 +1572,7 @@
 
 @media (max-width: 860px) {
   .pro-result-hero {
+    grid-template-columns: 1fr;
     min-height: 28rem;
     background:
       linear-gradient(
@@ -1533,6 +1585,20 @@
       url('/images/professional-results-house.png') center / cover;
   }
 
+  .pro-result-hero__metrics,
+  .pro-result-hero-actions {
+    grid-column: 1;
+    width: 100%;
+  }
+
+  .pro-result-hero__metrics {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .pro-result-hero__roof-status {
+    display: none;
+  }
+
   .pro-result-finance {
     grid-template-columns: 1fr;
   }
@@ -1543,8 +1609,35 @@
 }
 
 @media (max-width: 620px) {
+  .calculator-page--professional
+    [data-professional-calculator][data-current-step='3']
+    .wizard-progress {
+    margin-bottom: 0.25rem;
+  }
+
+  .calculator-page--professional
+    [data-professional-calculator][data-current-step='3']
+    .wizard-progress::before {
+    top: 1.22rem;
+  }
+
+  .calculator-page--professional
+    [data-professional-calculator][data-current-step='3']
+    .wizard-progress
+    button {
+    min-height: 2.7rem;
+  }
+
+  .calculator-page--professional
+    [data-professional-calculator][data-current-step='3']
+    .wizard-progress
+    button
+    strong {
+    display: none;
+  }
+
   .pro-result-hero {
-    min-height: 37rem;
+    min-height: 0;
   }
 
   .pro-result-production__heading {
@@ -1553,6 +1646,10 @@
   }
 
   .pro-result-finance__metrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .pro-result-hero__metrics {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 

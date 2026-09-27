@@ -422,6 +422,14 @@ export const createCalculatorResultsView = ({
         kind: 'power'
       }),
       overviewMetric({
+        label: resultsCopy.metrics?.panelCount ?? 'Panel count',
+        value: `${format(scenario.system?.panelCount, locale)} ${
+          resultsCopy.panelsUnit ?? 'panels'
+        }`,
+        icon: 'electrical-panel',
+        kind: 'panels'
+      }),
+      overviewMetric({
         label:
           resultsCopy.metrics?.annualProduction ?? wizard.metrics?.annualGeneration ?? 'kWh/year',
         value: `${format(scenario.generation?.annualKwh, locale)} ${
