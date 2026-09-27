@@ -24,8 +24,10 @@ import { createAsyncRequestLifecycle } from './async-request-lifecycle.js';
 import { createCalculatorSession } from './calculator-session.js';
 import { buildProfessionalLeadContext, validateProfessionalLeadForm } from './professional-lead.js';
 import {
+  completeProfessionalRoofInput,
   createProfessionalAnalysisIdentity,
-  isRestorableProfessionalAnalysis
+  isRestorableProfessionalAnalysis,
+  mergeProfessionalRoofInput
 } from './professional-analysis-identity.js';
 import { localitiesForRegion, localityCenter } from '../data/locations/armenia.js';
 import { createEquipmentCatalog } from '../data/equipment/showroom/catalog.js';
@@ -248,11 +250,22 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
   const recommendedPanelSystem = getDefaultCalculatorSystem();
   const recommendedPanelId = recommendedPanelSystem?.equipment?.panelId ?? null;
   const savedStorageRequired = savedSession.storageRequired === true;
+  const savedRoofForIdentity = completeProfessionalRoofInput(savedSession.roof, {
+    areaMethod: activeAreaMethod(root),
+    mountingMode: activeMountingMode(root),
+    projectedAreaSqm: savedSession.roof?.areaSqm ?? null,
+    planeAreaSqm: number(roofPlaneArea?.value, 0),
+    tiltDegrees: number(roofTilt?.value, 0, 90),
+    azimuthDegrees:
+      roofOrientation?.value === 'custom'
+        ? number(roofOrientationCustomInput?.value, 0, 359)
+        : number(roofOrientation?.value, 0, 359)
+  });
   const savedProfessionalIdentity = createProfessionalAnalysisIdentity({
     property: savedSession.property?.coordinates,
     consumption: savedSession.consumption,
     tariff: savedSession.userTariff,
-    roof: savedSession.roof,
+    roof: savedRoofForIdentity,
     system: { capacityKwp: PVGIS_KWP, lossPercent: PVGIS_LOSS },
     panelId: recommendedPanelId,
     storageRequired: savedStorageRequired,
@@ -1101,15 +1114,7 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
     if (roofPlaneArea) roofPlaneArea.disabled = !measured;
     if (roofOrientationCustom) roofOrientationCustom.hidden = roofOrientation?.value !== 'custom';
     const roof = roofGeometry();
-    state.roof = {
-      ...(state.roof ?? {}),
-      areaMethod: roof.areaMethod,
-      mountingMode: roof.mountingMode,
-      projectedAreaSqm: roof.projectedAreaSqm,
-      planeAreaSqm: roof.planeAreaSqm,
-      tiltDegrees: roof.tiltDegrees,
-      orientationDegrees: roof.azimuthDegrees
-    };
+    state.roof = mergeProfessionalRoofInput(state.roof, roof);
     updateRoofAreaSummary();
     if (!preserveValidation) clearRoofValidation();
     if (!preserveAnalysis) clearAnalysis();
@@ -1165,6 +1170,10 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
     state.consumption = consumption.value;
     state.userTariff = consumption.tariff;
     const payload = buildPayload();
+    // Persist every roof value used in this exact request. Without this,
+    // untouched default controls are absent from a freshly drawn map outline,
+    // so the cached result cannot pass the refresh-time identity check.
+    state.roof = mergeProfessionalRoofInput(state.roof, payload.roof);
     const fingerprint = JSON.stringify(payload);
     const remaining =
       lastAnalysis?.fingerprint === fingerprint

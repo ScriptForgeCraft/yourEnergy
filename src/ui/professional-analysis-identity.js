@@ -37,6 +37,66 @@ const normalizedRoof = (roof) => {
 };
 
 /**
+ * Keep the map outline alongside the exact technical roof inputs sent to the
+ * analysis endpoint. A newly drawn outline initially contains only its
+ * points, area and completion state, while the direction and tilt can still
+ * be untouched default controls. Saving just that outline made a completed
+ * result fail its input-identity check after a page refresh.
+ */
+export const mergeProfessionalRoofInput = (currentRoof, inputRoof) => {
+  const stored =
+    currentRoof !== null && typeof currentRoof === 'object' && !Array.isArray(currentRoof)
+      ? currentRoof
+      : {};
+  const input =
+    inputRoof !== null && typeof inputRoof === 'object' && !Array.isArray(inputRoof)
+      ? inputRoof
+      : {};
+
+  return {
+    ...stored,
+    areaMethod: input.areaMethod ?? null,
+    mountingMode: input.mountingMode ?? null,
+    projectedAreaSqm: input.projectedAreaSqm ?? null,
+    planeAreaSqm: input.planeAreaSqm ?? null,
+    tiltDegrees: input.tiltDegrees ?? null,
+    orientationDegrees: input.azimuthDegrees ?? input.orientationDegrees ?? null
+  };
+};
+
+/**
+ * Earlier session records may contain a completed map outline without the
+ * unchanged form defaults. Fill only those missing values so an otherwise
+ * valid result remains available after this fix is deployed.
+ */
+export const completeProfessionalRoofInput = (currentRoof, fallbackRoof) => {
+  const stored =
+    currentRoof !== null && typeof currentRoof === 'object' && !Array.isArray(currentRoof)
+      ? currentRoof
+      : {};
+  const fallback =
+    fallbackRoof !== null && typeof fallbackRoof === 'object' && !Array.isArray(fallbackRoof)
+      ? fallbackRoof
+      : {};
+
+  return {
+    ...stored,
+    areaMethod: stored.areaMethod ?? fallback.areaMethod ?? null,
+    mountingMode: stored.mountingMode ?? fallback.mountingMode ?? null,
+    projectedAreaSqm:
+      stored.projectedAreaSqm ?? stored.areaSqm ?? fallback.projectedAreaSqm ?? fallback.areaSqm ?? null,
+    planeAreaSqm: stored.planeAreaSqm ?? fallback.planeAreaSqm ?? null,
+    tiltDegrees: stored.tiltDegrees ?? fallback.tiltDegrees ?? null,
+    orientationDegrees:
+      stored.orientationDegrees ??
+      stored.azimuthDegrees ??
+      fallback.azimuthDegrees ??
+      fallback.orientationDegrees ??
+      null
+  };
+};
+
+/**
  * A stable representation of every Professional Calculator value sent to the
  * engineering endpoint. It is deliberately separate from the result itself:
  * a result can only be restored when its stored identity still matches the

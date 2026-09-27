@@ -3,8 +3,10 @@ import test from 'node:test';
 import { ANALYSIS_SCHEMA_VERSION } from '../src/domain/solar-analysis.js';
 import { createCalculatorSession } from '../src/ui/calculator-session.js';
 import {
+  completeProfessionalRoofInput,
   createProfessionalAnalysisIdentity,
-  isRestorableProfessionalAnalysis
+  isRestorableProfessionalAnalysis,
+  mergeProfessionalRoofInput
 } from '../src/ui/professional-analysis-identity.js';
 
 const sessionStorage = () => {
@@ -77,6 +79,42 @@ test('Professional roof identity treats null and invalid roof values as empty', 
   for (const roof of [null, undefined, false, 42, 'invalid', []]) {
     assert.deepEqual(JSON.parse(createProfessionalAnalysisIdentity({ roof })).roof, neutralRoof);
   }
+});
+
+test('a completed Professional result retains untouched roof controls through refresh', () => {
+  const inputs = professionalInputs();
+  const submittedRoof = {
+    areaMethod: 'map-projected',
+    mountingMode: 'roof-parallel',
+    projectedAreaSqm: 95,
+    planeAreaSqm: null,
+    polygonComplete: true,
+    tiltDegrees: 25,
+    azimuthDegrees: 180
+  };
+  // A map change contains geometry only until a roof control is changed. This
+  // is the real shape that used to be written before the first calculation.
+  const freshlyDrawnRoof = {
+    points: [
+      { lat: 40.177, lng: 44.503 },
+      { lat: 40.1771, lng: 44.503 },
+      { lat: 40.177, lng: 44.5031 }
+    ],
+    areaSqm: 95,
+    complete: true
+  };
+  const persistedRoof = mergeProfessionalRoofInput(freshlyDrawnRoof, submittedRoof);
+  const restoredLegacyRoof = completeProfessionalRoofInput(freshlyDrawnRoof, submittedRoof);
+  const requestIdentity = createProfessionalAnalysisIdentity({ ...inputs, roof: submittedRoof });
+  const restoredIdentity = createProfessionalAnalysisIdentity({ ...inputs, roof: persistedRoof });
+
+  assert.equal(restoredIdentity, requestIdentity);
+  assert.equal(
+    createProfessionalAnalysisIdentity({ ...inputs, roof: restoredLegacyRoof }),
+    requestIdentity
+  );
+  assert.deepEqual(persistedRoof.points, freshlyDrawnRoof.points);
+  assert.equal(persistedRoof.complete, true);
 });
 
 test('a pre-correction Quick result is discarded while shared inputs remain reusable', () => {
