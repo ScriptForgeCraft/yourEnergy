@@ -6,6 +6,7 @@ const SUPPORTED_LOCALES = new Set(['hy', 'ru', 'en']);
 const ANALYSIS_ID = /^[A-Za-z0-9_-]{1,96}$/;
 const TELEGRAM_MESSAGE_LIMIT = 4_096;
 const DELIVERY_CHANNELS = Object.freeze(['telegram', 'email']);
+const ENGINEER_LOCALE = 'hy-AM';
 
 const normalizeText = (value) =>
   typeof value === 'string' ? value.replace(/\s+/g, ' ').trim() : '';
@@ -277,16 +278,15 @@ const leadDeliveryErrorForResponse = (response) =>
 const truncateTelegramMessage = (message) => {
   const characters = Array.from(message);
   if (characters.length <= TELEGRAM_MESSAGE_LIMIT) return message;
-  const notice = '\n\n[Message truncated; full text is in the email.]';
+  const notice = '\n\n[Հաղորդագրությունը կրճատվել է։ Ամբողջական տեքստը էլ. փոստում է։]';
   return `${characters.slice(0, TELEGRAM_MESSAGE_LIMIT - notice.length).join('')}${notice}`;
 };
 
-const localeForFormatting = (locale) =>
-  locale === 'ru' ? 'ru-RU' : locale === 'hy' ? 'hy-AM' : 'en-US';
-
-const formatNumber = (value, locale, maximumFractionDigits = 0) =>
+// Engineer notifications are always written and formatted in Armenian; the
+// visitor locale is retained only as a contact preference in the message.
+const formatNumber = (value, _visitorLocale, maximumFractionDigits = 0) =>
   Number.isFinite(Number(value))
-    ? new Intl.NumberFormat(localeForFormatting(locale), { maximumFractionDigits }).format(value)
+    ? new Intl.NumberFormat(ENGINEER_LOCALE, { maximumFractionDigits }).format(value)
     : null;
 
 const field = (lines, label, value) => {
@@ -297,52 +297,85 @@ const field = (lines, label, value) => {
 const section = (lines, title) => lines.push('', title);
 
 const modeLabel = (mode) =>
-  ({ bill: 'monthly bill', usage: 'monthly kWh', monthly: 'monthly profile' })[mode] ?? mode;
+  ({
+    bill: 'Միջին ամսական հաշիվ',
+    usage: 'Միջին ամսական սպառում',
+    monthly: 'Ամսական սպառման պրոֆիլ'
+  })[mode] ?? mode;
 
 const roofAreaMethodLabel = (method) =>
-  ({ 'map-projected': 'map outline', 'measured-plane': 'measured roof plane' })[method] ?? method;
+  ({
+    'map-projected': 'Քարտեզով ուրվագծում',
+    'measured-plane': 'Չափված տանիքի հարթություն'
+  })[method] ?? method;
 
 const mountingModeLabel = (mode) =>
-  ({ 'roof-parallel': 'parallel to roof', elevated: 'elevated structure' })[mode] ?? mode;
+  ({ 'roof-parallel': 'Տանիքին զուգահեռ', elevated: 'Բարձրացված կառուցվածք' })[mode] ?? mode;
+
+const regionLabel = (region) =>
+  ({
+    yerevan: 'Երևան',
+    aragatsotn: 'Արագածոտն',
+    ararat: 'Արարատ',
+    armavir: 'Արմավիր',
+    gegharkunik: 'Գեղարքունիք',
+    kotayk: 'Կոտայք',
+    lori: 'Լոռի',
+    shirak: 'Շիրակ',
+    syunik: 'Սյունիք',
+    tavush: 'Տավուշ',
+    'vayots-dzor': 'Վայոց ձոր'
+  })[region] ?? region;
+
+const scenarioLabel = (scenario) =>
+  ({ conservative: 'Զգուշավոր', balanced: 'Հավասարակշռված', maximum: 'Առավելագույն' })[
+    scenario
+  ] ?? scenario;
+
+const scopeLabel = (scope) =>
+  ({
+    'regional-preliminary': 'Տարածաշրջանային նախնական հաշվարկ',
+    'manual-roof-plane': 'Ձեռքով մուտքագրված տանիքի հարթություն'
+  })[scope] ?? scope;
 
 const formatQuickCalculatorContext = (context, locale) => {
-  const lines = ['Quick Calculator summary'];
-  field(lines, 'Region', context.region);
+  const lines = ['Արագ հաշվիչի ամփոփում'];
+  field(lines, 'Տարածաշրջան', regionLabel(context.region));
   if (context.consumption) {
-    section(lines, 'Consumption');
-    field(lines, 'Input', modeLabel(context.consumption.mode));
+    section(lines, 'Սպառում');
+    field(lines, 'Մուտքագրման եղանակ', modeLabel(context.consumption.mode));
     field(
       lines,
-      'Average monthly bill',
+      'Միջին ամսական հաշիվ',
       context.consumption.averageMonthlyBillAmd === undefined
         ? null
         : `${formatNumber(context.consumption.averageMonthlyBillAmd, locale)} AMD`
     );
     field(
       lines,
-      'Average monthly consumption',
+      'Միջին ամսական սպառում',
       context.consumption.averageMonthlyKwh === undefined
         ? null
         : `${formatNumber(context.consumption.averageMonthlyKwh, locale)} kWh`
     );
     field(
       lines,
-      'Annual consumption',
+      'Տարեկան սպառում',
       context.consumption.annualKwh === undefined
         ? null
         : `${formatNumber(context.consumption.annualKwh, locale)} kWh`
     );
   }
-  section(lines, 'Preliminary result');
-  field(lines, 'Scenario', context.selectedScenario);
+  section(lines, 'Նախնական արդյունք');
+  field(lines, 'Սցենար', scenarioLabel(context.selectedScenario));
   field(
     lines,
-    'Recommended power',
+    'Առաջարկվող հզորություն',
     context.capacityKwp === undefined ? null : `${formatNumber(context.capacityKwp, locale, 2)} kWp`
   );
   field(
     lines,
-    'Annual generation',
+    'Տարեկան արտադրանք',
     context.annualGenerationKwh === undefined
       ? null
       : `${formatNumber(context.annualGenerationKwh, locale)} kWh`
@@ -350,56 +383,56 @@ const formatQuickCalculatorContext = (context, locale) => {
   if (context.budgetRangeAmd) {
     field(
       lines,
-      'Preliminary budget range',
+      'Նախնական բյուջեի միջակայք',
       `${formatNumber(context.budgetRangeAmd.p25, locale)}–${formatNumber(
         context.budgetRangeAmd.p75,
         locale
       )} AMD`
     );
   }
-  field(lines, 'Solar data source', context.source);
-  field(lines, 'Scope', context.scope);
+  field(lines, 'Արևային տվյալների աղբյուր', context.source);
+  field(lines, 'Հաշվարկի շրջանակ', scopeLabel(context.scope));
   return lines;
 };
 
 const formatProfessionalCalculatorContext = (context, locale) => {
-  const lines = ['Professional Calculator report'];
+  const lines = ['Մասնագիտական հաշվիչի հաշվետվություն'];
   const { property, consumption, roof, result, equipment } = context;
 
-  section(lines, 'Property');
-  field(lines, 'Address / note', property.address);
+  section(lines, 'Օբյեկտ');
+  field(lines, 'Հասցե / նշում', property.address);
   if (property.latitude !== null && property.longitude !== null) {
     field(
       lines,
-      'Coordinates',
+      'Կոորդինատներ',
       `${formatNumber(property.latitude, locale, 5)}, ${formatNumber(property.longitude, locale, 5)}`
     );
   }
 
-  section(lines, 'Entered consumption');
-  field(lines, 'Input method', modeLabel(consumption.mode));
+  section(lines, 'Մուտքագրված սպառում');
+  field(lines, 'Մուտքագրման եղանակ', modeLabel(consumption.mode));
   field(
     lines,
-    'Average monthly bill',
+    'Միջին ամսական հաշիվ',
     consumption.averageMonthlyBillAmd === null
       ? null
       : `${formatNumber(consumption.averageMonthlyBillAmd, locale)} AMD`
   );
   field(
     lines,
-    'Average monthly consumption',
+    'Միջին ամսական սպառում',
     consumption.averageMonthlyKwh === null
       ? null
       : `${formatNumber(consumption.averageMonthlyKwh, locale)} kWh`
   );
   field(
     lines,
-    'Annual consumption',
+    'Տարեկան սպառում',
     consumption.annualKwh === null ? null : `${formatNumber(consumption.annualKwh, locale)} kWh`
   );
   field(
     lines,
-    'Electricity tariff',
+    'Էլեկտրաէներգիայի սակագին',
     context.tariffAmdPerKwh === null
       ? null
       : `${formatNumber(context.tariffAmdPerKwh, locale, 2)} AMD/kWh`
@@ -407,47 +440,47 @@ const formatProfessionalCalculatorContext = (context, locale) => {
   if (consumption.monthlyKwh) {
     field(
       lines,
-      'Monthly consumption profile',
+      'Ամսական սպառման պրոֆիլ',
       consumption.monthlyKwh
         .map((value, index) => `${index + 1}: ${formatNumber(value, locale)} kWh`)
         .join(' · ')
     );
   }
 
-  section(lines, 'Roof');
-  field(lines, 'Area method', roofAreaMethodLabel(roof.areaMethod));
+  section(lines, 'Տանիք');
+  field(lines, 'Մակերեսի չափման եղանակ', roofAreaMethodLabel(roof.areaMethod));
   field(
     lines,
-    'Roof area used for sizing',
+    'Հաշվարկում օգտագործված տանիքի մակերես',
     roof.areaSqm === null ? null : `${formatNumber(roof.areaSqm, locale, 1)} m²`
   );
   field(
     lines,
-    'Projected map area',
+    'Քարտեզով հաշվարկված մակերես',
     roof.projectedAreaSqm === null ? null : `${formatNumber(roof.projectedAreaSqm, locale, 1)} m²`
   );
   field(
     lines,
-    'Measured roof-plane area',
+    'Չափված տանիքի մակերես',
     roof.planeAreaSqm === null ? null : `${formatNumber(roof.planeAreaSqm, locale, 1)} m²`
   );
   field(
     lines,
-    'Orientation',
+    'Կողմնորոշում',
     roof.azimuthDegrees === null ? null : `${formatNumber(roof.azimuthDegrees, locale)}°`
   );
   field(
     lines,
-    'Tilt',
+    'Թեքություն',
     roof.tiltDegrees === null ? null : `${formatNumber(roof.tiltDegrees, locale)}°`
   );
-  field(lines, 'Mounting approach', mountingModeLabel(roof.mountingMode));
-  field(lines, 'Storage / backup requested', context.storageRequested ? 'Yes' : 'No');
+  field(lines, 'Տեղադրման եղանակ', mountingModeLabel(roof.mountingMode));
+  field(lines, 'Պահուստային սնուցում է պահանջվում', context.storageRequested ? 'Այո' : 'Ոչ');
   if (roof.outlinePoints) {
-    field(lines, 'Roof outline', `${roof.outlinePoints.length} points`);
+    field(lines, 'Տանիքի ուրվագիծ', `${roof.outlinePoints.length} կետ`);
     field(
       lines,
-      'Outline coordinates',
+      'Ուրվագծի կոորդինատներ',
       roof.outlinePoints
         .map(
           (point, index) =>
@@ -457,84 +490,84 @@ const formatProfessionalCalculatorContext = (context, locale) => {
     );
   }
 
-  section(lines, 'Calculated result');
+  section(lines, 'Հաշվարկի արդյունք');
   field(
     lines,
-    'Solar potential',
+    'Արևային ներուժ',
     result.solarYieldKwhPerKwp === null
       ? null
-      : `${formatNumber(result.solarYieldKwhPerKwp, locale)} kWh/kWp per year`
+      : `${formatNumber(result.solarYieldKwhPerKwp, locale)} kWh/kWp տարեկան`
   );
   field(
     lines,
-    'Recommended power',
+    'Առաջարկվող հզորություն',
     result.capacityKwp === null ? null : `${formatNumber(result.capacityKwp, locale, 2)} kWp`
   );
   field(
     lines,
-    'Panels',
+    'Վահանակներ',
     result.panelCount === null || result.panelWatts === null
       ? null
       : `${formatNumber(result.panelCount, locale)} × ${formatNumber(result.panelWatts, locale)} W`
   );
   field(
     lines,
-    'Annual generation',
+    'Տարեկան արտադրանք',
     result.annualGenerationKwh === null
       ? null
       : `${formatNumber(result.annualGenerationKwh, locale)} kWh`
   );
   field(
     lines,
-    'Consumption coverage',
+    'Սպառման ծածկույթ',
     result.coveragePercent === null ? null : `${formatNumber(result.coveragePercent, locale, 1)}%`
   );
   field(
     lines,
-    'Covered consumption',
+    'Ծածկված սպառում',
     result.coveredConsumptionKwh === null
       ? null
       : `${formatNumber(result.coveredConsumptionKwh, locale)} kWh`
   );
   field(
     lines,
-    'Surplus generation',
+    'Արտադրված ավելցուկ',
     result.surplusGenerationKwh === null
       ? null
       : `${formatNumber(result.surplusGenerationKwh, locale)} kWh`
   );
   field(
     lines,
-    'Estimated annual savings',
+    'Գնահատված տարեկան խնայողություն',
     result.annualSavingsAmd === null ? null : `${formatNumber(result.annualSavingsAmd, locale)} AMD`
   );
   field(
     lines,
-    'CO₂ reduction',
+    'CO₂-ի կրճատում',
     result.avoidedCo2Tons === null
       ? null
-      : `${formatNumber(result.avoidedCo2Tons, locale, 2)} t/year`
+      : `${formatNumber(result.avoidedCo2Tons, locale, 2)} տ/տարի`
   );
-  field(lines, 'Solar data source', result.source);
+  field(lines, 'Արևային տվյալների աղբյուր', result.source);
   if (result.monthlyGenerationKwh) {
     field(
       lines,
-      'Monthly generation',
+      'Ամսական արտադրանք',
       result.monthlyGenerationKwh
         .map((value, index) => `${index + 1}: ${formatNumber(value, locale)} kWh`)
         .join(' · ')
     );
   }
 
-  section(lines, 'Recommended equipment');
-  field(lines, 'Solar module', equipment.solarModule);
-  field(lines, 'Inverter', equipment.inverter);
-  field(lines, 'Storage', equipment.storage);
-  field(lines, 'Mounting', equipment.mounting);
+  section(lines, 'Առաջարկվող սարքավորում');
+  field(lines, 'Արևային մոդուլ', equipment.solarModule);
+  field(lines, 'Ինվերտոր', equipment.inverter);
+  field(lines, 'Կուտակիչ', equipment.storage);
+  field(lines, 'Կառուցվածք', equipment.mounting);
   field(
     lines,
-    'Uploaded bill file',
-    context.billFileName ? `${context.billFileName} (not attached)` : null
+    'Վերբեռնված հաշվի ֆայլ',
+    context.billFileName ? `${context.billFileName} (կցված չէ)` : null
   );
   return lines;
 };
@@ -543,16 +576,16 @@ const formatProfessionalCalculatorContext = (context, locale) => {
 const formatLeadMessage = (lead) => {
   const isProfessional = lead.calculatorContext?.type === 'professional';
   const lines = [
-    isProfessional ? 'New YourEnergy Professional Calculator request' : 'New YourEnergy lead',
+    isProfessional ? 'Նոր հայտ՝ YourEnergy մասնագիտական հաշվիչից' : 'Նոր դիմում՝ YourEnergy կայքից',
     '',
-    'Contact',
-    `• Name: ${lead.name}`,
-    `• Phone: ${lead.phone}`,
-    `• Email: ${lead.email ?? 'Not provided'}`,
-    `• Language: ${lead.locale}`
+    'Կոնտակտային տվյալներ',
+    `• Անուն: ${lead.name}`,
+    `• Հեռախոս: ${lead.phone}`,
+    `• Էլ. փոստ: ${lead.email ?? 'Նշված չէ'}`,
+    `• Նախընտրած լեզու: ${{ hy: 'Հայերեն', ru: 'Ռուսերեն', en: 'Անգլերեն' }[lead.locale]}`
   ];
 
-  if (lead.analysisId) field(lines, 'Analysis ID', lead.analysisId);
+  if (lead.analysisId) field(lines, 'Վերլուծության նույնացուցիչ', lead.analysisId);
   if (lead.calculatorContext) {
     lines.push(
       '',
@@ -562,7 +595,7 @@ const formatLeadMessage = (lead) => {
     );
   }
   if (lead.message) {
-    section(lines, 'Customer message');
+    section(lines, 'Հաճախորդի հաղորդագրություն');
     lines.push(lead.message);
   }
   return lines.join('\n');
@@ -644,8 +677,8 @@ const createEmailAdapter = (env, { fetchImpl = fetch } = {}) => {
             from,
             subject:
               lead.calculatorContext?.type === 'professional'
-                ? 'New YourEnergy Professional Calculator request'
-                : 'New YourEnergy lead',
+                ? 'Նոր հայտ՝ YourEnergy մասնագիտական հաշվիչից'
+                : 'Նոր դիմում՝ YourEnergy կայքից',
             text: leadText,
             ...(lead.email ? { reply_to: lead.email } : {})
           })

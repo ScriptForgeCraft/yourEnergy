@@ -748,7 +748,7 @@ test('lead endpoint sends the same normalized Quick Calculator lead to Telegram 
       phone: '+374 91 095950',
       email: 'arman@example.test',
       message: 'Please call after 18:00',
-      locale: 'ru-RU',
+      locale: 'en-US',
       calculatorContext: {
         region: 'yerevan',
         consumption: { mode: 'usage', averageMonthlyKwh: 850, annualKwh: 10_200 },
@@ -786,10 +786,10 @@ test('lead endpoint sends the same normalized Quick Calculator lead to Telegram 
   );
   assert.equal(telegramRequests.length, 1);
   assert.equal(telegramRequests[0].payload.chat_id, leadDeliveryEnv.TELEGRAM_CHAT_ID);
-  assert.match(telegramRequests[0].payload.text, /Name: Arman Petrosyan/);
-  assert.match(telegramRequests[0].payload.text, /Phone: \+374 91 095950/);
-  assert.match(telegramRequests[0].payload.text, /Email: arman@example\.test/);
-  assert.match(telegramRequests[0].payload.text, /Language: ru/);
+  assert.match(telegramRequests[0].payload.text, /Անուն: Arman Petrosyan/);
+  assert.match(telegramRequests[0].payload.text, /Հեռախոս: \+374 91 095950/);
+  assert.match(telegramRequests[0].payload.text, /Էլ\. փոստ: arman@example\.test/);
+  assert.match(telegramRequests[0].payload.text, /Նախընտրած լեզու: Անգլերեն/);
 
   const emailRequest = received.find(({ url }) => url.startsWith('https://api.cloudflare.com/'));
   assert.equal(
@@ -802,13 +802,16 @@ test('lead endpoint sends the same normalized Quick Calculator lead to Telegram 
   assert.equal(emailRequest.payload.reply_to, 'arman@example.test');
   assert.equal('replyTo' in emailRequest.payload, false);
   assert.equal(emailRequest.payload.text, telegramRequests[0].payload.text);
-  assert.match(emailRequest.payload.text, /Quick Calculator summary/);
+  assert.match(emailRequest.payload.text, /Արագ հաշվիչի ամփոփում/);
   assert.match(emailRequest.payload.text, /Please call after 18:00/);
   assert.equal(emailRequest.payload.text.includes('coordinates'), false);
   assert.equal(emailRequest.payload.text.includes('"roof"'), false);
   assert.equal(emailRequest.payload.text.includes('"tariff"'), false);
-  assert.match(emailRequest.payload.text, /Region: yerevan/);
-  assert.match(emailRequest.payload.text, /Annual generation: 10\D*440 kWh/);
+  assert.match(emailRequest.payload.text, /Տարածաշրջան: Երևան/);
+  assert.match(emailRequest.payload.text, /Սցենար: Հավասարակշռված/);
+  assert.match(emailRequest.payload.text, /Հաշվարկի շրջանակ: Տարածաշրջանային նախնական հաշվարկ/);
+  assert.match(emailRequest.payload.text, /Տարեկան արտադրանք: 10\D*440 kWh/);
+  assert.doesNotMatch(emailRequest.payload.text, /Quick Calculator summary|Annual generation/);
   assert.doesNotMatch(emailRequest.payload.text, /"annualGenerationKwh"/);
 });
 
@@ -882,19 +885,20 @@ test('lead endpoint sends a readable Professional Calculator report with submitt
   assert.equal(body.data.accepted, true);
   const telegram = received.find(({ url }) => url.startsWith('https://api.telegram.org/'));
   const email = received.find(({ url }) => url.startsWith('https://api.cloudflare.com/'));
-  assert.equal(email.payload.subject, 'New YourEnergy Professional Calculator request');
+  assert.equal(email.payload.subject, 'Նոր հայտ՝ YourEnergy մասնագիտական հաշվիչից');
   assert.equal(email.payload.text, telegram.payload.text);
-  assert.match(email.payload.text, /Professional Calculator report/);
-  assert.match(email.payload.text, /Property/);
+  assert.match(email.payload.text, /Մասնագիտական հաշվիչի հաշվետվություն/);
+  assert.match(email.payload.text, /Օբյեկտ/);
   assert.match(email.payload.text, /Arabkir, Yerevan/);
-  assert.match(email.payload.text, /Entered consumption/);
-  assert.match(email.payload.text, /Roof outline: 3 points/);
-  assert.match(email.payload.text, /Calculated result/);
+  assert.match(email.payload.text, /Մուտքագրված սպառում/);
+  assert.match(email.payload.text, /Տանիքի ուրվագիծ: 3 կետ/);
+  assert.match(email.payload.text, /Հաշվարկի արդյունք/);
   assert.match(email.payload.text, /11 × 650 W/);
-  assert.match(email.payload.text, /Recommended equipment/);
+  assert.match(email.payload.text, /Առաջարկվող սարքավորում/);
   assert.match(email.payload.text, /LONGi Hi-MO X10 Guardian/);
-  assert.match(email.payload.text, /electricity-bill\.pdf \(not attached\)/);
-  assert.match(email.payload.text, /Customer message/);
+  assert.match(email.payload.text, /electricity-bill\.pdf \(կցված չէ\)/);
+  assert.match(email.payload.text, /Հաճախորդի հաղորդագրություն/);
+  assert.doesNotMatch(email.payload.text, /Professional Calculator report|Recommended equipment/);
   assert.doesNotMatch(email.payload.text, /"monthlyGenerationKwh"/);
 });
 

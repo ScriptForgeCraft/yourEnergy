@@ -1,6 +1,4 @@
-
-
-const dialog = document.querySelector('.meeting-dialog');
+const dialog = typeof document === 'undefined' ? null : document.querySelector('.meeting-dialog');
 const content = dialog?.querySelector('.meeting-dialog__content');
 
 const updateMeetingScrollbar = () => {
@@ -50,6 +48,8 @@ const updateMeetingScrollbar = () => {
 
 content?.addEventListener('scroll', updateMeetingScrollbar);
 
-window.addEventListener('resize', updateMeetingScrollbar);
+if (typeof window !== 'undefined') {
+  window.addEventListener('resize', updateMeetingScrollbar);
+}
 
 updateMeetingScrollbar();

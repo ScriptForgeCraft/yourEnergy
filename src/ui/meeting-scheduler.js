@@ -162,6 +162,16 @@ const formatDate = (date, locale) =>
   }).format(date);
 const capitalize = (value) => value.charAt(0).toLocaleUpperCase() + value.slice(1);
 
+// The notification is operational copy for the engineer, not visitor-facing
+// copy, so it stays Armenian even when the page uses another language.
+export const buildEngineerMeetingMessage = (date, time) =>
+  [
+    'Հանդիպման հայտ',
+    `• Ամսաթիվ: ${formatDate(date, 'hy-AM')}`,
+    `• Ժամ: ${time}`,
+    '• Ձևաչափ: Առցանց կամ գրասենյակում'
+  ].join('\n');
+
 export const initMeetingScheduler = ({ config = {} } = {}) => {
   const dialog = document.querySelector('[data-meeting-dialog]');
   const triggers = document.querySelectorAll('[data-meeting-open]');
@@ -438,11 +448,7 @@ export const initMeetingScheduler = ({ config = {} } = {}) => {
     contactStep.setAttribute('aria-busy', 'true');
     setStatus(copy.sending);
 
-    const meetingMessage = buildMeetingMessage(
-      copy.message ?? '',
-      formatDate(selectedDate, locale),
-      selectedTime
-    );
+    const meetingMessage = buildEngineerMeetingMessage(selectedDate, selectedTime);
 
     try {
       await api.submitLead(

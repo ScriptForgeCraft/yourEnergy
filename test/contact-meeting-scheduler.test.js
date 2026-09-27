@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 
 import {
+  buildEngineerMeetingMessage,
   buildMeetingMessage,
   getMeetingSlots,
   isMeetingDateAvailable
@@ -40,4 +41,13 @@ test('meeting scheduler substitutes the selected date and time into the lead mes
     buildMeetingMessage('Meeting: {date}, {time}.', 'Tuesday, 29 September 2026', '10:00'),
     'Meeting: Tuesday, 29 September 2026, 10:00.'
   );
+});
+
+test('meeting notifications use Armenian operational copy', () => {
+  const message = buildEngineerMeetingMessage(new Date(2026, 8, 29), '10:00');
+
+  assert.match(message, /Հանդիպման հայտ/);
+  assert.match(message, /Ամսաթիվ/);
+  assert.match(message, /երեքշաբթի/);
+  assert.doesNotMatch(message, /Tuesday/);
 });
