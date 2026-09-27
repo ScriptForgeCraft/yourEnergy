@@ -343,45 +343,25 @@ export const createCalculatorResultsView = ({
         })
       );
     }
-    const mounting = recommendation?.mounting;
-    if (mounting?.productId) {
-      cards.push(
-        equipmentCard({
-          title: wizard.mountingHardwareTitle ?? 'Mounting recommendation',
-          recommendation: mounting,
-          value: `${format(mounting.practicalInclinationDeg, locale, { maximumFractionDigits: 1 })}° · ${mounting.installationType === 'elevated' ? (wizard.elevated ?? 'Elevated structure') : (wizard.parallel ?? 'Parallel to roof')}`,
-          reason:
-            wizard.mountingHardwareReason ??
-            'The catalog-supported inclination nearest the calculated optimum was selected.'
-        })
-      );
-    }
-    const storage = recommendation?.storage;
-    if (storage?.status === 'sized' && storage.productId) {
-      cards.push(
-        equipmentCard({
-          title: wizard.storageRecommendationTitle ?? 'Battery / storage option',
-          recommendation: storage,
-          value: `${format(storage.selectedUsableCapacityKwh, locale, { maximumFractionDigits: 2 })} kWh · ${format(storage.moduleCount, locale)} ${wizard.storageModules ?? 'modules'}`,
-          reason:
-            wizard.storageSizingReason ??
-            'A whole module count was rounded up to cover the required usable capacity.'
-        })
-      );
-    }
-
     const availableCards = cards.filter(Boolean);
     if (!availableCards.length) return null;
     const section = element('section', 'pro-result-card pro-result-card--equipment');
+    const heading = element('div', 'pro-result-section-heading');
+    const icon = element('span', 'pro-result-section-heading__icon');
+    icon.append(resultIcon('electrical-panel'));
+    heading.append(
+      icon,
+      element('h3', '', wizard.results?.equipmentTitle ?? 'Recommended equipment')
+    );
     section.append(
-      element('h3', '', wizard.recommendedSystemTitle ?? 'Recommended system'),
-      ...availableCards,
+      heading,
       element(
         'p',
-        'pro-result-equipment__engineering-note',
-        wizard.equipmentPreliminaryCopy ??
-          'This selection is preliminary; an engineer confirms string design, electrical compatibility and site implementation.'
-      )
+        'pro-result-equipment__subtitle',
+        wizard.results?.equipmentCopy ??
+          'Preliminary selection. Final compatibility is confirmed by an engineer.'
+      ),
+      ...availableCards
     );
     return section;
   };
@@ -393,9 +373,7 @@ export const createCalculatorResultsView = ({
     const annualSavings = scenario.financial?.annualSavingsAmd;
     const annualConsumptionKwh = number(scenario.energyBalance?.annualConsumptionKwh, 0);
     const annualGenerationKwh = number(scenario.generation?.annualKwh, 0);
-    const surplusEnergyKwh = number(scenario.energyBalance?.surplusEnergyKwh, 0);
     const retailOffsetValueAmd = number(scenario.financial?.retailOffsetValueAmd, 0);
-    const surplusCompensationValueAmd = number(scenario.financial?.surplusCompensationValueAmd, 0);
     const displayedSavings = number(annualSavings, 0) ?? retailOffsetValueAmd;
     const savingsAreOffsetOnly = number(annualSavings, 0) === null && retailOffsetValueAmd !== null;
     const remainingGridDemandKwh =
@@ -537,16 +515,18 @@ export const createCalculatorResultsView = ({
         'lifetime'
       )
     );
-    financialSummary.append(financialHeading, financialValues);
-    if (displayedSavings === null) {
-      financialSummary.append(
-        element(
-          'p',
-          'pro-result-finance__notice',
-          wizard.tariffNeeded ?? 'Add your electricity tariff to see savings and payback.'
-        )
-      );
-    }
+    financialSummary.append(
+      financialHeading,
+      financialValues,
+      element(
+        'p',
+        'pro-result-finance__notice',
+        displayedSavings === null
+          ? (wizard.tariffNeeded ?? 'Add your electricity tariff to see savings and payback.')
+          : (resultsCopy.financialDisclaimer ??
+              'This is a preliminary estimate, not a commercial offer.')
+      )
+    );
     resultDashboard.append(financialSummary);
     if (annualConsumptionKwh !== null || annualGenerationKwh !== null) {
       const balance = element('section', 'pro-result-card pro-result-card--energy');
@@ -600,176 +580,29 @@ export const createCalculatorResultsView = ({
         )
       );
       balance.append(values, coverageMeter, breakdown);
-      if (retailOffsetValueAmd !== null)
-        balance.append(
-          element(
-            'p',
-            '',
-            `${wizard.retailOffsetSavings ?? 'Savings from covered consumption'}: ${text(
-              wizard.retailOffsetSavingsCopy ?? '≈ {value} AMD/year',
-              { value: format(retailOffsetValueAmd, locale) }
-            )}`
-          )
-        );
-      if (surplusEnergyKwh !== null && surplusEnergyKwh > 0) {
-        const surplusCopy =
-          surplusCompensationValueAmd === null
-            ? (wizard.surplusValueUnavailable ?? wizard.surplusCompensationUnavailableCopy)
-            : text(wizard.surplusCompensationValueCopy, {
-                surplus: format(surplusEnergyKwh, locale),
-                value: format(surplusCompensationValueAmd, locale)
-              });
-        balance.append(
-          element(
-            'p',
-            '',
-            surplusCompensationValueAmd === null
-              ? surplusCopy
-              : `${wizard.surplusCompensationValue ?? 'Surplus compensation'}: ${surplusCopy}`
-          )
-        );
-        balance.append(
-          element(
-            'small',
-            '',
-            wizard.annualNetSurplusHelp ??
-              'This compares annual totals; it is not an hourly export calculation.'
-          )
-        );
-      }
       resultDashboard.append(balance);
     }
-    const projectSummary = element('section', 'pro-result-details');
-    projectSummary.append(element('h3', '', wizard.projectSummaryTitle ?? 'Your project summary'));
-    const projectValues = element('dl', 'wizard-kpis');
-    const coordinates = analysis.property?.coordinates ?? state.confirmedProperty;
-    const referencePotential = state.sitePotential;
-    const consumptionMode = state.consumption?.mode;
-    const consumptionModeLabel = consumptionMode
-      ? (product.consumption?.modes?.[consumptionMode] ?? consumptionMode)
-      : '—';
-    const tariffRate = analysis.financial?.tariff?.rateAmdPerKwh ?? state.userTariff?.rateAmdPerKwh;
-    const roofMounting =
-      analysis.roof?.mountingMode === 'elevated'
-        ? (wizard.elevated ?? 'Elevated structure')
-        : (wizard.parallel ?? 'Roof parallel');
-    projectValues.append(
-      dashboardMetric(
-        wizard.projectLocation ?? 'Location',
-        state.addressNote ||
-          (coordinates
-            ? `${format(coordinates.lat, locale, { maximumFractionDigits: 5 })}, ${format(coordinates.lng, locale, { maximumFractionDigits: 5 })}`
-            : '—')
-      ),
-      dashboardMetric(
-        wizard.exactCoordinates ?? 'Coordinates',
-        coordinates
-          ? `${format(coordinates.lat, locale, { maximumFractionDigits: 5 })}, ${format(coordinates.lng, locale, { maximumFractionDigits: 5 })}`
-          : '—'
-      ),
-      dashboardMetric(
-        wizard.pvgisReferenceYield ?? 'Solar-resource reference yield',
-        referencePotential
-          ? `${format(referencePotential.annualYieldKwhPerKwp, locale)} kWh/kWp/year`
-          : '—'
-      ),
-      dashboardMetric(
-        wizard.annualConsumption ?? 'Annual consumption',
-        `${format(annualConsumptionKwh, locale)} kWh · ${consumptionModeLabel}`
-      ),
-      dashboardMetric(
-        wizard.metrics?.tariff ?? 'Tariff',
-        tariffRate === null || tariffRate === undefined
-          ? '—'
-          : `${format(tariffRate, locale, { maximumFractionDigits: 2 })} AMD/kWh`
-      ),
-      dashboardMetric(
-        wizard.roofSummary ?? 'Roof',
-        `${format(analysis.roof?.areaSqm, locale, { maximumFractionDigits: 1 })} m² · ${format(analysis.roof?.orientationDegrees, locale, { maximumFractionDigits: 0 })}° · ${format(analysis.roof?.tiltDegrees, locale, { maximumFractionDigits: 0 })}° · ${roofMounting}`
-      )
-    );
-    projectSummary.append(projectValues);
-    resultDashboard.append(projectSummary);
-    const yieldDetail = element('details', 'pro-result-details pro-result-details--yield');
-    yieldDetail.append(
-      element('summary', '', wizard.roofYieldDetails ?? 'Location and roof yield details')
-    );
-    const yieldValues = element('dl', 'passport-ledger');
-    yieldValues.append(
-      dashboardMetric(
-        wizard.pvgisReferenceYield ?? 'Solar-resource reference at location',
-        referencePotential
-          ? `${format(referencePotential.annualYieldKwhPerKwp, locale)} kWh/kWp/year · ${format(referencePotential.orientation?.azimuthDegrees, locale, { maximumFractionDigits: 0 })}° / ${format(referencePotential.orientation?.tiltDegrees, locale, { maximumFractionDigits: 0 })}°`
-          : '—'
-      ),
-      dashboardMetric(
-        wizard.roofSystemYield ?? 'Estimated specific yield for your roof',
-        `${format(analysis.production?.annualYieldKwhPerKwp, locale)} kWh/kWp/year`
-      )
-    );
-    yieldDetail.append(
-      yieldValues,
+    const chart = element('figure', 'pro-result-card pro-result-card--production');
+    const chartHeading = element('div', 'pro-result-production__heading');
+    chartHeading.append(
       element(
-        'p',
+        'figcaption',
         '',
-        wizard.roofYieldExplanation ??
-          'The difference can result from the actual roof orientation, tilt and calculation assumptions.'
+        resultsCopy.monthlyProduction ?? wizard.production ?? 'Monthly solar production'
+      ),
+      element(
+        'strong',
+        '',
+        `${resultsCopy.totalAnnualProduction ?? 'Annual total'}: ${format(annualGenerationKwh, locale)} kWh`
       )
     );
-    resultDashboard.append(yieldDetail);
+    const bars = element('div', 'chart-bars');
+    renderBars(bars, monthly, product.passport?.months ?? [], 'kWh');
+    chart.append(chartHeading, bars);
+    resultDashboard.append(chart);
     const equipmentRecommendation = analysis.equipmentRecommendation;
     const renderedEquipmentCards = equipmentRecommendationCards(equipmentRecommendation);
     if (renderedEquipmentCards) resultDashboard.append(renderedEquipmentCards);
-    const solarModule = equipmentRecommendation?.solarModule;
-    if (!renderedEquipmentCards && solarModule) {
-      const recommendation = element('section', 'pro-result-details');
-      recommendation.append(
-        element('h3', '', wizard.moduleRecommendationTitle ?? 'Recommended solar module'),
-        element('p', '', `${solarModule.brand} ${solarModule.productName}`),
-        element('p', '', solarModule.model),
-        element(
-          'p',
-          '',
-          text(wizard.moduleRecommendationCopy, {
-            quantity: format(solarModule.quantity, locale),
-            watts: format(solarModule.watts, locale),
-            capacity: format(solarModule.totalDcCapacityKwp, locale, {
-              maximumFractionDigits: 2
-            }),
-            area: format(solarModule.physicalModuleAreaSqm, locale, {
-              maximumFractionDigits: 2
-            }),
-            footprint: format(solarModule.totalModuleFootprintSqm, locale, {
-              maximumFractionDigits: 2
-            })
-          })
-        ),
-        element(
-          'p',
-          '',
-          wizard.moduleRecommendationReason ??
-            'The catalog module count and rating produce the calculated DC capacity.'
-        ),
-        element(
-          'small',
-          '',
-          wizard.equipmentPreliminaryCopy ??
-            'Final string design, electrical compatibility and site implementation are confirmed during engineering.'
-        )
-      );
-      resultDashboard.append(recommendation);
-    } else {
-      const equipment = analysis.equipment ?? scenario.system?.equipment;
-      if (equipment?.panelBrand && equipment?.panelModel) {
-        resultDashboard.append(
-          element(
-            'p',
-            'pro-result-details',
-            `${wizard.preliminarySizingBasis ?? 'Preliminary sizing basis'}: ${equipment.panelBrand} ${equipment.panelModel} · ${format(equipment.panelWatts, locale)} W`
-          )
-        );
-      }
-    }
     const roofCapacity = calculatePreliminaryRoofCapacity({
       roofAreaSqm: analysis.roof?.areaSqm,
       usableAreaRatio: analysis.roof?.usableAreaRatio,
@@ -778,333 +611,335 @@ export const createCalculatorResultsView = ({
     });
     if (roofCapacity) {
       const roofFit = element('section', 'pro-result-card pro-result-card--roof');
-      roofFit.append(element('h3', '', wizard.roofCapacityTitle ?? 'Physical roof capacity'));
-      const values = element('dl', 'wizard-kpis');
+      const heading = element('div', 'pro-result-section-heading');
+      const icon = element('span', 'pro-result-section-heading__icon');
+      icon.append(resultIcon('check'));
+      heading.append(icon, element('h3', '', resultsCopy.roofTitle ?? 'Roof compatibility'));
+      const isLimiting = scenario.limitations?.includes('ROOF_CAPACITY_LIMIT');
+      const status = element('div', 'pro-result-roof__status');
+      const statusIcon = element('span', 'pro-result-roof__status-icon');
+      statusIcon.append(resultIcon(isLimiting ? 'info' : 'check'));
+      const statusCopy = element('div');
+      statusCopy.append(
+        element(
+          'strong',
+          '',
+          isLimiting
+            ? (wizard.roofCapacityLimiting ?? 'The roof capacity limits the selected system.')
+            : (wizard.roofCapacityNotLimiting ?? 'Roof does not limit the selected system.')
+        ),
+        element(
+          'p',
+          '',
+          resultsCopy.roofCopy ??
+            'The available roof area is sufficient for the recommended system.'
+        )
+      );
+      status.append(statusIcon, statusCopy);
+      const values = element('dl', 'pro-result-roof__comparison');
       values.append(
         dashboardMetric(
-          wizard.roofAreaForSizing ?? 'Roof area used for sizing',
+          resultsCopy.roofRecommended ?? 'Recommended',
+          `${format(scenario.system?.panelCount, locale)} ${resultsCopy.panelsUnit ?? 'panels'} · ${format(scenario.system?.capacityKwp, locale, { maximumFractionDigits: 2 })} kWp`,
+          'recommended'
+        ),
+        dashboardMetric(
+          resultsCopy.roofMaximum ?? 'Physical roof maximum',
+          `${resultsCopy.upTo ?? 'up to'} ${format(roofCapacity.maximumPanelCount, locale)} ${resultsCopy.panelsUnit ?? 'panels'} · ${resultsCopy.upTo ?? 'up to'} ${format(roofCapacity.maximumCapacityKwp, locale, { maximumFractionDigits: 2 })} kWp`,
+          'maximum'
+        )
+      );
+      const facts = element('dl', 'pro-result-roof__facts');
+      facts.append(
+        dashboardMetric(
+          resultsCopy.roofArea ?? 'Roof area',
           `${format(roofCapacity.roofAreaSqm, locale, { maximumFractionDigits: 1 })} m²`
         ),
         dashboardMetric(
-          wizard.preliminaryUsableRoofArea ?? 'Preliminary usable module area',
+          resultsCopy.usableArea ?? 'Usable area',
           `${format(roofCapacity.usableRoofAreaSqm, locale, { maximumFractionDigits: 1 })} m²`
         ),
         dashboardMetric(
-          wizard.maximumPanelsForRoof ?? 'Maximum with the selected module',
-          format(roofCapacity.maximumPanelCount, locale)
-        ),
-        dashboardMetric(
-          wizard.physicalDcCapacityLimit ?? 'Physical DC capacity limit',
-          `${format(roofCapacity.maximumCapacityKwp, locale, { maximumFractionDigits: 2 })} kWp`
-        ),
-        dashboardMetric(
-          wizard.roofOrientation ?? 'Roof orientation',
+          wizard.roofOrientation ?? 'Orientation',
           `${format(analysis.roof?.orientationDegrees, locale, { maximumFractionDigits: 0 })}°`
         ),
         dashboardMetric(
-          wizard.roofTilt ?? 'Roof tilt',
-          `${format(analysis.roof?.tiltDegrees, locale, { maximumFractionDigits: 0 })}° · ${
-            analysis.roof?.mountingMode === 'elevated'
-              ? (wizard.elevated ?? 'Elevated structure')
-              : (wizard.parallel ?? 'Roof parallel')
-          }`
+          wizard.roofTilt ?? 'Tilt',
+          `${format(analysis.roof?.tiltDegrees, locale, { maximumFractionDigits: 0 })}°`
         )
       );
       roofFit.append(
+        heading,
+        status,
         values,
+        facts,
         element(
-          'p',
-          '',
-          text(wizard.roofCapacityPreview, {
-            capacity: format(roofCapacity.maximumCapacityKwp, locale, {
-              maximumFractionDigits: 2
-            }),
-            count: format(roofCapacity.maximumPanelCount, locale)
-          })
-        ),
-        element(
-          'small',
-          '',
-          text(wizard.roofCapacityAssumption, {
-            ratio: format(roofCapacity.usableAreaRatio * 100, locale, {
-              maximumFractionDigits: 0
-            })
-          })
-        ),
-        element(
-          'p',
-          'pro-result-roof__status',
-          scenario.limitations?.includes('ROOF_CAPACITY_LIMIT')
-            ? (wizard.roofCapacityLimiting ??
-                'The physical roof limit constrains the recommended system size.')
-            : (wizard.roofCapacityNotLimiting ?? 'Roof capacity is not a limiting factor.')
-        ),
-        element(
-          'small',
-          '',
-          wizard.roofCapacityExplanation ??
-            'The physical roof limit is not the recommended system size; the recommendation is sized from consumption, solar yield and the other calculation inputs.'
+          'button',
+          'pro-result-roof__link',
+          resultsCopy.roofWhy ?? 'Why is the recommended system smaller?'
         )
       );
       resultDashboard.append(roofFit);
     }
-    const inverter = equipmentRecommendation?.inverter ?? analysis.inverterRecommendation;
-    if (
-      !renderedEquipmentCards &&
-      inverter?.productId &&
-      Number.isFinite(Number(inverter.selectedAcPowerKw))
-    ) {
-      const recommendation = element('section', 'pro-result-details');
-      recommendation.append(
-        element('h3', '', wizard.inverterRecommendationTitle ?? 'Recommended inverter'),
-        element(
-          'p',
-          '',
-          `${inverter.brand} ${inverter.productName} · ${format(inverter.selectedAcPowerKw, locale, { maximumFractionDigits: 1 })} kW`
-        ),
-        element('p', '', inverter.model),
-        element(
-          'p',
-          '',
-          text(wizard.inverterTechnologyCopy, {
-            technology: inverterTechnology(inverter.technology, wizard)
-          })
-        ),
-        element('p', '', inverterReason(inverter.reason, wizard)),
-        element(
-          'small',
-          '',
-          wizard.equipmentPreliminaryCopy ??
-            wizard.inverterRecommendationCopy ??
-            'Final string, MPPT and grid compatibility is confirmed during engineering.'
-        )
-      );
-      resultDashboard.append(recommendation);
-    }
-    const mountingHardware = analysis.mountingHardwareRecommendation;
-    if (
-      !renderedEquipmentCards &&
-      mountingHardware?.status === 'matched' &&
-      mountingHardware.productId
-    ) {
-      const recommendation = element('section', 'pro-result-details');
-      const availableAngles = (mountingHardware.availableInclinationDeg ?? [])
-        .map((angle) => format(angle, locale, { maximumFractionDigits: 1 }))
-        .join(' / ');
-      recommendation.append(
-        element('h3', '', wizard.mountingHardwareTitle ?? 'Catalog mounting option'),
-        element('p', '', `${mountingHardware.brand} ${mountingHardware.productName}`),
-        element('p', '', mountingHardware.model),
-        element(
-          'p',
-          '',
-          text(wizard.mountingHardwareCopy, {
-            optimum: format(mountingHardware.pvgisOptimumTiltDegrees, locale, {
-              maximumFractionDigits: 1
-            }),
-            available: availableAngles,
-            practical: format(mountingHardware.practicalInclinationDeg, locale, {
-              maximumFractionDigits: 1
-            })
-          })
-        )
-      );
+    if (state?.legacyResultPresentation) {
+      const inverter = equipmentRecommendation?.inverter ?? analysis.inverterRecommendation;
       if (
-        Number.isFinite(Number(mountingHardware.kitLengthMm)) ||
-        Number.isFinite(Number(mountingHardware.railLengthMm))
+        !renderedEquipmentCards &&
+        inverter?.productId &&
+        Number.isFinite(Number(inverter.selectedAcPowerKw))
       ) {
+        const recommendation = element('section', 'pro-result-details');
         recommendation.append(
+          element('h3', '', wizard.inverterRecommendationTitle ?? 'Recommended inverter'),
           element(
             'p',
             '',
-            text(wizard.mountingHardwareDimensionsCopy, {
-              kit: Number.isFinite(Number(mountingHardware.kitLengthMm))
-                ? format(mountingHardware.kitLengthMm, locale)
-                : '—',
-              rail: Number.isFinite(Number(mountingHardware.railLengthMm))
-                ? format(mountingHardware.railLengthMm, locale)
-                : '—'
-            })
-          )
-        );
-      }
-      recommendation.append(
-        element(
-          'p',
-          '',
-          wizard.mountingHardwareReason ??
-            'The catalog-supported inclination nearest the calculated optimum was selected.'
-        )
-      );
-      recommendation.append(
-        element(
-          'small',
-          '',
-          wizard.mountingHardwareEngineeringCopy ??
-            'The catalog angle does not change the calculated roof plane. Structure and wind-load design are confirmed during engineering.'
-        )
-      );
-      resultDashboard.append(recommendation);
-    } else if (!renderedEquipmentCards && mountingHardware?.status === 'no-catalog-match') {
-      resultDashboard.append(
-        element(
-          'p',
-          'pro-result-details',
-          text(wizard.mountingHardwareNoMatchCopy, {
-            optimum: format(mountingHardware.pvgisOptimumTiltDegrees, locale, {
-              maximumFractionDigits: 1
-            })
-          })
-        )
-      );
-    }
-    const storage = analysis.storageRecommendation;
-    if (!renderedEquipmentCards && storage) {
-      const recommendation = element('section', 'pro-result-details');
-      recommendation.append(
-        element('h3', '', wizard.storageRecommendationTitle ?? 'Energy-storage option')
-      );
-      if (storage.status === 'sized' && storage.productId) {
-        recommendation.append(
-          element('p', '', `${storage.brand} ${storage.productName}`),
-          element('p', '', storage.model),
+            `${inverter.brand} ${inverter.productName} · ${format(inverter.selectedAcPowerKw, locale, { maximumFractionDigits: 1 })} kW`
+          ),
+          element('p', '', inverter.model),
           element(
             'p',
             '',
-            text(wizard.storageSizingCopy, {
-              required: format(storage.requiredUsableCapacityKwh, locale, {
-                maximumFractionDigits: 2
-              }),
-              modules: storage.moduleCount,
-              selected: format(storage.selectedUsableCapacityKwh, locale, {
-                maximumFractionDigits: 2
-              })
+            text(wizard.inverterTechnologyCopy, {
+              technology: inverterTechnology(inverter.technology, wizard)
             })
           ),
+          element('p', '', inverterReason(inverter.reason, wizard)),
           element(
-            'p',
+            'small',
             '',
-            wizard.storageSizingReason ??
-              'A whole module count was rounded up to cover the required usable capacity.'
+            wizard.equipmentPreliminaryCopy ??
+              wizard.inverterRecommendationCopy ??
+              'Final string, MPPT and grid compatibility is confirmed during engineering.'
           )
         );
-      } else if (storage.status === 'catalog-capacity-exceeded') {
+        resultDashboard.append(recommendation);
+      }
+      const mountingHardware = analysis.mountingHardwareRecommendation;
+      if (
+        !renderedEquipmentCards &&
+        mountingHardware?.status === 'matched' &&
+        mountingHardware.productId
+      ) {
+        const recommendation = element('section', 'pro-result-details');
+        const availableAngles = (mountingHardware.availableInclinationDeg ?? [])
+          .map((angle) => format(angle, locale, { maximumFractionDigits: 1 }))
+          .join(' / ');
         recommendation.append(
+          element('h3', '', wizard.mountingHardwareTitle ?? 'Catalog mounting option'),
+          element('p', '', `${mountingHardware.brand} ${mountingHardware.productName}`),
+          element('p', '', mountingHardware.model),
           element(
             'p',
             '',
-            text(wizard.storageCapacityExceededCopy, {
-              maximum: format(storage.systemUsableCapacityMaxKwh, locale, {
-                maximumFractionDigits: 2
+            text(wizard.mountingHardwareCopy, {
+              optimum: format(mountingHardware.pvgisOptimumTiltDegrees, locale, {
+                maximumFractionDigits: 1
+              }),
+              available: availableAngles,
+              practical: format(mountingHardware.practicalInclinationDeg, locale, {
+                maximumFractionDigits: 1
               })
             })
           )
         );
-      } else {
+        if (
+          Number.isFinite(Number(mountingHardware.kitLengthMm)) ||
+          Number.isFinite(Number(mountingHardware.railLengthMm))
+        ) {
+          recommendation.append(
+            element(
+              'p',
+              '',
+              text(wizard.mountingHardwareDimensionsCopy, {
+                kit: Number.isFinite(Number(mountingHardware.kitLengthMm))
+                  ? format(mountingHardware.kitLengthMm, locale)
+                  : '—',
+                rail: Number.isFinite(Number(mountingHardware.railLengthMm))
+                  ? format(mountingHardware.railLengthMm, locale)
+                  : '—'
+              })
+            )
+          );
+        }
         recommendation.append(
           element(
             'p',
             '',
-            wizard.storageProfileRequiredCopy ??
-              'Storage is optional. Exact battery sizing requires a load and backup profile.'
+            wizard.mountingHardwareReason ??
+              'The catalog-supported inclination nearest the calculated optimum was selected.'
           )
         );
-      }
-      recommendation.append(
-        element(
-          'small',
-          '',
-          wizard.storageEngineeringCopy ??
-            'Final compatibility, backup output and connection design are confirmed during engineering.'
-        )
-      );
-      resultDashboard.append(recommendation);
-    }
-    const basis = calculationBasisDetail(analysis.calculationBasis);
-    if (basis) resultDashboard.append(basis);
-    if (scenario.limitations?.includes('ROOF_CAPACITY_LIMIT')) {
-      const limit = element(
-        'p',
-        'pro-result-details pro-result-details--warning',
-        wizard.roofLimit
-      );
-      limit.append(
-        ` ${format(scenario.system?.requestedCapacityKwp, locale, { maximumFractionDigits: 2 })} kWp → ${format(scenario.system?.capacityKwp, locale, { maximumFractionDigits: 2 })} kWp; ${format(scenario.system?.maximumPanelCount, locale)} panels.`
-      );
-      resultDashboard.append(limit);
-    }
-    const environmental = analysis.environmental;
-    if (Number.isFinite(Number(environmental?.avoidedCo2Tons))) {
-      const impact = element('section', 'pro-result-card pro-result-card--impact');
-      impact.append(
-        element(
-          'h3',
-          '',
-          wizard.results?.impactTitle ?? wizard.environmental?.co2 ?? 'Environmental impact'
-        )
-      );
-      const values = element('dl', 'wizard-kpis');
-      values.append(
-        dashboardMetric(
-          wizard.results?.impact?.co2 ?? wizard.environmental?.co2 ?? 'Avoided CO₂ emissions',
-          `${format(environmental.avoidedCo2Tons, locale, { maximumFractionDigits: 2 })} t CO₂`
-        )
-      );
-      if (Number.isFinite(Number(environmental.treeEquivalent))) {
-        values.append(
-          dashboardMetric(
-            wizard.results?.impact?.trees ??
-              wizard.environmental?.trees ??
-              'Tree CO₂ absorption equivalent',
-            `≈ ${format(environmental.treeEquivalent, locale)}`
-          )
-        );
-      }
-      impact.append(values);
-      const factor = environmental.factor ?? {};
-      if (Number.isFinite(Number(factor.valueKgCo2PerKwh))) {
-        impact.append(
+        recommendation.append(
           element(
             'small',
-            'pro-result-impact__source',
-            `${wizard.environmentalFactorSource ?? 'Historical grid-emission factor'}${
-              factor.dataYear ? ` (${factor.dataYear})` : ''
-            }: ${format(factor.valueKgCo2PerKwh, locale, {
-              maximumFractionDigits: 3
-            })} kgCO₂/kWh`
+            '',
+            wizard.mountingHardwareEngineeringCopy ??
+              'The catalog angle does not change the calculated roof plane. Structure and wind-load design are confirmed during engineering.'
+          )
+        );
+        resultDashboard.append(recommendation);
+      } else if (!renderedEquipmentCards && mountingHardware?.status === 'no-catalog-match') {
+        resultDashboard.append(
+          element(
+            'p',
+            'pro-result-details',
+            text(wizard.mountingHardwareNoMatchCopy, {
+              optimum: format(mountingHardware.pvgisOptimumTiltDegrees, locale, {
+                maximumFractionDigits: 1
+              })
+            })
           )
         );
       }
-      resultDashboard.append(impact);
-    }
-    const actualMonthlyConsumption =
-      state.consumption?.mode === 'monthly' &&
-      Array.isArray(analysis.consumption?.monthlyKwh) &&
-      analysis.consumption.monthlyKwh.length === 12 &&
-      analysis.consumption.monthlyKwh.every((value) => number(value, 0) !== null)
-        ? analysis.consumption.monthlyKwh
-        : null;
-    if (actualMonthlyConsumption && monthly.length === 12) {
-      resultDashboard.append(
-        monthlyComparisonChart({
-          consumption: actualMonthlyConsumption,
-          generation: monthly,
-          months: product.passport?.months ?? []
-        })
-      );
-    } else {
-      const chart = element('figure', 'pro-result-card pro-result-card--production');
-      chart.append(
-        element(
-          'figcaption',
-          '',
-          wizard.results?.monthlyProduction ?? wizard.production ?? 'Monthly solar production'
-        )
-      );
-      const bars = element('div', 'chart-bars');
-      renderBars(bars, monthly, product.passport?.months ?? [], 'kWh');
-      chart.append(bars);
-      resultDashboard.append(chart);
+      const storage = analysis.storageRecommendation;
+      if (!renderedEquipmentCards && storage) {
+        const recommendation = element('section', 'pro-result-details');
+        recommendation.append(
+          element('h3', '', wizard.storageRecommendationTitle ?? 'Energy-storage option')
+        );
+        if (storage.status === 'sized' && storage.productId) {
+          recommendation.append(
+            element('p', '', `${storage.brand} ${storage.productName}`),
+            element('p', '', storage.model),
+            element(
+              'p',
+              '',
+              text(wizard.storageSizingCopy, {
+                required: format(storage.requiredUsableCapacityKwh, locale, {
+                  maximumFractionDigits: 2
+                }),
+                modules: storage.moduleCount,
+                selected: format(storage.selectedUsableCapacityKwh, locale, {
+                  maximumFractionDigits: 2
+                })
+              })
+            ),
+            element(
+              'p',
+              '',
+              wizard.storageSizingReason ??
+                'A whole module count was rounded up to cover the required usable capacity.'
+            )
+          );
+        } else if (storage.status === 'catalog-capacity-exceeded') {
+          recommendation.append(
+            element(
+              'p',
+              '',
+              text(wizard.storageCapacityExceededCopy, {
+                maximum: format(storage.systemUsableCapacityMaxKwh, locale, {
+                  maximumFractionDigits: 2
+                })
+              })
+            )
+          );
+        } else {
+          recommendation.append(
+            element(
+              'p',
+              '',
+              wizard.storageProfileRequiredCopy ??
+                'Storage is optional. Exact battery sizing requires a load and backup profile.'
+            )
+          );
+        }
+        recommendation.append(
+          element(
+            'small',
+            '',
+            wizard.storageEngineeringCopy ??
+              'Final compatibility, backup output and connection design are confirmed during engineering.'
+          )
+        );
+        resultDashboard.append(recommendation);
+      }
+      const basis = calculationBasisDetail(analysis.calculationBasis);
+      if (basis) resultDashboard.append(basis);
+      if (scenario.limitations?.includes('ROOF_CAPACITY_LIMIT')) {
+        const limit = element(
+          'p',
+          'pro-result-details pro-result-details--warning',
+          wizard.roofLimit
+        );
+        limit.append(
+          ` ${format(scenario.system?.requestedCapacityKwp, locale, { maximumFractionDigits: 2 })} kWp → ${format(scenario.system?.capacityKwp, locale, { maximumFractionDigits: 2 })} kWp; ${format(scenario.system?.maximumPanelCount, locale)} panels.`
+        );
+        resultDashboard.append(limit);
+      }
+      const environmental = analysis.environmental;
+      if (Number.isFinite(Number(environmental?.avoidedCo2Tons))) {
+        const impact = element('section', 'pro-result-card pro-result-card--impact');
+        impact.append(
+          element(
+            'h3',
+            '',
+            wizard.results?.impactTitle ?? wizard.environmental?.co2 ?? 'Environmental impact'
+          )
+        );
+        const values = element('dl', 'wizard-kpis');
+        values.append(
+          dashboardMetric(
+            wizard.results?.impact?.co2 ?? wizard.environmental?.co2 ?? 'Avoided CO₂ emissions',
+            `${format(environmental.avoidedCo2Tons, locale, { maximumFractionDigits: 2 })} t CO₂`
+          )
+        );
+        if (Number.isFinite(Number(environmental.treeEquivalent))) {
+          values.append(
+            dashboardMetric(
+              wizard.results?.impact?.trees ??
+                wizard.environmental?.trees ??
+                'Tree CO₂ absorption equivalent',
+              `≈ ${format(environmental.treeEquivalent, locale)}`
+            )
+          );
+        }
+        impact.append(values);
+        const factor = environmental.factor ?? {};
+        if (Number.isFinite(Number(factor.valueKgCo2PerKwh))) {
+          impact.append(
+            element(
+              'small',
+              'pro-result-impact__source',
+              `${wizard.environmentalFactorSource ?? 'Historical grid-emission factor'}${
+                factor.dataYear ? ` (${factor.dataYear})` : ''
+              }: ${format(factor.valueKgCo2PerKwh, locale, {
+                maximumFractionDigits: 3
+              })} kgCO₂/kWh`
+            )
+          );
+        }
+        resultDashboard.append(impact);
+      }
+      const actualMonthlyConsumption =
+        state.consumption?.mode === 'monthly' &&
+        Array.isArray(analysis.consumption?.monthlyKwh) &&
+        analysis.consumption.monthlyKwh.length === 12 &&
+        analysis.consumption.monthlyKwh.every((value) => number(value, 0) !== null)
+          ? analysis.consumption.monthlyKwh
+          : null;
+      if (actualMonthlyConsumption && monthly.length === 12) {
+        resultDashboard.append(
+          monthlyComparisonChart({
+            consumption: actualMonthlyConsumption,
+            generation: monthly,
+            months: product.passport?.months ?? []
+          })
+        );
+      } else {
+        const chart = element('figure', 'pro-result-card pro-result-card--production');
+        chart.append(
+          element(
+            'figcaption',
+            '',
+            wizard.results?.monthlyProduction ?? wizard.production ?? 'Monthly solar production'
+          )
+        );
+        const bars = element('div', 'chart-bars');
+        renderBars(bars, monthly, product.passport?.months ?? [], 'kWh');
+        chart.append(bars);
+        resultDashboard.append(chart);
+      }
     }
     if (resultSummary)
       resultSummary.textContent = wizard.results?.intro ?? product.result?.ready ?? '';

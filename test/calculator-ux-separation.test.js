@@ -55,13 +55,14 @@ test('Professional has exactly four customer steps and retains every engineering
     assert.match(professional, new RegExp(marker, 'u'));
   }
   assert.match(professional, /professional-roof-parameters/u);
-  assert.match(professional, /data-wizard-restart/u);
+  assert.doesNotMatch(professional, /data-wizard-restart/u);
   assert.match(professional, /pro-result-layout/u);
   assert.match(professional, /data-result-hero-actions/u);
   assert.match(professional, /data-download-pdf/u);
-  assert.match(professional, /wizard\.results\.benefits/u);
-  assert.match(professional, /professional-technology/u);
-  assert.match(professional, /wizard\.results\.technologyTitle/u);
+  assert.match(professional, /wizard\.results\.nextCopy/u);
+  assert.match(professional, /wizard\.results\.downloadReport/u);
+  assert.match(professional, /wizard\.results\.editCalculation/u);
+  assert.doesNotMatch(professional, /professional-technology/u);
   for (const marker of [
     'data-professional-lead-open',
     'data-professional-lead-dialog',
@@ -136,7 +137,7 @@ test('Professional product links preserve the recommendation ID in every locale'
   assert.equal(equipmentProductHref(productId, 'en-US'), `/en/equipment/?product=${productId}`);
 });
 
-test('Professional results use coverage terminology and retain the two PVGIS yield contexts', async () => {
+test('Professional results use coverage terminology without duplicate production details', async () => {
   const [resultsView, modes, wizard, en, ru, hy] = await Promise.all([
     source('src/ui/calculator/results-view.js'),
     source('src/content/calculator-modes.js'),
@@ -146,8 +147,8 @@ test('Professional results use coverage terminology and retain the two PVGIS yie
     source('src/content/hy.js')
   ]);
 
-  assert.match(resultsView, /monthlyComparisonChart/u);
-  assert.match(resultsView, /annualNetSurplusHelp/u);
+  assert.match(resultsView, /pro-result-production__heading/u);
+  assert.doesNotMatch(resultsView, /annualNetSurplusHelp/u);
   assert.match(resultsView, /roofCapacityNotLimiting/u);
   assert.doesNotMatch(modes, /selfConsumption/u);
   assert.match(modes, /annualCoverage/u);

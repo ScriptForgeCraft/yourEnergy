@@ -251,6 +251,19 @@ const common = {
         overviewCopy: 'Հաշվարկը հիմնված է ձեր տեղադրության, տանիքի և սպառման տվյալների վրա։',
         editData: 'Փոխել տվյալները',
         roofStatus: 'Տանիքը հարմար է ընտրված համակարգի համար',
+        equipmentTitle: 'Առաջարկվող սարքավորումներ',
+        equipmentCopy: 'Նախնական ընտրություն․ վերջնական համատեղելիությունը կհաստատի ինժեները։',
+        roofTitle: 'Տանիքի համապատասխանություն',
+        roofCopy: 'Օգտակար մակերեսը բավարար է առաջարկվող համակարգի համար։',
+        roofRecommended: 'Առաջարկվում է',
+        roofMaximum: 'Տանիքի ֆիզիկական առավելագույնը',
+        roofArea: 'Տանիքի մակերես',
+        usableArea: 'Օգտակար մակերես',
+        panelsUnit: 'պանել',
+        upTo: 'մինչև',
+        roofWhy: 'Ինչո՞ւ է առաջարկվող համակարգն ավելի փոքր։',
+        totalAnnualProduction: 'Տարեկան ընդհանուր',
+        financialDisclaimer: 'Սա նախնական գնահատում է, ոչ թե առևտրային առաջարկ։',
         financialTitle: 'Ֆինանսական արդյունք',
         financialCopy: 'Նախնական արժեքը, տարեկան խնայողությունը և հետգնման ժամկետը։',
         financial: {
@@ -270,22 +283,28 @@ const common = {
         calculationTitle: 'Ինչպես է հաշվարկվել այս գնահատումը',
         calculationCopy:
           'Մենք օգտագործել ենք արևային ռեսուրսի տվյալները, ձեր տեղադրությունը, էլեկտրաէներգիայի սպառումը և տանիքի բնութագրերը՝ արևային ներուժը գնահատելու համար։',
-        nextTitle: 'Ի՞նչ է հաջորդը',
+        nextTitle: 'Հաջորդ քայլերը',
+        nextCopy: 'Ձեր նախագիծն իրականացնելու համար՝',
         nextSteps: [
           {
-            title: 'Ստացեք մանրամասն առաջարկ',
-            copy: 'Ստացեք անհատական առաջարկ՝ սարքավորումներով, գնով և հետգնման հաշվարկով։'
+            icon: 'faq-settings',
+            title: 'Ինժեների ստուգում',
+            copy: 'Տեղազննում, տանիքի և էլեկտրական պայմանների ստուգում։'
           },
           {
-            title: 'Խոսեք մեր մասնագետի հետ',
-            copy: 'Կվերանայենք արդյունքները և կպատասխանենք ձեր բոլոր հարցերին։'
+            icon: 'file-text',
+            title: 'Սարքավորումների հաստատում',
+            copy: 'Ճշգրիտ մոդելներ, համալրում և վերջնական գին։'
           },
           {
-            title: 'Հաստատեք նախագիծը',
-            copy: 'Տեղազննությունից հետո հաստատեք վերջնական սարքավորումները, աշխատանքների ծավալն ու տեղադրման պայմանները։'
+            icon: 'wrench',
+            title: 'Վերջնական առաջարկ',
+            copy: 'Մանրամասն հաշվարկ, պայմանագիր և հաջորդ քայլեր։'
           }
         ],
-        offer: 'Ստանալ մանրամասն առաջարկ',
+        offer: 'Ստանալ ճշգրիտ առաջարկ',
+        downloadReport: 'Ներբեռնել հաշվետվությունը',
+        editCalculation: 'Փոխել հաշվարկի տվյալները',
         metrics: {
           roofSpecificYield: 'Ձեր տանիքի գնահատված տեսակարար արտադրություն',
           recommendedPower: 'Առաջարկվող հզորություն',
@@ -540,6 +559,19 @@ const common = {
         overviewCopy: 'Расчёт основан на данных о местоположении, крыше и потреблении.',
         editData: 'Изменить данные',
         roofStatus: 'Крыша подходит для выбранной системы',
+        equipmentTitle: 'Рекомендуемое оборудование',
+        equipmentCopy: 'Предварительный подбор. Окончательную совместимость подтвердит инженер.',
+        roofTitle: 'Соответствие крыши',
+        roofCopy: 'Полезной площади достаточно для выбранной системы.',
+        roofRecommended: 'Рекомендуется',
+        roofMaximum: 'Физический максимум крыши',
+        roofArea: 'Площадь крыши',
+        usableArea: 'Полезная площадь',
+        panelsUnit: 'панелей',
+        upTo: 'до',
+        roofWhy: 'Почему рекомендуемая система меньше?',
+        totalAnnualProduction: 'Всего за год',
+        financialDisclaimer: 'Это предварительная оценка, а не коммерческое предложение.',
         financialTitle: 'Финансовый результат',
         financialCopy: 'Предварительная стоимость, годовая экономия и срок окупаемости.',
         financial: {
@@ -559,22 +591,28 @@ const common = {
         calculationTitle: 'Как рассчитана эта оценка',
         calculationCopy:
           'Мы использовали данные о солнечном ресурсе, местоположение, потребление электроэнергии и характеристики крыши, чтобы оценить солнечный потенциал.',
-        nextTitle: 'Что дальше?',
+        nextTitle: 'Следующие шаги',
+        nextCopy: 'Чтобы перейти к реализации вашего проекта:',
         nextSteps: [
           {
-            title: 'Получите подробное предложение',
-            copy: 'Получите персональное предложение с оборудованием, стоимостью и сроком окупаемости.'
+            icon: 'faq-settings',
+            title: 'Проверка инженером',
+            copy: 'Выезд на объект, проверка крыши и электрических условий.'
           },
           {
-            title: 'Поговорите со специалистом',
-            copy: 'Мы проверим результаты и ответим на все ваши вопросы.'
+            icon: 'file-text',
+            title: 'Подтверждение оборудования',
+            copy: 'Точные модели, комплектация и финальная цена.'
           },
           {
-            title: 'Подтвердите проект',
-            copy: 'После осмотра объекта подтвердите итоговое оборудование, объём работ и условия монтажа.'
+            icon: 'wrench',
+            title: 'Финальное предложение',
+            copy: 'Детальный расчёт, договор и следующие шаги.'
           }
         ],
-        offer: 'Получить подробное предложение',
+        offer: 'Получить точное предложение',
+        downloadReport: 'Скачать отчёт',
+        editCalculation: 'Изменить данные расчёта',
         metrics: {
           roofSpecificYield: 'Расчётная удельная выработка вашей крыши',
           recommendedPower: 'Рекомендуемая мощность',
@@ -819,6 +857,19 @@ const common = {
         overviewCopy: 'Calculated from your location, roof and consumption inputs.',
         editData: 'Edit details',
         roofStatus: 'Roof is suitable for the selected system',
+        equipmentTitle: 'Recommended equipment',
+        equipmentCopy: 'Preliminary selection. Final compatibility is confirmed by an engineer.',
+        roofTitle: 'Roof compatibility',
+        roofCopy: 'The usable roof area is sufficient for the selected system.',
+        roofRecommended: 'Recommended',
+        roofMaximum: 'Physical roof maximum',
+        roofArea: 'Roof area',
+        usableArea: 'Usable area',
+        panelsUnit: 'panels',
+        upTo: 'up to',
+        roofWhy: 'Why is the recommended system smaller?',
+        totalAnnualProduction: 'Annual total',
+        financialDisclaimer: 'This is a preliminary estimate, not a commercial offer.',
         financialTitle: 'Financial result',
         financialCopy: 'A preliminary cost, annual savings and simple payback view.',
         financial: {
@@ -838,22 +889,28 @@ const common = {
         calculationTitle: 'How this estimate was calculated',
         calculationCopy:
           'We used solar-resource data, your location, electricity consumption and roof characteristics to estimate your solar potential.',
-        nextTitle: 'What’s next?',
+        nextTitle: 'Next steps',
+        nextCopy: 'To move your project into delivery:',
         nextSteps: [
           {
-            title: 'Get a detailed offer',
-            copy: 'Receive a personalized proposal with equipment, pricing and payback period.'
+            icon: 'faq-settings',
+            title: 'Engineer review',
+            copy: 'A site visit checks the roof and electrical conditions.'
           },
           {
-            title: 'Talk to our specialist',
-            copy: 'We’ll review the results and answer all your questions.'
+            icon: 'file-text',
+            title: 'Equipment confirmation',
+            copy: 'Exact models, configuration and final price.'
           },
           {
-            title: 'Confirm the project',
-            copy: 'After the site review, confirm the final equipment, scope and installation terms.'
+            icon: 'wrench',
+            title: 'Final proposal',
+            copy: 'Detailed estimate, agreement and next steps.'
           }
         ],
-        offer: 'Get a detailed offer',
+        offer: 'Get an accurate proposal',
+        downloadReport: 'Download report',
+        editCalculation: 'Edit calculation details',
         metrics: {
           roofSpecificYield: 'Estimated specific yield for your roof',
           recommendedPower: 'Recommended power',

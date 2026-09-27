@@ -191,8 +191,8 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
   const financeResult = root.querySelector('[data-finance-result]');
   const financeValues = root.querySelector('[data-finance-values]');
   const resultHeroActions = root.querySelector('[data-result-hero-actions]');
-  const downloadPdfButton = root.querySelector('[data-download-pdf]');
-  const professionalLeadOpen = root.querySelector('[data-professional-lead-open]');
+  const downloadPdfButtons = root.querySelectorAll('[data-download-pdf]');
+  const professionalLeadOpeners = root.querySelectorAll('[data-professional-lead-open]');
   const professionalLeadTriggerStatus = root.querySelector(
     '[data-professional-lead-trigger-status]'
   );
@@ -1427,10 +1427,6 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
       if (lifecycle.isActive()) root.querySelector('[data-consumption-tariff]')?.focus();
     });
   });
-  root.querySelector('[data-wizard-restart]')?.addEventListener('click', () => {
-    session.clear();
-    window.location.reload();
-  });
   const setProfessionalLeadStatus = (message, invalid = false) => {
     if (!professionalLeadStatus) return;
     professionalLeadStatus.textContent = message ?? '';
@@ -1468,36 +1464,41 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
     if (typeof professionalLeadDialog.close === 'function') professionalLeadDialog.close();
     else professionalLeadDialog.removeAttribute('open');
   };
-  professionalLeadOpen?.addEventListener('click', () => {
-    if (!lifecycle.isActive()) return;
-    if (!state.analysis) {
-      setProfessionalLeadTriggerStatus(wizard.lead?.resultUnavailable, true);
-      return;
-    }
-    if (!professionalLeadDialog) {
-      setProfessionalLeadTriggerStatus(wizard.lead?.formUnavailable, true);
-      return;
-    }
-    professionalLeadTrigger = professionalLeadOpen;
-    resetProfessionalLeadDialog();
-    setProfessionalLeadTriggerStatus('');
-    try {
-      if (!professionalLeadDialog.open && typeof professionalLeadDialog.showModal === 'function') {
-        professionalLeadDialog.showModal();
-      } else if (!professionalLeadDialog.open) {
-        // Older browsers without the dialog API still receive a visible form
-        // instead of an unresponsive button.
+  professionalLeadOpeners.forEach((professionalLeadOpen) =>
+    professionalLeadOpen.addEventListener('click', () => {
+      if (!lifecycle.isActive()) return;
+      if (!state.analysis) {
+        setProfessionalLeadTriggerStatus(wizard.lead?.resultUnavailable, true);
+        return;
+      }
+      if (!professionalLeadDialog) {
+        setProfessionalLeadTriggerStatus(wizard.lead?.formUnavailable, true);
+        return;
+      }
+      professionalLeadTrigger = professionalLeadOpen;
+      resetProfessionalLeadDialog();
+      setProfessionalLeadTriggerStatus('');
+      try {
+        if (
+          !professionalLeadDialog.open &&
+          typeof professionalLeadDialog.showModal === 'function'
+        ) {
+          professionalLeadDialog.showModal();
+        } else if (!professionalLeadDialog.open) {
+          // Older browsers without the dialog API still receive a visible form
+          // instead of an unresponsive button.
+          professionalLeadDialog.setAttribute('open', '');
+        }
+      } catch {
         professionalLeadDialog.setAttribute('open', '');
       }
-    } catch {
-      professionalLeadDialog.setAttribute('open', '');
-    }
-    if (!professionalLeadDialog.open) {
-      setProfessionalLeadTriggerStatus(wizard.lead?.formUnavailable, true);
-      return;
-    }
-    professionalLeadName?.focus();
-  });
+      if (!professionalLeadDialog.open) {
+        setProfessionalLeadTriggerStatus(wizard.lead?.formUnavailable, true);
+        return;
+      }
+      professionalLeadName?.focus();
+    })
+  );
   professionalLeadDialog
     ?.querySelectorAll('[data-professional-lead-close]')
     .forEach((control) => control.addEventListener('click', closeProfessionalLeadDialog));
@@ -1577,17 +1578,19 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
       }
     }
   });
-  downloadPdfButton?.addEventListener('click', () => {
-    const opened = openCalculatorPdfReport({
-      analysis: state.analysis,
-      passport: state.solarPassport,
-      state,
-      wizard,
-      product,
-      locale
-    });
-    if (!opened) writeStatus(wizard.pdfReport?.popupBlocked ?? product.result?.unavailable, true);
-  });
+  downloadPdfButtons.forEach((downloadPdfButton) =>
+    downloadPdfButton.addEventListener('click', () => {
+      const opened = openCalculatorPdfReport({
+        analysis: state.analysis,
+        passport: state.solarPassport,
+        state,
+        wizard,
+        product,
+        locale
+      });
+      if (!opened) writeStatus(wizard.pdfReport?.popupBlocked ?? product.result?.unavailable, true);
+    })
+  );
   root.querySelector('[data-open-passport]')?.addEventListener('click', (event) => {
     if (!passportDialog || typeof passportDialog.showModal !== 'function') return;
     passportOpener = event.currentTarget;
