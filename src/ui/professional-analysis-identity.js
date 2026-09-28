@@ -1,9 +1,19 @@
-import { ANALYSIS_SCHEMA_VERSION } from '../domain/solar-analysis.js';
+import { ANALYSIS_SCHEMA_VERSION } from '../domain/analysis-version.js';
 
 export const PROFESSIONAL_ANALYSIS_SCOPE = 'manual-roof-plane';
 const PROFESSIONAL_ANALYSIS_CALCULATION_VERSION = ANALYSIS_SCHEMA_VERSION;
 
-const finiteNumber = (value) => (Number.isFinite(Number(value)) ? Number(value) : null);
+const finiteNumber = (value) => {
+  if (value === null || value === undefined || typeof value === 'boolean') return null;
+  if (typeof value !== 'number' && typeof value !== 'string') return null;
+  if (typeof value === 'string' && !value.trim()) return null;
+  return Number.isFinite(Number(value)) ? Number(value) : null;
+};
+
+// Explicit null is an input too: an unused/empty map must not replace it with
+// the geometry layer's zero-area placeholder when restoring measured roofs.
+const projectedArea = (roof) =>
+  Object.hasOwn(roof, 'projectedAreaSqm') ? roof.projectedAreaSqm : roof.areaSqm;
 
 const stableValue = (value) => {
   if (value === null || value === undefined) return null;
@@ -28,7 +38,7 @@ const normalizedRoof = (roof) => {
   return {
     areaMethod: typeof source.areaMethod === 'string' ? source.areaMethod : null,
     mountingMode: typeof source.mountingMode === 'string' ? source.mountingMode : null,
-    projectedAreaSqm: finiteNumber(source.projectedAreaSqm ?? source.areaSqm),
+    projectedAreaSqm: finiteNumber(projectedArea(source)),
     planeAreaSqm: finiteNumber(source.planeAreaSqm),
     polygonComplete: Boolean(source.polygonComplete ?? source.complete),
     tiltDegrees: finiteNumber(source.tiltDegrees),
@@ -83,12 +93,9 @@ export const completeProfessionalRoofInput = (currentRoof, fallbackRoof) => {
     ...stored,
     areaMethod: stored.areaMethod ?? fallback.areaMethod ?? null,
     mountingMode: stored.mountingMode ?? fallback.mountingMode ?? null,
-    projectedAreaSqm:
-      stored.projectedAreaSqm ??
-      stored.areaSqm ??
-      fallback.projectedAreaSqm ??
-      fallback.areaSqm ??
-      null,
+    projectedAreaSqm: Object.hasOwn(stored, 'projectedAreaSqm')
+      ? stored.projectedAreaSqm
+      : (stored.areaSqm ?? projectedArea(fallback) ?? null),
     planeAreaSqm: stored.planeAreaSqm ?? fallback.planeAreaSqm ?? null,
     tiltDegrees: stored.tiltDegrees ?? fallback.tiltDegrees ?? null,
     orientationDegrees:

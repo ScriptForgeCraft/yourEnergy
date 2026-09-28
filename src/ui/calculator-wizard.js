@@ -856,7 +856,12 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
         mapController?.setLocation(state.confirmedProperty, { notify: false });
       if (state.confirmedProperty) syncLocationCoordinates(state.confirmedProperty);
       if (mode === 'roof' && state.roof?.points?.length) {
-        mapController?.setRoofPoints(state.roof.points, { complete: state.roof.complete });
+        // Restoring the unchanged outline is not an edit and must not clear
+        // the existing analysis or the roof's persisted technical controls.
+        mapController?.setRoofPoints(state.roof.points, {
+          complete: state.roof.complete,
+          notify: false
+        });
       }
       mapController?.resize();
       if (mode === 'roof' && state.confirmedProperty)

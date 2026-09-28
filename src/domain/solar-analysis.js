@@ -22,8 +22,9 @@ import { recommendMountingHardware } from './mounting-recommendation.js';
 import { buildEquipmentRecommendation } from './equipment-recommendation.js';
 import { buildCalculationBasis } from './calculation-provenance.js';
 import { calculatePreliminaryRoofCapacity } from './roof-capacity.js';
+import { ANALYSIS_SCHEMA_VERSION } from './analysis-version.js';
 
-export const ANALYSIS_SCHEMA_VERSION = '1.1.0';
+export { ANALYSIS_SCHEMA_VERSION } from './analysis-version.js';
 
 /**
  * Planning coverage choices, not production quotes or property-specific

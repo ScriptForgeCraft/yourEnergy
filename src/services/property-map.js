@@ -417,13 +417,13 @@ export const createPropertyMap = async ({
     locationMarker = null;
   };
 
-  const setRoofPoints = (points, { fit = false, complete = false } = {}) => {
+  const setRoofPoints = (points, { fit = false, complete = false, notify = true } = {}) => {
     roofPoints = points.filter(isFinitePoint).map(normalizePoint);
     roofFinished = Boolean(complete) && roofPoints.length >= 3;
     drawRoof();
     if (fit && roofPoints.length >= 2)
       map.fitBounds(L.latLngBounds(roofPoints), { padding: [28, 28] });
-    emitRoof();
+    if (notify) emitRoof();
   };
 
   map.on('click', (event) => {

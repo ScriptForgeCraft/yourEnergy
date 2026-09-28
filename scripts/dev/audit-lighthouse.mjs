@@ -1,5 +1,6 @@
 import { spawn } from 'node:child_process';
-import { mkdir, readFile, writeFile } from 'node:fs/promises';
+import { createHash } from 'node:crypto';
+import { mkdir, readFile, readdir, writeFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { createPageRegistry } from '../../src/config/routes.js';
 
@@ -28,6 +29,45 @@ if (!process.env.LIGHTHOUSE_NODE && (nodeMajor < 22 || (nodeMajor === 22 && node
   );
 }
 await mkdir(directory, { recursive: true });
+const fingerprintBuild = async () => {
+  const hash = createHash('sha256');
+  const visit = async (folder, prefix = '') => {
+    const entries = await readdir(folder, { withFileTypes: true });
+    entries.sort((a, b) => a.name.localeCompare(b.name));
+    for (const entry of entries) {
+      const path = resolve(folder, entry.name);
+      const name = `${prefix}${entry.name}`;
+      if (entry.isDirectory()) await visit(path, `${name}/`);
+      else if (entry.isFile()) {
+        const bytes = await readFile(path);
+        hash.update(`${name}\0${bytes.length}\0`).update(bytes);
+      }
+    }
+  };
+  await visit(resolve('dist'));
+  return hash.digest('hex');
+};
+const manifest = {
+  build: await fingerprintBuild(),
+  origin,
+  modes,
+  paths: pages.map(({ path }) => path),
+  lighthouse: JSON.parse(await readFile('node_modules/lighthouse/package.json', 'utf8')).version
+};
+const manifestPath = resolve(directory, 'manifest.json');
+const existingManifest = await readFile(manifestPath, 'utf8').catch((error) => {
+  if (error.code !== 'ENOENT') throw error;
+  return null;
+});
+if (existingManifest) {
+  if (!args.has('resume')) throw new Error('Batch already exists. Use --resume or a new --batch.');
+  if (JSON.stringify(JSON.parse(existingManifest)) !== JSON.stringify(manifest))
+    throw new Error('Build, origin or audit settings changed. Start a new batch.');
+} else {
+  const existingFiles = await readdir(directory);
+  if (existingFiles.length) throw new Error('Nonempty legacy batch: choose a new --batch.');
+  await writeFile(manifestPath, JSON.stringify(manifest, null, 2));
+}
 await writeFile(
   resolve(directory, 'routes.json'),
   JSON.stringify(
@@ -36,9 +76,19 @@ await writeFile(
     2
   )
 );
-const results = [];
+const results = existingManifest
+  ? await readFile(resolve(directory, 'summary.json'), 'utf8')
+      .then(JSON.parse)
+      .catch((error) => {
+        if (error.code !== 'ENOENT') throw error;
+        return [];
+      })
+  : [];
 for (const page of pages) {
   for (const device of modes) {
+    // Preserve every recorded attempt, including failures. Resume only fills
+    // interrupted/missing runs; it never cherry-picks a better score.
+    if (results.some((row) => row.path === page.path && row.device === device)) continue;
     const name = `${device}-${page.path.replace(/[^a-z0-9]+/gi, '-').replace(/^-|-$/g, '') || 'home'}`;
     const output = resolve(directory, `${name}.json`);
     const command = [
@@ -98,4 +148,6 @@ for (const page of pages) {
     );
   }
 }
+if ((await fingerprintBuild()) !== manifest.build)
+  throw new Error('Build changed during measurement. These results are not a single-build audit.');
 if (results.some(({ error, exitCode }) => error || exitCode)) process.exitCode = 1;

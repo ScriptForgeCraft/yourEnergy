@@ -117,6 +117,44 @@ test('a completed Professional result retains untouched roof controls through re
   assert.equal(persistedRoof.complete, true);
 });
 
+test('measured roof results survive refresh with an unused zero-area map outline', () => {
+  const inputs = professionalInputs();
+  const roof = {
+    areaMethod: 'measured-plane',
+    mountingMode: 'roof-parallel',
+    projectedAreaSqm: null,
+    planeAreaSqm: 50,
+    polygonComplete: false,
+    tiltDegrees: 30,
+    azimuthDegrees: 180
+  };
+  const stored = mergeProfessionalRoofInput({ points: [], areaSqm: 0, complete: false }, roof);
+  const completed = completeProfessionalRoofInput(stored, { projectedAreaSqm: 0 });
+  const identity = createProfessionalAnalysisIdentity({ ...inputs, roof });
+  assert.equal(completed.projectedAreaSqm, null);
+  assert.equal(createProfessionalAnalysisIdentity({ ...inputs, roof: completed }), identity);
+  assert.equal(createProfessionalAnalysisIdentity({ ...inputs, roof: stored }), identity);
+});
+
+test('missing numeric identity inputs are not zero and genuine zero angles are retained', () => {
+  for (const value of [null, undefined, '', '  ', false, true, NaN, Infinity, [], {}]) {
+    const identity = JSON.parse(
+      createProfessionalAnalysisIdentity({
+        roof: { planeAreaSqm: value, tiltDegrees: value }
+      })
+    );
+    assert.equal(identity.roof.planeAreaSqm, null);
+    assert.equal(identity.roof.tiltDegrees, null);
+  }
+  const identity = JSON.parse(
+    createProfessionalAnalysisIdentity({
+      roof: { tiltDegrees: 0, azimuthDegrees: 0 }
+    })
+  );
+  assert.equal(identity.roof.tiltDegrees, 0);
+  assert.equal(identity.roof.azimuthDegrees, 0);
+});
+
 test('a pre-correction Quick result is discarded while shared inputs remain reusable', () => {
   const { storage, values } = sessionStorage();
   const session = createCalculatorSession({ storage });
