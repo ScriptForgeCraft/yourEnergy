@@ -896,15 +896,7 @@
   position: relative;
 }
 
-.projects-process__steps li:not(:last-child)::after {
-  width: calc(100% - 58px);
-  height: 1px;
-  position: absolute;
-  top: 20px;
-  left: calc(100% + 10px);
-  background: rgb(126 236 177 / 65%);
-  content: '';
-}
+
 
 .projects-process__number {
   width: 42px;

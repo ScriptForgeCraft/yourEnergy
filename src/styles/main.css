@@ -879,7 +879,6 @@ h1 mark {
     z-index: 1;
     inset: 0;
     display: block;
-    background: rgb(1 8 13 / 62%);
     backdrop-filter: blur(3px);
     cursor: default;
     animation: process-menu-backdrop-in 220ms ease both;
