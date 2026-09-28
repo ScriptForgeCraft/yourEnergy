@@ -99,12 +99,53 @@ const localizedDate = Object.freeze({
   hy: '14 սեպտեմբերի 2026'
 });
 
+// Each image record carries intrinsic dimensions and responsive candidates so
+// the article pages can reserve space before the image loads and avoid serving
+// a desktop-sized source to every reader.
 const articleImages = Object.freeze({
-  'solar-panels-for-home-armenia': '/images/hero-time-20-1600.webp',
-  'solar-savings-armenia': '/images/project-vagharshapat-800.webp',
-  'do-i-need-solar-battery': '/images/project-abovyan-800.webp',
-  'how-to-size-solar-system': '/images/roof-scan-1536.webp',
-  'net-metering-armenia': '/images/project-arabkir-1200.webp'
+  'solar-panels-for-home-armenia': {
+    src: '/images/hero-time-20-1600.webp',
+    avifSrcset:
+      '/images/hero-time-20-640.avif 640w, /images/hero-time-20-1024.avif 1024w, /images/hero-time-20-1600.avif 1600w',
+    webpSrcset:
+      '/images/hero-time-20-640.webp 640w, /images/hero-time-20-1024.webp 1024w, /images/hero-time-20-1600.webp 1600w',
+    width: 1600,
+    height: 900
+  },
+  'solar-savings-armenia': {
+    src: '/images/project-vagharshapat-800.webp',
+    avifSrcset:
+      '/images/project-vagharshapat-480.avif 480w, /images/project-vagharshapat-800.avif 800w',
+    webpSrcset:
+      '/images/project-vagharshapat-480.webp 480w, /images/project-vagharshapat-800.webp 800w',
+    width: 800,
+    height: 533
+  },
+  'do-i-need-solar-battery': {
+    src: '/images/project-abovyan-800.webp',
+    avifSrcset: '/images/project-abovyan-480.avif 480w, /images/project-abovyan-800.avif 800w',
+    webpSrcset: '/images/project-abovyan-480.webp 480w, /images/project-abovyan-800.webp 800w',
+    width: 800,
+    height: 533
+  },
+  'how-to-size-solar-system': {
+    src: '/images/roof-scan-1536.webp',
+    avifSrcset:
+      '/images/roof-scan-480.avif 480w, /images/roof-scan-768.avif 768w, /images/roof-scan-1200.avif 1200w, /images/roof-scan-1536.avif 1536w',
+    webpSrcset:
+      '/images/roof-scan-480.webp 480w, /images/roof-scan-768.webp 768w, /images/roof-scan-1200.webp 1200w, /images/roof-scan-1536.webp 1536w',
+    width: 1536,
+    height: 1024
+  },
+  'net-metering-armenia': {
+    src: '/images/project-arabkir-1200.webp',
+    avifSrcset:
+      '/images/project-arabkir-480.avif 480w, /images/project-arabkir-800.avif 800w, /images/project-arabkir-1200.avif 1200w',
+    webpSrcset:
+      '/images/project-arabkir-480.webp 480w, /images/project-arabkir-800.webp 800w, /images/project-arabkir-1200.webp 1200w',
+    width: 1200,
+    height: 800
+  }
 });
 
 const localeIndex = Object.freeze({ en: 0, ru: 1, hy: 2 });
@@ -165,6 +206,7 @@ const parseLocalizedArticle = (block, locale, metadata) => {
   const readingTime = Math.max(1, Math.ceil(words / 190));
   const copy = BLOG_COPY[locale];
 
+  const image = articleImages[metadata.slug];
   return {
     ...metadata,
     locale,
@@ -183,7 +225,11 @@ const parseLocalizedArticle = (block, locale, metadata) => {
     readingTimeLabel: `${readingTime} ${copy.minRead}`,
     verifiedDate: localizedDate[locale],
     verifiedDateIso: VERIFIED_DATE,
-    image: articleImages[metadata.slug],
+    image: image.src,
+    imageAvifSrcset: image.avifSrcset,
+    imageWebpSrcset: image.webpSrcset,
+    imageWidth: image.width,
+    imageHeight: image.height,
     imageAlt: copy.imageAlt,
     searchText: `${h1} ${description} ${metadata.category} ${body}`.toLocaleLowerCase(locale)
   };

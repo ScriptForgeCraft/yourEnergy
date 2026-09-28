@@ -146,6 +146,6 @@ test('legacy PDFs and numbered renders resolve through one canonical source', ()
   }
   for (const number of [1, 2, 3, 4])
     assert.ok(byUrl.has(`/assets/equipment/products/${number}.png`));
-  const background = staticAssets.find(({ source }) => source.endsWith('/process-background.png'));
-  assert.equal(background.urls.length, 7);
+  const background = RESPONSIVE_IMAGE_ASSETS.find(({ name }) => name === 'process-background');
+  assert.equal(background.legacyUrls.length, 7);
 });

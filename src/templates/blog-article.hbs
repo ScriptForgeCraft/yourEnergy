@@ -4,8 +4,22 @@
     <meta charset='UTF-8' />
     <meta name='viewport' content='width=device-width, initial-scale=1.0' />
     <meta name='theme-color' content='#071a2d' />
+    <meta name='color-scheme' content='light' />
     <meta name='description' content='{{article.description}}' />
     <title>{{article.seoTitle}}</title>
+    <meta property='og:type' content='article' />
+    <meta property='og:site_name' content='YOURENERGY' />
+    <meta property='og:locale' content='{{localeCode}}' />
+    <meta property='og:title' content='{{article.seoTitle}}' />
+    <meta property='og:description' content='{{article.description}}' />
+    <meta property='og:url' content='https://yourenergy.am{{article.path}}' />
+    <meta property='og:image' content='https://yourenergy.am{{article.image}}' />
+    <meta property='og:image:width' content='{{article.imageWidth}}' />
+    <meta property='og:image:height' content='{{article.imageHeight}}' />
+    <meta name='twitter:card' content='summary_large_image' />
+    <meta name='twitter:title' content='{{article.seoTitle}}' />
+    <meta name='twitter:description' content='{{article.description}}' />
+    <meta name='twitter:image' content='https://yourenergy.am{{article.image}}' />
     <link rel='canonical' href='https://yourenergy.am{{article.path}}' />
     {{#each alternateLinks}}<link rel='alternate' hreflang='{{hreflang}}' href='{{href}}' />{{/each}}
     <link rel='icon' href='/favicon.ico' sizes='any' />
@@ -20,7 +34,7 @@
     <main id='article-main'>
       <article>
         <header class='article-hero'>
-          <img src='{{article.image}}' alt='' aria-hidden='true' />
+          <picture><source type='image/avif' srcset='{{article.imageAvifSrcset}}' sizes='100vw' /><source type='image/webp' srcset='{{article.imageWebpSrcset}}' sizes='100vw' /><img src='{{article.image}}' width='{{article.imageWidth}}' height='{{article.imageHeight}}' alt='' aria-hidden='true' fetchpriority='high' decoding='async' /></picture>
           <div class='container article-hero__content' data-blog-reveal>
             <a class='article-back-link' href='{{blogHref}}'>← {{blogCopy.backToJournal}}</a>
             <h1>{{article.h1}}</h1>
@@ -47,7 +61,7 @@
 
       <section class='related-section container' aria-labelledby='related-title'>
         <div class='blog-section-heading'><div><h2 id='related-title'>{{blogCopy.related}}</h2></div><a class='article-arrow-link' href='{{blogHref}}'>{{blogCopy.backToJournal}} <span aria-hidden='true'>→</span></a></div>
-        <div class='related-grid'>{{#each relatedArticles}}<article class='blog-card' data-blog-reveal><a class='blog-card__image' href='{{path}}' tabindex='-1' aria-hidden='true'><img src='{{image}}' alt='' loading='lazy' /></a><div class='blog-card__content'><h3><a href='{{path}}'>{{h1}}</a></h3><div class='blog-card__bottom'><span>{{../blogCopy.verified}} {{verifiedDate}}</span><a href='{{path}}' aria-label='{{../blogCopy.readArticle}}: {{h1}}'>→</a></div></div></article>{{/each}}</div>
+        <div class='related-grid'>{{#each relatedArticles}}<article class='blog-card' data-blog-reveal><a class='blog-card__image' href='{{path}}' tabindex='-1' aria-hidden='true'><picture><source type='image/avif' srcset='{{imageAvifSrcset}}' sizes='(max-width: 760px) 100vw, 50vw' /><source type='image/webp' srcset='{{imageWebpSrcset}}' sizes='(max-width: 760px) 100vw, 50vw' /><img src='{{image}}' width='{{imageWidth}}' height='{{imageHeight}}' alt='' loading='lazy' decoding='async' /></picture></a><div class='blog-card__content'><h3><a href='{{path}}'>{{h1}}</a></h3><div class='blog-card__bottom'><span>{{../blogCopy.verified}} {{verifiedDate}}</span><a href='{{path}}' aria-label='{{../blogCopy.readArticle}}: {{h1}}'>→</a></div></div></article>{{/each}}</div>
       </section>
     </main>
     {{> site-footer}}

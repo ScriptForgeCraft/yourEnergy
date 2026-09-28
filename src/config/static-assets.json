@@ -177,11 +177,6 @@
     "urls": ["/assets/equipment/docs/solax/SolaX-x3-ultra-Catalog-EN.pdf"]
   },
   {
-    "id": "images-equipment-hero-hero-bg",
-    "source": "assets/images/equipment/hero/hero-bg.png",
-    "urls": ["/assets/equipment/hero/hero-bg.png"]
-  },
-  {
     "id": "images-equipment-products-longi-hi-mo-x10-guardian-lr7-72hvdf",
     "source": "assets/images/equipment/products/longi-hi-mo-x10-guardian-lr7-72hvdf.png",
     "urls": [
@@ -359,19 +354,6 @@
     "id": "icons-icons",
     "source": "assets/icons/icons.svg",
     "urls": ["/icons.svg"]
-  },
-  {
-    "id": "images-process-process-background",
-    "source": "assets/images/process/process-background.png",
-    "urls": [
-      "/images/process-background.png",
-      "/images/process-step-analysis-bg.png",
-      "/images/process-step-design-bg.png",
-      "/images/process-step-inspection-bg.png",
-      "/images/process-step-installation-bg.png",
-      "/images/process-step-proposal-bg.png",
-      "/images/process-step-support-bg.png"
-    ]
   },
   {
     "id": "images-calculator-professional-results-house",

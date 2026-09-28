@@ -98,9 +98,20 @@ export const initNavigation = () => {
   });
 
   document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && languageMenu?.open) {
+      event.preventDefault();
+      languageMenu.open = false;
+      languageMenu.querySelector('summary')?.focus();
+    }
     if (event.key === 'Escape' && menu?.open) {
       event.preventDefault();
       closeMenu({ restoreFocus: true });
     }
+  });
+  document.addEventListener('click', (event) => {
+    if (languageMenu?.open && !languageMenu.contains(event.target)) languageMenu.open = false;
+  });
+  languageMenu?.addEventListener('focusout', (event) => {
+    if (!languageMenu.contains(event.relatedTarget)) languageMenu.open = false;
   });
 };

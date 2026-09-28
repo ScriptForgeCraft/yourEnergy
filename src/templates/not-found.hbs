@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang='{{locale}}'>
+  <head>
+    <meta charset='UTF-8' />
+    <meta name='viewport' content='width=device-width, initial-scale=1.0' />
+    <meta name='robots' content='noindex,follow' />
+    <meta name='theme-color' content='#071a2d' />
+    <title>{{notFoundTitle}} | YOURENERGY</title>
+    <link rel='icon' href='/favicon.ico' sizes='any' />
+    <link rel='stylesheet' href='/src/styles/support.css' />
+  </head>
+  <body class='support-page'>
+    <a class='skip-link' href='#main'>{{aria.skip}}</a>
+    {{> site-header}}
+    <main id='main' class='support-main support-main--legal'>
+      <section class='legal-hero'><div class='container legal-hero__inner'>
+        <p class='legal-hero__eyebrow'>404</p>
+        <h1>{{notFoundTitle}}</h1><p>{{notFoundCopy}}</p>
+        <a class='button' href='{{homeHref}}'>{{nav.home}}</a>
+      </div></section>
+    </main>
+    {{> site-footer}}
+    <script type='module' src='/src/main.js'></script>
+  </body>
+</html>

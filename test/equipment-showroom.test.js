@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import { readFile, stat } from 'node:fs/promises';
 import test from 'node:test';
 import staticAssets from '../src/config/static-assets.json';
+import { IMAGE_FORMATS, RESPONSIVE_IMAGE_ASSETS } from '../src/config/image-assets.js';
 import { createEquipmentCatalog } from '../src/data/equipment/showroom/catalog.js';
 import { EQUIPMENT_COPY } from '../src/data/equipment/showroom/translations.js';
 import {
@@ -92,7 +93,10 @@ test('every published showroom URL resolves to a canonical source', async () => 
       ...product.documents.map(({ url }) => url)
     ])
   ]);
-  const publicAssetPaths = new Set(assetsByUrl.keys());
+  const generatedAssetPaths = RESPONSIVE_IMAGE_ASSETS.flatMap(({ name, widths }) =>
+    widths.flatMap((width) => IMAGE_FORMATS.map((format) => `/images/${name}-${width}.${format}`))
+  );
+  const publicAssetPaths = new Set([...assetsByUrl.keys(), ...generatedAssetPaths]);
   assert.ok([...referencedAssets].every((path) => publicAssetPaths.has(path)));
 });
 

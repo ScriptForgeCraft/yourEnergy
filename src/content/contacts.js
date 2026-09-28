@@ -341,7 +341,7 @@ export const contactPageCopy = Object.freeze({
     formIntro: 'Fill in the form and we will get in touch shortly.',
     name: 'Your name',
     phone: 'Phone',
-    email: 'Эл. почта',
+    email: 'Email',
     topic: 'Topic',
     message: 'Your message',
     meeting: {

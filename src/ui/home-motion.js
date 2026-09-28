@@ -137,11 +137,11 @@ export const getHeroCounterTarget = (value) => {
 
 /**
  * The solar arc is embedded in each supplied time frame. The backdrop fills
- * the hero without `object-fit: cover`, so project its normalized source point
- * straight into the rendered hero rectangle. This keeps the marker on the
+ * the hero using `object-fit: cover`, so include the centered crop when projecting
+ * its normalized source point. This keeps the marker on the
  * visible sun in every time-of-day frame, including non-16:9 viewports.
  */
-export const projectHeroArcPoint = (profile, { frameWidth, frameHeight } = {}) => {
+export const projectHeroArcPoint = (profile, { frameWidth, frameHeight, imageWidth = 1600, imageHeight = 900 } = {}) => {
   const point = profile?.arcPoint;
   if (
     !point ||
@@ -155,9 +155,10 @@ export const projectHeroArcPoint = (profile, { frameWidth, frameHeight } = {}) =
     return null;
   }
 
+  const scale = Math.max(frameWidth / imageWidth, frameHeight / imageHeight);
   return {
-    x: point.x * frameWidth,
-    y: point.y * frameHeight
+    x: point.x * imageWidth * scale + (frameWidth - imageWidth * scale) / 2,
+    y: point.y * imageHeight * scale + (frameHeight - imageHeight * scale) / 2
   };
 };
 
@@ -166,6 +167,12 @@ const initHeroTime = (hero, { reducedMotion = false } = {}) => {
   const sources = [...hero.querySelectorAll('[data-hero-time-source]')];
   const transitionImages = [...hero.querySelectorAll('[data-hero-time-transition]')];
   if (!image || sources.length === 0) return () => {};
+  const frameUrl = (hour, extension) => {
+    const selectedWidth = Number(image.currentSrc.match(/-(\d+)\.(?:avif|webp|jpg)/)?.[1]);
+    const requiredWidth = window.innerWidth * Math.min(window.devicePixelRatio || 1, 2);
+    const width = selectedWidth || heroImageWidths.find((value) => value >= requiredWidth) || 1600;
+    return getHeroFrameUrl(hour, extension, width);
+  };
 
   let timer = 0;
   let disposed = false;
@@ -185,7 +192,9 @@ const initHeroTime = (hero, { reducedMotion = false } = {}) => {
     const frame = hero.getBoundingClientRect();
     const projected = projectHeroArcPoint(appliedProfile, {
       frameWidth: frame.width,
-      frameHeight: frame.height
+      frameHeight: frame.height,
+      imageWidth: image.naturalWidth || 1600,
+      imageHeight: image.naturalHeight || 900
     });
     if (!projected) return;
     setProperty(hero, '--hero-sun-x', `${projected.x}px`);
@@ -314,8 +323,9 @@ const initHeroTime = (hero, { reducedMotion = false } = {}) => {
         const progress = Math.min((now - startedAt) / duration, 1);
         const point = interpolateSunArc(profiles, progress);
         const bounds = hero.getBoundingClientRect();
-        setProperty(hero, '--hero-sun-x', `${point.x * bounds.width}px`);
-        setProperty(hero, '--hero-sun-y', `${point.y * bounds.height}px`);
+        const projected = projectHeroArcPoint({ arcPoint: point }, { frameWidth: bounds.width, frameHeight: bounds.height, imageWidth: image.naturalWidth || 1600, imageHeight: image.naturalHeight || 900 });
+        setProperty(hero, '--hero-sun-x', `${projected.x}px`);
+        setProperty(hero, '--hero-sun-y', `${projected.y}px`);
 
         if (progress < 1) {
           sunAnimationFrame = window.requestAnimationFrame(frame);
@@ -332,7 +342,7 @@ const initHeroTime = (hero, { reducedMotion = false } = {}) => {
 
   const prepareTransitionLayer = async (transitionImage, profile, extension, preloaded) => {
     if (!preloaded || disposed) return false;
-    transitionImage.src = getHeroFrameUrl(profile.assetHour, extension);
+    transitionImage.src = frameUrl(profile.assetHour, extension);
     const isLoaded =
       transitionImage.complete && transitionImage.naturalWidth > 0
         ? true
@@ -388,7 +398,7 @@ const initHeroTime = (hero, { reducedMotion = false } = {}) => {
       const profile = getHeroTimeProfile();
       const extension =
         getHeroImageExtension(image.currentSrc) ?? sources[0]?.dataset.heroTimeSource ?? 'jpg';
-      const isReady = await preload(getHeroFrameUrl(profile.assetHour, extension));
+      const isReady = await preload(frameUrl(profile.assetHour, extension));
 
       if (disposed) return;
       if (isReady) {
@@ -438,7 +448,7 @@ const initHeroTime = (hero, { reducedMotion = false } = {}) => {
             .slice(1)
             .map(async (profile) => [
               profile.assetHour,
-              await preload(getHeroFrameUrl(profile.assetHour, extension))
+              await preload(frameUrl(profile.assetHour, extension))
             ])
         )
       );
@@ -518,7 +528,7 @@ const initHeroTime = (hero, { reducedMotion = false } = {}) => {
     }
     try {
       const fallback = resolveHeroFrameFailure(lastSuccessfulProfile, appliedProfile);
-      const isReady = await preload(getHeroFrameUrl(fallback.assetHour, 'jpg'));
+      const isReady = await preload(frameUrl(fallback.assetHour, 'jpg'));
       if (disposed) return;
       if (isReady) {
         lastSuccessfulProfile = fallback;

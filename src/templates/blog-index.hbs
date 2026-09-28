@@ -4,8 +4,22 @@
     <meta charset='UTF-8' />
     <meta name='viewport' content='width=device-width, initial-scale=1.0' />
     <meta name='theme-color' content='#071a2d' />
-    <meta name='description' content='{{blogCopy.heroText}}' />
-    <title>{{blogCopy.heroBefore}} {{blogCopy.heroAccent}} | YOURENERGY</title>
+    <meta name='color-scheme' content='light' />
+    <meta name='description' content='{{blogMeta.description}}' />
+    <title>{{blogMeta.title}}</title>
+    <meta property='og:type' content='website' />
+    <meta property='og:site_name' content='YOURENERGY' />
+    <meta property='og:locale' content='{{localeCode}}' />
+    <meta property='og:title' content='{{blogMeta.title}}' />
+    <meta property='og:description' content='{{blogMeta.description}}' />
+    <meta property='og:url' content='https://yourenergy.am{{path}}' />
+    <meta property='og:image' content='https://yourenergy.am{{blogMeta.image}}' />
+    <meta property='og:image:width' content='1600' />
+    <meta property='og:image:height' content='900' />
+    <meta name='twitter:card' content='summary_large_image' />
+    <meta name='twitter:title' content='{{blogMeta.title}}' />
+    <meta name='twitter:description' content='{{blogMeta.description}}' />
+    <meta name='twitter:image' content='https://yourenergy.am{{blogMeta.image}}' />
     <link rel='canonical' href='https://yourenergy.am{{path}}' />
     {{#each alternateLinks}}<link rel='alternate' hreflang='{{hreflang}}' href='{{href}}' />{{/each}}
     <link rel='icon' href='/favicon.ico' sizes='any' />
@@ -18,7 +32,7 @@
     {{> site-header}}
     <main id='main'>
       <section class='blog-hero' aria-labelledby='blog-title'>
-        <img src='/images/hero-time-20-1600.webp' alt='' aria-hidden='true' />
+        <picture><source type='image/avif' srcset='/images/hero-time-20-640.avif 640w, /images/hero-time-20-1024.avif 1024w, /images/hero-time-20-1600.avif 1600w' sizes='100vw' /><source type='image/webp' srcset='/images/hero-time-20-640.webp 640w, /images/hero-time-20-1024.webp 1024w, /images/hero-time-20-1600.webp 1600w' sizes='100vw' /><img src='/images/hero-time-20-1600.webp' width='1600' height='900' alt='' aria-hidden='true' fetchpriority='high' decoding='async' /></picture>
         <div class='container blog-hero__content' data-blog-reveal>
           <h1 id='blog-title'>{{blogCopy.heroBefore}} <span>{{blogCopy.heroAccent}}</span></h1>
           <p>{{blogCopy.heroText}}</p>
@@ -38,7 +52,7 @@
         </div>
 
         <article class='featured-article' data-blog-reveal>
-          <a class='featured-article__image' href='{{featured.path}}' tabindex='-1' aria-hidden='true'><img src='{{featured.image}}' alt='' /></a>
+          <a class='featured-article__image' href='{{featured.path}}' tabindex='-1' aria-hidden='true'><picture><source type='image/avif' srcset='{{featured.imageAvifSrcset}}' sizes='(max-width: 760px) 100vw, 52vw' /><source type='image/webp' srcset='{{featured.imageWebpSrcset}}' sizes='(max-width: 760px) 100vw, 52vw' /><img src='{{featured.image}}' width='{{featured.imageWidth}}' height='{{featured.imageHeight}}' alt='' decoding='async' /></picture></a>
           <div class='featured-article__content'>
             <h2><a href='{{featured.path}}'>{{featured.h1}}</a></h2>
             <p class='featured-article__description'>{{featured.description}}</p>
@@ -58,7 +72,7 @@
         <div class='blog-content-layout'>
           <div class='blog-article-grid' data-blog-grid>
             {{#each articles}}<article class='blog-card' data-blog-card data-category='{{categoryKey}}' data-search='{{searchText}}' data-blog-reveal>
-              <a class='blog-card__image' href='{{path}}' tabindex='-1' aria-hidden='true'><img src='{{image}}' alt='' loading='lazy' /></a>
+              <a class='blog-card__image' href='{{path}}' tabindex='-1' aria-hidden='true'><picture><source type='image/avif' srcset='{{imageAvifSrcset}}' sizes='(max-width: 760px) 100vw, (max-width: 1100px) 50vw, 33vw' /><source type='image/webp' srcset='{{imageWebpSrcset}}' sizes='(max-width: 760px) 100vw, (max-width: 1100px) 50vw, 33vw' /><img src='{{image}}' width='{{imageWidth}}' height='{{imageHeight}}' alt='' loading='lazy' decoding='async' /></picture></a>
               <div class='blog-card__content'><h3><a href='{{path}}'>{{h1}}</a></h3><p class='blog-card__summary'>{{description}}</p><div class='blog-card__bottom'><span>{{blogCopy.verified}} {{verifiedDate}}</span><span>{{readingTimeLabel}}</span><a href='{{path}}' aria-label='{{blogCopy.readArticle}}: {{h1}}'>→</a></div></div>
             </article>{{/each}}
             <p class='blog-no-results' hidden data-blog-no-results>{{blogCopy.noResults}}</p>

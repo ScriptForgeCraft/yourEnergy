@@ -52,7 +52,7 @@ const setProductImage = (image, placeholder, product) => {
   }
   image.hidden = false;
   placeholder.hidden = true;
-  image.src = product.image;
+  image.src = product.displayImage || product.image;
 };
 
 const humanizeSpec = (key, locale) =>
@@ -288,16 +288,6 @@ const renderExplorer = (product, copy, locale, explorer) => {
   );
 };
 
-const preloadProducts = (products) => {
-  products
-    .filter(({ image }) => image)
-    .slice(0, 3)
-    .forEach(({ image }) => {
-      const preload = new Image();
-      preload.src = image;
-    });
-};
-
 export const productFromDeepLink = (productById, fallbackProduct = null, search = '') => {
   const requestedProductId = new URLSearchParams(search).get('product');
   return productById.get(requestedProductId) ?? fallbackProduct;
@@ -326,7 +316,6 @@ export const initEquipmentShowroom = ({ data, copy, locale, gsap }) => {
   let renderedCategory = null;
   const lastProductByCategory = new Map();
 
-  root.style.setProperty('--equipment-background', `url("${data.hero.background}")`);
   renderTitle(copy.page.title, $('[data-page-title]', root));
   $('[data-page-subtitle]', root).textContent = copy.page.subtitle;
   $('[data-product-popular]', root).textContent = copy.product.popular;
@@ -396,12 +385,11 @@ export const initEquipmentShowroom = ({ data, copy, locale, gsap }) => {
       card.type = 'button';
       card.dataset.productId = product.id;
       card.setAttribute('aria-pressed', String(product.id === selectedProduct.id));
-      card.setAttribute('aria-label', `${product.brand} ${product.name}, ${product.powerRange}`);
 
       const imageWrap = createElement('span', 'product-card__image');
       if (product.image) {
         const image = document.createElement('img');
-        image.src = product.image;
+        image.src = product.thumbnailImage || product.image;
         image.alt = '';
         image.loading = product.id === selectedProduct.id ? 'eager' : 'lazy';
         image.decoding = 'async';
@@ -424,7 +412,6 @@ export const initEquipmentShowroom = ({ data, copy, locale, gsap }) => {
       productTrack.append(card);
     });
     renderedCategory = selectedProduct.category;
-    preloadProducts(categoryProducts);
     const single = categoryProducts.length < 2;
     $('[data-product-previous]', root).disabled = single;
     $('[data-product-next]', root).disabled = single;
@@ -625,14 +612,14 @@ export const initEquipmentShowroom = ({ data, copy, locale, gsap }) => {
   if (animate) {
     gsap.set(root, { autoAlpha: 1 });
     gsap.from('[data-intro] > *', {
-      autoAlpha: 0,
+      autoAlpha: 1,
       x: -18,
       stagger: 0.07,
       duration: 0.72,
       ease: 'power3.out'
     });
     gsap.from(productVisual, {
-      autoAlpha: 0,
+      autoAlpha: 1,
       y: 24,
       scale: 0.93,
       rotateY: -4,
@@ -641,14 +628,14 @@ export const initEquipmentShowroom = ({ data, copy, locale, gsap }) => {
       ease: 'power3.out'
     });
     gsap.from('[data-product-panel]', {
-      autoAlpha: 0,
+      autoAlpha: 1,
       x: 26,
       duration: 0.82,
       delay: 0.2,
       ease: 'power3.out'
     });
     gsap.from('[data-product-rail]', {
-      autoAlpha: 0,
+      autoAlpha: 1,
       y: 22,
       duration: 0.72,
       delay: 0.32,

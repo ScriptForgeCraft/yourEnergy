@@ -135,13 +135,14 @@
 
 .equipment-shell {
   --equipment-hero-height: max(100svh, 870px);
+  --equipment-shell-top-padding: 60px;
   width: min(calc(100% - clamp(48px, 7vw, 128px)), 1740px);
   min-height: var(--equipment-hero-height);
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  grid-template-rows: calc(var(--equipment-hero-height) - 104px) auto;
+  grid-template-rows: calc(var(--equipment-hero-height) - var(--equipment-shell-top-padding)) auto;
   margin-inline: auto;
-  padding-top: 60px;
+  padding-top: var(--equipment-shell-top-padding);
 }
 
 .equipment-stage {

@@ -12,24 +12,28 @@
     <meta property='og:title' content='{{equipmentMeta.ogTitle}}' />
     <meta property='og:description' content='{{equipmentMeta.description}}' />
     <meta property='og:url' content='https://yourenergy.am{{path}}' />
-    <meta property='og:image' content='https://yourenergy.am/assets/equipment/hero/hero-bg.png' />
+    <meta property='og:image' content='https://yourenergy.am/og.png' />
     <meta name='twitter:card' content='summary_large_image' />
     <meta name='twitter:title' content='{{equipmentMeta.ogTitle}}' />
     <meta name='twitter:description' content='{{equipmentMeta.description}}' />
+    <meta name='twitter:image' content='https://yourenergy.am/og.png' />
     <link rel='canonical' href='https://yourenergy.am{{path}}' />
     {{#each alternateLinks}}<link rel='alternate' hreflang='{{hreflang}}' href='{{href}}' />{{/each}}
     <link rel='icon' href='/favicon.ico' sizes='any' />
     <link rel='icon' href='/yourenergy-mark.svg' type='image/svg+xml' />
     <link rel='apple-touch-icon' href='/apple-touch-icon.png' />
-    <link rel='preload' as='image' href='/assets/equipment/hero/hero-bg.png' />
+    <link rel='preload' as='image' href='/images/equipment-hero-768.webp' media='(max-width: 767px)' fetchpriority='high' />
+    <link rel='preload' as='image' href='/images/equipment-hero-1200.webp' media='(min-width: 768px) and (max-width: 1279px)' fetchpriority='high' />
+    <link rel='preload' as='image' href='/images/equipment-hero-1536.webp' media='(min-width: 1280px)' fetchpriority='high' />
     <link rel='stylesheet' href='/src/styles/main.css' />
     <link rel='stylesheet' href='/src/styles/equipment.css' />
+    <style>.equipment-showroom { --equipment-background: url('/images/equipment-hero-768.webp') !important; } @media (min-width: 768px) { .equipment-showroom { --equipment-background: url('/images/equipment-hero-1200.webp') !important; } } @media (min-width: 1280px) { .equipment-showroom { --equipment-background: url('/images/equipment-hero-1536.webp') !important; } }</style>
     <title>{{equipmentMeta.ogTitle}}</title>
   </head>
   <body class='page-equipment' data-equipment-page data-equipment-locale='{{locale}}'>
     <a class='skip-link' href='#main'>{{aria.skip}}</a>
     {{> site-header}}
-    <main id='main' class='equipment-showroom' data-equipment-showroom aria-busy='true' style='--equipment-background: url("{{equipmentSsr.heroBackground}}");'>
+    <main id='main' class='equipment-showroom' data-equipment-showroom aria-busy='true'>
       <div class='equipment-showroom__backdrop' aria-hidden='true'></div>
       <div class='equipment-showroom__noise' aria-hidden='true'></div>
       <div class='equipment-shell'>
@@ -46,7 +50,7 @@
           <section class='product-viewer' aria-label='{{equipmentCopy.product.interactiveView}}' data-viewer>
             <div class='product-viewer__halo' aria-hidden='true'></div>
             <div class='product-visual' data-product-visual><div class='product-visual__depth' data-product-depth>
-              <img class='product-visual__image' data-product-image src='{{equipmentSsr.initialProduct.image}}' alt='{{equipmentSsr.initialProduct.brand}} {{equipmentSsr.initialProduct.name}}' fetchpriority='high' decoding='async' />
+              <img class='product-visual__image' data-product-image src='{{equipmentSsr.initialProduct.displayImage}}' alt='{{equipmentSsr.initialProduct.brand}} {{equipmentSsr.initialProduct.name}}' fetchpriority='high' decoding='async' />
               <div class='product-hotspots' data-hotspots></div>
               <p class='product-image-missing' data-product-image-missing hidden>{{equipmentCopy.product.imageMissing}}</p>
             </div></div>
@@ -79,7 +83,7 @@
           <div class='product-rail__tabs' data-rail-categories>{{#each equipmentSsr.categories}}{{#if isAvailable}}<button class='product-rail__tab' type='button' data-rail-category='{{id}}' aria-pressed='{{isSelected}}'>{{label}}</button>{{/if}}{{/each}}</div>
           <div class='product-rail__navigation'>
             <button class='product-rail__arrow' type='button' data-product-previous><svg class='equipment-icon' aria-hidden='true'><use href='/icons.svg#arrow-left'></use></svg><span class='sr-only'>{{equipmentCopy.product.previousProduct}}</span></button>
-            <div class='product-rail__viewport' data-product-viewport><div class='product-rail__track' data-product-track>{{#each equipmentSsr.categoryProducts}}<button class='product-card' type='button' data-product-id='{{id}}' aria-pressed='{{isSelected}}' aria-label='{{brand}} {{name}}, {{powerRange}}'><span class='product-card__image'><img src='{{image}}' alt='' loading='lazy' decoding='async' /></span><span class='product-card__copy'><small>{{brand}}</small><strong>{{name}}</strong><span>{{powerRange}}</span></span><span class='product-card__arrow'><svg class='equipment-icon' aria-hidden='true'><use href='/icons.svg#arrow-right'></use></svg></span></button>{{/each}}</div></div>
+            <div class='product-rail__viewport' data-product-viewport><div class='product-rail__track' data-product-track>{{#each equipmentSsr.categoryProducts}}<button class='product-card' type='button' data-product-id='{{id}}' aria-pressed='{{isSelected}}'><span class='product-card__image'><img src='{{thumbnailImage}}' alt='' loading='lazy' decoding='async' /></span><span class='product-card__copy'><small>{{brand}}</small><strong>{{name}}</strong><span>{{powerRange}}</span></span><span class='product-card__arrow'><svg class='equipment-icon' aria-hidden='true'><use href='/icons.svg#arrow-right'></use></svg></span></button>{{/each}}</div></div>
             <button class='product-rail__arrow' type='button' data-product-next><svg class='equipment-icon' aria-hidden='true'><use href='/icons.svg#arrow-right'></use></svg><span class='sr-only'>{{equipmentCopy.product.nextProduct}}</span></button>
           </div>
         </section>

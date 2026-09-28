@@ -4,6 +4,7 @@ import { dirname, resolve } from 'node:path';
 import sharp from 'sharp';
 import { RESPONSIVE_IMAGE_ASSETS, IMAGE_FORMATS } from '../../src/config/image-assets.js';
 import { projectRoot, publicRoot } from './paths.mjs';
+import { EQUIPMENT_IMAGE_WIDTHS, equipmentImageUrl } from '../../src/config/equipment-images.js';
 
 const sourceDir = resolve(projectRoot, 'assets/images');
 const outputDir = resolve(publicRoot, 'images');
@@ -44,14 +45,20 @@ for (const asset of staticAssets) {
     const destination = claimOutput(url);
     await mkdir(dirname(destination), { recursive: true });
     await copyFile(source, destination);
+    if (equipmentImageUrl(url) !== url) {
+      for (const width of EQUIPMENT_IMAGE_WIDTHS) {
+        await sharp(source).resize({ width, withoutEnlargement: true }).webp({ quality: 80, effort: 5 }).toFile(claimOutput(equipmentImageUrl(url, width)));
+      }
+    }
   }
 }
 
-for (const { name, source, widths, quality } of RESPONSIVE_IMAGE_ASSETS) {
+for (const { name, source, widths, quality, legacyUrls = [] } of RESPONSIVE_IMAGE_ASSETS) {
   if (assetIds.has(name)) throw new Error(`Duplicate asset ID: ${name}`);
   assetIds.add(name);
   const sourcePath = resolve(sourceDir, `${source}.png`);
   const bytes = await requireSource(sourcePath);
+  for (const url of legacyUrls) await copyFile(sourcePath, claimOutput(url));
   const metadata = await sharp(bytes).metadata();
   const digest = createHash('sha256')
     .update(bytes)

@@ -9,6 +9,7 @@ const projectRoot = resolve(import.meta.dirname, '../..');
 const distRoot = resolve(projectRoot, 'dist');
 const origin = 'https://yourenergy.am';
 const registry = await createPageRegistry();
+const pageByFile = new Map(registry.map((page) => [page.file, page]));
 const selectPages = (...kinds) =>
   registry
     .filter(({ kind }) => kinds.includes(kind))
@@ -132,7 +133,7 @@ async function validateAssets(html, page) {
     if (tagName === 'img' || tagName === 'source' || tagName === 'script') {
       await validateAsset(attributes.get('src'), page);
     }
-    if (tagName === 'source' && attributes.has('srcset')) {
+    if (['source', 'img'].includes(tagName) && attributes.has('srcset')) {
       for (const url of extractSrcsetUrls(attributes.get('srcset'))) await validateAsset(url, page);
     }
     if (tagName === 'link' && /(?:stylesheet|icon|modulepreload)/u.test(rel)) {
@@ -258,6 +259,63 @@ function validateBaseDocument(html, page, locale) {
   if (/localhost|127\.0\.0\.1/iu.test(html)) fail(`${page}: localhost URL found`);
   if (/aria-(?:label|labelledby|describedby)\s*=\s*(["'])\1/iu.test(html)) {
     fail(`${page}: empty accessible name/reference found`);
+  }
+}
+
+async function validateIndexableMetadata(html, page, entry) {
+  const canonical = `${origin}${entry.path}`;
+  const title = html.match(/<title\b[^>]*>([\s\S]*?)<\/title>/iu)?.[1]?.trim();
+  if (!title) fail(`${page}: indexable route needs a title`);
+
+  if (!findMeta(html, 'name', 'description')?.get('content')?.trim()) {
+    fail(`${page}: indexable route needs a meta description`);
+  }
+
+  const canonicalLink = tagAttributes(html, 'link').find(
+    (attributes) => attributes.get('rel') === 'canonical'
+  );
+  if (canonicalLink?.get('href') !== canonical) fail(`${page}: canonical must be ${canonical}`);
+
+  const robots = findMeta(html, 'name', 'robots')?.get('content')?.toLowerCase() ?? '';
+  if (robots.includes('noindex')) fail(`${page}: indexable route must not declare noindex`);
+
+  const requiredSocialMetadata = [
+    ['property', 'og:type'],
+    ['property', 'og:site_name'],
+    ['property', 'og:locale'],
+    ['property', 'og:title'],
+    ['property', 'og:description'],
+    ['property', 'og:url'],
+    ['property', 'og:image'],
+    ['name', 'twitter:card'],
+    ['name', 'twitter:title'],
+    ['name', 'twitter:description'],
+    ['name', 'twitter:image']
+  ];
+  for (const [key, name] of requiredSocialMetadata) {
+    if (!findMeta(html, key, name)?.get('content')?.trim()) {
+      fail(`${page}: missing ${name} metadata`);
+    }
+  }
+
+  if (findMeta(html, 'property', 'og:url')?.get('content') !== canonical) {
+    fail(`${page}: og:url must be ${canonical}`);
+  }
+
+  for (const [name, value] of [
+    ['og:image', findMeta(html, 'property', 'og:image')?.get('content')],
+    ['twitter:image', findMeta(html, 'name', 'twitter:image')?.get('content')]
+  ]) {
+    if (value) await validateAsset(value, page);
+    else fail(`${page}: ${name} must reference a local production asset`);
+  }
+}
+
+function validateExternalLinkSafety(html, page) {
+  for (const attributes of tagAttributes(html, 'a')) {
+    if (attributes.get('target')?.toLowerCase() !== '_blank') continue;
+    const rel = new Set((attributes.get('rel') ?? '').toLowerCase().split(/\s+/u));
+    if (!rel.has('noopener')) fail(`${page}: target=_blank link must include rel=noopener`);
   }
 }
 
@@ -816,6 +874,9 @@ for (const [page, html] of pages) {
   validateBaseDocument(html, page, locale);
   await validateAssets(html, page);
   await validateAnchors(html, page, pages);
+  validateExternalLinkSafety(html, page);
+  const entry = pageByFile.get(page);
+  if (entry?.indexable) await validateIndexableMetadata(html, page, entry);
 }
 
 if (pages.has('index.html'))

@@ -37,17 +37,17 @@
             <source type='image/webp' srcset='/images/hero-time-20-1024.webp 1024w, /images/hero-time-20-1600.webp 1600w' sizes='100vw' />
             <img src='/images/hero-time-20-1600.jpg' width='1600' height='900' alt='' fetchpriority='high' decoding='async' />
           </picture>
-          <video class='projects-hero__video' data-projects-video autoplay muted loop playsinline preload='metadata' poster='/images/hero-time-20-1600.jpg'>{{#if projectsPage.videoSrc}}<source src='{{projectsPage.videoSrc}}' type='video/mp4' />{{/if}}</video>
+          {{#if projectsPage.videoSrc}}<video class='projects-hero__video' data-projects-video muted loop playsinline preload='none'><source src='{{projectsPage.videoSrc}}' type='video/mp4' /></video>{{/if}}
         </div>
         <div class='projects-hero__scrim' aria-hidden='true'></div>
         <div class='container projects-hero__content'>
           <div class='projects-hero__copy'>
             <h1 id='projects-hero-title'>{{projectsPage.hero.titleLead}}<br /><mark>{{projectsPage.hero.titleAccent}}</mark></h1>
             <p class='projects-hero__intro'>{{projectsPage.hero.copy}}</p>
-            <button class='projects-video-button' type='button' data-projects-video-toggle data-projects-video-watch='{{projectsPage.hero.watch}}' data-projects-video-pause='{{projectsPage.hero.pause}}' aria-pressed='false'>
+            {{#if projectsPage.videoSrc}}<button class='projects-video-button' type='button' data-projects-video-toggle data-projects-video-watch='{{projectsPage.hero.watch}}' data-projects-video-pause='{{projectsPage.hero.pause}}' aria-pressed='false'>
               <span class='projects-video-button__icon' aria-hidden='true'>▶</span>
               <span><strong data-projects-video-label>{{projectsPage.hero.watch}}</strong><small>{{projectsPage.hero.duration}}</small></span>
-            </button>
+            </button>{{/if}}
           </div>
           <div class='projects-hero__aside'>
             <p class='projects-hero__script'>{{projectsPage.hero.noteLead}}<br />{{projectsPage.hero.noteTail}}</p>

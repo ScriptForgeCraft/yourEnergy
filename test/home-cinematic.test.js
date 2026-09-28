@@ -133,14 +133,14 @@ test('time-based Hero visual preloads a frame and retains the last successful fr
   assert.doesNotMatch(motion, /date\?\.getHours/u);
 });
 
-test('Hero sun maps each source-frame arc point into the uncropped hero rectangle', () => {
+test('Hero sun maps each source-frame arc point into the centered cover crop', () => {
   const evening = getHeroTimeProfile(new Date('2026-09-07T16:00:00.000Z'));
   const point = projectHeroArcPoint(evening, {
     frameWidth: 1520.8,
     frameHeight: 791.2
   });
   assert.equal(Math.round(point.x), 1460);
-  assert.equal(Math.round(point.y), 169);
+  assert.equal(Math.round(point.y), 150);
   assert.equal(projectHeroArcPoint(evening, { frameWidth: 100 }), null);
 });
 

@@ -1,5 +1,3 @@
-import { gsap } from 'gsap';
-
 const reveal = () => {
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
   const items = [...document.querySelectorAll('[data-blog-reveal]')];
@@ -9,16 +7,16 @@ const reveal = () => {
       entries.forEach((entry) => {
         if (!entry.isIntersecting) return;
         observer.unobserve(entry.target);
-        gsap.fromTo(
-          entry.target,
-          { autoAlpha: 0, y: 18 },
-          { autoAlpha: 1, y: 0, duration: 0.52, ease: 'power2.out' }
+        entry.target.animate(
+          [{ opacity: 0, transform: 'translateY(18px)' }, { opacity: 1, transform: 'translateY(0)' }],
+          { duration: 520, easing: 'cubic-bezier(0.16, 1, 0.3, 1)' }
         );
       });
     },
     { rootMargin: '0px 0px -5%' }
   );
-  items.forEach((item) => observer.observe(item));
+  // Already-visible content must not disappear while enhancement initializes.
+  items.filter((item) => item.getBoundingClientRect().top >= window.innerHeight).forEach((item) => observer.observe(item));
 };
 
 const initCatalog = () => {

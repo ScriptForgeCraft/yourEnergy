@@ -268,7 +268,7 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  color: #8b9aa6;
+  color: #596b79;
   font-size: 0.79rem;
 }
 
@@ -389,7 +389,7 @@
   align-items: center;
   gap: 6px;
   margin: 0;
-  color: #72818e;
+  color: #596b79;
   font-size: 0.71rem;
 }
 
@@ -432,7 +432,7 @@
 .projects-featured__metrics dt {
   display: grid;
   gap: 5px;
-  color: #80909f;
+  color: #596b79;
   font-size: 0.59rem;
   line-height: 1.25;
 }
@@ -696,6 +696,7 @@
   margin: 11px 0 0;
   color: #60737c;
   font-size: 0.88rem;
+  font-weight: 400;
   line-height: 1.55;
 }
 

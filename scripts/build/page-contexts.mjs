@@ -525,6 +525,12 @@ export const createPageContextBuilder = ({ publicEnv, pages }) => {
         : null);
     if (!copy) throw new Error(`Missing project case content for ${slug} in ${content.locale}.`);
     const path = projectCasePath(content.locale, slug);
+    const image = copy.image ?? 'project-arabkir';
+    const imageWidth = image === 'project-arabkir' ? 1200 : 800;
+    const imageHeight = image === 'project-arabkir' ? 800 : 533;
+    const responsiveWidths = image === 'project-arabkir' ? [480, 800, 1200] : [480, 800];
+    const srcset = (format) =>
+      responsiveWidths.map((width) => `/images/${image}-${width}.${format} ${width}w`).join(', ');
     const base = createHomeContext(content, { pageKind: 'projects' });
 
     return {
@@ -536,9 +542,12 @@ export const createPageContextBuilder = ({ publicEnv, pages }) => {
       languageLinks: createProjectCaseLanguageLinks(content.locale, slug),
       projectCase: {
         ...copy,
-        image: copy.image ?? 'project-arabkir',
-        avifSrcset: `/images/${copy.image ?? 'project-arabkir'}-480.avif 480w, /images/${copy.image ?? 'project-arabkir'}-800.avif 800w`,
-        webpSrcset: `/images/${copy.image ?? 'project-arabkir'}-480.webp 480w, /images/${copy.image ?? 'project-arabkir'}-800.webp 800w`,
+        image,
+        imageWidth,
+        imageHeight,
+        socialImage: `/images/${image}-${imageWidth}.jpg`,
+        avifSrcset: srcset('avif'),
+        webpSrcset: srcset('webp'),
         projectsHref: contentPagePath(content.locale, 'projects'),
         calculatorHref: toolPath(content.locale, 'calculator')
       }
@@ -831,6 +840,11 @@ export const createPageContextBuilder = ({ publicEnv, pages }) => {
       ...createHomeContext(content, { pageKind: 'blog' }),
       path: contentPagePath(content.locale, 'blog'),
       blogCopy: BLOG_COPY[content.locale],
+      blogMeta: {
+        title: `${BLOG_COPY[content.locale].heroBefore} ${BLOG_COPY[content.locale].heroAccent} | YOURENERGY`,
+        description: BLOG_COPY[content.locale].heroText,
+        image: '/images/hero-time-20-1600.jpg'
+      },
       featured: localeArticles[0],
       articles: localeArticles,
       categories,
@@ -866,6 +880,11 @@ export const createPageContextBuilder = ({ publicEnv, pages }) => {
     .map(({ article }) => article);
   const contexts = {
     home: createHomeContext,
+    'not-found': (content) => ({
+      ...createHomeContext(content, { pageKind: 'support' }),
+      notFoundTitle: { hy: 'Էջը չի գտնվել', ru: 'Страница не найдена', en: 'Page not found' }[content.locale],
+      notFoundCopy: { hy: 'Այս հասցեով էջ չկա։ Օգտվեք ընտրացանկից կամ վերադարձեք գլխավոր էջ։', ru: 'По этому адресу нет страницы. Воспользуйтесь меню или вернитесь на главную.', en: 'There is no page at this address. Use the navigation or return to the homepage.' }[content.locale]
+    }),
     blog: (content) => createBlogIndexContext(content, blogArticles),
     'blog-article': (content, page) =>
       createBlogArticleContext(content, page.article, blogArticles),

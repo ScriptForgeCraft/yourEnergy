@@ -25,7 +25,10 @@ const createHeaders = (mapOrigins) => `/*
   X-Content-Type-Options: nosniff
   X-Frame-Options: DENY
 
-/assets/*
+/assets/*.js
+  Cache-Control: public, max-age=31536000, immutable
+
+/assets/*.css
   Cache-Control: public, max-age=31536000, immutable
 `;
 
@@ -50,6 +53,13 @@ export default defineConfig(async ({ mode }) => {
         name: 'yourenergy-csp-allowlist',
         async closeBundle() {
           await writeFile(resolve(distRoot, '_headers'), createHeaders(mapOrigins));
+          const redirects = pages
+            .filter(({ kind }) => ['calculator-pro', 'calculator-refine'].includes(kind))
+            .flatMap(({ path, locale }) => {
+              const destination = `${locale === 'hy' ? '/' : `/${locale}/`}calculator/?mode=pro`;
+              return [path, path.slice(0, -1), `${path}index.html`].map((from) => `${from} ${destination} 301`);
+            });
+          await writeFile(resolve(distRoot, '_redirects'), `${redirects.join('\n')}\n`);
         }
       }
     ],

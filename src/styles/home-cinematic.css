@@ -61,6 +61,7 @@
 
 .page-home .hero-backdrop img {
   display: block;
+  object-fit: cover;
   object-position: center;
 }
 
@@ -416,14 +417,14 @@
 @font-face {
   font-family: 'Caveat Signature';
   src: url('/fonts/caveat-500.ttf') format('truetype');
-  font-display: block;
+  font-display: swap;
   font-weight: 500;
 }
 
 @font-face {
   font-family: 'Poqrik Dzeragir';
   src: url('/fonts/poqrik-dzeragir.ttf') format('truetype');
-  font-display: block;
+  font-display: swap;
 }
 
 .page-home .hero-signature {
@@ -1399,7 +1400,7 @@ html[lang='hy'] .page-home .hero-signature {
 
 @keyframes hero-copy-enter {
   from {
-    opacity: 0;
+    opacity: var(--story-copy-opacity);
     transform: translate3d(0, calc(var(--story-copy-y) + 20px), 0);
   }
   to {
