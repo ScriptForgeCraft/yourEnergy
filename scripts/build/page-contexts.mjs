@@ -570,16 +570,16 @@ export const createPageContextBuilder = ({ publicEnv, pages }) => {
 
   const equipmentMeta = Object.freeze({
     hy: {
-      ogTitle: 'Սարքավորումներ | YOURENERGY',
+      ogTitle: 'Արևային վահանակներ և ինվերտորներ Հայաստանում | YOURENERGY',
       description:
         'YOURENERGY-ի արևային վահանակներ, ինվերտորներ, կուտակիչներ և մոնտաժային համակարգեր։'
     },
     ru: {
-      ogTitle: 'Оборудование | YOURENERGY',
+      ogTitle: 'Солнечные панели и инверторы в Армении | YOURENERGY',
       description: 'Оборудование YOURENERGY: солнечные панели, инверторы и аккумуляторные системы.'
     },
     en: {
-      ogTitle: 'Equipment | YOURENERGY',
+      ogTitle: 'Solar Panels & Inverters in Armenia | YOURENERGY',
       description: 'YOURENERGY equipment: solar panels, inverters, batteries and mounting systems.'
     }
   });

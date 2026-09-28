@@ -1,7 +1,7 @@
 export const projectsPageCopy = Object.freeze({
   ru: {
     meta: {
-      title: 'Наши солнечные проекты в Армении | YOURENERGY',
+      title: 'Проекты солнечных электростанций в Армении | YOURENERGY',
       description:
         'Реализованные солнечные системы YOURENERGY для домов, бизнеса и производственных объектов в Армении.',
       ogTitle: 'Реальные проекты солнечной энергетики | YOURENERGY',
@@ -117,7 +117,7 @@ export const projectsPageCopy = Object.freeze({
   },
   hy: {
     meta: {
-      title: 'Մեր արևային նախագծերը Հայաստանում | YOURENERGY',
+      title: 'Արևային կայանների նախագծեր Հայաստանում | YOURENERGY',
       description:
         'YOURENERGY-ի իրականացված արևային համակարգեր Հայաստանի տների, բիզնեսների և արտադրական օբյեկտների համար։',
       ogTitle: 'Արևային էներգետիկայի իրական նախագծեր | YOURENERGY',
@@ -228,7 +228,7 @@ export const projectsPageCopy = Object.freeze({
   },
   en: {
     meta: {
-      title: 'Our solar projects in Armenia | YOURENERGY',
+      title: 'Solar Power Projects in Armenia | YOURENERGY',
       description:
         'Completed YOURENERGY solar installations for homes, businesses and industrial sites across Armenia.',
       ogTitle: 'Real solar energy projects | YOURENERGY',

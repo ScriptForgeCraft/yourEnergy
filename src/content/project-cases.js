@@ -2,7 +2,7 @@ const modernHomeYerevan = Object.freeze({
   ru: {
     slug: 'modern-home-yerevan',
     meta: {
-      title: 'Современный дом с солнечной системой в Ереване | YOURENERGY',
+      title: 'Солнечная система для частного дома в Ереване | YOURENERGY',
       description:
         'Карточка реализованного проекта YOURENERGY: современный дом с солнечной системой в Ереване.',
       ogTitle: 'Современный дом с солнечной системой | YOURENERGY',
@@ -54,7 +54,7 @@ const modernHomeYerevan = Object.freeze({
   hy: {
     slug: 'modern-home-yerevan',
     meta: {
-      title: 'Ժամանակակից տուն արևային համակարգով Երևանում | YOURENERGY',
+      title: 'Արևային համակարգ առանձնատան համար Երևանում | YOURENERGY',
       description:
         'YOURENERGY-ի իրականացված նախագծի քարտ՝ ժամանակակից տուն արևային համակարգով Երևանում։',
       ogTitle: 'Ժամանակակից տուն արևային համակարգով | YOURENERGY',

@@ -43,7 +43,7 @@ const regions = {
 const common = {
   hy: {
     quickMeta: {
-      title: 'Արևային նախնական հաշվիչ՝ տարածաշրջան և սպառում | YOURENERGY',
+      title: 'Արևային համակարգի հաշվիչ Հայաստանում | YOURENERGY',
       description:
         'Ընտրեք տարածաշրջանն ու մուտքագրեք սպառումը՝ նախնական գնահատման համար, ապա ցանկության դեպքում ճշգրտեք այն տանիքով։',
       ogTitle: 'Արագ արևային հաշվիչ | YOURENERGY',
@@ -348,7 +348,7 @@ const common = {
   },
   ru: {
     quickMeta: {
-      title: 'Предварительный калькулятор: регион и потребление | YOURENERGY',
+      title: 'Калькулятор солнечной системы в Армении | YOURENERGY',
       description:
         'Выберите регион и укажите потребление для предварительной оценки, затем при необходимости уточните её по крыше.',
       ogTitle: 'Быстрый солнечный калькулятор | YOURENERGY',
@@ -656,7 +656,7 @@ const common = {
   },
   en: {
     quickMeta: {
-      title: 'Preliminary solar calculator: region and consumption | YOURENERGY',
+      title: 'Solar System Calculator in Armenia | YOURENERGY',
       description:
         'Choose a region and enter consumption for a preliminary estimate, then refine it with your roof when needed.',
       ogTitle: 'Quick solar calculator | YOURENERGY',

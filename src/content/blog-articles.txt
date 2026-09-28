@@ -304,7 +304,7 @@ RU
 ----------------------------------------------------------------------
 
 SEO TITLE:
-Сколько можно сэкономить с солнечной электростанцией в Армении? | YOURENERGY
+Солнечная электростанция в Армении: сколько можно сэкономить | YOURENERGY
 
 META DESCRIPTION:
 Как правильно оценить экономию солнечной системы в Армении: тарифы, потребление, выработка, собственное потребление и почему универсального срока окупаемости не существует.
@@ -410,7 +410,7 @@ EN
 ----------------------------------------------------------------------
 
 SEO TITLE:
-How Much Can a Solar System Save in Armenia? | YOURENERGY
+Solar Savings in Armenia: How Much Can You Save? | YOURENERGY
 
 META DESCRIPTION:
 How to estimate solar savings in Armenia correctly: electricity tariffs, consumption profile, solar generation, self-consumption and why there is no universal payback period.
@@ -516,7 +516,7 @@ HY
 ----------------------------------------------------------------------
 
 SEO TITLE:
-Որքա՞ն կարելի է խնայել արևային կայանով Հայաստանում | YOURENERGY
+Արևային համակարգ Հայաստանում․ որքան կարելի է խնայել | YOURENERGY
 
 META DESCRIPTION:
 Ինչպես ճիշտ գնահատել արևային կայանի խնայողությունը Հայաստանում՝ սակագներ, սպառում, արտադրություն, սեփական սպառում և վերադարձելիության իրական հաշվարկ։
@@ -622,7 +622,7 @@ RU
 ----------------------------------------------------------------------
 
 SEO TITLE:
-Нужен ли аккумулятор для солнечной электростанции? | YOURENERGY
+Нужен ли аккумулятор для солнечной системы в Армении? | YOURENERGY
 
 META DESCRIPTION:
 Когда солнечной системе действительно нужен аккумулятор: собственное потребление, резервное питание, kW и kWh, критические нагрузки и правильный выбор ёмкости.
@@ -741,7 +741,7 @@ EN
 ----------------------------------------------------------------------
 
 SEO TITLE:
-Do You Need a Battery for a Solar Power System? | YOURENERGY
+Do You Need a Battery for a Solar System in Armenia? | YOURENERGY
 
 META DESCRIPTION:
 When a solar system actually needs battery storage: self-consumption, backup power, kW versus kWh, critical loads and choosing the right battery size.
@@ -860,7 +860,7 @@ HY
 ----------------------------------------------------------------------
 
 SEO TITLE:
-Պե՞տք է մարտկոց արևային էլեկտրակայանի համար | YOURENERGY
+Պե՞տք է մարտկոց արևային համակարգի համար Հայաստանում | YOURENERGY
 
 META DESCRIPTION:
 Երբ է արևային համակարգին իրականում անհրաժեշտ կուտակիչ՝ սեփական սպառում, պահուստային սնուցում, kW և kWh, կարևոր բեռներ և ճիշտ հզորության ընտրություն։
@@ -968,7 +968,7 @@ RU
 ----------------------------------------------------------------------
 
 SEO TITLE:
-Как рассчитать мощность солнечной станции для дома | YOURENERGY
+Как подобрать мощность солнечной системы в Армении | YOURENERGY
 
 META DESCRIPTION:
 Как правильно подобрать мощность солнечной системы: годовое потребление, крыша, затенение, фактическая выработка, будущие нагрузки и ограничения подключения.
@@ -1070,7 +1070,7 @@ EN
 ----------------------------------------------------------------------
 
 SEO TITLE:
-How to Size a Solar Power System for a Home | YOURENERGY
+How to Size a Solar System in Armenia | YOURENERGY
 
 META DESCRIPTION:
 How to choose the right solar system size: annual electricity use, roof area, shading, real energy yield, future loads and grid connection limits.
@@ -1172,7 +1172,7 @@ HY
 ----------------------------------------------------------------------
 
 SEO TITLE:
-Ինչպես ճիշտ հաշվարկել արևային կայանի հզորությունը | YOURENERGY
+Ինչպես ընտրել արևային համակարգի հզորությունը Հայաստանում | YOURENERGY
 
 META DESCRIPTION:
 Ինչպես ընտրել արևային կայանի ճիշտ հզորությունը՝ տարեկան սպառում, տանիք, ստվերում, իրական արտադրություն, ապագա բեռներ և միացման սահմանափակումներ։
@@ -1277,7 +1277,7 @@ RU
 ----------------------------------------------------------------------
 
 SEO TITLE:
-Взаимозачёт солнечной энергии в Армении: как станция работает с сетью | YOURENERGY
+Взаимозачёт солнечной энергии в Армении | YOURENERGY
 
 META DESCRIPTION:
 Как работает режим автономного энергопроизводства в Армении: лимит мощности, месячный взаимозачёт, перенос положительного баланса и расчётный год с 1 мая по 30 апреля.
@@ -1381,7 +1381,7 @@ EN
 ----------------------------------------------------------------------
 
 SEO TITLE:
-Net Metering in Armenia: How Solar Works with the Grid | YOURENERGY
+Solar Net Metering in Armenia | YOURENERGY
 
 META DESCRIPTION:
 How Armenia's autonomous electricity generation framework works: capacity limits, monthly energy balance, rollover of positive balances and the settlement year from May 1 to April 30.
@@ -1485,7 +1485,7 @@ HY
 ----------------------------------------------------------------------
 
 SEO TITLE:
-Արևային էներգիայի հաշվանցումը Հայաստանում․ ինչպես է կայանն աշխատում ցանցի հետ | YOURENERGY
+Արևային էներգիայի հաշվանցում Հայաստանում | YOURENERGY
 
 META DESCRIPTION:
 Ինչպես է գործում ինքնավար էներգաարտադրության համակարգը Հայաստանում՝ հզորության սահման, ամսական հաշվեկշիռ, դրական մնացորդի տեղափոխում և մայիսի 1-ից ապրիլի 30 հաշվարկային տարի։

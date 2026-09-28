@@ -23,7 +23,7 @@ export default {
   homeHref: '/en/',
   supportBase: '/en',
   meta: {
-    title: 'Solar calculator for homes in Armenia | YOURENERGY',
+    title: 'Solar Panels & Solar Systems in Armenia | YOURENERGY',
     description:
       'Choose a region and enter consumption for a preliminary solar estimate, then refine it with your roof and professional inputs when needed.',
     ogTitle: 'Start your home solar estimate | YOURENERGY',
@@ -867,7 +867,7 @@ export default {
       }
     ],
     meta: {
-      title: 'Solar system FAQ in Armenia | YOURENERGY',
+      title: 'Solar Systems in Armenia: FAQ | YOURENERGY',
       description:
         'Answers to common questions about solar-system pricing, estimates, payback, installation and maintenance.',
       ogTitle: 'Solar system FAQ | YOURENERGY',
