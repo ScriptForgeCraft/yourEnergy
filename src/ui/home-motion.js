@@ -141,7 +141,10 @@ export const getHeroCounterTarget = (value) => {
  * its normalized source point. This keeps the marker on the
  * visible sun in every time-of-day frame, including non-16:9 viewports.
  */
-export const projectHeroArcPoint = (profile, { frameWidth, frameHeight, imageWidth = 1600, imageHeight = 900 } = {}) => {
+export const projectHeroArcPoint = (
+  profile,
+  { frameWidth, frameHeight, imageWidth = 1600, imageHeight = 900 } = {}
+) => {
   const point = profile?.arcPoint;
   if (
     !point ||
@@ -323,7 +326,15 @@ const initHeroTime = (hero, { reducedMotion = false } = {}) => {
         const progress = Math.min((now - startedAt) / duration, 1);
         const point = interpolateSunArc(profiles, progress);
         const bounds = hero.getBoundingClientRect();
-        const projected = projectHeroArcPoint({ arcPoint: point }, { frameWidth: bounds.width, frameHeight: bounds.height, imageWidth: image.naturalWidth || 1600, imageHeight: image.naturalHeight || 900 });
+        const projected = projectHeroArcPoint(
+          { arcPoint: point },
+          {
+            frameWidth: bounds.width,
+            frameHeight: bounds.height,
+            imageWidth: image.naturalWidth || 1600,
+            imageHeight: image.naturalHeight || 900
+          }
+        );
         setProperty(hero, '--hero-sun-x', `${projected.x}px`);
         setProperty(hero, '--hero-sun-y', `${projected.y}px`);
 

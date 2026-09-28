@@ -5,3 +5,4 @@ reports
 .codex
 .wrangler
 src/templates/*.hbs
+public/yandex_*.html

@@ -146,11 +146,7 @@ export const buildProcessInspectionValues = (state = {}, locale = 'en') => {
   );
 
   const shadingText = mappedStatus(shadingStatus.value, SHADING_ALIASES, copy.shading);
-  const electricalText = mappedStatus(
-    electricalStatus.value,
-    ELECTRICAL_ALIASES,
-    copy.electrical
-  );
+  const electricalText = mappedStatus(electricalStatus.value, ELECTRICAL_ALIASES, copy.electrical);
 
   return {
     'roof-area':

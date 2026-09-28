@@ -20,9 +20,9 @@
     </nav>
     <div class='header-actions'>
       <details class='language-menu'>
-        <summary aria-label='{{currentLanguageLabel}} — {{aria.languageNav}}'>{{currentLanguageLabel}}<span
-            aria-hidden='true'
-          ></span></summary>
+        <summary
+          aria-label='{{currentLanguageLabel}} — {{aria.languageNav}}'
+        >{{currentLanguageLabel}}<span aria-hidden='true'></span></summary>
         <nav aria-label='{{aria.languageNav}}'>{{#each languageLinks}}<a
               class='language-link'
               href='{{{href}}}'
@@ -42,9 +42,7 @@
         </a>
         <div class='mobile-menu__links'>
           <a class='{{activeNavigation.home}}' href='{{navLinks.home}}'>
-            <svg class='inline-icon' aria-hidden='true'><use
-                href='/icons.svg#faq-home'
-              ></use></svg>
+            <svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#faq-home'></use></svg>
             <span>{{nav.home}}</span>
           </a>
           <a class='{{activeNavigation.calculator}}' href='{{navLinks.calculator}}'>
@@ -70,7 +68,9 @@
             <span>{{nav.about}}</span>
           </a>
           <a class='{{activeNavigation.blog}}' href='{{navLinks.blog}}'>
-            <svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#file-text'></use></svg>
+            <svg class='inline-icon' aria-hidden='true'><use
+                href='/icons.svg#file-text'
+              ></use></svg>
             <span>{{nav.blog}}</span>
           </a>
         </div>

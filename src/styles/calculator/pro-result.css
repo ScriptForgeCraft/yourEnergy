@@ -1546,7 +1546,7 @@
 .calculator-page--professional
   [data-professional-calculator][data-current-step='3']
   .professional-hero__copy
-  > :not(.calculator-breadcrumb) {
+  > :not(.calculator-breadcrumb, h1) {
   display: none;
 }
 

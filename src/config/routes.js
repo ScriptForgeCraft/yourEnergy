@@ -19,7 +19,11 @@ export const createPageRegistry = async () => {
     });
     return [
       page('home', ''),
-      page('not-found', '', { path: `${pagePath(locale)}404.html`, file: `${pagePath(locale).slice(1)}404.html`, indexable: false }),
+      page('not-found', '', {
+        path: `${pagePath(locale)}404.html`,
+        file: `${pagePath(locale).slice(1)}404.html`,
+        indexable: false
+      }),
       ...['faq', 'equipment', 'calculator', 'projects', 'about', 'contacts', 'blog'].map((kind) =>
         page(kind, kind, { indexable: !['about', 'contacts'].includes(kind) })
       ),

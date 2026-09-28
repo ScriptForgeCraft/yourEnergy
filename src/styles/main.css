@@ -848,7 +848,9 @@ h1 mark {
   .page-home .mobile-menu summary:focus-visible {
     border-color: rgb(245 189 24 / 72%);
     background: rgb(7 26 45 / 86%);
-    box-shadow: 0 12px 36px rgb(0 0 0 / 28%), 0 0 0 1px rgb(245 189 24 / 14%);
+    box-shadow:
+      0 12px 36px rgb(0 0 0 / 28%),
+      0 0 0 1px rgb(245 189 24 / 14%);
   }
 
   .page-home .mobile-menu summary span {
@@ -991,11 +993,11 @@ h1 mark {
     color: var(--color-navy);
     background: var(--color-yellow);
   }
-.process-chrome-active  .button--small{
- background-color: rgba(254, 255, 255, 0);
- color:  rgba(253, 253, 253, 0);
- box-shadow:  none;
-}
+  .process-chrome-active .button--small {
+    background-color: rgba(254, 255, 255, 0);
+    color: rgba(253, 253, 253, 0);
+    box-shadow: none;
+  }
   .process-chrome-active .page-home .site-header {
     border-color: transparent;
     background-color: rgba(4, 21, 35, 0);

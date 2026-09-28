@@ -55,6 +55,8 @@ npm run preview
 npm run check
 ```
 
-Use Node compatible with the locked Vite version (Node 22.12+ or a current supported release). `npm test` generates its own HTML fixtures; it does not require committed HTML or a previous production build. `npm run verify:clean` rebuilds from an empty generated workspace, compares a second build and checks that source hashes and Git status stay unchanged.
+Use Node 22.19+ (or a newer supported release), including for the locked Lighthouse version. `npm test` generates its own HTML fixtures; it does not require committed HTML or a previous production build. `npm run verify:clean` rebuilds from an empty generated workspace, compares a second build and checks that source hashes and Git status stay unchanged.
+
+`npm run audit:lighthouse` audits every indexable locale on mobile and desktop against the production preview at port 4173. Start `npm run preview -- --port 4173` first. Reports go to ignored `reports/lighthouse/latest/`. Filters are optional: `--locale=en`, `--device=mobile`, `--kind=home,equipment`, `--batch=my-run`, `--origin=https://yourenergy.am`. Quote comma-separated arguments in PowerShell. To use a separate supported Node runtime, set `LIGHTHOUSE_NODE` to its executable. Run `node scripts/dev/audit-http.mjs` against a local Cloudflare Pages server (port 8789 by default) to verify actual redirects and 404 status codes.
 
 See [architecture](docs/architecture.md), [assets](docs/assets.md), [equipment data](docs/equipment-data.md), [calculator behavior](docs/calculator.md), [deployment](docs/deployment.md) and [Functions configuration](docs/functions.md).

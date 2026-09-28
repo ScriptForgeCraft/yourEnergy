@@ -261,7 +261,12 @@ const reportFooter = ({ page, total, label, reportId }) => `<footer class="pdf-f
   <span class="pdf-footer__right">${escapeHtml(`${page}/${total}${reportId ? ` · ${shortReportId(reportId)}` : ''}`)}</span>
 </footer>`;
 
-const reportPage = ({ page, copy, reportId, content }) => `<section class="pdf-page pdf-page--${page}" data-pdf-page="${page}">
+const reportPage = ({
+  page,
+  copy,
+  reportId,
+  content
+}) => `<section class="pdf-page pdf-page--${page}" data-pdf-page="${page}">
   ${brand()}
   ${content}
   ${reportFooter({ page, total: 4, label: copy.footerLabel, reportId })}
@@ -270,7 +275,16 @@ const reportPage = ({ page, copy, reportId, content }) => `<section class="pdf-p
 const statusBadge = (label, className = '') =>
   `<span class="pdf-badge ${className}">${escapeHtml(label)}</span>`;
 
-const metricCard = ({ x, width, top, label, value, unit = '', accent, valueSize = 16 }) => `<article class="metric-card" style="left:${x}pt;top:${top}pt;width:${width}pt;--accent:${accent}">
+const metricCard = ({
+  x,
+  width,
+  top,
+  label,
+  value,
+  unit = '',
+  accent,
+  valueSize = 16
+}) => `<article class="metric-card" style="left:${x}pt;top:${top}pt;width:${width}pt;--accent:${accent}">
   <div class="metric-card__label">${escapeHtml(label)}</div>
   <div class="metric-card__value" style="font-size:${valueSize}pt">${escapeHtml(value)}</div>
   ${unit ? `<div class="metric-card__unit">${escapeHtml(unit)}</div>` : ''}
@@ -288,7 +302,10 @@ const dataRows = (rows) =>
     .join('');
 
 const monthlyBarChart = ({ values, months, unit, kind }) => {
-  const numericValues = Array.from({ length: 12 }, (_unused, index) => asNumber(values?.[index]) ?? 0);
+  const numericValues = Array.from(
+    { length: 12 },
+    (_unused, index) => asNumber(values?.[index]) ?? 0
+  );
   const maximum = Math.max(...numericValues, 1) * 1.15;
   const bars = numericValues
     .map((value, index) => {
@@ -324,20 +341,28 @@ const sourceStatus = ({ label, status, color }) => `<div class="source-status">
   <div class="source-status__state"><span class="source-status__dot" style="--dot:${color}"></span><span>${escapeHtml(status)}</span></div>
 </div>`;
 
-const assumptionCard = ({ x, top, title, body }) => `<article class="assumption-card" style="left:${x}pt;top:${top}pt">
+const assumptionCard = ({
+  x,
+  top,
+  title,
+  body
+}) => `<article class="assumption-card" style="left:${x}pt;top:${top}pt">
   <div class="assumption-card__title">${escapeHtml(title)}</div>
   <div class="assumption-card__body">${escapeHtml(body)}</div>
 </article>`;
 
 const equipmentDetails = ({ analysis, scenario, copy, locale }) => {
   const recommendation = analysis.equipmentRecommendation ?? {};
-  const module = recommendation.solarModule ?? analysis.equipment ?? scenario.system?.equipment ?? {};
+  const module =
+    recommendation.solarModule ?? analysis.equipment ?? scenario.system?.equipment ?? {};
   const inverter = recommendation.inverter ?? analysis.inverterRecommendation ?? {};
   const moduleBrand = module.panelBrand ?? module.brand;
   const moduleModel = module.panelModel ?? module.model ?? module.productName;
   const moduleName = [moduleBrand, moduleModel].filter(Boolean).join(' ');
   const moduleWatts = asNumber(scenario.system?.panelWatts ?? module.watts);
-  const inverterName = [inverter.brand, inverter.productName ?? inverter.model].filter(Boolean).join(' ');
+  const inverterName = [inverter.brand, inverter.productName ?? inverter.model]
+    .filter(Boolean)
+    .join(' ');
   const inverterKw = asNumber(inverter.selectedAcPowerKw ?? inverter.acPowerKw);
   return {
     module: moduleName
@@ -364,46 +389,72 @@ const createCopy = ({ wizard, product }) => {
     page3Subtitle: pdf.page3Subtitle ?? '',
     page4Title: pdf.page4Title ?? 'Inputs, sources and limitations',
     page4Subtitle: pdf.page4Subtitle ?? '',
-    recommendedSystem: pdf.recommendedSystem ?? wizard.recommendedSystemTitle ?? 'Recommended system',
-    annualProduction: pdf.annualProduction ?? wizard.metrics?.annualGeneration ?? 'Annual generation',
+    recommendedSystem:
+      pdf.recommendedSystem ?? wizard.recommendedSystemTitle ?? 'Recommended system',
+    annualProduction:
+      pdf.annualProduction ?? wizard.metrics?.annualGeneration ?? 'Annual generation',
     annualCoverage: pdf.annualCoverage ?? wizard.annualCoverage ?? 'Annual consumption coverage',
     coverageSentence: pdf.coverageSentence ?? '{value}% annual consumption coverage',
     annualSavings: pdf.annualSavings ?? wizard.metrics?.annualSavings ?? 'Annual savings',
-    remainingGridDemand: pdf.remainingGridDemand ?? wizard.remainingGridDemand ?? 'Remaining annual grid demand',
+    remainingGridDemand:
+      pdf.remainingGridDemand ?? wizard.remainingGridDemand ?? 'Remaining annual grid demand',
     co2: pdf.co2 ?? wizard.environmental?.co2 ?? 'CO₂ reduction',
     perYear: pdf.perYear ?? 'per year',
     projectSummary: pdf.projectSummary ?? wizard.projectSummaryTitle ?? 'Your project summary',
     property: pdf.property ?? wizard.projectLocation ?? 'Property',
     consumption: pdf.consumption ?? wizard.annualConsumption ?? 'Annual consumption',
     roof: pdf.roof ?? wizard.roofSummary ?? 'Roof',
-    pvgisReferenceYield: pdf.pvgisReferenceYield ?? wizard.pvgisReferenceYield ?? 'Solar-resource reference yield',
+    pvgisReferenceYield:
+      pdf.pvgisReferenceYield ?? wizard.pvgisReferenceYield ?? 'Solar-resource reference yield',
     usableArea: pdf.usableArea ?? wizard.preliminaryUsableRoofArea ?? 'Usable module area',
     mounting: pdf.mounting ?? 'Mounting approach',
     disclaimer: pdf.disclaimer ?? pdf.footer ?? '',
     solarModule: pdf.module ?? wizard.moduleRecommendationTitle ?? 'Solar module',
     inverter: pdf.inverter ?? wizard.inverterRecommendationTitle ?? 'Inverter',
     whyPanels: pdf.whyPanels ?? 'Why {count} modules',
-    sizingExplanation: pdf.sizingExplanation ?? 'The system is sized for consumption, not to fill the whole roof.',
-    roofCapacityTitle: pdf.roofCapacityTitle ?? wizard.roofCapacityTitle ?? 'Physical roof capacity',
+    sizingExplanation:
+      pdf.sizingExplanation ?? 'The system is sized for consumption, not to fill the whole roof.',
+    roofCapacityTitle:
+      pdf.roofCapacityTitle ?? wizard.roofCapacityTitle ?? 'Physical roof capacity',
     roofArea: pdf.roofArea ?? wizard.roofAreaForSizing ?? 'Roof area',
-    physicalModuleLimit: pdf.physicalModuleLimit ?? wizard.maximumPanelsForRoof ?? 'Physical module limit',
-    physicalCapacity: pdf.physicalCapacity ?? wizard.physicalDcCapacityLimit ?? 'Physical DC capacity limit',
-    roofNotLimiting: pdf.roofNotLimiting ?? wizard.roofCapacityNotLimiting ?? 'Roof capacity is not a limiting factor.',
-    roofLimiting: pdf.roofLimiting ?? wizard.roofCapacityLimiting ?? 'Roof capacity limits the recommended system.',
-    energyBalanceTitle: pdf.energyBalanceTitle ?? wizard.energyBalanceTitle ?? 'Annual energy balance',
+    physicalModuleLimit:
+      pdf.physicalModuleLimit ?? wizard.maximumPanelsForRoof ?? 'Physical module limit',
+    physicalCapacity:
+      pdf.physicalCapacity ?? wizard.physicalDcCapacityLimit ?? 'Physical DC capacity limit',
+    roofNotLimiting:
+      pdf.roofNotLimiting ??
+      wizard.roofCapacityNotLimiting ??
+      'Roof capacity is not a limiting factor.',
+    roofLimiting:
+      pdf.roofLimiting ??
+      wizard.roofCapacityLimiting ??
+      'Roof capacity limits the recommended system.',
+    energyBalanceTitle:
+      pdf.energyBalanceTitle ?? wizard.energyBalanceTitle ?? 'Annual energy balance',
     solarProduction: pdf.solarProduction ?? 'Solar production',
-    roofReferenceTitle: pdf.roofReferenceTitle ?? wizard.roofReferenceComparison ?? 'Location reference and roof estimate',
-    roofSpecificYield: pdf.roofSpecificYield ?? wizard.roofSystemYield ?? 'Estimated specific yield for the roof',
+    roofReferenceTitle:
+      pdf.roofReferenceTitle ??
+      wizard.roofReferenceComparison ??
+      'Location reference and roof estimate',
+    roofSpecificYield:
+      pdf.roofSpecificYield ?? wizard.roofSystemYield ?? 'Estimated specific yield for the roof',
     roofYieldExplanation: pdf.roofYieldExplanation ?? wizard.roofYieldExplanation ?? '',
     payback: pdf.payback ?? wizard.metrics?.payback ?? 'Payback period',
     twentyFiveYears: pdf.twentyFiveYears ?? 'Over 25 years',
     budgetRange: pdf.budgetRange ?? pdf.budget ?? 'Preliminary budget range',
     centralEstimate: pdf.centralEstimate ?? 'Central estimate: {value}',
     budgetDisclaimer: pdf.budgetDisclaimer ?? '',
-    monthlyProductionTitle: pdf.monthlyProductionTitle ?? pdf.monthly ?? wizard.production ?? 'Monthly solar production',
-    monthlyProductionNote: pdf.monthlyProductionNote ?? 'Annual total: {value} kWh · Monthly values are rounded.',
-    pvgisMonthlyTitle: pdf.pvgisMonthlyTitle ?? pdf.monthlyLocationReference ?? 'Monthly solar-resource reference yield',
-    pvgisMonthlyNote: pdf.pvgisMonthlyNote ?? 'Reference total: {value} kWh/kWp/year · preliminary 14% system-loss assumption.',
+    monthlyProductionTitle:
+      pdf.monthlyProductionTitle ?? pdf.monthly ?? wizard.production ?? 'Monthly solar production',
+    monthlyProductionNote:
+      pdf.monthlyProductionNote ?? 'Annual total: {value} kWh · Monthly values are rounded.',
+    pvgisMonthlyTitle:
+      pdf.pvgisMonthlyTitle ??
+      pdf.monthlyLocationReference ??
+      'Monthly solar-resource reference yield',
+    pvgisMonthlyNote:
+      pdf.pvgisMonthlyNote ??
+      'Reference total: {value} kWh/kWp/year · preliminary 14% system-loss assumption.',
     inputsTitle: pdf.inputsTitle ?? pdf.inputs ?? 'Your inputs',
     coordinates: pdf.coordinates ?? wizard.calculationBasis?.coordinates ?? 'Coordinates',
     inputMethod: pdf.inputMethod ?? 'Consumption input method',
@@ -411,7 +462,8 @@ const createCopy = ({ wizard, product }) => {
     storageRequest: pdf.storageRequest ?? wizard.storageRequestLabel ?? 'Storage review',
     yes: pdf.yes ?? 'Yes',
     no: pdf.no ?? 'No',
-    calculationBasisTitle: pdf.calculationBasisTitle ?? wizard.calculationBasisTitle ?? 'Calculation basis',
+    calculationBasisTitle:
+      pdf.calculationBasisTitle ?? wizard.calculationBasisTitle ?? 'Calculation basis',
     pvgisReferenceOrientation: pdf.pvgisReferenceOrientation ?? 'Reference direction / tilt',
     sourcesTitle: pdf.sourcesTitle ?? 'Sources',
     sourcePvgis: pdf.sourcePvgis ?? 'Solar data — European Commission Joint Research Centre',
@@ -431,7 +483,12 @@ const createCopy = ({ wizard, product }) => {
     assumptionFinanceText: pdf.assumptionFinanceText ?? '',
     assumptionEngineeringTitle: pdf.assumptionEngineeringTitle ?? 'Engineering review',
     assumptionEngineeringText: pdf.assumptionEngineeringText ?? '',
-    inputModes: pdf.inputModes ?? { bill: 'Average bill', usage: 'Average consumption', monthly: 'Monthly profile', upload: 'Attached bill' },
+    inputModes: pdf.inputModes ?? {
+      bill: 'Average bill',
+      usage: 'Average consumption',
+      monthly: 'Monthly profile',
+      upload: 'Attached bill'
+    },
     unavailable: pdf.unavailable ?? 'Unavailable',
     years: pdf.years ?? 'years',
     kwhPerYear: pdf.kwhPerYear ?? 'kWh/year',
@@ -443,7 +500,8 @@ const createCopy = ({ wizard, product }) => {
   };
 };
 
-const pageHeader = ({ title, subtitle }) => `<div class="pdf-page-heading"><h1 class="pdf-page-title">${escapeHtml(title)}</h1><p class="pdf-page-subtitle">${escapeHtml(subtitle)}</p></div>`;
+const pageHeader = ({ title, subtitle }) =>
+  `<div class="pdf-page-heading"><h1 class="pdf-page-title">${escapeHtml(title)}</h1><p class="pdf-page-subtitle">${escapeHtml(subtitle)}</p></div>`;
 
 const pageOne = ({ copy, passport, locale, values }) => {
   const {
@@ -506,13 +564,23 @@ const pageOne = ({ copy, passport, locale, values }) => {
           ${[
             [copy.property, coordinates],
             [copy.consumption, `${displayNumber(annualConsumption, locale)} ${copy.kwhPerYear}`],
-            [copy.roof, `${displayNumber(roofArea, locale, { maximumFractionDigits: 1 })} m² · ${displayNumber(roofOrientation, locale, { maximumFractionDigits: 0 })}° · ${displayNumber(roofTilt, locale, { maximumFractionDigits: 0 })}°`],
-            [copy.pvgisReferenceYield, `${displayNumber(referenceYield, locale)} ${copy.yieldPerYear}`],
-            [copy.usableArea, `${displayNumber(usableArea, locale, { maximumFractionDigits: 1 })} m²`],
+            [
+              copy.roof,
+              `${displayNumber(roofArea, locale, { maximumFractionDigits: 1 })} m² · ${displayNumber(roofOrientation, locale, { maximumFractionDigits: 0 })}° · ${displayNumber(roofTilt, locale, { maximumFractionDigits: 0 })}°`
+            ],
+            [
+              copy.pvgisReferenceYield,
+              `${displayNumber(referenceYield, locale)} ${copy.yieldPerYear}`
+            ],
+            [
+              copy.usableArea,
+              `${displayNumber(usableArea, locale, { maximumFractionDigits: 1 })} m²`
+            ],
             [copy.mounting, mounting]
           ]
             .map(
-              ([label, value]) => `<div style="min-width:0"><div style="color:#65798E;font-size:8pt;font-weight:700">${escapeHtml(label)}</div><div style="margin-top:7pt;color:#17324D;font-size:9.6pt;font-weight:700;line-height:1.25;overflow-wrap:anywhere">${escapeHtml(value)}</div></div>`
+              ([label, value]) =>
+                `<div style="min-width:0"><div style="color:#65798E;font-size:8pt;font-weight:700">${escapeHtml(label)}</div><div style="margin-top:7pt;color:#17324D;font-size:9.6pt;font-weight:700;line-height:1.25;overflow-wrap:anywhere">${escapeHtml(value)}</div></div>`
             )
             .join('')}
         </div>
@@ -542,7 +610,10 @@ const pageTwo = ({ copy, passport, locale, values, equipment }) => {
   const energyMax = Math.max(annualConsumption ?? 0, annualGeneration ?? 0, 1) * 1.08;
   const consumptionWidth = Math.max(0, Math.min(100, ((annualConsumption ?? 0) / energyMax) * 100));
   const generationWidth = Math.max(0, Math.min(100, ((annualGeneration ?? 0) / energyMax) * 100));
-  const yieldMax = Math.max(200, Math.ceil(Math.max(referenceYield ?? 0, roofYield ?? 0, 1) / 200) * 200);
+  const yieldMax = Math.max(
+    200,
+    Math.ceil(Math.max(referenceYield ?? 0, roofYield ?? 0, 1) / 200) * 200
+  );
   return reportPage({
     page: 2,
     copy,
@@ -569,9 +640,18 @@ const pageTwo = ({ copy, passport, locale, values, equipment }) => {
         <h2 style="margin:0 0 9pt;color:#0E2F57;font-size:12pt">${escapeHtml(copy.roofCapacityTitle)}</h2>
         ${dataRows([
           [copy.roofArea, `${displayNumber(roofArea, locale, { maximumFractionDigits: 1 })} m²`],
-          [copy.usableArea, `${displayNumber(usableArea, locale, { maximumFractionDigits: 1 })} m²`],
-          [copy.physicalModuleLimit, `${displayNumber(physicalModuleLimit, locale)} ${copy.modulesWord}`],
-          [copy.physicalCapacity, `${displayNumber(physicalCapacity, locale, { maximumFractionDigits: 1 })} kWp`]
+          [
+            copy.usableArea,
+            `${displayNumber(usableArea, locale, { maximumFractionDigits: 1 })} m²`
+          ],
+          [
+            copy.physicalModuleLimit,
+            `${displayNumber(physicalModuleLimit, locale)} ${copy.modulesWord}`
+          ],
+          [
+            copy.physicalCapacity,
+            `${displayNumber(physicalCapacity, locale, { maximumFractionDigits: 1 })} kWp`
+          ]
         ])}
         <div style="position:absolute;left:16pt;bottom:17pt;max-width:190pt;padding:5pt 10pt;border-radius:10pt;color:${roofLimited ? '#9A6A00' : '#1F8F6A'};background:${roofLimited ? '#FFF6D9' : '#EAF8F2'};font-size:7.2pt;font-weight:700">${escapeHtml(roofLimited ? copy.roofLimiting : copy.roofNotLimiting)}</div>
       </section>
@@ -666,10 +746,26 @@ const pageFour = ({ copy, passport, locale, values, equipment }) => {
   } = values;
   const modeLabel = safeText(copy.inputModes?.[inputMode]) ?? copy.unavailable;
   const sourceItems = [
-    sourceStatus({ label: copy.sourcePvgis, status: hasPvgis ? copy.sourceConfirmed : copy.sourceUnavailable, color: hasPvgis ? '#1F8F6A' : '#65798E' }),
-    sourceStatus({ label: copy.sourceTariff, status: hasTariff ? copy.sourceUserProvided : copy.sourceUnavailable, color: hasTariff ? '#1F7AE0' : '#65798E' }),
-    sourceStatus({ label: copy.sourceEquipment, status: hasEquipment ? copy.sourceConfirmed : copy.sourceUnavailable, color: hasEquipment ? '#1F8F6A' : '#65798E' }),
-    sourceStatus({ label: copy.sourcePricebook, status: hasPricebook ? copy.sourcePreliminary : copy.sourceUnavailable, color: hasPricebook ? '#F5B82E' : '#65798E' })
+    sourceStatus({
+      label: copy.sourcePvgis,
+      status: hasPvgis ? copy.sourceConfirmed : copy.sourceUnavailable,
+      color: hasPvgis ? '#1F8F6A' : '#65798E'
+    }),
+    sourceStatus({
+      label: copy.sourceTariff,
+      status: hasTariff ? copy.sourceUserProvided : copy.sourceUnavailable,
+      color: hasTariff ? '#1F7AE0' : '#65798E'
+    }),
+    sourceStatus({
+      label: copy.sourceEquipment,
+      status: hasEquipment ? copy.sourceConfirmed : copy.sourceUnavailable,
+      color: hasEquipment ? '#1F8F6A' : '#65798E'
+    }),
+    sourceStatus({
+      label: copy.sourcePricebook,
+      status: hasPricebook ? copy.sourcePreliminary : copy.sourceUnavailable,
+      color: hasPricebook ? '#F5B82E' : '#65798E'
+    })
   ].join('');
   return reportPage({
     page: 4,
@@ -683,20 +779,40 @@ const pageFour = ({ copy, passport, locale, values, equipment }) => {
           [copy.coordinates, coordinates],
           [copy.consumption, `${displayNumber(annualConsumption, locale)} kWh`],
           [copy.inputMethod, modeLabel],
-          [copy.tariff, tariffRate === null ? copy.unavailable : `${displayNumber(tariffRate, locale, { maximumFractionDigits: 2 })} AMD/kWh`],
+          [
+            copy.tariff,
+            tariffRate === null
+              ? copy.unavailable
+              : `${displayNumber(tariffRate, locale, { maximumFractionDigits: 2 })} AMD/kWh`
+          ],
           [copy.storageRequest, storageRequested ? copy.yes : copy.no],
-          [copy.roof, `${displayNumber(roofArea, locale, { maximumFractionDigits: 1 })} m² · ${displayNumber(roofOrientation, locale, { maximumFractionDigits: 0 })}° · ${displayNumber(roofTilt, locale, { maximumFractionDigits: 0 })}°`],
+          [
+            copy.roof,
+            `${displayNumber(roofArea, locale, { maximumFractionDigits: 1 })} m² · ${displayNumber(roofOrientation, locale, { maximumFractionDigits: 0 })}° · ${displayNumber(roofTilt, locale, { maximumFractionDigits: 0 })}°`
+          ],
           [copy.mounting, mounting]
         ])}
       </section>
       <section class="pdf-card" style="position:absolute;top:125pt;left:302.64pt;width:252.64pt;height:260pt;padding:18pt 16pt">
         <h2 style="margin:0 0 8pt;color:#0E2F57;font-size:12pt">${escapeHtml(copy.calculationBasisTitle)}</h2>
         ${dataRows([
-          [copy.pvgisReferenceYield, `${displayNumber(referenceYield, locale)} ${copy.yieldPerYear}`],
-          [copy.pvgisReferenceOrientation, `${displayNumber(referenceAzimuth, locale, { maximumFractionDigits: 0 })}° / ${displayNumber(referenceTilt, locale, { maximumFractionDigits: 0 })}°`],
+          [
+            copy.pvgisReferenceYield,
+            `${displayNumber(referenceYield, locale)} ${copy.yieldPerYear}`
+          ],
+          [
+            copy.pvgisReferenceOrientation,
+            `${displayNumber(referenceAzimuth, locale, { maximumFractionDigits: 0 })}° / ${displayNumber(referenceTilt, locale, { maximumFractionDigits: 0 })}°`
+          ],
           [copy.roofSpecificYield, `${displayNumber(roofYield, locale)} ${copy.yieldPerYear}`],
-          [copy.usableArea, `${displayNumber(usableArea, locale, { maximumFractionDigits: 1 })} m²`],
-          [copy.physicalModuleLimit, `${displayNumber(physicalModuleLimit, locale)} ${copy.modulesWord} / ${displayNumber(physicalCapacity, locale, { maximumFractionDigits: 1 })} kWp`],
+          [
+            copy.usableArea,
+            `${displayNumber(usableArea, locale, { maximumFractionDigits: 1 })} m²`
+          ],
+          [
+            copy.physicalModuleLimit,
+            `${displayNumber(physicalModuleLimit, locale)} ${copy.modulesWord} / ${displayNumber(physicalCapacity, locale, { maximumFractionDigits: 1 })} kWp`
+          ],
           [copy.solarModule, equipment.module],
           [copy.inverter, equipment.inverter]
         ])}

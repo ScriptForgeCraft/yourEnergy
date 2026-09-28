@@ -1328,7 +1328,7 @@ h3 {
   line-height: 1;
   cursor: grab;
   touch-action: none;
-  padding-top:1px ;
+  padding-top: 1px;
 }
 
 .property-map__marker--roof > span:active {

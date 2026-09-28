@@ -2,6 +2,7 @@ import { copyFile, cp, mkdir, readFile, readdir, rm, stat, writeFile } from 'nod
 import { createHash } from 'node:crypto';
 import { dirname, resolve } from 'node:path';
 import sharp from 'sharp';
+import { compress as compressFont } from 'wawoff2';
 import { RESPONSIVE_IMAGE_ASSETS, IMAGE_FORMATS } from '../../src/config/image-assets.js';
 import { projectRoot, publicRoot } from './paths.mjs';
 import { EQUIPMENT_IMAGE_WIDTHS, equipmentImageUrl } from '../../src/config/equipment-images.js';
@@ -45,9 +46,19 @@ for (const asset of staticAssets) {
     const destination = claimOutput(url);
     await mkdir(dirname(destination), { recursive: true });
     await copyFile(source, destination);
+    if (url.startsWith('/fonts/') && url.endsWith('.ttf')) {
+      // Lossless container compression: preserve every glyph and original font URL.
+      await writeFile(
+        claimOutput(url.replace(/\.ttf$/u, '.woff2')),
+        await compressFont(await readFile(source))
+      );
+    }
     if (equipmentImageUrl(url) !== url) {
       for (const width of EQUIPMENT_IMAGE_WIDTHS) {
-        await sharp(source).resize({ width, withoutEnlargement: true }).webp({ quality: 80, effort: 5 }).toFile(claimOutput(equipmentImageUrl(url, width)));
+        await sharp(source)
+          .resize({ width, withoutEnlargement: true })
+          .webp({ quality: 80, effort: 5 })
+          .toFile(claimOutput(equipmentImageUrl(url, width)));
       }
     }
   }

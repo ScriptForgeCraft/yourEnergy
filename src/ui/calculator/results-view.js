@@ -1,5 +1,5 @@
 import { calculatePreliminaryRoofCapacity } from '../../domain/roof-capacity.js';
-import { number, format, text, element, localeCode } from './view-helpers.js';
+import { number, format, formatApproximate, text, element, localeCode } from './view-helpers.js';
 
 const inverterTechnology = (technology, wizard) =>
   technology === 'hybrid'
@@ -333,7 +333,7 @@ export const createCalculatorResultsView = ({
       );
     }
     const inverter = recommendation?.inverter;
-    if (inverter?.productId && Number.isFinite(Number(inverter.selectedAcPowerKw))) {
+    if (inverter?.productId && number(inverter.selectedAcPowerKw, 0) !== null) {
       cards.push(
         equipmentCard({
           title: wizard.inverterRecommendationTitle ?? 'Recommended inverter',
@@ -496,30 +496,30 @@ export const createCalculatorResultsView = ({
       ),
       dashboardMetric(
         resultsCopy.financial?.central ?? 'Estimated cost',
-        Number.isFinite(Number(commercialEstimate?.primaryAmd))
+        commercialEstimate?.available && number(commercialEstimate.primaryAmd, 0) !== null
           ? `≈ ${format(commercialEstimate.primaryAmd, locale)} ֏`
           : '—',
         'central'
       ),
       dashboardMetric(
-        resultsCopy.metrics?.annualSavings ?? wizard.metrics?.annualSavings ?? 'Annual savings',
+        savingsAreOffsetOnly
+          ? wizard.retailOffsetSavings
+          : (resultsCopy.metrics?.annualSavings ??
+              wizard.metrics?.annualSavings ??
+              'Annual savings'),
         displayedSavings === null ? '—' : `≈ ${format(displayedSavings, locale)} ֏`,
         'savings'
       ),
       dashboardMetric(
         resultsCopy.financial?.payback ?? wizard.metrics?.payback ?? 'Payback period',
-        Number.isFinite(Number(financial.paybackYears))
-          ? `≈ ${format(financial.paybackYears, locale, { maximumFractionDigits: 1 })} ${
-              wizard.years ?? 'years'
-            }`
-          : '—',
+        formatApproximate(financial.paybackYears, locale, wizard.years ?? 'years', {
+          maximumFractionDigits: 1
+        }),
         'payback'
       ),
       dashboardMetric(
         resultsCopy.financial?.twentyFiveYears ?? '25-year value',
-        Number.isFinite(Number(financial.grossSavings25YearsAmd))
-          ? `≈ ${format(financial.grossSavings25YearsAmd, locale)} ֏`
-          : '—',
+        formatApproximate(financial.grossSavings25YearsAmd, locale, '֏'),
         'lifetime'
       )
     );
@@ -531,7 +531,11 @@ export const createCalculatorResultsView = ({
         'pro-result-finance__notice',
         displayedSavings === null
           ? (wizard.tariffNeeded ?? 'Add your electricity tariff to see savings and payback.')
-          : (resultsCopy.financialDisclaimer ??
+          : savingsAreOffsetOnly
+            ? text(wizard.surplusCompensationUnavailableCopy, {
+                surplus: format(scenario.energyBalance?.surplusEnergyKwh, locale)
+              })
+            : (resultsCopy.financialDisclaimer ??
               'This is a preliminary estimate, not a commercial offer.')
       )
     );
@@ -694,7 +698,7 @@ export const createCalculatorResultsView = ({
       if (
         !renderedEquipmentCards &&
         inverter?.productId &&
-        Number.isFinite(Number(inverter.selectedAcPowerKw))
+        number(inverter.selectedAcPowerKw, 0) !== null
       ) {
         const recommendation = element('section', 'pro-result-details');
         recommendation.append(
@@ -752,20 +756,22 @@ export const createCalculatorResultsView = ({
           )
         );
         if (
-          Number.isFinite(Number(mountingHardware.kitLengthMm)) ||
-          Number.isFinite(Number(mountingHardware.railLengthMm))
+          number(mountingHardware.kitLengthMm, 0) !== null ||
+          number(mountingHardware.railLengthMm, 0) !== null
         ) {
           recommendation.append(
             element(
               'p',
               '',
               text(wizard.mountingHardwareDimensionsCopy, {
-                kit: Number.isFinite(Number(mountingHardware.kitLengthMm))
-                  ? format(mountingHardware.kitLengthMm, locale)
-                  : '—',
-                rail: Number.isFinite(Number(mountingHardware.railLengthMm))
-                  ? format(mountingHardware.railLengthMm, locale)
-                  : '—'
+                kit:
+                  number(mountingHardware.kitLengthMm, 0) !== null
+                    ? format(mountingHardware.kitLengthMm, locale)
+                    : '—',
+                rail:
+                  number(mountingHardware.railLengthMm, 0) !== null
+                    ? format(mountingHardware.railLengthMm, locale)
+                    : '—'
               })
             )
           );

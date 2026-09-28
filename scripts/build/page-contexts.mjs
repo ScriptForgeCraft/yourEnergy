@@ -882,8 +882,14 @@ export const createPageContextBuilder = ({ publicEnv, pages }) => {
     home: createHomeContext,
     'not-found': (content) => ({
       ...createHomeContext(content, { pageKind: 'support' }),
-      notFoundTitle: { hy: 'Էջը չի գտնվել', ru: 'Страница не найдена', en: 'Page not found' }[content.locale],
-      notFoundCopy: { hy: 'Այս հասցեով էջ չկա։ Օգտվեք ընտրացանկից կամ վերադարձեք գլխավոր էջ։', ru: 'По этому адресу нет страницы. Воспользуйтесь меню или вернитесь на главную.', en: 'There is no page at this address. Use the navigation or return to the homepage.' }[content.locale]
+      notFoundTitle: { hy: 'Էջը չի գտնվել', ru: 'Страница не найдена', en: 'Page not found' }[
+        content.locale
+      ],
+      notFoundCopy: {
+        hy: 'Այս հասցեով էջ չկա։ Օգտվեք ընտրացանկից կամ վերադարձեք գլխավոր էջ։',
+        ru: 'По этому адресу нет страницы. Воспользуйтесь меню или вернитесь на главную.',
+        en: 'There is no page at this address. Use the navigation or return to the homepage.'
+      }[content.locale]
     }),
     blog: (content) => createBlogIndexContext(content, blogArticles),
     'blog-article': (content, page) =>

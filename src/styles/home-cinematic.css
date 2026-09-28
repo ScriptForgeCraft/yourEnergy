@@ -416,14 +416,14 @@
 
 @font-face {
   font-family: 'Caveat Signature';
-  src: url('/fonts/caveat-500.ttf') format('truetype');
+  src: url('/fonts/caveat-500.woff2') format('woff2');
   font-display: swap;
   font-weight: 500;
 }
 
 @font-face {
   font-family: 'Poqrik Dzeragir';
-  src: url('/fonts/poqrik-dzeragir.ttf') format('truetype');
+  src: url('/fonts/poqrik-dzeragir.woff2') format('woff2');
   font-display: swap;
 }
 
@@ -1157,8 +1157,6 @@ html[lang='hy'] .page-home .hero-signature {
   .page-home .portfolio-projects__slider > .portfolio-projects__arrow:hover:not(:disabled) {
     transform: scale(1.06);
   }
-
- 
 
   .page-home .portfolio-projects__button--secondary:hover {
     border-color: #fff;

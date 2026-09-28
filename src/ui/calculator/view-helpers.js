@@ -5,10 +5,15 @@ export const number = (value, minimum = -Infinity, maximum = Infinity) => {
   return parsed !== null && parsed >= minimum && parsed <= maximum ? parsed : null;
 };
 
-export const format = (value, locale, options = {}) =>
-  Number.isFinite(Number(value))
-    ? new Intl.NumberFormat(locale, { maximumFractionDigits: 0, ...options }).format(Number(value))
-    : '—';
+export const format = (value, locale, options = {}) => {
+  const parsed = number(value);
+  return parsed === null
+    ? '—'
+    : new Intl.NumberFormat(locale, { maximumFractionDigits: 0, ...options }).format(parsed);
+};
+
+export const formatApproximate = (value, locale, suffix = '', options = {}) =>
+  number(value) === null ? '—' : `≈ ${format(value, locale, options)}${suffix ? ` ${suffix}` : ''}`;
 
 export const text = (template, values) =>
   Object.entries(values).reduce(

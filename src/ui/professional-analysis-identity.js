@@ -84,7 +84,11 @@ export const completeProfessionalRoofInput = (currentRoof, fallbackRoof) => {
     areaMethod: stored.areaMethod ?? fallback.areaMethod ?? null,
     mountingMode: stored.mountingMode ?? fallback.mountingMode ?? null,
     projectedAreaSqm:
-      stored.projectedAreaSqm ?? stored.areaSqm ?? fallback.projectedAreaSqm ?? fallback.areaSqm ?? null,
+      stored.projectedAreaSqm ??
+      stored.areaSqm ??
+      fallback.projectedAreaSqm ??
+      fallback.areaSqm ??
+      null,
     planeAreaSqm: stored.planeAreaSqm ?? fallback.planeAreaSqm ?? null,
     tiltDegrees: stored.tiltDegrees ?? fallback.tiltDegrees ?? null,
     orientationDegrees:

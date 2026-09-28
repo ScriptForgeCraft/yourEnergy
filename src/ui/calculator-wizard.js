@@ -457,6 +457,7 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
     root.dataset.currentStep = String(target);
     const showingResults = target === 3;
     if (heroTitle) {
+      heroTitle.classList.toggle('visually-hidden', showingResults);
       heroTitle.textContent = showingResults
         ? (wizard.results?.title ?? defaultHeroTitle)
         : defaultHeroTitle;

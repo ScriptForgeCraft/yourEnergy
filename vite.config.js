@@ -57,7 +57,9 @@ export default defineConfig(async ({ mode }) => {
             .filter(({ kind }) => ['calculator-pro', 'calculator-refine'].includes(kind))
             .flatMap(({ path, locale }) => {
               const destination = `${locale === 'hy' ? '/' : `/${locale}/`}calculator/?mode=pro`;
-              return [path, path.slice(0, -1), `${path}index.html`].map((from) => `${from} ${destination} 301`);
+              return [path, path.slice(0, -1), `${path}index.html`].map(
+                (from) => `${from} ${destination} 301`
+              );
             });
           await writeFile(resolve(distRoot, '_redirects'), `${redirects.join('\n')}\n`);
         }

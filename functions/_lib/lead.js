@@ -328,9 +328,8 @@ const regionLabel = (region) =>
   })[region] ?? region;
 
 const scenarioLabel = (scenario) =>
-  ({ conservative: 'Զգուշավոր', balanced: 'Հավասարակշռված', maximum: 'Առավելագույն' })[
-    scenario
-  ] ?? scenario;
+  ({ conservative: 'Զգուշավոր', balanced: 'Հավասարակշռված', maximum: 'Առավելագույն' })[scenario] ??
+  scenario;
 
 const scopeLabel = (scope) =>
   ({

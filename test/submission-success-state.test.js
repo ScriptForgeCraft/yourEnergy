@@ -77,7 +77,10 @@ test('each data-submission form replaces its pre-submit UI only after API succes
     'data-professional-lead-success',
     'data-professional-lead-dismiss'
   ]) {
-    assert.ok(professionalTemplate.includes(marker), `professional lead markup is missing ${marker}`);
+    assert.ok(
+      professionalTemplate.includes(marker),
+      `professional lead markup is missing ${marker}`
+    );
   }
 
   assert.match(contactController, /await api\.submitLead[\s\S]*preSubmit\.hidden = true/u);
@@ -90,12 +93,13 @@ test('each data-submission form replaces its pre-submit UI only after API succes
 });
 
 test('lead failures preserve form access and every close path resets the completed state', async () => {
-  const [contactController, meetingController, quickController, professionalController] = await Promise.all([
-    source('src/ui/contact-form.js'),
-    source('src/ui/meeting-scheduler.js'),
-    source('src/ui/quick-calculator.js'),
-    source('src/ui/calculator-wizard.js')
-  ]);
+  const [contactController, meetingController, quickController, professionalController] =
+    await Promise.all([
+      source('src/ui/contact-form.js'),
+      source('src/ui/meeting-scheduler.js'),
+      source('src/ui/quick-calculator.js'),
+      source('src/ui/calculator-wizard.js')
+    ]);
 
   assert.match(contactController, /setStatus\(copy\.unavailable, true\)/u);
   assert.match(contactController, /successClose\?\.addEventListener\('click', reset\)/u);
@@ -105,6 +109,9 @@ test('lead failures preserve form access and every close path resets the complet
   assert.match(meetingController, /resetDialog\(\);/u);
   assert.match(quickController, /setLeadStatus\(copy\.lead\?\.unavailable, true\)/u);
   assert.match(quickController, /leadComplete = false/u);
-  assert.match(professionalController, /setProfessionalLeadStatus\(wizard\.lead\?\.unavailable, true\)/u);
+  assert.match(
+    professionalController,
+    /setProfessionalLeadStatus\(wizard\.lead\?\.unavailable, true\)/u
+  );
   assert.match(professionalController, /professionalLeadComplete = false/u);
 });

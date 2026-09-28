@@ -77,8 +77,6 @@
   text-transform: uppercase;
 }
 
-
-
 /* Hero */
 .about-hero {
   min-height: clamp(500px, 62svh, 690px);

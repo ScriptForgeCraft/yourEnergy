@@ -27,7 +27,8 @@ const copy = {
     annualCoverage: 'Տարեկան սպառման ծածկույթ',
     remainingGridDemand: 'Ցանցից մնացած տարեկան պահանջարկ',
     annualNetSurplus: 'Տարեկան զուտ արտադրություն՝ սպառումից բարձր',
-    annualNetSurplusHelp: 'Սա տարեկան հանրագումարների համեմատություն է, ոչ թե ժամային արտահանման հաշվարկ։',
+    annualNetSurplusHelp:
+      'Սա տարեկան հանրագումարների համեմատություն է, ոչ թե ժամային արտահանման հաշվարկ։',
     projectSummaryTitle: 'Ձեր նախագծի ամփոփում',
     projectLocation: 'Տեղադրություն',
     pvgisReferenceYield: 'Տեղանքի հղումային արևային արտադրություն',
@@ -40,13 +41,15 @@ const copy = {
     roofTilt: 'Տանիքի թեքություն',
     physicalDcCapacityLimit: 'Ֆիզիկական DC հզորության սահման',
     roofCapacityNotLimiting: 'Տանիքի տարողությունը սահմանափակող գործոն չէ։',
-    roofCapacityLimiting: 'Տանիքի ֆիզիկական սահմանը սահմանափակում է առաջարկվող համակարգի հզորությունը։',
+    roofCapacityLimiting:
+      'Տանիքի ֆիզիկական սահմանը սահմանափակում է առաջարկվող համակարգի հզորությունը։',
     roofCapacityExplanation:
       'Ֆիզիկական տանիքի սահմանը առաջարկվող հզորությունը չէ․ առաջարկը չափագրվում է ըստ սպառման, արևային արտադրության և այլ մուտքային տվյալների։',
     roofReferenceComparison: 'Իրական տանիքը՝ համեմատած տեղանքի հղումային տվյալների հետ',
     actualRoof: 'Իրական տանիք՝ ուղղություն / թեքություն',
     pvgisReference: 'Տեղանքի հղում՝ ուղղություն / թեքություն',
-    roofReferenceHelp: 'Այս համեմատությունն օգնում է բացատրել, թե ինչու տանիքի արտադրությունը կարող է տարբերվել տեղանքի հղումից։',
+    roofReferenceHelp:
+      'Այս համեմատությունն օգնում է բացատրել, թե ինչու տանիքի արտադրությունը կարող է տարբերվել տեղանքի հղումից։',
     coveredConsumption: 'Ծածկվող սպառում',
     retailOffsetSavings: 'Խնայողություն ծածկվող սպառումից',
     retailOffsetSavingsCopy: '≈ {value} AMD/տարի',
@@ -108,7 +111,8 @@ const copy = {
     mountingHardwareTitle: 'Կատալոգային ամրացման տարբերակ',
     mountingHardwareCopy:
       'Հաշվարկային օպտիմում՝ {optimum}° · հասանելի անկյուններ՝ {available}° · գործնական կատալոգային տարբերակ՝ {practical}°',
-    mountingHardwareReason: 'Ընտրված է հաշվարկային օպտիմումին ամենամոտ աջակցվող թեքությունը կատալոգից։',
+    mountingHardwareReason:
+      'Ընտրված է հաշվարկային օպտիմումին ամենամոտ աջակցվող թեքությունը կատալոգից։',
     mountingHardwareDimensionsCopy: 'Կոմպլեկտ՝ {kit} mm · ռելս՝ {rail} mm',
     mountingHardwareNoMatchCopy:
       'Հաշվարկային օպտիմումը {optimum}° է, սակայն կատալոգում նորմալացված աջակցվող անկյունով ամրացման տարբերակ չկա։',
@@ -407,7 +411,8 @@ const copy = {
     roofReferenceComparison: 'Фактическая крыша и ориентир для местоположения',
     actualRoof: 'Фактическая крыша: направление / наклон',
     pvgisReference: 'Ориентир для местоположения: направление / наклон',
-    roofReferenceHelp: 'Сравнение помогает объяснить, почему выработка крыши может отличаться от ориентира для местоположения.',
+    roofReferenceHelp:
+      'Сравнение помогает объяснить, почему выработка крыши может отличаться от ориентира для местоположения.',
     coveredConsumption: 'Покрываемое потребление',
     retailOffsetSavings: 'Экономия на покрытом потреблении',
     retailOffsetSavingsCopy: '≈ {value} AMD/год',
@@ -470,7 +475,8 @@ const copy = {
     mountingHardwareTitle: 'Вариант крепления из каталога',
     mountingHardwareCopy:
       'Расчётный оптимум: {optimum}° · доступные углы: {available}° · практический вариант из каталога: {practical}°',
-    mountingHardwareReason: 'Выбран ближайший к расчётному оптимуму поддерживаемый угол из каталога.',
+    mountingHardwareReason:
+      'Выбран ближайший к расчётному оптимуму поддерживаемый угол из каталога.',
     mountingHardwareDimensionsCopy: 'Комплект: {kit} мм · рельс: {rail} мм',
     mountingHardwareNoMatchCopy:
       'Расчётный оптимум — {optimum}°, но в каталоге нет крепления с нормализованным поддерживаемым углом.',
@@ -543,7 +549,8 @@ const copy = {
       reportId: 'ID отчёта',
       footerLabel: 'Предварительный солнечный отчёт',
       page2Title: 'Система, крыша и энергетический баланс',
-      page2Subtitle: 'Что рекомендуется, сколько позволяет крыша и какая доля потребления покрывается.',
+      page2Subtitle:
+        'Что рекомендуется, сколько позволяет крыша и какая доля потребления покрывается.',
       page3Title: 'Выработка и финансовая картина',
       page3Subtitle: 'Помесячная солнечная выработка и предварительная финансовая оценка.',
       page4Title: 'Данные, источники и ограничения',
@@ -752,8 +759,7 @@ const copy = {
     annualCoverage: 'Annual consumption coverage',
     remainingGridDemand: 'Remaining annual grid demand',
     annualNetSurplus: 'Annual net generation above consumption',
-    annualNetSurplusHelp:
-      'This compares annual totals; it is not an hourly export calculation.',
+    annualNetSurplusHelp: 'This compares annual totals; it is not an hourly export calculation.',
     projectSummaryTitle: 'Your project summary',
     projectLocation: 'Location',
     pvgisReferenceYield: 'Solar-resource reference yield',
@@ -908,7 +914,8 @@ const copy = {
       reportId: 'Report ID',
       footerLabel: 'Preliminary solar report',
       page2Title: 'System, roof and energy balance',
-      page2Subtitle: 'What is recommended, what the roof can physically support and how much demand is covered.',
+      page2Subtitle:
+        'What is recommended, what the roof can physically support and how much demand is covered.',
       page3Title: 'Production and financial overview',
       page3Subtitle: 'Expected monthly solar production and the preliminary financial estimate.',
       page4Title: 'Inputs, sources and limitations',
@@ -932,7 +939,8 @@ const copy = {
       module: 'Solar module',
       inverter: 'Inverter',
       whyPanels: 'Why {count} modules',
-      sizingExplanation: 'The system is sized for electricity consumption, not to fill the entire roof.',
+      sizingExplanation:
+        'The system is sized for electricity consumption, not to fill the entire roof.',
       roofCapacityTitle: 'Physical roof capacity',
       roofArea: 'Roof area',
       physicalModuleLimit: 'Physical limit',

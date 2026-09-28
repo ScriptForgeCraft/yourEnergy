@@ -270,41 +270,43 @@ export const initProcessStory = ({ config = {} } = {}) => {
     // The inspection scene owns its five live values. Its renderer uses the
     // persisted roof/survey data and localized compass labels, so this generic
     // process renderer must not overwrite them with numeric presentation data.
-    root.querySelectorAll('.process-state:not(.process-state--inspection) [data-process-value]').forEach((element) => {
-      const descriptor = metricDescriptor(
-        element.dataset.processValue,
-        presentation,
-        copy,
-        locale,
-        regionLabels
-      );
-      const note = element.parentElement.querySelector(
-        `[data-process-value-note="${element.dataset.processValue}"]`
-      );
-      element.removeAttribute('data-process-number');
-      element.removeAttribute('data-process-final');
-      element.removeAttribute('data-process-suffix');
-      element.removeAttribute('data-process-decimals');
-      element.removeAttribute('data-process-metric-signature');
-      if (!descriptor) {
-        element.textContent = element.dataset.default;
-        if (note) note.textContent = '';
-        return;
-      }
-      const finalText = `${descriptor.text}${descriptor.suffix ?? ''}`;
-      element.textContent = finalText;
-      if (note) note.textContent = descriptor.note ?? '';
-      if (Number.isFinite(descriptor.value)) {
-        const decimals = ['system-capacity', 'roof-area'].includes(element.dataset.processValue)
-          ? 2
-          : 0;
-        element.dataset.processNumber = String(descriptor.value);
-        element.dataset.processFinal = finalText;
-        element.dataset.processSuffix = descriptor.suffix ?? '';
-        element.dataset.processDecimals = String(decimals);
-        element.dataset.processMetricSignature = `${element.dataset.processValue}:${descriptor.value}`;
-      }
-    });
+    root
+      .querySelectorAll('.process-state:not(.process-state--inspection) [data-process-value]')
+      .forEach((element) => {
+        const descriptor = metricDescriptor(
+          element.dataset.processValue,
+          presentation,
+          copy,
+          locale,
+          regionLabels
+        );
+        const note = element.parentElement.querySelector(
+          `[data-process-value-note="${element.dataset.processValue}"]`
+        );
+        element.removeAttribute('data-process-number');
+        element.removeAttribute('data-process-final');
+        element.removeAttribute('data-process-suffix');
+        element.removeAttribute('data-process-decimals');
+        element.removeAttribute('data-process-metric-signature');
+        if (!descriptor) {
+          element.textContent = element.dataset.default;
+          if (note) note.textContent = '';
+          return;
+        }
+        const finalText = `${descriptor.text}${descriptor.suffix ?? ''}`;
+        element.textContent = finalText;
+        if (note) note.textContent = descriptor.note ?? '';
+        if (Number.isFinite(descriptor.value)) {
+          const decimals = ['system-capacity', 'roof-area'].includes(element.dataset.processValue)
+            ? 2
+            : 0;
+          element.dataset.processNumber = String(descriptor.value);
+          element.dataset.processFinal = finalText;
+          element.dataset.processSuffix = descriptor.suffix ?? '';
+          element.dataset.processDecimals = String(decimals);
+          element.dataset.processMetricSignature = `${element.dataset.processValue}:${descriptor.value}`;
+        }
+      });
     animateStepMetrics(activeIndex);
   };
 
@@ -687,7 +689,11 @@ export const initProcessStory = ({ config = {} } = {}) => {
           .to(outgoingCopy, { autoAlpha: 0, y: forward ? -20 : 20, duration: 0.24 }, 0)
           .to(outgoingVisual, { autoAlpha: 0, scale: 1.025, duration: 0.28 }, 0)
           .to(outgoingMedia, { autoAlpha: 0, scale: 1.025, duration: 0.28 }, 0)
-          .to(outgoingCards, { autoAlpha: 0, y: forward ? -12 : 12, duration: 0.22, stagger: 0.02 }, 0)
+          .to(
+            outgoingCards,
+            { autoAlpha: 0, y: forward ? -12 : 12, duration: 0.22, stagger: 0.02 },
+            0
+          )
           .set(outgoing, { autoAlpha: 0 }, 0.28)
           .to(incomingCopy, { autoAlpha: 1, y: 0, duration: 0.34 }, 0.08)
           .to(incomingVisual, { autoAlpha: 1, scale: 1, duration: 0.48 }, 0.04)

@@ -34,6 +34,8 @@ const contentPageTypes = ['contacts', 'about'];
 const contactPages = selectPages('contacts').map(({ page }) => page);
 const contentPages = selectPages(...contentPageTypes).map(({ page }) => page);
 const expectedPages = registry.map(({ file }) => file);
+// Webmaster ownership tokens are static machine-readable assets, not site pages.
+const verificationAssets = new Set(['yandex_8a397f0dfdfda459.html']);
 
 const failures = [];
 
@@ -1016,8 +1018,14 @@ const walkOutput = async (directory) => {
 };
 for (const file of await walkOutput(distRoot)) {
   const outputPath = relative(distRoot, file).split(sep).join('/');
-  if (file.endsWith('.html') && !expectedPages.includes(outputPath))
-    fail(`Unexpected generated route: ${outputPath}`);
+  if (file.endsWith('.html') && !expectedPages.includes(outputPath)) {
+    if (!verificationAssets.has(outputPath)) fail(`Unexpected generated route: ${outputPath}`);
+    else if (
+      (await readFile(file, 'utf8')) !==
+      (await readFile(resolve(projectRoot, 'public', outputPath), 'utf8'))
+    )
+      fail(`Verification asset changed during build: ${outputPath}`);
+  }
   if (!file.endsWith('.css')) continue;
   const css = await readFile(file, 'utf8');
   for (const match of css.matchAll(/url\(\s*(?:"([^"]*)"|'([^']*)'|([^)]*))\s*\)/gu)) {

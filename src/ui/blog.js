@@ -8,7 +8,10 @@ const reveal = () => {
         if (!entry.isIntersecting) return;
         observer.unobserve(entry.target);
         entry.target.animate(
-          [{ opacity: 0, transform: 'translateY(18px)' }, { opacity: 1, transform: 'translateY(0)' }],
+          [
+            { opacity: 0, transform: 'translateY(18px)' },
+            { opacity: 1, transform: 'translateY(0)' }
+          ],
           { duration: 520, easing: 'cubic-bezier(0.16, 1, 0.3, 1)' }
         );
       });
@@ -16,7 +19,9 @@ const reveal = () => {
     { rootMargin: '0px 0px -5%' }
   );
   // Already-visible content must not disappear while enhancement initializes.
-  items.filter((item) => item.getBoundingClientRect().top >= window.innerHeight).forEach((item) => observer.observe(item));
+  items
+    .filter((item) => item.getBoundingClientRect().top >= window.innerHeight)
+    .forEach((item) => observer.observe(item));
 };
 
 const initCatalog = () => {

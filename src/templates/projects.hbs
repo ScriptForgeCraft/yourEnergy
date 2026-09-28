@@ -61,7 +61,7 @@
       <section class='projects-featured section' aria-labelledby='featured-project-title'>
         <div class='container'>
           <div class='projects-section-topline'>
-            <div class='projects-featured__pagination'><button type='button' class='projects-featured__arrow' disabled aria-label='{{aria.previousProject}}'><svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#arrow-left'></use></svg></button><b>01</b><span>/ {{projectsPage.featured.total}}</span><button type='button' class='projects-featured__arrow' aria-label='{{aria.nextProject}}'><svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#arrow-right'></use></svg></button></div>
+            <div class='projects-featured__pagination'><button type='button' class='projects-featured__arrow' disabled aria-label='{{aria.previousProject}}'><svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#arrow-left'></use></svg></button><b>01</b><span>/ {{projectsPage.featured.total}}</span><a class='projects-featured__arrow' href='{{projectsPage.items.[0].href}}' aria-label='{{aria.nextProject}}'><svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#arrow-right'></use></svg></a></div>
           </div>
           <article class='projects-featured__card'>
             <div class='projects-featured__media'>

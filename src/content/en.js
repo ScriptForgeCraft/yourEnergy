@@ -87,7 +87,8 @@ export default {
       annualYieldLabel: 'Solar-resource reference yield',
       orientationLabel: 'Reference optimal direction',
       tiltLabel: 'Reference optimal tilt',
-      source: 'Source: European Commission Joint Research Centre · preliminary 14% system-loss assumption',
+      source:
+        'Source: European Commission Joint Research Centre · preliminary 14% system-loss assumption',
       disclosure:
         'These values describe the solar resource at this location for a reference 1 kWp fixed system. Your actual roof is analysed in Step 3.',
       roofDisclosure:
