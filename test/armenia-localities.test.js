@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
+import { localityLabel } from '../src/data/locations/locality-labels.js';
 import {
   ARMENIA_LOCALITIES,
   localitiesForRegion,
@@ -18,4 +19,15 @@ test('locality picker offers only places from the selected Armenian region', () 
       assert.notEqual(localityCenter(region, locality), null, `${region}: ${locality}`);
     }
   }
+});
+
+test('all locality display labels are localized without changing stable identifiers', () => {
+  for (const locality of Object.values(ARMENIA_LOCALITIES).flat()) {
+    assert.equal(localityLabel(locality, 'ru-RU'), locality);
+    assert.match(localityLabel(locality, 'en-US'), /^[A-Za-z -]+$/u, locality);
+    assert.match(localityLabel(locality, 'hy-AM'), /^[\u0531-\u0587 -]+$/u, locality);
+  }
+  assert.equal(localityLabel('Кентрон', 'en'), 'Kentron');
+  assert.equal(localityLabel('Кентрон', 'hy'), 'Կենտրոն');
+  assert.equal(localityLabel('Unknown place', 'hy'), 'Unknown place');
 });

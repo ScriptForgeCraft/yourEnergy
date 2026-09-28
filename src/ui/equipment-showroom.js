@@ -45,6 +45,10 @@ const setProductImage = (image, placeholder, product) => {
   };
   image.onerror = showMissing;
   image.alt = `${product.brand} ${product.name}`;
+  image.srcset = product.displaySrcset || '';
+  image.sizes = image.hasAttribute('data-explorer-image')
+    ? '(max-width: 680px) calc(100vw - 48px), 50vw'
+    : '(max-width: 680px) min(calc(100vw - 32px), 360px), 490px';
   if (!product.image) {
     image.removeAttribute('src');
     showMissing();
@@ -389,9 +393,11 @@ export const initEquipmentShowroom = ({ data, copy, locale, gsap }) => {
       const imageWrap = createElement('span', 'product-card__image');
       if (product.image) {
         const image = document.createElement('img');
+        image.srcset = product.thumbnailSrcset || '';
+        image.sizes = '90px';
         image.src = product.thumbnailImage || product.image;
         image.alt = '';
-        image.loading = product.id === selectedProduct.id ? 'eager' : 'lazy';
+        image.loading = 'lazy';
         image.decoding = 'async';
         imageWrap.append(image);
       } else

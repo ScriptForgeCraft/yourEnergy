@@ -1314,7 +1314,8 @@ html[lang='hy'] .page-home .hero-signature {
 }
 
 .js .page-home .home-hero.is-motion-ready [data-hero-copy] > :nth-child(1) {
-  animation-delay: 70ms;
+  /* Keep the primary heading stable at first paint; supporting copy still enters. */
+  animation: none;
 }
 .js .page-home .home-hero.is-motion-ready [data-hero-copy] > :nth-child(2) {
   animation-delay: 130ms;

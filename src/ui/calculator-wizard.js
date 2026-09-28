@@ -30,6 +30,7 @@ import {
   mergeProfessionalRoofInput
 } from './professional-analysis-identity.js';
 import { localitiesForRegion, localityCenter } from '../data/locations/armenia.js';
+import { localityLabel } from '../data/locations/locality-labels.js';
 import { createEquipmentCatalog } from '../data/equipment/showroom/catalog.js';
 import { getDefaultCalculatorSystem } from '../data/equipment/calculator/defaults.js';
 
@@ -354,7 +355,7 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
     const options = localities.map((locality) => {
       const option = document.createElement('option');
       option.value = locality;
-      option.textContent = locality;
+      option.textContent = localityLabel(locality, locale);
       return option;
     });
     localitySelect.replaceChildren(placeholder, ...options);

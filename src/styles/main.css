@@ -110,8 +110,10 @@ textarea {
 }
 
 :focus-visible {
-  outline: none !important;
-  box-shadow: none !important;
+  /* Two colours keep keyboard focus visible on both light and dark surfaces. */
+  outline: 3px solid #1676d2 !important;
+  outline-offset: 3px;
+  box-shadow: 0 0 0 3px #fff !important;
 }
 
 .container {
@@ -492,6 +494,12 @@ textarea {
   gap: 4px;
 }
 
+.mobile-menu__brand img {
+  width: 39px;
+  height: 39px;
+  flex: 0 0 39px;
+}
+
 .mobile-menu__links .inline-icon {
   width: 18px;
   height: 18px;
@@ -724,6 +732,9 @@ h1 mark {
     right: 0;
     top: calc(100% + 10px);
     width: min(320px, calc(100vw - 32px));
+    max-height: calc(100svh - var(--header-height) - 24px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
     display: grid;
     gap: 4px;
     border: 1px solid rgb(255 255 255 / 18%);

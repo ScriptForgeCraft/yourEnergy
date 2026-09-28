@@ -124,7 +124,7 @@ test('calculator instances expose destroy and the mode manager tears down before
   assert.match(professional, /lifecycle\.canCommit\(controller, analysisRequest\)/u);
   assert.match(modes, /currentInstance\?\.destroy\?\.\(\)/u);
   assert.match(modes, /const epoch = \+\+renderEpoch;\s+destroyCurrentInstance\(\);/u);
-  assert.match(modes, /stage\.replaceChildren\(\);\s+const markup = await loadProfessionalMarkup/u);
+  assert.match(modes, /stage\.replaceChildren\(\);\s+const \[markup\] = await Promise\.all\(\[\s+loadProfessionalMarkup\(\),\s+import\('\.\.\/styles\/calculator\/professional\.css'\)/u);
   assert.match(modes, /window\.addEventListener\('popstate', onPopstate\)/u);
   assert.match(modes, /window\.removeEventListener\('popstate', onPopstate\)/u);
 });

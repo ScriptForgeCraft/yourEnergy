@@ -6,7 +6,7 @@ const createProcessImageAsset = (visual, { widths, width, height }) =>
     widths: Object.freeze(widths),
     width,
     height,
-    quality: 74
+    quality: 56
   });
 
 export const PROCESS_IMAGE_ASSETS = Object.freeze([

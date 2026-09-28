@@ -1201,11 +1201,11 @@
     height: 16px;
   }
   .process-metric__title {
-    font-size: 10px;
+    font-size: 12px;
   }
   .process-metric__description,
   .process-metric > small {
-    font-size: 9px;
+    font-size: 12px;
   }
   .process-installation-timeline {
     top: auto;

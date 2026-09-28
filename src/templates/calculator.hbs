@@ -87,15 +87,15 @@
                   </svg>{{wizard.searchAddress}}</button><button class='button button--outline' type='button'
                   data-use-current-location><svg aria-hidden='true'>
                     <use href='/icons.svg#map-pin'></use>
-                  </svg>{{wizard.useCurrentLocation}}</button></div><label class='location-address-field'
-                for='wizard-address'><span class='visually-hidden'>{{wizard.addressLabel}}</span><svg
+                  </svg>{{wizard.useCurrentLocation}}</button></div><div class='location-address-field'>
+                <label class='visually-hidden' for='wizard-address'>{{wizard.addressLabel}}</label><svg
                   aria-hidden='true'>
                   <use href='/icons.svg#search'></use>
                 </svg><input id='wizard-address' name='address' data-wizard-address maxlength='220' autocomplete='street-address'
                   placeholder='{{hero.addressPlaceholder}}' /><button class='location-address-field__clear'
                   type='button' data-clear-address aria-label='{{product.common.cancel}}'><svg aria-hidden='true'>
                   <use href='/icons.svg#close'></use>
-                  </svg></button></label>
+                  </svg></button></div>
               <small class='location-address-disclosure'>{{wizard.addressSearchDisclosure}}</small>
               <small class='location-search-attribution'>{{wizard.addressSearchAttribution}} <a
                   href='https://www.openstreetmap.org/copyright' target='_blank' rel='noopener'>© OpenStreetMap contributors</a></small>

@@ -131,7 +131,10 @@ export const initCalculatorMode = async ({ config = {} } = {}) => {
       // Detach the retired Quick controls while the Professional markup is
       // loading. Their instance has already been destroyed above.
       stage.replaceChildren();
-      const markup = await loadProfessionalMarkup();
+      const [markup] = await Promise.all([
+        loadProfessionalMarkup(),
+        import('../styles/calculator/professional.css')
+      ]);
       if (!isCurrentRender(epoch)) return;
       stage.innerHTML = `${markup.main}${markup.passport}`;
       const { initCalculatorWizard } = await import('./calculator-wizard.js');

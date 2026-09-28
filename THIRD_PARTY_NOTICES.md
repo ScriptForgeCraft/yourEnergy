@@ -6,18 +6,18 @@ Leaflet is distributed under the BSD 2-Clause License. Copyright © 2010–2026 
 
 ## Lucide Icons
 
-The local paths in `public/icons.svg` are vendored from [Lucide Icons](https://lucide.dev/) and are distributed under the ISC License. Copyright © Lucide Contributors.
+The local paths in `assets/icons/icons.svg` are vendored from [Lucide Icons](https://lucide.dev/) and are distributed under the ISC License. Copyright © Lucide Contributors.
 
 The SVG sprite is served locally; the site does not request icons from a third-party service at runtime.
 
 ## Simple Icons
 
-The WhatsApp mark in `public/icons.svg` is vendored from [Simple Icons](https://simpleicons.org/), available under [CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0/). The SVG sprite is served locally; the site does not request icons from a third-party service at runtime.
+The WhatsApp mark in `assets/icons/icons.svg` is vendored from [Simple Icons](https://simpleicons.org/), available under [CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0/). The SVG sprite is served locally; the site does not request icons from a third-party service at runtime.
 
 ## Caveat
 
-`public/fonts/caveat-500.ttf` is Caveat by Pablo Impallari and the Caveat Project Authors, distributed under the SIL Open Font License 1.1.
+`assets/fonts/caveat-500.ttf` is Caveat by Pablo Impallari and the Caveat Project Authors, distributed under the SIL Open Font License 1.1.
 
 ## Poqrik dzeragir
 
-`public/fonts/poqrik-dzeragir.ttf` is Poqrik dzeragir by poqrik.am. It is published for free commercial and personal use and is used only for the Armenian Hero signature.
+`assets/fonts/poqrik-dzeragir.ttf` is Poqrik dzeragir by poqrik.am. It is published for free commercial and personal use and is used only for the Armenian Hero signature.

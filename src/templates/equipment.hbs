@@ -50,7 +50,7 @@
           <section class='product-viewer' aria-label='{{equipmentCopy.product.interactiveView}}' data-viewer>
             <div class='product-viewer__halo' aria-hidden='true'></div>
             <div class='product-visual' data-product-visual><div class='product-visual__depth' data-product-depth>
-              <img class='product-visual__image' data-product-image src='{{equipmentSsr.initialProduct.displayImage}}' alt='{{equipmentSsr.initialProduct.brand}} {{equipmentSsr.initialProduct.name}}' fetchpriority='high' decoding='async' />
+              <img class='product-visual__image' data-product-image src='{{equipmentSsr.initialProduct.displayImage}}' srcset='{{equipmentSsr.initialProduct.displaySrcset}}' sizes='(max-width: 680px) min(calc(100vw - 32px), 360px), 490px' alt='{{equipmentSsr.initialProduct.brand}} {{equipmentSsr.initialProduct.name}}' fetchpriority='high' decoding='async' />
               <div class='product-hotspots' data-hotspots></div>
               <p class='product-image-missing' data-product-image-missing hidden>{{equipmentCopy.product.imageMissing}}</p>
             </div></div>
@@ -83,7 +83,7 @@
           <div class='product-rail__tabs' data-rail-categories>{{#each equipmentSsr.categories}}{{#if isAvailable}}<button class='product-rail__tab' type='button' data-rail-category='{{id}}' aria-pressed='{{isSelected}}'>{{label}}</button>{{/if}}{{/each}}</div>
           <div class='product-rail__navigation'>
             <button class='product-rail__arrow' type='button' data-product-previous><svg class='equipment-icon' aria-hidden='true'><use href='/icons.svg#arrow-left'></use></svg><span class='sr-only'>{{equipmentCopy.product.previousProduct}}</span></button>
-            <div class='product-rail__viewport' data-product-viewport><div class='product-rail__track' data-product-track>{{#each equipmentSsr.categoryProducts}}<button class='product-card' type='button' data-product-id='{{id}}' aria-pressed='{{isSelected}}'><span class='product-card__image'><img src='{{thumbnailImage}}' alt='' loading='lazy' decoding='async' /></span><span class='product-card__copy'><small>{{brand}}</small><strong>{{name}}</strong><span>{{powerRange}}</span></span><span class='product-card__arrow'><svg class='equipment-icon' aria-hidden='true'><use href='/icons.svg#arrow-right'></use></svg></span></button>{{/each}}</div></div>
+            <div class='product-rail__viewport' data-product-viewport><div class='product-rail__track' data-product-track>{{#each equipmentSsr.categoryProducts}}<button class='product-card' type='button' data-product-id='{{id}}' aria-pressed='{{isSelected}}'><span class='product-card__image'><img src='{{thumbnailImage}}' srcset='{{thumbnailSrcset}}' sizes='90px' alt='' loading='lazy' decoding='async' /></span><span class='product-card__copy'><small>{{brand}}</small><strong>{{name}}</strong><span>{{powerRange}}</span></span><span class='product-card__arrow'><svg class='equipment-icon' aria-hidden='true'><use href='/icons.svg#arrow-right'></use></svg></span></button>{{/each}}</div></div>
             <button class='product-rail__arrow' type='button' data-product-next><svg class='equipment-icon' aria-hidden='true'><use href='/icons.svg#arrow-right'></use></svg><span class='sr-only'>{{equipmentCopy.product.nextProduct}}</span></button>
           </div>
         </section>

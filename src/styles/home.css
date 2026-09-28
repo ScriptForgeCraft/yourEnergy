@@ -5,3 +5,29 @@
 @import './faq-preview.css';
 @import '/src/styles/process-story.css';
 @import '/src/styles/process-inspection-overlay.css';
+
+/* Small-screen labels remain readable without browser zoom. */
+@media (max-width: 767px) {
+  .page-home .hero-dashboard dt,
+  .page-home .hero-dashboard__note,
+  .page-home .hero-dashboard__status,
+  .page-home .hero-dashboard__location,
+  .page-home .hero-dashboard__metric > span,
+  .page-home .hero-trust-strip .trust-item p,
+  .page-home .portfolio-project-card__metrics strong,
+  .page-home .portfolio-project-card__metrics small,
+  .page-home .portfolio-project-card__location,
+  .page-home .portfolio-project-card__link,
+  .page-home .portfolio-projects__rail-meta p,
+  .page-home .process-form__help,
+  .page-home .process-progress__button,
+  .page-home .process-installation-timeline li,
+  .page-home .process-metric__description,
+  .page-home .process-metric > small,
+  .page-home .footer-grid li,
+  .page-home .footer-contact p,
+  .page-home .footer-contact small,
+  .page-home .footer-bottom {
+    font-size: 12px;
+  }
+}

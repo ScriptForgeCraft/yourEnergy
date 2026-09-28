@@ -16,6 +16,8 @@ const pages = (await createPageRegistry()).filter(
     (!args.get('locale') || page.locale === args.get('locale')) &&
     (!args.get('kind') || args.get('kind').split(',').includes(page.kind))
 );
+if (!pages.length) throw new Error('No routes matched the audit filters. Quote comma-separated arguments in PowerShell.');
+const nodeExecutable = process.env.LIGHTHOUSE_NODE || process.execPath;
 await mkdir(directory, { recursive: true });
 await writeFile(resolve(directory, 'routes.json'), JSON.stringify(pages.map(({ path, kind, locale, indexable }) => ({ path, kind, locale, indexable })), null, 2));
 const results = [];
@@ -26,10 +28,11 @@ for (const page of pages) {
     const command = [
       resolve('node_modules/lighthouse/cli/index.js'), new URL(page.path, origin).href,
       '--chrome-flags=--headless', '--quiet', '--output=json', `--output-path=${output}`,
+      '--only-categories=performance,accessibility,best-practices,seo',
       ...(device === 'desktop' ? ['--preset=desktop'] : [])
     ];
     const exitCode = await new Promise((accept, reject) => {
-      const child = spawn(process.execPath, command, { stdio: 'inherit', windowsHide: true });
+      const child = spawn(nodeExecutable, command, { stdio: 'inherit', windowsHide: true });
       child.on('error', reject);
       child.on('close', accept);
     });

@@ -1,0 +1,4 @@
+/* The Quick entry needs the shared shell, forms and result layout, not maps or roof tools. */
+@import './base.css';
+@import './quick.css';
+@import './layout.css';
