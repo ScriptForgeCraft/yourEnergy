@@ -74,7 +74,7 @@
       rgb(244 250 255 / 20%) 68%,
       rgb(244 250 255 / 0%) 100%
     ),
-    url('/images/professional-results-house.png') center / cover;
+    url('/images/professional-results-house-1600.webp') center / cover;
 }
 
 .pro-result-hero__roof-status {
@@ -206,6 +206,7 @@
 }
 
 .pro-result-hero__metric {
+  position: relative;
   display: grid;
   grid-template-columns: 2rem minmax(0, 1fr);
   grid-template-rows: auto auto;
@@ -220,8 +221,10 @@
 }
 
 .pro-result-hero__icon {
+  position: absolute;
+  top: 0.55rem;
+  left: 0.55rem;
   display: grid;
-  grid-row: 1 / span 2;
   width: 2rem;
   height: 2rem;
   place-items: center;
@@ -312,7 +315,7 @@
 
 .pro-result-finance__heading p {
   margin: 0.3rem 0 0;
-  color: #5f7894;
+  color: #405b78;
   font-size: 0.72rem;
   line-height: 1.42;
 }
@@ -333,7 +336,7 @@
 }
 
 .pro-result-finance__metrics dt {
-  color: #5d7692;
+  color: #405b78;
   font-size: 0.63rem;
   line-height: 1.25;
 }
@@ -380,7 +383,7 @@
 
 .pro-result-energy__primary dt,
 .pro-result-energy__breakdown dt {
-  color: #637c97;
+  color: #405b78;
   font-size: 0.7rem;
 }
 
@@ -1056,7 +1059,7 @@
         rgb(244 250 255 / 87%) 48%,
         rgb(244 250 255 / 17%) 100%
       ),
-      url('/images/professional-results-house.png') center / cover;
+      url('/images/professional-results-house-1024.webp') center / cover;
   }
 
   .pro-result-hero__metrics {
@@ -1210,7 +1213,7 @@
       rgb(246 251 255 / 4%) 78%,
       rgb(246 251 255 / 0%) 100%
     ),
-    url('/images/professional-results-house.png') center right / cover;
+    url('/images/professional-results-house-1600.webp') center right / cover;
 }
 
 .pro-result-hero h3 {
@@ -1275,7 +1278,7 @@
   grid-column: 1 / -1;
   margin-top: -0.28rem;
   padding: 0.35rem 0;
-  color: #607a96;
+  color: #405b78;
   background: transparent;
 }
 
@@ -1345,7 +1348,7 @@
 .pro-result-equipment__subtitle {
   grid-column: 1 / -1;
   margin: -0.22rem 0 0;
-  color: #647d98;
+  color: #405b78;
   font-size: 0.65rem;
 }
 
@@ -1374,7 +1377,7 @@
 }
 
 .pro-result-equipment-card__brand {
-  color: #0877e8;
+  color: #075fbd;
   font-weight: 850;
 }
 
@@ -1431,7 +1434,7 @@
 
 .pro-result-roof__status p {
   margin-top: 0.18rem;
-  color: #5b7890;
+  color: #405b78;
   font-size: 0.64rem;
   line-height: 1.3;
 }
@@ -1456,7 +1459,7 @@
 
 .pro-result-roof__comparison dt,
 .pro-result-roof__facts dt {
-  color: #5f7b94;
+  color: #405b78;
   font-size: 0.59rem;
   line-height: 1.2;
 }
@@ -1582,7 +1585,7 @@
         rgb(246 251 255 / 22%) 76%,
         rgb(246 251 255 / 0%) 100%
       ),
-      url('/images/professional-results-house.png') center / cover;
+      url('/images/professional-results-house-1024.webp') center / cover;
   }
 
   .pro-result-hero__metrics,

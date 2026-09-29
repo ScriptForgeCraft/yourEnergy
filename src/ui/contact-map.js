@@ -84,7 +84,12 @@ export const initContactMap = async () => {
       iconAnchor: [16, 38],
       popupAnchor: [0, -36]
     });
-    const marker = L.marker(office.coordinates, { icon, keyboard: true, title: office.title })
+    const marker = L.marker(office.coordinates, {
+      icon,
+      keyboard: true,
+      title: office.title,
+      alt: office.title
+    })
       .bindPopup(createPopupContent(office))
       .addTo(map);
     const button = office.card.querySelector('[data-office-map-option]');

@@ -1,4 +1,5 @@
 import { calculatePreliminaryRoofCapacity } from '../../domain/roof-capacity.js';
+import { equipmentImageSrcset, equipmentImageUrl } from '../../config/equipment-images.js';
 import { number, format, formatApproximate, text, element, localeCode } from './view-helpers.js';
 
 const inverterTechnology = (technology, wizard) =>
@@ -58,7 +59,9 @@ export const createCalculatorResultsView = ({
     const wrapper = element('div', `pro-result-hero__metric pro-result-hero__metric--${kind}`);
     const symbol = element('span', 'pro-result-hero__icon');
     symbol.append(resultIcon(icon));
-    wrapper.append(symbol, element('dt', '', label), element('dd', '', value));
+    const term = element('dt', '', label);
+    term.prepend(symbol);
+    wrapper.append(term, element('dd', '', value));
     return wrapper;
   };
 
@@ -281,7 +284,12 @@ export const createCalculatorResultsView = ({
     );
     if (displayProduct?.image) {
       const image = document.createElement('img');
-      image.src = displayProduct.image;
+      image.src = equipmentImageUrl(displayProduct.image, 320);
+      const srcset = equipmentImageSrcset(displayProduct.image, [160, 320, 640]);
+      if (srcset) {
+        image.srcset = srcset;
+        image.sizes = '(max-width: 620px) 40vw, 240px';
+      }
       image.alt = [displayBrand, displayName, displayModel].filter(Boolean).join(' · ');
       image.loading = 'lazy';
       image.decoding = 'async';
