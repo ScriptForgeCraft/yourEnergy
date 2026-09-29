@@ -31,37 +31,122 @@
     {{> site-header}}
     <main id='main'>
       <section class='contacts-hero' aria-labelledby='contacts-title'>
-        <div class='contacts-hero__backdrop' aria-hidden='true'><picture><source
-              type='image/avif'
-              srcset='/images/hero-time-14-1024.avif 1024w, /images/hero-time-14-1600.avif 1600w'
-              sizes='100vw'
-            /><source
-              type='image/webp'
-              srcset='/images/hero-time-14-1024.webp 1024w, /images/hero-time-14-1600.webp 1600w'
-              sizes='100vw'
-            /><img src='/images/hero-time-14-1600.jpg' width='1600' height='900' alt='' fetchpriority='high' decoding='async' /></picture></div>
-        <div class='container contacts-hero__inner'>
-          <div class='contacts-hero__copy'><h1 id='contacts-title'>{{{contactPage.title}}}</h1><p>{{contactPage.intro}}</p></div>
-          <aside class='contacts-hero__signature' aria-label='YOURENERGY'><p>{{contactPage.signature}}</p></aside>
-          <div class='contacts-channels'>{{#each contactPage.channels}}<a
-                class='contacts-channel'
-                href='{{href}}'
-                {{#if meeting}}data-meeting-open{{/if}}
-                {{#if external}}target='_blank' rel='noopener noreferrer'{{/if}}
-              ><span class='contacts-channel__icon'><svg aria-hidden='true'><use href='/icons.svg#{{icon}}'></use></svg></span><span><strong>{{title}}</strong><small>{{value}}</small></span></a>{{/each}}</div>
+        <div class='contacts-hero__backdrop' aria-hidden='true'>
+          <picture>
+            <source type='image/avif' srcset='/images/hero-time-14-1024.avif 1024w, /images/hero-time-14-1600.avif 1600w' sizes='100vw' />
+            <source type='image/webp' srcset='/images/hero-time-14-1024.webp 1024w, /images/hero-time-14-1600.webp 1600w' sizes='100vw' />
+            <img src='/images/hero-time-14-1600.jpg' width='1600' height='900' alt='' fetchpriority='high' decoding='async' />
+          </picture>
         </div>
-      </section>
-
-      <section class='contact-offices section' aria-labelledby='offices-title'>
-        <div class='container'><header class='contact-section-heading'><div><h2 id='offices-title'>{{contactPage.officesTitle}}</h2><p>{{contactPage.officesIntro}}</p></div><a class='contact-route-button' href='{{contactPage.offices.0.href}}' target='_blank' rel='noopener noreferrer'><svg aria-hidden='true'><use href='/icons.svg#map-pin'></use></svg>{{contactPage.route}}</a></header>
-          <div class='office-map' data-office-map aria-label='{{contactPage.officesTitle}}'><div class='office-map__canvas' data-office-map-canvas role='region' aria-label='{{contactPage.officesTitle}}'></div>{{#each contactPage.offices}}<article class='office-card office-card--{{add @index 1}}' data-office-card data-office-map-lat='{{latitude}}' data-office-map-lng='{{longitude}}' data-office-map-title='{{title}}' data-office-map-address='{{address}}'><div class='office-card__image' aria-hidden='true'></div><div><h3>{{title}}</h3><p><svg aria-hidden='true'><use href='/icons.svg#map-pin'></use></svg>{{address}}</p><p><svg aria-hidden='true'><use href='/icons.svg#support'></use></svg>{{hours}}</p><button class='office-card__show' type='button' data-office-map-option aria-pressed='false'><svg aria-hidden='true'><use href='/icons.svg#map-pin'></use></svg>{{../contactPage.showOnMap}}</button></div><a href='{{href}}' target='_blank' rel='noopener noreferrer' aria-label='{{../contactPage.route}} — {{title}}'><svg aria-hidden='true'><use href='/icons.svg#arrow-right'></use></svg></a></article>{{/each}}</div>
+        <div class='container contacts-hero__inner'>
+          <div class='contacts-hero__copy'>
+            <h1 id='contacts-title'>{{{contactPage.heroTitle}}}</h1>
+            <p>{{contactPage.heroIntro}}</p>
+          </div>
+          <div class='contacts-channels'>
+            {{#each contactPage.channels}}
+              <a class='contacts-channel' href='{{href}}' {{#if meeting}}data-meeting-open{{/if}} {{#if external}}target='_blank' rel='noopener noreferrer'{{/if}}>
+                <span class='contacts-channel__icon'><svg aria-hidden='true'><use href='/icons.svg#{{icon}}'></use></svg></span>
+                <span class='contacts-channel__copy'><strong>{{title}}</strong><small>{{value}}</small></span>
+                <span class='contacts-channel__arrow' aria-hidden='true'><svg><use href='/icons.svg#arrow-right'></use></svg></span>
+              </a>
+            {{/each}}
+          </div>
         </div>
       </section>
 
       <section class='contact-form-section section' aria-labelledby='contact-form-title'>
-        <div class='container contact-form-layout'><div class='contact-form-copy'><div data-contact-pre-submit><h2 id='contact-form-title'>{{contactPage.formTitle}}</h2><p>{{contactPage.formIntro}}</p><form id='contact-form' class='contact-form' data-contact-form novalidate><div class='contact-form__fields'><label for='contact-name'><span>{{contactPage.name}}</span><input id='contact-name' name='name' type='text' autocomplete='name' maxlength='100' required placeholder='{{contactPage.name}} *' /></label><label for='contact-phone'><span>{{contactPage.phone}}</span><input id='contact-phone' name='phone' type='tel' autocomplete='tel' inputmode='tel' maxlength='32' required placeholder='{{contactPage.phone}} *' /></label><label for='contact-email'><span>{{contactPage.email}}</span><input id='contact-email' name='email' type='email' autocomplete='email' maxlength='254' placeholder='{{contactPage.email}}' /></label><label for='contact-topic'><span>{{contactPage.topic}}</span><select id='contact-topic' name='topic' autocomplete='off'><option value=''>{{contactPage.topic}}</option>{{#each contactPage.topicOptions}}<option value='{{this}}'>{{this}}</option>{{/each}}</select></label><label class='contact-form__message' for='contact-message'><span>{{contactPage.message}}</span><textarea id='contact-message' name='message' autocomplete='off' maxlength='2000' rows='5' placeholder='{{contactPage.message}}'></textarea></label></div><label class='contact-form__consent' for='contact-consent'><input id='contact-consent' name='consent' type='checkbox' autocomplete='off' required /><span>{{contactPage.consent.before}}<a href='{{privacyHref}}'>{{contactPage.consent.link}}</a>{{contactPage.consent.after}}</span></label><button class='contact-form__submit' type='submit' data-contact-submit><span>{{contactPage.submit}}</span><svg aria-hidden='true'><use href='/icons.svg#arrow-right'></use></svg></button><p class='contact-form__status' data-contact-status aria-live='polite'></p></form></div><section class='contact-form__success' data-contact-success hidden tabindex='-1' aria-labelledby='contact-success-title'><h2 id='contact-success-title'>{{contactPage.success.title}}</h2><p>{{contactPage.success.text}}</p><button class='contact-form__submit' type='button' data-contact-success-close>{{contactPage.success.close}}</button></section></div>
-          <aside class='contact-energy-card'><picture><source type='image/avif' srcset='/images/hero-time-20-1024.avif 1024w, /images/hero-time-20-1600.avif 1600w' sizes='(max-width: 900px) 100vw, 42vw' /><source type='image/webp' srcset='/images/hero-time-20-1024.webp 1024w, /images/hero-time-20-1600.webp 1600w' sizes='(max-width: 900px) 100vw, 42vw' /><img src='/images/hero-time-20-1600.jpg' width='1600' height='900' alt='' loading='lazy' decoding='async' /></picture><div><h2>{{contactPage.cardTitle}}</h2><p>{{contactPage.cardCopy}}</p></div></aside></div>
-        <div class='container contact-benefits'>{{#each contactPage.benefits}}<article><span><svg aria-hidden='true'><use href='/icons.svg#{{icon}}'></use></svg></span><div><h3>{{title}}</h3><p>{{copy}}</p></div></article>{{/each}}</div>
+        <div class='container contact-form-layout'>
+          <aside class='contact-info-card'>
+            <div class='contact-info-card__intro'>
+              <h2>{{contactPage.contactCardTitle}}</h2>
+              <p>{{contactPage.contactCardCopy}}</p>
+            </div>
+            <div class='contact-info-card__list'>
+              <a href='{{contactPage.channels.0.href}}'>
+                <span class='contact-info-card__icon'><svg aria-hidden='true'><use href='/icons.svg#phone'></use></svg></span>
+                <span><strong>{{contactPage.contactLabels.phone}}</strong><b>{{contactPage.channels.0.value}}</b><small>{{contactPage.channels.0.title}}</small></span>
+              </a>
+              <a href='{{contactPage.channels.1.href}}'>
+                <span class='contact-info-card__icon'><svg aria-hidden='true'><use href='/icons.svg#mail'></use></svg></span>
+                <span><strong>{{contactPage.contactLabels.email}}</strong><b>{{contactPage.channels.1.value}}</b><small>{{contactPage.channels.1.title}}</small></span>
+              </a>
+              <a href='{{contactPage.offices.0.href}}' target='_blank' rel='noopener noreferrer'>
+                <span class='contact-info-card__icon'><svg aria-hidden='true'><use href='/icons.svg#map-pin'></use></svg></span>
+                <span><strong>{{contactPage.contactLabels.address}}</strong><b>{{contactPage.offices.0.address}}</b><small>{{contactPage.offices.0.title}}</small></span>
+              </a>
+              <div class='contact-info-card__row'>
+                <span class='contact-info-card__icon'><svg aria-hidden='true'><use href='/icons.svg#calendar'></use></svg></span>
+                <span><strong>{{contactPage.contactLabels.hours}}</strong><b>{{contactPage.offices.0.hours}}</b></span>
+              </div>
+            </div>
+          </aside>
+
+          <div class='contact-form-card'>
+            <div data-contact-pre-submit>
+              <h2 id='contact-form-title'>{{contactPage.formTitleRef}}</h2>
+              <p class='contact-form-card__intro'>{{contactPage.formIntroRef}}</p>
+              <form id='contact-form' class='contact-form' data-contact-form novalidate>
+                <div class='contact-form__fields'>
+                  <label for='contact-name'><span>{{contactPage.name}} *</span><input id='contact-name' name='name' type='text' autocomplete='name' maxlength='100' required placeholder='{{contactPage.name}}' /></label>
+                  <label for='contact-phone'><span>{{contactPage.phone}} *</span><input id='contact-phone' name='phone' type='tel' autocomplete='tel' inputmode='tel' maxlength='32' required placeholder='+374 __ ___ __' /></label>
+                  <label class='contact-form__wide' for='contact-email'><span>{{contactPage.email}}</span><input id='contact-email' name='email' type='email' autocomplete='email' maxlength='254' placeholder='name@email.com' /></label>
+                </div>
+                <fieldset class='contact-property-types'>
+                  <legend>{{contactPage.propertyTypeLabel}}</legend>
+                  <div class='contact-property-types__grid'>
+                    {{#each contactPage.propertyTypes}}
+                      <label class='contact-property-type'>
+                        <input type='radio' name='topic' value='{{value}}' {{#if @first}}checked{{/if}} />
+                        <span class='contact-property-type__body'><svg aria-hidden='true'><use href='/icons.svg#{{icon}}'></use></svg><b>{{label}}</b><span class='contact-property-type__check'><svg aria-hidden='true'><use href='/icons.svg#check'></use></svg></span></span>
+                      </label>
+                    {{/each}}
+                  </div>
+                </fieldset>
+                <label class='contact-form__message' for='contact-message'><span>{{contactPage.message}}</span><textarea id='contact-message' name='message' autocomplete='off' maxlength='2000' rows='4' placeholder='{{contactPage.message}}'></textarea></label>
+                <div class='contact-form__footer'>
+                  <button class='contact-form__submit' type='submit' data-contact-submit><span>{{contactPage.submit}}</span><svg aria-hidden='true'><use href='/icons.svg#arrow-right'></use></svg></button>
+                  <label class='contact-form__consent' for='contact-consent'>
+                    <input id='contact-consent' name='consent' type='checkbox' autocomplete='off' required />
+                    <span class='contact-form__consent-icon'><svg aria-hidden='true'><use href='/icons.svg#shield-check'></use></svg></span>
+                    <span>{{contactPage.consent.before}}<a href='{{privacyHref}}'>{{contactPage.consent.link}}</a>{{contactPage.consent.after}}. {{contactPage.privacyHint}}</span>
+                  </label>
+                </div>
+                <p class='contact-form__status' data-contact-status aria-live='polite'></p>
+              </form>
+            </div>
+            <section class='contact-form__success' data-contact-success hidden tabindex='-1' aria-labelledby='contact-success-title'><h2 id='contact-success-title'>{{contactPage.success.title}}</h2><p>{{contactPage.success.text}}</p><button class='contact-form__submit' type='button' data-contact-success-close>{{contactPage.success.close}}</button></section>
+          </div>
+        </div>
+      </section>
+
+      <section class='contact-projects section' aria-labelledby='offices-title'>
+        <div class='container'>
+          <header class='contact-section-heading'>
+            <div><h2 id='offices-title'>{{contactPage.officesProjectsTitle}}</h2><p>{{contactPage.officesProjectsIntro}}</p></div>
+            <a class='contact-route-button' href='{{contactPage.projectsHref}}'><svg aria-hidden='true'><use href='/icons.svg#map-pin'></use></svg>{{contactPage.allProjects}}<svg aria-hidden='true'><use href='/icons.svg#arrow-right'></use></svg></a>
+          </header>
+          <div class='office-map' data-office-map aria-label='{{contactPage.officesProjectsTitle}}'>
+            <div class='office-map__canvas' data-office-map-canvas role='region' aria-label='{{contactPage.officesProjectsTitle}}'></div>
+            <div class='contact-project-cards'>
+              {{#each contactPage.mapProjects}}
+                <article class='contact-project-card' data-office-card data-office-map-lat='{{latitude}}' data-office-map-lng='{{longitude}}' data-office-map-title='{{title}}' data-office-map-address='{{title}}'>
+                  <picture class='contact-project-card__image'><source type='image/avif' srcset='/images/{{image}}-480.avif 480w, /images/{{image}}-800.avif 800w' sizes='92px' /><source type='image/webp' srcset='/images/{{image}}-480.webp 480w, /images/{{image}}-800.webp 800w' sizes='92px' /><img src='/images/{{image}}-480.jpg' width='480' height='320' alt='{{imageAlt}}' loading='lazy' decoding='async' /></picture>
+                  <div class='contact-project-card__copy'><h3>{{title}}</h3><p><svg aria-hidden='true'><use href='/icons.svg#sun'></use></svg>{{power}}</p><p><svg aria-hidden='true'><use href='/icons.svg#zap'></use></svg>{{production}}</p><p><svg aria-hidden='true'><use href='/icons.svg#tree'></use></svg>{{../contactPage.installed}}</p></div>
+                  <div class='contact-project-card__actions'><button type='button' data-office-map-option aria-pressed='false' aria-label='{{../contactPage.showOnMap}} — {{title}}'><svg aria-hidden='true'><use href='/icons.svg#map-pin'></use></svg></button><a href='{{href}}' aria-label='{{title}}'><svg aria-hidden='true'><use href='/icons.svg#arrow-right'></use></svg></a></div>
+                </article>
+              {{/each}}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class='contact-calculator-cta section' aria-labelledby='contact-calculator-title'>
+        <div class='container contact-calculator-cta__inner'>
+          <span class='contact-calculator-cta__icon'><svg aria-hidden='true'><use href='/icons.svg#calculator'></use></svg></span>
+          <div class='contact-calculator-cta__copy'><h2 id='contact-calculator-title'>{{contactPage.calculatorTitle}}</h2><p>{{contactPage.calculatorCopy}}</p></div>
+          <a class='contact-calculator-cta__button' href='{{contactPage.calculatorHref}}'>{{contactPage.calculatorAction}}<svg aria-hidden='true'><use href='/icons.svg#arrow-right'></use></svg></a>
+        </div>
       </section>
     </main>
     <dialog class='meeting-dialog' data-meeting-dialog aria-labelledby='meeting-dialog-title' aria-describedby='meeting-dialog-copy'>

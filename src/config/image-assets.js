@@ -10,6 +10,12 @@ export const RESPONSIVE_IMAGE_ASSETS = [
   })),
   { name: 'roof-scan', source: 'calculator/roof-scan', widths: [480, 768, 1200, 1536] },
   {
+    name: 'contact-panel-bg',
+    source: 'contacts/contact-panel-bg',
+    widths: [640, 1024],
+    quality: 62
+  },
+  {
     name: 'professional-results-house',
     source: 'calculator/professional-results-house',
     widths: [640, 1024, 1600],

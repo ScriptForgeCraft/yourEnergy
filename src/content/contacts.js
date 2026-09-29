@@ -1,4 +1,5 @@
 import { CONTACT_HOURS } from './contact-hours.js';
+import projectCatalog from '../data/projects/projects.json';
 
 const mapsUrl = (query) =>
   `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(query)}`;
@@ -14,7 +15,7 @@ const office = (title, address, hours, mapQuery, coordinates) => ({
   href: mapsUrl(mapQuery)
 });
 
-export const contactPageCopy = Object.freeze({
+const baseContactPageCopy = Object.freeze({
   hy: {
     meta: {
       title: 'Կապ | YOURENERGY',
@@ -403,3 +404,120 @@ export const contactPageCopy = Object.freeze({
     ]
   }
 });
+
+
+const CONTACT_VISUAL_COPY = Object.freeze({
+  hy: {
+    heroEyebrow: 'Կապ',
+    heroTitle: 'Եկեք քննարկենք<br><span>Ձեր նախագիծը</span>',
+    heroIntro: 'Պատասխանենք արևային համակարգի, հաշվարկի, սարքավորումների և տեղադրման մասին Ձեր հարցերին։',
+    contactCardTitle: 'Կապվեք մեզ հետ',
+    contactCardCopy: 'Հարց ունե՞ք հաշվարկի կամ տեղադրման մասին։ Գրեք կամ զանգահարեք մեզ։',
+    contactLabels: { phone: 'Հեռախոս', email: 'Email', address: 'Հասցե', hours: 'Աշխատանքային ժամեր' },
+    formTitleRef: 'Թողնել հայտ',
+    formIntroRef: 'Մի փոքր պատմեք օբյեկտի մասին — մենք կօգնենք ընտրել օպտիմալ լուծումը։',
+    propertyTypeLabel: 'Օբյեկտի տեսակը',
+    propertyTypes: [
+      { value: 'Առանձնատուն', icon: 'faq-home', label: 'Առանձնատուն' },
+      { value: 'Բնակարան', icon: 'roof-measure', label: 'Բնակարան' },
+      { value: 'Կոմերցիոն օբյեկտ', icon: 'electrical-panel', label: 'Կոմերցիոն օբյեկտ' },
+      { value: 'Այլ', icon: 'menu', label: 'Այլ' }
+    ],
+    privacyHint: 'Ձեր տվյալներն օգտագործվում են միայն Ձեր հայտին պատասխանելու համար։',
+    officesProjectsTitle: 'Մեր գրասենյակներն ու նախագծերը',
+    officesProjectsIntro: 'Աշխատում ենք Երևանում և ամբողջ Հայաստանում։ Կարող եք այցելել մեր գրասենյակ կամ քարտեզում դիտել իրականացված նախագծերը։',
+    allProjects: 'Ցույց տալ բոլոր նախագծերը',
+    calculatorTitle: 'Հաշվարկ պե՞տք է հենց հիմա',
+    calculatorCopy: 'Իմացեք համակարգի մոտավոր հզորությունն ու սպասվող արտադրությունը մի քանի րոպեում։',
+    calculatorAction: 'Անցնել հաշվիչին',
+    installed: 'Շահագործման մեջ'
+  },
+  ru: {
+    heroEyebrow: 'Контакты',
+    heroTitle: 'Давайте обсудим<br><span>ваш проект</span>',
+    heroIntro: 'Ответим на вопросы по солнечной системе, расчёту, оборудованию и установке.',
+    contactCardTitle: 'Свяжитесь с нами',
+    contactCardCopy: 'Есть вопрос по расчёту или установке? Напишите или позвоните нам.',
+    contactLabels: { phone: 'Телефон', email: 'Email', address: 'Адрес', hours: 'Время работы' },
+    formTitleRef: 'Оставить заявку',
+    formIntroRef: 'Расскажите немного о вашем объекте — мы поможем подобрать оптимальное решение.',
+    propertyTypeLabel: 'Тип объекта',
+    propertyTypes: [
+      { value: 'Частный дом', icon: 'faq-home', label: 'Частный дом' },
+      { value: 'Квартира', icon: 'roof-measure', label: 'Квартира' },
+      { value: 'Коммерческий объект', icon: 'electrical-panel', label: 'Коммерческий объект' },
+      { value: 'Другое', icon: 'menu', label: 'Другое' }
+    ],
+    privacyHint: 'Ваши данные используются только для связи по вашей заявке.',
+    officesProjectsTitle: 'Наши офисы и проекты',
+    officesProjectsIntro: 'Мы работаем в Ереване и по всей Армении. Вы можете посетить наш офис или посмотреть реализованные проекты на карте.',
+    allProjects: 'Показать все проекты',
+    calculatorTitle: 'Нужен расчёт прямо сейчас?',
+    calculatorCopy: 'Узнайте примерную мощность системы и ожидаемую выработку электроэнергии за несколько минут.',
+    calculatorAction: 'Перейти к калькулятору',
+    installed: 'Введен в эксплуатацию'
+  },
+  en: {
+    heroEyebrow: 'Contacts',
+    heroTitle: 'Let’s discuss<br><span>your project</span>',
+    heroIntro: 'We’ll answer your questions about solar systems, estimates, equipment and installation.',
+    contactCardTitle: 'Get in touch',
+    contactCardCopy: 'Have a question about an estimate or installation? Message or call us.',
+    contactLabels: { phone: 'Phone', email: 'Email', address: 'Address', hours: 'Working hours' },
+    formTitleRef: 'Send a request',
+    formIntroRef: 'Tell us a little about your property — we’ll help you choose the right solution.',
+    propertyTypeLabel: 'Property type',
+    propertyTypes: [
+      { value: 'Private home', icon: 'faq-home', label: 'Private home' },
+      { value: 'Apartment', icon: 'roof-measure', label: 'Apartment' },
+      { value: 'Commercial property', icon: 'electrical-panel', label: 'Commercial property' },
+      { value: 'Other', icon: 'menu', label: 'Other' }
+    ],
+    privacyHint: 'Your data is used only to respond to your request.',
+    officesProjectsTitle: 'Our offices and projects',
+    officesProjectsIntro: 'We work in Yerevan and across Armenia. Visit our office or explore completed projects on the map.',
+    allProjects: 'View all projects',
+    calculatorTitle: 'Need an estimate right now?',
+    calculatorCopy: 'See the approximate system size and expected energy production in a few minutes.',
+    calculatorAction: 'Open calculator',
+    installed: 'Commissioned'
+  }
+});
+
+const LOCALE_TAGS = Object.freeze({ hy: 'hy-AM', ru: 'ru-RU', en: 'en-US' });
+const projectHref = (locale, slug) => `${locale === 'hy' ? '' : `/${locale}`}/projects/${slug}/`;
+const projectsHref = (locale) => `${locale === 'hy' ? '' : `/${locale}`}/projects/`;
+const calculatorHref = (locale) => `${locale === 'hy' ? '' : `/${locale}`}/calculator/`;
+const number = (value, locale) => new Intl.NumberFormat(LOCALE_TAGS[locale]).format(value);
+const contactProjects = (locale) =>
+  projectCatalog.projects
+    .filter(({ slug }) => ['modern-home-yerevan', 'office-building-yerevan'].includes(slug))
+    .map((project) => {
+      const translation = project.translations?.[locale] ?? project.translations.en;
+      return Object.freeze({
+        slug: project.slug,
+        title: `${translation.category} — ${translation.city}`,
+        image: project.image,
+        imageAlt: translation.imageAlt,
+        power: `${project.powerKwp} kWp`,
+        production: `${number(project.annualProductionKwh, locale)} kWh/year`,
+        latitude: project.location.coordinates.lat,
+        longitude: project.location.coordinates.lng,
+        href: projectHref(locale, project.slug)
+      });
+    });
+
+export const contactPageCopy = Object.freeze(
+  Object.fromEntries(
+    Object.entries(baseContactPageCopy).map(([locale, base]) => [
+      locale,
+      Object.freeze({
+        ...base,
+        ...CONTACT_VISUAL_COPY[locale],
+        mapProjects: Object.freeze(contactProjects(locale)),
+        projectsHref: projectsHref(locale),
+        calculatorHref: calculatorHref(locale)
+      })
+    ])
+  )
+);
