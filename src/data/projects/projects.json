@@ -1,0 +1,301 @@
+{
+  "featuredSlug": "modern-home-yerevan",
+  "mapConfig": {
+    "coordinateSystem": "WGS84",
+    "svgPath": "/maps/armenia.svg",
+    "svgWidth": 792.57129,
+    "svgHeight": 802.40002,
+    "geoViewBox": {
+      "west": 43.45409,
+      "north": 41.303028,
+      "east": 46.630286,
+      "south": 38.83289
+    },
+    "defaultCenter": {
+      "lat": 40.2,
+      "lng": 44.5
+    },
+    "defaultZoom": 7,
+    "note": "Project markers are projected automatically from location.coordinates {lat, lng} onto the provided Armenia SVG. No manual x/y map positions are required."
+  },
+  "projects": [
+    {
+      "slug": "modern-home-yerevan",
+      "order": 1,
+      "featured": true,
+      "showInGrid": false,
+      "category": "residential",
+      "location": {
+        "regionKey": "yerevan",
+        "coordinates": {
+          "lat": 40.1772,
+          "lng": 44.5033
+        }
+      },
+      "image": "project-arabkir",
+      "powerKwp": 8.4,
+      "annualProductionKwh": 8420,
+      "co2Tons": 3.5,
+      "translations": {
+        "hy": {
+          "category": "Առանձնատուն",
+          "title": "Ժամանակակից տուն արևային համակարգով",
+          "city": "Երևան",
+          "copy": "Ընտանիքի համար հուսալի և գեղագիտական լուծում՝ տանիքի ճարտարապետությանը ներդաշնակ արևային համակարգով։",
+          "imageAlt": "Ժամանակակից տուն արևային համակարգով Երևանում",
+          "region": "Երևան"
+        },
+        "ru": {
+          "category": "Частный дом",
+          "title": "Современный дом с солнечной системой",
+          "city": "Ереван",
+          "copy": "Надёжное и аккуратное решение для частного дома, интегрированное в архитектуру кровли.",
+          "imageAlt": "Современный дом с солнечной системой в Ереване",
+          "region": "Ереван"
+        },
+        "en": {
+          "category": "Private home",
+          "title": "Modern home with a solar system",
+          "city": "Yerevan",
+          "copy": "A reliable, architectural solar solution designed to sit naturally on a private home's roof.",
+          "imageAlt": "Modern home with a solar system in Yerevan",
+          "region": "Yerevan"
+        }
+      }
+    },
+    {
+      "slug": "country-house-kotayk",
+      "order": 2,
+      "category": "residential",
+      "location": {
+        "regionKey": "kotayk",
+        "coordinates": {
+          "lat": 40.2238,
+          "lng": 44.563
+        }
+      },
+      "image": "project-ararat",
+      "powerKwp": 10.4,
+      "annualProductionKwh": 13500,
+      "co2Tons": 5.8,
+      "translations": {
+        "hy": {
+          "category": "Առանձնատուն",
+          "title": "Ամառանոց",
+          "city": "Կոտայք",
+          "imageAlt": "Արևային համակարգ ամառանոցում Կոտայքում",
+          "region": "Կոտայք"
+        },
+        "ru": {
+          "category": "Частный дом",
+          "title": "Загородный дом",
+          "city": "Котайк",
+          "imageAlt": "Солнечная система на загородном доме в Котайке",
+          "region": "Котайк"
+        },
+        "en": {
+          "category": "Private home",
+          "title": "Country house",
+          "city": "Kotayk",
+          "imageAlt": "Solar system on a country house in Kotayk",
+          "region": "Kotayk"
+        }
+      }
+    },
+    {
+      "slug": "office-building-yerevan",
+      "order": 3,
+      "category": "business",
+      "location": {
+        "regionKey": "yerevan",
+        "coordinates": {
+          "lat": 40.1815,
+          "lng": 44.5147
+        }
+      },
+      "image": "project-abovyan",
+      "powerKwp": 30,
+      "annualProductionKwh": 42000,
+      "co2Tons": 17.6,
+      "translations": {
+        "hy": {
+          "category": "Բիզնես",
+          "title": "Գրասենյակային շենք",
+          "city": "Երևան",
+          "imageAlt": "Արևային համակարգ գրասենյակային շենքում Երևանում",
+          "region": "Երևան"
+        },
+        "ru": {
+          "category": "Бизнес",
+          "title": "Офисное здание",
+          "city": "Ереван",
+          "imageAlt": "Солнечная система на офисном здании в Ереване",
+          "region": "Ереван"
+        },
+        "en": {
+          "category": "Business",
+          "title": "Office building",
+          "city": "Yerevan",
+          "imageAlt": "Solar system on an office building in Yerevan",
+          "region": "Yerevan"
+        }
+      }
+    },
+    {
+      "slug": "education-centre-yerevan",
+      "order": 4,
+      "category": "education",
+      "location": {
+        "regionKey": "yerevan",
+        "coordinates": {
+          "lat": 40.1957,
+          "lng": 44.5152
+        }
+      },
+      "image": "project-arabkir",
+      "powerKwp": 20,
+      "annualProductionKwh": 28000,
+      "co2Tons": 11.7,
+      "translations": {
+        "hy": {
+          "category": "Կրթություն",
+          "title": "Ուսումնական կենտրոն",
+          "city": "Երևան",
+          "imageAlt": "Արևային համակարգ ուսումնական կենտրոնում Երևանում",
+          "region": "Երևան"
+        },
+        "ru": {
+          "category": "Образование",
+          "title": "Учебное учреждение",
+          "city": "Ереван",
+          "imageAlt": "Солнечная система учебного учреждения в Ереване",
+          "region": "Ереван"
+        },
+        "en": {
+          "category": "Education",
+          "title": "Education centre",
+          "city": "Yerevan",
+          "imageAlt": "Solar system at an education centre in Yerevan",
+          "region": "Yerevan"
+        }
+      }
+    },
+    {
+      "slug": "production-facility-armavir",
+      "order": 5,
+      "category": "industrial",
+      "location": {
+        "regionKey": "armavir",
+        "coordinates": {
+          "lat": 40.1538,
+          "lng": 44.0382
+        }
+      },
+      "image": "project-vagharshapat",
+      "powerKwp": 50,
+      "annualProductionKwh": 68000,
+      "co2Tons": 28.4,
+      "translations": {
+        "hy": {
+          "category": "Արդյունաբերություն",
+          "title": "Արտադրական օբյեկտ",
+          "city": "Արմավիր",
+          "imageAlt": "Արևային համակարգ արտադրական օբյեկտում Արմավիրում",
+          "region": "Արմավիր"
+        },
+        "ru": {
+          "category": "Промышленность",
+          "title": "Производственный объект",
+          "city": "Армавир",
+          "imageAlt": "Солнечная система производственного объекта в Армавире",
+          "region": "Армавир"
+        },
+        "en": {
+          "category": "Industry",
+          "title": "Production facility",
+          "city": "Armavir",
+          "imageAlt": "Solar system at a production facility in Armavir",
+          "region": "Armavir"
+        }
+      }
+    },
+    {
+      "slug": "mountain-home-dilijan",
+      "order": 6,
+      "category": "residential",
+      "location": {
+        "regionKey": "dilijan",
+        "coordinates": {
+          "lat": 40.7408,
+          "lng": 44.8632
+        }
+      },
+      "image": "project-ararat",
+      "powerKwp": 7.5,
+      "annualProductionKwh": 9800,
+      "co2Tons": 4.1,
+      "translations": {
+        "hy": {
+          "category": "Առանձնատուն",
+          "title": "Տուն լեռներում",
+          "city": "Դիլիջան",
+          "imageAlt": "Արևային համակարգ լեռնային տանը Դիլիջանում",
+          "region": "Դիլիջան"
+        },
+        "ru": {
+          "category": "Частный дом",
+          "title": "Дом в горах",
+          "city": "Дилижан",
+          "imageAlt": "Солнечная система на доме в горах в Дилижане",
+          "region": "Дилижан"
+        },
+        "en": {
+          "category": "Private home",
+          "title": "Mountain home",
+          "city": "Dilijan",
+          "imageAlt": "Solar system on a mountain home in Dilijan",
+          "region": "Dilijan"
+        }
+      }
+    },
+    {
+      "slug": "agricultural-site-armavir",
+      "order": 7,
+      "category": "agriculture",
+      "location": {
+        "regionKey": "armavir",
+        "coordinates": {
+          "lat": 40.1403,
+          "lng": 44.0239
+        }
+      },
+      "image": "project-vagharshapat",
+      "powerKwp": 25,
+      "annualProductionKwh": 37000,
+      "co2Tons": 15.4,
+      "translations": {
+        "hy": {
+          "category": "Գյուղատնտեսություն",
+          "title": "Ագրոձեռնարկություն",
+          "city": "Արմավիր",
+          "imageAlt": "Արևային համակարգ ագրոձեռնարկությունում Արմավիրում",
+          "region": "Արմավիր"
+        },
+        "ru": {
+          "category": "Сельское хозяйство",
+          "title": "Агропредприятие",
+          "city": "Армавир",
+          "imageAlt": "Солнечная система агропредприятия в Армавире",
+          "region": "Армавир"
+        },
+        "en": {
+          "category": "Agriculture",
+          "title": "Agricultural site",
+          "city": "Armavir",
+          "imageAlt": "Solar system at an agricultural site in Armavir",
+          "region": "Armavir"
+        }
+      }
+    }
+  ]
+}

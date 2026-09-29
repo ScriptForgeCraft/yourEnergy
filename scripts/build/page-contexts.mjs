@@ -18,7 +18,7 @@ import { ARMENIA_TARIFF_DATASET } from '../../src/data/tariffs/armenia.js';
 import { GENERATED_CONTENT_LOCALES } from '../../src/content/schema.js';
 import { createProcessImageContext } from '../../src/config/process-images.js';
 import { BLOG_COPY, getBlogPath } from '../../src/content/blog.js';
-import { GALLERY_PROJECT_CASE_SLUGS, PROJECT_CASES } from '../../src/content/project-cases.js';
+import { PROJECT_CASES } from '../../src/content/project-cases.js';
 import { EQUIPMENT_COPY, SPEC_LABELS } from '../../src/data/equipment/showroom/translations.js';
 import {
   formatProductCount,
@@ -29,6 +29,7 @@ import { createEquipmentCatalog } from '../../src/data/equipment/showroom/catalo
 import { pagePath } from '../../src/config/routes.js';
 import {
   projectsPageCopy,
+  PROJECT_CATALOG,
   FEATURED_PROJECT_CASE_SLUG,
   galleryProjectCaseCopy
 } from '../../src/content/projects.js';
@@ -464,7 +465,122 @@ export const createPageContextBuilder = ({ publicEnv, pages }) => {
     const base = createHomeContext(content, { pageKind: 'projects' });
     const copy = projectsPageCopy[content.locale];
     if (!copy) throw new Error(`Missing projects page content for ${content.locale}.`);
+
+    const locale = runtimeLocales[content.locale] ?? 'en-US';
+    const number = (value, options = {}) => new Intl.NumberFormat(locale, options).format(value);
     const metricsIcons = ['zap', 'chart-bars', 'leaf'];
+    const categoryIcons = Object.freeze({
+      residential: 'faq-home',
+      business: 'chart-bars',
+      education: 'file',
+      industrial: 'wrench',
+      agriculture: 'leaf'
+    });
+    const projectHref = (slug) => projectCasePath(content.locale, slug);
+    const projectView = (item) => ({
+      ...item,
+      href: projectHref(item.slug),
+      action: copy.featured.action,
+      tagIcon: categoryIcons[item.categoryKey] ?? 'sun',
+      avifSrcset: `/images/${item.image}-480.avif 480w, /images/${item.image}-800.avif 800w${item.image === 'project-arabkir' ? `, /images/${item.image}-1200.avif 1200w` : ''}`,
+      webpSrcset: `/images/${item.image}-480.webp 480w, /images/${item.image}-800.webp 800w${item.image === 'project-arabkir' ? `, /images/${item.image}-1200.webp 1200w` : ''}`,
+      metrics: item.metrics.map((value, metricIndex) => ({
+        icon: metricsIcons[metricIndex],
+        label: copy.featured.metricLabels[metricIndex],
+        value
+      }))
+    });
+
+    const featuredSource = copy.catalog.find((item) => item.slug === FEATURED_PROJECT_CASE_SLUG);
+    if (!featuredSource) throw new Error('Missing featured project in project catalog.');
+    const featured = {
+      ...projectView(featuredSource),
+      kicker: copy.featured.kicker,
+      galleryAction: copy.featured.galleryAction
+    };
+    const items = copy.catalog
+      .filter((item) => item.showInGrid !== false)
+      .sort((a, b) => Number(a.order ?? 0) - Number(b.order ?? 0))
+      .map(projectView);
+
+    const categoryMap = new Map();
+    for (const item of items) {
+      if (!categoryMap.has(item.categoryKey)) categoryMap.set(item.categoryKey, item.category);
+    }
+    const categories = [...categoryMap].map(([value, label]) => ({ value, label }));
+
+    const regionMap = new Map();
+    for (const item of copy.catalog) {
+      const current = regionMap.get(item.regionKey) ?? {
+        value: item.regionKey,
+        label: item.regionLabel ?? item.city ?? item.regionKey,
+        projects: []
+      };
+      current.projects.push(item);
+      regionMap.set(item.regionKey, current);
+    }
+    const regions = [...regionMap.values()]
+      .map(({ value, label }) => ({ value, label }))
+      .sort((a, b) => a.label.localeCompare(b.label, locale));
+
+    const { geoViewBox } = PROJECT_CATALOG.mapConfig ?? {};
+    const west = Number(geoViewBox?.west);
+    const north = Number(geoViewBox?.north);
+    const east = Number(geoViewBox?.east);
+    const south = Number(geoViewBox?.south);
+    if (![west, north, east, south].every(Number.isFinite) || east <= west || north <= south) {
+      throw new Error('Invalid projects mapConfig.geoViewBox in projects.json.');
+    }
+    const projectMapPosition = (item) => {
+      const latitude = Number(item.coordinates?.lat);
+      const longitude = Number(item.coordinates?.lng);
+      return {
+        x: ((longitude - west) / (east - west)) * 100,
+        y: ((north - latitude) / (north - south)) * 100
+      };
+    };
+    const markers = [...regionMap.values()].map(({ value, label, projects }) => {
+      const points = projects.map(projectMapPosition);
+      const average = (axis) =>
+        points.reduce((sum, point) => sum + Number(point[axis]), 0) / points.length;
+      return {
+        key: value,
+        label,
+        x: Math.min(100, Math.max(0, average('x'))),
+        y: Math.min(100, Math.max(0, average('y'))),
+        count: projects.length
+      };
+    });
+
+    const mapData = copy.catalog.map((item) => ({
+      slug: item.slug,
+      title: item.title,
+      category: item.category,
+      categoryKey: item.categoryKey,
+      city: item.city,
+      region: item.regionLabel,
+      regionKey: item.regionKey,
+      coordinates: item.coordinates,
+      image: item.image,
+      powerKwp: item.powerKwp,
+      annualProductionKwh: item.annualProductionKwh,
+      co2Tons: item.co2Tons,
+      href: projectHref(item.slug)
+    }));
+
+    const totalPowerKwp = copy.catalog.reduce((sum, item) => sum + Number(item.powerKwp || 0), 0);
+    const totalProductionKwh = copy.catalog.reduce(
+      (sum, item) => sum + Number(item.annualProductionKwh || 0),
+      0
+    );
+    const powerValue =
+      totalPowerKwp >= 1000
+        ? `${number(totalPowerKwp / 1000, { maximumFractionDigits: 1 })} MW`
+        : `${number(totalPowerKwp, { maximumFractionDigits: 1 })} kWp`;
+    const productionValue =
+      totalProductionKwh >= 1000000
+        ? `${number(totalProductionKwh / 1000000, { maximumFractionDigits: 1 })} GWh`
+        : `${number(totalProductionKwh / 1000, { maximumFractionDigits: 1 })} MWh`;
 
     return {
       ...base,
@@ -477,49 +593,52 @@ export const createPageContextBuilder = ({ publicEnv, pages }) => {
         ...copy,
         videoSrc: sameOriginPath(publicEnv.VITE_PROJECTS_HERO_VIDEO, ''),
         contactHref: base.navLinks.contacts,
-        featuredHref: projectCasePath(content.locale, FEATURED_PROJECT_CASE_SLUG),
-        items: copy.gallery.map((item, index) => ({
-          ...item,
-          tagIcon: index === 3 ? 'chart-bars' : index === 5 ? 'leaf' : 'faq-home',
-          action: copy.featured.action,
-          href: projectCasePath(content.locale, GALLERY_PROJECT_CASE_SLUGS[index]),
-          imageAlt: `${item.title}, ${item.city}`,
-          avifSrcset: `/images/${item.image}-480.avif 480w, /images/${item.image}-800.avif 800w`,
-          webpSrcset: `/images/${item.image}-480.webp 480w, /images/${item.image}-800.webp 800w`,
-          metrics: item.metrics.map((value, metricIndex) => ({
-            icon: metricsIcons[metricIndex],
-            value
-          }))
-        }))
+        featuredHref: projectHref(FEATURED_PROJECT_CASE_SLUG),
+        featured,
+        items,
+        categories,
+        regions,
+        mapConfig: PROJECT_CATALOG.mapConfig,
+        mapDataJson: escapeJsonForHtml(mapData),
+        coverage: {
+          ...copy.coverage,
+          markers,
+          stats: [
+            { value: number(copy.catalog.length), label: copy.coverage.projectLabel },
+            { value: number(regionMap.size), label: copy.coverage.regionLabel },
+            { value: powerValue, label: copy.coverage.powerLabel },
+            { value: productionValue, label: copy.coverage.productionLabel }
+          ]
+        },
+        projectCount: number(copy.catalog.length)
       }
     };
   };
 
   const createProjectCaseContext = (content, slug) => {
-    const galleryCaseIndex = GALLERY_PROJECT_CASE_SLUGS.indexOf(slug);
-    const galleryItem =
-      galleryCaseIndex === -1 ? null : projectsPageCopy[content.locale]?.gallery[galleryCaseIndex];
+    const catalogItem = projectsPageCopy[content.locale]?.catalog.find((item) => item.slug === slug);
     const galleryCopy = galleryProjectCaseCopy[content.locale];
     const copy =
       PROJECT_CASES[slug]?.[content.locale] ??
-      (galleryItem && galleryCopy
+      (catalogItem && galleryCopy
         ? {
             ...galleryCopy,
             slug,
             meta: {
-              title: `${galleryItem.title} | YOURENERGY`,
-              description: `${galleryCopy.metaDescription}: ${galleryItem.title}.`,
-              ogTitle: `${galleryItem.title} | YOURENERGY`,
+              title: `${catalogItem.title} | YOURENERGY`,
+              description: `${galleryCopy.metaDescription}: ${catalogItem.title}.`,
+              ogTitle: `${catalogItem.title} | YOURENERGY`,
               ogDescription: galleryCopy.intro
             },
-            category: galleryItem.tag,
-            location: galleryItem.city,
-            title: galleryItem.title,
-            image: galleryItem.image,
-            imageAlt: `${galleryItem.title}, ${galleryItem.city}`,
-            metrics: projectsPageCopy[content.locale].featured.metrics.map((metric, index) => ({
-              ...metric,
-              value: galleryItem.metrics[index]
+            category: catalogItem.category,
+            location: catalogItem.city,
+            title: catalogItem.title,
+            image: catalogItem.image,
+            imageAlt: catalogItem.imageAlt ?? `${catalogItem.title}, ${catalogItem.city}`,
+            metrics: projectsPageCopy[content.locale].featured.metricLabels.map((label, index) => ({
+              icon: ['zap', 'chart-bars', 'leaf'][index],
+              label,
+              value: catalogItem.metrics[index]
             }))
           }
         : null);

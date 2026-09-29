@@ -1,27 +1,28 @@
-const modernHomeYerevan = Object.freeze({
+import projectCatalog from '../data/projects/projects.json';
+
+const LOCALE_TAGS = Object.freeze({ hy: 'hy-AM', ru: 'ru-RU', en: 'en-US' });
+const CO2_UNITS = Object.freeze({ hy: 'տ', ru: 'т', en: 't' });
+const COUNTRY_NAMES = Object.freeze({ hy: 'Հայաստան', ru: 'Армения', en: 'Armenia' });
+
+const formatNumber = (value, locale, options = {}) =>
+  new Intl.NumberFormat(LOCALE_TAGS[locale] ?? 'en-US', options).format(value);
+
+const featuredProject = projectCatalog.projects.find(
+  (project) => project.slug === projectCatalog.featuredSlug
+);
+
+if (!featuredProject) {
+  throw new Error(`Featured project ${projectCatalog.featuredSlug} is missing from projects.json.`);
+}
+
+const featuredDetailCopy = Object.freeze({
   ru: {
-    slug: 'modern-home-yerevan',
-    meta: {
-      title: 'Солнечная система для частного дома в Ереване | YOURENERGY',
-      description:
-        'Карточка реализованного проекта YOURENERGY: современный дом с солнечной системой в Ереване.',
-      ogTitle: 'Современный дом с солнечной системой | YOURENERGY',
-      ogDescription: 'Опубликованные показатели и сведения о проекте в Ереване.'
-    },
     eyebrow: 'РЕАЛИЗОВАННЫЙ ПРОЕКТ',
-    category: 'Частный дом',
-    location: 'Ереван, Армения',
-    title: 'Современный дом с солнечной системой',
-    intro:
-      'Реализованная солнечная система для частного дома с опубликованной установленной мощностью 8,4 kWp.',
-    imageAlt: 'Современный дом с солнечной системой в Ереване',
+    metaDescription: 'Карточка реализованного проекта YOURENERGY',
+    introPrefix: 'Реализованная солнечная система для частного дома с опубликованной установленной мощностью',
     photoCaption: 'Опубликованная фотография объекта',
     metricsTitle: 'Опубликованные показатели',
-    metrics: [
-      { icon: 'zap', label: 'Установленная мощность', value: '8,4 kWp' },
-      { icon: 'chart-bars', label: 'Годовая выработка', value: '8 420 kWh' },
-      { icon: 'leaf', label: 'Сокращение CO₂ в год', value: '3,5 т' }
-    ],
+    metricLabels: ['Установленная мощность', 'Годовая выработка', 'Сокращение CO₂ в год'],
     recordsTitle: 'Техническая карточка объекта',
     records: [
       {
@@ -38,13 +39,12 @@ const modernHomeYerevan = Object.freeze({
         label: 'Год установки',
         value: 'Не опубликовано',
         note: 'Дата монтажа и ввода в эксплуатацию в публичной записи не указана.'
-      },
-      {
-        label: 'Источник годовой выработки',
-        value: 'Не опубликовано',
-        note: 'Показатель 8 420 kWh/год опубликован в каталоге, но без ссылки на расчёт по данным солнечного ресурса или данные мониторинга.'
       }
     ],
+    productionSourceLabel: 'Источник годовой выработки',
+    productionSourceValue: 'Не опубликовано',
+    productionSourceSuffix:
+      'опубликован в каталоге, но без ссылки на расчёт по данным солнечного ресурса или данные мониторинга.',
     disclosureTitle: 'О данных проекта',
     disclosure:
       'Показатели выше опубликованы в каталоге проектов YOURENERGY. В текущей записи нет источника и даты их измерения, поэтому годовая выработка не обозначается как расчёт по данным солнечного ресурса или фактически измеренная выработка.',
@@ -52,28 +52,12 @@ const modernHomeYerevan = Object.freeze({
     calculatorAction: 'Рассчитать свой проект'
   },
   hy: {
-    slug: 'modern-home-yerevan',
-    meta: {
-      title: 'Արևային համակարգ առանձնատան համար Երևանում | YOURENERGY',
-      description:
-        'YOURENERGY-ի իրականացված նախագծի քարտ՝ ժամանակակից տուն արևային համակարգով Երևանում։',
-      ogTitle: 'Ժամանակակից տուն արևային համակարգով | YOURENERGY',
-      ogDescription: 'Երևանի նախագծի հրապարակված ցուցանիշներն ու տվյալները։'
-    },
     eyebrow: 'ԻՐԱԿԱՆԱՑՎԱԾ ՆԱԽԱԳԻԾ',
-    category: 'Առանձնատուն',
-    location: 'Երևան, Հայաստան',
-    title: 'Ժամանակակից տուն արևային համակարգով',
-    intro:
-      'Առանձնատան համար իրականացված արևային համակարգ՝ հրապարակված 8,4 kWp տեղադրված հզորությամբ։',
-    imageAlt: 'Ժամանակակից տուն արևային համակարգով Երևանում',
+    metaDescription: 'YOURENERGY-ի իրականացված նախագծի քարտ',
+    introPrefix: 'Առանձնատան համար իրականացված արևային համակարգ՝ հրապարակված տեղադրված հզորությամբ',
     photoCaption: 'Օբյեկտի հրապարակված լուսանկարը',
     metricsTitle: 'Հրապարակված ցուցանիշներ',
-    metrics: [
-      { icon: 'zap', label: 'Տեղադրված հզորություն', value: '8,4 kWp' },
-      { icon: 'chart-bars', label: 'Տարեկան արտադրություն', value: '8 420 kWh' },
-      { icon: 'leaf', label: 'CO₂-ի կրճատում', value: '3,5 տ' }
-    ],
+    metricLabels: ['Տեղադրված հզորություն', 'Տարեկան արտադրություն', 'CO₂-ի կրճատում'],
     recordsTitle: 'Օբյեկտի տեխնիկական քարտ',
     records: [
       {
@@ -90,13 +74,12 @@ const modernHomeYerevan = Object.freeze({
         label: 'Տեղադրման տարի',
         value: 'Չի հրապարակվել',
         note: 'Տեղադրման և շահագործման հանձնման ամսաթիվը հրապարակային գրառման մեջ նշված չէ։'
-      },
-      {
-        label: 'Տարեկան արտադրության աղբյուր',
-        value: 'Չի հրապարակվել',
-        note: '8 420 kWh/տարի ցուցանիշը հրապարակված է կատալոգում, բայց առանց արևային ռեսուրսի տվյալներով հաշվարկի կամ մոնիթորինգի տվյալների հղման։'
       }
     ],
+    productionSourceLabel: 'Տարեկան արտադրության աղբյուր',
+    productionSourceValue: 'Չի հրապարակվել',
+    productionSourceSuffix:
+      'ցուցանիշը հրապարակված է կատալոգում, բայց առանց արևային ռեսուրսի տվյալներով հաշվարկի կամ մոնիթորինգի տվյալների հղման։',
     disclosureTitle: 'Նախագծի տվյալների մասին',
     disclosure:
       'Վերոնշյալ ցուցանիշները հրապարակված են YOURENERGY նախագծերի կատալոգում։ Ընթացիկ գրառումը չի պարունակում դրանց չափման աղբյուրն ու ամսաթիվը, ուստի տարեկան արտադրությունը չի ներկայացվում որպես արևային ռեսուրսի տվյալներով հաշվարկ կամ փաստացի չափված արտադրություն։',
@@ -104,27 +87,12 @@ const modernHomeYerevan = Object.freeze({
     calculatorAction: 'Հաշվարկել իմ նախագիծը'
   },
   en: {
-    slug: 'modern-home-yerevan',
-    meta: {
-      title: 'Modern home with a solar system in Yerevan | YOURENERGY',
-      description:
-        'Completed YOURENERGY project record: a modern home with a solar system in Yerevan.',
-      ogTitle: 'Modern home with a solar system | YOURENERGY',
-      ogDescription: 'Published results and project information for the Yerevan site.'
-    },
     eyebrow: 'COMPLETED PROJECT',
-    category: 'Private home',
-    location: 'Yerevan, Armenia',
-    title: 'Modern home with a solar system',
-    intro: 'A completed residential solar system with a published installed capacity of 8.4 kWp.',
-    imageAlt: 'Modern home with a solar system in Yerevan',
+    metaDescription: 'Completed YOURENERGY project record',
+    introPrefix: 'A completed residential solar system with a published installed capacity of',
     photoCaption: 'Published photograph of the site',
     metricsTitle: 'Published results',
-    metrics: [
-      { icon: 'zap', label: 'Installed capacity', value: '8.4 kWp' },
-      { icon: 'chart-bars', label: 'Annual production', value: '8,420 kWh' },
-      { icon: 'leaf', label: 'CO₂ avoided a year', value: '3.5 t' }
-    ],
+    metricLabels: ['Installed capacity', 'Annual production', 'CO₂ avoided a year'],
     recordsTitle: 'Technical project record',
     records: [
       {
@@ -141,13 +109,12 @@ const modernHomeYerevan = Object.freeze({
         label: 'Installation year',
         value: 'Not published',
         note: 'The installation and commissioning date is not stated in the public record.'
-      },
-      {
-        label: 'Annual-production source',
-        value: 'Not published',
-        note: 'The catalogue publishes 8,420 kWh/year without a link to a solar-resource calculation or monitoring data.'
       }
     ],
+    productionSourceLabel: 'Annual-production source',
+    productionSourceValue: 'Not published',
+    productionSourceSuffix:
+      'is published in the catalogue without a link to a solar-resource calculation or monitoring data.',
     disclosureTitle: 'About the project data',
     disclosure:
       'The figures above are published in the YOURENERGY projects catalogue. This record does not provide a source or measurement date, so annual production is not labelled as a solar-resource estimate or measured generation.',
@@ -156,20 +123,65 @@ const modernHomeYerevan = Object.freeze({
   }
 });
 
+const buildFeaturedCase = (locale) => {
+  const translation = featuredProject.translations?.[locale] ?? featuredProject.translations?.en;
+  const copy = featuredDetailCopy[locale];
+  const power = `${formatNumber(featuredProject.powerKwp, locale, { maximumFractionDigits: 1 })} kWp`;
+  const production = `${formatNumber(featuredProject.annualProductionKwh, locale)} kWh`;
+  const co2 = `${formatNumber(featuredProject.co2Tons, locale, { maximumFractionDigits: 1 })} ${CO2_UNITS[locale]}`;
+
+  return Object.freeze({
+    slug: featuredProject.slug,
+    meta: {
+      title: `${translation.title} | YOURENERGY`,
+      description: `${copy.metaDescription}: ${translation.title}.`,
+      ogTitle: `${translation.title} | YOURENERGY`,
+      ogDescription: `${translation.region}: ${power}, ${production}.`
+    },
+    eyebrow: copy.eyebrow,
+    category: translation.category,
+    location: `${translation.city}, ${COUNTRY_NAMES[locale]}`,
+    title: translation.title,
+    intro: `${copy.introPrefix} ${power}.`,
+    image: featuredProject.image,
+    imageAlt: translation.imageAlt,
+    photoCaption: copy.photoCaption,
+    metricsTitle: copy.metricsTitle,
+    metrics: [
+      { icon: 'zap', label: copy.metricLabels[0], value: power },
+      { icon: 'chart-bars', label: copy.metricLabels[1], value: production },
+      { icon: 'leaf', label: copy.metricLabels[2], value: co2 }
+    ],
+    recordsTitle: copy.recordsTitle,
+    records: [
+      ...copy.records,
+      {
+        label: copy.productionSourceLabel,
+        value: copy.productionSourceValue,
+        note: `${production} ${copy.productionSourceSuffix}`
+      }
+    ],
+    disclosureTitle: copy.disclosureTitle,
+    disclosure: copy.disclosure,
+    back: copy.back,
+    calculatorAction: copy.calculatorAction
+  });
+};
+
 export const PROJECT_CASES = Object.freeze({
-  'modern-home-yerevan': modernHomeYerevan
+  [projectCatalog.featuredSlug]: Object.freeze({
+    ru: buildFeaturedCase('ru'),
+    hy: buildFeaturedCase('hy'),
+    en: buildFeaturedCase('en')
+  })
 });
 
-export const GALLERY_PROJECT_CASE_SLUGS = Object.freeze([
-  'country-house-kotayk',
-  'office-building-yerevan',
-  'education-centre-yerevan',
-  'production-facility-armavir',
-  'mountain-home-dilijan',
-  'agricultural-site-armavir'
-]);
+export const GALLERY_PROJECT_CASE_SLUGS = Object.freeze(
+  projectCatalog.projects
+    .filter((project) => project.slug !== projectCatalog.featuredSlug)
+    .map((project) => project.slug)
+);
 
-export const PROJECT_CASE_SLUGS = Object.freeze([
-  ...Object.keys(PROJECT_CASES),
-  ...GALLERY_PROJECT_CASE_SLUGS
-]);
+export const PROJECT_CASE_SLUGS = Object.freeze(
+  projectCatalog.projects.map((project) => project.slug)
+);
