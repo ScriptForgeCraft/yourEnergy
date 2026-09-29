@@ -270,7 +270,7 @@ const common = {
           budget: 'Նախնական արժեքի միջակայք',
           central: 'Կենտրոնական գնահատական',
           payback: 'Հետգնման ժամկետ',
-          twentyFiveYears: 'Արժեքը 25 տարում'
+          twentyFiveYears: 'Ընդհանուր խնայողություն 25 տարում'
         },
         energy: {
           title: 'Էներգետիկ հաշվեկշիռ',
