@@ -616,7 +616,9 @@ export const createPageContextBuilder = ({ publicEnv, pages }) => {
   };
 
   const createProjectCaseContext = (content, slug) => {
-    const catalogItem = projectsPageCopy[content.locale]?.catalog.find((item) => item.slug === slug);
+    const catalogItem = projectsPageCopy[content.locale]?.catalog.find(
+      (item) => item.slug === slug
+    );
     const galleryCopy = galleryProjectCaseCopy[content.locale];
     const copy =
       PROJECT_CASES[slug]?.[content.locale] ??
@@ -820,11 +822,18 @@ export const createPageContextBuilder = ({ publicEnv, pages }) => {
     const wizard = wizardCopy[content.locale];
     const path = toolPath(content.locale, 'calculator');
     const base = createHomeContext(content, { pageKind: 'calculator' });
+    const heroTitleParts = modeCopy.quick.heroTitle.trim().split(/\s+/u);
+    const heroTitleAccent = heroTitleParts.pop() ?? '';
+    const quick = {
+      ...modeCopy.quick,
+      heroTitleLead: heroTitleParts.join(' '),
+      heroTitleAccent
+    };
     return {
       ...base,
       path,
       meta: modeCopy.quickMeta,
-      quick: modeCopy.quick,
+      quick,
       modeControl: calculatorModeControl[content.locale],
       // Visitors are already at the calculator, so the header CTA should move
       // them forward to a conversation instead of pointing back to this page.

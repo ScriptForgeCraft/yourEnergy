@@ -6,7 +6,31 @@
   isolation: isolate;
   overflow: hidden;
   padding-top: calc(var(--header-height) + clamp(0.35rem, 1vw, 0.85rem));
-  background: #edf8ff;
+  background: transparent;
+}
+
+.calculator-hero--quick::before {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  background:
+    linear-gradient(
+      90deg,
+      rgb(3 20 38 / 94%) 0%,
+      rgb(3 20 38 / 86%) 29%,
+      rgb(3 20 38 / 50%) 51%,
+      rgb(3 20 38 / 8%) 78%
+    ),
+    linear-gradient(0deg, rgb(3 20 38 / 38%) 0%, transparent 38%);
+  content: '';
+}
+
+/* Keep the new solar landscape visible through the whole journey. The
+   calculator cards stay as the only light working surfaces. */
+.calculator-page--quick {
+  background:
+    linear-gradient(180deg, rgb(3 22 39 / 10%) 0%, rgb(3 22 39 / 10%) 48%, rgb(3 22 39 / 30%) 100%),
+    url('/images/quick-calculator-sunset-1600.jpg') center / cover fixed;
 }
 
 .calculator-hero--quick .calculator-hero__inner {
@@ -20,47 +44,64 @@
   max-width: min(18ch, 56vw);
 }
 
+.calculator-hero--quick h1 {
+  max-width: none;
+  font-size: clamp(2.2rem, 3.8vw, 3.9rem);
+  letter-spacing: -0.06em;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.calculator-hero--quick h1 mark {
+  color: #ffd13d;
+  background: transparent;
+}
+
 .calculator-hero--quick h1 + p {
   max-width: min(39rem, 51vw);
 }
 
-.calculator-hero__visual,
-.calculator-hero__visual picture,
-.calculator-hero__visual img {
-  position: absolute;
-  inset: 0;
-  display: block;
-  width: 100%;
-  height: 100%;
+.calculator-hero--quick,
+.calculator-hero--quick h1,
+.calculator-hero--quick .calculator-hero__eyebrow,
+.calculator-hero--quick h1 + p {
+  color: #fff;
 }
 
-.calculator-hero__visual {
-  z-index: -1;
-  overflow: hidden;
+.calculator-hero--quick .calculator-hero__eyebrow {
+  color: rgb(225 237 247 / 88%);
 }
 
-.calculator-hero__visual img {
-  object-fit: cover;
-  object-position: 74% center;
-}
-
-.calculator-hero__visual::after {
-  position: absolute;
-  inset: 0;
-  background:
-    linear-gradient(
-      90deg,
-      #f9fdff 0%,
-      rgb(249 253 255 / 98%) 30%,
-      rgb(249 253 255 / 74%) 48%,
-      rgb(249 253 255 / 8%) 76%
-    ),
-    linear-gradient(0deg, #f8fcff 0%, transparent 36%);
-  content: '';
+.calculator-hero--quick h1 + p {
+  color: rgb(255 255 255 / 89%);
 }
 
 .calculator-hero--quick .calculator-mode-switch a {
+  border-color: rgb(255 255 255 / 36%);
+  color: #fff;
+  background: rgb(7 30 53 / 52%);
+  box-shadow: 0 12px 28px rgb(0 0 0 / 18%);
   backdrop-filter: blur(9px);
+}
+
+.calculator-hero--quick .calculator-mode-switch a.is-active {
+  border-color: rgb(140 202 255 / 88%);
+  color: #fff;
+  background: rgb(20 94 174 / 66%);
+}
+
+.calculator-hero--quick .calculator-mode-switch__icon {
+  color: #fff;
+  background: rgb(255 255 255 / 14%);
+}
+
+.calculator-hero--quick .calculator-mode-switch a.is-active .calculator-mode-switch__icon {
+  color: #fff;
+  background: #167ef4;
+}
+
+.calculator-hero--quick .calculator-mode-switch__copy small {
+  color: rgb(255 255 255 / 78%);
 }
 
 .calculator-hero--quick .calculator-mode-switch {
@@ -473,11 +514,11 @@
 
 @media (max-width: 780px) {
   .calculator-hero--quick {
-    background: linear-gradient(145deg, #f3fbff, #e4f4ff);
+    background: transparent;
   }
 
-  .calculator-hero--quick .calculator-hero__visual {
-    display: none;
+  .calculator-hero--quick h1 {
+    white-space: normal;
   }
 }
 

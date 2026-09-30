@@ -8,6 +8,12 @@ export const RESPONSIVE_IMAGE_ASSETS = [
     widths: [640, 1024, 1600],
     quality: 50
   })),
+  {
+    name: 'quick-calculator-sunset',
+    source: 'calculator/quick-calculator-sunset',
+    widths: [640, 1024, 1600],
+    quality: 62
+  },
   { name: 'roof-scan', source: 'calculator/roof-scan', widths: [480, 768, 1200, 1536] },
   {
     name: 'contact-panel-bg',
