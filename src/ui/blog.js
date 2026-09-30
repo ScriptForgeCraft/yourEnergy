@@ -1,3 +1,5 @@
+import { createArticleSearchIndex, matchesArticleSearch } from '../domain/article-search.js';
+
 const reveal = () => {
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
   const items = [...document.querySelectorAll('[data-blog-reveal]')];
@@ -28,18 +30,21 @@ const initCatalog = () => {
   const page = document.querySelector('[data-blog-page]');
   if (!page) return;
   const search = page.querySelector('[data-blog-search]');
-  const cards = [...page.querySelectorAll('[data-blog-card]')];
+  const cards = [...page.querySelectorAll('[data-blog-card]')].map((card) => ({
+    element: card,
+    searchIndex: createArticleSearchIndex(card.dataset.search, card.dataset.searchAliases)
+  }));
   const filters = [...page.querySelectorAll('[data-blog-filter]')];
   const noResults = page.querySelector('[data-blog-no-results]');
   let category = 'all';
 
   const render = () => {
-    const query = search?.value.trim().toLocaleLowerCase() ?? '';
+    const query = search?.value ?? '';
     let matched = 0;
-    cards.forEach((card) => {
+    cards.forEach(({ element: card, searchIndex }) => {
       const visible =
         (category === 'all' || card.dataset.category === category) &&
-        (!query || card.dataset.search?.includes(query));
+        (!query.trim() || matchesArticleSearch(searchIndex, query));
       card.hidden = !visible;
       if (visible) matched += 1;
     });

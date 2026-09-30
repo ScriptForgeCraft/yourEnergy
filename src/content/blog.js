@@ -231,7 +231,8 @@ const parseLocalizedArticle = (block, locale, metadata) => {
     imageWidth: image.width,
     imageHeight: image.height,
     imageAlt: copy.imageAlt,
-    searchText: `${h1} ${description} ${metadata.category} ${body}`.toLocaleLowerCase(locale)
+    searchText: `${h1} ${description} ${metadata.category} ${body}`.toLocaleLowerCase(locale),
+    searchAlias: `${h1} ${description} ${metadata.category}`
   };
 };
 
@@ -273,7 +274,7 @@ export const loadBlogArticles = async () => {
     };
 
     if (!articleImages[slug]) throw new Error(`Blog article ${slug} has no selected image.`);
-    return Object.fromEntries(
+    const localizedArticles = Object.fromEntries(
       Object.entries(languages).map(([locale, languageBlock]) => [
         locale,
         parseLocalizedArticle(languageBlock, locale, {
@@ -281,6 +282,18 @@ export const loadBlogArticles = async () => {
           category: metadata.categoryByLocale[locale],
           path: articlePath(locale, slug)
         })
+      ])
+    );
+    // Local article text remains the primary index. Titles, descriptions and
+    // categories from its translations are included as compact aliases, so a
+    // Russian query can discover the English article (and vice versa).
+    const searchAliases = Object.values(localizedArticles)
+      .map(({ searchAlias }) => searchAlias)
+      .join(' ');
+    return Object.fromEntries(
+      Object.entries(localizedArticles).map(([locale, article]) => [
+        locale,
+        { ...article, searchAliases }
       ])
     );
   });
