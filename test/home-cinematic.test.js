@@ -176,7 +176,10 @@ test('desktop process mode collapses global navigation into an accessible burger
   assert.match(header, /data-mobile-menu-backdrop/u);
   assert.match(header, /mobile-menu__brand/u);
   assert.match(header, /mobile-menu__cta/u);
+  assert.match(header, /data-home-link/u);
   assert.match(navigation, /solar:process-chrome/u);
+  assert.match(navigation, /returnToHomeTop/u);
+  assert.match(navigation, /window\.scrollTo\(\{ top: 0, behavior: 'auto' \}\)/u);
   assert.match(navigation, /process-chrome-active/u);
   assert.match(navigation, /hide-page-scrollbar', active/u);
   assert.match(navigation, /element\.inert = active/u);

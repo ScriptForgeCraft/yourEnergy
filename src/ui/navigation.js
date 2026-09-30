@@ -6,6 +6,7 @@ export const initNavigation = () => {
   const languageMenu = header?.querySelector('.language-menu');
   const desktopNav = header?.querySelector('.desktop-nav');
   const headerActions = header?.querySelector('.header-actions');
+  const homeLinks = header?.querySelectorAll('[data-home-link]') ?? [];
   const documentElement = document.documentElement;
   const processDesktop = window.matchMedia(
     '(min-width: 1181px) and (min-height: 650px) and (prefers-reduced-motion: no-preference)'
@@ -22,6 +23,44 @@ export const initNavigation = () => {
     const lockPage = open && isProcessChromeActive();
     documentElement.classList.toggle('site-menu-open', lockPage);
     menuSummary?.setAttribute('aria-expanded', String(open));
+  };
+
+  const returnToHomeTop = (event) => {
+    if (
+      event.defaultPrevented ||
+      event.button !== 0 ||
+      event.metaKey ||
+      event.ctrlKey ||
+      event.shiftKey ||
+      event.altKey
+    )
+      return;
+
+    const destination = new URL(event.currentTarget.href, window.location.href);
+    const current = window.location;
+    const isCurrentHomeDocument =
+      !destination.hash &&
+      destination.origin === current.origin &&
+      destination.pathname === current.pathname &&
+      destination.search === current.search;
+    if (!isCurrentHomeDocument) return;
+
+    // A link to the current home URL is otherwise a no-op. In particular,
+    // it leaves the pinned #process experience active instead of returning
+    // visitors to the beginning of the page.
+    event.preventDefault();
+    window.history.replaceState(
+      window.history.state,
+      '',
+      `${destination.pathname}${destination.search}`
+    );
+
+    const previousScrollBehavior = documentElement.style.scrollBehavior;
+    documentElement.style.scrollBehavior = 'auto';
+    window.scrollTo({ top: 0, behavior: 'auto' });
+    window.requestAnimationFrame(() => {
+      documentElement.style.scrollBehavior = previousScrollBehavior;
+    });
   };
 
   const finishMenuClose = ({ restoreFocus = false } = {}) => {
@@ -102,6 +141,7 @@ export const initNavigation = () => {
   menu?.querySelectorAll('a').forEach((link) => {
     link.addEventListener('click', () => closeMenu({ animate: false }));
   });
+  homeLinks.forEach((link) => link.addEventListener('click', returnToHomeTop));
 
   document.addEventListener('keydown', (event) => {
     if (event.key === 'Escape' && languageMenu?.open) {

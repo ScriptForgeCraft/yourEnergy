@@ -634,6 +634,9 @@
   z-index: 5;
   display: grid;
   grid-template-columns: repeat(6, minmax(0, 1fr));
+  /* The step grid reserves space for the progress rail on the right. Offset
+     that asymmetric space so the installation panel remains viewport-centred. */
+  left: calc((clamp(205px, 15.5vw, 286px) - clamp(30px, 4.2vw, 78px)) / 2);
   margin: 0;
   padding: 18px 10px;
   border-radius: 14px;

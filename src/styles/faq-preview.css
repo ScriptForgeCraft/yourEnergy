@@ -1,9 +1,10 @@
-/* Homepage FAQ entry point: the reference composition lives in one viewport on desktop. */
+/* Homepage FAQ entry point: deliberately more compact than a full-screen Hero. */
 .faq-preview {
+  --faq-preview-height: min(86svh, 760px);
   position: relative;
   isolation: isolate;
-  min-block-size: 100svh;
-  max-block-size: 100svh;
+  min-block-size: var(--faq-preview-height);
+  max-block-size: var(--faq-preview-height);
   overflow: hidden;
   scroll-margin-top: var(--header-height);
   color: #f8fafc;
@@ -56,12 +57,12 @@
 .faq-preview__brand {
   position: absolute;
   z-index: 2;
-  top: clamp(58px, 8svh, 76px);
+  top: clamp(42px, 6svh, 56px);
   left: max(5.85vw, calc((100% - var(--container)) / 2));
   display: grid;
-  gap: 7px;
+  gap: 5px;
   color: #fff;
-  font-size: clamp(0.67rem, 0.73vw, 0.78rem);
+  font-size: clamp(0.61rem, 0.66vw, 0.7rem);
   font-weight: 800;
   letter-spacing: 0.5em;
   line-height: 1;
@@ -76,10 +77,10 @@
 .faq-preview__inner {
   position: relative;
   z-index: 1;
-  min-block-size: 100svh;
+  min-block-size: var(--faq-preview-height);
   display: flex;
   flex-direction: column;
-  padding-block: clamp(106px, 16svh, 132px) clamp(16px, 4svh, 38px);
+  padding-block: clamp(76px, 10svh, 92px) clamp(14px, 2.3svh, 22px);
 }
 
 .faq-preview__heading {
@@ -87,10 +88,10 @@
 }
 
 .faq-preview__eyebrow {
-  width: 38px;
+  width: 32px;
   height: 2px;
   display: block;
-  margin-bottom: clamp(38px, 5.3svh, 48px);
+  margin-bottom: clamp(24px, 3.4svh, 32px);
   background: #f4ba11;
 }
 
@@ -98,7 +99,7 @@
   max-width: none;
   margin: 0;
   color: #f8fafc;
-  font-size: clamp(2.7rem, 3.75vw, 4.5rem) !important;
+  font-size: clamp(2.3rem, 3.1vw, 3.75rem) !important;
   font-weight: 780;
   line-height: 0.99 !important;
   letter-spacing: -0.065em;
@@ -119,20 +120,20 @@
 
 .faq-preview__heading > p:last-child {
   max-width: 37rem;
-  margin: clamp(18px, 2.55svh, 24px) 0 0;
+  margin: clamp(14px, 1.9svh, 18px) 0 0;
   color: rgb(248 250 252 / 86%);
-  font-size: clamp(1rem, 1.38vw, 1.32rem);
-  line-height: 1.48;
+  font-size: clamp(0.92rem, 1.18vw, 1.12rem);
+  line-height: 1.42;
 }
 
 .faq-preview__grid {
   width: 100%;
-  min-height: clamp(112px, 14.5svh, 122px);
+  min-height: clamp(94px, 12svh, 106px);
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr)) minmax(268px, 1.04fr);
   margin-top: auto;
   border: 1px solid rgb(230 244 247 / 47%);
-  border-radius: 26px;
+  border-radius: 22px;
   background: linear-gradient(106deg, rgb(3 29 42 / 92%), rgb(5 31 43 / 84%));
   box-shadow:
     0 20px 48px rgb(0 8 15 / 25%),
@@ -149,8 +150,8 @@
 }
 
 .faq-preview__card {
-  gap: clamp(13px, 1.2vw, 22px);
-  padding: 18px clamp(16px, 1.65vw, 32px);
+  gap: clamp(10px, 1vw, 16px);
+  padding: 12px clamp(12px, 1.25vw, 24px);
   border-right: 1px solid rgb(211 229 232 / 39%);
   transition: background 180ms ease;
 }
@@ -163,12 +164,12 @@
 }
 
 .faq-preview__card:first-child {
-  border-radius: 25px 0 0 25px;
+  border-radius: 21px 0 0 21px;
 }
 
 .faq-preview__icon {
-  width: clamp(54px, 4.15vw, 70px);
-  height: clamp(54px, 4.15vw, 70px);
+  width: clamp(46px, 3.4vw, 58px);
+  height: clamp(46px, 3.4vw, 58px);
   display: grid;
   flex: none;
   place-items: center;
@@ -178,8 +179,8 @@
 }
 
 .faq-preview__icon svg {
-  width: 34px;
-  height: 34px;
+  width: 28px;
+  height: 28px;
   stroke-width: 1.95;
 }
 
@@ -192,7 +193,7 @@
 .faq-preview__card strong,
 .faq-preview__card small {
   color: #fff;
-  font-size: clamp(0.86rem, 1.05vw, 1.05rem);
+  font-size: clamp(0.76rem, 0.9vw, 0.94rem);
   font-weight: 750;
   line-height: 1.26;
 }
@@ -202,8 +203,8 @@
 }
 
 .faq-preview__arrow {
-  width: 23px;
-  height: 23px;
+  width: 19px;
+  height: 19px;
   flex: none;
   margin-left: auto;
   color: rgb(255 255 255 / 84%);
@@ -222,14 +223,14 @@
 }
 
 .faq-preview__all {
-  gap: 18px;
+  gap: 12px;
   align-self: center;
-  min-height: 74px;
-  margin: 10px 22px;
+  min-height: 58px;
+  margin: 8px 14px;
   border: 1px solid rgb(255 255 255 / 75%);
   border-radius: 999px;
-  padding: 0 clamp(18px, 1.8vw, 32px);
-  font-size: clamp(0.92rem, 1.08vw, 1.08rem);
+  padding: 0 clamp(16px, 1.45vw, 24px);
+  font-size: clamp(0.82rem, 0.95vw, 0.96rem);
   font-weight: 750;
   transition:
     background 180ms ease,
@@ -242,8 +243,8 @@
 }
 
 .faq-preview__all-icon {
-  width: 33px;
-  height: 33px;
+  width: 28px;
+  height: 28px;
   color: #f6ba11;
   stroke-width: 1.85;
 }
@@ -251,16 +252,16 @@
 .faq-preview__footer {
   display: flex;
   justify-content: center;
-  margin-top: clamp(16px, 3svh, 27px);
+  margin-top: clamp(12px, 1.8svh, 18px);
 }
 
 .faq-preview__footer p {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 10px;
   margin: 0;
   color: rgb(255 255 255 / 94%);
-  font-size: clamp(0.88rem, 1vw, 1rem);
+  font-size: clamp(0.78rem, 0.88vw, 0.9rem);
   font-weight: 650;
   line-height: 1.35;
 }
@@ -272,8 +273,8 @@
 }
 
 .faq-preview__contact-icon {
-  width: 38px;
-  height: 38px;
+  width: 30px;
+  height: 30px;
   color: #f6ba11;
   stroke-width: 1.65;
 }
@@ -287,9 +288,9 @@
 }
 
 .faq-preview__contact-arrow {
-  width: 21px;
-  height: 21px;
-  margin-left: 7px;
+  width: 18px;
+  height: 18px;
+  margin-left: 4px;
   color: #fff;
   stroke-width: 1.55;
 }
@@ -297,9 +298,9 @@
 .faq-preview__art {
   position: absolute;
   z-index: 0;
-  top: clamp(56px, 8.4svh, 78px);
+  top: clamp(40px, 5.8svh, 54px);
   right: clamp(9.5vw, 15.6vw, 300px);
-  width: min(28vw, 420px);
+  width: min(23vw, 350px);
   color: #062643;
   pointer-events: none;
   transform: rotate(-4deg);
@@ -308,7 +309,7 @@
 .faq-preview__art p {
   margin: 0;
   font-family: 'Caveat Signature', cursive;
-  font-size: clamp(2rem, 3.05vw, 3.25rem);
+  font-size: clamp(1.7rem, 2.45vw, 2.65rem);
   font-style: normal;
   font-synthesis: none;
   font-weight: 500;
@@ -318,16 +319,16 @@
 
 html[lang='hy'] .faq-preview__art p {
   font-family: 'Poqrik Dzeragir', cursive;
-  font-size: clamp(1.8rem, 2.6vw, 2.75rem);
+  font-size: clamp(1.55rem, 2.2vw, 2.3rem);
   font-weight: 400;
   line-height: 1.08;
 }
 
 .faq-preview__sun {
   position: absolute;
-  top: -24px;
+  top: -18px;
   right: -8px;
-  width: clamp(62px, 6.4vw, 94px);
+  width: clamp(54px, 5vw, 76px);
   overflow: visible;
   fill: none;
   stroke: #f6ba11;
@@ -336,10 +337,10 @@ html[lang='hy'] .faq-preview__art p {
 }
 
 .faq-preview__stroke {
-  width: 84%;
+  width: 80%;
   height: auto;
   display: block;
-  margin: 10px auto 0;
+  margin: 6px auto 0;
   overflow: visible;
   fill: none;
   stroke: #f6ba11;
@@ -356,7 +357,7 @@ html[lang='hy'] .faq-preview__art p {
 
 @media (max-width: 1300px) {
   .faq-preview__inner {
-    padding-top: clamp(102px, 15svh, 122px);
+    padding-top: clamp(74px, 9svh, 86px);
   }
 
   .faq-preview__grid {
@@ -374,6 +375,7 @@ html[lang='hy'] .faq-preview__art p {
 
 @media (max-width: 980px) {
   .faq-preview {
+    --faq-preview-height: auto;
     min-block-size: 0;
     max-block-size: none;
   }
