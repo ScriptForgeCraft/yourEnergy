@@ -25,6 +25,7 @@ if (document.querySelector('[data-home-hero]')) {
 const processStory = document.querySelector('[data-process-story]');
 
 if (processStory) {
+  const hasPendingProcessReload = window.__yourEnergyProcessReload === true;
   let storyStarted = false;
   const loadProcessStory = () => {
     if (storyStarted) return;
@@ -44,7 +45,11 @@ if (processStory) {
     });
   };
 
-  if (window.location.hash === '#process' || typeof IntersectionObserver === 'undefined') {
+  if (
+    window.location.hash === '#process' ||
+    hasPendingProcessReload ||
+    typeof IntersectionObserver === 'undefined'
+  ) {
     loadProcessStory();
   } else {
     const storyObserver = new IntersectionObserver(

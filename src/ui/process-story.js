@@ -177,8 +177,77 @@ export const initProcessStory = ({ config = {} } = {}) => {
   let mobileObserver = null;
   let disposed = false;
   let hasEditedInput = false;
+  const earlyProcessReload = window.__yourEnergyProcessReload === true;
+  delete window.__yourEnergyProcessReload;
+  const processReloadStateKey = 'yourenergy:process-reload-state';
+  const processLocation = `${window.location.pathname}${window.location.search}${window.location.hash}`;
+  const maxReloadStateAge = 15_000;
+  const readReloadState = () => {
+    const candidates = [];
+    try {
+      candidates.push(window.history.state?.processReloadState);
+      const historyState = window.history.state;
+      if (historyState?.processReloadState) {
+        const rest = { ...historyState };
+        delete rest.processReloadState;
+        window.history.replaceState(rest, '');
+      }
+    } catch {
+      // History state is optional; session storage below remains a fallback.
+    }
+    try {
+      candidates.push(JSON.parse(window.sessionStorage.getItem(processReloadStateKey) || 'null'));
+      window.sessionStorage.removeItem(processReloadStateKey);
+    } catch {
+      // Browsers may disable session storage.
+    }
+    return candidates.find(
+      (state) =>
+        state?.location === processLocation &&
+        Number.isInteger(state.step) &&
+        Date.now() - Number(state.updatedAt) <= maxReloadStateAge
+    );
+  };
+  let pendingReloadStep = (() => {
+    const state = readReloadState();
+    return state ? clamp(state.step, 0, states.length - 1) : null;
+  })();
+
+  let processChromeActive = false;
+  const persistReloadState = () => {
+    const state = {
+      location: processLocation,
+      step: activeIndex,
+      updatedAt: Date.now()
+    };
+    try {
+      if (processChromeActive) {
+        window.history.replaceState(
+          { ...(window.history.state || {}), processReloadState: state },
+          ''
+        );
+      } else if (window.history.state?.processReloadState) {
+        const rest = { ...window.history.state };
+        delete rest.processReloadState;
+        window.history.replaceState(rest, '');
+      }
+    } catch {
+      // History state is optional; session storage below remains a fallback.
+    }
+    try {
+      if (processChromeActive) {
+        window.sessionStorage.setItem(processReloadStateKey, JSON.stringify(state));
+      } else {
+        window.sessionStorage.removeItem(processReloadStateKey);
+      }
+    } catch {
+      // Browsers may disable session storage; native restoration remains a safe fallback.
+    }
+  };
 
   const setProcessChromeActive = (active) => {
+    processChromeActive = Boolean(active);
+    persistReloadState();
     window.dispatchEvent(
       new CustomEvent('solar:process-chrome', { detail: { active: Boolean(active) } })
     );
@@ -186,6 +255,7 @@ export const initProcessStory = ({ config = {} } = {}) => {
 
   const setProgress = (index) => {
     activeIndex = clamp(index, 0, states.length - 1);
+    persistReloadState();
     root.dataset.processActive = String(activeIndex + 1);
     root.style.setProperty(
       '--process-progress',
@@ -576,6 +646,50 @@ export const initProcessStory = ({ config = {} } = {}) => {
       let wheelBurstTimer = 0;
       let touchStartY = null;
       let touchHandled = false;
+      let pinnedLayoutRefreshFrame = 0;
+      let pinnedLayoutViewportWidth = 0;
+      let reloadRestoreFrame = 0;
+      let savedScrollRestoration = earlyProcessReload ? 'auto' : null;
+
+      const setManualScrollRestoration = (manual) => {
+        if (!('scrollRestoration' in window.history)) return;
+        if (manual) {
+          if (savedScrollRestoration === null)
+            savedScrollRestoration = window.history.scrollRestoration;
+          window.history.scrollRestoration = 'manual';
+          return;
+        }
+        if (savedScrollRestoration !== null) {
+          window.history.scrollRestoration = savedScrollRestoration;
+          savedScrollRestoration = null;
+        }
+      };
+
+      const activateProcessChrome = () => {
+        setManualScrollRestoration(true);
+        setProcessChromeActive(true);
+
+        // ScrollTrigger creates its pin spacer before onEnter runs. Hiding the
+        // browser scrollbar afterwards widens the viewport, but without this
+        // refresh the spacer retains the old (scrollbar-width) measurement and
+        // leaves an empty strip on the right of #process until a page reload.
+        const viewportWidth = document.documentElement.clientWidth;
+        if (pinnedLayoutViewportWidth === viewportWidth) return;
+        pinnedLayoutViewportWidth = viewportWidth;
+        window.cancelAnimationFrame(pinnedLayoutRefreshFrame);
+        pinnedLayoutRefreshFrame = window.requestAnimationFrame(() => {
+          pinnedLayoutRefreshFrame = 0;
+          if (!disposed) ScrollTrigger.refresh();
+        });
+      };
+
+      const deactivateProcessChrome = () => {
+        window.cancelAnimationFrame(pinnedLayoutRefreshFrame);
+        pinnedLayoutRefreshFrame = 0;
+        pinnedLayoutViewportWidth = 0;
+        setProcessChromeActive(false);
+        setManualScrollRestoration(false);
+      };
 
       const cardsFor = (index) =>
         states[index]?.querySelectorAll('[data-process-card], [data-process-install-step]') ?? [];
@@ -866,41 +980,71 @@ export const initProcessStory = ({ config = {} } = {}) => {
         trigger: root,
         pin: frame,
         start: 'top top',
-        end: () => `+=${Math.round(window.innerHeight * 4.5)}`,
+        // Keep the final pinned frame a little inside the trigger range. On a
+        // reload at step six, browser scroll restoration may otherwise land a
+        // pixel beyond the exact end value and briefly restore the native
+        // scrollbar gutter while the process scene is still on screen.
+        end: () => `+=${Math.round(window.innerHeight * 4.5) + 64}`,
         anticipatePin: 1,
         invalidateOnRefresh: true,
         onUpdate: syncStepWithScrollbar,
-        onEnter: () => {
-          setProcessChromeActive(true);
+        onEnter: (trigger) => {
+          activateProcessChrome();
           if (programmaticScroll) return;
           transition?.kill();
           transitionInProgress = false;
           pendingScrollIndex = null;
-          setExclusiveState(0);
-          animateSceneToStep(0, true);
-          window.requestAnimationFrame(() => setScrollTop(stepScrollTop(0)));
+          const restoredIndex = getProcessStepIndex(trigger.progress, states.length);
+          setExclusiveState(restoredIndex);
+          animateSceneToStep(restoredIndex, true);
         },
-        onEnterBack: () => {
-          setProcessChromeActive(true);
+        onEnterBack: (trigger) => {
+          activateProcessChrome();
           if (programmaticScroll) return;
           transition?.kill();
           transitionInProgress = false;
           pendingScrollIndex = null;
-          setExclusiveState(states.length - 1);
-          animateSceneToStep(states.length - 1, true);
-          window.requestAnimationFrame(() => setScrollTop(stepScrollTop(states.length - 1)));
+          const restoredIndex = getProcessStepIndex(trigger.progress, states.length);
+          setExclusiveState(restoredIndex);
+          animateSceneToStep(restoredIndex, true);
         },
         onLeave: () => {
-          setProcessChromeActive(false);
+          deactivateProcessChrome();
           setExclusiveState(states.length - 1);
           animateSceneToStep(states.length - 1, true);
         },
         onLeaveBack: () => {
-          setProcessChromeActive(false);
+          deactivateProcessChrome();
           setExclusiveState(0);
           animateSceneToStep(0, true);
         }
       });
+
+      const saveReloadState = () => {
+        if (pinTrigger?.isActive) persistReloadState();
+      };
+
+      const restoreReloadState = () => {
+        if (pendingReloadStep === null || disposed || !pinTrigger) return;
+        const restoredIndex = pendingReloadStep;
+        pendingReloadStep = null;
+        activateProcessChrome();
+        setExclusiveState(restoredIndex);
+        animateSceneToStep(restoredIndex, true);
+        setScrollTop(stepScrollTop(restoredIndex));
+      };
+
+      if (pendingReloadStep !== null) {
+        // The browser completes its own scroll restoration after the first paint.
+        // Two frames let the pinned layout settle, then manual restoration returns
+        // precisely to the recorded process step without the old scrollbar gutter.
+        reloadRestoreFrame = window.requestAnimationFrame(() => {
+          reloadRestoreFrame = window.requestAnimationFrame(() => {
+            reloadRestoreFrame = 0;
+            restoreReloadState();
+          });
+        });
+      }
 
       window.addEventListener('wheel', onWheel, { passive: false, capture: true });
       window.addEventListener('touchstart', onTouchStart, { passive: true, capture: true });
@@ -908,15 +1052,17 @@ export const initProcessStory = ({ config = {} } = {}) => {
       window.addEventListener('touchend', onTouchEnd, { passive: true, capture: true });
       window.addEventListener('touchcancel', onTouchEnd, { passive: true, capture: true });
       window.addEventListener('keydown', onKeyDown, { capture: true });
+      window.addEventListener('pagehide', saveReloadState);
       progressSteps.forEach((step) => step.addEventListener('click', onProgressStepClick));
 
       return () => {
-        setProcessChromeActive(false);
+        deactivateProcessChrome();
         transition?.kill();
         sceneTween?.kill();
         pinTrigger?.kill();
         window.clearTimeout(wheelBurstTimer);
         window.cancelAnimationFrame(programmaticScrollFrame);
+        window.cancelAnimationFrame(reloadRestoreFrame);
         if (savedScrollBehavior !== null) {
           document.documentElement.style.scrollBehavior = savedScrollBehavior;
         }
@@ -926,6 +1072,7 @@ export const initProcessStory = ({ config = {} } = {}) => {
         window.removeEventListener('touchend', onTouchEnd, true);
         window.removeEventListener('touchcancel', onTouchEnd, true);
         window.removeEventListener('keydown', onKeyDown, true);
+        window.removeEventListener('pagehide', saveReloadState);
         progressSteps.forEach((step) => step.removeEventListener('click', onProgressStepClick));
         root.style.removeProperty('--process-progress');
         states.forEach((state) => {
