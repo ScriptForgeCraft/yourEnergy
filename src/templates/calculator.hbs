@@ -60,7 +60,7 @@
           <div class='professional-hero__controls'>
             <nav class='wizard-progress' aria-label='{{toolShared.calculator}}'>{{#each wizard.steps}}<button
                 type='button' data-wizard-nav='{{@index}}'
-                data-step-state='{{#if @first}}available{{else}}locked{{/if}}' aria-label='{{this}}'><span>{{add @index
+                data-step-state='{{#if @first}}available{{else}}locked{{/if}}'><span>{{add @index
                   1}}</span><strong>{{this}}</strong></button>{{/each}}</nav><a class='professional-quick-switch'
               data-calculator-mode='quick' href='{{calculatorHref}}'><svg aria-hidden='true'>
                 <use href='/icons.svg#zap'></use>
@@ -171,7 +171,7 @@
                     <use href='/icons.svg#arrow-right'></use>
                   </svg></button></div>
             </div>
-            <div class='wizard-map-wrap wizard-map-wrap--location' data-location-map-wrap>
+            <div class='wizard-map-wrap wizard-map-wrap--location' data-location-map-wrap hidden>
               <div class='property-map wizard-map' data-property-map data-mode='location'></div>
               <div class='wizard-map__layers' role='group' aria-label='{{wizard.ui.location.map}}'><button
                   class='is-active' type='button' data-map-layer='map'>{{wizard.ui.location.map}}</button><button

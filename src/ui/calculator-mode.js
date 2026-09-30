@@ -54,6 +54,17 @@ export const initCalculatorMode = async ({ config = {} } = {}) => {
   let renderEpoch = 0;
   let destroyed = false;
 
+  // The quick calculator is present in the static document. On a direct
+  // Professional URL it is replaced after the professional stylesheet and
+  // shell have arrived. Keep its occupied space during that hand-off so a
+  // slow connection cannot pull the footer into view and then push it away
+  // again, which is otherwise recorded as a large layout shift.
+  const reserveStageSpace = () => {
+    const height = Math.ceil(stage.getBoundingClientRect().height);
+    if (height > 0) stage.style.minHeight = `${height}px`;
+  };
+  const releaseStageSpace = () => stage.style.removeProperty('min-height');
+
   const destroyCurrentInstance = () => {
     currentInstance?.destroy?.();
     currentInstance = null;
@@ -125,11 +136,13 @@ export const initCalculatorMode = async ({ config = {} } = {}) => {
     syncLanguageLinks(mode);
     try {
       if (mode !== 'professional') {
+        releaseStageSpace();
         await initializeQuick(render, epoch, { replace: true });
         return;
       }
       // Detach the retired Quick controls while the Professional markup is
-      // loading. Their instance has already been destroyed above.
+      // loading. Its height remains reserved until the new layout is mounted.
+      reserveStageSpace();
       stage.replaceChildren();
       const [markup] = await Promise.all([
         loadProfessionalMarkup(),
@@ -151,7 +164,10 @@ export const initCalculatorMode = async ({ config = {} } = {}) => {
         )
       );
     } finally {
-      if (isCurrentRender(epoch)) stage.removeAttribute('aria-busy');
+      if (isCurrentRender(epoch)) {
+        releaseStageSpace();
+        stage.removeAttribute('aria-busy');
+      }
     }
   };
 

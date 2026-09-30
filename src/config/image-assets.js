@@ -19,7 +19,8 @@ export const RESPONSIVE_IMAGE_ASSETS = [
     name: 'professional-results-house',
     source: 'calculator/professional-results-house',
     widths: [640, 1024, 1600],
-    quality: 65
+    quality: 65,
+    legacyUrls: ['/images/professional-results-house.png']
   },
   {
     name: 'equipment-hero',

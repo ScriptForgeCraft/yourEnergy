@@ -31,7 +31,6 @@ import {
 } from './professional-analysis-identity.js';
 import { localitiesForRegion, localityCenter } from '../data/locations/armenia.js';
 import { localityLabel } from '../data/locations/locality-labels.js';
-import { createEquipmentCatalog } from '../data/equipment/showroom/catalog.js';
 import { getDefaultCalculatorSystem } from '../data/equipment/calculator/defaults.js';
 
 const PVGIS_KWP = 1;
@@ -130,11 +129,19 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
   const product = config.product ?? {};
   const wizard = config.wizard ?? {};
   const locale = config.locale ?? 'en-US';
-  const displayProductsById = new Map(
-    createEquipmentCatalog(localeCode(locale))
-      .products.filter((displayProduct) => displayProduct?.id)
-      .map((displayProduct) => [displayProduct.id, displayProduct])
-  );
+  const displayProductsById = new Map();
+  let displayProductsRequest = null;
+  const loadDisplayProducts = () => {
+    if (displayProductsRequest) return displayProductsRequest;
+    displayProductsRequest = import('../data/equipment/showroom/catalog.js').then(
+      ({ createEquipmentCatalog }) => {
+        for (const displayProduct of createEquipmentCatalog(localeCode(locale)).products) {
+          if (displayProduct?.id) displayProductsById.set(displayProduct.id, displayProduct);
+        }
+      }
+    );
+    return displayProductsRequest;
+  };
   const api = new ProductApiClient({ endpoints: config.endpoints ?? {} });
   const lifecycle = createAsyncRequestLifecycle();
   const passportRepository = new SolarPassportRepository();
@@ -1193,6 +1200,10 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
     stopAnalysis();
     const controller = lifecycle.createController();
     analysisRequest = controller;
+    // Product imagery and detail links are required only for the completed
+    // result. Start their catalogue load beside the provider request so it
+    // cannot delay the result transition, while keeping it out of first load.
+    const displayProducts = loadDisplayProducts().catch(() => null);
     state.analysisStatus = WIZARD_STEP_STATUSES.LOADING;
     lastAnalysis = { fingerprint, startedAt: Date.now() };
     const button = root.querySelector('[data-run-analysis]');
@@ -1202,6 +1213,8 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
     updateProgress();
     try {
       const response = await api.analyze(payload, { signal: controller.signal });
+      if (!lifecycle.canCommit(controller, analysisRequest)) return;
+      await displayProducts;
       if (!lifecycle.canCommit(controller, analysisRequest)) return;
       state.analysis = response?.analysis ?? null;
       if (!state.analysis) throw new ProductApiError('MALFORMED_RESPONSE');
@@ -1626,19 +1639,16 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
   populateLocalityOptions();
   syncRoofControls({ preserveAnalysis: true });
   if (state.sitePotential) renderPotential(state.sitePotential);
-  if (state.analysis) renderResult(state.analysis);
+  if (state.analysis) {
+    renderResult(state.analysis);
+    void loadDisplayProducts()
+      .then(() => {
+        if (lifecycle.isActive() && state.analysis) renderResult(state.analysis);
+      })
+      .catch(() => {});
+  }
   const restoredStep = Number.isInteger(savedSession.currentStep) ? savedSession.currentStep : 0;
   setStep(restoredStep, { focus: false });
-  if (state.currentStep === 0)
-    void mountMap('location').then((map) => {
-      if (!lifecycle.isActive() || !map || state.confirmedProperty || state.pendingLocation) return;
-      const lat = number(latitudeInput?.value, -90, 90);
-      const lng = number(longitudeInput?.value, -180, 180);
-      if (lat !== null && lng !== null) {
-        map.setLocation({ lat, lng }, { notify: false });
-        syncLocationCoordinates({ lat, lng });
-      }
-    });
   const destroy = () => {
     if (!lifecycle.destroy()) return;
     stopAddressSearch();

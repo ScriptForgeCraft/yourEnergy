@@ -70,13 +70,11 @@ test('every project CTA generates a local project case route', async () => {
   assert.equal(FEATURED_PROJECT_CASE_SLUG, 'modern-home-yerevan');
   assert.match(
     generator,
-    /href: projectCasePath\(content\.locale, GALLERY_PROJECT_CASE_SLUGS\[index\]\)/u
+    /const projectHref = \(slug\) => projectCasePath\(content\.locale, slug\)/u
   );
-  assert.match(
-    generator,
-    /featuredHref: projectCasePath\(content\.locale, FEATURED_PROJECT_CASE_SLUG\)/u
-  );
-  assert.match(projectsTemplate, /href='\{\{projectsPage\.featuredHref\}\}'/u);
+  assert.match(generator, /href: projectHref\(item\.slug\)/u);
+  assert.match(generator, /featuredHref: projectHref\(FEATURED_PROJECT_CASE_SLUG\)/u);
+  assert.match(projectsTemplate, /href='\{\{projectsPage\.featured\.href\}\}'/u);
   assert.match(projectsTemplate, /href='\{\{href\}\}'/u);
   assert.match(projectCaseTemplate, /\{\{> site-header\}\}/u);
   assert.match(projectCaseTemplate, /\{\{> site-footer\}\}/u);

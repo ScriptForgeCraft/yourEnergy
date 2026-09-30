@@ -356,11 +356,6 @@
     "urls": ["/icons.svg"]
   },
   {
-    "id": "images-calculator-professional-results-house",
-    "source": "assets/images/calculator/professional-results-house.png",
-    "urls": ["/images/professional-results-house.png"]
-  },
-  {
     "id": "icons-yourenergy-mark",
     "source": "assets/icons/yourenergy-mark.svg",
     "urls": ["/yourenergy-mark.svg"]

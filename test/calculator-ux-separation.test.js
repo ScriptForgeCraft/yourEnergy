@@ -75,6 +75,7 @@ test('Professional has exactly four customer steps and retains every engineering
     assert.ok(professional.includes(marker), `missing Professional lead marker: ${marker}`);
   }
   assert.match(professional, /<select\b[^>]*\bdata-roof-mounting-mode\b/u);
+  assert.doesNotMatch(professional, /data-wizard-nav='\{\{@index\}\}'[^>]*aria-label=/u);
   assert.match(professional, /class='consumption-estimate'/u);
   assert.match(
     professional,
@@ -84,6 +85,7 @@ test('Professional has exactly four customer steps and retains every engineering
   assert.doesNotMatch(professional, /data-roof-enter-area/u);
   assert.match(professional, /data-location-region/u);
   assert.match(professional, /data-location-locality/u);
+  assert.match(professional, /data-location-map-wrap hidden/u);
   assert.match(professional, /data-potential-summary/u);
   assert.match(professional, /potential-monthly-details/u);
   assert.doesNotMatch(professional, /data-potential-summary-chart/u);
@@ -94,6 +96,7 @@ test('Professional has exactly four customer steps and retains every engineering
   assert.match(controller, /locateSelectedLocality/u);
   assert.match(controller, /map\?\.focusLocation\(center\)/u);
   assert.match(controller, /mapController\?\.finishRoof\(\)/u);
+  assert.doesNotMatch(controller, /if \(state\.currentStep === 0\)[\s\S]*?mountMap\('location'\)/u);
   assert.match(controller, /if \(state\.sitePotential\) renderPotential\(state\.sitePotential\)/u);
   assert.doesNotMatch(controller, /renderBars\(potentialSummaryChart/u);
   assert.doesNotMatch(professional, /data-calculation-panel/u);
@@ -119,10 +122,15 @@ test('Professional has exactly four customer steps and retains every engineering
   assert.match(resultsView, /analysis\.storageRecommendation/u);
   assert.match(resultsView, /wizard\.storageRecommendationTitle/u);
   assert.match(resultsView, /pro-result-hero__metric/u);
+  assert.match(resultsView, /term\.prepend\(symbol\)/u);
+  assert.doesNotMatch(resultsView, /wrapper\.append\(symbol,/u);
+  assert.match(resultsView, /equipmentImageSrcset/u);
   assert.match(resultsView, /metrics\?\.annualCoverage/u);
   assert.match(resultsView, /metrics\?\.recommendedPower/u);
   assert.match(resultsView, /metrics\?\.annualSavings/u);
   assert.match(controller, /createEquipmentCatalog/u);
+  assert.match(controller, /loadDisplayProducts/u);
+  assert.doesNotMatch(controller, /import \{ createEquipmentCatalog \} from/u);
   assert.match(resultsView, /card\.dataset\.recommendedProduct/u);
   assert.match(resultsView, /card\.target = '_blank'/u);
   assert.match(resultsView, /card\.rel = 'noopener noreferrer'/u);
@@ -160,10 +168,12 @@ test('Professional results use coverage terminology without duplicate production
 });
 
 test('one calculator exposes two modes and migrates historic routes safely', async () => {
-  const [quick, migration, controller, generator] = await Promise.all([
+  const [quick, migration, controller, entry, main, generator] = await Promise.all([
     source('src/templates/calculator-quick.hbs'),
     source('src/templates/calculator-migration.hbs'),
     source('src/ui/calculator-mode.js'),
+    source('src/ui/calculator-mode-entry.js'),
+    source('src/main.js'),
     source('scripts/build/page-contexts.mjs')
   ]);
   assert.match(quick, /data-calculator-mode-stage/u);
@@ -171,6 +181,11 @@ test('one calculator exposes two modes and migrates historic routes safely', asy
   assert.match(controller, /professionalSource/u);
   assert.match(controller, /syncLanguageLinks/u);
   assert.match(controller, /searchParams\.set\('mode', 'pro'\)/u);
+  assert.match(controller, /reserveStageSpace/u);
+  assert.match(controller, /stage\.style\.minHeight/u);
+  assert.match(quick, /calculator-mode-entry\.js/u);
+  assert.match(entry, /initCalculatorMode/u);
+  assert.match(main, /!document\.querySelector\('\[data-calculator-mode-stage\]'\)/u);
   assert.match(migration, /http-equiv='refresh'/u);
   assert.match(generator, /createProfessionalCalculatorLanguageLinks/u);
   assert.doesNotMatch(generator, /renderRefineCalculator|roof-refinement/u);

@@ -402,7 +402,10 @@ test('analysis joins real PVGIS yield with confirmed inputs, suppresses unselect
   assert.equal(analysis.environmental.treeEquivalent, 32.717);
   assert.equal(analysis.financial.tariff.kind, 'unavailable');
   assert.equal(analysis.financial.tariff.rateAmdPerKwh, null);
-  assert.equal(analysis.commercialEstimate.available, true);
+  // The registered temporary price book expired on 2026-09-28. The API must
+  // withhold a provisional price rather than silently extending it.
+  assert.equal(analysis.commercialEstimate.available, false);
+  assert.equal(analysis.commercialEstimate.reason, 'PRICEBOOK_UNAVAILABLE');
   assert.equal(
     analysis.sourceLedger.find((entry) => entry.key === 'production').source.provider,
     'PVGIS'

@@ -5,17 +5,28 @@ import { resolve } from 'node:path';
 import { createPageRegistry } from '../../src/config/routes.js';
 
 // Sequential runs avoid CPU contention. Defaults retain Lighthouse's standard
-// mobile/desktop throttling and audit every indexable localized production page.
+// mobile/desktop throttling, audit every indexable localized production page,
+// and cover the Professional calculator's public query entry point.
 const args = new Map(process.argv.slice(2).map((arg) => arg.replace(/^--/, '').split('=')));
 const origin = args.get('origin') || 'http://127.0.0.1:4173';
 const directory = resolve('reports/lighthouse', args.get('batch') || 'latest');
 const modes = args.get('device') ? [args.get('device')] : ['mobile', 'desktop'];
 if (modes.some((mode) => !['mobile', 'desktop'].includes(mode))) throw new Error('Invalid device');
-const pages = (await createPageRegistry()).filter(
+const requestedKinds = args.get('kind')?.split(',') ?? null;
+const registry = await createPageRegistry();
+const professionalCalculatorPages = registry
+  .filter((page) => page.kind === 'calculator')
+  .map((page) => ({
+    ...page,
+    kind: 'calculator-pro-mode',
+    path: `${page.path}?mode=pro`,
+    indexable: false
+  }));
+const pages = [...registry, ...professionalCalculatorPages].filter(
   (page) =>
-    (page.indexable || args.has('include-noindex')) &&
+    (page.indexable || page.kind === 'calculator-pro-mode' || args.has('include-noindex')) &&
     (!args.get('locale') || page.locale === args.get('locale')) &&
-    (!args.get('kind') || args.get('kind').split(',').includes(page.kind))
+    (!requestedKinds || requestedKinds.includes(page.kind))
 );
 if (!pages.length)
   throw new Error(
