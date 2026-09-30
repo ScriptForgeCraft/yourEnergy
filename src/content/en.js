@@ -268,7 +268,7 @@ export default {
       noTariff:
         'No tariff was entered: capacity, calculated solar generation and a preliminary price remain available, but savings and payback are not shown.',
       priceUnavailable:
-        'The temporary price book is unavailable or has expired. Request an engineer survey; savings and payback also require a tariff.',
+        'The owner-managed price book is unavailable. Request an engineer survey; savings and payback also require a tariff.',
       noSavings: 'There is not enough data to show savings and payback.',
       chartDescription:
         'Monthly preliminary generation based on the confirmed inputs and returned solar-resource data.',
@@ -283,7 +283,7 @@ export default {
       },
       assumptionsTitle: 'Assumptions and limits',
       commercialEstimate:
-        'Preliminary YOURENERGY price · {version} · not an offer: {p25}–{p75}; P50 {p50}. Valid until {validUntil}.'
+        'Owner-managed preliminary YOURENERGY price · {version} · not an offer: {p25}–{p75}; P50 {p50}.'
     },
     ledger: {
       title: 'How this was calculated',
@@ -296,7 +296,7 @@ export default {
         userTariff: 'Entered by the visitor from a bill',
         solar: 'Solar resource',
         investment: 'System price',
-        pricebook: 'Temporary YOURENERGY price list',
+        pricebook: 'YOURENERGY owner-managed price list',
         unavailable: 'Source not connected'
       },
       assumptions: {
@@ -314,8 +314,8 @@ export default {
           'Preliminary capacity uses a module from the equipment catalog; an engineer must confirm the final specification.',
         USER_PROVIDED_TARIFF:
           'The tariff was entered by the visitor from a bill and is not a tariff registry record.',
-        TEMPORARY_PRICEBOOK_NOT_OFFER:
-          'The temporary price list is a preliminary budget guide, not an offer or contractual price.',
+        OWNER_MANAGED_PRICEBOOK_NOT_OFFER:
+          'The owner-managed price list is a preliminary budget guide, not an offer or contractual price.',
         MAP_PROJECTED_AREA_CONVERTED_TO_ROOF_PLANE:
           'The map outline area was converted from a top view to a preliminary roof-plane area using the entered tilt.',
         USER_MEASURED_ROOF_PLANE_AREA:

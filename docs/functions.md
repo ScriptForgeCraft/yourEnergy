@@ -103,7 +103,7 @@ revision from `src/data/tariffs/armenia.js` rather than trusting a client rate.
 For a rate copied from a bill, submit `{ "rateAmdPerKwh": 45 }`, which remains
 labelled user-provided in the result. A bill total never implies a tariff
 bracket, social status or day/night period. Without an explicit usable tariff,
-technical output and a valid temporary PriceBook budget can appear, while
+technical output and a valid owner-managed PriceBook budget can appear, while
 savings, payback and the timeline remain `null`/empty. There is no demo or
 hidden tariff fallback. Provider or cache failure returns the normal error
 envelope and never substitutes values.
@@ -159,8 +159,8 @@ benchmark mounting recommendation. Neither mode measures local obstacles or
 structural capacity.
 
 The server independently selects the active dated YOURENERGY PriceBook for a
-standard grid-tied residential preliminary budget. That temporary price range
-is not an offer and is returned only while the price book is active; it may be
+standard grid-tied residential preliminary budget. That owner-managed price range
+is not an offer and is returned until YOURENERGY replaces it; it may be
 shown even when no tariff is present, while savings/payback stay hidden. Client
 `capex`, price, price-book version or other commercial fields are ignored. The
 browser requests a transparent `1 kWp` PVGIS yield, then the server scales that

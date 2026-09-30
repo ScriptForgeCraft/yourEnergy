@@ -31,7 +31,7 @@ export { ARMENIA_TARIFF_DATASET } from '../data/tariffs/armenia.js';
 
 export { ARMENIA_GRID_CO2_FACTOR } from '../data/environment/armenia-grid-co2.js';
 export { EPA_URBAN_TREE_CO2_EQUIVALENCY } from '../data/environment/epa-tree-co2-equivalence.js';
-export { TEMPORARY_YOURENERGY_PRICEBOOK } from '../data/pricebooks/armenia.js';
+export { YOURENERGY_OWNER_MANAGED_PRICEBOOK } from '../data/pricebooks/armenia.js';
 export {
   ARMENIA_REGIONAL_BENCHMARKS,
   getArmeniaRegionalBenchmark

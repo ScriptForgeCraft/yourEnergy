@@ -3,7 +3,7 @@ import test from 'node:test';
 
 import {
   SolarPassportRepository,
-  TEMPORARY_YOURENERGY_PRICEBOOK,
+  YOURENERGY_OWNER_MANAGED_PRICEBOOK,
   buildSolarAnalysis,
   createUserTariffSelection
 } from '../src/domain/index.js';
@@ -33,7 +33,7 @@ const FIXTURE = Object.freeze({
     source: { kind: 'provider', status: 'confirmed', provider: 'PVGIS fixture' }
   },
   system: { panelWatts: 580, panelAreaSqm: 2 },
-  priceBook: TEMPORARY_YOURENERGY_PRICEBOOK,
+  priceBook: YOURENERGY_OWNER_MANAGED_PRICEBOOK,
   tariffSelection: createUserTariffSelection({ rateAmdPerKwh: 52 }, '2026-08-31')
 });
 test('consumer and engineering UI share the calculation contract', () => {

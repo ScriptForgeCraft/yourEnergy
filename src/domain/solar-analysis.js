@@ -849,7 +849,9 @@ export const buildSolarAnalysis = (input = {}) => {
       ...(environmental.factor.status === 'verified-historical'
         ? [`VERIFIED_HISTORICAL_GRID_FACTOR_${environmental.factor.dataYear ?? 'UNKNOWN'}`]
         : []),
-      ...(commercialEstimate?.kind === 'temporary' ? ['TEMPORARY_PRICEBOOK_NOT_OFFER'] : []),
+      ...(commercialEstimate?.kind === 'owner-managed'
+        ? ['OWNER_MANAGED_PRICEBOOK_NOT_OFFER']
+        : []),
       ...(Array.isArray(input.assumptions)
         ? input.assumptions.filter((assumption) => typeof assumption === 'string' && assumption)
         : [])

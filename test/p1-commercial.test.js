@@ -3,7 +3,7 @@ import test from 'node:test';
 
 import {
   PriceBookRepository,
-  TEMPORARY_YOURENERGY_PRICEBOOK,
+  YOURENERGY_OWNER_MANAGED_PRICEBOOK,
   buildCommercialEstimate,
   buildSolarAnalysis,
   createUserTariffSelection,
@@ -48,11 +48,11 @@ const realAnalysisInputs = Object.freeze({
     source: { kind: 'provider', status: 'confirmed', provider: 'Test PVGIS adapter' }
   },
   system: { panelWatts: 580, panelAreaSqm: 2 },
-  priceBook: TEMPORARY_YOURENERGY_PRICEBOOK
+  priceBook: YOURENERGY_OWNER_MANAGED_PRICEBOOK
 });
-test('temporary price book produces rounded P25/P50/P75 commercial planning estimates', () => {
+test('owner-managed price book produces rounded P25/P50/P75 commercial planning estimates', () => {
   const repository = new PriceBookRepository({
-    records: [TEMPORARY_YOURENERGY_PRICEBOOK],
+    records: [YOURENERGY_OWNER_MANAGED_PRICEBOOK],
     clock: () => new Date(`${ACTIVE_DATE}T12:00:00.000Z`)
   });
   const priceBook = repository.getActive({ region: 'AM', systemType: 'residential-grid-tied' });
@@ -62,9 +62,9 @@ test('temporary price book produces rounded P25/P50/P75 commercial planning esti
     at: ACTIVE_DATE
   });
 
-  assert.equal(priceBook.version, 'v0.1');
+  assert.equal(priceBook.version, 'v1.0');
   assert.equal(estimate.available, true);
-  assert.equal(estimate.kind, 'temporary');
+  assert.equal(estimate.kind, 'owner-managed');
   assert.deepEqual(estimate.ratesAmdPerWp, { p25: 182, p50: 194, p75: 206.7 });
   assert.deepEqual(estimate.rangeAmd, {
     p25: 1_090_000,
@@ -72,13 +72,13 @@ test('temporary price book produces rounded P25/P50/P75 commercial planning esti
     p75: 1_240_000
   });
   assert.equal(estimate.primaryAmd, 1_160_000);
-  assert.equal(estimate.validUntil, '2026-09-28');
+  assert.equal(estimate.validUntil, null);
   assertFiniteTree(estimate);
 });
 test('the 10.4 kWp preliminary example never exceeds the client-approved 2.15M AMD ceiling', () => {
   const estimate = buildCommercialEstimate({
     capacityKwp: 10.4,
-    priceBook: TEMPORARY_YOURENERGY_PRICEBOOK,
+    priceBook: YOURENERGY_OWNER_MANAGED_PRICEBOOK,
     at: ACTIVE_DATE
   });
 
@@ -90,12 +90,17 @@ test('the 10.4 kWp preliminary example never exceeds the client-approved 2.15M A
   assert.ok(estimate.rangeAmd.p75 <= 2_150_000);
 });
 
-test('price book expires instead of silently serving a successor price', () => {
-  const repository = new PriceBookRepository({ records: [TEMPORARY_YOURENERGY_PRICEBOOK] });
+test('a finite price book expires instead of silently serving a successor price', () => {
+  const finitePriceBook = {
+    ...YOURENERGY_OWNER_MANAGED_PRICEBOOK,
+    status: 'temporary',
+    validUntil: '2026-09-28'
+  };
+  const repository = new PriceBookRepository({ records: [finitePriceBook] });
   const afterExpiry = '2026-09-29';
   const expired = buildCommercialEstimate({
     capacityKwp: 6,
-    priceBook: TEMPORARY_YOURENERGY_PRICEBOOK,
+    priceBook: finitePriceBook,
     at: afterExpiry
   });
 
@@ -148,7 +153,7 @@ test('a real analysis with no tariff publishes no savings, payback or financial 
   assertFiniteTree(analysis);
 });
 
-test('an expired price book hides the preliminary price and payback even with a user tariff', () => {
+test('an owner-managed price book remains available until it is replaced', () => {
   const analysis = buildSolarAnalysis({
     ...realAnalysisInputs,
     effectiveDate: '2026-09-29',
@@ -156,12 +161,20 @@ test('an expired price book hides the preliminary price and payback even with a 
   });
   const scenario = analysis.selectedScenario;
 
-  assert.equal(analysis.commercialEstimate.available, false);
-  assert.equal(analysis.commercialEstimate.reason, 'PRICEBOOK_EXPIRED');
-  assert.equal(scenario.commercialEstimate.available, false);
-  assert.equal(scenario.financial.capexAmd, null);
+  assert.equal(analysis.commercialEstimate.available, true);
+  assert.equal(analysis.commercialEstimate.kind, 'owner-managed');
+  assert.equal(scenario.commercialEstimate.available, true);
+  assert.equal(scenario.financial.capexAmd, scenario.commercialEstimate.primaryAmd);
   assert.equal(scenario.financial.annualSavingsAmd, 542_880);
-  assert.equal(scenario.financial.paybackYears, null);
-  assert.deepEqual(scenario.financial.timeline, []);
+  assert.ok(scenario.financial.paybackYears > 0);
+  assert.ok(scenario.financial.timeline.length > 0);
+  assert.equal(
+    buildCommercialEstimate({
+      capacityKwp: 6,
+      priceBook: YOURENERGY_OWNER_MANAGED_PRICEBOOK,
+      at: '2030-01-01'
+    }).available,
+    true
+  );
   assertFiniteTree(analysis);
 });

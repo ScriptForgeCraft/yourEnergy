@@ -261,7 +261,7 @@ const copy = {
         'Օգտակար մակերեսի նախնական գործակիցը 70% է։ Ստվերումը, խոչընդոտները և կրողունակությունը տեղում չեն չափվել։',
       assumptionFinanceTitle: 'Ֆինանսներ',
       assumptionFinanceText:
-        'Բյուջեն հիմնված է ժամանակավոր գնացուցակի վրա և առաջարկ չէ։ Ֆինանսավորումը, սպասարկումը, հարկերը և արտահանձնման վերջնական պայմանները ներառված չեն։',
+        'Բյուջեն հիմնված է YOURENERGY-ի կողմից կառավարվող գնացուցակի վրա և առաջարկ չէ։ Ֆինանսավորումը, սպասարկումը, հարկերը և արտահանձնման վերջնական պայմանները ներառված չեն։',
       assumptionEngineeringTitle: 'Ինժեներական ստուգում',
       assumptionEngineeringText:
         'Վերջնական դասավորությունը, ինվերտերի համատեղելիությունն ու ցանցային միացումը հաստատում է ինժեները։ Հաշվետվությունը չի փոխարինում տեղազննությանը կամ նախագծին։',
@@ -626,7 +626,7 @@ const copy = {
         'Предварительно используется 70% площади. Затенение, препятствия и несущая способность на объекте не измерялись.',
       assumptionFinanceTitle: 'Финансы',
       assumptionFinanceText:
-        'Бюджет основан на временном прайс-листе и не является офертой. Финансирование, обслуживание, налоги и окончательные условия отпуска в сеть не включены.',
+        'Бюджет основан на прайс-листе, которым управляет YOURENERGY, и не является офертой. Финансирование, обслуживание, налоги и окончательные условия отпуска в сеть не включены.',
       assumptionEngineeringTitle: 'Инженерная проверка',
       assumptionEngineeringText:
         'Финальную раскладку, совместимость инвертора и подключение к сети подтверждает инженер. Отчёт не заменяет обследование или проект.',
@@ -992,7 +992,7 @@ const copy = {
         'The preliminary usable-area factor is 70%. Shading, obstructions and structural capacity were not measured on site.',
       assumptionFinanceTitle: 'Finance',
       assumptionFinanceText:
-        'The budget uses a temporary price book and is not an offer. Financing, maintenance, taxes and final export terms are not included.',
+        'The budget uses an owner-managed price book and is not an offer. Financing, maintenance, taxes and final export terms are not included.',
       assumptionEngineeringTitle: 'Engineering review',
       assumptionEngineeringText:
         'Final layout, inverter compatibility and grid connection are confirmed by an engineer. This report does not replace a site survey or engineering design.',

@@ -45,10 +45,10 @@ the repository or a `VITE_*` variable.
 
 ## Commercial data renewal
 
-- [ ] Before the current temporary PriceBook expires, provide an owner-approved
-      replacement in `src/data/pricebooks/armenia.js` with its source,
-      revision and validity period. Until then, the calculator and Offer
-      Checker intentionally hide commercial pricing after expiry.
+- [ ] When YOURENERGY prices change, provide an owner-approved replacement in
+      `src/data/pricebooks/armenia.js` with its source, revision and rates.
+      The owner-managed price book remains active until that replacement is
+      published.
 
 ## Final browser check
 

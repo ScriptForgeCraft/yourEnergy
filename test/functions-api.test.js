@@ -402,10 +402,8 @@ test('analysis joins real PVGIS yield with confirmed inputs, suppresses unselect
   assert.equal(analysis.environmental.treeEquivalent, 32.717);
   assert.equal(analysis.financial.tariff.kind, 'unavailable');
   assert.equal(analysis.financial.tariff.rateAmdPerKwh, null);
-  // The registered temporary price book expired on 2026-09-28. The API must
-  // withhold a provisional price rather than silently extending it.
-  assert.equal(analysis.commercialEstimate.available, false);
-  assert.equal(analysis.commercialEstimate.reason, 'PRICEBOOK_UNAVAILABLE');
+  assert.equal(analysis.commercialEstimate.available, true);
+  assert.equal(analysis.commercialEstimate.kind, 'owner-managed');
   assert.equal(
     analysis.sourceLedger.find((entry) => entry.key === 'production').source.provider,
     'PVGIS'
@@ -473,10 +471,10 @@ test('the server selects the dated P1 price book instead of accepting a client p
     effectiveDate: '2026-08-31'
   });
 
-  assert.equal(analysis.priceBook.version, 'v0.1');
+  assert.equal(analysis.priceBook.version, 'v1.0');
   assert.equal(analysis.selectedScenario.financial.capexAmd, 1_390_000);
   assert.notEqual(analysis.selectedScenario.financial.capexAmd, 1);
-  assert.equal(analysis.financial.price.kind, 'temporary');
+  assert.equal(analysis.financial.price.kind, 'owner-managed');
 });
 
 test('the server resolves an explicit catalog panel ID without altering PVGIS-specific yield', () => {

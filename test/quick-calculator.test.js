@@ -7,7 +7,7 @@ import { onRequest as quickOnRequest } from '../functions/api/quick-analysis.js'
 import {
   ARMENIA_REGIONAL_BENCHMARKS,
   ARMENIA_TARIFF_DATASET,
-  TEMPORARY_YOURENERGY_PRICEBOOK,
+  YOURENERGY_OWNER_MANAGED_PRICEBOOK,
   buildRegionalQuickAnalysis,
   buildSolarAnalysis,
   createUserTariffSelection,
@@ -174,7 +174,7 @@ test('regional quick analysis delegates unchanged sizing, budget and finance for
       monthlyYieldFactors: Array(12).fill(125),
       source: { kind: 'provider', status: 'confirmed' }
     },
-    priceBook: TEMPORARY_YOURENERGY_PRICEBOOK,
+    priceBook: YOURENERGY_OWNER_MANAGED_PRICEBOOK,
     effectiveDate: '2026-08-31'
   };
   const quick = buildRegionalQuickAnalysis({ region, ...input });

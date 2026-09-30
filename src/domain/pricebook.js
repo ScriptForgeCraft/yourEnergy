@@ -4,7 +4,8 @@ import { cleanString, cloneSerializable, deepFreeze, toPositiveNumberOrNull } fr
 const PRICEBOOK_SYSTEM_TYPE = 'residential-grid-tied';
 const PRICEBOOK_STATUS = Object.freeze({
   TEMPORARY: 'temporary',
-  CONFIRMED: 'confirmed'
+  CONFIRMED: 'confirmed',
+  OWNER_MANAGED: 'owner-managed'
 });
 
 const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/u;
@@ -39,8 +40,17 @@ const normalizePriceBook = (input = {}) => {
   const p75 = toPositiveNumberOrNull(rates.p75);
   const validFrom = toIsoDate(input.validFrom);
   const validUntil = toIsoDate(input.validUntil);
+  const status =
+    input.status === PRICEBOOK_STATUS.CONFIRMED
+      ? PRICEBOOK_STATUS.CONFIRMED
+      : input.status === PRICEBOOK_STATUS.OWNER_MANAGED
+        ? PRICEBOOK_STATUS.OWNER_MANAGED
+        : PRICEBOOK_STATUS.TEMPORARY;
   const validRateOrder = p25 !== null && p50 !== null && p75 !== null && p25 <= p50 && p50 <= p75;
-  const validDateRange = validFrom !== null && validUntil !== null && validFrom <= validUntil;
+  const validDateRange =
+    validFrom !== null &&
+    ((status === PRICEBOOK_STATUS.OWNER_MANAGED && validUntil === null) ||
+      (validUntil !== null && validFrom <= validUntil));
 
   if (!validRateOrder || !validDateRange || !cleanString(input.id) || !cleanString(input.version)) {
     return null;
@@ -49,10 +59,7 @@ const normalizePriceBook = (input = {}) => {
   return deepFreeze({
     id: cleanString(input.id),
     version: cleanString(input.version),
-    status:
-      input.status === PRICEBOOK_STATUS.CONFIRMED
-        ? PRICEBOOK_STATUS.CONFIRMED
-        : PRICEBOOK_STATUS.TEMPORARY,
+    status,
     countryCode: cleanString(input.countryCode) ?? 'AM',
     region: cleanString(input.region) ?? 'all-armenia',
     systemType: cleanString(input.systemType) ?? PRICEBOOK_SYSTEM_TYPE,
@@ -72,14 +79,17 @@ const isPriceBookActive = (priceBook, at = new Date()) => {
   const normalized = normalizePriceBook(priceBook);
   const date = toIsoDate(at);
   return Boolean(
-    normalized && date && normalized.validFrom <= date && normalized.validUntil >= date
+    normalized &&
+    date &&
+    normalized.validFrom <= date &&
+    (normalized.validUntil === null || normalized.validUntil >= date)
   );
 };
 
 /**
- * A replaceable registry boundary for temporary and approved price books. It
- * returns no record after its stated validity date, rather than guessing a
- * successor price.
+ * A replaceable registry boundary for finite price books and an explicitly
+ * owner-managed price book. Finite records stop at their stated end date;
+ * owner-managed records remain active until their owner replaces them.
  */
 export class PriceBookRepository {
   constructor({ records = ARMENIA_PRICEBOOKS, clock = () => new Date() } = {}) {
@@ -98,7 +108,7 @@ export class PriceBookRepository {
         (record) =>
           record.systemType === requestedSystemType &&
           record.validFrom <= requestedDate &&
-          record.validUntil >= requestedDate
+          (record.validUntil === null || record.validUntil >= requestedDate)
       )
       .sort((left, right) => right.validFrom.localeCompare(left.validFrom))[0];
 
@@ -144,7 +154,7 @@ export const buildCommercialEstimate = ({ capacityKwp, priceBook, at = new Date(
 
   return deepFreeze({
     available: true,
-    kind: normalized.status === PRICEBOOK_STATUS.CONFIRMED ? 'confirmed' : 'temporary',
+    kind: normalized.status,
     reason: null,
     capacityKwp: capacity,
     currency: normalized.currency,
