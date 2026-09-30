@@ -86,7 +86,14 @@
 .faq-preview__heading {
   max-width: 44rem;
 }
- 
+
+.faq-preview__eyebrow {
+  width: 32px;
+  height: 2px;
+  display: block;
+  margin-bottom: clamp(24px, 3.4svh, 32px);
+  background: #f4ba11;
+}
 
 .faq-preview h2 {
   max-width: none;
@@ -341,10 +348,18 @@ html[lang='hy'] .faq-preview__art p {
   stroke-width: 3.1;
 }
 
-@media (min-width: 1780px) {
-  .faq-preview__grid {
-    width: min(calc(100% + 72px), calc(100vw - 148px));
-    margin-left: -28px;
+@media (min-width: 981px) {
+  .faq-preview__inner {
+    /* Keep the FAQ proportional to the viewport instead of using a hard cap. */
+    inline-size: 70vw;
+    --faq-preview-left: max(5.85vw, calc((100% - var(--container)) / 2));
+    margin-inline: var(--faq-preview-left) 0;
+  }
+
+  .faq-preview__grid,
+  .faq-preview__footer {
+    /* The text follows the left content guide; the FAQ action group is centred. */
+    transform: translateX(calc((100vw - 70vw) / 2 - var(--faq-preview-left)));
   }
 }
 
@@ -429,7 +444,6 @@ html[lang='hy'] .faq-preview__art p {
     max-width: 23rem;
   }
 
- 
   .faq-preview h2 {
     font-size: clamp(2.5rem, 11.5vw, 4rem) !important;
   }
