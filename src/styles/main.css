@@ -18,6 +18,7 @@
      remains on the section itself; only its actual content is constrained. */
   --container: 1700px;
   --header-height: 74px;
+  --page-scrollbar-width: 0px;
 }
 
 *,
@@ -48,20 +49,18 @@ svg {
 html {
   min-height: 100%;
   scroll-behavior: smooth;
-  overflow-y: auto;
+  overflow-y: scroll;
   overflow-x: hidden;
   scrollbar-gutter: auto;
+}
+
+html.hide-page-scrollbar {
   scrollbar-width: none;
 }
 
-html::-webkit-scrollbar {
-  width: 0;
-  height: 0;
+html.hide-page-scrollbar::-webkit-scrollbar {
   display: none;
 }
-
-/* The native scrollbar is hidden for the entire page, so entering the process
-   scene never changes the viewport width or reserves an empty gutter. */
 
 html.site-menu-open {
   overflow: hidden;
@@ -138,7 +137,7 @@ textarea {
 .floating-contact-actions {
   position: fixed;
   z-index: 60;
-  right: max(18px, env(safe-area-inset-right));
+  right: calc(max(18px, env(safe-area-inset-right)) + var(--page-scrollbar-width));
   bottom: max(24px, env(safe-area-inset-bottom));
   display: grid;
   gap: 12px;
@@ -1106,7 +1105,7 @@ h1 mark {
 
 @media (max-width: 767px) {
   .floating-contact-actions {
-    right: max(14px, env(safe-area-inset-right));
+    right: calc(max(14px, env(safe-area-inset-right)) + var(--page-scrollbar-width));
     bottom: max(16px, env(safe-area-inset-bottom));
     gap: 10px;
   }

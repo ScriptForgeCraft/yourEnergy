@@ -187,7 +187,6 @@
     0 1px 2px rgba(0, 0, 0, 0.86);
 }
 
-.process-state__cta,
 .process-form__submit {
   border: 1px solid #ffdc7b;
   background: linear-gradient(115deg, #f0c75d, #c88d16 58%, #f2ce6c);
@@ -199,25 +198,6 @@
 #process-step-title-6 {
   font-size: 3rem;
 }
-.process-state__cta {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 28px;
-  min-height: 56px;
-  margin-top: 28px;
-  padding: 0 28px;
-  border-radius: 13px;
-  font-weight: 700;
-  text-decoration: none;
-  font-size: 1rem;
-}
-
-.process-state__cta .inline-icon {
-  width: 20px;
-  height: 20px;
-}
-
 .process-form {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
@@ -364,8 +344,7 @@
     box-shadow 180ms ease;
 }
 
-.process-form__submit:hover,
-.process-state__cta:hover {
+.process-form__submit:hover {
   filter: brightness(1.08);
   box-shadow: 0 14px 38px #d79d2447;
 }

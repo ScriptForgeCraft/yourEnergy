@@ -650,8 +650,7 @@ export default {
         visualCards: [
           { label: 'Documents', value: 'Together in one place' },
           { label: 'Service', value: 'Support after commissioning' }
-        ],
-        cta: 'Start my solar analysis'
+        ]
       }
     ]
   },

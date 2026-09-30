@@ -257,8 +257,7 @@ export const processStoryCopy = {
             value: 'YOURENERGY stays with you.',
             data: 'service'
           }
-        ],
-        cta: 'Start my solar analysis'
+        ]
       }
     ]
   },
@@ -525,8 +524,7 @@ export const processStoryCopy = {
             value: 'YOURENERGY остаётся рядом.',
             data: 'service'
           }
-        ],
-        cta: 'Начать мой солнечный анализ'
+        ]
       }
     ]
   },
@@ -793,8 +791,7 @@ export const processStoryCopy = {
             value: 'YOURENERGY-ն մնում է Ձեր կողքին։',
             data: 'service'
           }
-        ],
-        cta: 'Սկսել իմ արևային վերլուծությունը'
+        ]
       }
     ]
   }

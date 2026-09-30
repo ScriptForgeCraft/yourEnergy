@@ -49,7 +49,13 @@ export const initNavigation = () => {
 
   const applyProcessChrome = () => {
     const active = processRequested && processDesktop.matches;
+    if (active) {
+      const scrollbarWidth = Math.max(0, window.innerWidth - documentElement.clientWidth);
+      documentElement.style.setProperty('--page-scrollbar-width', `${scrollbarWidth}px`);
+    }
     documentElement.classList.toggle('process-chrome-active', active);
+    documentElement.classList.toggle('hide-page-scrollbar', active);
+    if (!active) documentElement.style.removeProperty('--page-scrollbar-width');
     header?.classList.toggle('is-process-mode', active);
 
     [desktopNav, headerActions].forEach((element) => {
