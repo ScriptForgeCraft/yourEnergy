@@ -833,37 +833,41 @@ export default {
   faq: {
     eyebrow: 'FAQ',
     title: 'Frequently asked questions',
-    homeTitle: 'Answers to important questions',
+    homeTitle: 'Everything you need to know before installing a solar system',
+    homeTitleLead: 'Everything you need to know',
+    homeTitleAccent: 'before installing',
+    homeTitleTail: 'a solar system',
     pageTitle: 'Solar system questions, answered',
     intro: 'Clear, concise answers to help you make a confident decision about a solar system.',
+    previewIntro:
+      'Costs, warranties, documents, grid connection and batteries — the answers to the most common questions, all in one place.',
     answersEyebrow: 'All questions',
     answersTitle: 'Detailed answers',
     answersIntro:
       'The essentials on calculations, pricing, installation and how a solar system works.',
     allQuestions: 'All questions',
     notFound: 'Didn’t find an answer?',
-    contactLink: 'Contact us',
+    contactLink: 'Ask an engineer',
     previewItems: [
       {
-        question: 'How much does a solar system cost?',
-        answer: 'The price depends on your consumption, property type and chosen equipment.',
-        icon: 'faq-home'
+        question: 'Costs',
+        answer: 'and payback',
+        icon: 'coins'
       },
       {
-        question: 'How much energy can I get?',
-        answer:
-          'Estimate the expected generation for your home in our calculator in a few minutes.',
-        icon: 'zap'
-      },
-      {
-        question: 'How does installation work?',
-        answer: 'From system design to commissioning, our team coordinates every stage.',
-        icon: 'faq-settings'
-      },
-      {
-        question: 'Are permits required?',
-        answer: 'We help with documents and requirements that apply to your property.',
+        question: 'Warranties',
+        answer: 'and service',
         icon: 'shield-check'
+      },
+      {
+        question: 'Documents',
+        answer: 'and permits',
+        icon: 'file-text'
+      },
+      {
+        question: 'Batteries',
+        answer: 'and energy storage',
+        icon: 'battery'
       }
     ],
     meta: {

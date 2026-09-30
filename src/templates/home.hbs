@@ -273,13 +273,14 @@
     <section class='faq-preview' id='faq' aria-labelledby='faq-title'>
       <div class='faq-preview__backdrop' aria-hidden='true'>
         <picture>
-          <source type='image/avif' srcset='/images/hero-time-16-1024.avif 1024w, /images/hero-time-16-1600.avif 1600w'
+          <source type='image/avif' srcset='/images/hero-time-18-1024.avif 1024w, /images/hero-time-18-1600.avif 1600w'
             sizes='100vw' />
-          <source type='image/webp' srcset='/images/hero-time-16-1024.webp 1024w, /images/hero-time-16-1600.webp 1600w'
-            sizes='100vw' /><img src='/images/hero-time-16-1600.jpg' width='1600' height='900' alt='' loading='lazy'
+          <source type='image/webp' srcset='/images/hero-time-18-1024.webp 1024w, /images/hero-time-18-1600.webp 1600w'
+            sizes='100vw' /><img src='/images/hero-time-18-1600.jpg' width='1600' height='900' alt='' loading='lazy'
             decoding='async' />
         </picture>
       </div>
+      <span class='faq-preview__brand' aria-hidden='true'>YOUR ENERGY<small>BRIGHTER TOMORROW</small></span>
       <aside class='faq-preview__art' aria-hidden='true'>
         <svg class='faq-preview__sun' viewBox='0 0 92 92' focusable='false'>
           <circle cx='46' cy='46' r='18'></circle>
@@ -290,26 +291,32 @@
           <path d='M7 31C63 4 128 4 246 17'></path>
           <path d='M34 49C92 25 159 19 227 25'></path>
         </svg>
-        <span class='faq-preview__brand'>YOUR ENERGY<small>BRIGHTER TOMORROW</small></span>
       </aside>
       <div class='container faq-preview__inner'>
         <header class='faq-preview__heading'>
-          <h2 id='faq-title'>{{faq.homeTitle}}</h2>
-          <p>{{faq.intro}}</p>
+          <span class='faq-preview__eyebrow' aria-hidden='true'></span>
+          <h2 id='faq-title'><span>{{faq.homeTitleLead}}</span><mark>{{faq.homeTitleAccent}}</mark><span>{{faq.homeTitleTail}}</span></h2>
+          <p>{{faq.previewIntro}}</p>
         </header>
-        <div class='faq-preview__grid'>{{#each faq.previewItems}}<a class='faq-preview__card'
+        <nav class='faq-preview__grid' aria-label='{{faq.eyebrow}}'>{{#each faq.previewItems}}<a class='faq-preview__card'
             href='{{../faqHref}}'><span class='faq-preview__icon'><svg class='inline-icon' aria-hidden='true'>
                 <use href='/icons.svg#{{icon}}'></use>
               </svg></span><span
               class='faq-preview__card-copy'><strong>{{question}}</strong><small>{{answer}}</small></span><svg
               class='faq-preview__arrow inline-icon' aria-hidden='true'>
               <use href='/icons.svg#arrow-right'></use>
-            </svg></a>{{/each}}</div>
-        <div class='faq-preview__footer'><a class='button faq-preview__button'
-            href='{{faqHref}}'><span>{{faq.allQuestions}}</span><svg class='inline-icon' aria-hidden='true'>
+            </svg></a>{{/each}}<a class='faq-preview__all' href='{{faqHref}}'><svg class='faq-preview__all-icon inline-icon'
+              aria-hidden='true'>
+              <use href='/icons.svg#list'></use>
+            </svg><span>{{faq.allQuestions}}</span><svg class='faq-preview__arrow inline-icon' aria-hidden='true'>
               <use href='/icons.svg#arrow-right'></use>
-            </svg></a>
-          <p>{{faq.notFound}} <a href='{{contactsHref}}'>{{faq.contactLink}}</a></p>
+            </svg></a></nav>
+        <div class='faq-preview__footer'><p><svg class='faq-preview__contact-icon inline-icon' aria-hidden='true'>
+              <use href='/icons.svg#message-circle'></use>
+            </svg><span>{{faq.notFound}} <a href='{{contactsHref}}'>{{faq.contactLink}}</a><svg
+                class='faq-preview__contact-arrow inline-icon' aria-hidden='true'>
+                <use href='/icons.svg#arrow-right'></use>
+              </svg></span></p>
         </div>
       </div>
     </section>
