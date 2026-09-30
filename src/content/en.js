@@ -840,7 +840,7 @@ export default {
     pageTitle: 'Solar system questions, answered',
     intro: 'Clear, concise answers to help you make a confident decision about a solar system.',
     previewIntro:
-      'Costs, warranties, documents, grid connection and batteries — the answers to the most common questions, all in one place.',
+      'Costs, warranties, documents, grid connection and batteries — answers to the most common questions, all in one place.',
     answersEyebrow: 'All questions',
     answersTitle: 'Detailed answers',
     answersIntro:
@@ -880,35 +880,35 @@ export default {
     items: [
       [
         'How much does a solar system cost?',
-        'Start with your region and average bill or consumption. The first result is preliminary; an optional roof refinement and engineering review confirm the final system and price.'
+        'Start by selecting your region and entering your average electricity bill or consumption. The first result is preliminary; refining the roof data and completing an engineering review help determine the final system configuration and price.'
       ],
       [
         'How is system capacity calculated?',
-        'The first calculation uses the selected region and your consumption. You can then refine it with your roof area; detailed roof, shading and grid checks remain an engineering task.'
+        'The preliminary calculation is based on the selected region and your electricity consumption. You can then refine it by entering the roof area. Detailed checks of the roof, shading and grid connection are completed by an engineer.'
       ],
       [
         'What is the payback period?',
-        'Payback is shown only after the solar analysis and a tariff entered by you. The model excludes tariff growth, degradation, maintenance, financing, discounting, taxes and export rules.'
+        'Payback is shown after the solar-potential calculation and after you enter your electricity tariff. The model does not include possible tariff increases, panel degradation, maintenance, financing costs, discounting, taxes or grid-export rules.'
       ],
       [
         'Do solar panels need maintenance?',
-        'Periodic inspection, monitoring checks and cleaning when needed help maintain the system. The exact schedule depends on the equipment and site conditions.'
+        'Periodic inspections, monitoring checks and cleaning when needed help keep the system operating efficiently. The exact maintenance schedule depends on the equipment and installation conditions.'
       ],
       [
         'What happens in cloudy weather?',
-        'Generation is lower and stops at night. The home uses the grid or a battery if one is included in the confirmed project.'
+        'Generation decreases in cloudy weather and stops at night. During those periods, the home uses electricity from the grid or from a battery if one is included in the project.'
       ],
       [
         'Can I install a battery?',
-        'Yes. The Energy Independence option includes an example with battery storage. Actual capacity is selected from the consumption profile and required backup time.'
+        'Yes. The Energy Independence option shows an example system with battery storage. The required capacity is selected according to the consumption profile and the desired backup duration.'
       ],
       [
-        'Can I finance a system?',
-        'No verified financing programme is currently published on the website. Financing terms will be stated only when a specific partner and agreement are confirmed.'
+        'Can I finance the system?',
+        'No verified financing programme is currently published on the website. Financing terms will only be shown once a specific partner and the corresponding agreement have been confirmed.'
       ],
       [
         'What is a Solar Passport?',
-        'A preliminary Solar Passport keeps the current calculation inputs, sources and assumptions together. It is not an engineering design, bank document or binding offer; a permanent link and PDF are not currently generated.'
+        'A preliminary Solar Passport brings together the calculation inputs, sources and assumptions in one place. It is not an engineering design, bank document or binding commercial offer. A permanent link and PDF are not currently generated.'
       ]
     ].map(([question, answer], index) => ({
       question,
