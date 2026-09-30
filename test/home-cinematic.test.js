@@ -183,11 +183,13 @@ test('desktop process mode collapses global navigation into an accessible burger
   assert.match(processStory, /setProcessChromeActive\(true\)/u);
   assert.match(processStory, /setProcessChromeActive\(false\)/u);
   assert.match(mainCss, /scrollbar-gutter:\s*auto/u);
-  assert.match(mainCss, /overflow-y:\s*scroll/u);
+  assert.match(mainCss, /overflow-y:\s*auto/u);
   assert.doesNotMatch(mainCss, /html::-webkit-scrollbar/u);
   assert.match(mainCss, /html\.hide-page-scrollbar\s*\{\s*scrollbar-width:\s*none;/u);
   assert.match(mainCss, /html\.hide-page-scrollbar::-webkit-scrollbar\s*\{\s*display:\s*none;/u);
+  assert.match(mainCss, /html\.hide-page-scrollbar \.page-home #process\s*\{\s*width:\s*100vw;/u);
   assert.match(mainCss, /var\(--page-scrollbar-width\)/u);
+  assert.match(mainCss, /html\.hide-page-scrollbar \.site-header\s*\{\s*padding-right:/u);
   assert.match(navigation, /window\.innerWidth - documentElement\.clientWidth/u);
   assert.match(navigation, /setProperty\('--page-scrollbar-width'/u);
 });

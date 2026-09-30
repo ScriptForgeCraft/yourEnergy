@@ -49,7 +49,7 @@ export const initNavigation = () => {
 
   const applyProcessChrome = () => {
     const active = processRequested && processDesktop.matches;
-    if (active) {
+    if (active && !documentElement.classList.contains('hide-page-scrollbar')) {
       const scrollbarWidth = Math.max(0, window.innerWidth - documentElement.clientWidth);
       documentElement.style.setProperty('--page-scrollbar-width', `${scrollbarWidth}px`);
     }
