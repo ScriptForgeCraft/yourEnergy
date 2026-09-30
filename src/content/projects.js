@@ -92,7 +92,11 @@ const pageCopy = Object.freeze({
     },
     list: {
       title: 'Проекты',
-      empty: 'По выбранным фильтрам проектов не найдено.'
+      empty: 'По выбранным фильтрам проектов не найдено.',
+      paginationLabel: 'Навигация по проектам',
+      previousPage: 'Назад',
+      nextPage: 'Вперёд',
+      pageStatus: 'Показаны {start}–{end} из {total}'
     },
     filters: {
       all: 'Все',
@@ -153,7 +157,11 @@ const pageCopy = Object.freeze({
     },
     list: {
       title: 'Նախագծեր',
-      empty: 'Ընտրված ֆիլտրերով նախագծեր չեն գտնվել։'
+      empty: 'Ընտրված ֆիլտրերով նախագծեր չեն գտնվել։',
+      paginationLabel: 'Նախագծերի նավարկում',
+      previousPage: 'Նախորդ',
+      nextPage: 'Հաջորդ',
+      pageStatus: 'Ցուցադրված է {start}–{end}՝ {total}-ից'
     },
     filters: {
       all: 'Բոլորը',
@@ -214,7 +222,11 @@ const pageCopy = Object.freeze({
     },
     list: {
       title: 'Projects',
-      empty: 'No projects match the selected filters.'
+      empty: 'No projects match the selected filters.',
+      paginationLabel: 'Project pagination',
+      previousPage: 'Previous',
+      nextPage: 'Next',
+      pageStatus: 'Showing {start}–{end} of {total}'
     },
     filters: {
       all: 'All',

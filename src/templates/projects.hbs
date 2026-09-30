@@ -156,6 +156,17 @@
             {{/each}}
           </div>
           <p class='projects-empty' data-projects-empty hidden>{{projectsPage.list.empty}}</p>
+          <nav class='projects-pagination' data-projects-pagination data-status-template='{{projectsPage.list.pageStatus}}' aria-label='{{projectsPage.list.paginationLabel}}' hidden>
+            <button class='projects-pagination__button' type='button' data-projects-page-previous>
+              <svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#arrow-right'></use></svg>
+              <span>{{projectsPage.list.previousPage}}</span>
+            </button>
+            <p class='projects-pagination__status' data-projects-page-status aria-live='polite'></p>
+            <button class='projects-pagination__button' type='button' data-projects-page-next>
+              <span>{{projectsPage.list.nextPage}}</span>
+              <svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#arrow-right'></use></svg>
+            </button>
+          </nav>
         </div>
       </section>
 
@@ -181,7 +192,7 @@
             />
             {{#each projectsPage.coverage.markers}}
               <span class='projects-map__marker' style='--marker-x: {{x}}%; --marker-y: {{y}}%;'>
-                <i></i><b>{{label}}</b>
+                <i></i>
               </span>
             {{/each}}
           </div>
