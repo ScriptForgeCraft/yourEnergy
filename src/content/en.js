@@ -198,12 +198,9 @@ export default {
       addPoint: 'Add point',
       undo: 'Undo last point',
       reset: 'Clear outline',
-      finish: 'Finish outline',
-      finishHelp:
-        'Enter the roof-face parameters and consumption, then request a preliminary solar calculation.',
       edit: 'Edit outline',
       pointsLabel: 'Points in outline: {count}',
-      minimumPoints: 'Add at least 3 points to finish the outline.',
+      minimumPoints: 'Add at least 3 points to create an outline.',
       areaLabel: 'Preliminary area from the outline',
       mountingModeLabel: 'Mounting approach',
       mountingModeHelp:

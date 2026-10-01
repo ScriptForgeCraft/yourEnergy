@@ -190,7 +190,6 @@ const common = {
       add: 'Ավելացնել կետ',
       undo: 'Վերջին կետը հեռացնել',
       reset: 'Մաքրել',
-      finish: 'Ավարտել ուրվագիծը',
       calculate: 'Թարմացնել հաշվարկը',
       mapNotice: 'Քարտեզի ուրվագիծը մոտավոր է։ Այն չի չափում տեղային ստվերը կամ կոնստրուկցիան։',
       engineering: 'Ինժեներական պարամետրեր',
@@ -499,7 +498,6 @@ const common = {
       add: 'Добавить точку',
       undo: 'Удалить последнюю точку',
       reset: 'Очистить',
-      finish: 'Завершить контур',
       calculate: 'Обновить расчёт',
       mapNotice:
         'Контур на карте приблизительный. Он не измеряет локальное затенение или конструкцию.',
@@ -796,7 +794,6 @@ const common = {
       add: 'Add point',
       undo: 'Undo last point',
       reset: 'Clear',
-      finish: 'Finish outline',
       calculate: 'Update estimate',
       mapNotice: 'The map outline is approximate. It does not measure local shading or structure.',
       engineering: 'Engineering parameters',

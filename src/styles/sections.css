@@ -1330,11 +1330,11 @@ h3 {
 }
 
 .property-map__marker--roof > span {
-  width: 20px;
-  height: 20px;
+  width: var(--roof-point-diameter, 20px);
+  height: var(--roof-point-diameter, 20px);
   color: #fff;
   background: #0d3554;
-  font-size: 0.58rem;
+  font-size: clamp(0.55rem, calc(var(--roof-point-diameter, 20px) * 0.45), 0.75rem);
   font-weight: 450;
   line-height: 1;
   cursor: grab;

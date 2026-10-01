@@ -651,9 +651,6 @@
   text-align: center;
   font-size: 0.72rem;
 }
-.roof-controls {
-  margin: 1rem 0;
-}
 .roof-area-readout {
   display: flex;
   flex-wrap: wrap;

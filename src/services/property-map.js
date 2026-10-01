@@ -90,6 +90,9 @@ export const createPropertyMap = async ({
   let roofMarkers = [];
   let roofPoints = [];
   let roofFinished = false;
+  let roofLineWeight = 3;
+  let roofPointRadius = 10;
+  let roofPointNumbersVisible = true;
   let mode = 'location';
   let resizeFrame = null;
   let centerFrame = null;
@@ -105,13 +108,16 @@ export const createPropertyMap = async ({
     iconSize: [34, 34],
     iconAnchor: [17, 17]
   });
-  const roofPointIcon = (index) =>
-    L.divIcon({
+  const roofPointIcon = (index) => {
+    const diameter = roofPointRadius * 2;
+    const pointNumber = roofPointNumbersVisible ? index + 1 : '';
+    return L.divIcon({
       className: 'property-map__marker property-map__marker--roof',
-      html: `<span aria-hidden="true">${index + 1}</span>`,
-      iconSize: [24, 24],
-      iconAnchor: [12, 12]
+      html: `<span aria-hidden="true" style="--roof-point-diameter: ${diameter}px">${pointNumber}</span>`,
+      iconSize: [diameter, diameter],
+      iconAnchor: [roofPointRadius, roofPointRadius]
     });
+  };
 
   const invalidateSizeAfterLayout = () => {
     if (destroyed) return;
@@ -346,7 +352,7 @@ export const createPropertyMap = async ({
     if (roofPoints.length >= 2) {
       roofPolygon = L.polygon(roofPoints, {
         color: '#f5bd18',
-        weight: 3,
+        weight: roofLineWeight,
         fillColor: '#f5bd18',
         fillOpacity: 0.12
       }).addTo(map);
@@ -478,6 +484,27 @@ export const createPropertyMap = async ({
       else map.doubleClickZoom.enable();
     },
     setRoofPoints,
+    setRoofLineWeight(value) {
+      const next = Math.max(1, Math.min(8, Math.round(Number(value) || 3)));
+      if (next === roofLineWeight) return false;
+      roofLineWeight = next;
+      drawRoof();
+      return true;
+    },
+    setRoofPointRadius(value) {
+      const next = Math.max(6, Math.min(18, Math.round(Number(value) || 10)));
+      if (next === roofPointRadius) return false;
+      roofPointRadius = next;
+      drawRoof();
+      return true;
+    },
+    setRoofPointNumbers(visible) {
+      const next = Boolean(visible);
+      if (next === roofPointNumbersVisible) return false;
+      roofPointNumbersVisible = next;
+      drawRoof();
+      return true;
+    },
     setLocationAtCenter() {
       if (mode !== 'location') return false;
       // Leaflet's canvas is not a practical way to choose a point with a

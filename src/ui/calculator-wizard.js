@@ -161,6 +161,11 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
   const mapElement = root.querySelector('[data-property-map]');
   const locationMapWrap = root.querySelector('[data-location-map-wrap]');
   const roofMapHost = root.querySelector('[data-roof-map-host]');
+  const roofLineWidth = root.querySelector('[data-roof-line-width]');
+  const roofLineWidthOutput = root.querySelector('[data-roof-line-width-output]');
+  const roofPointRadius = root.querySelector('[data-roof-point-radius]');
+  const roofPointRadiusOutput = root.querySelector('[data-roof-point-radius-output]');
+  const roofPointNumbers = root.querySelector('[data-roof-point-numbers]');
   const pendingCoordinates = root.querySelector('[data-pending-coordinates]');
   const potentialLoading = root.querySelector('[data-potential-loading]');
   const potentialStatus = root.querySelector('[data-potential-status]');
@@ -863,6 +868,13 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
     updateRoofReferenceComparison(roof);
   };
 
+  const applyRoofMapStyle = (map) => {
+    if (!map) return;
+    map.setRoofLineWeight(roofLineWidth?.value);
+    map.setRoofPointRadius(roofPointRadius?.value);
+    map.setRoofPointNumbers(roofPointNumbers?.checked ?? true);
+  };
+
   const mountMap = async (mode) => {
     if (!lifecycle.isActive()) return null;
     const host = mode === 'roof' ? roofMapHost : locationMapWrap;
@@ -898,6 +910,7 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
       mapController?.mount(host);
       mapController?.setMode(mode);
       if (mode === 'roof') {
+        applyRoofMapStyle(mapController);
         root
           .querySelectorAll('.professional-roof-map__layers button')
           .forEach((button, index) => button.classList.toggle('is-active', index === 1));
@@ -1476,6 +1489,21 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
     .forEach((button) =>
       button.addEventListener('click', () => useRoofMap((map) => map.resetRoof()))
     );
+  const updateRoofLineWidth = () => {
+    const value = Number(roofLineWidth?.value) || 3;
+    if (roofLineWidthOutput) roofLineWidthOutput.textContent = `${value} px`;
+    useRoofMap((map) => map.setRoofLineWeight(value));
+  };
+  const updateRoofPointRadius = () => {
+    const value = Number(roofPointRadius?.value) || 10;
+    if (roofPointRadiusOutput) roofPointRadiusOutput.textContent = `${value} px`;
+    useRoofMap((map) => map.setRoofPointRadius(value));
+  };
+  roofLineWidth?.addEventListener('input', updateRoofLineWidth);
+  roofPointRadius?.addEventListener('input', updateRoofPointRadius);
+  roofPointNumbers?.addEventListener('change', () =>
+    useRoofMap((map) => map.setRoofPointNumbers(roofPointNumbers.checked))
+  );
   root
     .querySelectorAll(
       '[data-roof-area-method], [data-roof-mounting-mode], [data-roof-tilt], [data-roof-plane-area], [data-roof-orientation], [data-roof-orientation-custom-input]'

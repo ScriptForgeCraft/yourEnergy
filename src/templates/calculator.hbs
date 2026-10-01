@@ -320,10 +320,6 @@
                 </svg>
                 <p>{{wizard.drawRoof}}<small>{{wizard.mapApproximate}}</small></p>
               </section>
-              <div class='roof-controls'><button class='button button--outline' type='button'
-                  data-roof-undo><svg aria-hidden='true'><use href='/icons.svg#arrow-left'></use></svg>{{product.roof.undo}}</button><button class='button button--outline' type='button'
-                  data-roof-reset><svg aria-hidden='true'><use href='/icons.svg#cycle'></use></svg>{{product.roof.reset}}</button><button class='button' type='button'
-                  data-roof-finish><svg aria-hidden='true'><use href='/icons.svg#check'></use></svg>{{product.roof.finish}}</button></div>
               <section class='professional-roof-area'><span><svg aria-hidden='true'>
                     <use href='/icons.svg#faq-home'></use>
                   </svg></span>
@@ -395,9 +391,19 @@
                   <p><strong data-roof-map-tilt>30°</strong><small>{{wizard.ui.roof.tilt}}</small></p>
                 </div>
               </aside>
-              <div class='professional-roof-map__tip'><svg aria-hidden='true'>
-                  <use href='/icons.svg#info'></use>
-                </svg><strong>{{wizard.ui.roof.tipsTitle}}</strong><span>{{wizard.ui.roof.tipsCopy}}</span></div>
+              <details class='professional-roof-map__tools'>
+                <summary><svg aria-hidden='true'>
+                    <use href='/icons.svg#faq-settings'></use>
+                  </svg><strong>{{wizard.ui.roof.outlineSettings}}</strong><svg class='professional-roof-map__tools-arrow' aria-hidden='true'>
+                    <use href='/icons.svg#arrow-right'></use>
+                  </svg></summary>
+                <div class='professional-roof-map__tools-panel'>
+                  <label class='professional-roof-map__range'><span>{{wizard.ui.roof.lineWidth}}<output data-roof-line-width-output>3 px</output></span><input type='range' min='1' max='8' step='1' value='3' data-roof-line-width /></label>
+                  <label class='professional-roof-map__range'><span>{{wizard.ui.roof.pointRadius}}<output data-roof-point-radius-output>10 px</output></span><input type='range' min='6' max='18' step='1' value='10' data-roof-point-radius /></label>
+                  <label class='professional-roof-map__toggle'><input type='checkbox' checked data-roof-point-numbers /><span>{{wizard.ui.roof.showPointNumbers}}</span></label>
+                  <div class='professional-roof-map__tools-actions'><button type='button' data-roof-undo><svg aria-hidden='true'><use href='/icons.svg#arrow-left'></use></svg>{{product.roof.undo}}</button><button type='button' data-roof-reset><svg aria-hidden='true'><use href='/icons.svg#cycle'></use></svg>{{product.roof.reset}}</button></div>
+                </div>
+              </details>
             </div>
           </section>
 

@@ -32,10 +32,11 @@ test('Quick keeps maps and professional fields out of its initial markup', async
 });
 
 test('Professional has exactly four customer steps and retains every engineering input', async () => {
-  const [professional, controller, resultsView] = await Promise.all([
+  const [professional, controller, resultsView, propertyMap] = await Promise.all([
     source('src/templates/calculator.hbs'),
     source('src/ui/calculator-wizard.js'),
-    source('src/ui/calculator/results-view.js')
+    source('src/ui/calculator/results-view.js'),
+    source('src/services/property-map.js')
   ]);
   assert.equal((professional.match(/data-wizard-step='/gu) ?? []).length, 4);
   assert.doesNotMatch(professional, /System configuration|Best choice|Most popular/u);
@@ -83,6 +84,24 @@ test('Professional has exactly four customer steps and retains every engineering
   );
   assert.doesNotMatch(professional, /data-roof-add-center/u);
   assert.doesNotMatch(professional, /data-roof-enter-area/u);
+  assert.doesNotMatch(professional, /data-roof-finish/u);
+  assert.doesNotMatch(professional, /professional-roof-map__tip/u);
+  assert.match(professional, /professional-roof-map__tools/u);
+  for (const marker of [
+    'data-roof-line-width',
+    'data-roof-point-radius',
+    'data-roof-point-numbers',
+    'data-roof-undo',
+    'data-roof-reset'
+  ]) {
+    assert.match(professional, new RegExp(marker, 'u'));
+  }
+  assert.match(controller, /setRoofLineWeight\(roofLineWidth\?\.value\)/u);
+  assert.match(controller, /setRoofPointRadius\(roofPointRadius\?\.value\)/u);
+  assert.match(controller, /setRoofPointNumbers\(roofPointNumbers\?\.checked \?\? true\)/u);
+  assert.match(propertyMap, /setRoofLineWeight\(value\)[\s\S]*?drawRoof\(\)/u);
+  assert.match(propertyMap, /setRoofPointRadius\(value\)[\s\S]*?drawRoof\(\)/u);
+  assert.match(propertyMap, /setRoofPointNumbers\(visible\)[\s\S]*?drawRoof\(\)/u);
   assert.match(professional, /data-location-region/u);
   assert.match(professional, /data-location-locality/u);
   assert.match(professional, /data-location-map-wrap hidden/u);
