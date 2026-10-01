@@ -1,4 +1,5 @@
 import { calculatePreliminaryRoofCapacity } from '../../domain/roof-capacity.js';
+import { formatTariffProvenance } from '../tariff-selector.js';
 
 const PAGE_WIDTH_PT = 595.28;
 const PAGE_HEIGHT_PT = 841.89;
@@ -459,6 +460,7 @@ const createCopy = ({ wizard, product }) => {
     coordinates: pdf.coordinates ?? wizard.calculationBasis?.coordinates ?? 'Coordinates',
     inputMethod: pdf.inputMethod ?? 'Consumption input method',
     tariff: pdf.tariff ?? wizard.metrics?.tariff ?? 'Tariff',
+    tariffStrings: product?.consumption ?? {},
     storageRequest: pdf.storageRequest ?? wizard.storageRequestLabel ?? 'Storage review',
     yes: pdf.yes ?? 'Yes',
     no: pdf.no ?? 'No',
@@ -727,6 +729,8 @@ const pageFour = ({ copy, passport, locale, values, equipment }) => {
     annualConsumption,
     inputMode,
     tariffRate,
+    tariffSummary,
+    tariffSourceStatus,
     storageRequested,
     roofArea,
     roofOrientation,
@@ -753,7 +757,7 @@ const pageFour = ({ copy, passport, locale, values, equipment }) => {
     }),
     sourceStatus({
       label: copy.sourceTariff,
-      status: hasTariff ? copy.sourceUserProvided : copy.sourceUnavailable,
+      status: hasTariff ? tariffSourceStatus : copy.sourceUnavailable,
       color: hasTariff ? '#1F7AE0' : '#65798E'
     }),
     sourceStatus({
@@ -779,12 +783,7 @@ const pageFour = ({ copy, passport, locale, values, equipment }) => {
           [copy.coordinates, coordinates],
           [copy.consumption, `${displayNumber(annualConsumption, locale)} kWh`],
           [copy.inputMethod, modeLabel],
-          [
-            copy.tariff,
-            tariffRate === null
-              ? copy.unavailable
-              : `${displayNumber(tariffRate, locale, { maximumFractionDigits: 2 })} AMD/kWh`
-          ],
+          [copy.tariff, tariffRate === null ? copy.unavailable : tariffSummary],
           [copy.storageRequest, storageRequested ? copy.yes : copy.no],
           [
             copy.roof,
@@ -872,6 +871,11 @@ export const createCalculatorPdfReportHtml = ({
     roof.mountingMode === 'elevated'
       ? (wizard.elevated ?? copy.unavailable)
       : (wizard.parallel ?? copy.unavailable);
+  const tariffSummary = formatTariffProvenance({
+    tariff,
+    strings: copy.tariffStrings,
+    formatRate: (value) => displayNumber(value, locale, { maximumFractionDigits: 2 })
+  });
 
   const values = {
     capacityKwp: asNumber(scenario.system?.capacityKwp),
@@ -886,6 +890,8 @@ export const createCalculatorPdfReportHtml = ({
     coordinates,
     inputMode: consumption.mode ?? state.consumption?.mode ?? null,
     tariffRate: asNumber(tariff.rateAmdPerKwh),
+    tariffSummary,
+    tariffSourceStatus: tariff.kind === 'registry' ? copy.sourceConfirmed : copy.sourceUserProvided,
     storageRequested: Boolean(state.storageRequired),
     roofArea: asNumber(roof.areaSqm),
     roofOrientation: asNumber(roof.orientationDegrees),

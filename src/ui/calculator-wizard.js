@@ -1338,10 +1338,6 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
     const input = root.querySelector('[data-consumption-bill]');
     if (input) input.value = state.consumption.averageMonthlyBillAmd ?? '';
   }
-  const savedTariff = root.querySelector('[data-consumption-tariff]');
-  if (savedTariff && state.userTariff?.rateAmdPerKwh) {
-    savedTariff.value = state.userTariff.rateAmdPerKwh;
-  }
   if (state.addressNote && address) address.value = state.addressNote;
   if (storageRequired) storageRequired.checked = state.storageRequired;
   if (state.roof) {
@@ -1368,6 +1364,7 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
   const consumptionInput = initConsumptionInput({
     root: root.querySelector('[data-consumption-inputs]'),
     strings: product.consumption ?? {},
+    initialTariff: state.userTariff,
     onChange: () => {
       const draft = consumptionInput?.inspect();
       state.consumption = draft?.valid ? draft.value : null;

@@ -1,5 +1,6 @@
 import { calculatePreliminaryRoofCapacity } from '../../domain/roof-capacity.js';
 import { equipmentImageSrcset, equipmentImageUrl } from '../../config/equipment-images.js';
+import { formatTariffProvenance } from '../tariff-selector.js';
 import { number, format, formatApproximate, text, element, localeCode } from './view-helpers.js';
 
 const inverterTechnology = (technology, wizard) =>
@@ -40,6 +41,12 @@ export const createCalculatorResultsView = ({
   renderBars,
   state
 }) => {
+  const tariffText = (tariff) =>
+    formatTariffProvenance({
+      tariff,
+      strings: product.consumption ?? {},
+      formatRate: (value) => format(value, locale, { maximumFractionDigits: 2 })
+    });
   const dashboardMetric = (label, value, kind = '') => {
     const wrapper = element('div', `result-metric${kind ? ` result-metric--${kind}` : ''}`);
     wrapper.append(element('dt', '', label), element('dd', '', value));
@@ -224,14 +231,7 @@ export const createCalculatorResultsView = ({
     }
     const tariff = basis.tariff;
     if (tariff?.rateAmdPerKwh !== null && tariff?.rateAmdPerKwh !== undefined) {
-      const identity = [tariff.tariffId, tariff.revision, tariff.period]
-        .filter(Boolean)
-        .join(' · ');
-      add(
-        basisCopy.tariff ?? 'Electricity tariff',
-        `${identity ? `${identity} · ` : ''}${format(tariff.rateAmdPerKwh, locale, { maximumFractionDigits: 2 })} AMD/kWh`,
-        tariff.sourceType
-      );
+      add(basisCopy.tariff ?? 'Electricity tariff', tariffText(tariff), tariff.sourceType);
     } else {
       add(
         basisCopy.tariff ?? 'Electricity tariff',
@@ -991,7 +991,7 @@ export const createCalculatorResultsView = ({
     add(
       wizard.metrics?.tariff ?? product.consumption?.tariffLabel ?? 'Tariff',
       analysis.financial?.tariff?.rateAmdPerKwh
-        ? `${format(analysis.financial.tariff.rateAmdPerKwh, locale)} AMD/kWh`
+        ? tariffText(analysis.financial.tariff)
         : (product.result?.noTariff ?? '—')
     );
     const environmental = analysis.environmental;

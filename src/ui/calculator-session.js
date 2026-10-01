@@ -1,8 +1,8 @@
 import { PROFESSIONAL_ANALYSIS_SCOPE } from './professional-analysis-identity.js';
 
 const SESSION_KEY = 'yourenergy.calculator.v2';
-const SESSION_VERSION = 4;
-const LEGACY_SESSION_VERSIONS = new Set([2, 3]);
+const SESSION_VERSION = 5;
+const LEGACY_SESSION_VERSIONS = new Set([2, 3, 4]);
 
 const cloneSafe = (value) => {
   if (!value || typeof value !== 'object') return value ?? null;
@@ -36,21 +36,29 @@ const isQuickAnalysis = (analysis) => analysis?.scope === 'regional-preliminary'
 const isProfessionalAnalysis = (analysis) => analysis?.scope === PROFESSIONAL_ANALYSIS_SCOPE;
 
 /**
- * Versions 2 and 3 can contain financial output that valued annual generation
- * above consumption at the retail tariff. Retain reusable inputs but discard
- * every cached result so an old payback value is never restored.
+ * Earlier sessions cannot prove whether their visible 53.48 was an untouched
+ * default or an entered value. Rebuild result snapshots and retain only the
+ * reusable descriptor, restoring the old default as its official selection.
  */
-const migrateFinancialModelState = (stored = {}) => ({
-  ...emptyState(),
-  ...stored,
-  version: SESSION_VERSION,
-  quickAnalysis: null,
-  quickAnalysisStatus: 'idle',
-  professionalAnalysis: null,
-  professionalAnalysisStatus: 'idle',
-  professionalAnalysisIdentity: null,
-  professionalSolarPassport: null
-});
+const migrateFinancialModelState = (stored = {}) => {
+  const legacyTariff = stored.userTariff;
+  const userTariff =
+    legacyTariff?.tariffId || Number(legacyTariff?.rateAmdPerKwh) !== 53.48
+      ? legacyTariff
+      : { tariffId: 'standard-over-400', period: 'day' };
+  return {
+    ...emptyState(),
+    ...stored,
+    userTariff,
+    version: SESSION_VERSION,
+    quickAnalysis: null,
+    quickAnalysisStatus: 'idle',
+    professionalAnalysis: null,
+    professionalAnalysisStatus: 'idle',
+    professionalAnalysisIdentity: null,
+    professionalSolarPassport: null
+  };
+};
 
 const readStoredState = (stored) => {
   const state =

@@ -185,6 +185,7 @@ export const buildCalculationBasis = ({
             : CALCULATION_BASIS_SOURCE_TYPE.UNAVAILABLE,
       tariffId: cleanString(tariff.tariffId),
       revision: cleanString(tariff.revision),
+      customerType: cleanString(tariff.customerType),
       period: cleanString(tariff.period),
       rateAmdPerKwh: toPositiveNumberOrNull(tariff.rateAmdPerKwh),
       source: sourceReference(tariff.source)

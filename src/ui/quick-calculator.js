@@ -3,19 +3,13 @@ import { getCalculatorInputNumber, isCalculatorInputInRange } from '../domain/ca
 import { formatConsumerCommercialRange } from './commercial-range.js';
 import { createAsyncRequestLifecycle } from './async-request-lifecycle.js';
 import { createCalculatorSession } from './calculator-session.js';
+import { initTariffSelector } from './tariff-selector.js';
 
 const monthlyUsage = (value) => getCalculatorInputNumber(value, 'averageMonthlyConsumptionKwh');
 const monthlyBill = (value) => getCalculatorInputNumber(value, 'averageMonthlyBillAmd');
-const customTariff = (value) => getCalculatorInputNumber(value, 'customTariffAmdPerKwh');
 
 const leadText = (value) => (typeof value === 'string' ? value.replace(/\s+/gu, ' ').trim() : '');
 const validLeadPhone = (value) => /^[+()\d\s-]{6,32}$/u.test(value) && /\d/u.test(value);
-
-/** Returns the editable rate as a safe API descriptor. */
-export const readQuickTariff = (value) => {
-  const rate = customTariff(value);
-  return rate === null ? null : { rateAmdPerKwh: rate };
-};
 
 export const validateQuickLeadForm = ({ name, phone, message } = {}) => {
   const normalized = {
@@ -257,8 +251,6 @@ export const initQuickCalculator = ({ config = {} } = {}) => {
   const billWrap = root.querySelector('[data-quick-bill-wrap]');
   const usageWrap = root.querySelector('[data-quick-usage-wrap]');
   const tariffWrap = root.querySelector('[data-quick-tariff-wrap]');
-  const tariffLabel = root.querySelector('[data-quick-tariff-label]');
-  const tariffHelp = root.querySelector('[data-quick-tariff-help]');
   const submit = root.querySelector('[data-quick-submit]');
   const status = root.querySelector('[data-quick-status]');
   const result = root.querySelector('[data-quick-result]');
@@ -293,8 +285,6 @@ export const initQuickCalculator = ({ config = {} } = {}) => {
   } else if (savedMode === 'bill') {
     bill.value = saved.consumption.averageMonthlyBillAmd ?? '';
   }
-  if (saved.userTariff?.rateAmdPerKwh) tariff.value = saved.userTariff.rateAmdPerKwh;
-
   const mode = () =>
     root.querySelector('input[name="quick-consumption-mode"]:checked')?.value ?? 'bill';
   const setStatus = (message, invalid = false) => {
@@ -313,7 +303,15 @@ export const initQuickCalculator = ({ config = {} } = {}) => {
     resultContent.hidden = !visible;
     result.setAttribute('aria-busy', String(loading));
   };
-  const selectedTariff = () => readQuickTariff(tariff?.value);
+  const tariffSelector = initTariffSelector({
+    root,
+    strings: copy,
+    initialSelection: saved.userTariff,
+    getMonthlyKwh: () => (mode() === 'usage' ? monthlyUsage(usage?.value) : null),
+    onChange: () => clearAnalysis()
+  });
+  const selectedTariff = () => tariffSelector?.getSelection() ?? null;
+  const selectedTariffRate = () => tariffSelector?.getRate() ?? null;
 
   const updateMode = () => {
     const billMode = mode() === 'bill';
@@ -321,14 +319,11 @@ export const initQuickCalculator = ({ config = {} } = {}) => {
     usageWrap.hidden = billMode;
     bill.disabled = !billMode;
     usage.disabled = billMode;
-    const consumption = billMode ? monthlyBill(bill.value) : monthlyUsage(usage.value);
-    const needsVisibleTariff = consumption !== null;
-    tariffWrap.hidden = !needsVisibleTariff;
-    tariff.disabled = !needsVisibleTariff;
-    tariff.required = billMode && needsVisibleTariff;
-    tariff.setAttribute('aria-required', String(billMode && needsVisibleTariff));
-    tariffLabel.textContent = copy.tariffLabel;
-    tariffHelp.textContent = billMode ? copy.tariffHelpBill : copy.tariffHelpUsage;
+    tariffWrap.hidden = false;
+    tariff.disabled = false;
+    tariff.required = billMode;
+    tariff.setAttribute('aria-required', String(billMode));
+    tariffSelector?.syncMonthlyConsumption();
   };
   const clearAnalysis = () => {
     if (!lifecycle.isActive()) return;
@@ -358,19 +353,14 @@ export const initQuickCalculator = ({ config = {} } = {}) => {
     if (!selectedRegion) return { valid: false, field: region };
     if (currentMode === 'bill') {
       const value = monthlyBill(bill.value);
-      if (!value || !tariffSelection) {
+      const tariffRate = selectedTariffRate();
+      if (!value || !tariffSelection || tariffRate === null) {
         return {
           valid: false,
           field: !value ? bill : tariff
         };
       }
-      if (
-        tariffSelection.rateAmdPerKwh &&
-        !isCalculatorInputInRange(
-          value / tariffSelection.rateAmdPerKwh,
-          'averageMonthlyConsumptionKwh'
-        )
-      ) {
+      if (!isCalculatorInputInRange(value / tariffRate, 'averageMonthlyConsumptionKwh')) {
         return { valid: false, field: tariff };
       }
       return {
@@ -389,6 +379,7 @@ export const initQuickCalculator = ({ config = {} } = {}) => {
     }
     const value = monthlyUsage(usage.value);
     if (!value) return { valid: false, field: usage };
+    if (selectedTariffRate() === null) return { valid: false, field: tariff };
     return {
       valid: true,
       payload: {
@@ -449,7 +440,7 @@ export const initQuickCalculator = ({ config = {} } = {}) => {
       clearAnalysis();
     })
   );
-  [region, bill, usage, tariff].forEach((control) =>
+  [region, bill, usage].forEach((control) =>
     control.addEventListener('input', () => {
       control.removeAttribute('aria-invalid');
       clearAnalysis();

@@ -9,7 +9,6 @@ import {
   isWizardStepAccessible,
   WIZARD_STEP_STATUSES
 } from '../src/ui/calculator-wizard-state.js';
-import { getTariffSemantics } from '../src/ui/consumption-input.js';
 import { getRoofValidationIssue } from '../src/ui/calculator-wizard.js';
 
 const completePotential = Object.freeze({
@@ -94,31 +93,6 @@ test('result is unavailable until a successful analysis, even when all inputs ar
     deriveWizardStepStates({ ...base, analysisStatus: WIZARD_STEP_STATUSES.COMPLETE }).result,
     WIZARD_STEP_STATUSES.COMPLETE
   );
-});
-
-test('tariff semantics are required only for average bill input', () => {
-  const strings = {
-    tariffBillLabel: 'Bill rate',
-    tariffBillHelp: 'Bill help',
-    tariffOptionalLabel: 'Optional rate',
-    tariffOptionalHelp: 'Optional help'
-  };
-
-  assert.deepEqual(getTariffSemantics('bill', strings), {
-    required: true,
-    label: 'Bill rate',
-    help: 'Bill help'
-  });
-  assert.deepEqual(getTariffSemantics('usage', strings), {
-    required: false,
-    label: 'Optional rate',
-    help: 'Optional help'
-  });
-  assert.deepEqual(getTariffSemantics('monthly', strings), {
-    required: false,
-    label: 'Optional rate',
-    help: 'Optional help'
-  });
 });
 
 test('roof validation points to the exact missing input in a recoverable order', () => {

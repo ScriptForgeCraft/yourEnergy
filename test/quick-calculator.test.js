@@ -21,7 +21,6 @@ import { formatConsumerCommercialRange } from '../src/ui/commercial-range.js';
 import {
   buildQuickResultMetrics,
   buildQuickLeadContext,
-  readQuickTariff,
   shouldClearRefinementForRegion,
   validateQuickLeadForm
 } from '../src/ui/quick-calculator.js';
@@ -243,13 +242,6 @@ test('quick endpoint uses server-side PVGIS, requires tariff only for bill mode 
   assert.equal(unavailable.status, 503);
   assert.equal(unavailableBody.error.code, 'PVGIS_UNAVAILABLE');
   assert.equal(unavailableBody.data, undefined);
-});
-
-test('Quick tariff uses an editable numeric rate', () => {
-  assert.equal(readQuickTariff(''), null);
-  assert.equal(readQuickTariff('not a number'), null);
-  assert.deepEqual(readQuickTariff('53.48'), { rateAmdPerKwh: 53.48 });
-  assert.deepEqual(readQuickTariff('47,12'), { rateAmdPerKwh: 47.12 });
 });
 
 test('Quick server resolves the official tariff selection itself and retains registry metadata', async () => {
