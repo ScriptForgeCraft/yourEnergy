@@ -87,6 +87,8 @@ test('Professional has exactly four customer steps and retains every engineering
   assert.doesNotMatch(professional, /data-roof-finish/u);
   assert.doesNotMatch(professional, /professional-roof-map__tip/u);
   assert.match(professional, /professional-roof-map__tools/u);
+  assert.match(professional, /<details class='professional-roof-map__analysis'>/u);
+  assert.match(professional, /professional-roof-map__analysis-panel/u);
   for (const marker of [
     'data-roof-line-width',
     'data-roof-point-radius',

@@ -367,30 +367,33 @@
               <div class='professional-roof-map__layers'><button type='button'
                   class='is-active'>{{wizard.ui.roof.map}}</button><button
                   type='button'>{{wizard.ui.roof.satellite}}</button></div>
-              <aside class='professional-roof-map__analysis'>
-                <header><svg aria-hidden='true'>
+              <details class='professional-roof-map__analysis'>
+                <summary><svg aria-hidden='true'>
                     <use href='/icons.svg#faq-home'></use>
-                  </svg><strong>{{wizard.ui.roof.analysis}}</strong>
-                  </header>
-                <div><span><svg aria-hidden='true'>
+                  </svg><strong>{{wizard.ui.roof.analysis}}</strong><svg class='professional-roof-map__analysis-arrow' aria-hidden='true'>
+                    <use href='/icons.svg#arrow-right'></use>
+                  </svg></summary>
+                <div class='professional-roof-map__analysis-panel'>
+                  <div><span><svg aria-hidden='true'>
                       <use href='/icons.svg#faq-home'></use>
                     </svg></span>
-                  <p><strong data-roof-map-area>—</strong><small>{{wizard.ui.roof.area}}</small></p>
-                </div>
-                <div><span><svg aria-hidden='true'>
+                    <p><strong data-roof-map-area>—</strong><small>{{wizard.ui.roof.area}}</small></p>
+                  </div>
+                  <div><span><svg aria-hidden='true'>
                       <use href='/icons.svg#sun'></use>
                     </svg></span>
-                  <p><strong>{{wizard.metrics.pvgis}}</strong><small>{{wizard.ui.roof.potential}}</small></p>
-                </div>
-                <div><span><svg aria-hidden='true'>
+                    <p><strong>{{wizard.metrics.pvgis}}</strong><small>{{wizard.ui.roof.potential}}</small></p>
+                  </div>
+                  <div><span><svg aria-hidden='true'>
                       <use href='/icons.svg#faq-home'></use>
                     </svg></span>
-                  <p><strong data-roof-map-orientation>South</strong><small>{{wizard.ui.roof.orientation}}</small></p>
+                    <p><strong data-roof-map-orientation>South</strong><small>{{wizard.ui.roof.orientation}}</small></p>
+                  </div>
+                  <div><span>∠</span>
+                    <p><strong data-roof-map-tilt>30°</strong><small>{{wizard.ui.roof.tilt}}</small></p>
+                  </div>
                 </div>
-                <div><span>∠</span>
-                  <p><strong data-roof-map-tilt>30°</strong><small>{{wizard.ui.roof.tilt}}</small></p>
-                </div>
-              </aside>
+              </details>
               <details class='professional-roof-map__tools'>
                 <summary><svg aria-hidden='true'>
                     <use href='/icons.svg#faq-settings'></use>
