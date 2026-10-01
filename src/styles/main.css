@@ -28,17 +28,15 @@
 *::after {
   box-sizing: border-box;
 }
-p,
-span,
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  word-break: normal;
-  overflow-wrap: normal;
-  hyphens: none;
+
+
+html,
+body,
+body * {
+  word-break: normal !important;
+  overflow-wrap: normal !important;
+  word-wrap: normal !important;
+  hyphens: none !important;
 }
 
 img,
@@ -1226,3 +1224,5 @@ h1 mark {
     transition-duration: 0.01ms !important;
   }
 }
+
+

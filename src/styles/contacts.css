@@ -6,6 +6,14 @@
   background: #f7faf8;
 }
 
+/* Keep the contact content comfortably readable on wide screens. The hero
+   deliberately keeps the site-wide container so its composition stays put. */
+@media (min-width: 861px) {
+  .contacts-page main > section:not(.contacts-hero) > .container {
+    width: min(calc(100% - 48px), 1440px);
+  }
+}
+
 .contacts-page svg {
   fill: none;
   stroke: currentcolor;
