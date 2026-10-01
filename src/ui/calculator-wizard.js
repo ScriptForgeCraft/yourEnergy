@@ -483,6 +483,18 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
       step.hidden = index !== target;
     });
     updateProgress();
+    if (target === 0) {
+      // The Professional URL opens directly on the location step. Initialise
+      // its visible map here, rather than waiting for a later address or
+      // coordinate action. Otherwise Leaflet is only created after moving
+      // through the wizard, leaving the first visit with an empty map panel.
+      void mountMap('location').then((controller) => {
+        if (!lifecycle.isActive() || !controller || state.currentStep !== 0) return;
+        requestAnimationFrame(() => {
+          if (lifecycle.isActive() && state.currentStep === 0) controller.resize();
+        });
+      });
+    }
     if (target === 2) {
       void mountMap('roof').then((controller) => {
         if (!lifecycle.isActive() || !controller || state.currentStep !== 2) return;

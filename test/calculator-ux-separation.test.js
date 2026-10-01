@@ -96,7 +96,7 @@ test('Professional has exactly four customer steps and retains every engineering
   assert.match(controller, /locateSelectedLocality/u);
   assert.match(controller, /map\?\.focusLocation\(center\)/u);
   assert.match(controller, /mapController\?\.finishRoof\(\)/u);
-  assert.doesNotMatch(controller, /if \(state\.currentStep === 0\)[\s\S]*?mountMap\('location'\)/u);
+  assert.match(controller, /if \(target === 0\)[\s\S]*?mountMap\('location'\)/u);
   assert.match(controller, /if \(state\.sitePotential\) renderPotential\(state\.sitePotential\)/u);
   assert.doesNotMatch(controller, /renderBars\(potentialSummaryChart/u);
   assert.doesNotMatch(professional, /data-calculation-panel/u);
