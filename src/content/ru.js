@@ -56,11 +56,12 @@ export default {
   contact: {
     phone: '+374 91 095 950',
     phoneHref: 'tel:+37491095950',
+    whatsapp: 'WhatsApp',
     whatsappHref: 'https://wa.me/37491095950',
     whatsappLabel: 'Написать нам в WhatsApp',
     phoneLabel: 'Позвонить по номеру +374 91 095 950',
-    address1: 'Армения, г. Ереван, ул. Арташисьяна, 48/14',
-    address2: 'Армения, Котайкская область, с. Зовуни, 26-я улица, 33',
+    address1: 'Ереван, ул. Арташисьяна, 48/14',
+    address2: 'Зовуни, 26-я улица, 33',
     hours: CONTACT_HOURS.ru.footer
   },
   common: {
@@ -941,24 +942,34 @@ export default {
       'Солнечные системы для дома и бизнеса: аудит, проектирование, установка, сервис и мониторинг.',
     columns: [
       {
-        title: 'Для дома',
+        title: 'РЕШЕНИЯ',
         links: [
           ['Калькулятор', '#calculator'],
-          ['FAQ', '#faq']
+          ['Проекты', '#projects'],
+          ['Оборудование', '#equipment']
         ]
       },
       {
-        title: 'Компания',
-        links: [['Как это работает', '#process']]
+        title: 'КОМПАНИЯ',
+        links: [
+          ['О нас', '#about'],
+          ['Как это работает', '#process'],
+          ['Контакты', '#contacts']
+        ]
       },
       {
-        title: 'Информация',
-        links: [['Контакты', '#contacts']]
+        title: 'ПОЛЕЗНОЕ',
+        links: [
+          ['FAQ', '#faq'],
+          ['Блог', '#blog']
+        ]
       }
     ],
     privacy: 'Политика конфиденциальности',
     terms: 'Условия использования',
-    copyright: '© 2026 YOURENERGY. Все права защищены.'
+    copyright: '© 2026 YOURENERGY. Все права защищены.',
+    contacts: 'КОНТАКТЫ',
+    developedBy: 'Разработано ScriptForge'
   },
   status: {
     minAddress: 'Введите адрес длиной не менее 5 символов.',

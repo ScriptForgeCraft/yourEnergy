@@ -56,11 +56,12 @@ export default {
   contact: {
     phone: '+374 91 095 950',
     phoneHref: 'tel:+37491095950',
+    whatsapp: 'WhatsApp',
     whatsappHref: 'https://wa.me/37491095950',
     whatsappLabel: 'Գրել մեզ WhatsApp-ով',
     phoneLabel: 'Զանգել +374 91 095 950 համարով',
-    address1: 'Հայաստան, Երևան, Արտաշիսյան փողոց, 48',
-    address2: 'Հայաստան, Կոտայքի մարզ, Զովունի, 26-րդ փողոց, 33',
+    address1: 'Երևան, Արտաշիսյան փ., 48/14',
+    address2: 'Զովունի, 26-րդ փողոց, 33',
     hours: CONTACT_HOURS.hy.footer
   },
   common: {
@@ -956,24 +957,34 @@ export default {
       'Արևային համակարգեր տան և բիզնեսի համար՝ աուդիտ, նախագծում, տեղադրում, սպասարկում և մոնիտորինգ։',
     columns: [
       {
-        title: 'Տան համար',
+        title: 'ԼՈՒԾՈՒՄՆԵՐ',
         links: [
           ['Հաշվիչ', '#calculator'],
-          ['ՀՏՀ', '#faq']
+          ['Նախագծեր', '#projects'],
+          ['Սարքավորումներ', '#equipment']
         ]
       },
       {
-        title: 'Ընկերություն',
-        links: [['Ինչպես է աշխատում', '#process']]
+        title: 'ԸՆԿԵՐՈՒԹՅՈՒՆ',
+        links: [
+          ['Մեր մասին', '#about'],
+          ['Ինչպես է աշխատում', '#process'],
+          ['Կոնտակտներ', '#contacts']
+        ]
       },
       {
-        title: 'Տեղեկություն',
-        links: [['Կապ', '#contacts']]
+        title: 'ՕԳՏԱԿԱՐ',
+        links: [
+          ['FAQ', '#faq'],
+          ['Բլոգ', '#blog']
+        ]
       }
     ],
     privacy: 'Գաղտնիության քաղաքականություն',
     terms: 'Օգտագործման պայմաններ',
-    copyright: '© 2026 YOURENERGY։ Բոլոր իրավունքները պաշտպանված են։'
+    copyright: '© 2026 YOURENERGY։ Բոլոր իրավունքները պաշտպանված են։',
+    contacts: 'ԿՈՆՏԱԿՏՆԵՐ',
+    developedBy: 'Մշակումը՝ ScriptForge'
   },
   status: {
     minAddress: 'Մուտքագրեք առնվազն 5 նիշ պարունակող հասցե։',

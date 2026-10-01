@@ -1018,9 +1018,19 @@ h3 {
   font-size: 0.66rem;
 }
 
-.footer-bottom > span:last-child {
+.footer-legal {
   display: flex;
   gap: 17px;
+}
+
+.footer-developed-by {
+  white-space: nowrap;
+}
+
+@media (min-width: 681px) {
+  .footer-bottom {
+    padding-inline-end: clamp(88px, 8vw, 128px);
+  }
 }
 
 .passport-dialog {

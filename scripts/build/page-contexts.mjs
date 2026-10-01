@@ -423,11 +423,21 @@ export const createPageContextBuilder = ({ publicEnv, pages }) => {
             label,
             href === '#calculator'
               ? calculatorHref
-              : href === '#faq'
-                ? faqHref
-                : !isHome && href.startsWith('#')
-                  ? `${content.homeHref}${href}`
-                  : href
+              : href === '#projects'
+                ? projectsHref
+                : href === '#equipment'
+                  ? toolPath(content.locale, 'equipment')
+                  : href === '#about'
+                    ? contentPagePath(content.locale, 'about')
+                    : href === '#contacts'
+                      ? contactsHref
+                      : href === '#faq'
+                        ? faqHref
+                        : href === '#blog'
+                          ? contentPagePath(content.locale, 'blog')
+                          : !isHome && href.startsWith('#')
+                            ? `${content.homeHref}${href}`
+                            : href
           ])
         }))
       },

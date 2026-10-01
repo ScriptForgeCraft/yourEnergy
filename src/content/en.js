@@ -56,11 +56,12 @@ export default {
   contact: {
     phone: '+374 91 095 950',
     phoneHref: 'tel:+37491095950',
+    whatsapp: 'WhatsApp',
     whatsappHref: 'https://wa.me/37491095950',
     whatsappLabel: 'Chat with us on WhatsApp',
     phoneLabel: 'Call +374 91 095 950',
-    address1: '48/14 Artashisyan St., Yerevan, Armenia',
-    address2: '33, 26th Street, Zovuni, Kotayk Province, Armenia',
+    address1: '48/14 Artashisyan St., Yerevan',
+    address2: '33, 26th St., Zovuni',
     hours: CONTACT_HOURS.en.footer
   },
   common: {
@@ -937,24 +938,34 @@ export default {
       'Solar systems for homes and businesses: audit, design, installation, service and monitoring.',
     columns: [
       {
-        title: 'For homes',
+        title: 'SOLUTIONS',
         links: [
           ['Calculator', '#calculator'],
-          ['FAQ', '#faq']
+          ['Projects', '#projects'],
+          ['Equipment', '#equipment']
         ]
       },
       {
-        title: 'Company',
-        links: [['How it works', '#process']]
+        title: 'COMPANY',
+        links: [
+          ['About Us', '#about'],
+          ['How It Works', '#process'],
+          ['Contacts', '#contacts']
+        ]
       },
       {
-        title: 'Information',
-        links: [['Contact', '#contacts']]
+        title: 'RESOURCES',
+        links: [
+          ['FAQ', '#faq'],
+          ['Blog', '#blog']
+        ]
       }
     ],
     privacy: 'Privacy Policy',
     terms: 'Terms of Use',
-    copyright: '© 2026 YOURENERGY. All rights reserved.'
+    copyright: '© 2026 YOURENERGY. All rights reserved.',
+    contacts: 'CONTACTS',
+    developedBy: 'Developed by ScriptForge'
   },
   status: {
     minAddress: 'Enter an address of at least 5 characters.',
