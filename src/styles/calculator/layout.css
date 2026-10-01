@@ -41,7 +41,7 @@
   aspect-ratio: 1;
   place-items: center;
   border-radius: 999px;
-  color: #59728b;
+  color: #74598b;
   background: #edf3f8;
 }
 
@@ -605,7 +605,8 @@
   justify-content: center;
   gap: 0.8rem;
   margin: 1.25rem 0 0;
-  color: #5c7690;
+  color:white;
+ text-shadow:0 1px 0 rgb(0, 0, 0);
   font-size: 0.78rem;
   font-weight: 750;
   text-align: center;

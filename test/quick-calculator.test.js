@@ -20,9 +20,8 @@ import { createCalculatorSession } from '../src/ui/calculator-session.js';
 import { formatConsumerCommercialRange } from '../src/ui/commercial-range.js';
 import {
   buildQuickResultMetrics,
-  buildQuickTariffOptions,
   buildQuickLeadContext,
-  readQuickTariffSelection,
+  readQuickTariff,
   shouldClearRefinementForRegion,
   validateQuickLeadForm
 } from '../src/ui/quick-calculator.js';
@@ -246,32 +245,11 @@ test('quick endpoint uses server-side PVGIS, requires tariff only for bill mode 
   assert.equal(unavailableBody.data, undefined);
 });
 
-test('Quick tariff choices suggest a standard bracket but require an explicit official day or night selection', () => {
-  const { options, suggested } = buildQuickTariffOptions({
-    records: ARMENIA_TARIFF_DATASET.records,
-    monthlyKwh: 201,
-    copy: {
-      tariffOfficial: 'Official tariff',
-      tariffDay: 'Daytime',
-      tariffNight: 'Nighttime',
-      tariffCategories: { 'standard-201-to-400': 'Standard: 201–400 kWh/month' }
-    },
-    locale: 'en-US'
-  });
-
-  assert.equal(suggested.id, 'standard-201-to-400');
-  assert.deepEqual(
-    options.filter((option) => option.suggested).map((option) => option.value),
-    ['standard-201-to-400:day', 'standard-201-to-400:night']
-  );
-  assert.equal(readQuickTariffSelection({ value: '', options }), null);
-  assert.deepEqual(readQuickTariffSelection({ value: 'standard-201-to-400:night', options }), {
-    tariffId: 'standard-201-to-400',
-    period: 'night'
-  });
-  assert.deepEqual(readQuickTariffSelection({ value: 'custom', manualRate: '47.12', options }), {
-    rateAmdPerKwh: 47.12
-  });
+test('Quick tariff uses an editable numeric rate', () => {
+  assert.equal(readQuickTariff(''), null);
+  assert.equal(readQuickTariff('not a number'), null);
+  assert.deepEqual(readQuickTariff('53.48'), { rateAmdPerKwh: 53.48 });
+  assert.deepEqual(readQuickTariff('47,12'), { rateAmdPerKwh: 47.12 });
 });
 
 test('Quick server resolves the official tariff selection itself and retains registry metadata', async () => {

@@ -220,6 +220,11 @@ test('Professional location actions are honest, searchable and recoverable', asy
   assert.match(template, /addressSearchAttribution/u);
   assert.doesNotMatch(template, /professional-upload-tab|data-optional-upload/u);
   assert.match(controller, /api\.geocode\(\{ query, locale \}/u);
+  assert.match(controller, /const ADDRESS_SEARCH_DEBOUNCE_MS = 1_000/u);
+  assert.match(controller, /address\?\.addEventListener\('input', scheduleAddressSearch\)/u);
+  assert.match(controller, /window\.setTimeout\([\s\S]*ADDRESS_SEARCH_DEBOUNCE_MS/u);
+  assert.match(controller, /addEventListener\('click', searchAddressImmediately\)/u);
+  assert.match(controller, /event\.key !== 'Enter'[\s\S]*searchAddressImmediately\(\)/u);
   assert.match(controller, /navigator\.geolocation\.getCurrentPosition/u);
   assert.match(controller, /locationSearchResults\.hidden = false/u);
   assert.match(config, /Permissions-Policy:.*geolocation=\(self\)/u);

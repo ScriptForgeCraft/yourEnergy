@@ -645,7 +645,7 @@ function validateQuickCalculatorMarkup(html, page) {
   for (const marker of [
     'data-quick-calculator',
     'data-quick-region',
-    'data-quick-tariff-select',
+    'data-quick-tariff',
     'data-quick-submit',
     'data-quick-lead-open',
     'data-quick-lead-dialog',

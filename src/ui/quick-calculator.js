@@ -1,6 +1,5 @@
 import { ProductApiClient, ProductApiError } from '../services/api-client.js';
 import { getCalculatorInputNumber, isCalculatorInputInRange } from '../domain/calculator-inputs.js';
-import { tariffBracketIncludesMonthlyKwh } from '../domain/tariffs.js';
 import { formatConsumerCommercialRange } from './commercial-range.js';
 import { createAsyncRequestLifecycle } from './async-request-lifecycle.js';
 import { createCalculatorSession } from './calculator-session.js';
@@ -12,58 +11,10 @@ const customTariff = (value) => getCalculatorInputNumber(value, 'customTariffAmd
 const leadText = (value) => (typeof value === 'string' ? value.replace(/\s+/gu, ' ').trim() : '');
 const validLeadPhone = (value) => /^[+()\d\s-]{6,32}$/u.test(value) && /\d/u.test(value);
 
-const TARIFF_OPTION_CUSTOM = 'custom';
-const TARIFF_PERIODS = Object.freeze(['day', 'night']);
-
-const tariffOptionValue = (record, period) => `${record.id}:${period}`;
-
-const formatTariffRate = (rate, locale) =>
-  `${new Intl.NumberFormat(locale, { maximumFractionDigits: 2 }).format(rate)} AMD/kWh`;
-
-/**
- * Exposes the user-confirmed tariff choices without assigning one implicitly.
- * For known kWh consumption, only the matching standard bracket is suggested;
- * social choices and a manual bill rate remain available as explicit options.
- */
-export const buildQuickTariffOptions = ({ records = [], monthlyKwh, copy = {}, locale } = {}) => {
-  const activeRecords = Array.isArray(records) ? records.filter((record) => record?.id) : [];
-  const suggested = activeRecords.find((record) =>
-    tariffBracketIncludesMonthlyKwh(record, monthlyKwh)
-  );
-  const standardRecords = suggested
-    ? [suggested]
-    : activeRecords.filter((record) => record.customerType === 'standard');
-  const socialRecords = activeRecords.filter(
-    (record) => record.customerType === 'social-vulnerable'
-  );
-  const optionRecords = [...standardRecords, ...socialRecords];
-  const options = optionRecords.flatMap((record) =>
-    TARIFF_PERIODS.map((period) => {
-      const rate = period === 'day' ? Number(record.dayRate) : Number(record.nightRate);
-      return {
-        value: tariffOptionValue(record, period),
-        tariffId: record.id,
-        period,
-        customerType: record.customerType,
-        rate,
-        suggested: record.id === suggested?.id,
-        label: `${copy.tariffOfficial ?? 'Official tariff'} · ${
-          copy.tariffCategories?.[record.id] ?? record.id
-        } · ${period === 'day' ? (copy.tariffDay ?? 'Daytime') : (copy.tariffNight ?? 'Nighttime')} — ${formatTariffRate(rate, locale)}`
-      };
-    })
-  );
-  return { options, suggested };
-};
-
-/** Returns a safe API descriptor; official rate values are resolved server-side. */
-export const readQuickTariffSelection = ({ value, manualRate, options = [] } = {}) => {
-  if (value === TARIFF_OPTION_CUSTOM) {
-    const rate = customTariff(manualRate);
-    return rate === null ? null : { rateAmdPerKwh: rate };
-  }
-  const option = options.find((candidate) => candidate.value === value);
-  return option ? { tariffId: option.tariffId, period: option.period } : null;
+/** Returns the editable rate as a safe API descriptor. */
+export const readQuickTariff = (value) => {
+  const rate = customTariff(value);
+  return rate === null ? null : { rateAmdPerKwh: rate };
 };
 
 export const validateQuickLeadForm = ({ name, phone, message } = {}) => {
@@ -303,14 +254,11 @@ export const initQuickCalculator = ({ config = {} } = {}) => {
   const bill = root.querySelector('[data-quick-bill]');
   const usage = root.querySelector('[data-quick-usage]');
   const tariff = root.querySelector('[data-quick-tariff]');
-  const tariffSelect = root.querySelector('[data-quick-tariff-select]');
   const billWrap = root.querySelector('[data-quick-bill-wrap]');
   const usageWrap = root.querySelector('[data-quick-usage-wrap]');
   const tariffWrap = root.querySelector('[data-quick-tariff-wrap]');
-  const customTariffWrap = root.querySelector('[data-quick-custom-tariff-wrap]');
   const tariffLabel = root.querySelector('[data-quick-tariff-label]');
   const tariffHelp = root.querySelector('[data-quick-tariff-help]');
-  const tariffSuggestion = root.querySelector('[data-quick-tariff-suggestion]');
   const submit = root.querySelector('[data-quick-submit]');
   const status = root.querySelector('[data-quick-status]');
   const result = root.querySelector('[data-quick-result]');
@@ -365,61 +313,9 @@ export const initQuickCalculator = ({ config = {} } = {}) => {
     resultContent.hidden = !visible;
     result.setAttribute('aria-busy', String(loading));
   };
-  const registryRecords = config.tariffRegistry?.records ?? [];
-  let tariffOptions = [];
+  const selectedTariff = () => readQuickTariff(tariff?.value);
 
-  const selectedTariff = () =>
-    readQuickTariffSelection({
-      value: tariffSelect?.value,
-      manualRate: tariff?.value,
-      options: tariffOptions
-    });
-
-  const populateTariffOptions = ({ monthlyKwh, preserveSelection = true } = {}) => {
-    if (!tariffSelect) return;
-    const previousValue = preserveSelection ? tariffSelect.value : '';
-    const previousRegistry = saved.userTariff?.tariffId
-      ? `${saved.userTariff.tariffId}:${saved.userTariff.period}`
-      : null;
-    const { options, suggested } = buildQuickTariffOptions({
-      records: registryRecords,
-      monthlyKwh,
-      copy,
-      locale
-    });
-    tariffOptions = options;
-    tariffSelect.replaceChildren();
-    const placeholder = document.createElement('option');
-    placeholder.value = '';
-    placeholder.textContent = copy.tariffChoose;
-    tariffSelect.append(placeholder);
-    for (const option of options) {
-      const element = document.createElement('option');
-      element.value = option.value;
-      element.textContent = option.label;
-      tariffSelect.append(element);
-    }
-    const custom = document.createElement('option');
-    custom.value = TARIFF_OPTION_CUSTOM;
-    custom.textContent = copy.tariffCustom;
-    tariffSelect.append(custom);
-
-    const permitted = new Set([...options.map((option) => option.value), TARIFF_OPTION_CUSTOM]);
-    const restored = [
-      previousValue,
-      previousRegistry,
-      saved.userTariff?.rateAmdPerKwh ? TARIFF_OPTION_CUSTOM : ''
-    ].find((candidate) => candidate && permitted.has(candidate));
-    tariffSelect.value = restored ?? '';
-    if (tariffSuggestion) {
-      tariffSuggestion.hidden = !suggested;
-      tariffSuggestion.textContent = suggested
-        ? `${copy.tariffSuggested}: ${copy.tariffCategories?.[suggested.id] ?? suggested.id}.`
-        : '';
-    }
-  };
-
-  const updateMode = ({ preserveSelection = true } = {}) => {
+  const updateMode = () => {
     const billMode = mode() === 'bill';
     billWrap.hidden = !billMode;
     usageWrap.hidden = billMode;
@@ -427,19 +323,10 @@ export const initQuickCalculator = ({ config = {} } = {}) => {
     usage.disabled = billMode;
     const consumption = billMode ? monthlyBill(bill.value) : monthlyUsage(usage.value);
     const needsVisibleTariff = consumption !== null;
-    populateTariffOptions({
-      monthlyKwh: billMode ? null : consumption,
-      preserveSelection
-    });
     tariffWrap.hidden = !needsVisibleTariff;
-    tariffSelect.disabled = !needsVisibleTariff;
-    tariffSelect.required = billMode && needsVisibleTariff;
-    tariffSelect.setAttribute('aria-required', String(billMode && needsVisibleTariff));
-    const custom = tariffSelect.value === TARIFF_OPTION_CUSTOM;
-    customTariffWrap.hidden = !custom;
-    tariff.disabled = !custom;
-    tariff.required = billMode && custom;
-    tariff.setAttribute('aria-required', String(billMode && custom));
+    tariff.disabled = !needsVisibleTariff;
+    tariff.required = billMode && needsVisibleTariff;
+    tariff.setAttribute('aria-required', String(billMode && needsVisibleTariff));
     tariffLabel.textContent = copy.tariffLabel;
     tariffHelp.textContent = billMode ? copy.tariffHelpBill : copy.tariffHelpUsage;
   };
@@ -474,7 +361,7 @@ export const initQuickCalculator = ({ config = {} } = {}) => {
       if (!value || !tariffSelection) {
         return {
           valid: false,
-          field: !value ? bill : tariffSelect.value === TARIFF_OPTION_CUSTOM ? tariff : tariffSelect
+          field: !value ? bill : tariff
         };
       }
       if (
@@ -562,18 +449,13 @@ export const initQuickCalculator = ({ config = {} } = {}) => {
       clearAnalysis();
     })
   );
-  [region, bill, usage, tariff, tariffSelect].forEach((control) =>
+  [region, bill, usage, tariff].forEach((control) =>
     control.addEventListener('input', () => {
       control.removeAttribute('aria-invalid');
       clearAnalysis();
     })
   );
   [bill, usage].forEach((control) => control.addEventListener('input', () => updateMode()));
-  tariffSelect.addEventListener('change', () => {
-    tariffSelect.removeAttribute('aria-invalid');
-    updateMode();
-    clearAnalysis();
-  });
   region.addEventListener('change', clearAnalysis);
   form.addEventListener('submit', async (event) => {
     event.preventDefault();

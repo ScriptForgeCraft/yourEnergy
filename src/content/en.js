@@ -124,7 +124,8 @@ export default {
       tariffHelp:
         'Optional for kWh. A bill in AMD needs the tariff to convert the amount to kWh; Solar Passport will mark it as user-provided.',
       tariffBillLabel: 'Tariff AMD/kWh — required to calculate consumption',
-      tariffBillHelp: 'Enter the rate from your bill to convert AMD to kWh.',
+      tariffBillHelp:
+        'The starting tariff is 53.48 AMD/kWh. Change it if needed to convert AMD to kWh accurately.',
       tariffOptionalLabel: 'Tariff AMD/kWh — optional',
       tariffOptionalHelp: 'Used to estimate your annual financial savings.',
       usageLabel: 'Average monthly consumption',

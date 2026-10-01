@@ -35,6 +35,7 @@ import { getDefaultCalculatorSystem } from '../data/equipment/calculator/default
 
 const PVGIS_KWP = 1;
 const PVGIS_LOSS = 14;
+const ADDRESS_SEARCH_DEBOUNCE_MS = 1_000;
 const POTENTIAL_COOLDOWN_MS = 10_000;
 const ANALYSIS_COOLDOWN_MS = 15_000;
 
@@ -310,6 +311,7 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
   let mapControllerPromise = null;
   let potentialRequest = null;
   let geocodeRequest = null;
+  let addressSearchDebounce = null;
   let analysisRequest = null;
   let lastPotential = null;
   let lastAnalysis = null;
@@ -373,6 +375,15 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
     geocodeRequest?.abort();
     lifecycle.release(geocodeRequest);
     geocodeRequest = null;
+    const button = root.querySelector('[data-open-location-map]');
+    button?.removeAttribute('aria-busy');
+    button?.removeAttribute('disabled');
+  };
+
+  const clearAddressSearchDebounce = () => {
+    if (addressSearchDebounce === null) return;
+    window.clearTimeout(addressSearchDebounce);
+    addressSearchDebounce = null;
   };
 
   const writeStatus = (message, error = false) => {
@@ -586,6 +597,7 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
   };
 
   const searchAddress = async () => {
+    clearAddressSearchDebounce();
     if (!lifecycle.isActive()) return;
     const query = address?.value.trim() ?? '';
     if (query.length < 3) {
@@ -629,6 +641,23 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
     }
   };
 
+  const searchAddressImmediately = () => {
+    clearAddressSearchDebounce();
+    void searchAddress();
+  };
+
+  const scheduleAddressSearch = () => {
+    clearAddressSearchDebounce();
+    stopAddressSearch();
+    clearLocationSearchResults();
+    writeStatus('');
+    if ((address?.value.trim().length ?? 0) < 3) return;
+    addressSearchDebounce = window.setTimeout(() => {
+      addressSearchDebounce = null;
+      void searchAddress();
+    }, ADDRESS_SEARCH_DEBOUNCE_MS);
+  };
+
   const focusLocality = async (coordinates) => {
     if (!lifecycle.isActive()) return false;
     const lat = number(coordinates?.lat ?? coordinates?.latitude, -90, 90);
@@ -647,6 +676,7 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
   };
 
   const locateSelectedLocality = async () => {
+    clearAddressSearchDebounce();
     if (!lifecycle.isActive()) return;
     const locality = localitySelect?.value.trim() ?? '';
     if (!locality) return;
@@ -695,6 +725,7 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
   };
 
   const useCurrentLocation = () => {
+    clearAddressSearchDebounce();
     if (!lifecycle.isActive()) return;
     if (!window.isSecureContext || !navigator.geolocation) {
       writeStatus(wizard.currentLocationUnavailable ?? '', true);
@@ -1327,13 +1358,15 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
   });
   root
     .querySelector('[data-open-location-map]')
-    ?.addEventListener('click', () => void searchAddress());
+    ?.addEventListener('click', searchAddressImmediately);
+  address?.addEventListener('input', scheduleAddressSearch);
   address?.addEventListener('keydown', (event) => {
     if (event.key !== 'Enter') return;
     event.preventDefault();
-    void searchAddress();
+    searchAddressImmediately();
   });
   root.querySelector('[data-clear-address]')?.addEventListener('click', () => {
+    clearAddressSearchDebounce();
     stopAddressSearch();
     clearLocationSearchResults();
     if (address) address.value = '';
@@ -1663,6 +1696,7 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
   setStep(restoredStep, { focus: false });
   const destroy = () => {
     if (!lifecycle.destroy()) return;
+    clearAddressSearchDebounce();
     stopAddressSearch();
     stopPotential();
     stopAnalysis();

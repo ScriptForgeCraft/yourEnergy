@@ -77,11 +77,11 @@ const common = {
       usage: 'Միջին ամսական սպառում',
       billLabel: 'Միջին ամսական հաշիվ',
       usageLabel: 'Միջին ամսական սպառում',
-      tariffLabel: 'Ընտրեք էլեկտրաէներգիայի սակագինը',
+      tariffLabel: 'Էլեկտրաէներգիայի սակագին',
       tariffHelpBill:
-        'Հաշիվը kWh-ի փոխարկելու համար ընտրեք Ձեր կիրառվող պաշտոնական սակագինը կամ մուտքագրեք այն Ձեր հաշվից։',
+        'Սկզբնական արժեքը 53.48 AMD/kWh է։ Եթե Ձեր հաշվին այլ սակագին է, փոխեք այն։',
       tariffHelpUsage:
-        'Սակագինը ընտրովի է․ այն պետք է միայն խնայողությունն ու հետգնման ժամկետը ցուցադրելու համար։',
+        'Սկզբնական արժեքը 53.48 AMD/kWh է։ Անհրաժեշտության դեպքում փոխեք այն՝ խնայողությունն ու հետգնման ժամկետը ճշտելու համար։',
       tariffChoose: 'Ընտրեք սակագինը',
       tariffSuggested: 'Սպառման համար առաջարկվող սովորական միջակայք',
       tariffOfficial: 'Պաշտոնական սակագին',
@@ -384,11 +384,11 @@ const common = {
       usage: 'Среднее потребление в месяц',
       billLabel: 'Средний счёт в месяц',
       usageLabel: 'Среднее потребление в месяц',
-      tariffLabel: 'Выберите тариф на электроэнергию',
+      tariffLabel: 'Тариф на электроэнергию',
       tariffHelpBill:
-        'Чтобы перевести счёт в kWh, выберите действующий официальный тариф или укажите ставку из своего счёта.',
+        'Начальное значение — 53.48 AMD/kWh. Измените его, если в вашем счёте указан другой тариф.',
       tariffHelpUsage:
-        'Тариф необязателен: он нужен только для отображения экономии и окупаемости.',
+        'Начальное значение — 53.48 AMD/kWh. При необходимости измените его для более точной оценки экономии и окупаемости.',
       tariffChoose: 'Выберите тариф',
       tariffSuggested: 'Рекомендуемый стандартный диапазон для этого потребления',
       tariffOfficial: 'Официальный тариф',
@@ -691,10 +691,11 @@ const common = {
       usage: 'Average monthly consumption',
       billLabel: 'Average monthly bill',
       usageLabel: 'Average monthly consumption',
-      tariffLabel: 'Choose your electricity tariff',
+      tariffLabel: 'Electricity tariff',
       tariffHelpBill:
-        'To convert your bill into kWh, choose the official rate that applies to you or enter the rate from your bill.',
-      tariffHelpUsage: 'A tariff is optional. It is needed only to show savings and payback.',
+        'The starting value is 53.48 AMD/kWh. Change it if your bill shows a different rate.',
+      tariffHelpUsage:
+        'The starting value is 53.48 AMD/kWh. Change it if needed for a more accurate savings and payback estimate.',
       tariffChoose: 'Choose a tariff',
       tariffSuggested: 'Suggested standard bracket for this consumption',
       tariffOfficial: 'Official tariff',
