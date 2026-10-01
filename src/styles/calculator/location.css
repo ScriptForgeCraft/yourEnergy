@@ -3,65 +3,13 @@
    estimate stays compact while the professional workspace can expose all of
    its map and coordinate controls at once. */
 .calculator-page--professional {
-  --header-height: 64px;
   background:
     radial-gradient(circle at 68% 19%, rgb(213 237 255 / 65%), transparent 31rem),
     linear-gradient(180deg, #f5faff 0%, #fff 78%);
 }
 
-.calculator-page--professional .container {
+.calculator-page--professional .container:not(.header-row) {
   width: min(calc(100% - 96px), 90rem);
-}
-
-.calculator-page--professional .site-header {
-  color: #0a1d43;
-  border-color: #e6edf5;
-  background: rgb(255 255 255 / 94%);
-  box-shadow: 0 2px 18px rgb(22 65 112 / 4%);
-}
-
-.calculator-page--professional .site-header.is-scrolled {
-  border-color: #e0eaf3;
-  background: rgb(255 255 255 / 96%);
-  box-shadow: 0 5px 22px rgb(22 65 112 / 8%);
-}
-
-.calculator-page--professional .site-header .header-row {
-  min-height: var(--header-height);
-}
-
-.calculator-page--professional .site-header .wordmark,
-.calculator-page--professional .site-header .language-menu summary {
-  color: #0a1d43;
-}
-
-.calculator-page--professional .site-header .wordmark__mark {
-  width: 38px;
-  height: 38px;
-}
-
-.calculator-page--professional .site-header .desktop-nav a:hover,
-.calculator-page--professional .site-header .desktop-nav a.is-active {
-  color: #f0a900;
-}
-
-.calculator-page--professional .site-header .language-menu summary {
-  border-color: #d9e4f0;
-  background: #fff;
-}
-
-.calculator-page--professional .site-header .language-menu summary span {
-  color: #244267;
-}
-
-.calculator-page--professional .site-header .language-menu nav {
-  border-color: #dbe7f2;
-  background: #fff;
-  box-shadow: 0 14px 30px rgb(28 69 110 / 16%);
-}
-
-.calculator-page--professional .site-header .language-menu .language-link {
-  color: #0b2245;
 }
 
 .calculator-page--professional .calculator-hero--professional.section {
@@ -768,7 +716,7 @@
 }
 
 @media (max-width: 1100px) {
-  .calculator-page--professional .container {
+  .calculator-page--professional .container:not(.header-row) {
     width: min(calc(100% - 48px), 90rem);
   }
 
