@@ -145,9 +145,16 @@
 }
 
 .quick-calculator .quick-field__control select {
-  min-height: 3rem;
+  min-height: 0;
+  height: 100%;
   border: 0;
-  padding: 0.5rem 2.2rem 0.5rem 0.65rem;
+  margin: 0;
+  appearance: none;
+  padding: 0.5rem 2.75rem 0.5rem 0.65rem;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath d='m1 1 5 5 5-5' fill='none' stroke='%23172d52' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.8'/%3E%3C/svg%3E");
+  background-position: right 1rem center;
+  background-repeat: no-repeat;
+  background-size: 0.7rem auto;
   box-shadow: none;
 }
 
@@ -213,8 +220,29 @@
 }
 
 .quick-input-with-unit input {
-  min-height: 3rem;
+  min-height: 0;
+  height: 100%;
+  margin: 0;
   padding-inline: 0.25rem;
+}
+
+/* Quick selects and unit inputs share one fixed outer height. The nested
+   editable control stretches inside its shell instead of adding its own
+   height or margin. */
+.quick-calculator {
+  --quick-control-height: var(--site-control-height, 3rem);
+}
+
+.quick-calculator .quick-field__control,
+.quick-calculator .quick-field .quick-input-with-unit {
+  min-height: var(--quick-control-height);
+  height: var(--quick-control-height);
+}
+
+.quick-calculator .quick-field .quick-input-with-unit input {
+  min-height: 0;
+  height: 100%;
+  margin: 0;
 }
 
 .quick-calculator [data-quick-submit] {

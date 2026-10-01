@@ -132,6 +132,12 @@
   resize: vertical;
 }
 
+.quick-lead-dialog input,
+.professional-lead-dialog input {
+  min-height: var(--site-control-height, 3rem);
+  height: var(--site-control-height, 3rem);
+}
+
 .quick-lead-dialog [aria-busy='true'] [data-quick-lead-submit],
 .professional-lead-dialog [aria-busy='true'] [data-professional-lead-submit] {
   cursor: wait;
@@ -457,6 +463,39 @@
   width: 100%;
   min-height: 48px;
   margin-top: 0.35rem;
+}
+
+/* Keep the professional calculator's form controls on one visual rhythm.
+   A unit input lives inside .input-with-unit, so the generic input margin
+   above must not become extra height inside that shell. */
+.calculator-page--professional {
+  --professional-control-height: var(--site-control-height, 3rem);
+  --professional-select-arrow: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath d='m1 1 5 5 5-5' fill='none' stroke='%23172d52' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.8'/%3E%3C/svg%3E");
+}
+
+.calculator-page--professional .wizard-step select {
+  box-sizing: border-box;
+  min-height: var(--professional-control-height);
+  height: var(--professional-control-height);
+  appearance: none;
+  padding-right: 2.75rem;
+  background-image: var(--professional-select-arrow);
+  background-position: right 1rem center;
+  background-repeat: no-repeat;
+  background-size: 0.7rem auto;
+}
+
+.calculator-page--professional .wizard-step .input-with-unit {
+  box-sizing: border-box;
+  min-height: var(--professional-control-height);
+  height: var(--professional-control-height);
+}
+
+.calculator-page--professional .wizard-step .input-with-unit input {
+  box-sizing: border-box;
+  min-height: 0;
+  height: 100%;
+  margin-top: 0;
 }
 .input-help {
   max-width: 70ch;
@@ -945,7 +984,6 @@
 .calculator-hero__inner {
   max-width: 74rem;
 }
-
 
 .result-kicker {
   margin: 0 0 0.7rem;

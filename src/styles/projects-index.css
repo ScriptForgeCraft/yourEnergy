@@ -547,7 +547,7 @@ button.projects-video-button:focus-visible .projects-video-button__icon {
 
 .projects-select > .inline-icon {
   position: absolute;
-  right: 9px;
+  right: 1rem;
   width: 11px;
   height: 11px;
   pointer-events: none;

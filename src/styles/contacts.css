@@ -394,7 +394,7 @@
 }
 
 .contact-form input:not([type='checkbox'], [type='radio']) {
-  height: 38px;
+  height: var(--site-control-height);
   padding: 0 12px;
 }
 

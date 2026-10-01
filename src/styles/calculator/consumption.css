@@ -182,7 +182,8 @@
 .calculator-page--professional .month-inputs input {
   width: 100%;
   min-width: 0;
-  min-height: 2.72rem;
+  min-height: var(--professional-control-height);
+  height: var(--professional-control-height);
   border: 1px solid #d2dfec;
   border-radius: 0.48rem;
   padding: 0 0.55rem;
@@ -208,7 +209,8 @@
   .consumption-inputs
   > label:has([data-consumption-tariff])
   .input-with-unit {
-  min-height: 3.1rem;
+  min-height: var(--professional-control-height);
+  height: var(--professional-control-height);
   margin-top: 0.34rem;
   border: 1px solid #d2dfec;
   border-radius: 0.56rem;
@@ -217,7 +219,8 @@
 
 .calculator-page--professional .consumption-panel input,
 .calculator-page--professional .consumption-inputs > label:has([data-consumption-tariff]) input {
-  min-height: 3rem;
+  min-height: 0;
+  height: 100%;
   margin: 0;
   border: 0;
   padding: 0 0.82rem;
@@ -233,7 +236,8 @@
   > label:has([data-consumption-tariff])
   .input-with-unit
   span {
-  min-height: 3rem;
+  min-height: 0;
+  height: 100%;
   display: inline-flex;
   align-items: center;
   border-left: 1px solid #dce6ee;

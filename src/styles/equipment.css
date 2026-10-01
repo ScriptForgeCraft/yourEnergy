@@ -20,6 +20,17 @@
   color: #071a2d;
 }
 
+.equipment-model-picker select {
+  min-height: var(--site-control-height);
+  height: var(--site-control-height);
+  border: 1px solid rgb(180 235 218 / 42%);
+  border-radius: 0.7rem;
+  padding-left: 0.8rem;
+  color: #f4f8f7;
+  background-color: rgb(6 25 23 / 82%);
+  font: inherit;
+}
+
 .sr-only,
 .sr-status {
   position: absolute;

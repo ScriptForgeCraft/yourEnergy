@@ -357,7 +357,8 @@
 }
 
 .professional-roof-plane-input .input-with-unit {
-  min-height: 2.85rem;
+  min-height: var(--professional-control-height);
+  height: var(--professional-control-height);
   margin-top: 0.32rem;
   border: 1px solid #d2dfec;
   border-radius: 0.52rem;
@@ -365,7 +366,9 @@
 }
 
 .professional-roof-plane-input input {
-  min-height: 2.75rem;
+  min-height: 0;
+  height: 100%;
+  margin-top: 0;
   border: 0;
   padding-inline: 0.75rem;
   background: transparent;
@@ -401,22 +404,25 @@
 
 .calculator-page--professional .professional-roof-parameters select,
 .calculator-page--professional .professional-roof-parameters .input-with-unit {
-  min-height: 2.88rem;
+  min-height: var(--professional-control-height);
+  height: var(--professional-control-height);
   margin-top: 0.3rem;
   border: 1px solid #d2dfec;
   border-radius: 0.52rem;
-  background: #fff;
+  background-color: #fff;
 }
 
 .calculator-page--professional .professional-roof-parameters select {
-  padding-inline: 0.7rem 2rem;
+  padding-left: 0.7rem;
   color: #172d52;
   font-size: 0.74rem;
   font-weight: 760;
 }
 
 .calculator-page--professional .professional-roof-parameters input {
-  min-height: 2.75rem;
+  min-height: 0;
+  height: 100%;
+  margin-top: 0;
   border: 0;
   padding-inline: 0.72rem;
   color: #172d52;
@@ -500,13 +506,14 @@
 }
 
 .calculator-page--professional .professional-roof-mounting-select select {
-  min-height: 2.88rem;
+  min-height: var(--professional-control-height);
+  height: var(--professional-control-height);
   margin-top: 0.3rem;
   border: 1px solid #d2dfec;
   border-radius: 0.52rem;
-  padding-inline: 0.7rem 2rem;
+  padding-left: 0.7rem;
   color: #172d52;
-  background: #fff;
+  background-color: #fff;
   font: inherit;
   font-size: 0.74rem;
   font-weight: 760;

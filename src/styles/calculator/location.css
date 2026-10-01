@@ -313,7 +313,8 @@
   grid-template-columns: 1.3rem minmax(0, 1fr) 1rem;
   gap: 0.6rem;
   align-items: center;
-  min-height: 2.9rem;
+  min-height: var(--professional-control-height);
+  height: var(--professional-control-height);
   margin: 0.68rem 0 0 !important;
   border: 1px solid #d3e0ec;
   border-radius: 0.56rem;
@@ -352,8 +353,10 @@
   height: 0.88rem;
 }
 
-.calculator-page--professional .location-address-field input {
-  min-height: 2.75rem;
+.calculator-page--professional .wizard-step .location-address-field input {
+  box-sizing: border-box;
+  min-height: 0;
+  height: 100%;
   margin: 0;
   border: 0;
   padding: 0;
@@ -362,6 +365,16 @@
   color: #10284c;
   background: transparent;
   font-size: 0.78rem;
+}
+
+/* Chromium otherwise paints its own blue autofill layer. Keep that state
+   inside the same field instead of turning the input into a larger block. */
+.calculator-page--professional .wizard-step .location-address-field input:-webkit-autofill,
+.calculator-page--professional .wizard-step .location-address-field input:-webkit-autofill:hover,
+.calculator-page--professional .wizard-step .location-address-field input:-webkit-autofill:focus {
+  -webkit-text-fill-color: #10284c;
+  caret-color: #10284c;
+  box-shadow: 0 0 0 1000px #fff inset;
 }
 
 .calculator-page--professional .location-address-field:focus-within {
@@ -445,10 +458,11 @@
 }
 
 .calculator-page--professional .location-picker select {
-  min-height: 2.92rem;
+  min-height: var(--professional-control-height);
+  height: var(--professional-control-height);
   border: 1px solid #d5e1ec;
   border-radius: 0.56rem;
-  padding: 0 1.85rem 0 0.75rem;
+  padding-left: 0.75rem;
   color: #172a4b;
   background-color: #fff;
   font: inherit;
@@ -522,7 +536,8 @@
 }
 
 .calculator-page--professional .wizard-coordinates input {
-  min-height: 2.9rem;
+  min-height: var(--professional-control-height);
+  height: var(--professional-control-height);
   margin-top: 0.3rem;
   border: 1px solid #d0deeb;
   border-radius: 0.52rem;

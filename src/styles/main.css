@@ -19,6 +19,8 @@
   --container: 1700px;
   --header-height: 74px;
   --page-scrollbar-width: 0px;
+  --site-control-height: 3rem;
+  --site-select-arrow: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath d='m1 1 5 5 5-5' fill='none' stroke='%23142234' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.8'/%3E%3C/svg%3E");
 }
 
 *,
@@ -112,8 +114,23 @@ a {
 
 button,
 input,
-textarea {
+textarea,
+select {
   font: inherit;
+}
+
+/* Native menu indicators otherwise sit at a browser-defined distance from the
+   edge. One shared indicator makes selects consistent across every route. */
+select:not([multiple]) {
+  box-sizing: border-box;
+  min-height: var(--site-control-height);
+  height: var(--site-control-height);
+  appearance: none;
+  padding-right: 2.75rem;
+  background-image: var(--site-select-arrow);
+  background-position: right 1rem center;
+  background-repeat: no-repeat;
+  background-size: 0.7rem auto;
 }
 
 :focus-visible {

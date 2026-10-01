@@ -80,7 +80,9 @@
 }
 .blog-search {
   width: min(100%, 27rem);
-  padding: 0.2rem 0.85rem;
+  min-height: var(--site-control-height);
+  height: var(--site-control-height);
+  padding: 0 0.85rem;
   display: flex;
   align-items: center;
   gap: 0.7rem;
@@ -99,7 +101,8 @@
 }
 .blog-search input {
   width: 100%;
-  min-height: 2.5rem;
+  min-height: 0;
+  height: 100%;
   border: 0;
   outline: 0;
   color: inherit;
