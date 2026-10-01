@@ -62,24 +62,14 @@
               <h2>{{contactPage.contactCardTitle}}</h2>
               <p>{{contactPage.contactCardCopy}}</p>
             </div>
-            <div class='contact-info-card__list'>
-              <a href='{{contactPage.channels.0.href}}'>
-                <span class='contact-info-card__icon'><svg aria-hidden='true'><use href='/icons.svg#phone'></use></svg></span>
-                <span><strong>{{contactPage.contactLabels.phone}}</strong><b>{{contactPage.channels.0.value}}</b><small>{{contactPage.channels.0.title}}</small></span>
-              </a>
-              <a href='{{contactPage.channels.1.href}}'>
-                <span class='contact-info-card__icon'><svg aria-hidden='true'><use href='/icons.svg#mail'></use></svg></span>
-                <span><strong>{{contactPage.contactLabels.email}}</strong><b>{{contactPage.channels.1.value}}</b><small>{{contactPage.channels.1.title}}</small></span>
-              </a>
-              <a href='{{contactPage.offices.0.href}}' target='_blank' rel='noopener noreferrer'>
-                <span class='contact-info-card__icon'><svg aria-hidden='true'><use href='/icons.svg#map-pin'></use></svg></span>
-                <span><strong>{{contactPage.contactLabels.address}}</strong><b>{{contactPage.offices.0.address}}</b><small>{{contactPage.offices.0.title}}</small></span>
-              </a>
-              <div class='contact-info-card__row'>
-                <span class='contact-info-card__icon'><svg aria-hidden='true'><use href='/icons.svg#calendar'></use></svg></span>
-                <span><strong>{{contactPage.contactLabels.hours}}</strong><b>{{contactPage.offices.0.hours}}</b></span>
-              </div>
-            </div>
+            <ul class='contact-info-card__list contact-help-list'>
+              {{#each contactPage.helpItems}}
+                <li class='contact-help-list__item'>
+                  <span class='contact-info-card__icon'><svg aria-hidden='true'><use href='/icons.svg#{{icon}}'></use></svg></span>
+                  <span><strong>{{title}}</strong><p>{{copy}}</p></span>
+                </li>
+              {{/each}}
+            </ul>
           </aside>
 
           <div class='contact-form-card'>

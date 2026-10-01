@@ -410,14 +410,30 @@ const CONTACT_VISUAL_COPY = Object.freeze({
     heroTitle: 'Եկեք քննարկենք<br><span>Ձեր նախագիծը</span>',
     heroIntro:
       'Պատասխանենք արևային համակարգի, հաշվարկի, սարքավորումների և տեղադրման մասին Ձեր հարցերին։',
-    contactCardTitle: 'Կապվեք մեզ հետ',
-    contactCardCopy: 'Հարց ունե՞ք հաշվարկի կամ տեղադրման մասին։ Գրեք կամ զանգահարեք մեզ։',
-    contactLabels: {
-      phone: 'Հեռախոս',
-      email: 'Email',
-      address: 'Հասցե',
-      hours: 'Աշխատանքային ժամեր'
-    },
+    contactCardTitle: 'Ինչով կարող ենք օգնել',
+    contactCardCopy: 'Պատմեք ձեր նախագծի մասին, իսկ մենք կօգնենք ընտրել ճիշտ լուծումը։',
+    helpItems: [
+      {
+        icon: 'calculator',
+        title: 'Նախնական հաշվարկ',
+        copy: 'Կգնահատենք համակարգի հզորությունն ու արտադրությունը։'
+      },
+      {
+        icon: 'faq-settings',
+        title: 'Համակարգի ընտրություն',
+        copy: 'Կօգնենք ընտրել ձեր տան կամ բիզնեսի համար ճիշտ լուծումը։'
+      },
+      {
+        icon: 'roof-measure',
+        title: 'Այց և չափագրում',
+        copy: 'Կգնահատենք տանիքը և տեղադրման պայմանները։'
+      },
+      {
+        icon: 'file-text',
+        title: 'Առաջարկի պատրաստում',
+        copy: 'Կպատրաստենք անհատական լուծում և նախնական առաջարկ։'
+      }
+    ],
     formTitleRef: 'Թողնել հայտ',
     formIntroRef: 'Մի փոքր պատմեք օբյեկտի մասին — մենք կօգնենք ընտրել օպտիմալ լուծումը։',
     propertyTypeLabel: 'Օբյեկտի տեսակը',
@@ -439,9 +455,30 @@ const CONTACT_VISUAL_COPY = Object.freeze({
     heroEyebrow: 'Контакты',
     heroTitle: 'Давайте обсудим<br><span>ваш проект</span>',
     heroIntro: 'Ответим на вопросы по солнечной системе, расчёту, оборудованию и установке.',
-    contactCardTitle: 'Свяжитесь с нами',
-    contactCardCopy: 'Есть вопрос по расчёту или установке? Напишите или позвоните нам.',
-    contactLabels: { phone: 'Телефон', email: 'Email', address: 'Адрес', hours: 'Время работы' },
+    contactCardTitle: 'Чем мы можем помочь',
+    contactCardCopy: 'Расскажите о вашем проекте, а мы поможем подобрать подходящее решение.',
+    helpItems: [
+      {
+        icon: 'calculator',
+        title: 'Предварительный расчёт',
+        copy: 'Оценим мощность системы и ожидаемую выработку.'
+      },
+      {
+        icon: 'faq-settings',
+        title: 'Подбор системы',
+        copy: 'Поможем выбрать подходящее решение для дома или бизнеса.'
+      },
+      {
+        icon: 'roof-measure',
+        title: 'Выезд и замеры',
+        copy: 'Оценим крышу и условия для установки системы.'
+      },
+      {
+        icon: 'file-text',
+        title: 'Подготовка предложения',
+        copy: 'Подготовим индивидуальное решение и предварительное предложение.'
+      }
+    ],
     formTitleRef: 'Оставить заявку',
     formIntroRef: 'Расскажите немного о вашем объекте — мы поможем подобрать оптимальное решение.',
     propertyTypeLabel: 'Тип объекта',
@@ -464,9 +501,30 @@ const CONTACT_VISUAL_COPY = Object.freeze({
     heroTitle: 'Let’s discuss<br><span>your project</span>',
     heroIntro:
       'We’ll answer your questions about solar systems, estimates, equipment and installation.',
-    contactCardTitle: 'Get in touch',
-    contactCardCopy: 'Have a question about an estimate or installation? Message or call us.',
-    contactLabels: { phone: 'Phone', email: 'Email', address: 'Address', hours: 'Working hours' },
+    contactCardTitle: 'How we can help',
+    contactCardCopy: 'Tell us about your project, and we’ll help you choose the right solution.',
+    helpItems: [
+      {
+        icon: 'calculator',
+        title: 'Preliminary estimate',
+        copy: 'We’ll estimate the system capacity and expected energy production.'
+      },
+      {
+        icon: 'faq-settings',
+        title: 'System selection',
+        copy: 'We’ll help you choose the right solution for your home or business.'
+      },
+      {
+        icon: 'roof-measure',
+        title: 'Site visit & measurements',
+        copy: 'We’ll assess the roof and installation conditions.'
+      },
+      {
+        icon: 'file-text',
+        title: 'Proposal preparation',
+        copy: 'We’ll prepare a tailored solution and preliminary proposal.'
+      }
+    ],
     formTitleRef: 'Send a request',
     formIntroRef:
       'Tell us a little about your property — we’ll help you choose the right solution.',
