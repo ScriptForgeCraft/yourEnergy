@@ -191,6 +191,17 @@ test('Professional results use coverage terminology without duplicate production
   }
 });
 
+test('Professional result supplements are not hidden behind a legacy presentation flag', async () => {
+  const resultsView = await source('src/ui/calculator/results-view.js');
+
+  assert.doesNotMatch(resultsView, /legacyResultPresentation/u);
+  assert.match(resultsView, /const storage = analysis\.storageRecommendation;\s*if \(storage\)/u);
+  assert.match(resultsView, /const basis = calculationBasisDetail\(analysis\.calculationBasis\)/u);
+  assert.match(resultsView, /ROOF_CAPACITY_LIMIT/u);
+  assert.match(resultsView, /environmental\.treeEquivalent/u);
+  assert.match(resultsView, /monthlyComparisonChart\(\{/u);
+});
+
 test('one calculator exposes two modes and migrates historic routes safely', async () => {
   const [quick, migration, controller, entry, main, generator] = await Promise.all([
     source('src/templates/calculator-quick.hbs'),

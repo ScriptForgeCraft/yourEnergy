@@ -378,6 +378,13 @@ export const createCalculatorResultsView = ({
     const scenario = analysis.selectedScenario;
     if (!scenario || !resultDashboard) return;
     const monthly = scenario.generation?.monthlyKwh ?? [];
+    const actualMonthlyConsumption =
+      state?.consumption?.mode === 'monthly' &&
+      Array.isArray(analysis.consumption?.monthlyKwh) &&
+      analysis.consumption.monthlyKwh.length === 12 &&
+      analysis.consumption.monthlyKwh.every((value) => number(value, 0) !== null)
+        ? analysis.consumption.monthlyKwh
+        : null;
     const annualSavings = scenario.financial?.annualSavingsAmd;
     const annualConsumptionKwh = number(scenario.energyBalance?.annualConsumptionKwh, 0);
     const annualGenerationKwh = number(scenario.generation?.annualKwh, 0);
@@ -602,24 +609,34 @@ export const createCalculatorResultsView = ({
       balance.append(values, coverageMeter, breakdown);
       resultDashboard.append(balance);
     }
-    const chart = element('figure', 'pro-result-card pro-result-card--production');
-    const chartHeading = element('div', 'pro-result-production__heading');
-    chartHeading.append(
-      element(
-        'figcaption',
-        '',
-        resultsCopy.monthlyProduction ?? wizard.production ?? 'Monthly solar production'
-      ),
-      element(
-        'strong',
-        '',
-        `${resultsCopy.totalAnnualProduction ?? 'Annual total'}: ${format(annualGenerationKwh, locale)} kWh`
-      )
-    );
-    const bars = element('div', 'chart-bars');
-    renderBars(bars, monthly, product.passport?.months ?? [], 'kWh');
-    chart.append(chartHeading, bars);
-    resultDashboard.append(chart);
+    if (actualMonthlyConsumption && monthly.length === 12) {
+      resultDashboard.append(
+        monthlyComparisonChart({
+          consumption: actualMonthlyConsumption,
+          generation: monthly,
+          months: product.passport?.months ?? []
+        })
+      );
+    } else {
+      const chart = element('figure', 'pro-result-card pro-result-card--production');
+      const chartHeading = element('div', 'pro-result-production__heading');
+      chartHeading.append(
+        element(
+          'figcaption',
+          '',
+          resultsCopy.monthlyProduction ?? wizard.production ?? 'Monthly solar production'
+        ),
+        element(
+          'strong',
+          '',
+          `${resultsCopy.totalAnnualProduction ?? 'Annual total'}: ${format(annualGenerationKwh, locale)} kWh`
+        )
+      );
+      const bars = element('div', 'chart-bars');
+      renderBars(bars, monthly, product.passport?.months ?? [], 'kWh');
+      chart.append(chartHeading, bars);
+      resultDashboard.append(chart);
+    }
     const equipmentRecommendation = analysis.equipmentRecommendation;
     const renderedEquipmentCards = equipmentRecommendationCards(equipmentRecommendation);
     if (renderedEquipmentCards) resultDashboard.append(renderedEquipmentCards);
@@ -701,267 +718,199 @@ export const createCalculatorResultsView = ({
       );
       resultDashboard.append(roofFit);
     }
-    if (state?.legacyResultPresentation) {
-      const inverter = equipmentRecommendation?.inverter ?? analysis.inverterRecommendation;
-      if (
-        !renderedEquipmentCards &&
-        inverter?.productId &&
-        number(inverter.selectedAcPowerKw, 0) !== null
-      ) {
-        const recommendation = element('section', 'pro-result-details');
-        recommendation.append(
-          element('h3', '', wizard.inverterRecommendationTitle ?? 'Recommended inverter'),
-          element(
-            'p',
-            '',
-            `${inverter.brand} ${inverter.productName} · ${format(inverter.selectedAcPowerKw, locale, { maximumFractionDigits: 1 })} kW`
-          ),
-          element('p', '', inverter.model),
-          element(
-            'p',
-            '',
-            text(wizard.inverterTechnologyCopy, {
-              technology: inverterTechnology(inverter.technology, wizard)
-            })
-          ),
-          element('p', '', inverterReason(inverter.reason, wizard)),
-          element(
-            'small',
-            '',
-            wizard.equipmentPreliminaryCopy ??
-              wizard.inverterRecommendationCopy ??
-              'Final string, MPPT and grid compatibility is confirmed during engineering.'
-          )
-        );
-        resultDashboard.append(recommendation);
-      }
-      const mountingHardware = analysis.mountingHardwareRecommendation;
-      if (
-        !renderedEquipmentCards &&
-        mountingHardware?.status === 'matched' &&
-        mountingHardware.productId
-      ) {
-        const recommendation = element('section', 'pro-result-details');
-        const availableAngles = (mountingHardware.availableInclinationDeg ?? [])
-          .map((angle) => format(angle, locale, { maximumFractionDigits: 1 }))
-          .join(' / ');
-        recommendation.append(
-          element('h3', '', wizard.mountingHardwareTitle ?? 'Catalog mounting option'),
-          element('p', '', `${mountingHardware.brand} ${mountingHardware.productName}`),
-          element('p', '', mountingHardware.model),
-          element(
-            'p',
-            '',
-            text(wizard.mountingHardwareCopy, {
-              optimum: format(mountingHardware.pvgisOptimumTiltDegrees, locale, {
-                maximumFractionDigits: 1
-              }),
-              available: availableAngles,
-              practical: format(mountingHardware.practicalInclinationDeg, locale, {
-                maximumFractionDigits: 1
-              })
-            })
-          )
-        );
-        if (
-          number(mountingHardware.kitLengthMm, 0) !== null ||
-          number(mountingHardware.railLengthMm, 0) !== null
-        ) {
-          recommendation.append(
-            element(
-              'p',
-              '',
-              text(wizard.mountingHardwareDimensionsCopy, {
-                kit:
-                  number(mountingHardware.kitLengthMm, 0) !== null
-                    ? format(mountingHardware.kitLengthMm, locale)
-                    : '—',
-                rail:
-                  number(mountingHardware.railLengthMm, 0) !== null
-                    ? format(mountingHardware.railLengthMm, locale)
-                    : '—'
-              })
-            )
-          );
-        }
-        recommendation.append(
-          element(
-            'p',
-            '',
-            wizard.mountingHardwareReason ??
-              'The catalog-supported inclination nearest the calculated optimum was selected.'
-          )
-        );
-        recommendation.append(
-          element(
-            'small',
-            '',
-            wizard.mountingHardwareEngineeringCopy ??
-              'The catalog angle does not change the calculated roof plane. Structure and wind-load design are confirmed during engineering.'
-          )
-        );
-        resultDashboard.append(recommendation);
-      } else if (!renderedEquipmentCards && mountingHardware?.status === 'no-catalog-match') {
-        resultDashboard.append(
-          element(
-            'p',
-            'pro-result-details',
-            text(wizard.mountingHardwareNoMatchCopy, {
-              optimum: format(mountingHardware.pvgisOptimumTiltDegrees, locale, {
-                maximumFractionDigits: 1
-              })
-            })
-          )
-        );
-      }
-      const storage = analysis.storageRecommendation;
-      if (!renderedEquipmentCards && storage) {
-        const recommendation = element('section', 'pro-result-details');
-        recommendation.append(
-          element('h3', '', wizard.storageRecommendationTitle ?? 'Energy-storage option')
-        );
-        if (storage.status === 'sized' && storage.productId) {
-          recommendation.append(
-            element('p', '', `${storage.brand} ${storage.productName}`),
-            element('p', '', storage.model),
-            element(
-              'p',
-              '',
-              text(wizard.storageSizingCopy, {
-                required: format(storage.requiredUsableCapacityKwh, locale, {
-                  maximumFractionDigits: 2
-                }),
-                modules: storage.moduleCount,
-                selected: format(storage.selectedUsableCapacityKwh, locale, {
-                  maximumFractionDigits: 2
-                })
-              })
-            ),
-            element(
-              'p',
-              '',
-              wizard.storageSizingReason ??
-                'A whole module count was rounded up to cover the required usable capacity.'
-            )
-          );
-        } else if (storage.status === 'catalog-capacity-exceeded') {
-          recommendation.append(
-            element(
-              'p',
-              '',
-              text(wizard.storageCapacityExceededCopy, {
-                maximum: format(storage.systemUsableCapacityMaxKwh, locale, {
-                  maximumFractionDigits: 2
-                })
-              })
-            )
-          );
-        } else {
-          recommendation.append(
-            element(
-              'p',
-              '',
-              wizard.storageProfileRequiredCopy ??
-                'Storage is optional. Exact battery sizing requires a load and backup profile.'
-            )
-          );
-        }
-        recommendation.append(
-          element(
-            'small',
-            '',
-            wizard.storageEngineeringCopy ??
-              'Final compatibility, backup output and connection design are confirmed during engineering.'
-          )
-        );
-        resultDashboard.append(recommendation);
-      }
-      const basis = calculationBasisDetail(analysis.calculationBasis);
-      if (basis) resultDashboard.append(basis);
-      if (scenario.limitations?.includes('ROOF_CAPACITY_LIMIT')) {
-        const limit = element(
+    const mountingHardware = analysis.mountingHardwareRecommendation;
+    if (mountingHardware?.status === 'matched' && mountingHardware.productId) {
+      const recommendation = element('section', 'pro-result-details');
+      const availableAngles = (mountingHardware.availableInclinationDeg ?? [])
+        .map((angle) => format(angle, locale, { maximumFractionDigits: 1 }))
+        .join(' / ');
+      recommendation.append(
+        element('h3', '', wizard.mountingHardwareTitle ?? 'Catalog mounting option'),
+        element('p', '', `${mountingHardware.brand} ${mountingHardware.productName}`),
+        element('p', '', mountingHardware.model),
+        element(
           'p',
-          'pro-result-details pro-result-details--warning',
-          wizard.roofLimit
-        );
-        limit.append(
-          ` ${format(scenario.system?.requestedCapacityKwp, locale, { maximumFractionDigits: 2 })} kWp → ${format(scenario.system?.capacityKwp, locale, { maximumFractionDigits: 2 })} kWp; ${format(scenario.system?.maximumPanelCount, locale)} panels.`
-        );
-        resultDashboard.append(limit);
-      }
-      const environmental = analysis.environmental;
-      if (Number.isFinite(Number(environmental?.avoidedCo2Tons))) {
-        const impact = element('section', 'pro-result-card pro-result-card--impact');
-        impact.append(
-          element(
-            'h3',
-            '',
-            wizard.results?.impactTitle ?? wizard.environmental?.co2 ?? 'Environmental impact'
-          )
-        );
-        const values = element('dl', 'wizard-kpis');
-        values.append(
-          dashboardMetric(
-            wizard.results?.impact?.co2 ?? wizard.environmental?.co2 ?? 'Avoided CO₂ emissions',
-            `${format(environmental.avoidedCo2Tons, locale, { maximumFractionDigits: 2 })} t CO₂`
-          )
-        );
-        if (Number.isFinite(Number(environmental.treeEquivalent))) {
-          values.append(
-            dashboardMetric(
-              wizard.results?.impact?.trees ??
-                wizard.environmental?.trees ??
-                'Tree CO₂ absorption equivalent',
-              `≈ ${format(environmental.treeEquivalent, locale)}`
-            )
-          );
-        }
-        impact.append(values);
-        const factor = environmental.factor ?? {};
-        if (Number.isFinite(Number(factor.valueKgCo2PerKwh))) {
-          impact.append(
-            element(
-              'small',
-              'pro-result-impact__source',
-              `${wizard.environmentalFactorSource ?? 'Historical grid-emission factor'}${
-                factor.dataYear ? ` (${factor.dataYear})` : ''
-              }: ${format(factor.valueKgCo2PerKwh, locale, {
-                maximumFractionDigits: 3
-              })} kgCO₂/kWh`
-            )
-          );
-        }
-        resultDashboard.append(impact);
-      }
-      const actualMonthlyConsumption =
-        state.consumption?.mode === 'monthly' &&
-        Array.isArray(analysis.consumption?.monthlyKwh) &&
-        analysis.consumption.monthlyKwh.length === 12 &&
-        analysis.consumption.monthlyKwh.every((value) => number(value, 0) !== null)
-          ? analysis.consumption.monthlyKwh
-          : null;
-      if (actualMonthlyConsumption && monthly.length === 12) {
-        resultDashboard.append(
-          monthlyComparisonChart({
-            consumption: actualMonthlyConsumption,
-            generation: monthly,
-            months: product.passport?.months ?? []
+          '',
+          text(wizard.mountingHardwareCopy, {
+            optimum: format(mountingHardware.pvgisOptimumTiltDegrees, locale, {
+              maximumFractionDigits: 1
+            }),
+            available: availableAngles,
+            practical: format(mountingHardware.practicalInclinationDeg, locale, {
+              maximumFractionDigits: 1
+            })
           })
+        )
+      );
+      if (
+        number(mountingHardware.kitLengthMm, 0) !== null ||
+        number(mountingHardware.railLengthMm, 0) !== null
+      ) {
+        recommendation.append(
+          element(
+            'p',
+            '',
+            text(wizard.mountingHardwareDimensionsCopy, {
+              kit:
+                number(mountingHardware.kitLengthMm, 0) !== null
+                  ? format(mountingHardware.kitLengthMm, locale)
+                  : '—',
+              rail:
+                number(mountingHardware.railLengthMm, 0) !== null
+                  ? format(mountingHardware.railLengthMm, locale)
+                  : '—'
+            })
+          )
+        );
+      }
+      recommendation.append(
+        element(
+          'p',
+          '',
+          wizard.mountingHardwareReason ??
+            'The catalog-supported inclination nearest the calculated optimum was selected.'
+        )
+      );
+      recommendation.append(
+        element(
+          'small',
+          '',
+          wizard.mountingHardwareEngineeringCopy ??
+            'The catalog angle does not change the calculated roof plane. Structure and wind-load design are confirmed during engineering.'
+        )
+      );
+      resultDashboard.append(recommendation);
+    } else if (mountingHardware?.status === 'no-catalog-match') {
+      resultDashboard.append(
+        element(
+          'p',
+          'pro-result-details',
+          text(wizard.mountingHardwareNoMatchCopy, {
+            optimum: format(mountingHardware.pvgisOptimumTiltDegrees, locale, {
+              maximumFractionDigits: 1
+            })
+          })
+        )
+      );
+    }
+    const storage = analysis.storageRecommendation;
+    if (storage) {
+      const recommendation = element('section', 'pro-result-details');
+      recommendation.append(
+        element('h3', '', wizard.storageRecommendationTitle ?? 'Energy-storage option')
+      );
+      if (storage.status === 'sized' && storage.productId) {
+        recommendation.append(
+          element('p', '', `${storage.brand} ${storage.productName}`),
+          element('p', '', storage.model),
+          element(
+            'p',
+            '',
+            text(wizard.storageSizingCopy, {
+              required: format(storage.requiredUsableCapacityKwh, locale, {
+                maximumFractionDigits: 2
+              }),
+              modules: storage.moduleCount,
+              selected: format(storage.selectedUsableCapacityKwh, locale, {
+                maximumFractionDigits: 2
+              })
+            })
+          ),
+          element(
+            'p',
+            '',
+            wizard.storageSizingReason ??
+              'A whole module count was rounded up to cover the required usable capacity.'
+          )
+        );
+      } else if (storage.status === 'catalog-capacity-exceeded') {
+        recommendation.append(
+          element(
+            'p',
+            '',
+            text(wizard.storageCapacityExceededCopy, {
+              maximum: format(storage.systemUsableCapacityMaxKwh, locale, {
+                maximumFractionDigits: 2
+              })
+            })
+          )
         );
       } else {
-        const chart = element('figure', 'pro-result-card pro-result-card--production');
-        chart.append(
+        recommendation.append(
           element(
-            'figcaption',
+            'p',
             '',
-            wizard.results?.monthlyProduction ?? wizard.production ?? 'Monthly solar production'
+            wizard.storageProfileRequiredCopy ??
+              'Storage is optional. Exact battery sizing requires a load and backup profile.'
           )
         );
-        const bars = element('div', 'chart-bars');
-        renderBars(bars, monthly, product.passport?.months ?? [], 'kWh');
-        chart.append(bars);
-        resultDashboard.append(chart);
       }
+      recommendation.append(
+        element(
+          'small',
+          '',
+          wizard.storageEngineeringCopy ??
+            'Final compatibility, backup output and connection design are confirmed during engineering.'
+        )
+      );
+      resultDashboard.append(recommendation);
+    }
+    const basis = calculationBasisDetail(analysis.calculationBasis);
+    if (basis) resultDashboard.append(basis);
+    if (scenario.limitations?.includes('ROOF_CAPACITY_LIMIT')) {
+      const limit = element(
+        'p',
+        'pro-result-details pro-result-details--warning',
+        wizard.roofLimit
+      );
+      limit.append(
+        ` ${format(scenario.system?.requestedCapacityKwp, locale, { maximumFractionDigits: 2 })} kWp → ${format(scenario.system?.capacityKwp, locale, { maximumFractionDigits: 2 })} kWp; ${format(scenario.system?.maximumPanelCount, locale)} panels.`
+      );
+      resultDashboard.append(limit);
+    }
+    const environmental = analysis.environmental;
+    if (Number.isFinite(Number(environmental?.avoidedCo2Tons))) {
+      const impact = element('section', 'pro-result-card pro-result-card--impact');
+      impact.append(
+        element(
+          'h3',
+          '',
+          wizard.results?.impactTitle ?? wizard.environmental?.co2 ?? 'Environmental impact'
+        )
+      );
+      const values = element('dl', 'wizard-kpis');
+      values.append(
+        dashboardMetric(
+          wizard.results?.impact?.co2 ?? wizard.environmental?.co2 ?? 'Avoided CO₂ emissions',
+          `${format(environmental.avoidedCo2Tons, locale, { maximumFractionDigits: 2 })} t CO₂`
+        )
+      );
+      if (Number.isFinite(Number(environmental.treeEquivalent))) {
+        values.append(
+          dashboardMetric(
+            wizard.results?.impact?.trees ??
+              wizard.environmental?.trees ??
+              'Tree CO₂ absorption equivalent',
+            `≈ ${format(environmental.treeEquivalent, locale)}`
+          )
+        );
+      }
+      impact.append(values);
+      const factor = environmental.factor ?? {};
+      if (Number.isFinite(Number(factor.valueKgCo2PerKwh))) {
+        impact.append(
+          element(
+            'small',
+            'pro-result-impact__source',
+            `${wizard.environmentalFactorSource ?? 'Historical grid-emission factor'}${
+              factor.dataYear ? ` (${factor.dataYear})` : ''
+            }: ${format(factor.valueKgCo2PerKwh, locale, {
+              maximumFractionDigits: 3
+            })} kgCO₂/kWh`
+          )
+        );
+      }
+      resultDashboard.append(impact);
     }
     if (resultSummary)
       resultSummary.textContent = wizard.results?.intro ?? product.result?.ready ?? '';
