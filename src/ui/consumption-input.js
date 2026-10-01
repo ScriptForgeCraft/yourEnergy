@@ -6,8 +6,6 @@ const monthlyBill = (value) => getCalculatorInputNumber(value, 'averageMonthlyBi
 const customTariff = (value) => getCalculatorInputNumber(value, 'customTariffAmdPerKwh');
 const profileMonth = (value) => getCalculatorInputNumber(value, 'monthlyProfileKwh');
 
-const demoMonthlyProfile = [320, 280, 310, 380, 450, 520, 600, 580, 470, 390, 330, 290];
-
 const togglePanel = (panel, active) => {
   panel.hidden = !active;
   panel.setAttribute('aria-hidden', String(!active));
@@ -67,11 +65,12 @@ export const initConsumptionInput = ({
     if (!chartItems.length) return;
     const hasMonthlyProfile =
       mode === 'monthly' && monthly.length === 12 && monthly.every((value) => value !== null);
+    // A chart without an entered monthly profile must not imply a fabricated
+    // seasonal household pattern. Use the known annual average only as a
+    // neutral visual baseline.
     const kwhValues = hasMonthlyProfile
       ? monthly
-      : annual === null
-        ? demoMonthlyProfile
-        : demoMonthlyProfile.map((value) => Math.round((value / 4920) * annual));
+      : Array(12).fill(annual === null ? 0 : annual / 12);
     const useAmd = chartUnit === 'amd' && tariff !== null;
     const values = useAmd ? kwhValues.map((value) => value * tariff) : kwhValues;
     const maximum = Math.max(...values, 1);
@@ -98,6 +97,7 @@ export const initConsumptionInput = ({
       button.classList.toggle('is-active', selected);
       button.setAttribute('aria-pressed', String(selected));
     });
+    if (fillAverageButton) fillAverageButton.disabled = annual === null;
     updateChart(values);
   };
 
@@ -131,18 +131,17 @@ export const initConsumptionInput = ({
   fillAverageButton?.addEventListener('click', () => {
     const values = getValues();
     const monthlyInputs = [...root.querySelectorAll('[data-consumption-month]')];
-    const annual =
-      values.annual ??
-      (values.usage === null
-        ? demoMonthlyProfile.reduce((sum, value) => sum + value, 0)
-        : values.usage * 12);
-    if (monthlyInputs.length !== 12) return;
+    if (values.annual === null || monthlyInputs.length !== 12) return;
 
     const monthlyMode = modeInputs.find((input) => input.value === 'monthly');
     if (monthlyMode) monthlyMode.checked = true;
-    const average = annual / 12;
+    const annual = Math.round(values.annual);
+    const base = Math.floor(annual / 12);
+    const remainder = annual - base * 12;
     monthlyInputs.forEach((input, index) => {
-      input.value = String(Math.round((demoMonthlyProfile[index] / 4920) * average * 12));
+      // Differ by at most 1 kWh so the rounded monthly inputs still total the
+      // entered annual amount exactly.
+      input.value = String(base + (index < remainder ? 1 : 0));
     });
     updateMode();
   });

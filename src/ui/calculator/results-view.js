@@ -33,9 +33,6 @@ export const createCalculatorResultsView = ({
   displayProductsById,
   resultDashboard,
   resultSummary,
-  financeEmpty,
-  financeResult,
-  financeValues,
   resultHeroActions,
   passportContent,
   renderBars,
@@ -385,10 +382,14 @@ export const createCalculatorResultsView = ({
       analysis.consumption.monthlyKwh.every((value) => number(value, 0) !== null)
         ? analysis.consumption.monthlyKwh
         : null;
-    const annualSavings = scenario.financial?.annualSavingsAmd;
+    const financial = scenario.financial ?? {};
+    const storagePriceUnavailable = financial.storagePriceUnavailable === true;
+    const annualSavings = storagePriceUnavailable
+      ? financial.solarOnlyAnnualSavingsAmd
+      : financial.annualSavingsAmd;
     const annualConsumptionKwh = number(scenario.energyBalance?.annualConsumptionKwh, 0);
     const annualGenerationKwh = number(scenario.generation?.annualKwh, 0);
-    const retailOffsetValueAmd = number(scenario.financial?.retailOffsetValueAmd, 0);
+    const retailOffsetValueAmd = number(financial.retailOffsetValueAmd, 0);
     const displayedSavings = number(annualSavings, 0) ?? retailOffsetValueAmd;
     const savingsAreOffsetOnly = number(annualSavings, 0) === null && retailOffsetValueAmd !== null;
     const remainingGridDemandKwh =
@@ -463,11 +464,13 @@ export const createCalculatorResultsView = ({
         kind: 'coverage'
       }),
       overviewMetric({
-        label: savingsAreOffsetOnly
-          ? (wizard.retailOffsetSavings ?? 'Savings from covered consumption')
-          : (resultsCopy.metrics?.annualSavings ??
-            wizard.metrics?.annualSavings ??
-            'Annual savings'),
+        label: storagePriceUnavailable
+          ? (wizard.solarOnlyAnnualSavings ?? 'Solar-only annual value')
+          : savingsAreOffsetOnly
+            ? (wizard.retailOffsetSavings ?? 'Savings from covered consumption')
+            : (resultsCopy.metrics?.annualSavings ??
+              wizard.metrics?.annualSavings ??
+              'Annual savings'),
         value: displayedSavings === null ? '—' : `≈ ${format(displayedSavings, locale)} ֏`,
         icon: 'calculator',
         kind: 'savings'
@@ -484,7 +487,6 @@ export const createCalculatorResultsView = ({
     else overview.append(overviewHeading, primaryMetrics, roofStatus);
     resultDashboard.append(overview);
     const commercialEstimate = analysis.commercialEstimate ?? scenario.commercialEstimate;
-    const financial = scenario.financial ?? {};
     const budgetRange = commercialEstimate?.available
       ? `${format(commercialEstimate.rangeAmd?.p25, locale)} – ${format(
           commercialEstimate.rangeAmd?.p75,
@@ -505,36 +507,57 @@ export const createCalculatorResultsView = ({
     const financialValues = element('dl', 'pro-result-finance__metrics');
     financialValues.append(
       dashboardMetric(
-        resultsCopy.financial?.budget ?? wizard.budget ?? 'Preliminary budget range',
+        storagePriceUnavailable
+          ? (wizard.solarOnlyBudget ?? 'Solar-only preliminary budget range')
+          : (resultsCopy.financial?.budget ?? wizard.budget ?? 'Preliminary budget range'),
         budgetRange,
         'budget'
       ),
       dashboardMetric(
-        resultsCopy.financial?.central ?? 'Estimated cost',
+        storagePriceUnavailable
+          ? (wizard.solarOnlyEstimate ?? 'Solar-only estimated cost')
+          : (resultsCopy.financial?.central ?? 'Estimated cost'),
         commercialEstimate?.available && number(commercialEstimate.primaryAmd, 0) !== null
           ? `≈ ${format(commercialEstimate.primaryAmd, locale)} ֏`
           : '—',
         'central'
       ),
       dashboardMetric(
-        savingsAreOffsetOnly
-          ? wizard.retailOffsetSavings
-          : (resultsCopy.metrics?.annualSavings ??
+        storagePriceUnavailable
+          ? (wizard.solarOnlyAnnualSavings ?? 'Solar-only annual value')
+          : savingsAreOffsetOnly
+            ? wizard.retailOffsetSavings
+            : (resultsCopy.metrics?.annualSavings ??
               wizard.metrics?.annualSavings ??
               'Annual savings'),
         displayedSavings === null ? '—' : `≈ ${format(displayedSavings, locale)} ֏`,
         'savings'
       ),
       dashboardMetric(
-        resultsCopy.financial?.payback ?? wizard.metrics?.payback ?? 'Payback period',
-        formatApproximate(financial.paybackYears, locale, wizard.years ?? 'years', {
-          maximumFractionDigits: 1
-        }),
+        storagePriceUnavailable
+          ? (wizard.solarOnlyPayback ?? 'Solar-only payback period')
+          : (resultsCopy.financial?.payback ?? wizard.metrics?.payback ?? 'Payback period'),
+        formatApproximate(
+          storagePriceUnavailable ? financial.solarOnlyPaybackYears : financial.paybackYears,
+          locale,
+          wizard.years ?? 'years',
+          {
+            maximumFractionDigits: 1
+          }
+        ),
         'payback'
       ),
       dashboardMetric(
-        resultsCopy.financial?.twentyFiveYears ?? '25-year value',
-        formatApproximate(financial.grossSavings25YearsAmd, locale, '֏'),
+        storagePriceUnavailable
+          ? (wizard.solarOnlyTwentyFiveYears ?? 'Solar-only 25-year value')
+          : (resultsCopy.financial?.twentyFiveYears ?? '25-year value'),
+        formatApproximate(
+          storagePriceUnavailable
+            ? financial.solarOnlyGrossSavings25YearsAmd
+            : financial.grossSavings25YearsAmd,
+          locale,
+          '֏'
+        ),
         'lifetime'
       )
     );
@@ -544,14 +567,17 @@ export const createCalculatorResultsView = ({
       element(
         'p',
         'pro-result-finance__notice',
-        displayedSavings === null
-          ? (wizard.tariffNeeded ?? 'Add your electricity tariff to see savings and payback.')
-          : savingsAreOffsetOnly
-            ? text(wizard.surplusCompensationUnavailableCopy, {
-                surplus: format(scenario.energyBalance?.surplusEnergyKwh, locale)
-              })
-            : (resultsCopy.financialDisclaimer ??
-              'This is a preliminary estimate, not a commercial offer.')
+        storagePriceUnavailable
+          ? (wizard.storagePriceUnavailableCopy ??
+              'Battery and hybrid-system costs are not in the current price book. The figures above are explicitly solar-only; full-system budget and payback require battery sizing.')
+          : displayedSavings === null
+            ? (wizard.tariffNeeded ?? 'Add your electricity tariff to see savings and payback.')
+            : savingsAreOffsetOnly
+              ? text(wizard.surplusCompensationUnavailableCopy, {
+                  surplus: format(scenario.energyBalance?.surplusEnergyKwh, locale)
+                })
+              : (resultsCopy.financialDisclaimer ??
+                'This is a preliminary estimate, not a commercial offer.')
       )
     );
     resultDashboard.append(financialSummary);
@@ -604,7 +630,15 @@ export const createCalculatorResultsView = ({
         dashboardMetric(
           resultsCopy.energy?.grid ?? wizard.remainingGridDemand ?? 'Remaining grid demand',
           remainingGridDemandKwh === null ? '—' : `${format(remainingGridDemandKwh, locale)} kWh`
-        )
+        ),
+        ...(number(scenario.energyBalance?.surplusEnergyKwh, 0) > 0
+          ? [
+              dashboardMetric(
+                wizard.surplusEnergy ?? 'Annual net surplus',
+                `${format(scenario.energyBalance.surplusEnergyKwh, locale)} kWh`
+              )
+            ]
+          : [])
       );
       balance.append(values, coverageMeter, breakdown);
       resultDashboard.append(balance);
@@ -642,6 +676,10 @@ export const createCalculatorResultsView = ({
     if (renderedEquipmentCards) resultDashboard.append(renderedEquipmentCards);
     const roofCapacity = calculatePreliminaryRoofCapacity({
       roofAreaSqm: analysis.roof?.areaSqm,
+      projectedRoofAreaSqm: analysis.roof?.projectedAreaSqm,
+      areaMethod: analysis.roof?.areaMethod,
+      mountingMode: analysis.roof?.mountingMode,
+      tiltDegrees: analysis.roof?.tiltDegrees,
       usableAreaRatio: analysis.roof?.usableAreaRatio,
       panelAreaSqm: scenario.system?.panelAreaSqm,
       panelWatts: scenario.system?.panelWatts
@@ -914,9 +952,6 @@ export const createCalculatorResultsView = ({
     }
     if (resultSummary)
       resultSummary.textContent = wizard.results?.intro ?? product.result?.ready ?? '';
-    if (financeEmpty) financeEmpty.hidden = true;
-    if (financeResult) financeResult.hidden = true;
-    financeValues?.replaceChildren();
   };
 
   const renderPassport = () => {

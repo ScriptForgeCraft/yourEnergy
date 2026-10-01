@@ -168,7 +168,6 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
   const roofPointRadius = root.querySelector('[data-roof-point-radius]');
   const roofPointRadiusOutput = root.querySelector('[data-roof-point-radius-output]');
   const roofPointNumbers = root.querySelector('[data-roof-point-numbers]');
-  const pendingCoordinates = root.querySelector('[data-pending-coordinates]');
   const potentialLoading = root.querySelector('[data-potential-loading]');
   const potentialStatus = root.querySelector('[data-potential-status]');
   const potentialResult = root.querySelector('[data-potential-result]');
@@ -182,7 +181,6 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
   const roofMapArea = root.querySelector('[data-roof-map-area]');
   const roofMapOrientation = root.querySelector('[data-roof-map-orientation]');
   const roofMapTilt = root.querySelector('[data-roof-map-tilt]');
-  const roofPoints = root.querySelector('[data-roof-points]');
   const roofPlaneWrap = root.querySelector('[data-roof-plane-area-wrap]');
   const roofPlaneArea = root.querySelector('[data-roof-plane-area]');
   const roofOrientation = root.querySelector('[data-roof-orientation]');
@@ -205,9 +203,6 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
   const roofReferencePvgis = root.querySelector('[data-roof-reference-pvgis]');
   const resultDashboard = root.querySelector('[data-result-dashboard]');
   const resultSummary = root.querySelector('[data-result-summary]');
-  const financeEmpty = root.querySelector('[data-finance-empty]');
-  const financeResult = root.querySelector('[data-finance-result]');
-  const financeValues = root.querySelector('[data-finance-values]');
   const resultHeroActions = root.querySelector('[data-result-hero-actions]');
   const downloadPdfButtons = root.querySelectorAll('[data-download-pdf]');
   const professionalLeadOpeners = root.querySelectorAll('[data-professional-lead-open]');
@@ -250,14 +245,11 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
   const heroTitle = root.querySelector('#calculator-title');
   const heroIntro = root.querySelector('.professional-hero__copy > p');
   const heroBreadcrumbCurrent = root.querySelector('.calculator-breadcrumb > span');
-  const heroControls = root.querySelector('.professional-hero__controls');
-  const restartButton = root.querySelector('[data-wizard-restart]');
   const defaultHeroTitle = heroTitle?.textContent ?? '';
   const defaultHeroIntro = heroIntro?.textContent ?? '';
   const defaultHeroBreadcrumb = heroBreadcrumbCurrent?.textContent ?? '';
 
   if ('scrollRestoration' in window.history) window.history.scrollRestoration = 'manual';
-  if (heroControls && restartButton) heroControls.append(restartButton);
 
   const session = createCalculatorSession();
   const savedSession = session.read();
@@ -412,6 +404,13 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
     if (mapLongitude) mapLongitude.textContent = lngValue;
   };
 
+  const clearLocationCoordinates = () => {
+    if (latitudeInput) latitudeInput.value = '';
+    if (longitudeInput) longitudeInput.value = '';
+    if (mapLatitude) mapLatitude.textContent = '—';
+    if (mapLongitude) mapLongitude.textContent = '—';
+  };
+
   const stepStates = () =>
     deriveWizardStepStates({
       confirmedProperty: state.confirmedProperty,
@@ -544,8 +543,6 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
     professionalAnalysisIdentity = null;
     resultDashboard?.replaceChildren();
     if (resultSummary) resultSummary.textContent = wizard.results?.intro ?? '';
-    if (financeEmpty) financeEmpty.hidden = true;
-    if (financeResult) financeResult.hidden = true;
   };
   const clearPotentialAndBelow = () => {
     stopPotential();
@@ -570,8 +567,7 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
     syncLocationCoordinates({ lat, lng });
     state.confirmedProperty = null;
     clearPotentialAndBelow();
-    if (pendingCoordinates)
-      pendingCoordinates.textContent = `${format(lat, locale, { maximumFractionDigits: 5 })}, ${format(lng, locale, { maximumFractionDigits: 5 })}`;
+    state.mapFocus = { lat, lng };
     updateProgress();
     return true;
   };
@@ -657,6 +653,15 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
     clearAddressSearchDebounce();
     stopAddressSearch();
     clearLocationSearchResults();
+    // An edited address no longer describes the selected point. Never retain
+    // coordinates from a previous property under new address text.
+    if (state.pendingLocation || state.confirmedProperty) {
+      state.pendingLocation = null;
+      state.confirmedProperty = null;
+      clearPotentialAndBelow();
+      clearLocationCoordinates();
+      updateProgress();
+    }
     writeStatus('');
     if ((address?.value.trim().length ?? 0) < 3) return;
     addressSearchDebounce = window.setTimeout(() => {
@@ -670,10 +675,11 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
     const lat = number(coordinates?.lat ?? coordinates?.latitude, -90, 90);
     const lng = number(coordinates?.lng ?? coordinates?.longitude, -180, 180);
     if (lat === null || lng === null) return false;
+    state.mapFocus = { lat, lng };
     state.pendingLocation = null;
     state.confirmedProperty = null;
     clearPotentialAndBelow();
-    syncLocationCoordinates({ lat, lng });
+    clearLocationCoordinates();
     updateProgress();
     const map = await mountMap('location');
     if (!lifecycle.isActive()) return false;
@@ -763,8 +769,6 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
   const onRoofChange = (roof) => {
     if (!lifecycle.isActive()) return;
     state.roof = roof;
-    if (roofPoints)
-      roofPoints.textContent = text(product.roof?.pointsLabel, { count: roof.points.length });
     updateRoofAreaSummary();
     clearAnalysis();
     updateProgress();
@@ -775,6 +779,10 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
     const system = recommendedPanelSystem;
     const capacity = calculatePreliminaryRoofCapacity({
       roofAreaSqm: roof.effectiveAreaSqm,
+      projectedRoofAreaSqm: roof.projectedAreaSqm,
+      areaMethod: roof.areaMethod,
+      mountingMode: roof.mountingMode,
+      tiltDegrees: roof.tiltDegrees,
       usableAreaRatio: PRELIMINARY_USABLE_ROOF_RATIO,
       panelAreaSqm: system?.panelAreaSqm,
       panelWatts: system?.panelWatts
@@ -806,7 +814,7 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
       });
     if (roofCapacityAssumption)
       roofCapacityAssumption.textContent = text(wizard.roofCapacityAssumption, {
-        ratio: format(PRELIMINARY_USABLE_ROOF_RATIO * 100, locale, {
+        ratio: format(capacity.usableAreaRatio * 100, locale, {
           maximumFractionDigits: 0
         })
       });
@@ -925,6 +933,8 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
       if (state.confirmedProperty)
         mapController?.setLocation(state.confirmedProperty, { notify: false });
       if (state.confirmedProperty) syncLocationCoordinates(state.confirmedProperty);
+      if (mode === 'location' && !state.confirmedProperty && state.mapFocus)
+        mapController?.focusLocation(state.mapFocus);
       if (mode === 'roof' && state.roof?.points?.length) {
         // Restoring the unchanged outline is not an edit and must not clear
         // the existing analysis or the roof's persisted technical controls.
@@ -977,9 +987,6 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
     displayProductsById,
     resultDashboard,
     resultSummary,
-    financeEmpty,
-    financeResult,
-    financeValues,
     resultHeroActions,
     passportContent,
     renderBars,
@@ -1088,6 +1095,7 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
     if (!lifecycle.isActive() || !state.pendingLocation) return;
     state.addressNote = address?.value.trim() ?? '';
     state.confirmedProperty = { ...state.pendingLocation };
+    state.mapFocus = { ...state.confirmedProperty };
     setPotentialOutcome({ status: WIZARD_STEP_STATUSES.AVAILABLE });
     await mountMap('location');
     if (!lifecycle.isActive()) return;
@@ -1268,7 +1276,6 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
     // cannot delay the result transition, while keeping it out of first load.
     const displayProducts = loadDisplayProducts().catch(() => null);
     state.analysisStatus = WIZARD_STEP_STATUSES.LOADING;
-    lastAnalysis = { fingerprint, startedAt: Date.now() };
     const button = root.querySelector('[data-run-analysis]');
     button?.setAttribute('aria-busy', 'true');
     button?.setAttribute('disabled', '');
@@ -1282,6 +1289,9 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
       state.analysis = response?.analysis ?? null;
       if (!state.analysis) throw new ProductApiError('MALFORMED_RESPONSE');
       state.analysisStatus = WIZARD_STEP_STATUSES.COMPLETE;
+      // Cool down completed calculations only. A provider failure must leave
+      // Retry immediately available for the same inputs.
+      lastAnalysis = { fingerprint, startedAt: Date.now() };
       state.solarPassport = passportRepository.create(state.analysis, { locale });
       professionalAnalysisIdentity = createProfessionalAnalysisIdentity({
         property: payload.property,
@@ -1369,6 +1379,9 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
       const draft = consumptionInput?.inspect();
       state.consumption = draft?.valid ? draft.value : null;
       state.userTariff = draft?.valid ? draft.tariff : null;
+      // Consumption and tariff are shared with Quick. A Professional edit
+      // cannot leave an earlier regional result visible for different inputs.
+      session.clearQuickAnalysis();
       clearAnalysis();
       updateProgress();
     }
@@ -1387,12 +1400,15 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
     stopAddressSearch();
     clearLocationSearchResults();
     if (address) address.value = '';
+    state.addressNote = '';
+    state.pendingLocation = null;
+    state.confirmedProperty = null;
+    clearPotentialAndBelow();
+    clearLocationCoordinates();
+    updateProgress();
     writeStatus('');
     address?.focus();
   });
-  root
-    .querySelector('[data-confirm-location]')
-    ?.addEventListener('click', () => void confirmLocation());
   const selectCoordinates = () => {
     const lat = number(latitudeInput?.value, -90, 90);
     const lng = number(longitudeInput?.value, -180, 180);
@@ -1405,11 +1421,19 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
       if (lifecycle.isActive()) map?.setLocation({ lat, lng }, { notify: false });
     });
   };
-  root
-    .querySelector('[data-location-coordinates-submit]')
-    ?.addEventListener('click', selectCoordinates);
   root.querySelector('[data-use-map-coordinates]')?.addEventListener('click', selectCoordinates);
-  root.querySelector('[data-map-focus-location]')?.addEventListener('click', selectCoordinates);
+  [latitudeInput, longitudeInput].forEach((input) =>
+    input?.addEventListener('input', () => {
+      // Typing is not selection. Keep the manual value visible, but invalidate
+      // any old property and require the explicit “show on map” action before
+      // it can become pending/confirmed.
+      if (!state.pendingLocation && !state.confirmedProperty) return;
+      state.pendingLocation = null;
+      state.confirmedProperty = null;
+      clearPotentialAndBelow();
+      updateProgress();
+    })
+  );
   root.querySelector('[data-use-current-location]')?.addEventListener('click', useCurrentLocation);
   regionSelect?.addEventListener('change', () => {
     const center = ARMENIA_REGION_CENTERS[regionSelect.value];
@@ -1418,10 +1442,12 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
     stopAddressSearch();
     clearLocationSearchResults();
     if (address) address.value = '';
+    state.addressNote = '';
+    state.mapFocus = { ...center };
     state.pendingLocation = null;
     state.confirmedProperty = null;
     clearPotentialAndBelow();
-    syncLocationCoordinates(center);
+    clearLocationCoordinates();
     updateProgress();
     void mountMap('location').then((map) => {
       if (!lifecycle.isActive()) return;
@@ -1431,13 +1457,10 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
   });
   localitySelect?.addEventListener('change', () => void locateSelectedLocality());
   root.querySelector('[data-location-continue]')?.addEventListener('click', () => {
-    const lat = number(latitudeInput?.value, -90, 90);
-    const lng = number(longitudeInput?.value, -180, 180);
-    if (lat === null || lng === null) {
-      writeStatus(product.location?.invalidCoordinates, true);
+    if (!state.pendingLocation) {
+      writeStatus(wizard.selectExactProperty ?? product.location?.invalidCoordinates, true);
       return;
     }
-    setPendingLocation({ lat, lng });
     void confirmLocation();
   });
   root.querySelectorAll('[data-map-layer]').forEach((button) =>
@@ -1490,9 +1513,6 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
     });
   };
   root
-    .querySelector('[data-roof-add-center]')
-    ?.addEventListener('click', () => useRoofMap((map) => map.addPointAtCenter()));
-  root
     .querySelector('[data-roof-undo]')
     ?.addEventListener('click', () => useRoofMap((map) => map.undo()));
   root
@@ -1534,12 +1554,6 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
   });
 
   root.querySelector('[data-run-analysis]')?.addEventListener('click', () => void runAnalysis());
-  root.querySelector('[data-add-tariff]')?.addEventListener('click', () => {
-    setStep(1);
-    requestAnimationFrame(() => {
-      if (lifecycle.isActive()) root.querySelector('[data-consumption-tariff]')?.focus();
-    });
-  });
   const setProfessionalLeadStatus = (message, invalid = false) => {
     if (!professionalLeadStatus) return;
     professionalLeadStatus.textContent = message ?? '';

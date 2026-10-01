@@ -462,6 +462,10 @@ const createCopy = ({ wizard, product }) => {
     tariff: pdf.tariff ?? wizard.metrics?.tariff ?? 'Tariff',
     tariffStrings: product?.consumption ?? {},
     storageRequest: pdf.storageRequest ?? wizard.storageRequestLabel ?? 'Storage review',
+    storagePriceUnavailable:
+      pdf.storagePriceUnavailable ??
+      wizard.storagePriceUnavailableCopy ??
+      'Battery and hybrid-system costs are not in the current price book. Full-system budget and payback require battery sizing.',
     yes: pdf.yes ?? 'Yes',
     no: pdf.no ?? 'No',
     calculationBasisTitle:
@@ -684,6 +688,7 @@ const pageThree = ({ copy, passport, locale, values }) => {
     budgetMin,
     budgetMid,
     budgetMax,
+    storagePriceUnavailable,
     monthlyGeneration,
     annualGeneration,
     monthlyReference,
@@ -706,7 +711,7 @@ const pageThree = ({ copy, passport, locale, values }) => {
         </div>
         <div style="position:absolute;top:18pt;right:16pt;width:210pt;color:#65798E;font-size:8.3pt;line-height:1.35">
           <div>${escapeHtml(interpolate(copy.centralEstimate, { value: `${displayNumber(budgetMid, locale)} AMD` }))}</div>
-          <div style="margin-top:8pt;font-size:7.3pt">${escapeHtml(copy.budgetDisclaimer)}</div>
+          <div style="margin-top:8pt;font-size:7.3pt">${escapeHtml(storagePriceUnavailable ? copy.storagePriceUnavailable : copy.budgetDisclaimer)}</div>
         </div>
       </section>
       <section class="pdf-card" style="position:absolute;top:375pt;left:40pt;width:515.28pt;height:190pt;padding:17pt 16pt">
@@ -850,6 +855,7 @@ export const createCalculatorPdfReportHtml = ({
   const consumption = analysis.consumption ?? state.consumption ?? {};
   const tariff = analysis.financial?.tariff ?? state.userTariff ?? {};
   const financial = scenario.financial ?? {};
+  const storagePriceUnavailable = financial.storagePriceUnavailable === true;
   const estimate = scenario.commercialEstimate ?? analysis.commercialEstimate ?? {};
   const referencePotential = state.sitePotential ?? null;
   const annualConsumption =
@@ -858,6 +864,10 @@ export const createCalculatorPdfReportHtml = ({
   const remainingGridDemand = Math.max(0, (annualConsumption ?? 0) - (annualGeneration ?? 0));
   const roofCapacity = calculatePreliminaryRoofCapacity({
     roofAreaSqm: roof.areaSqm,
+    projectedRoofAreaSqm: roof.projectedAreaSqm,
+    areaMethod: roof.areaMethod,
+    mountingMode: roof.mountingMode,
+    tiltDegrees: roof.tiltDegrees,
     usableAreaRatio: roof.usableAreaRatio,
     panelAreaSqm: scenario.system?.panelAreaSqm,
     panelWatts: scenario.system?.panelWatts
@@ -884,7 +894,7 @@ export const createCalculatorPdfReportHtml = ({
     annualGeneration,
     annualConsumption,
     coverage: asNumber(scenario.coveragePercent),
-    annualSavings: asNumber(financial.annualSavingsAmd),
+    annualSavings: storagePriceUnavailable ? null : asNumber(financial.annualSavingsAmd),
     remainingGridDemand,
     co2: asNumber(analysis.environmental?.avoidedCo2Tons),
     coordinates,
@@ -905,17 +915,20 @@ export const createCalculatorPdfReportHtml = ({
     referenceAzimuth: asNumber(referencePotential?.orientation?.azimuthDegrees),
     referenceTilt: asNumber(referencePotential?.orientation?.tiltDegrees),
     roofYield: asNumber(analysis.production?.annualYieldKwhPerKwp),
-    payback: asNumber(financial.paybackYears),
-    savings25: asNumber(financial.grossSavings25YearsAmd),
-    budgetMin: asNumber(estimate.rangeAmd?.p25),
-    budgetMid: asNumber(estimate.primaryAmd),
-    budgetMax: asNumber(estimate.rangeAmd?.p75),
+    payback: storagePriceUnavailable ? null : asNumber(financial.paybackYears),
+    savings25: storagePriceUnavailable ? null : asNumber(financial.grossSavings25YearsAmd),
+    budgetMin: storagePriceUnavailable ? null : asNumber(estimate.rangeAmd?.p25),
+    budgetMid: storagePriceUnavailable ? null : asNumber(estimate.primaryAmd),
+    budgetMax: storagePriceUnavailable ? null : asNumber(estimate.rangeAmd?.p75),
+    storagePriceUnavailable,
     monthlyGeneration: scenario.generation?.monthlyKwh ?? [],
     monthlyReference: referencePotential?.monthlyYieldKwhPerKwp ?? [],
     hasPvgis: Boolean(referencePotential?.annualYieldKwhPerKwp),
     hasTariff: asNumber(tariff.rateAmdPerKwh) !== null,
     hasEquipment: equipment.module !== copy.unavailable || equipment.inverter !== copy.unavailable,
-    hasPricebook: Boolean(estimate.available || asNumber(estimate.primaryAmd) !== null)
+    hasPricebook:
+      !storagePriceUnavailable &&
+      Boolean(estimate.available || asNumber(estimate.primaryAmd) !== null)
   };
 
   const titleSlug = new Date().toISOString().slice(0, 10);

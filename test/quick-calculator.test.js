@@ -7,6 +7,7 @@ import { onRequest as quickOnRequest } from '../functions/api/quick-analysis.js'
 import {
   ARMENIA_REGIONAL_BENCHMARKS,
   ARMENIA_TARIFF_DATASET,
+  ANALYSIS_SCHEMA_VERSION,
   YOURENERGY_OWNER_MANAGED_PRICEBOOK,
   buildRegionalQuickAnalysis,
   buildSolarAnalysis,
@@ -18,6 +19,7 @@ import { getSolarPanels } from '../src/data/equipment/calculator/catalog.js';
 import { calculatorModes } from '../src/content/calculator-modes.js';
 import { createCalculatorSession } from '../src/ui/calculator-session.js';
 import { formatConsumerCommercialRange } from '../src/ui/commercial-range.js';
+import { createQuickAnalysisIdentity } from '../src/ui/quick-analysis-identity.js';
 import {
   buildQuickResultMetrics,
   buildQuickLeadContext,
@@ -326,8 +328,24 @@ test('a detailed roof result preserves its compatible quick result for a simple 
       setItem: (key, value) => values.set(key, value)
     }
   });
+  const quickState = {
+    regionId: 'yerevan',
+    consumption: { mode: 'usage', averageMonthlyKwh: 850 },
+    userTariff: { rateAmdPerKwh: 45 }
+  };
   session.write({
-    quickAnalysis: { scope: 'regional-preliminary', selectedScenario: { id: 'quick' } }
+    ...quickState,
+    quickAnalysis: {
+      scope: 'regional-preliminary',
+      schemaVersion: ANALYSIS_SCHEMA_VERSION,
+      selectedScenario: { id: 'quick' }
+    },
+    quickAnalysisStatus: 'complete',
+    quickAnalysisIdentity: createQuickAnalysisIdentity({
+      regionId: quickState.regionId,
+      consumption: quickState.consumption,
+      tariff: quickState.userTariff
+    })
   });
   session.write({
     professionalAnalysis: { scope: 'manual-roof-plane', selectedScenario: { id: 'refined' } },
@@ -348,12 +366,26 @@ test('selecting a calculation panel invalidates cached sizing results but keeps 
   });
   const defaultSystem = getDefaultCalculatorSystem();
   const selectedPanel = getSolarPanels()[1];
-  session.write({
+  const quickState = {
+    regionId: 'yerevan',
     consumption: { mode: 'usage', averageMonthlyKwh: 850 },
+    userTariff: { rateAmdPerKwh: 45 }
+  };
+  session.write({
+    ...quickState,
     roof: { areaSqm: 100, complete: true },
     selectedPanelId: defaultSystem.equipment.panelId,
-    quickAnalysis: { scope: 'regional-preliminary', selectedScenario: { system: defaultSystem } },
+    quickAnalysis: {
+      scope: 'regional-preliminary',
+      schemaVersion: ANALYSIS_SCHEMA_VERSION,
+      selectedScenario: { system: defaultSystem }
+    },
     quickAnalysisStatus: 'complete',
+    quickAnalysisIdentity: createQuickAnalysisIdentity({
+      regionId: quickState.regionId,
+      consumption: quickState.consumption,
+      tariff: quickState.userTariff
+    }),
     professionalAnalysis: { scope: 'manual-roof-plane', equipment: defaultSystem.equipment },
     professionalAnalysisStatus: 'complete',
     professionalAnalysisIdentity: 'prior-panel',

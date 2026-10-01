@@ -75,7 +75,7 @@ test('blank numeric fields do not become a false zero, while an explicit zero re
   assert.equal(toFiniteNumberOrNull(0), 0);
 });
 
-test('panel count increases only when the fractional remainder exceeds one half', () => {
+test('panel count rounds up so a feasible target coverage is never knowingly missed', () => {
   const panelCountForAnnualConsumption = (annualKwh) =>
     calculateSolarScenario({
       id: 'panel-rounding',
@@ -85,8 +85,8 @@ test('panel count increases only when the fractional remainder exceeds one half'
       system: { panelWatts: 1_000, panelAreaSqm: 2 }
     }).system.panelCount;
 
-  assert.equal(panelCountForAnnualConsumption(12_400), 12);
-  assert.equal(panelCountForAnnualConsumption(12_500), 12);
+  assert.equal(panelCountForAnnualConsumption(12_400), 13);
+  assert.equal(panelCountForAnnualConsumption(12_500), 13);
   assert.equal(panelCountForAnnualConsumption(12_600), 13);
 });
 

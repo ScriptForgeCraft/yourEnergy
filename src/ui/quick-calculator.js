@@ -4,6 +4,7 @@ import { formatConsumerCommercialRange } from './commercial-range.js';
 import { createAsyncRequestLifecycle } from './async-request-lifecycle.js';
 import { createCalculatorSession } from './calculator-session.js';
 import { initTariffSelector } from './tariff-selector.js';
+import { createQuickAnalysisIdentity } from './quick-analysis-identity.js';
 
 const monthlyUsage = (value) => getCalculatorInputNumber(value, 'averageMonthlyConsumptionKwh');
 const monthlyBill = (value) => getCalculatorInputNumber(value, 'averageMonthlyBillAmd');
@@ -330,6 +331,7 @@ export const initQuickCalculator = ({ config = {} } = {}) => {
     session.write({
       quickAnalysis: null,
       quickAnalysisStatus: 'idle',
+      quickAnalysisIdentity: null,
       // Consumption and tariff are shared inputs. Editing either makes a
       // Professional result incompatible, but never lets the two result
       // scopes overwrite one another.
@@ -467,11 +469,17 @@ export const initQuickCalculator = ({ config = {} } = {}) => {
     // the homeowner only updates consumption for the same region, but never
     // carry it into a newly selected regional estimate.
     const changedRegion = shouldClearRefinementForRegion(previous.regionId, current.state.regionId);
+    const quickAnalysisIdentity = createQuickAnalysisIdentity({
+      regionId: current.state.regionId,
+      consumption: current.state.consumption,
+      tariff: current.state.userTariff
+    });
     session.write({
       ...current.state,
       ...(changedRegion ? { property: null, roof: null, sitePotential: null } : {}),
       quickAnalysis: null,
       quickAnalysisStatus: 'loading',
+      quickAnalysisIdentity: null,
       professionalAnalysis: null,
       professionalAnalysisStatus: 'idle',
       professionalAnalysisIdentity: null,
@@ -492,7 +500,8 @@ export const initQuickCalculator = ({ config = {} } = {}) => {
       session.write({
         ...current.state,
         quickAnalysis: analysis,
-        quickAnalysisStatus: 'complete'
+        quickAnalysisStatus: 'complete',
+        quickAnalysisIdentity
       });
       render(analysis);
       setStatus('');
@@ -504,7 +513,11 @@ export const initQuickCalculator = ({ config = {} } = {}) => {
       resultValues.hidden = true;
       resultActions.hidden = true;
       setResultState('error');
-      session.write({ quickAnalysis: null, quickAnalysisStatus: 'unavailable' });
+      session.write({
+        quickAnalysis: null,
+        quickAnalysisStatus: 'unavailable',
+        quickAnalysisIdentity: null
+      });
       setStatus(errorMessage(error, copy), true);
       const retry = document.createElement('button');
       retry.type = 'button';

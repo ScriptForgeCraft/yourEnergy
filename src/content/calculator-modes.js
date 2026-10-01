@@ -308,7 +308,7 @@ const common = {
           }
         ],
         offer: 'Ստանալ ճշգրիտ առաջարկ',
-        downloadReport: 'Ներբեռնել հաշվետվությունը',
+        downloadReport: 'Բացել տպման / PDF պատուհանը',
         editCalculation: 'Փոխել հաշվարկի տվյալները',
         metrics: {
           roofSpecificYield: 'Ձեր տանիքի գնահատված տեսակարար արտադրություն',
@@ -621,7 +621,7 @@ const common = {
           }
         ],
         offer: 'Получить точное предложение',
-        downloadReport: 'Скачать отчёт',
+        downloadReport: 'Открыть окно печати / PDF',
         editCalculation: 'Изменить данные расчёта',
         metrics: {
           roofSpecificYield: 'Расчётная удельная выработка вашей крыши',
@@ -925,7 +925,7 @@ const common = {
           }
         ],
         offer: 'Get an accurate proposal',
-        downloadReport: 'Download report',
+        downloadReport: 'Open print / PDF view',
         editCalculation: 'Edit calculation details',
         metrics: {
           roofSpecificYield: 'Estimated specific yield for your roof',

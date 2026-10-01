@@ -165,7 +165,7 @@ test('an owner-managed price book remains available until it is replaced', () =>
   assert.equal(analysis.commercialEstimate.kind, 'owner-managed');
   assert.equal(scenario.commercialEstimate.available, true);
   assert.equal(scenario.financial.capexAmd, scenario.commercialEstimate.primaryAmd);
-  assert.equal(scenario.financial.annualSavingsAmd, 542_880);
+  assert.equal(scenario.financial.annualSavingsAmd, 588_120);
   assert.ok(scenario.financial.paybackYears > 0);
   assert.ok(scenario.financial.timeline.length > 0);
   assert.equal(
@@ -177,4 +177,22 @@ test('an owner-managed price book remains available until it is replaced', () =>
     true
   );
   assertFiniteTree(analysis);
+});
+
+test('a storage request never presents a solar-only price book as a full-system budget', () => {
+  const analysis = buildSolarAnalysis({
+    ...realAnalysisInputs,
+    storageRequired: true,
+    tariffSelection: createUserTariffSelection({ rateAmdPerKwh: 52 }, ACTIVE_DATE)
+  });
+  const financial = analysis.selectedScenario.financial;
+
+  assert.equal(analysis.inverterRecommendation.technology, 'hybrid');
+  assert.equal(financial.storagePriceUnavailable, true);
+  assert.equal(financial.capexAmd, null);
+  assert.equal(financial.paybackYears, null);
+  assert.deepEqual(financial.timeline, []);
+  assert.ok(financial.solarOnlyCapexAmd > 0);
+  assert.ok(financial.solarOnlyPaybackYears > 0);
+  assert.ok(analysis.selectedScenario.limitations.includes('STORAGE_PRICE_UNAVAILABLE'));
 });

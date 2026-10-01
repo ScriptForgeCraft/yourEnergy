@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 
 import {
+  PRELIMINARY_ELEVATED_GROUND_COVERAGE_RATIO,
   PRELIMINARY_USABLE_ROOF_RATIO,
   calculatePreliminaryRoofCapacity
 } from '../src/domain/index.js';
@@ -35,4 +36,29 @@ test('roof fit remains unavailable for incomplete or invalid technical input', (
     }),
     null
   );
+});
+
+test('elevated arrays use plan area and conservative row spacing rather than roof-slope area', () => {
+  const system = getDefaultCalculatorSystem();
+  const elevated = calculatePreliminaryRoofCapacity({
+    roofAreaSqm: 115.47,
+    projectedRoofAreaSqm: 100,
+    areaMethod: 'map-projected',
+    mountingMode: 'elevated',
+    tiltDegrees: 30,
+    usableAreaRatio: PRELIMINARY_USABLE_ROOF_RATIO,
+    panelAreaSqm: system.panelAreaSqm,
+    panelWatts: system.panelWatts
+  });
+  const roofParallel = calculatePreliminaryRoofCapacity({
+    roofAreaSqm: 115.47,
+    usableAreaRatio: PRELIMINARY_USABLE_ROOF_RATIO,
+    panelAreaSqm: system.panelAreaSqm,
+    panelWatts: system.panelWatts
+  });
+
+  assert.equal(elevated.usableAreaRatio, PRELIMINARY_ELEVATED_GROUND_COVERAGE_RATIO);
+  assert.equal(elevated.roofAreaSqm, 100);
+  assert.ok(elevated.panelFootprintSqm < system.panelAreaSqm);
+  assert.ok(elevated.maximumPanelCount < roofParallel.maximumPanelCount);
 });

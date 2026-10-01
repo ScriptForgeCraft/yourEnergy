@@ -25,6 +25,9 @@ const potentialStatus = (value) =>
 export const createCalculatorWizardState = (overrides = {}) => ({
   currentStep: 0,
   addressNote: '',
+  // A region/locality only positions the map. It must never be promoted to a
+  // confirmed property until the visitor explicitly selects an exact point.
+  mapFocus: null,
   pendingLocation: null,
   confirmedProperty: null,
   sitePotential: null,

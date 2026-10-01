@@ -117,9 +117,9 @@
                 </div>
                 <p class='input-help'>{{wizard.coordinatesHelp}}</p>
                 <div class='wizard-coordinates'><label>{{product.location.latitudeLabel}}<input id='location-latitude' name='latitude' type='number' step='any'
-                      inputmode='decimal' autocomplete='off' value='40.1811'
+                      inputmode='decimal' autocomplete='off'
                       data-location-latitude /></label><label>{{product.location.longitudeLabel}}<input type='number'
-                      id='location-longitude' name='longitude' step='any' inputmode='decimal' autocomplete='off' value='44.5136' data-location-longitude /></label></div>
+                      id='location-longitude' name='longitude' step='any' inputmode='decimal' autocomplete='off' data-location-longitude /></label></div>
               </section>
 
  
@@ -422,8 +422,10 @@
                 <button class='button' type='button' data-professional-lead-open><svg aria-hidden='true'>
                     <use href='/icons.svg#file-text'></use>
                   </svg>{{wizard.results.offer}} <svg aria-hidden='true'>
-                    <use href='/icons.svg#arrow-right'></use>
-                  </svg></button><button class='button button--outline professional-results-download' type='button'
+                  <use href='/icons.svg#arrow-right'></use>
+                  </svg></button><button class='button button--outline' type='button' data-open-passport><svg aria-hidden='true'>
+                    <use href='/icons.svg#file-text'></use>
+                  </svg>{{wizard.openPassport}}</button><button class='button button--outline professional-results-download' type='button'
                   data-download-pdf><svg aria-hidden='true'>
                     <use href='/icons.svg#file'></use>
                   </svg>{{wizard.pdfReport.download}}</button><button class='button button--outline pro-result-hero__edit' type='button'
@@ -453,15 +455,6 @@
                   aria-live='polite'></p>
               </section>
             </div>
-            <section class='finance-empty' data-finance-empty hidden>
-              <p>{{wizard.tariffNeeded}}</p><button class='button' type='button'
-                data-add-tariff>{{wizard.addTariff}}</button>
-            </section>
-            <section class='professional-finance' data-finance-result hidden>
-              <h3>{{finance.title}}</h3>
-              <dl data-finance-values></dl>
-              <p class='section-disclosure'>{{finance.disclaimer}}</p>
-            </section>
           </section>
         </div>
       </section>

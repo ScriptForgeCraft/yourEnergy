@@ -60,6 +60,7 @@ test('Professional has exactly four customer steps and retains every engineering
   assert.match(professional, /pro-result-layout/u);
   assert.match(professional, /data-result-hero-actions/u);
   assert.match(professional, /data-download-pdf/u);
+  assert.match(professional, /data-open-passport/u);
   assert.match(professional, /wizard\.results\.nextCopy/u);
   assert.match(professional, /wizard\.results\.downloadReport/u);
   assert.match(professional, /wizard\.results\.editCalculation/u);
@@ -118,6 +119,18 @@ test('Professional has exactly four customer steps and retains every engineering
   assert.match(controller, /localitiesForRegion/u);
   assert.match(controller, /localityCenter/u);
   assert.match(controller, /locateSelectedLocality/u);
+  assert.match(controller, /state\.mapFocus = \{ \.\.\.center \}/u);
+  assert.match(controller, /state\.mapFocus = \{ lat, lng \}/u);
+  assert.match(controller, /clearLocationCoordinates\(\)/u);
+  assert.match(
+    controller,
+    /data-location-continue[\s\S]*?if \(!state\.pendingLocation\)[\s\S]*?void confirmLocation\(\)/u
+  );
+  assert.doesNotMatch(
+    controller,
+    /data-location-continue[\s\S]{0,400}setPendingLocation\(/u,
+    'Continue must not promote arbitrary coordinate inputs to a property'
+  );
   assert.match(controller, /map\?\.focusLocation\(center\)/u);
   assert.match(controller, /mapController\?\.finishRoof\(\)/u);
   assert.match(controller, /if \(target === 0\)[\s\S]*?mountMap\('location'\)/u);
@@ -152,6 +165,8 @@ test('Professional has exactly four customer steps and retains every engineering
   assert.match(resultsView, /metrics\?\.annualCoverage/u);
   assert.match(resultsView, /metrics\?\.recommendedPower/u);
   assert.match(resultsView, /metrics\?\.annualSavings/u);
+  assert.match(resultsView, /storagePriceUnavailable/u);
+  assert.match(resultsView, /surplusEnergyKwh/u);
   assert.match(controller, /createEquipmentCatalog/u);
   assert.match(controller, /loadDisplayProducts/u);
   assert.doesNotMatch(controller, /import \{ createEquipmentCatalog \} from/u);
@@ -257,6 +272,10 @@ test('Professional location actions are honest, searchable and recoverable', asy
   assert.match(controller, /api\.geocode\(\{ query, locale \}/u);
   assert.match(controller, /const ADDRESS_SEARCH_DEBOUNCE_MS = 1_000/u);
   assert.match(controller, /address\?\.addEventListener\('input', scheduleAddressSearch\)/u);
+  assert.match(
+    controller,
+    /scheduleAddressSearch[\s\S]*?state\.confirmedProperty = null[\s\S]*?clearLocationCoordinates\(\)/u
+  );
   assert.match(controller, /window\.setTimeout\([\s\S]*ADDRESS_SEARCH_DEBOUNCE_MS/u);
   assert.match(controller, /addEventListener\('click', searchAddressImmediately\)/u);
   assert.match(controller, /event\.key !== 'Enter'[\s\S]*searchAddressImmediately\(\)/u);
@@ -268,4 +287,21 @@ test('Professional location actions are honest, searchable and recoverable', asy
     /data-use-current-location[\s\S]*setLocationAtCenter/u,
     'current location must not silently use the map centre'
   );
+});
+
+test('Professional monthly input and report controls describe their actual behavior', async () => {
+  const [consumptionInput, wizardCopy, template, controller] = await Promise.all([
+    source('src/ui/consumption-input.js'),
+    source('src/content/calculator-wizard.js'),
+    source('src/templates/calculator.hbs'),
+    source('src/ui/calculator-wizard.js')
+  ]);
+
+  assert.doesNotMatch(consumptionInput, /demoMonthlyProfile/u);
+  assert.match(consumptionInput, /Array\(12\)\.fill\(annual === null \? 0 : annual \/ 12\)/u);
+  assert.match(consumptionInput, /base \+ \(index < remainder \? 1 : 0\)/u);
+  assert.doesNotMatch(wizardCopy, /higher accuracy|более точного расчёта|Բարձր ճշգրտ/u);
+  assert.match(wizardCopy, /Финансовая оценка сейчас использует годовую сумму/u);
+  assert.match(template, /data-open-passport/u);
+  assert.match(controller, /\[data-open-passport\]/u);
 });

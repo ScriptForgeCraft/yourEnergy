@@ -1,8 +1,13 @@
 import { PROFESSIONAL_ANALYSIS_SCOPE } from './professional-analysis-identity.js';
+import {
+  createQuickAnalysisIdentity,
+  isRestorableQuickAnalysis,
+  QUICK_ANALYSIS_SCOPE
+} from './quick-analysis-identity.js';
 
 const SESSION_KEY = 'yourenergy.calculator.v2';
-const SESSION_VERSION = 5;
-const LEGACY_SESSION_VERSIONS = new Set([2, 3, 4]);
+const SESSION_VERSION = 6;
+const LEGACY_SESSION_VERSIONS = new Set([2, 3, 4, 5]);
 
 const cloneSafe = (value) => {
   if (!value || typeof value !== 'object') return value ?? null;
@@ -26,13 +31,14 @@ const emptyState = () => ({
   storageRequired: false,
   quickAnalysis: null,
   quickAnalysisStatus: 'idle',
+  quickAnalysisIdentity: null,
   professionalAnalysis: null,
   professionalAnalysisStatus: 'idle',
   professionalAnalysisIdentity: null,
   professionalSolarPassport: null
 });
 
-const isQuickAnalysis = (analysis) => analysis?.scope === 'regional-preliminary';
+const isQuickAnalysis = (analysis) => analysis?.scope === QUICK_ANALYSIS_SCOPE;
 const isProfessionalAnalysis = (analysis) => analysis?.scope === PROFESSIONAL_ANALYSIS_SCOPE;
 
 /**
@@ -53,6 +59,7 @@ const migrateFinancialModelState = (stored = {}) => {
     version: SESSION_VERSION,
     quickAnalysis: null,
     quickAnalysisStatus: 'idle',
+    quickAnalysisIdentity: null,
     professionalAnalysis: null,
     professionalAnalysisStatus: 'idle',
     professionalAnalysisIdentity: null,
@@ -70,9 +77,22 @@ const readStoredState = (stored) => {
   delete state.analysis;
   delete state.analysisStatus;
   delete state.solarPassport;
-  if (!isQuickAnalysis(state.quickAnalysis)) {
+  const currentQuickIdentity = createQuickAnalysisIdentity({
+    regionId: state.regionId,
+    consumption: state.consumption,
+    tariff: state.userTariff
+  });
+  if (
+    !isRestorableQuickAnalysis({
+      analysis: state.quickAnalysis,
+      status: state.quickAnalysisStatus,
+      storedIdentity: state.quickAnalysisIdentity,
+      currentIdentity: currentQuickIdentity
+    })
+  ) {
     state.quickAnalysis = null;
     state.quickAnalysisStatus = 'idle';
+    state.quickAnalysisIdentity = null;
   }
   if (
     !isProfessionalAnalysis(state.professionalAnalysis) ||
@@ -161,6 +181,7 @@ export const createCalculatorSession = ({ storage } = {}) => {
     if (
       'quickAnalysis' in changes ||
       'quickAnalysisStatus' in changes ||
+      'quickAnalysisIdentity' in changes ||
       'professionalAnalysis' in changes ||
       'professionalAnalysisStatus' in changes
     )
@@ -168,7 +189,8 @@ export const createCalculatorSession = ({ storage } = {}) => {
     return next;
   };
 
-  const clearQuickAnalysis = () => write({ quickAnalysis: null, quickAnalysisStatus: 'idle' });
+  const clearQuickAnalysis = () =>
+    write({ quickAnalysis: null, quickAnalysisStatus: 'idle', quickAnalysisIdentity: null });
 
   const clearProfessionalAnalysis = () =>
     write({
@@ -178,10 +200,11 @@ export const createCalculatorSession = ({ storage } = {}) => {
       professionalSolarPassport: null
     });
 
-  const saveQuickAnalysis = (analysis, status = 'complete') =>
+  const saveQuickAnalysis = (analysis, { status = 'complete', identity } = {}) =>
     write({
       quickAnalysis: isQuickAnalysis(analysis) ? analysis : null,
-      quickAnalysisStatus: status
+      quickAnalysisStatus: status,
+      quickAnalysisIdentity: typeof identity === 'string' ? identity : null
     });
 
   const saveProfessionalAnalysis = ({

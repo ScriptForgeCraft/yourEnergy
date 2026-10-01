@@ -2,6 +2,7 @@ import {
   ARMENIA_GRID_CO2_FACTOR,
   ARMENIA_TARIFF_DATASET,
   EPA_URBAN_TREE_CO2_EQUIVALENCY,
+  PRELIMINARY_ELEVATED_GROUND_COVERAGE_RATIO,
   PRELIMINARY_USABLE_ROOF_RATIO,
   PriceBookRepository,
   buildSolarAnalysis,
@@ -235,7 +236,9 @@ export const buildP0SolarAnalysis = ({
     ],
     assumptions: [
       'PVGIS_SYSTEM_LOSS_14_PERCENT',
-      'PRELIMINARY_ROOF_USABLE_AREA_70_PERCENT',
+      body?.roof?.mountingMode === 'elevated'
+        ? `PRELIMINARY_ELEVATED_ROW_LAYOUT_${Math.round(PRELIMINARY_ELEVATED_GROUND_COVERAGE_RATIO * 100)}_PERCENT`
+        : `PRELIMINARY_ROOF_USABLE_AREA_${Math.round(PRELIMINARY_USABLE_ROOF_RATIO * 100)}_PERCENT`,
       'PRELIMINARY_PANEL_FROM_EQUIPMENT_CATALOG',
       ...(body?.roof?.areaMethod === 'map-projected'
         ? ['MAP_PROJECTED_AREA_CONVERTED_TO_ROOF_PLANE']

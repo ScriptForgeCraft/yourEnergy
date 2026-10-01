@@ -102,23 +102,25 @@ test('generation above consumption never values unconfigured surplus at the reta
   assert.equal(result.financial.annualEconomicValueAmd, null);
   assert.equal(result.financial.annualSavingsAmd, null);
   assert.equal(result.financial.paybackYears, null);
+  assert.equal(result.coveragePercent, 100);
   assert.equal(result.financial.surplusCompensation.reason, 'SURPLUS_COMPENSATION_NOT_CONFIGURED');
   assert.ok(result.limitations.includes('SURPLUS_COMPENSATION_UNAVAILABLE'));
 });
 
-test('very low consumption below half a module does not add a panel', () => {
+test('very low consumption rounds up to a whole module to meet the coverage target', () => {
   const lowConsumption = scenario({
     annualConsumptionKwh: 100,
     annualYieldKwhPerKwp: 1_500,
     panelWatts: 580
   });
 
-  assert.equal(lowConsumption.system.panelCount, 0);
-  assert.equal(lowConsumption.energyBalance.annualGenerationKwh, 0);
-  assert.equal(lowConsumption.energyBalance.offsetEnergyKwh, 0);
-  assert.equal(lowConsumption.energyBalance.surplusEnergyKwh, 0);
-  assert.equal(lowConsumption.financial.retailOffsetValueAmd, 0);
-  assert.equal(lowConsumption.financial.annualEconomicValueAmd, 0);
+  assert.equal(lowConsumption.system.panelCount, 1);
+  assert.ok(Math.abs(lowConsumption.energyBalance.annualGenerationKwh - 870) < 0.000001);
+  assert.equal(lowConsumption.energyBalance.offsetEnergyKwh, 100);
+  assert.ok(Math.abs(lowConsumption.energyBalance.surplusEnergyKwh - 770) < 0.000001);
+  assert.equal(lowConsumption.coveragePercent, 100);
+  assert.equal(lowConsumption.financial.retailOffsetValueAmd, 5_000);
+  assert.equal(lowConsumption.financial.annualEconomicValueAmd, null);
 });
 
 test('a configured, verified regulatory surplus-compensation rate completes annual value and payback', () => {

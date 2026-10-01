@@ -293,6 +293,10 @@ const roofPanelLimit = (roof, system) => {
   return (
     calculatePreliminaryRoofCapacity({
       roofAreaSqm: roof.areaSqm,
+      projectedRoofAreaSqm: roof.projectedAreaSqm,
+      areaMethod: roof.areaMethod,
+      mountingMode: roof.mountingMode,
+      tiltDegrees: roof.tiltDegrees,
       usableAreaRatio: roof.usableAreaRatio,
       panelAreaSqm: system.panelAreaSqm,
       panelWatts: system.panelWatts
@@ -300,12 +304,9 @@ const roofPanelLimit = (roof, system) => {
   );
 };
 
-// A fractional remainder of 0.5 or less does not require another module.
-// This keeps preliminary estimates from adding a panel for small shortfalls.
-const roundPanelCount = (requestedPanelCount) => {
-  const wholePanels = Math.floor(requestedPanelCount);
-  return requestedPanelCount - wholePanels > 0.5 ? wholePanels + 1 : wholePanels;
-};
+// Scenario coverage is a minimum target. When there is roof capacity for the
+// next whole module, rounding down would knowingly underdeliver that target.
+const roundPanelCount = (requestedPanelCount) => Math.ceil(requestedPanelCount);
 
 const getScenarioCapex = (investment, capacityKwp) => {
   if (investment.capexAmdPerKwp !== null) return capacityKwp * investment.capexAmdPerKwp;
@@ -367,6 +368,7 @@ export const calculateSolarScenario = ({
   investment: suppliedInvestment,
   system: suppliedSystem,
   priceBook = null,
+  storageRequired = false,
   effectiveDate = new Date()
 } = {}) => {
   const consumption = isNormalizedConsumption(suppliedConsumption)
@@ -418,6 +420,11 @@ export const calculateSolarScenario = ({
         grossSavings25YearsAmd: null,
         capexAmd: null,
         paybackYears: null,
+        storagePriceUnavailable: storageRequired,
+        solarOnlyAnnualSavingsAmd: null,
+        solarOnlyGrossSavings25YearsAmd: null,
+        solarOnlyCapexAmd: null,
+        solarOnlyPaybackYears: null,
         timeline: [],
         price: financialPrice(null, null),
         surplusCompensation: surplusCompensationSummary(surplusCompensation)
@@ -464,15 +471,24 @@ export const calculateSolarScenario = ({
       ? null
       : retailOffsetValueAmd + surplusCompensationValueAmd;
   const commercialEstimate = buildCommercialEstimate({ capacityKwp, priceBook, at: effectiveDate });
-  const capexAmd = getScenarioCapex(investment, capacityKwp) ?? commercialEstimate.primaryAmd;
-  const paybackYears =
-    capexAmd !== null && annualEconomicValueAmd !== null && annualEconomicValueAmd > 0
-      ? capexAmd / annualEconomicValueAmd
+  const solarOnlyCapexAmd =
+    getScenarioCapex(investment, capacityKwp) ?? commercialEstimate.primaryAmd;
+  const solarOnlyPaybackYears =
+    solarOnlyCapexAmd !== null && annualEconomicValueAmd !== null && annualEconomicValueAmd > 0
+      ? solarOnlyCapexAmd / annualEconomicValueAmd
       : null;
+  // The active residential price book explicitly excludes batteries. A hybrid
+  // inverter recommendation is not evidence that battery hardware or its
+  // installation cost is covered by the solar-only budget.
+  const storagePriceUnavailable =
+    storageRequired === true && !commercialEstimate.scope?.includes('battery');
+  const capexAmd = storagePriceUnavailable ? null : solarOnlyCapexAmd;
+  const paybackYears = storagePriceUnavailable ? null : solarOnlyPaybackYears;
   const roofLimited =
     maxPanelCount !== null && requestedPanelCount !== null && panelCount < requestedPanelCount;
 
   const financialReady =
+    !storagePriceUnavailable &&
     capexAmd !== null &&
     capexAmd > 0 &&
     annualEconomicValueAmd !== null &&
@@ -488,7 +504,8 @@ export const calculateSolarScenario = ({
       ...(surplusEnergyKwh > 0 && surplusCompensationValueAmd === null
         ? ['SURPLUS_COMPENSATION_UNAVAILABLE']
         : []),
-      ...(capexAmd === null ? ['CAPEX_REQUIRED'] : [])
+      ...(storagePriceUnavailable ? ['STORAGE_PRICE_UNAVAILABLE'] : []),
+      ...(!storagePriceUnavailable && capexAmd === null ? ['CAPEX_REQUIRED'] : [])
     ],
     system: {
       capacityKwp,
@@ -506,20 +523,35 @@ export const calculateSolarScenario = ({
       offsetEnergyKwh,
       surplusEnergyKwh
     },
-    coveragePercent: (annualKwh / consumption.annualKwh) * 100,
+    // “Consumption coverage” has a 100% ceiling. Generation above annual
+    // demand is preserved separately as surplus energy, not mislabeled as
+    // greater-than-100% coverage.
+    coveragePercent: (offsetEnergyKwh / consumption.annualKwh) * 100,
     financial: {
       retailOffsetValueAmd,
       surplusCompensationValueAmd,
-      annualEconomicValueAmd,
+      annualEconomicValueAmd: storagePriceUnavailable ? null : annualEconomicValueAmd,
       // Retained for presentation compatibility; it is now always the
       // corrected complete annual economic value, never all generation at a
       // retail rate.
-      annualSavingsAmd: annualEconomicValueAmd,
-      grossSavings25YearsAmd: annualEconomicValueAmd === null ? null : annualEconomicValueAmd * 25,
+      annualSavingsAmd: storagePriceUnavailable ? null : annualEconomicValueAmd,
+      grossSavings25YearsAmd:
+        storagePriceUnavailable || annualEconomicValueAmd === null
+          ? null
+          : annualEconomicValueAmd * 25,
       capexAmd,
       paybackYears,
-      timeline: makeTimeline(capexAmd, annualEconomicValueAmd),
-      price: financialPrice(commercialEstimate, capexAmd),
+      timeline: storagePriceUnavailable ? [] : makeTimeline(capexAmd, annualEconomicValueAmd),
+      price: storagePriceUnavailable
+        ? financialPrice(null, null)
+        : financialPrice(commercialEstimate, capexAmd),
+      storagePriceUnavailable,
+      solarOnlyAnnualSavingsAmd: annualEconomicValueAmd,
+      solarOnlyGrossSavings25YearsAmd:
+        annualEconomicValueAmd === null ? null : annualEconomicValueAmd * 25,
+      solarOnlyCapexAmd,
+      solarOnlyPaybackYears,
+      solarOnlyPrice: financialPrice(commercialEstimate, solarOnlyCapexAmd),
       surplusCompensation: surplusCompensationSummary(surplusCompensation)
     },
     commercialEstimate
@@ -620,6 +652,7 @@ export const buildSolarAnalysis = (input = {}) => {
       investment,
       system,
       priceBook,
+      storageRequired: input.storageRequired === true,
       effectiveDate: input.effectiveDate
     })
   );

@@ -9,6 +9,8 @@ const copy = {
     exactCoordinates: 'Ճշգրիտ կոորդինատներ',
     coordinatesHelp:
       'Եթե հասցեի որոնումը ճշգրիտ չի գտնում գույքը, մուտքագրեք լայնությունն ու երկայնությունը ձեռքով։',
+    selectExactProperty:
+      'Ընտրեք ճշգրիտ կետ քարտեզի վրա, հասցեների որոնման արդյունքներից կամ մուտքագրեք կոորդինատները և ցուցադրեք քարտեզի վրա։',
     calculationPanelLabel: 'Նախնական չափագրման հիմք',
     calculationPanelHelp:
       'Տանիքի նախնական չափագրումը հիմնվում է կատալոգային մոդուլի չափի և հզորության վրա։ Սարքավորումը կներկայացվի արդյունքում։',
@@ -105,6 +107,13 @@ const copy = {
     storageRequestLabel: 'Ներառել կուտակիչի / պահուստի գնահատում',
     storageRequestHelp:
       'Ճշգրիտ ընտրության համար անհրաժեշտ են կրիտիկական բեռի և պահուստի տևողության տվյալներ։',
+    solarOnlyBudget: 'Միայն արևային համակարգի նախնական բյուջե',
+    solarOnlyEstimate: 'Միայն արևային համակարգի գնահատված արժեք',
+    solarOnlyAnnualSavings: 'Միայն արևային համակարգի տարեկան արժեք',
+    solarOnlyPayback: 'Միայն արևային համակարգի հետգնման ժամկետ',
+    solarOnlyTwentyFiveYears: 'Միայն արևային համակարգի 25 տարվա արժեք',
+    storagePriceUnavailableCopy:
+      'Մարտկոցի և հիբրիդային համակարգի արժեքը ներառված չէ ընթացիկ գնացուցակում։ Վերևի թվերը միայն արևային համակարգի համար են. ամբողջ համակարգի բյուջեն և հետգնումը պահանջում են մարտկոցի ընտրություն։',
     inverterRecommendationTitle: 'Առաջարկվող ինվերտեր',
     inverterRecommendationCopy:
       'Ընտրված է հաշվարկված PV DC հզորության համար։ Վերջնական լարային, MPPT և ցանցային համատեղելիությունը հաստատվում է ինժեներական փուլում։',
@@ -177,7 +186,7 @@ const copy = {
     passportTitle: 'Solar Passport',
     passportCopy: 'Այս աշխատաշրջանի նախնական տվյալները, աղբյուրներն ու սահմանափակումները։',
     pdfReport: {
-      download: 'Պահպանել PDF հաշվետվությունը',
+      download: 'Բացել տպման / PDF պատուհանը',
       title: 'Արևային համակարգի նախնական հաշվետվություն',
       subtitle: 'Ձեր տան համար՝ հաշվարկված ըստ գտնվելու վայրի, սպառման և տանիքի տվյալների։',
       preliminary: 'ՆԱԽՆԱԿԱՆ',
@@ -329,15 +338,17 @@ const copy = {
       consumption: {
         monthlyTitle: 'Ամսական սպառում',
         optional: 'ընտրովի',
-        monthlyCopy: 'Ավելի բարձր ճշգրտության համար մուտքագրեք փաստացի ամսական սպառումը։',
+        monthlyCopy:
+          'Մուտքագրեք փաստացի ամսական սպառումը՝ այն սեզոնային արևային արտադրության հետ համեմատելու համար։ Ֆինանսական գնահատումը ներկայում օգտագործում է տարեկան գումարը։',
         kwh: 'kWh',
         amd: 'AMD',
-        fillAverage: 'Լրացնել միջին արժեքներով',
+        fillAverage: 'Բաժանել տարեկան արժեքը հավասար',
         tipsTitle: 'Արագ խորհուրդներ',
         tipBillTitle: 'Ստուգեք էլեկտրաէներգիայի հաշիվը',
         tipBillCopy: 'Միջին ամսական գումարը կարող եք գտնել կոմունալ վճարման հաշվում։',
         tipMonthlyTitle: 'Օգտագործեք ամսական տվյալներ, եթե կան',
-        tipMonthlyCopy: 'Ավելի մանրամասն պրոֆիլը բարձրացնում է արդյունքի ճշգրտությունը։',
+        tipMonthlyCopy:
+          'Ամսական տվյալները օգնում են սեզոնային համեմատությանը։ Ֆինանսական գնահատումը հիմնվում է տարեկան ընդհանուրի վրա։',
         tipTariffTitle: 'Սակագինը կարևոր է',
         tipTariffCopy: 'Սակագները փոխում են ֆինանսական գնահատումն ու հետգնման ժամկետը։',
         advancedCopy: 'Ամսական պրոֆիլն ու Ձեր նշած սակագինը պահպանվում են հաշվարկում։',
@@ -375,6 +386,8 @@ const copy = {
     exactCoordinates: 'Точные координаты',
     coordinatesHelp:
       'Если поиск адреса не находит объект достаточно точно, введите широту и долготу вручную.',
+    selectExactProperty:
+      'Выберите точку на карте, результат поиска адреса или введите координаты и покажите их на карте.',
     calculationPanelLabel: 'Основа предварительного подбора',
     calculationPanelHelp:
       'Предварительный расчёт крыши использует площадь и мощность модуля из каталога. Оборудование будет показано в результате.',
@@ -470,6 +483,13 @@ const copy = {
     storageRequestLabel: 'Включить оценку накопителя / резерва',
     storageRequestHelp:
       'Для точного подбора нужны данные о критической нагрузке и времени резерва.',
+    solarOnlyBudget: 'Предварительный бюджет только солнечной системы',
+    solarOnlyEstimate: 'Оценочная стоимость только солнечной системы',
+    solarOnlyAnnualSavings: 'Годовой эффект только солнечной системы',
+    solarOnlyPayback: 'Окупаемость только солнечной системы',
+    solarOnlyTwentyFiveYears: '25-летний эффект только солнечной системы',
+    storagePriceUnavailableCopy:
+      'Стоимость батареи и гибридной системы не входит в текущий прайсбук. Цифры выше относятся только к солнечной системе; для бюджета и окупаемости полного решения требуется подбор батареи.',
     inverterRecommendationTitle: 'Рекомендуемый инвертор',
     inverterRecommendationCopy:
       'Выбран для рассчитанной PV DC-мощности. Окончательную совместимость строк, MPPT и сети подтверждает инженер.',
@@ -542,7 +562,7 @@ const copy = {
     passportTitle: 'Solar Passport',
     passportCopy: 'Предварительные данные этой сессии, источники и ограничения.',
     pdfReport: {
-      download: 'Сохранить PDF-отчёт',
+      download: 'Открыть окно печати / PDF',
       title: 'Предварительный отчёт по солнечной системе',
       subtitle: 'Для вашего дома — расчёт по местоположению, потреблению и данным крыши.',
       preliminary: 'ПРЕДВАРИТЕЛЬНО',
@@ -696,15 +716,17 @@ const copy = {
       consumption: {
         monthlyTitle: 'Потребление по месяцам',
         optional: 'необязательно',
-        monthlyCopy: 'Введите фактическое потребление по месяцам для более точного расчёта.',
+        monthlyCopy:
+          'Введите фактическое потребление по месяцам, чтобы сравнить его с солнечной выработкой по сезонам. Финансовая оценка сейчас использует годовую сумму.',
         kwh: 'кВт·ч',
         amd: 'AMD',
-        fillAverage: 'Заполнить средними значениями',
+        fillAverage: 'Равномерно распределить годовое значение',
         tipsTitle: 'Полезные советы',
         tipBillTitle: 'Проверьте счёт за электроэнергию',
         tipBillCopy: 'Среднюю сумму за месяц можно найти в коммунальном счёте.',
         tipMonthlyTitle: 'Используйте помесячные данные, если они есть',
-        tipMonthlyCopy: 'Более подробный профиль повышает точность результата.',
+        tipMonthlyCopy:
+          'Помесячные данные помогают сезонному сравнению. Финансовая оценка основана на годовой сумме.',
         tipTariffTitle: 'Тариф имеет значение',
         tipTariffCopy: 'Разные тарифы влияют на финансовую оценку и срок окупаемости.',
         advancedCopy: 'Помесячный профиль и введённый тариф сохраняются для следующего расчёта.',
@@ -742,6 +764,8 @@ const copy = {
     exactCoordinates: 'Exact coordinates',
     coordinatesHelp:
       'Enter latitude and longitude manually if address search cannot locate the property accurately.',
+    selectExactProperty:
+      'Choose an exact point on the map or from address search, or enter coordinates and show them on the map.',
     calculationPanelLabel: 'Preliminary sizing basis',
     calculationPanelHelp:
       'The preliminary roof fit uses a catalog module footprint and rating. Equipment is shown with the result.',
@@ -836,6 +860,13 @@ const copy = {
     },
     storageRequestLabel: 'Include storage / backup review',
     storageRequestHelp: 'Exact sizing requires critical-load and backup-duration inputs.',
+    solarOnlyBudget: 'Solar-only preliminary budget range',
+    solarOnlyEstimate: 'Solar-only estimated cost',
+    solarOnlyAnnualSavings: 'Solar-only annual value',
+    solarOnlyPayback: 'Solar-only payback period',
+    solarOnlyTwentyFiveYears: 'Solar-only 25-year value',
+    storagePriceUnavailableCopy:
+      'Battery and hybrid-system costs are not in the current price book. The figures above are solar-only; full-system budget and payback require battery sizing.',
     inverterRecommendationTitle: 'Recommended inverter',
     inverterRecommendationCopy:
       'Selected for the calculated PV DC capacity. Final string, MPPT and grid compatibility is confirmed during engineering.',
@@ -907,7 +938,7 @@ const copy = {
     passportTitle: 'Solar Passport',
     passportCopy: 'This session’s preliminary inputs, sources and limitations.',
     pdfReport: {
-      download: 'Save PDF report',
+      download: 'Open print / PDF view',
       title: 'Preliminary solar system report',
       subtitle: 'Calculated for your home from location, consumption and roof data.',
       preliminary: 'PRELIMINARY',
@@ -1062,15 +1093,17 @@ const copy = {
       consumption: {
         monthlyTitle: 'Monthly consumption',
         optional: 'optional',
-        monthlyCopy: 'Enter your actual monthly consumption for higher accuracy.',
+        monthlyCopy:
+          'Enter actual monthly consumption to compare it with solar production by season. The financial estimate currently uses the annual total.',
         kwh: 'kWh',
         amd: 'AMD',
-        fillAverage: 'Fill with average values',
+        fillAverage: 'Spread annual value evenly',
         tipsTitle: 'Quick tips',
         tipBillTitle: 'Check your electricity bill',
         tipBillCopy: 'You can find the average monthly amount on your utility bill.',
         tipMonthlyTitle: 'Use monthly data if available',
-        tipMonthlyCopy: 'A more detailed profile improves the accuracy of the results.',
+        tipMonthlyCopy:
+          'Monthly data helps seasonal comparison. The financial estimate uses the annual total.',
         tipTariffTitle: 'Tariff matters',
         tipTariffCopy: 'Different tariffs affect the financial analysis and payback period.',
         advancedCopy:

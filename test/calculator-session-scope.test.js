@@ -8,6 +8,7 @@ import {
   isRestorableProfessionalAnalysis,
   mergeProfessionalRoofInput
 } from '../src/ui/professional-analysis-identity.js';
+import { createQuickAnalysisIdentity } from '../src/ui/quick-analysis-identity.js';
 
 const sessionStorage = () => {
   const values = new Map();
@@ -207,6 +208,38 @@ test('a version 3 scoped result cannot restore the former overproduction payback
   assert.equal(restored.userTariff.rateAmdPerKwh, 45);
 });
 
+test('Quick identity discards a result when Professional changes shared consumption or tariff', () => {
+  const { storage } = sessionStorage();
+  const session = createCalculatorSession({ storage });
+  const shared = {
+    regionId: 'yerevan',
+    consumption: { mode: 'usage', averageMonthlyKwh: 500 },
+    userTariff: { rateAmdPerKwh: 45 }
+  };
+  session.write({
+    ...shared,
+    quickAnalysis: {
+      scope: 'regional-preliminary',
+      schemaVersion: ANALYSIS_SCHEMA_VERSION,
+      selectedScenario: { id: 'for-500-kwh' }
+    },
+    quickAnalysisStatus: 'complete',
+    quickAnalysisIdentity: createQuickAnalysisIdentity({
+      regionId: shared.regionId,
+      consumption: shared.consumption,
+      tariff: shared.userTariff
+    })
+  });
+
+  session.write({ consumption: { mode: 'usage', averageMonthlyKwh: 700 } });
+  const restored = session.read();
+
+  assert.equal(restored.consumption.averageMonthlyKwh, 700);
+  assert.equal(restored.quickAnalysis, null);
+  assert.equal(restored.quickAnalysisStatus, 'idle');
+  assert.equal(restored.quickAnalysisIdentity, null);
+});
+
 test('a legacy Professional result without an input fingerprint is discarded but its inputs remain', () => {
   const { storage, values } = sessionStorage();
   const session = createCalculatorSession({ storage });
@@ -236,15 +269,31 @@ test('Quick and Professional results survive their own refresh and Back/Forward 
   const inputs = professionalInputs();
   const identity = createProfessionalAnalysisIdentity(inputs);
 
-  session.saveQuickAnalysis({
-    scope: 'regional-preliminary',
-    selectedScenario: { id: 'regional' }
+  session.write({
+    regionId: 'yerevan',
+    consumption: inputs.consumption,
+    userTariff: inputs.tariff
   });
+  session.saveQuickAnalysis(
+    {
+      scope: 'regional-preliminary',
+      schemaVersion: ANALYSIS_SCHEMA_VERSION,
+      selectedScenario: { id: 'regional' }
+    },
+    {
+      identity: createQuickAnalysisIdentity({
+        regionId: 'yerevan',
+        consumption: inputs.consumption,
+        tariff: inputs.tariff
+      })
+    }
+  );
   const quickRoute = session.read();
   assert.equal(quickRoute.quickAnalysis.selectedScenario.id, 'regional');
   assert.equal(quickRoute.professionalAnalysis, null);
 
   session.write({
+    regionId: 'yerevan',
     property: inputs.property,
     consumption: inputs.consumption,
     userTariff: inputs.tariff,
@@ -303,13 +352,29 @@ test('Professional restoration requires a matching property, roof, consumption a
 test('changing a Professional panel clears only its incompatible property result', () => {
   const { storage } = sessionStorage();
   const session = createCalculatorSession({ storage });
-  session.saveQuickAnalysis({
-    scope: 'regional-preliminary',
-    selectedScenario: { id: 'regional' }
+  const inputs = professionalInputs();
+  session.write({
+    regionId: 'yerevan',
+    consumption: inputs.consumption,
+    userTariff: inputs.tariff
   });
+  session.saveQuickAnalysis(
+    {
+      scope: 'regional-preliminary',
+      schemaVersion: ANALYSIS_SCHEMA_VERSION,
+      selectedScenario: { id: 'regional' }
+    },
+    {
+      identity: createQuickAnalysisIdentity({
+        regionId: 'yerevan',
+        consumption: inputs.consumption,
+        tariff: inputs.tariff
+      })
+    }
+  );
   session.saveProfessionalAnalysis({
     analysis: professionalAnalysis,
-    identity: createProfessionalAnalysisIdentity(professionalInputs())
+    identity: createProfessionalAnalysisIdentity(inputs)
   });
 
   session.selectPanel('trina-solar-tallmax-590');
