@@ -224,6 +224,22 @@
   grid-column: 1 / -1;
 }
 
+/* Inputs here sit inside visual controls. Highlight the complete control, not
+   just the editable portion, so the icon, value and menu arrow read as one. */
+.process-form__select:focus-within,
+.process-form__amount:focus-within {
+  border-color: rgb(241 199 91 / 88%);
+  box-shadow:
+    0 0 0 3px rgb(241 199 91 / 20%),
+    0 8px 28px #0003;
+}
+
+.process-form__select select:focus-visible,
+.process-form__amount input:focus-visible {
+  outline: 0;
+  box-shadow: none;
+}
+
 .process-form__select > svg {
   width: 22px;
   height: 22px;
@@ -297,6 +313,12 @@
   box-shadow: inset 0 0 0 1px #f1c75b5c;
 }
 
+.process-form__modes input:focus-visible + span {
+  box-shadow:
+    inset 0 0 0 1px #f1c75b5c,
+    0 0 0 2px rgb(241 199 91 / 58%);
+}
+
 .process-form__amount-label {
   grid-column: 2;
   grid-row: 2;
@@ -364,11 +386,10 @@
 }
 
 .process-stage a:focus-visible,
-.process-stage button:focus-visible,
-.process-stage input:focus-visible,
-.process-stage select:focus-visible {
+.process-stage button:focus-visible {
   outline: 2px solid var(--process-gold);
-  outline-offset: 4px;
+  outline-offset: 3px;
+  box-shadow: 0 0 0 4px rgb(241 199 91 / 14%);
 }
 
 .process-visual {

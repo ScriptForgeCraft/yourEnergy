@@ -131,6 +131,8 @@
   min-height: clamp(94px, 12svh, 106px);
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr)) minmax(268px, 1.04fr);
+  grid-auto-rows: minmax(clamp(94px, 12svh, 106px), auto);
+  align-items: stretch;
   margin-top: auto;
   border: 1px solid rgb(230 244 247 / 47%);
   border-radius: 22px;
@@ -150,8 +152,10 @@
 }
 
 .faq-preview__card {
-  gap: clamp(10px, 1vw, 16px);
-  padding: 12px clamp(12px, 1.25vw, 24px);
+  min-width: 0;
+  height: 100%;
+  gap: clamp(8px, 0.8vw, 12px);
+  padding: 10px clamp(10px, 1vw, 18px);
   border-right: 1px solid rgb(211 229 232 / 39%);
   transition: background 180ms ease;
 }
@@ -168,8 +172,8 @@
 }
 
 .faq-preview__icon {
-  width: clamp(46px, 3.4vw, 58px);
-  height: clamp(46px, 3.4vw, 58px);
+  width: clamp(42px, 3vw, 52px);
+  height: clamp(42px, 3vw, 52px);
   display: grid;
   flex: none;
   place-items: center;
@@ -179,27 +183,35 @@
 }
 
 .faq-preview__icon svg {
-  width: 28px;
-  height: 28px;
+  width: 25px;
+  height: 25px;
   stroke-width: 1.95;
 }
 
 .faq-preview__card-copy {
   min-width: 0;
+  flex: 1 1 auto;
   display: grid;
-  gap: 4px;
+  gap: 2px;
 }
 
 .faq-preview__card strong,
 .faq-preview__card small {
+  min-width: 0;
+  max-width: 100%;
   color: #fff;
-  font-size: clamp(0.76rem, 0.9vw, 0.94rem);
+  font-size: clamp(0.72rem, 0.78vw, 0.84rem);
   font-weight: 750;
-  line-height: 1.26;
+  line-height: 1.2;
+  overflow-wrap: normal;
+  word-break: normal;
+  hyphens: none;
 }
 
 .faq-preview__card small {
-  font-size: inherit;
+  color: rgb(255 255 255 / 78%);
+  font-size: clamp(0.66rem, 0.7vw, 0.76rem);
+  font-weight: 650;
 }
 
 .faq-preview__arrow {
@@ -346,21 +358,6 @@ html[lang='hy'] .faq-preview__art p {
   stroke: #f6ba11;
   stroke-linecap: round;
   stroke-width: 3.1;
-}
-
-@media (min-width: 981px) {
-  .faq-preview__inner {
-    /* Keep the FAQ proportional to the viewport instead of using a hard cap. */
-    inline-size: 70vw;
-    --faq-preview-left: max(5.85vw, calc((100% - var(--container)) / 2));
-    margin-inline: var(--faq-preview-left) 0;
-  }
-
-  .faq-preview__grid,
-  .faq-preview__footer {
-    /* The text follows the left content guide; the FAQ action group is centred. */
-    transform: translateX(calc((100vw - 70vw) / 2 - var(--faq-preview-left)));
-  }
 }
 
 @media (max-width: 1300px) {

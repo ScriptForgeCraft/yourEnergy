@@ -117,10 +117,10 @@ textarea {
 }
 
 :focus-visible {
-  /* Two colours keep keyboard focus visible on both light and dark surfaces. */
-  outline: 3px solid #1676d2 !important;
-  outline-offset: 3px;
-  box-shadow: 0 0 0 3px #fff !important;
+  /* Keep a calm, high-contrast keyboard cue without the former heavy blue-and-white frame. */
+  outline: 3px solid rgb(22 118 210 / 48%);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgb(22 118 210 / 12%);
 }
 
 .container {
