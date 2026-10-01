@@ -698,7 +698,7 @@ function validateContactMapMarkup(html, page) {
   for (const marker of [
     'data-office-map',
     'data-office-map-canvas',
-    'data-office-map-option',
+    'data-office-card',
     "id='contact-page-config'"
   ]) {
     if (!html.includes(marker)) fail(`${page}: office map is missing ${marker}`);
@@ -715,13 +715,15 @@ function validateContactMapMarkup(html, page) {
       fail(`${page}: obsolete single-office map token ${legacy} is present`);
   }
 
-  const options = [...html.matchAll(/\bdata-office-map-option\b/giu)];
-  if (options.length !== 2) {
-    fail(`${page}: office map must expose exactly two selectable office controls`);
-  }
   const locations = [...html.matchAll(/\bdata-office-map-lat\b/giu)];
   if (locations.length !== 2) {
     fail(`${page}: office map must expose coordinates for both offices`);
+  }
+
+  for (const coordinates of ['40.151219%2C%2044.474063', '40.235773%2C%2044.490821']) {
+    if (!html.includes(`destination&#x3D;${coordinates}`)) {
+      fail(`${page}: office route must use the saved destination coordinates (${coordinates})`);
+    }
   }
 
   const configMatch = html.match(

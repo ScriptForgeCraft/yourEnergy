@@ -31,16 +31,7 @@
 .projects-container {
   width: min(calc(100% - 52px), 1280px);
 }
-
-.projects-eyebrow {
-  margin-bottom: 11px;
-  color: var(--projects-yellow);
-  font-size: 0.69rem;
-  font-weight: 800;
-  letter-spacing: 0.18em;
-  line-height: 1.2;
-  text-transform: uppercase;
-}
+ 
 
 .projects-primary-button,
 .projects-secondary-button,

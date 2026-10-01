@@ -37,16 +37,11 @@
   z-index: 2;
   inset: 0;
 
-  background: linear-gradient(
-    108deg,
-    rgb(248 251 250 / 88%) 0 49.5%,
-    rgb(248 251 250 / 0%) 49.5%
-  );
+  background: linear-gradient(108deg, rgb(248 251 250 / 88%) 0 49.5%, rgb(248 251 250 / 0%) 49.5%);
 
   content: '';
 }
 
- 
 .contacts-hero__backdrop picture,
 .contacts-hero__backdrop img {
   width: 100%;
@@ -73,8 +68,6 @@
   margin-bottom: 22px;
   padding-left: 18px;
 }
-
-
 
 .contacts-hero h1 {
   max-width: 12ch;
@@ -648,7 +641,7 @@
   width: max-content;
 }
 
-.contact-projects {
+.contact-offices {
   padding: 22px 0 26px;
   background: #fff;
 }
@@ -676,7 +669,6 @@
   line-height: 1.4;
 }
 
-.contact-route-button,
 .contact-calculator-cta__button {
   min-height: 42px;
   display: inline-flex;
@@ -697,14 +689,11 @@
     transform 150ms ease;
 }
 
-.contact-route-button svg,
 .contact-calculator-cta__button svg {
   width: 15px;
   height: 15px;
 }
 
-.contact-route-button:hover,
-.contact-route-button:focus-visible,
 .contact-calculator-cta__button:hover,
 .contact-calculator-cta__button:focus-visible {
   color: #fff;
@@ -773,113 +762,100 @@
   font-size: 0.72rem;
 }
 
-.contact-project-cards {
+.contact-location-cards {
   position: absolute;
   z-index: 3;
   right: 12px;
   bottom: 12px;
   left: 12px;
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: min(22vw, 225px);
+  grid-template-columns: repeat(2, minmax(200px, 280px));
+  justify-content: space-between;
+  gap: 16px;
   pointer-events: none;
 }
 
-.contact-project-card {
-  min-height: 99px;
-  display: grid;
-  grid-template-columns: 90px minmax(0, 1fr) 32px;
-  gap: 10px;
-  align-items: center;
-  border: 1px solid rgb(255 255 255 / 94%);
-  border-radius: 12px;
-  padding: 9px;
-  background: rgb(255 255 255 / 95%);
-  box-shadow: 0 11px 26px rgb(30 70 52 / 14%);
-  backdrop-filter: blur(7px);
+.contact-location-card {
   pointer-events: auto;
-  transition:
-    border-color 150ms ease,
-    transform 150ms ease;
 }
 
-.contact-project-card.is-active {
+.contact-location-card__link {
+  min-height: 78px;
+  display: grid;
+  grid-template-columns: 32px minmax(0, 1fr);
+  grid-template-rows: minmax(0, 1fr) auto;
+  column-gap: 10px;
+  border: 1px solid rgb(255 255 255 / 94%);
+  border-radius: 12px;
+  padding: 11px;
+  background: rgb(255 255 255 / 95%);
+  color: inherit;
+  box-shadow: 0 11px 26px rgb(30 70 52 / 14%);
+  backdrop-filter: blur(7px);
+  transition:
+    border-color 150ms ease,
+    background 150ms ease,
+    transform 150ms ease,
+    box-shadow 150ms ease;
+}
+
+.contact-location-card__link:hover,
+.contact-location-card__link:focus-visible {
   border-color: #5bb584;
+  background: #fff;
+  box-shadow: 0 14px 30px rgb(30 70 52 / 20%);
   transform: translateY(-2px);
 }
 
-.contact-project-card__image,
-.contact-project-card__image img {
-  width: 90px;
-  height: 76px;
-  display: block;
-  border-radius: 8px;
-  object-fit: cover;
-}
-
-.contact-project-card__copy h3 {
-  margin: 0 0 6px;
-  color: #0f202d;
-  font-size: 0.68rem;
-  line-height: 1.2;
-}
-
-.contact-project-card__copy p {
-  display: flex;
-  gap: 6px;
-  align-items: center;
-  margin: 3px 0;
-  color: #5a6874;
-  font-size: 0.59rem;
-  line-height: 1.25;
-}
-
-.contact-project-card__copy p svg {
-  width: 12px;
-  height: 12px;
-  flex: 0 0 auto;
-  color: #17814b;
-}
-
-.contact-project-card__copy p:first-of-type svg {
-  color: #d99a00;
-}
-
-.contact-project-card__actions {
-  display: grid;
-  gap: 7px;
-  justify-items: center;
-}
-
-.contact-project-card__actions button,
-.contact-project-card__actions a {
-  width: 28px;
-  height: 28px;
+.contact-location-card__icon {
+  width: 32px;
+  height: 32px;
+  grid-row: 1 / -1;
   display: grid;
   place-items: center;
-  border: 1px solid #53ad7c;
-  border-radius: 50%;
-  padding: 0;
-  color: #147442;
-  background: #fff;
-  cursor: pointer;
-}
-
-.contact-project-card__actions button {
-  width: 22px;
-  height: 22px;
-  border-color: transparent;
-  background: transparent;
-}
-
-.contact-project-card__actions button.is-active {
+  align-self: center;
+  border-radius: 9px;
   color: #fff;
   background: #16804b;
 }
 
-.contact-project-card__actions svg {
-  width: 13px;
-  height: 13px;
+.contact-location-card__icon svg {
+  width: 16px;
+  height: 16px;
+}
+
+.contact-location-card__copy {
+  min-width: 0;
+  display: grid;
+  gap: 2px;
+  align-content: center;
+}
+
+.contact-location-card__copy strong {
+  color: #0f202d;
+  font-size: 0.72rem;
+  line-height: 1.2;
+}
+
+.contact-location-card__copy > span {
+  color: #5a6874;
+  font-size: 0.61rem;
+  line-height: 1.25;
+}
+
+.contact-location-card__action {
+  display: inline-flex;
+  gap: 5px;
+  align-items: center;
+  margin-top: 5px;
+  color: #147442;
+  font-size: 0.56rem;
+  font-weight: 800;
+}
+
+.contact-location-card__action svg {
+  width: 12px;
+  height: 12px;
 }
 
 .contact-calculator-cta {
@@ -898,25 +874,32 @@
   align-items: center;
   overflow: hidden;
   border-radius: 26px 26px 0 0;
-  padding: 18px 250px 18px 24px;
-  background:
-    linear-gradient(
-      90deg,
-      rgb(237 250 242 / 98%) 0%,
-      rgb(245 252 248 / 95%) 62%,
-      rgb(245 252 248 / 60%) 100%
-    ),
-    url('/images/hero-time-14-1024.webp') right 34% / 350px auto no-repeat;
+  padding: 18px clamp(250px, 28vw, 480px) 18px 24px;
+  background: linear-gradient(
+    90deg,
+    #edfaf2 0%,
+    #f5fcf8 64%,
+    rgb(245 252 248 / 76%) 80%,
+    rgb(245 252 248 / 18%) 100%
+  );
 }
 
 .contact-calculator-cta__inner::after {
-  width: 300px;
+  width: clamp(340px, 26vw, 440px);
   position: absolute;
-  z-index: -1;
+  z-index: 0;
   inset: 0 0 0 auto;
-  background: url('/images/hero-time-14-1024.webp') center / cover no-repeat;
-  clip-path: polygon(35% 0, 100% 0, 100% 100%, 0 100%);
+  background:
+    linear-gradient(112deg, rgb(245 252 248 / 88%) 0%, rgb(245 252 248 / 0%) 54%),
+    url('/images/hero-time-14-1024.webp') 58% center / cover no-repeat;
+  clip-path: polygon(36% 0, 100% 0, 100% 100%, 0 100%);
   content: '';
+}
+
+.contact-calculator-cta__icon,
+.contact-calculator-cta__copy {
+  position: relative;
+  z-index: 1;
 }
 
 .contact-calculator-cta__icon {
@@ -1290,10 +1273,6 @@
     padding: 7px 6px;
   }
 
-  .contact-project-cards {
-    gap: 14px;
-  }
-
   .contact-calculator-cta__inner {
     padding-right: 220px;
   }
@@ -1353,21 +1332,14 @@
     background-position: center 72%;
   }
 
-  .contact-project-cards {
-    grid-template-columns: 1fr;
+  .contact-location-cards {
+    grid-template-columns: minmax(0, 280px);
+    justify-content: end;
     gap: 8px;
   }
 
   .office-map {
     min-height: 430px;
-  }
-
-  .contact-project-card {
-    width: min(100%, 430px);
-  }
-
-  .contact-project-card:nth-child(2) {
-    justify-self: end;
   }
 
   .contact-calculator-cta__inner {
@@ -1404,7 +1376,7 @@
   }
 
   .contact-form-section,
-  .contact-projects {
+  .contact-offices {
     padding-top: 18px;
   }
 
@@ -1444,34 +1416,20 @@
     padding: 0;
   }
 
-  .contact-route-button {
-    width: 100%;
-  }
-
   .office-map {
-    min-height: 500px;
+    min-height: 430px;
   }
 
-  .contact-project-cards {
+  .contact-location-cards {
     right: 8px;
     bottom: 8px;
-    left: 8px;
+    left: auto;
+    grid-template-columns: minmax(0, 280px);
   }
 
-  .contact-project-card,
-  .contact-project-card:nth-child(2) {
-    width: 100%;
-    justify-self: stretch;
-  }
-
-  .contact-project-card {
-    grid-template-columns: 74px minmax(0, 1fr) 28px;
-  }
-
-  .contact-project-card__image,
-  .contact-project-card__image img {
-    width: 74px;
-    height: 68px;
+  .contact-location-card__link {
+    min-height: 74px;
+    padding: 10px;
   }
 
   .contact-calculator-cta {

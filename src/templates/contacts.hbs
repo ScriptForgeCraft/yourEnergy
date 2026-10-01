@@ -120,20 +120,21 @@
         </div>
       </section>
 
-      <section class='contact-projects section' aria-labelledby='offices-title'>
+      <section class='contact-offices section' aria-labelledby='offices-title'>
         <div class='container'>
           <header class='contact-section-heading'>
             <div><h2 id='offices-title'>{{contactPage.officesProjectsTitle}}</h2><p>{{contactPage.officesProjectsIntro}}</p></div>
-            <a class='contact-route-button' href='{{contactPage.projectsHref}}'><svg aria-hidden='true'><use href='/icons.svg#map-pin'></use></svg>{{contactPage.allProjects}}<svg aria-hidden='true'><use href='/icons.svg#arrow-right'></use></svg></a>
           </header>
           <div class='office-map' data-office-map aria-label='{{contactPage.officesProjectsTitle}}'>
             <div class='office-map__canvas' data-office-map-canvas role='region' aria-label='{{contactPage.officesProjectsTitle}}'></div>
-            <div class='contact-project-cards'>
-              {{#each contactPage.mapProjects}}
-                <article class='contact-project-card' data-office-card data-office-map-lat='{{latitude}}' data-office-map-lng='{{longitude}}' data-office-map-title='{{title}}' data-office-map-address='{{title}}'>
-                  <picture class='contact-project-card__image'><source type='image/avif' srcset='/images/{{image}}-480.avif 480w, /images/{{image}}-800.avif 800w' sizes='92px' /><source type='image/webp' srcset='/images/{{image}}-480.webp 480w, /images/{{image}}-800.webp 800w' sizes='92px' /><img src='/images/{{image}}-480.jpg' width='480' height='320' alt='{{imageAlt}}' loading='lazy' decoding='async' /></picture>
-                  <div class='contact-project-card__copy'><h3>{{title}}</h3><p><svg aria-hidden='true'><use href='/icons.svg#sun'></use></svg>{{power}}</p><p><svg aria-hidden='true'><use href='/icons.svg#zap'></use></svg>{{production}}</p><p><svg aria-hidden='true'><use href='/icons.svg#tree'></use></svg>{{../contactPage.installed}}</p></div>
-                  <div class='contact-project-card__actions'><button type='button' data-office-map-option aria-pressed='false' aria-label='{{../contactPage.showOnMap}} — {{title}}'><svg aria-hidden='true'><use href='/icons.svg#map-pin'></use></svg></button><a href='{{href}}' aria-label='{{title}}'><svg aria-hidden='true'><use href='/icons.svg#arrow-right'></use></svg></a></div>
+            <div class='contact-location-cards'>
+              {{#each contactPage.offices}}
+                <article class='contact-location-card' data-office-card data-office-map-lat='{{latitude}}' data-office-map-lng='{{longitude}}' data-office-map-title='{{title}}' data-office-map-address='{{address}}'>
+                  <a class='contact-location-card__link' href='{{href}}' target='_blank' rel='noopener noreferrer' aria-label='{{../contactPage.route}} — {{title}}, {{address}}'>
+                    <span class='contact-location-card__icon'><svg aria-hidden='true'><use href='/icons.svg#map-pin'></use></svg></span>
+                    <span class='contact-location-card__copy'><strong>{{title}}</strong><span>{{address}}</span></span>
+                    <span class='contact-location-card__action'><span>{{../contactPage.route}}</span><svg aria-hidden='true'><use href='/icons.svg#arrow-right'></use></svg></span>
+                  </a>
                 </article>
               {{/each}}
             </div>

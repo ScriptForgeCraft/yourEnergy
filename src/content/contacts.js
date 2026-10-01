@@ -1,5 +1,4 @@
 import { CONTACT_HOURS } from './contact-hours.js';
-import projectCatalog from '../data/projects/projects.json';
 
 const mapsUrl = (query) =>
   `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(query)}`;
@@ -64,15 +63,15 @@ const baseContactPageCopy = Object.freeze({
     showOnMap: 'Ցույց տալ քարտեզում',
     offices: [
       office(
-        'Երևան — Գլխավոր գրասենյակ',
-        'Արտաշիսյան փ., 48, Երևան',
+        'Երևան',
+        'Երևան, Արտաշիսյան փ., 48/14',
         CONTACT_HOURS.hy.office,
-        '48 Artashesyan St, Yerevan',
+        '40.151219, 44.474063',
         [40.151219, 44.474063]
       ),
       office(
-        'Զովունի — Ներկայացուցչություն',
-        '26-րդ փ., 33, Զովունի, Կոտայք',
+        'Զովունի',
+        'Զովունի, 26-րդ փողոց, 33',
         CONTACT_HOURS.hy.office,
         '40.235773, 44.490821',
         [40.235773, 44.490821]
@@ -197,18 +196,18 @@ const baseContactPageCopy = Object.freeze({
     showOnMap: 'Показать на карте',
     offices: [
       office(
-        'Ереван — Главный офис',
-        'ул. Арташисьяна, 48/14, Ереван',
+        'Ереван',
+        'Ереван, ул. Арташисьяна, 48/14',
         CONTACT_HOURS.ru.office,
-        'Artashisyan Street 48/14, Yerevan',
-        [40.2272612, 44.5454473]
+        '40.151219, 44.474063',
+        [40.151219, 44.474063]
       ),
       office(
-        'Зовуни — Представительство',
-        '26-я ул., 33, Зовуни, Котайк',
+        'Зовуни',
+        'Зовуни, 26-я улица, 33',
         CONTACT_HOURS.ru.office,
-        '26th Street 33, Zovuni, Armenia',
-        [40.1590219, 44.5387532]
+        '40.235773, 44.490821',
+        [40.235773, 44.490821]
       )
     ],
     formEyebrow: 'Остались вопросы?',
@@ -323,18 +322,18 @@ const baseContactPageCopy = Object.freeze({
     showOnMap: 'Show on map',
     offices: [
       office(
-        'Yerevan — Head office',
-        '48/14 Artashisyan St., Yerevan',
+        'Yerevan',
+        'Yerevan, 48/14 Artashisyan St.',
         CONTACT_HOURS.en.office,
-        'Artashisyan Street 48/14, Yerevan',
-        [40.2272612, 44.5454473]
+        '40.151219, 44.474063',
+        [40.151219, 44.474063]
       ),
       office(
-        'Zovuni — Representative office',
-        '33, 26th St., Zovuni, Kotayk',
+        'Zovuni',
+        'Zovuni, 26th Street, 33',
         CONTACT_HOURS.en.office,
-        '26th Street 33, Zovuni, Armenia',
-        [40.1590219, 44.5387532]
+        '40.235773, 44.490821',
+        [40.235773, 44.490821]
       )
     ],
     formEyebrow: 'Have questions?',
@@ -405,15 +404,20 @@ const baseContactPageCopy = Object.freeze({
   }
 });
 
-
 const CONTACT_VISUAL_COPY = Object.freeze({
   hy: {
     heroEyebrow: 'Կապ',
     heroTitle: 'Եկեք քննարկենք<br><span>Ձեր նախագիծը</span>',
-    heroIntro: 'Պատասխանենք արևային համակարգի, հաշվարկի, սարքավորումների և տեղադրման մասին Ձեր հարցերին։',
+    heroIntro:
+      'Պատասխանենք արևային համակարգի, հաշվարկի, սարքավորումների և տեղադրման մասին Ձեր հարցերին։',
     contactCardTitle: 'Կապվեք մեզ հետ',
     contactCardCopy: 'Հարց ունե՞ք հաշվարկի կամ տեղադրման մասին։ Գրեք կամ զանգահարեք մեզ։',
-    contactLabels: { phone: 'Հեռախոս', email: 'Email', address: 'Հասցե', hours: 'Աշխատանքային ժամեր' },
+    contactLabels: {
+      phone: 'Հեռախոս',
+      email: 'Email',
+      address: 'Հասցե',
+      hours: 'Աշխատանքային ժամեր'
+    },
     formTitleRef: 'Թողնել հայտ',
     formIntroRef: 'Մի փոքր պատմեք օբյեկտի մասին — մենք կօգնենք ընտրել օպտիմալ լուծումը։',
     propertyTypeLabel: 'Օբյեկտի տեսակը',
@@ -424,13 +428,12 @@ const CONTACT_VISUAL_COPY = Object.freeze({
       { value: 'Այլ', icon: 'menu', label: 'Այլ' }
     ],
     privacyHint: 'Ձեր տվյալներն օգտագործվում են միայն Ձեր հայտին պատասխանելու համար։',
-    officesProjectsTitle: 'Մեր գրասենյակներն ու նախագծերը',
-    officesProjectsIntro: 'Աշխատում ենք Երևանում և ամբողջ Հայաստանում։ Կարող եք այցելել մեր գրասենյակ կամ քարտեզում դիտել իրականացված նախագծերը։',
-    allProjects: 'Ցույց տալ բոլոր նախագծերը',
+    officesProjectsTitle: 'Մեր գրասենյակները',
+    officesProjectsIntro: 'Ընտրեք հասցեն՝ Google Քարտեզներում երթուղին բացելու համար։',
     calculatorTitle: 'Հաշվարկ պե՞տք է հենց հիմա',
-    calculatorCopy: 'Իմացեք համակարգի մոտավոր հզորությունն ու սպասվող արտադրությունը մի քանի րոպեում։',
-    calculatorAction: 'Անցնել հաշվիչին',
-    installed: 'Շահագործման մեջ'
+    calculatorCopy:
+      'Իմացեք համակարգի մոտավոր հզորությունն ու սպասվող արտադրությունը մի քանի րոպեում։',
+    calculatorAction: 'Անցնել հաշվիչին'
   },
   ru: {
     heroEyebrow: 'Контакты',
@@ -449,23 +452,24 @@ const CONTACT_VISUAL_COPY = Object.freeze({
       { value: 'Другое', icon: 'menu', label: 'Другое' }
     ],
     privacyHint: 'Ваши данные используются только для связи по вашей заявке.',
-    officesProjectsTitle: 'Наши офисы и проекты',
-    officesProjectsIntro: 'Мы работаем в Ереване и по всей Армении. Вы можете посетить наш офис или посмотреть реализованные проекты на карте.',
-    allProjects: 'Показать все проекты',
+    officesProjectsTitle: 'Наши офисы',
+    officesProjectsIntro: 'Выберите адрес, чтобы построить маршрут в Google Картах.',
     calculatorTitle: 'Нужен расчёт прямо сейчас?',
-    calculatorCopy: 'Узнайте примерную мощность системы и ожидаемую выработку электроэнергии за несколько минут.',
-    calculatorAction: 'Перейти к калькулятору',
-    installed: 'Введен в эксплуатацию'
+    calculatorCopy:
+      'Узнайте примерную мощность системы и ожидаемую выработку электроэнергии за несколько минут.',
+    calculatorAction: 'Перейти к калькулятору'
   },
   en: {
     heroEyebrow: 'Contacts',
     heroTitle: 'Let’s discuss<br><span>your project</span>',
-    heroIntro: 'We’ll answer your questions about solar systems, estimates, equipment and installation.',
+    heroIntro:
+      'We’ll answer your questions about solar systems, estimates, equipment and installation.',
     contactCardTitle: 'Get in touch',
     contactCardCopy: 'Have a question about an estimate or installation? Message or call us.',
     contactLabels: { phone: 'Phone', email: 'Email', address: 'Address', hours: 'Working hours' },
     formTitleRef: 'Send a request',
-    formIntroRef: 'Tell us a little about your property — we’ll help you choose the right solution.',
+    formIntroRef:
+      'Tell us a little about your property — we’ll help you choose the right solution.',
     propertyTypeLabel: 'Property type',
     propertyTypes: [
       { value: 'Private home', icon: 'faq-home', label: 'Private home' },
@@ -474,38 +478,16 @@ const CONTACT_VISUAL_COPY = Object.freeze({
       { value: 'Other', icon: 'menu', label: 'Other' }
     ],
     privacyHint: 'Your data is used only to respond to your request.',
-    officesProjectsTitle: 'Our offices and projects',
-    officesProjectsIntro: 'We work in Yerevan and across Armenia. Visit our office or explore completed projects on the map.',
-    allProjects: 'View all projects',
+    officesProjectsTitle: 'Our offices',
+    officesProjectsIntro: 'Select an address to get directions in Google Maps.',
     calculatorTitle: 'Need an estimate right now?',
-    calculatorCopy: 'See the approximate system size and expected energy production in a few minutes.',
-    calculatorAction: 'Open calculator',
-    installed: 'Commissioned'
+    calculatorCopy:
+      'See the approximate system size and expected energy production in a few minutes.',
+    calculatorAction: 'Open calculator'
   }
 });
 
-const LOCALE_TAGS = Object.freeze({ hy: 'hy-AM', ru: 'ru-RU', en: 'en-US' });
-const projectHref = (locale, slug) => `${locale === 'hy' ? '' : `/${locale}`}/projects/${slug}/`;
-const projectsHref = (locale) => `${locale === 'hy' ? '' : `/${locale}`}/projects/`;
 const calculatorHref = (locale) => `${locale === 'hy' ? '' : `/${locale}`}/calculator/`;
-const number = (value, locale) => new Intl.NumberFormat(LOCALE_TAGS[locale]).format(value);
-const contactProjects = (locale) =>
-  projectCatalog.projects
-    .filter(({ slug }) => ['modern-home-yerevan', 'office-building-yerevan'].includes(slug))
-    .map((project) => {
-      const translation = project.translations?.[locale] ?? project.translations.en;
-      return Object.freeze({
-        slug: project.slug,
-        title: `${translation.category} — ${translation.city}`,
-        image: project.image,
-        imageAlt: translation.imageAlt,
-        power: `${project.powerKwp} kWp`,
-        production: `${number(project.annualProductionKwh, locale)} kWh/year`,
-        latitude: project.location.coordinates.lat,
-        longitude: project.location.coordinates.lng,
-        href: projectHref(locale, project.slug)
-      });
-    });
 
 export const contactPageCopy = Object.freeze(
   Object.fromEntries(
@@ -514,8 +496,6 @@ export const contactPageCopy = Object.freeze(
       Object.freeze({
         ...base,
         ...CONTACT_VISUAL_COPY[locale],
-        mapProjects: Object.freeze(contactProjects(locale)),
-        projectsHref: projectsHref(locale),
         calculatorHref: calculatorHref(locale)
       })
     ])
