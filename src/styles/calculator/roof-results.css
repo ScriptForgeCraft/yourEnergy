@@ -624,11 +624,12 @@
   width: 0.95rem;
   height: 0.95rem;
   color: #5b7390;
+  transform: rotate(90deg);
   transition: transform 160ms ease;
 }
 
 .professional-roof-map__analysis[open] .professional-roof-map__analysis-arrow {
-  transform: rotate(90deg);
+  transform: rotate(-90deg);
 }
 
 .professional-roof-map__analysis summary:focus-visible {

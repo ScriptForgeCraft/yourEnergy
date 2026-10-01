@@ -161,6 +161,8 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
   const mapElement = root.querySelector('[data-property-map]');
   const locationMapWrap = root.querySelector('[data-location-map-wrap]');
   const roofMapHost = root.querySelector('[data-roof-map-host]');
+  const roofMapTools = root.querySelector('.professional-roof-map__tools');
+  const roofMapAnalysis = root.querySelector('.professional-roof-map__analysis');
   const roofLineWidth = root.querySelector('[data-roof-line-width]');
   const roofLineWidthOutput = root.querySelector('[data-roof-line-width-output]');
   const roofPointRadius = root.querySelector('[data-roof-point-radius]');
@@ -875,6 +877,11 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
     map.setRoofPointNumbers(roofPointNumbers?.checked ?? true);
   };
 
+  const closeRoofMapPanels = () => {
+    roofMapTools?.removeAttribute('open');
+    roofMapAnalysis?.removeAttribute('open');
+  };
+
   const mountMap = async (mode) => {
     if (!lifecycle.isActive()) return null;
     const host = mode === 'roof' ? roofMapHost : locationMapWrap;
@@ -1461,6 +1468,13 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
       });
     })
   );
+  roofMapHost?.addEventListener('click', (event) => {
+    const target = event.target instanceof Element ? event.target : null;
+    // Only a click on the interactive map closes the two overlay panels.
+    // The controls themselves and the rest of the page retain their own state.
+    if (!target?.closest('.leaflet-container') || target.closest('.leaflet-control')) return;
+    closeRoofMapPanels();
+  });
   potentialSkip?.addEventListener('click', () => setStep(1));
   potentialRetry?.addEventListener('click', () => void requestPotential({ force: true }));
   root.querySelector('[data-consumption-continue]')?.addEventListener('click', () => {
