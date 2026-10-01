@@ -15,26 +15,6 @@
   background: var(--blog-paper);
   color: var(--blog-ink);
 }
-.blog-page .site-header {
-  position: absolute;
-  inset: 0 0 auto;
-  z-index: 10;
-  background: transparent;
-  border-color: rgb(255 255 255 / 14%);
-}
-.blog-page .site-header .wordmark,
-.blog-page .site-header .desktop-nav a,
-.blog-page .site-header .language-menu {
-  color: #fff;
-}
-.blog-page .site-header .wordmark__mark {
-  filter: none;
-}
-.blog-page .site-header .header-actions > .button {
-  background: #007d59;
-  border-color: #007d59;
-  color: white;
-}
 .blog-hero,
 .article-hero {
   isolation: isolate;
@@ -713,9 +693,6 @@
   }
 }
 @media (max-width: 850px) {
-  .blog-page .site-header {
-    background: linear-gradient(#061827e6, transparent);
-  }
   .blog-content-layout {
     grid-template-columns: 1fr;
   }
