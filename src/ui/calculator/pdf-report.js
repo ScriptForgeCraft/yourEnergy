@@ -1,5 +1,5 @@
 import { calculatePreliminaryRoofCapacity } from '../../domain/roof-capacity.js';
-import { formatTariffProvenance } from '../tariff-selector.js';
+import { formatTariffProvenance } from '../tariff-provenance.js';
 
 const PAGE_WIDTH_PT = 595.28;
 const PAGE_HEIGHT_PT = 841.89;
@@ -853,7 +853,7 @@ export const createCalculatorPdfReportHtml = ({
   const coordinatesObject = analysis.property?.coordinates;
   const roof = analysis.roof ?? state.roof ?? {};
   const consumption = analysis.consumption ?? state.consumption ?? {};
-  const tariff = analysis.financial?.tariff ?? state.userTariff ?? {};
+  const tariff = analysis.financial?.tariff ?? state.effectiveRateOverride ?? {};
   const financial = scenario.financial ?? {};
   const storagePriceUnavailable = financial.storagePriceUnavailable === true;
   const estimate = scenario.commercialEstimate ?? analysis.commercialEstimate ?? {};

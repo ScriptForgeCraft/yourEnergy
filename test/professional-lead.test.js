@@ -43,7 +43,7 @@ test('Professional lead context includes entered inputs, calculated result and e
       addressNote: 'Arabkir, Yerevan',
       confirmedProperty: { lat: 40.20512, lng: 44.51234 },
       consumption: { mode: 'usage', averageMonthlyKwh: 540 },
-      userTariff: { rateAmdPerKwh: 46.48 },
+      effectiveRateOverride: { rateAmdPerKwh: 46.48 },
       roof: {
         areaMethod: 'map-projected',
         areaSqm: 40,

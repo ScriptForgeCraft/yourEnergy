@@ -6,7 +6,7 @@ import {
   PRELIMINARY_USABLE_ROOF_RATIO,
   PriceBookRepository,
   buildSolarAnalysis,
-  createRegistryTariffSelection,
+  createAutomaticStandardResidentialTariff,
   createUserTariffSelection,
   normalizeConsumption
 } from '../../src/domain/index.js';
@@ -80,24 +80,12 @@ const roofAreaFromBody = (body, validatedInput) => {
   };
 };
 
-const selectTariffForP1 = (body) => {
-  const tariff = body?.tariff;
-  if (tariff?.tariffId || tariff?.period) {
-    // The client cannot supply an official rate. Resolve the chosen ID and
-    // day/night period from the server-owned Armenian registry instead.
-    return createRegistryTariffSelection(
-      { tariffId: tariff.tariffId, period: tariff.period },
-      ARMENIA_TARIFF_DATASET
-    );
-  }
-  const rawRate = tariff?.rateAmdPerKwh;
-  if (rawRate !== undefined && rawRate !== null && rawRate !== '') {
-    return createUserTariffSelection({ rateAmdPerKwh: rawRate });
-  }
-  // Pass an explicit unavailable selection to the generic domain layer.
-  // `undefined` would activate its registry default parameter and make a
-  // public P0 analysis appear to have a tariff the visitor never entered.
-  return createUserTariffSelection({});
+const userEffectiveRate = (body) => {
+  const rawRate = body?.tariff?.rateAmdPerKwh;
+  if (rawRate === undefined || rawRate === null || rawRate === '') return null;
+  const selection = createUserTariffSelection({ rateAmdPerKwh: rawRate });
+  if (!selection.available) throw new ApiError('INVALID_INPUT');
+  return selection;
 };
 
 const confirmedProperty = (body, validatedInput) => ({
@@ -145,8 +133,14 @@ const confirmedRoof = (body, validatedInput, validatedArea = null) => {
  * result before explicitly confirming a point and outlining a usable roof.
  */
 export const validateP0AnalysisWorkflow = (body, validatedInput) => {
-  const tariffSelection = selectTariffForP1(body);
-  const consumption = normalizeConsumption(body?.consumption, { tariff: tariffSelection });
+  const effectiveRate = userEffectiveRate(body);
+  const consumption = normalizeConsumption(body?.consumption, {
+    tariff: effectiveRate,
+    tariffDataset: ARMENIA_TARIFF_DATASET
+  });
+  const tariffSelection =
+    effectiveRate ??
+    createAutomaticStandardResidentialTariff(consumption.averageMonthlyKwh, ARMENIA_TARIFF_DATASET);
   const calculatorSystem = calculatorSystemForBody(body);
   const hasConfirmedProperty =
     body?.property?.confirmed === true &&
@@ -155,7 +149,12 @@ export const validateP0AnalysisWorkflow = (body, validatedInput) => {
     body?.roof?.polygonComplete === true ||
     validAreaMethod(body?.roof?.areaMethod) === 'measured-plane';
 
-  if (!hasConfirmedProperty || !hasCompleteRoof || !consumption.available) {
+  if (
+    !hasConfirmedProperty ||
+    !hasCompleteRoof ||
+    !consumption.available ||
+    !tariffSelection.available
+  ) {
     throw new ApiError('INVALID_INPUT');
   }
 
@@ -176,6 +175,7 @@ export const buildP0SolarAnalysis = ({
   body,
   validatedInput,
   providerAnalysis,
+  consumption = null,
   tariffSelection,
   roofArea,
   calculatorSystem,
@@ -190,7 +190,9 @@ export const buildP0SolarAnalysis = ({
 
   return buildSolarAnalysis({
     property: confirmedProperty(body, validatedInput),
-    consumption: body?.consumption,
+    // Retain the already validated bill estimate so a discontinuity fallback
+    // cannot be re-divided into a different bracket downstream.
+    consumption: consumption ?? body?.consumption,
     roof: confirmedRoof(body, validatedInput, roofArea),
     production: {
       // P0 requests exactly 1 kWp, so PVGIS annual generation is a specific yield.
@@ -204,9 +206,8 @@ export const buildP0SolarAnalysis = ({
         verifiedAt: providerAnalysis.sourceLedger?.[0]?.retrievedAt ?? new Date().toISOString()
       }
     },
-    // A public result never silently chooses a registry tariff. It accepts
-    // either an explicit official tariff ID + day/night choice or a rate the
-    // visitor entered from a bill; missing selection remains unavailable.
+    // The server resolves the automatic standard residential reference rate
+    // from consumption. A visitor may override only with one effective rate.
     tariffSelection,
     system: calculatorSystem ?? calculatorSystemForBody(body),
     storageRequired: body?.storageRequired === true,

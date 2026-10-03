@@ -62,7 +62,7 @@ export const buildProfessionalLeadContext = ({ analysis, state } = {}) => {
       monthlyKwh: wholeProfile(consumption.monthlyKwh),
       annualKwh: finite(analysis?.consumption?.annualKwh)
     },
-    tariffAmdPerKwh: finite(state?.userTariff?.rateAmdPerKwh),
+    tariffAmdPerKwh: finite(state?.effectiveRateOverride?.rateAmdPerKwh),
     roof: {
       areaMethod: cleanText(roof.areaMethod) || null,
       areaSqm: finite(normalizedRoof.areaSqm ?? roof.effectiveAreaSqm),

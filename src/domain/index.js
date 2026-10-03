@@ -4,11 +4,11 @@ export { CALCULATOR_INPUT_LIMITS, getCalculatorInputNumber } from './calculator-
 export {
   getConfirmedTariffRate,
   getUsableTariffRate,
-  selectEffectiveTariff,
   selectEffectiveSurplusCompensation,
   suggestStandardTariff,
   tariffBracketIncludesMonthlyKwh,
-  createRegistryTariffSelection,
+  createAutomaticStandardResidentialTariff,
+  estimateStandardResidentialConsumptionFromBill,
   createUserTariffSelection
 } from './tariffs.js';
 export { PriceBookRepository, buildCommercialEstimate } from './pricebook.js';

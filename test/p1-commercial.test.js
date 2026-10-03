@@ -111,7 +111,7 @@ test('a finite price book expires instead of silently serving a successor price'
   assertFiniteTree(expired);
 });
 
-test('a user-entered tariff is usable but remains distinguishable from unavailable tariff evidence', () => {
+test('a user effective rate overrides the automatic bill estimate and remains distinguishable', () => {
   const userTariff = createUserTariffSelection({ rateAmdPerKwh: 52 }, ACTIVE_DATE);
   const invalidTariff = createUserTariffSelection({ rateAmdPerKwh: 0 }, ACTIVE_DATE);
   const billWithUserTariff = normalizeConsumption(
@@ -129,8 +129,9 @@ test('a user-entered tariff is usable but remains distinguishable from unavailab
   assert.equal(invalidTariff.available, false);
   assert.equal(invalidTariff.reason, 'USER_TARIFF_INVALID');
   assert.equal(getUsableTariffRate(invalidTariff), null);
-  assert.equal(billWithoutTariff.available, false);
-  assert.ok(billWithoutTariff.issues.includes('TARIFF_REQUIRED_FOR_BILL'));
+  assert.equal(billWithoutTariff.available, true);
+  assert.equal(billWithoutTariff.kind, 'estimated-from-monthly-bill');
+  assert.equal(billWithoutTariff.source.status, 'estimated');
   assertFiniteTree(userTariff);
   assertFiniteTree(billWithUserTariff);
 });

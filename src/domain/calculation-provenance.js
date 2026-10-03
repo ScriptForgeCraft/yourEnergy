@@ -178,7 +178,7 @@ export const buildCalculationBasis = ({
           },
     tariff: {
       sourceType:
-        tariff.kind === 'registry'
+        tariff.kind === 'automatic-standard-residential'
           ? CALCULATION_BASIS_SOURCE_TYPE.REGISTRY_VALUE
           : tariff.kind === 'user'
             ? CALCULATION_BASIS_SOURCE_TYPE.USER_INPUT
@@ -187,6 +187,7 @@ export const buildCalculationBasis = ({
       revision: cleanString(tariff.revision),
       customerType: cleanString(tariff.customerType),
       period: cleanString(tariff.period),
+      tariffSource: cleanString(tariff.tariffSource),
       rateAmdPerKwh: toPositiveNumberOrNull(tariff.rateAmdPerKwh),
       source: sourceReference(tariff.source)
     },

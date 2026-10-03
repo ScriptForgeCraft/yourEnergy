@@ -35,7 +35,12 @@ export const buildProcessStartState = ({ regionId, mode, amount }, previous = {}
     });
   }
   if (previous.regionId !== regionId) {
-    Object.assign(next, { property: null, roof: null, sitePotential: null, userTariff: null });
+    Object.assign(next, {
+      property: null,
+      roof: null,
+      sitePotential: null,
+      effectiveRateOverride: null
+    });
   }
   return next;
 };

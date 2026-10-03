@@ -12,8 +12,8 @@ import { getCalculatorInputNumber } from './calculator-inputs.js';
 import {
   getUsableSurplusCompensationRate,
   getUsableTariffRate,
-  selectEffectiveSurplusCompensation,
-  selectEffectiveTariff
+  createAutomaticStandardResidentialTariff,
+  selectEffectiveSurplusCompensation
 } from './tariffs.js';
 import { buildCommercialEstimate } from './pricebook.js';
 import { recommendInverter } from './inverter-recommendation.js';
@@ -619,9 +619,9 @@ const calculateDataCompleteness = ({
 
 /**
  * Creates a deterministic, provider-agnostic analysis from manual and/or
- * confirmed provider inputs. The tariff registry is never selected implicitly:
- * callers must supply an explicit official day/night selection or a rate the
- * visitor entered. A default call therefore produces technical output only.
+ * confirmed provider inputs. Standard residential tariffs are derived from
+ * consumption with the documented daytime-reference assumption. A visitor may
+ * override that with one effective rate, but cannot choose registry internals.
  *
  * @param {Object} [input]
  * @returns {import('./models.js').SolarAnalysis}
@@ -632,14 +632,23 @@ export const buildSolarAnalysis = (input = {}) => {
   const system = normalizeSystem(input.system);
   const investment = normalizeInvestment(input.investment);
   const priceBook = input.priceBook ?? null;
+  const consumption = isNormalizedConsumption(input.consumption)
+    ? input.consumption
+    : normalizeConsumption(input.consumption, {
+        tariff: input.tariffSelection,
+        tariffDataset: input.tariffDataset,
+        effectiveDate: input.effectiveDate
+      });
   const tariff =
-    input.tariffSelection ?? selectEffectiveTariff(input.tariffDataset, input.effectiveDate);
+    input.tariffSelection ??
+    createAutomaticStandardResidentialTariff(
+      consumption.averageMonthlyKwh,
+      input.tariffDataset,
+      input.effectiveDate
+    );
   const surplusCompensation =
     input.surplusCompensationSelection ??
     selectEffectiveSurplusCompensation(input.surplusCompensationDataset, input.effectiveDate);
-  const consumption = isNormalizedConsumption(input.consumption)
-    ? input.consumption
-    : normalizeConsumption(input.consumption, { tariff });
   const production = normalizeProduction(input.production);
   const scenarios = normalizeScenarioTargets(input.scenarioTargets).map((scenario) =>
     calculateSolarScenario({
@@ -687,7 +696,9 @@ export const buildSolarAnalysis = (input = {}) => {
   const status = selectedScenario?.status ?? ANALYSIS_STATUS.UNAVAILABLE;
   const commercialEstimate = selectedScenario?.commercialEstimate ?? null;
   const tariffKind =
-    tariff?.kind === 'user' || tariff?.kind === 'registry' ? tariff.kind : 'unavailable';
+    tariff?.kind === 'user' || tariff?.kind === 'automatic-standard-residential'
+      ? tariff.kind
+      : 'unavailable';
   const priceKind = commercialEstimate?.available
     ? commercialEstimate.kind
     : (selectedScenario?.financial?.price?.kind ?? 'unavailable');
@@ -810,6 +821,7 @@ export const buildSolarAnalysis = (input = {}) => {
         kind: tariffKind,
         tariffId: tariff?.tariff?.tariffId ?? null,
         revision: tariff?.dataset?.revision ?? tariff?.tariff?.datasetRevision ?? null,
+        tariffSource: tariff?.tariff?.tariffSource ?? null,
         period: tariff?.tariff?.period ?? null,
         rateAmdPerKwh: getUsableTariffRate(tariff),
         source: tariff?.source ?? unavailableSource
@@ -862,6 +874,7 @@ export const buildSolarAnalysis = (input = {}) => {
         revision: tariff?.dataset?.revision ?? tariff?.tariff?.datasetRevision ?? null,
         customerType: tariff?.tariff?.customerType ?? null,
         period: tariff?.tariff?.period ?? null,
+        tariffSource: tariff?.tariff?.tariffSource ?? null,
         rateAmdPerKwh: getUsableTariffRate(tariff),
         source: tariff?.source ?? unavailableSource
       },

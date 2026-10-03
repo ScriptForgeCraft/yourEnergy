@@ -1,7 +1,7 @@
 import { SOURCE_KIND, SOURCE_STATUS } from './models.js';
 import { MONTHS_PER_YEAR, sum } from './numbers.js';
 import { getCalculatorInputNumber, isCalculatorInputInRange } from './calculator-inputs.js';
-import { getUsableTariffRate } from './tariffs.js';
+import { estimateStandardResidentialConsumptionFromBill, getUsableTariffRate } from './tariffs.js';
 
 const unavailableSource = Object.freeze({
   kind: SOURCE_KIND.UNAVAILABLE,
@@ -48,16 +48,20 @@ const normalizeMonthlyProfile = (value) => {
 
 /**
  * Turns manual household consumption inputs into a safe, comparable model.
- * Precedence is monthly profile, annual kWh, average monthly kWh, then a bill
- * divided by a confirmed tariff. No seasonal profile is invented when only an
- * annual or bill value exists. A bill can be converted with either a dated
- * registry tariff or a rate explicitly copied by the visitor from their bill.
+ * Precedence is monthly profile, annual kWh, average monthly kWh, then a bill.
+ * No seasonal profile is invented when only an annual or bill value exists.
+ * A bill with a user-provided effective rate is divided by that rate. Without
+ * one, it is a clearly labelled estimate using the standard residential
+ * daytime reference-rate assumption from the server-owned tariff registry.
  *
  * @param {{monthlyKwh?: unknown[], annualKwh?: unknown, averageMonthlyKwh?: unknown, averageMonthlyBillAmd?: unknown}} [input]
  * @param {{tariff?: Object|null}} [options]
  * @returns {import('./models.js').Consumption}
  */
-export const normalizeConsumption = (input = {}, { tariff = null } = {}) => {
+export const normalizeConsumption = (
+  input = {},
+  { tariff = null, tariffDataset, effectiveDate } = {}
+) => {
   const issues = [];
   const { profile, issue } = normalizeMonthlyProfile(input.monthlyKwh);
   if (issue) issues.push(issue);
@@ -116,23 +120,51 @@ export const normalizeConsumption = (input = {}, { tariff = null } = {}) => {
   );
   if (averageMonthlyBillAmd !== null) {
     const rateAmdPerKwh = getUsableTariffRate(tariff);
-    if (rateAmdPerKwh === null) {
-      return unavailableConsumption([...issues, 'TARIFF_REQUIRED_FOR_BILL']);
+    const estimate =
+      rateAmdPerKwh === null
+        ? estimateStandardResidentialConsumptionFromBill(
+            averageMonthlyBillAmd,
+            tariffDataset,
+            effectiveDate
+          )
+        : null;
+    if (rateAmdPerKwh === null && !estimate?.available) {
+      return unavailableConsumption([...issues, 'STANDARD_RESIDENTIAL_ESTIMATE_UNAVAILABLE']);
     }
-    const billKwh = averageMonthlyBillAmd / rateAmdPerKwh;
+    const billKwh =
+      rateAmdPerKwh === null ? estimate.estimatedMonthlyKwh : averageMonthlyBillAmd / rateAmdPerKwh;
     if (!isCalculatorInputInRange(billKwh, 'averageMonthlyConsumptionKwh')) {
       return unavailableConsumption([...issues, 'CONSUMPTION_VALUE_OUT_OF_RANGE']);
     }
     return {
       normalized: true,
-      kind: 'monthly-bill',
+      kind: rateAmdPerKwh === null ? 'estimated-from-monthly-bill' : 'monthly-bill',
       available: true,
       annualKwh: billKwh * MONTHS_PER_YEAR,
       monthlyKwh: null,
       averageMonthlyKwh: billKwh,
       averageMonthlyBillAmd,
       issues,
-      source: manualSource
+      source:
+        rateAmdPerKwh === null
+          ? {
+              kind: SOURCE_KIND.REGISTRY,
+              status: SOURCE_STATUS.ESTIMATED,
+              provider: estimate.source.provider,
+              reference: estimate.source.reference,
+              verifiedAt: estimate.source.verifiedAt
+            }
+          : manualSource,
+      ...(rateAmdPerKwh === null
+        ? {
+            estimation: {
+              assumption: estimate.assumption,
+              resolution: estimate.resolution,
+              tariffId: estimate.tariff.tariffId,
+              rateAmdPerKwh: estimate.rateAmdPerKwh
+            }
+          }
+        : {})
     };
   }
 

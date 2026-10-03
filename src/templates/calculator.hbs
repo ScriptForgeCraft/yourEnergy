@@ -216,12 +216,15 @@
                 <div class='consumption-panel consumption-panel--months' data-consumption-panel='monthly' hidden>
                   <div class='month-inputs'>{{#each passport.months}}<label>{{short}}<input id='consumption-month-{{@index}}' name='consumption-month-{{@index}}' type='text'
                         inputmode='decimal' autocomplete='off' data-consumption-month /></label>{{/each}}</div>
-                </div><div class='tariff-selector' data-tariff-selector><label><span>{{product.consumption.tariffLabel}}</span>
-                  <div class='input-with-unit'><input id='consumption-tariff' name='tariff' type='text' inputmode='decimal'
-                      autocomplete='off' value='53.48' data-consumption-tariff data-tariff-rate aria-describedby='consumption-tariff-help' required
-                      aria-required='true' /><span>AMD/kWh</span></div>
-                </label>
-                <p class='input-help' id='consumption-tariff-help'>{{product.consumption.tariffHelp}}</p><button class='text-link tariff-selector__disclosure' type='button' data-tariff-disclosure aria-expanded='false' aria-controls='consumption-tariff-advanced'>{{product.consumption.refineTariff}}</button><div class='tariff-selector__advanced' id='consumption-tariff-advanced' data-tariff-advanced hidden><fieldset class='tariff-selector__choices'><legend>{{product.consumption.tariffLabel}}</legend><label><input type='radio' name='tariff-mode' value='official' data-tariff-mode checked />{{product.consumption.officialTariff}}</label><label><input type='radio' name='tariff-mode' value='custom' data-tariff-mode />{{product.consumption.customTariff}}</label></fieldset><div data-tariff-official-controls><fieldset class='tariff-selector__choices'><legend>{{product.consumption.customerType}}</legend><label><input type='radio' name='tariff-customer' value='standard' data-tariff-customer checked />{{product.consumption.standardCustomer}}</label><label><input type='radio' name='tariff-customer' value='social-vulnerable' data-tariff-customer />{{product.consumption.socialVulnerable}}</label></fieldset><p class='tariff-selector__suggestion' data-tariff-suggestion hidden></p><div class='tariff-selector__brackets' data-tariff-brackets><span>{{product.consumption.chooseBracket}}</span><div><button type='button' data-tariff-bracket='standard-up-to-200'>{{product.consumption.tariffCategories.standard-up-to-200}}</button><button type='button' data-tariff-bracket='standard-201-to-400'>{{product.consumption.tariffCategories.standard-201-to-400}}</button><button type='button' data-tariff-bracket='standard-over-400'>{{product.consumption.tariffCategories.standard-over-400}}</button></div></div><fieldset class='tariff-selector__choices'><legend>{{product.consumption.period}}</legend><label><input type='radio' name='tariff-period' value='day' data-tariff-period checked />{{product.consumption.tariffDay}}</label><label><input type='radio' name='tariff-period' value='night' data-tariff-period />{{product.consumption.tariffNight}}</label></fieldset></div><p class='input-help' data-tariff-custom-help hidden>{{product.consumption.customTariffHelp}}</p><p class='input-help tariff-selector__mixed-help'>{{product.consumption.mixedTariffHelp}}</p></div></div>
+                </div>
+                <details class='effective-rate' data-effective-rate-disclosure>
+                  <summary>{{product.consumption.refineEffectiveRate}}</summary>
+                  <label><span>{{product.consumption.effectiveRateLabel}}</span>
+                    <div class='input-with-unit'><input id='consumption-effective-rate' name='effective-rate' type='text' inputmode='decimal'
+                        autocomplete='off' data-consumption-effective-rate aria-describedby='consumption-effective-rate-help' /><span>AMD/kWh</span></div>
+                  </label>
+                  <p class='input-help' id='consumption-effective-rate-help'>{{product.consumption.effectiveRateHelp}}</p>
+                </details>
                 <div class='consumption-estimate'>
                   <span class='consumption-estimate__icon' aria-hidden='true'><svg><use href='/icons.svg#zap'></use></svg></span>
                   <span class='consumption-estimate__copy'><span

@@ -2,12 +2,10 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 
 import { getDefaultCalculatorSystem } from '../src/data/equipment/calculator/defaults.js';
-import { ARMENIA_TARIFF_DATASET } from '../src/data/tariffs/armenia.js';
 import {
   CALCULATION_BASIS_SOURCE_TYPE,
   buildRegionalQuickAnalysis,
-  buildSolarAnalysis,
-  createRegistryTariffSelection
+  buildSolarAnalysis
 } from '../src/domain/index.js';
 
 const pvgisSource = {
@@ -35,10 +33,6 @@ test('property-level calculation basis identifies PVGIS, catalog IDs, a roof ass
     },
     production: { annualYieldKwhPerKwp: 1_500, source: pvgisSource },
     system,
-    tariffSelection: createRegistryTariffSelection(
-      { tariffId: 'standard-201-to-400', period: 'day' },
-      ARMENIA_TARIFF_DATASET
-    ),
     calculationConfig: { systemLossPercent: 14, mountingPlace: 'free' },
     mountingRecommendation: {
       basis: 'pvgis-fixed-free-standing-optimum',
@@ -79,8 +73,8 @@ test('property-level calculation basis identifies PVGIS, catalog IDs, a roof ass
   assert.equal(basis.inverter.productId, analysis.inverterRecommendation.productId);
   assert.equal(basis.mounting.productId, analysis.mountingHardwareRecommendation.productId);
   assert.equal(basis.tariff.sourceType, CALCULATION_BASIS_SOURCE_TYPE.REGISTRY_VALUE);
-  assert.equal(basis.tariff.tariffId, 'standard-201-to-400');
-  assert.equal(basis.tariff.revision, ARMENIA_TARIFF_DATASET.revision);
+  assert.equal(basis.tariff.tariffId, 'standard-over-400');
+  assert.equal(basis.tariff.tariffSource, 'automatic-standard-residential');
   assert.deepEqual(
     analysis.sourceLedger
       .filter((entry) => ['panel', 'inverter', 'mounting-hardware'].includes(entry.key))

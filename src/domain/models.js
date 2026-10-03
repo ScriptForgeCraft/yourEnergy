@@ -65,7 +65,7 @@
  * @property {string|null} id
  * @property {string|null} tariffId
  * @property {string|null} datasetRevision
- * @property {'standard'|'social-vulnerable'|'user-provided'|null} customerType
+ * @property {'standard'|'user-provided'|null} customerType
  * @property {'day'|'night'|'custom'|null} period
  * @property {string} effectiveFrom
  * @property {string|null} effectiveTo

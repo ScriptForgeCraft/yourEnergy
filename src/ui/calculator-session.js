@@ -6,8 +6,8 @@ import {
 } from './quick-analysis-identity.js';
 
 const SESSION_KEY = 'yourenergy.calculator.v2';
-const SESSION_VERSION = 6;
-const LEGACY_SESSION_VERSIONS = new Set([2, 3, 4, 5]);
+const SESSION_VERSION = 7;
+const LEGACY_SESSION_VERSIONS = new Set([2, 3, 4, 5, 6]);
 
 const cloneSafe = (value) => {
   if (!value || typeof value !== 'object') return value ?? null;
@@ -18,12 +18,26 @@ const cloneSafe = (value) => {
   }
 };
 
+const normalizeSessionChanges = (changes = {}) => {
+  const next = cloneSafe(changes) ?? {};
+  if (!Object.hasOwn(next, 'userTariff') || Object.hasOwn(next, 'effectiveRateOverride'))
+    return next;
+  const legacyTariff = next.userTariff;
+  const rateAmdPerKwh = Number(legacyTariff?.rateAmdPerKwh);
+  next.effectiveRateOverride =
+    !legacyTariff?.tariffId && Number.isFinite(rateAmdPerKwh) && rateAmdPerKwh > 0
+      ? { rateAmdPerKwh }
+      : null;
+  delete next.userTariff;
+  return next;
+};
+
 const emptyState = () => ({
   version: SESSION_VERSION,
   currentStep: 0,
   regionId: null,
   consumption: null,
-  userTariff: null,
+  effectiveRateOverride: null,
   property: null,
   roof: null,
   sitePotential: null,
@@ -42,20 +56,24 @@ const isQuickAnalysis = (analysis) => analysis?.scope === QUICK_ANALYSIS_SCOPE;
 const isProfessionalAnalysis = (analysis) => analysis?.scope === PROFESSIONAL_ANALYSIS_SCOPE;
 
 /**
- * Earlier sessions cannot prove whether their visible 53.48 was an untouched
- * default or an entered value. Rebuild result snapshots and retain only the
- * reusable descriptor, restoring the old default as its official selection.
+ * Earlier sessions contained an official tariff selector. Its registry and
+ * social-status choices must never revive in the new product. Retain only a
+ * valid old custom rate as the optional effective-rate override.
  */
 const migrateFinancialModelState = (stored = {}) => {
-  const legacyTariff = stored.userTariff;
-  const userTariff =
-    legacyTariff?.tariffId || Number(legacyTariff?.rateAmdPerKwh) !== 53.48
-      ? legacyTariff
-      : { tariffId: 'standard-over-400', period: 'day' };
+  const legacyTariff = stored.effectiveRateOverride ?? stored.userTariff;
+  const rateAmdPerKwh = Number(legacyTariff?.rateAmdPerKwh);
+  const effectiveRateOverride =
+    !legacyTariff?.tariffId &&
+    Number.isFinite(rateAmdPerKwh) &&
+    rateAmdPerKwh > 0 &&
+    rateAmdPerKwh !== 53.48
+      ? { rateAmdPerKwh }
+      : null;
   return {
     ...emptyState(),
     ...stored,
-    userTariff,
+    effectiveRateOverride,
     version: SESSION_VERSION,
     quickAnalysis: null,
     quickAnalysisStatus: 'idle',
@@ -77,10 +95,11 @@ const readStoredState = (stored) => {
   delete state.analysis;
   delete state.analysisStatus;
   delete state.solarPassport;
+  delete state.userTariff;
   const currentQuickIdentity = createQuickAnalysisIdentity({
     regionId: state.regionId,
     consumption: state.consumption,
-    tariff: state.userTariff
+    tariff: state.effectiveRateOverride
   });
   if (
     !isRestorableQuickAnalysis({
@@ -163,7 +182,8 @@ export const createCalculatorSession = ({ storage } = {}) => {
   };
 
   const write = (changes = {}) => {
-    const next = { ...read(), ...cloneSafe(changes), version: SESSION_VERSION };
+    const normalizedChanges = normalizeSessionChanges(changes);
+    const next = { ...read(), ...normalizedChanges, version: SESSION_VERSION };
     // File objects and other opaque values are intentionally not persisted.
     delete next.selectedBillFile;
     // The generic v2 result fields must never be written back alongside the
@@ -179,11 +199,11 @@ export const createCalculatorSession = ({ storage } = {}) => {
       // still works; only cross-route convenience is unavailable.
     }
     if (
-      'quickAnalysis' in changes ||
-      'quickAnalysisStatus' in changes ||
-      'quickAnalysisIdentity' in changes ||
-      'professionalAnalysis' in changes ||
-      'professionalAnalysisStatus' in changes
+      'quickAnalysis' in normalizedChanges ||
+      'quickAnalysisStatus' in normalizedChanges ||
+      'quickAnalysisIdentity' in normalizedChanges ||
+      'professionalAnalysis' in normalizedChanges ||
+      'professionalAnalysisStatus' in normalizedChanges
     )
       publishAnalysisUpdate(next);
     return next;

@@ -1,9 +1,9 @@
 import { getCalculatorInputNumber, isCalculatorInputInRange } from '../domain/calculator-inputs.js';
-import { initTariffSelector } from './tariff-selector.js';
+import { estimateStandardResidentialConsumptionFromBill } from '../domain/tariffs.js';
 
 const monthlyUsage = (value) => getCalculatorInputNumber(value, 'averageMonthlyConsumptionKwh');
 const monthlyBill = (value) => getCalculatorInputNumber(value, 'averageMonthlyBillAmd');
-const customTariff = (value) => getCalculatorInputNumber(value, 'customTariffAmdPerKwh');
+const effectiveRate = (value) => getCalculatorInputNumber(value, 'customTariffAmdPerKwh');
 const profileMonth = (value) => getCalculatorInputNumber(value, 'monthlyProfileKwh');
 
 const togglePanel = (panel, active) => {
@@ -14,24 +14,26 @@ const togglePanel = (panel, active) => {
   });
 };
 
+const hasText = (value) => typeof value === 'string' && value.trim() !== '';
+
 /**
- * Accessible consumption-mode control. Tariff state is owned by the shared
- * selector so Professional uses exactly the same official/custom semantics as
- * Quick while the server remains authoritative for registry rates.
+ * The Professional consumption step accepts only household consumption and an
+ * optional effective average rate. It never presents tariff brackets,
+ * customer categories or day/night controls; the server derives an automatic
+ * standard residential tariff when an override is absent.
  */
 export const initConsumptionInput = ({
   root,
-  strings,
-  initialTariff,
+  strings = {},
+  initialEffectiveRate = null,
   onChange = () => {}
 } = {}) => {
   if (!root) return null;
   const wizardRoot = root.closest('[data-calculator-wizard]') ?? root;
-
   const modeInputs = [...root.querySelectorAll('input[name="consumption-mode"]')];
   const panels = [...root.querySelectorAll('[data-consumption-panel]')];
   const annualOutput = root.querySelector('[data-consumption-annual]');
-  const tariffInput = root.querySelector('[data-consumption-tariff]');
+  const effectiveRateInput = root.querySelector('[data-consumption-effective-rate]');
   const chartItems = [
     ...wizardRoot.querySelectorAll('[data-consumption-chart] .consumption-profile-chart__item')
   ];
@@ -39,40 +41,51 @@ export const initConsumptionInput = ({
   const unitButtons = [...wizardRoot.querySelectorAll('[data-consumption-unit]')];
   const monthlyProfileButton = wizardRoot.querySelector('[data-consumption-switch-monthly]');
   let chartUnit = 'kwh';
-  let tariffSelector = null;
+
+  if (effectiveRateInput && initialEffectiveRate?.rateAmdPerKwh !== undefined) {
+    effectiveRateInput.value = String(initialEffectiveRate.rateAmdPerKwh);
+  }
 
   const activeMode = () => modeInputs.find((input) => input.checked)?.value ?? 'bill';
+  const selectedEffectiveRate = () => effectiveRate(effectiveRateInput?.value);
+  const automaticEstimate = (bill) =>
+    bill === null ? null : estimateStandardResidentialConsumptionFromBill(bill);
 
   const getValues = () => {
     const mode = activeMode();
     const usage = monthlyUsage(root.querySelector('[data-consumption-usage]')?.value);
-    const tariff = tariffSelector?.getRate() ?? customTariff(tariffInput?.value);
+    const bill = monthlyBill(root.querySelector('[data-consumption-bill]')?.value);
+    const overrideRate = selectedEffectiveRate();
+    const estimate = mode === 'bill' && overrideRate === null ? automaticEstimate(bill) : null;
     const monthly = [...root.querySelectorAll('[data-consumption-month]')].map((input) =>
       profileMonth(input.value)
     );
     let annual = null;
-    const bill = monthlyBill(root.querySelector('[data-consumption-bill]')?.value);
-    if (mode === 'bill' && bill !== null && tariff !== null) annual = (bill / tariff) * 12;
+    let displayRate = overrideRate;
+    if (mode === 'bill' && bill !== null) {
+      if (overrideRate !== null) annual = (bill / overrideRate) * 12;
+      else if (estimate?.available) {
+        annual = estimate.estimatedMonthlyKwh * 12;
+        displayRate = estimate.rateAmdPerKwh;
+      }
+    }
     if (mode === 'usage' && usage !== null) annual = usage * 12;
     if (mode === 'monthly' && monthly.length === 12 && monthly.every((value) => value !== null)) {
       annual = monthly.reduce((total, value) => total + value, 0);
     }
     if (!isCalculatorInputInRange(annual, 'annualConsumptionKwh')) annual = null;
-    return { annual, bill, monthly, mode, tariff, usage };
+    return { annual, bill, displayRate, estimate, mode, monthly, overrideRate, usage };
   };
 
-  const updateChart = ({ annual, mode, monthly, tariff }) => {
+  const updateChart = ({ annual, mode, monthly, displayRate }) => {
     if (!chartItems.length) return;
     const hasMonthlyProfile =
       mode === 'monthly' && monthly.length === 12 && monthly.every((value) => value !== null);
-    // A chart without an entered monthly profile must not imply a fabricated
-    // seasonal household pattern. Use the known annual average only as a
-    // neutral visual baseline.
     const kwhValues = hasMonthlyProfile
       ? monthly
       : Array(12).fill(annual === null ? 0 : annual / 12);
-    const useAmd = chartUnit === 'amd' && tariff !== null;
-    const values = useAmd ? kwhValues.map((value) => value * tariff) : kwhValues;
+    const useAmd = chartUnit === 'amd' && displayRate !== null;
+    const values = useAmd ? kwhValues.map((value) => value * displayRate) : kwhValues;
     const maximum = Math.max(...values, 1);
     chartItems.forEach((item, index) => {
       const value = values[index] ?? 0;
@@ -87,40 +100,32 @@ export const initConsumptionInput = ({
 
   const updateAnnualOutput = () => {
     const values = getValues();
-    const { annual } = values;
-    if (annualOutput) annualOutput.textContent = annual === null ? '—' : String(Math.round(annual));
-    if (chartUnit === 'amd' && values.tariff === null) chartUnit = 'kwh';
+    if (annualOutput)
+      annualOutput.textContent = values.annual === null ? '—' : String(Math.round(values.annual));
+    if (chartUnit === 'amd' && values.displayRate === null) chartUnit = 'kwh';
     unitButtons.forEach((button) => {
       const selected = button.dataset.consumptionUnit === chartUnit;
-      const requiresTariff = button.dataset.consumptionUnit === 'amd';
-      button.disabled = requiresTariff && values.tariff === null;
+      const requiresRate = button.dataset.consumptionUnit === 'amd';
+      button.disabled = requiresRate && values.displayRate === null;
       button.classList.toggle('is-active', selected);
       button.setAttribute('aria-pressed', String(selected));
     });
-    if (fillAverageButton) fillAverageButton.disabled = annual === null;
+    if (fillAverageButton) fillAverageButton.disabled = values.annual === null;
     updateChart(values);
-  };
-
-  const updateTariffRequirement = (mode) => {
-    const required = mode === 'bill';
-    if (tariffInput) {
-      tariffInput.required = required;
-      tariffInput.setAttribute('aria-required', String(required));
-    }
   };
 
   const updateMode = ({ notify = true } = {}) => {
     const mode = activeMode();
     panels.forEach((panel) => togglePanel(panel, panel.dataset.consumptionPanel === mode));
-    updateTariffRequirement(mode);
-    tariffSelector?.syncMonthlyConsumption();
     updateAnnualOutput();
     if (notify) onChange();
   };
 
   modeInputs.forEach((input) => input.addEventListener('change', updateMode));
   root
-    .querySelectorAll('[data-consumption-bill], [data-consumption-usage], [data-consumption-month]')
+    .querySelectorAll(
+      '[data-consumption-bill], [data-consumption-usage], [data-consumption-month], [data-consumption-effective-rate]'
+    )
     .forEach((input) => {
       input.addEventListener('input', () => {
         input.removeAttribute('aria-invalid');
@@ -132,15 +137,12 @@ export const initConsumptionInput = ({
     const values = getValues();
     const monthlyInputs = [...root.querySelectorAll('[data-consumption-month]')];
     if (values.annual === null || monthlyInputs.length !== 12) return;
-
     const monthlyMode = modeInputs.find((input) => input.value === 'monthly');
     if (monthlyMode) monthlyMode.checked = true;
     const annual = Math.round(values.annual);
     const base = Math.floor(annual / 12);
     const remainder = annual - base * 12;
     monthlyInputs.forEach((input, index) => {
-      // Differ by at most 1 kWh so the rounded monthly inputs still total the
-      // entered annual amount exactly.
       input.value = String(base + (index < remainder ? 1 : 0));
     });
     updateMode();
@@ -160,21 +162,6 @@ export const initConsumptionInput = ({
     updateMode();
     root.querySelector('[data-consumption-month]')?.focus();
   });
-  tariffSelector = initTariffSelector({
-    root,
-    strings,
-    initialSelection: initialTariff,
-    getMonthlyKwh: () => {
-      const values = getValues();
-      if (values.mode === 'usage') return values.usage;
-      if (values.mode !== 'monthly' || values.monthly.some((value) => value === null)) return null;
-      return values.monthly.reduce((total, value) => total + value, 0) / 12;
-    },
-    onChange: () => {
-      updateAnnualOutput();
-      onChange();
-    }
-  });
   updateMode({ notify: false });
 
   const invalidResult = (inputs, message) => ({
@@ -182,35 +169,41 @@ export const initConsumptionInput = ({
     message,
     inputs: inputs.filter(Boolean)
   });
+  const validOverride = () =>
+    !hasText(effectiveRateInput?.value) || selectedEffectiveRate() !== null;
+  const tariffOverride = () => {
+    const rateAmdPerKwh = selectedEffectiveRate();
+    return rateAmdPerKwh === null ? null : { rateAmdPerKwh };
+  };
 
   const inspect = () => {
     const mode = activeMode();
-    const tariff = tariffSelector?.getRate() ?? null;
-    const selectedTariff = tariffSelector?.getSelection() ?? null;
-    if (tariff === null) return invalidResult([tariffInput], strings.invalidTariff);
+    if (!validOverride()) {
+      return invalidResult(
+        [effectiveRateInput],
+        strings.invalidEffectiveRate ?? strings.invalidTariff
+      );
+    }
     if (mode === 'bill') {
       const input = root.querySelector('[data-consumption-bill]');
       const value = monthlyBill(input?.value);
       if (value === null) return invalidResult([input], strings.invalidBill);
-      if (tariff === null) return invalidResult([tariffInput], strings.invalidTariff);
-      if (!isCalculatorInputInRange(value / tariff, 'averageMonthlyConsumptionKwh')) {
-        return invalidResult([input, tariffInput], strings.invalidBill);
+      if (selectedEffectiveRate() === null && !automaticEstimate(value)?.available) {
+        return invalidResult([input], strings.invalidBill);
       }
       return {
         valid: true,
         value: { mode, averageMonthlyBillAmd: value },
-        tariff: selectedTariff
+        tariff: tariffOverride()
       };
     }
-
     if (mode === 'usage') {
       const input = root.querySelector('[data-consumption-usage]');
       const value = monthlyUsage(input?.value);
       return value === null
         ? invalidResult([input], strings.invalidUsage)
-        : { valid: true, value: { mode, averageMonthlyKwh: value }, tariff: selectedTariff };
+        : { valid: true, value: { mode, averageMonthlyKwh: value }, tariff: tariffOverride() };
     }
-
     const inputs = [...root.querySelectorAll('[data-consumption-month]')];
     const monthlyKwh = inputs.map((input) => profileMonth(input.value));
     const annualKwh = monthlyKwh.reduce((total, value) => total + (value ?? 0), 0);
@@ -222,7 +215,7 @@ export const initConsumptionInput = ({
     ) {
       return invalidResult(inputs, strings.incompleteMonths);
     }
-    return { valid: true, value: { mode, monthlyKwh }, tariff: selectedTariff };
+    return { valid: true, value: { mode, monthlyKwh }, tariff: tariffOverride() };
   };
 
   return {
@@ -236,7 +229,6 @@ export const initConsumptionInput = ({
       root
         .querySelectorAll('[aria-invalid="true"]')
         .forEach((input) => input.removeAttribute('aria-invalid'));
-    },
-    tariffSelector
+    }
   };
 };

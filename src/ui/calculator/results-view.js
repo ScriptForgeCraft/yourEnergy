@@ -1,6 +1,6 @@
 import { calculatePreliminaryRoofCapacity } from '../../domain/roof-capacity.js';
 import { equipmentImageSrcset, equipmentImageUrl } from '../../config/equipment-images.js';
-import { formatTariffProvenance } from '../tariff-selector.js';
+import { formatTariffProvenance } from '../tariff-provenance.js';
 import { number, format, formatApproximate, text, element, localeCode } from './view-helpers.js';
 
 const inverterTechnology = (technology, wizard) =>

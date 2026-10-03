@@ -272,7 +272,7 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
   const savedProfessionalIdentity = createProfessionalAnalysisIdentity({
     property: savedSession.property?.coordinates,
     consumption: savedSession.consumption,
-    tariff: savedSession.userTariff,
+    tariff: savedSession.effectiveRateOverride,
     roof: savedRoofForIdentity,
     system: { capacityKwp: PVGIS_KWP, lossPercent: PVGIS_LOSS },
     panelId: recommendedPanelId,
@@ -300,7 +300,7 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
       : WIZARD_STEP_STATUSES.LOCKED,
     roof: savedSession.roof ?? null,
     consumption: savedSession.consumption ?? null,
-    userTariff: savedSession.userTariff ?? null,
+    effectiveRateOverride: savedSession.effectiveRateOverride ?? null,
     storageRequired: savedStorageRequired,
     analysis: restoredAnalysis,
     solarPassport: restoredAnalysis ? (savedSession.professionalSolarPassport ?? null) : null,
@@ -337,7 +337,7 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
       sitePotential: state.sitePotential,
       roof: state.roof,
       consumption: state.consumption,
-      userTariff: state.userTariff,
+      effectiveRateOverride: state.effectiveRateOverride,
       storageRequired: state.storageRequired,
       professionalAnalysis: state.analysis,
       professionalAnalysisStatus: state.analysisStatus,
@@ -1217,7 +1217,7 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
         source: 'manual'
       },
       consumption: state.consumption,
-      tariff: state.userTariff,
+      tariff: state.effectiveRateOverride,
       roof: {
         areaMethod: roof.areaMethod,
         mountingMode: roof.mountingMode,
@@ -1253,7 +1253,7 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
     }
     if (!validateRoof()) return;
     state.consumption = consumption.value;
-    state.userTariff = consumption.tariff;
+    state.effectiveRateOverride = consumption.tariff;
     const payload = buildPayload();
     // Persist every roof value used in this exact request. Without this,
     // untouched default controls are absent from a freshly drawn map outline,
@@ -1374,12 +1374,12 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
   const consumptionInput = initConsumptionInput({
     root: root.querySelector('[data-consumption-inputs]'),
     strings: product.consumption ?? {},
-    initialTariff: state.userTariff,
+    initialEffectiveRate: state.effectiveRateOverride,
     onChange: () => {
       const draft = consumptionInput?.inspect();
       state.consumption = draft?.valid ? draft.value : null;
-      state.userTariff = draft?.valid ? draft.tariff : null;
-      // Consumption and tariff are shared with Quick. A Professional edit
+      state.effectiveRateOverride = draft?.valid ? draft.tariff : null;
+      // Consumption and its optional effective rate are shared with Quick. A Professional edit
       // cannot leave an earlier regional result visible for different inputs.
       session.clearQuickAnalysis();
       clearAnalysis();
@@ -1504,7 +1504,7 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
       return;
     }
     state.consumption = consumption.value;
-    state.userTariff = consumption.tariff;
+    state.effectiveRateOverride = consumption.tariff;
     setStep(2);
   });
   const useRoofMap = (action) => {

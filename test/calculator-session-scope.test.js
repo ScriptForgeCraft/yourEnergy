@@ -205,7 +205,7 @@ test('a version 3 scoped result cannot restore the former overproduction payback
   assert.equal(restored.quickAnalysisStatus, 'idle');
   assert.equal(restored.professionalAnalysisStatus, 'idle');
   assert.equal(restored.consumption.averageMonthlyKwh, 850);
-  assert.equal(restored.userTariff.rateAmdPerKwh, 45);
+  assert.equal(restored.effectiveRateOverride.rateAmdPerKwh, 45);
 });
 
 test('Quick identity discards a result when Professional changes shared consumption or tariff', () => {
@@ -214,7 +214,7 @@ test('Quick identity discards a result when Professional changes shared consumpt
   const shared = {
     regionId: 'yerevan',
     consumption: { mode: 'usage', averageMonthlyKwh: 500 },
-    userTariff: { rateAmdPerKwh: 45 }
+    effectiveRateOverride: { rateAmdPerKwh: 45 }
   };
   session.write({
     ...shared,
@@ -227,7 +227,7 @@ test('Quick identity discards a result when Professional changes shared consumpt
     quickAnalysisIdentity: createQuickAnalysisIdentity({
       regionId: shared.regionId,
       consumption: shared.consumption,
-      tariff: shared.userTariff
+      tariff: shared.effectiveRateOverride
     })
   });
 
@@ -272,7 +272,7 @@ test('Quick and Professional results survive their own refresh and Back/Forward 
   session.write({
     regionId: 'yerevan',
     consumption: inputs.consumption,
-    userTariff: inputs.tariff
+    effectiveRateOverride: inputs.tariff
   });
   session.saveQuickAnalysis(
     {
@@ -296,7 +296,7 @@ test('Quick and Professional results survive their own refresh and Back/Forward 
     regionId: 'yerevan',
     property: inputs.property,
     consumption: inputs.consumption,
-    userTariff: inputs.tariff,
+    effectiveRateOverride: inputs.tariff,
     roof: inputs.roof,
     selectedPanelId: inputs.panelId
   });
@@ -356,7 +356,7 @@ test('changing a Professional panel clears only its incompatible property result
   session.write({
     regionId: 'yerevan',
     consumption: inputs.consumption,
-    userTariff: inputs.tariff
+    effectiveRateOverride: inputs.tariff
   });
   session.saveQuickAnalysis(
     {

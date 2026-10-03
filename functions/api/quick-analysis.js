@@ -4,7 +4,7 @@ import {
   EPA_URBAN_TREE_CO2_EQUIVALENCY,
   PriceBookRepository,
   buildRegionalQuickAnalysis,
-  createRegistryTariffSelection,
+  createAutomaticStandardResidentialTariff,
   createUserTariffSelection,
   getArmeniaRegionalBenchmark,
   normalizeConsumption
@@ -15,21 +15,12 @@ import { createPvgisAdapter } from '../_lib/pvgis.js';
 const priceBookRepository = new PriceBookRepository();
 const P0_PVGIS_QUERY = Object.freeze({ capacityKwp: 1, lossPercent: 14 });
 
-const inputTariff = (body) => {
-  const tariff = body?.tariff;
-  if (tariff?.tariffId || tariff?.period) {
-    // The browser sends only an official tariff ID and time period. The rate,
-    // category and revision are resolved again from the server-side registry.
-    return createRegistryTariffSelection(
-      { tariffId: tariff.tariffId, period: tariff.period },
-      ARMENIA_TARIFF_DATASET
-    );
-  }
-  return tariff?.rateAmdPerKwh === undefined ||
-    tariff?.rateAmdPerKwh === null ||
-    tariff?.rateAmdPerKwh === ''
-    ? createUserTariffSelection({})
-    : createUserTariffSelection({ rateAmdPerKwh: tariff.rateAmdPerKwh });
+const userEffectiveRate = (body) => {
+  const rawRate = body?.tariff?.rateAmdPerKwh;
+  if (rawRate === undefined || rawRate === null || rawRate === '') return null;
+  const selection = createUserTariffSelection({ rateAmdPerKwh: rawRate });
+  if (!selection.available) throw new ApiError('INVALID_INPUT');
+  return selection;
 };
 
 const validateQuickInput = (body) => {
@@ -37,9 +28,19 @@ const validateQuickInput = (body) => {
   const region = getArmeniaRegionalBenchmark(regionId);
   if (!region) throw new ApiError('INVALID_INPUT');
 
-  const tariffSelection = inputTariff(body);
-  const consumption = normalizeConsumption(body?.consumption, { tariff: tariffSelection });
+  const effectiveRate = userEffectiveRate(body);
+  const consumption = normalizeConsumption(body?.consumption, {
+    tariff: effectiveRate,
+    tariffDataset: ARMENIA_TARIFF_DATASET
+  });
   if (!consumption.available) throw new ApiError('INVALID_INPUT');
+
+  // A registry descriptor sent by a browser is never trusted or required.
+  // The server derives the standard residential reference rate itself.
+  const tariffSelection =
+    effectiveRate ??
+    createAutomaticStandardResidentialTariff(consumption.averageMonthlyKwh, ARMENIA_TARIFF_DATASET);
+  if (!tariffSelection.available) throw new ApiError('INVALID_INPUT');
 
   return { region, tariffSelection, consumption };
 };

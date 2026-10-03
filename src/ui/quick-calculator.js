@@ -1,9 +1,8 @@
 import { ProductApiClient, ProductApiError } from '../services/api-client.js';
-import { getCalculatorInputNumber, isCalculatorInputInRange } from '../domain/calculator-inputs.js';
+import { getCalculatorInputNumber } from '../domain/calculator-inputs.js';
 import { formatConsumerCommercialRange } from './commercial-range.js';
 import { createAsyncRequestLifecycle } from './async-request-lifecycle.js';
 import { createCalculatorSession } from './calculator-session.js';
-import { initTariffSelector } from './tariff-selector.js';
 import { createQuickAnalysisIdentity } from './quick-analysis-identity.js';
 
 const monthlyUsage = (value) => getCalculatorInputNumber(value, 'averageMonthlyConsumptionKwh');
@@ -248,10 +247,8 @@ export const initQuickCalculator = ({ config = {} } = {}) => {
   const region = root.querySelector('[data-quick-region]');
   const bill = root.querySelector('[data-quick-bill]');
   const usage = root.querySelector('[data-quick-usage]');
-  const tariff = root.querySelector('[data-quick-tariff]');
   const billWrap = root.querySelector('[data-quick-bill-wrap]');
   const usageWrap = root.querySelector('[data-quick-usage-wrap]');
-  const tariffWrap = root.querySelector('[data-quick-tariff-wrap]');
   const submit = root.querySelector('[data-quick-submit]');
   const status = root.querySelector('[data-quick-status]');
   const result = root.querySelector('[data-quick-result]');
@@ -304,27 +301,12 @@ export const initQuickCalculator = ({ config = {} } = {}) => {
     resultContent.hidden = !visible;
     result.setAttribute('aria-busy', String(loading));
   };
-  const tariffSelector = initTariffSelector({
-    root,
-    strings: copy,
-    initialSelection: saved.userTariff,
-    getMonthlyKwh: () => (mode() === 'usage' ? monthlyUsage(usage?.value) : null),
-    onChange: () => clearAnalysis()
-  });
-  const selectedTariff = () => tariffSelector?.getSelection() ?? null;
-  const selectedTariffRate = () => tariffSelector?.getRate() ?? null;
-
   const updateMode = () => {
     const billMode = mode() === 'bill';
     billWrap.hidden = !billMode;
     usageWrap.hidden = billMode;
     bill.disabled = !billMode;
     usage.disabled = billMode;
-    tariffWrap.hidden = false;
-    tariff.disabled = false;
-    tariff.required = billMode;
-    tariff.setAttribute('aria-required', String(billMode));
-    tariffSelector?.syncMonthlyConsumption();
   };
   const clearAnalysis = () => {
     if (!lifecycle.isActive()) return;
@@ -332,7 +314,7 @@ export const initQuickCalculator = ({ config = {} } = {}) => {
       quickAnalysis: null,
       quickAnalysisStatus: 'idle',
       quickAnalysisIdentity: null,
-      // Consumption and tariff are shared inputs. Editing either makes a
+      // Consumption is shared with Professional. Editing it makes a
       // Professional result incompatible, but never lets the two result
       // scopes overwrite one another.
       professionalAnalysis: null,
@@ -351,48 +333,35 @@ export const initQuickCalculator = ({ config = {} } = {}) => {
   const input = () => {
     const selectedRegion = region.value;
     const currentMode = mode();
-    const tariffSelection = selectedTariff();
     if (!selectedRegion) return { valid: false, field: region };
     if (currentMode === 'bill') {
       const value = monthlyBill(bill.value);
-      const tariffRate = selectedTariffRate();
-      if (!value || !tariffSelection || tariffRate === null) {
-        return {
-          valid: false,
-          field: !value ? bill : tariff
-        };
-      }
-      if (!isCalculatorInputInRange(value / tariffRate, 'averageMonthlyConsumptionKwh')) {
-        return { valid: false, field: tariff };
-      }
+      if (!value) return { valid: false, field: bill };
       return {
         valid: true,
         payload: {
           regionId: selectedRegion,
-          consumption: { averageMonthlyBillAmd: value },
-          tariff: tariffSelection
+          consumption: { averageMonthlyBillAmd: value }
         },
         state: {
           regionId: selectedRegion,
           consumption: { mode: 'bill', averageMonthlyBillAmd: value },
-          userTariff: tariffSelection
+          effectiveRateOverride: null
         }
       };
     }
     const value = monthlyUsage(usage.value);
     if (!value) return { valid: false, field: usage };
-    if (selectedTariffRate() === null) return { valid: false, field: tariff };
     return {
       valid: true,
       payload: {
         regionId: selectedRegion,
-        consumption: { averageMonthlyKwh: value },
-        ...(tariffSelection ? { tariff: tariffSelection } : {})
+        consumption: { averageMonthlyKwh: value }
       },
       state: {
         regionId: selectedRegion,
         consumption: { mode: 'usage', averageMonthlyKwh: value },
-        userTariff: tariffSelection
+        effectiveRateOverride: null
       }
     };
   };
@@ -401,7 +370,6 @@ export const initQuickCalculator = ({ config = {} } = {}) => {
     if (!scenario) return;
     const values = document.createElement('dl');
     values.className = 'quick-result__metrics';
-    const retailOffsetValueAmd = finite(scenario.financial?.retailOffsetValueAmd);
     const summary = buildQuickResultMetrics({
       scenario,
       commercialEstimate: analysis?.commercialEstimate,
@@ -411,13 +379,6 @@ export const initQuickCalculator = ({ config = {} } = {}) => {
     values.append(
       ...summary.metrics.map(({ label, value, icon, tone }) => metric(label, value, { icon, tone }))
     );
-    let savingsNotice = null;
-    if (!summary.savingsAvailable) {
-      savingsNotice = document.createElement('p');
-      savingsNotice.className = 'quick-result__notice';
-      savingsNotice.textContent =
-        retailOffsetValueAmd === null ? copy.noTariff : copy.savingsUnavailable;
-    }
     const chart = monthlyProductionChart({
       production: scenario.generation?.monthlyKwh,
       months,
@@ -426,11 +387,7 @@ export const initQuickCalculator = ({ config = {} } = {}) => {
     });
     resultTitle.textContent = copy.resultsTitle ?? copy.regional;
     resultCopy.textContent = copy.resultsCopy ?? copy.regionalCopy;
-    resultValues.replaceChildren(
-      values,
-      ...(savingsNotice ? [savingsNotice] : []),
-      ...(chart ? [chart] : [])
-    );
+    resultValues.replaceChildren(values, ...(chart ? [chart] : []));
     resultValues.hidden = false;
     resultActions.hidden = false;
     setResultState('complete');
@@ -472,7 +429,7 @@ export const initQuickCalculator = ({ config = {} } = {}) => {
     const quickAnalysisIdentity = createQuickAnalysisIdentity({
       regionId: current.state.regionId,
       consumption: current.state.consumption,
-      tariff: current.state.userTariff
+      tariff: current.state.effectiveRateOverride
     });
     session.write({
       ...current.state,

@@ -60,6 +60,7 @@ export const analyze = async ({ request, env, fetchImpl }) => {
       body,
       validatedInput: input,
       providerAnalysis: normalizedProviderAnalysis,
+      consumption: workflow.consumption,
       tariffSelection: workflow.tariffSelection,
       roofArea: workflow.roofArea,
       calculatorSystem: workflow.calculatorSystem,

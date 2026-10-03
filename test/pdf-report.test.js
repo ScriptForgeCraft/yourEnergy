@@ -62,7 +62,7 @@ const createOptions = () => ({
     addressNote: 'Home <private>',
     storageRequired: true,
     consumption: { annualKwh: 6454, mode: 'bill' },
-    userTariff: { rateAmdPerKwh: 46.48 },
+    effectiveRateOverride: { rateAmdPerKwh: 46.48 },
     sitePotential: {
       annualYieldKwhPerKwp: 1481,
       monthlyYieldKwhPerKwp: [81, 99, 116, 126, 141, 150, 160, 160, 150, 123, 101, 74],

@@ -367,7 +367,7 @@ test('analysis uses the documented server-side PVGIS default when no override is
   assert.equal(body.data.analysis.mode, 'real-analysis');
 });
 
-test('analysis joins real PVGIS yield with confirmed inputs, suppresses unselected finance and publishes verified historical CO₂ metadata', async () => {
+test('analysis joins real PVGIS yield with automatic residential finance and verified historical CO₂ metadata', async () => {
   const response = await analysisOnRequest({
     request: postJson('/analysis', p0AnalysisPayload),
     env: pvgisEnv({ PVGIS_ENDPOINT: 'https://pvgis.example/api' }),
@@ -391,17 +391,18 @@ test('analysis joins real PVGIS yield with confirmed inputs, suppresses unselect
   assert.equal(analysis.selectedScenario.system.capacityKwp, 7.8);
   assert.equal(analysis.selectedScenario.system.panelCount, 12);
   assert.equal(analysis.selectedScenario.generation.annualKwh, 11_700);
-  assert.equal(analysis.selectedScenario.financial.annualSavingsAmd, null);
-  assert.equal(analysis.selectedScenario.financial.grossSavings25YearsAmd, null);
-  assert.equal(analysis.selectedScenario.financial.paybackYears, null);
-  assert.deepEqual(analysis.selectedScenario.financial.timeline, []);
+  assert.ok(analysis.selectedScenario.financial.annualSavingsAmd > 0);
+  assert.ok(analysis.selectedScenario.financial.grossSavings25YearsAmd > 0);
+  assert.ok(analysis.selectedScenario.financial.paybackYears > 0);
+  assert.ok(analysis.selectedScenario.financial.timeline.length > 0);
   assert.equal(analysis.environmental.factor.status, 'verified-historical');
   assert.equal(analysis.environmental.factor.dataYear, 2022);
   assert.equal(analysis.environmental.avoidedCo2Tons, 2.141);
   assert.equal(analysis.environmental.treeEquivalency.metricTonsCo2PerTreePerYear, 0.06);
   assert.equal(analysis.environmental.treeEquivalent, 35.683);
-  assert.equal(analysis.financial.tariff.kind, 'unavailable');
-  assert.equal(analysis.financial.tariff.rateAmdPerKwh, null);
+  assert.equal(analysis.financial.tariff.kind, 'automatic-standard-residential');
+  assert.equal(analysis.financial.tariff.tariffId, 'standard-over-400');
+  assert.equal(analysis.financial.tariff.rateAmdPerKwh, 53.48);
   assert.equal(analysis.commercialEstimate.available, true);
   assert.equal(analysis.commercialEstimate.kind, 'owner-managed');
   assert.equal(

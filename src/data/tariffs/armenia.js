@@ -2,10 +2,9 @@
  * Residential 0.38 kV electricity tariffs for Armenia.
  *
  * The Public Services Regulatory Commission reported that consumer rates remain
- * unchanged in 2026. This registry deliberately carries only the standard
- * residential and socially-vulnerable household categories requested for the
- * public calculator. It is a data file: a future revision can replace these
- * records without changing calculator formulas or UI logic.
+ * unchanged in 2026. The homeowner calculator uses only the standard
+ * residential category. Day/night rates remain authoritative source data even
+ * though the product does not ask a homeowner to choose a period.
  *
  * Sources:
  * - https://www.ena.am/Info.aspx?id=11&lang=2
@@ -45,19 +44,13 @@ const record = ({
 
 export const ARMENIA_TARIFF_DATASET = Object.freeze({
   id: 'am-residential-electricity',
-  schemaVersion: '2.0.0',
-  revision: '2026-psrc-residential-v1',
+  schemaVersion: '3.0.0',
+  revision: '2026-psrc-standard-residential-v2',
   countryCode: 'AM',
   currency: 'AMD',
   reviewedAt: '2026-09-08',
   source: TARIFF_SOURCE,
   records: Object.freeze([
-    record({
-      id: 'social-vulnerable',
-      customerType: 'social-vulnerable',
-      dayRate: 29.99,
-      nightRate: 19.99
-    }),
     record({
       id: 'standard-up-to-200',
       customerType: 'standard',

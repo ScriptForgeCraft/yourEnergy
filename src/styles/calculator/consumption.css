@@ -231,11 +231,7 @@
 }
 
 .calculator-page--professional .consumption-panel .input-with-unit span,
-.calculator-page--professional
-  .consumption-inputs
-  > label:has([data-consumption-tariff])
-  .input-with-unit
-  span {
+.calculator-page--professional .effective-rate .input-with-unit span {
   min-height: 0;
   height: 100%;
   display: inline-flex;
@@ -264,62 +260,31 @@
   color: #0877ef;
 }
 
-.calculator-page--professional
-  .consumption-inputs
-  > label:has([data-consumption-tariff])
-  .input-with-unit {
-  position: relative;
-  display: flex;
-  padding-right: 2.15rem;
-}
-
-.calculator-page--professional
-  .consumption-inputs
-  > label:has([data-consumption-tariff])
-  .input-with-unit
-  span {
-  display: none;
-}
-
-.calculator-page--professional
-  .consumption-inputs
-  > label:has([data-consumption-tariff])
-  .input-with-unit::after {
-  position: absolute;
-  right: 0.9rem;
-  top: 50%;
-  width: 0.52rem;
-  height: 0.52rem;
-  border-right: 2px solid #14305a;
-  border-bottom: 2px solid #14305a;
-  content: '';
-  transform: translateY(-65%) rotate(45deg);
-}
-
-.calculator-page--professional .consumption-inputs > .input-help {
-  grid-column: 2;
-  margin: 0.5rem 0 0;
-  color: #5c7491;
-  font-size: 0.67rem;
-  line-height: 1.4;
-}
-
-.calculator-page--professional .consumption-inputs > .tariff-selector {
+.calculator-page--professional .effective-rate {
   grid-column: 2;
   display: grid;
   align-content: start;
   gap: 0.5rem;
   margin-top: 1.12rem;
+  border: 0;
 }
 
-.calculator-page--professional .tariff-selector > label {
+.calculator-page--professional .effective-rate summary {
+  width: fit-content;
+  cursor: pointer;
+  color: #076deb;
+  font-size: 0.78rem;
+  font-weight: 750;
+}
+
+.calculator-page--professional .effective-rate > label {
   margin: 0;
   color: #162b50;
   font-size: 0.77rem;
   font-weight: 780;
 }
 
-.calculator-page--professional .tariff-selector .input-with-unit {
+.calculator-page--professional .effective-rate .input-with-unit {
   min-height: var(--professional-control-height);
   height: var(--professional-control-height);
   margin-top: 0.34rem;
@@ -328,7 +293,7 @@
   background: #fff;
 }
 
-.calculator-page--professional .tariff-selector [data-tariff-rate] {
+.calculator-page--professional .effective-rate [data-consumption-effective-rate] {
   min-height: 0;
   height: 100%;
   margin: 0;
@@ -340,39 +305,11 @@
   font-weight: 800;
 }
 
-.calculator-page--professional .tariff-selector > .input-help {
+.calculator-page--professional .effective-rate > .input-help {
   margin: 0;
   color: #5c7491;
   font-size: 0.67rem;
   line-height: 1.4;
-}
-
-.calculator-page--professional .tariff-selector__advanced {
-  padding-top: 0.62rem;
-}
-
-.calculator-page--professional .tariff-selector__choices label,
-.calculator-page--professional .tariff-selector__brackets button {
-  font-size: 0.68rem;
-}
-
-.calculator-page--professional .consumption-inputs .tariff-selector__choices {
-  display: flex;
-  grid-column: auto;
-  grid-template-columns: none;
-  gap: 0.42rem;
-  margin: 0;
-  border: 0;
-  padding: 0;
-  background: transparent;
-}
-
-.calculator-page--professional .consumption-inputs .tariff-selector__choices > label {
-  display: inline-flex !important;
-  flex: 0 1 auto;
-  min-height: 2rem;
-  padding: 0.38rem 0.62rem;
-  background: #fff;
 }
 
 .calculator-page--professional .consumption-estimate {
@@ -825,9 +762,7 @@
   }
 
   .calculator-page--professional .consumption-panel,
-  .calculator-page--professional .consumption-inputs > label:has([data-consumption-tariff]),
-  .calculator-page--professional .consumption-inputs > .tariff-selector,
-  .calculator-page--professional .consumption-inputs > .input-help {
+  .calculator-page--professional .effective-rate {
     grid-column: 1;
   }
 
@@ -837,10 +772,6 @@
 
   .calculator-page--professional .month-inputs {
     grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-
-  .calculator-page--professional .consumption-inputs > label:has([data-consumption-tariff]) {
-    margin-top: 0.85rem;
   }
 
   .calculator-page--professional .consumption-estimate {

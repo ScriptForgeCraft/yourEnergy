@@ -202,9 +202,9 @@ test('regional quick analysis delegates unchanged sizing, budget and finance for
   assert.equal(quick.dataCompleteness.level, 'preliminary');
 });
 
-test('quick endpoint uses server-side PVGIS, requires tariff only for bill mode and returns no fallback on provider failure', async () => {
+test('quick endpoint accepts a bill without tariff UI and resolves the automatic standard tariff', async () => {
   let fetchCalls = 0;
-  const missingTariff = await quickOnRequest({
+  const billOnly = await quickOnRequest({
     request: post({ regionId: 'yerevan', consumption: { averageMonthlyBillAmd: 30000 } }),
     env: pvgisEnv,
     fetch: async () => {
@@ -212,8 +212,11 @@ test('quick endpoint uses server-side PVGIS, requires tariff only for bill mode 
       return pvgisResponse();
     }
   });
-  assert.equal(missingTariff.status, 422);
-  assert.equal(fetchCalls, 0);
+  const billBody = await billOnly.json();
+  assert.equal(billOnly.status, 200);
+  assert.equal(fetchCalls, 1);
+  assert.equal(billBody.data.analysis.consumption.kind, 'estimated-from-monthly-bill');
+  assert.equal(billBody.data.analysis.financial.tariff.kind, 'automatic-standard-residential');
 
   const usage = await quickOnRequest({
     request: post({ regionId: 'yerevan', consumption: { averageMonthlyKwh: 1000 } }),
@@ -226,8 +229,9 @@ test('quick endpoint uses server-side PVGIS, requires tariff only for bill mode 
   const body = await usage.json();
   assert.equal(usage.status, 200);
   assert.equal(body.data.analysis.scope, 'regional-preliminary');
-  assert.equal(body.data.analysis.financial.tariff.rateAmdPerKwh, null);
-  assert.equal(body.data.analysis.selectedScenario.financial.annualSavingsAmd, null);
+  assert.equal(body.data.analysis.financial.tariff.kind, 'automatic-standard-residential');
+  assert.equal(body.data.analysis.financial.tariff.tariffId, 'standard-over-400');
+  assert.ok(body.data.analysis.selectedScenario.financial.annualSavingsAmd > 0);
 
   const unavailable = await quickOnRequest({
     request: post({ regionId: 'ararat', consumption: { averageMonthlyKwh: 1000 } }),
@@ -246,12 +250,12 @@ test('quick endpoint uses server-side PVGIS, requires tariff only for bill mode 
   assert.equal(unavailableBody.data, undefined);
 });
 
-test('Quick server resolves the official tariff selection itself and retains registry metadata', async () => {
+test('Quick server ignores browser-supplied official registry descriptors and cannot be spoofed', async () => {
   const response = await quickOnRequest({
     request: post({
       regionId: 'yerevan',
       consumption: { averageMonthlyBillAmd: 30_000 },
-      tariff: { tariffId: 'standard-201-to-400', period: 'night', rateAmdPerKwh: 1 }
+      tariff: { tariffId: 'standard-201-to-400', period: 'night', rateAmdPerKwh: null }
     }),
     env: { ...pvgisEnv, PVGIS_CACHE: memoryKv() },
     fetch: async () => pvgisResponse()
@@ -260,13 +264,13 @@ test('Quick server resolves the official tariff selection itself and retains reg
   const tariff = body.data.analysis.financial.tariff;
 
   assert.equal(response.status, 200);
-  assert.equal(tariff.kind, 'registry');
-  assert.equal(tariff.tariffId, 'standard-201-to-400');
-  assert.equal(tariff.period, 'night');
+  assert.equal(tariff.kind, 'automatic-standard-residential');
+  assert.equal(tariff.tariffId, 'standard-over-400');
+  assert.equal(tariff.period, 'day');
   assert.equal(tariff.customerType, 'standard');
   assert.equal(tariff.revision, ARMENIA_TARIFF_DATASET.revision);
-  assert.equal(tariff.rateAmdPerKwh, 38.48);
-  assert.equal(body.data.analysis.consumption.averageMonthlyKwh, 30_000 / 38.48);
+  assert.equal(tariff.rateAmdPerKwh, 53.48);
+  assert.equal(body.data.analysis.consumption.kind, 'estimated-from-monthly-bill');
 });
 
 test('quick endpoint reports missing cache and unsafe provider configuration without a fallback result', async () => {
@@ -303,7 +307,7 @@ test('one temporary session carries quick values to refinement and professional 
   session.write({
     regionId: 'kotayk',
     consumption: { mode: 'usage', averageMonthlyKwh: 850 },
-    userTariff: { rateAmdPerKwh: 45 },
+    effectiveRateOverride: { rateAmdPerKwh: 45 },
     property: { coordinates: { lat: 40.27, lng: 44.63 }, confirmed: true },
     roof: { points: [{ lat: 40.27, lng: 44.63 }], complete: false },
     selectedBillFile: { name: 'private.pdf' }
@@ -331,7 +335,7 @@ test('a detailed roof result preserves its compatible quick result for a simple 
   const quickState = {
     regionId: 'yerevan',
     consumption: { mode: 'usage', averageMonthlyKwh: 850 },
-    userTariff: { rateAmdPerKwh: 45 }
+    effectiveRateOverride: { rateAmdPerKwh: 45 }
   };
   session.write({
     ...quickState,
@@ -344,7 +348,7 @@ test('a detailed roof result preserves its compatible quick result for a simple 
     quickAnalysisIdentity: createQuickAnalysisIdentity({
       regionId: quickState.regionId,
       consumption: quickState.consumption,
-      tariff: quickState.userTariff
+      tariff: quickState.effectiveRateOverride
     })
   });
   session.write({
@@ -369,7 +373,7 @@ test('selecting a calculation panel invalidates cached sizing results but keeps 
   const quickState = {
     regionId: 'yerevan',
     consumption: { mode: 'usage', averageMonthlyKwh: 850 },
-    userTariff: { rateAmdPerKwh: 45 }
+    effectiveRateOverride: { rateAmdPerKwh: 45 }
   };
   session.write({
     ...quickState,
@@ -384,7 +388,7 @@ test('selecting a calculation panel invalidates cached sizing results but keeps 
     quickAnalysisIdentity: createQuickAnalysisIdentity({
       regionId: quickState.regionId,
       consumption: quickState.consumption,
-      tariff: quickState.userTariff
+      tariff: quickState.effectiveRateOverride
     }),
     professionalAnalysis: { scope: 'manual-roof-plane', equipment: defaultSystem.equipment },
     professionalAnalysisStatus: 'complete',
@@ -433,7 +437,7 @@ test('Quick lead validation and context include only the permitted result summar
       consumption: { mode: 'usage', averageMonthlyKwh: 850 },
       property: { address: 'Must not leave the browser', coordinates: { lat: 40.18, lng: 44.51 } },
       roof: { points: [{ lat: 40.18, lng: 44.51 }] },
-      userTariff: { rateAmdPerKwh: 45 }
+      effectiveRateOverride: { rateAmdPerKwh: 45 }
     },
     analysis: {
       scope: 'regional-preliminary',
@@ -470,7 +474,7 @@ test('Quick lead validation and context include only the permitted result summar
   });
   assert.equal('property' in context, false);
   assert.equal('roof' in context, false);
-  assert.equal('userTariff' in context, false);
+  assert.equal('effectiveRateOverride' in context, false);
 });
 
 test('Quick lead form has accessible loading, success, error and double-submit safeguards', async () => {

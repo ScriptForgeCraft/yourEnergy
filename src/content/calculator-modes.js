@@ -77,30 +77,6 @@ const common = {
       usage: 'Միջին ամսական սպառում',
       billLabel: 'Միջին ամսական հաշիվ',
       usageLabel: 'Միջին ամսական սպառում',
-      tariffLabel: 'Սակագինը հաշվարկի համար',
-      tariffHelp:
-        'Լռելյայն օգտագործվում է պաշտոնական ցերեկային սակագինը։ Եթե Ձեր փաստացի սակագինը տարբերվում է, փոխեք արժեքը։',
-      refineTariff: 'Ճշտել սակագինը',
-      officialTariff: 'Պաշտոնական սակագին',
-      customTariff: 'Իմ սակագինը',
-      userProvidedTariff: 'Օգտատիրոջ նշած սակագին',
-      customerType: 'Սպառողի տեսակ',
-      standardCustomer: 'Սովորական սպառող',
-      socialVulnerable: 'Սոցիալապես անապահով սպառող',
-      period: 'Ժամանակահատված',
-      tariffDay: 'Ցերեկային',
-      tariffNight: 'Գիշերային',
-      chooseBracket: 'Ընտրեք սպառման միջակայքը',
-      tariffSuggested: 'Որոշվել է Ձեր սպառման հիման վրա՝ {bracket}',
-      customTariffHelp: 'Մուտքագրեք Ձեր փաստացի միջին սակագինը հաշվից։',
-      mixedTariffHelp:
-        'Եթե սպառման մի մասը հաշվարկվում է ցերեկային, իսկ մյուսը՝ գիշերային սակագնով, «Իմ սակագինը» ռեժիմում մուտքագրեք հաշվից փաստացի միջին սակագինը։',
-      tariffCategories: {
-        'social-vulnerable': 'Սոցիալապես անապահով ընտանիք',
-        'standard-up-to-200': 'Սովորական՝ մինչև 200 kWh/ամիս',
-        'standard-201-to-400': 'Սովորական՝ 201–400 kWh/ամիս',
-        'standard-over-400': 'Սովորական՝ 400 kWh-ից ավելի/ամիս'
-      },
       submit: 'Ստանալ նախնական գնահատում',
       pro: 'Բացել պրոֆեսիոնալ հաշվիչը',
       proTitle: 'Ցանկանո՞ւմ եք ավելի մանրամասն վերլուծություն',
@@ -153,8 +129,6 @@ const common = {
       },
       disclaimer:
         'Տարածաշրջանային նախնական գնահատում։ Տանիքի տվյալները կարող եք ճշգրտել Պրոֆեսիոնալ ռեժիմում։',
-      noTariff: 'Ավելացրեք սակագին՝ մոտավոր տարեկան խնայողությունը տեսնելու համար։',
-      savingsUnavailable: 'Մոտավոր տարեկան խնայողությունը հասանելի չէ ընտրված սակագնի համար։',
       benefitsLabel: 'Արևային էներգիայի առավելությունները',
       benefits: [
         { icon: 'leaf', title: 'Ավելի ցածր հաշիվներ', copy: 'Օգտագործեք մաքուր արևային էներգիա' },
@@ -389,30 +363,6 @@ const common = {
       usage: 'Среднее потребление в месяц',
       billLabel: 'Средний счёт в месяц',
       usageLabel: 'Среднее потребление в месяц',
-      tariffLabel: 'Тариф для расчёта',
-      tariffHelp:
-        'По умолчанию используется официальный дневной тариф. Если ваш фактический тариф отличается, измените значение.',
-      refineTariff: 'Уточнить тариф',
-      officialTariff: 'Официальный тариф',
-      customTariff: 'Свой тариф',
-      userProvidedTariff: 'Тариф, указанный пользователем',
-      customerType: 'Тип потребителя',
-      standardCustomer: 'Обычный потребитель',
-      socialVulnerable: 'Социально уязвимый потребитель',
-      period: 'Период',
-      tariffDay: 'Дневной',
-      tariffNight: 'Ночной',
-      chooseBracket: 'Выберите диапазон потребления',
-      tariffSuggested: 'Определено по вашему потреблению: {bracket}',
-      customTariffHelp: 'Введите фактический средний тариф из счёта.',
-      mixedTariffHelp:
-        'Если часть потребления идёт по дневному, а часть по ночному тарифу, в режиме «Свой тариф» укажите фактический средний тариф из счёта.',
-      tariffCategories: {
-        'social-vulnerable': 'Социально уязвимая семья',
-        'standard-up-to-200': 'Стандартный: до 200 kWh/мес.',
-        'standard-201-to-400': 'Стандартный: 201–400 kWh/мес.',
-        'standard-over-400': 'Стандартный: свыше 400 kWh/мес.'
-      },
       submit: 'Получить предварительную оценку',
       pro: 'Открыть профессиональный калькулятор',
       proTitle: 'Нужен более подробный анализ?',
@@ -466,8 +416,6 @@ const common = {
       },
       disclaimer:
         'Предварительная региональная оценка. Параметры крыши можно уточнить в Профессиональном режиме.',
-      noTariff: 'Добавьте тариф, чтобы увидеть ориентировочную годовую экономию.',
-      savingsUnavailable: 'Ориентировочная годовая экономия недоступна для выбранного тарифа.',
       benefitsLabel: 'Преимущества солнечной энергии',
       benefits: [
         {
@@ -701,30 +649,6 @@ const common = {
       usage: 'Average monthly consumption',
       billLabel: 'Average monthly bill',
       usageLabel: 'Average monthly consumption',
-      tariffLabel: 'Tariff for calculation',
-      tariffHelp:
-        'The official daytime tariff is used by default. Change the value if your actual tariff is different.',
-      refineTariff: 'Refine tariff',
-      officialTariff: 'Official tariff',
-      customTariff: 'My tariff',
-      userProvidedTariff: 'User-provided tariff',
-      customerType: 'Customer type',
-      standardCustomer: 'Standard consumer',
-      socialVulnerable: 'Socially vulnerable consumer',
-      period: 'Period',
-      tariffDay: 'Daytime',
-      tariffNight: 'Nighttime',
-      chooseBracket: 'Choose consumption range',
-      tariffSuggested: 'Determined from your consumption: {bracket}',
-      customTariffHelp: 'Enter the actual average tariff from your bill.',
-      mixedTariffHelp:
-        'If some consumption is billed at daytime and some at nighttime rates, enter the actual average tariff from your bill in “My tariff” mode.',
-      tariffCategories: {
-        'social-vulnerable': 'Socially vulnerable household',
-        'standard-up-to-200': 'Standard: up to 200 kWh/month',
-        'standard-201-to-400': 'Standard: 201–400 kWh/month',
-        'standard-over-400': 'Standard: over 400 kWh/month'
-      },
       submit: 'Get preliminary estimate',
       pro: 'Open professional calculator',
       proTitle: 'Want a more detailed analysis?',
@@ -777,8 +701,6 @@ const common = {
       },
       disclaimer:
         'Preliminary regional estimate. Roof parameters can be refined in Professional mode.',
-      noTariff: 'Add a tariff to see estimated annual savings.',
-      savingsUnavailable: 'Estimated annual savings are not available for the selected tariff.',
       benefitsLabel: 'Solar energy benefits',
       benefits: [
         { icon: 'leaf', title: 'Lower electricity bills', copy: 'Use clean solar energy' },

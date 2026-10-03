@@ -645,13 +645,23 @@ function validateQuickCalculatorMarkup(html, page) {
   for (const marker of [
     'data-quick-calculator',
     'data-quick-region',
-    'data-quick-tariff',
     'data-quick-submit',
     'data-quick-lead-open',
     'data-quick-lead-dialog',
     'data-quick-lead-form'
   ]) {
     if (!html.includes(marker)) fail(`${page}: missing quick calculator marker ${marker}`);
+  }
+  for (const removedMarker of [
+    'data-quick-tariff',
+    'data-tariff-selector',
+    'data-tariff-period',
+    'data-tariff-bracket',
+    'social-vulnerable'
+  ]) {
+    if (visibleHtml.includes(removedMarker)) {
+      fail(`${page}: contains removed tariff UI marker ${removedMarker}`);
+    }
   }
   for (const forbidden of [
     'data-property-map',

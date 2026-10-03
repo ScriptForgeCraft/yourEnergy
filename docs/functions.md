@@ -83,8 +83,7 @@ Request:
 ```json
 {
   "regionId": "yerevan",
-  "consumption": { "averageMonthlyKwh": 1000 },
-  "tariff": { "tariffId": "standard-201-to-400", "period": "day" }
+  "consumption": { "averageMonthlyKwh": 1000 }
 }
 ```
 
@@ -96,17 +95,16 @@ confirmed property point. The endpoint uses the same server-side PVGIS adapter,
 cache, 1 kWp/14% normalisation, PriceBook and pure `buildSolarAnalysis` engine
 as the detailed endpoint, returning `scope: "regional-preliminary"`.
 
-An average AMD bill requires an explicit tariff; average kWh does not. The
-browser may submit a registry selection as `{ "tariffId", "period" }`, where
-`period` is `"day"` or `"night"`; the Function resolves its rate, category and
-revision from `src/data/tariffs/armenia.js` rather than trusting a client rate.
-For a rate copied from a bill, submit `{ "rateAmdPerKwh": 45 }`, which remains
-labelled user-provided in the result. A bill total never implies a tariff
-bracket, social status or day/night period. Without an explicit usable tariff,
-technical output and a valid owner-managed PriceBook budget can appear, while
-savings, payback and the timeline remain `null`/empty. There is no demo or
-hidden tariff fallback. Provider or cache failure returns the normal error
-envelope and never substitutes values.
+The Function automatically resolves the standard residential bracket from known
+kWh using `src/data/tariffs/armenia.js`; browser-supplied registry IDs, rates,
+categories and day/night periods are ignored. For an AMD bill, it makes a
+deterministic, labelled consumption estimate using the standard residential
+daytime rate as a preliminary reference assumption. Around the 200/400 kWh
+rate discontinuities it chooses the nearest valid bracket boundary (lower on a
+tie), so resolution cannot oscillate. An optional `{ "tariff": {
+"rateAmdPerKwh": 45 } }` is the only override accepted; it remains labelled
+user-provided effective tariff. Provider or cache failure returns the normal
+error envelope and never substitutes values.
 
 ### `POST /api/analysis`
 
@@ -136,12 +134,12 @@ transparent source ledger):
 }
 ```
 
-`address` is optional and remains a label only. `tariff` is optional. Submit
-either a confirmed Armenian registry choice (`tariffId` plus `day`/`night`
-`period`) or a user-provided `rateAmdPerKwh`; the server resolves official
-rates from its versioned registry and records the tariff ID, revision, category
-and period in the source ledger. Without an explicit usable tariff, savings,
-payback and the financial timeline remain unavailable. `azimuthDegrees` is
+`address` is optional and remains a label only. `tariff` is optional: without
+it, the server derives the automatic standard residential tariff from known or
+bill-estimated consumption. A single user-provided `rateAmdPerKwh` is accepted
+as an effective-rate override; registry IDs, category and day/night selections
+are not API inputs. The source ledger records automatic tariff, effective-rate
+override, and bill-estimated consumption provenance. `azimuthDegrees` is
 compass bearing (0 north, 180 south). The function converts it to PVGIS aspect
 and returns `data.analysis` with `scope: "manual-roof-plane"` and a maximum
 `dataCompleteness.level` of `"preliminary"`. It is never an exact roof,
@@ -160,8 +158,7 @@ structural capacity.
 
 The server independently selects the active dated YOURENERGY PriceBook for a
 standard grid-tied residential preliminary budget. That owner-managed price range
-is not an offer and is returned until YOURENERGY replaces it; it may be
-shown even when no tariff is present, while savings/payback stay hidden. Client
+is not an offer and is returned until YOURENERGY replaces it. Client
 `capex`, price, price-book version or other commercial fields are ignored. The
 browser requests a transparent `1 kWp` PVGIS yield, then the server scales that
 provider result from confirmed consumption. The endpoint accepts only that
