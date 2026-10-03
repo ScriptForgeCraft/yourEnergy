@@ -4,10 +4,11 @@ import {
   isRestorableQuickAnalysis,
   QUICK_ANALYSIS_SCOPE
 } from './quick-analysis-identity.js';
+import { createStandardFinancialRate, normalizeFinancialRate } from '../domain/financial-rate.js';
 
 const SESSION_KEY = 'yourenergy.calculator.v2';
-const SESSION_VERSION = 8;
-const LEGACY_SESSION_VERSIONS = new Set([2, 3, 4, 5, 6, 7]);
+const SESSION_VERSION = 9;
+const LEGACY_SESSION_VERSIONS = new Set([2, 3, 4, 5, 6, 7, 8]);
 
 const cloneSafe = (value) => {
   if (!value || typeof value !== 'object') return value ?? null;
@@ -18,27 +19,36 @@ const cloneSafe = (value) => {
   }
 };
 
-const normalizeSessionChanges = (changes = {}) => {
-  const next = cloneSafe(changes) ?? {};
-  if (next.financialTariffMode === 'standard') next.effectiveRateOverride = null;
-  if (next.financialTariffMode === 'custom-effective') next.standardDayNightReadings = null;
-  if (
-    Object.hasOwn(next, 'effectiveRateOverride') &&
-    next.effectiveRateOverride?.rateAmdPerKwh &&
-    !Object.hasOwn(next, 'financialTariffMode')
-  ) {
-    next.financialTariffMode = 'custom-effective';
+const normalizeConsumptionState = (value) => {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return null;
+  if (value.mode === 'bill') {
+    return {
+      mode: 'bill',
+      averageMonthlyBillAmd: value.averageMonthlyBillAmd ?? null,
+      ...(value.billedKwh !== undefined || value.averageMonthlyKwh !== undefined
+        ? { billedKwh: value.billedKwh ?? value.averageMonthlyKwh }
+        : {})
+    };
   }
-  if (!Object.hasOwn(next, 'userTariff') || Object.hasOwn(next, 'effectiveRateOverride'))
-    return next;
-  const legacyTariff = next.userTariff;
-  const rateAmdPerKwh = Number(legacyTariff?.rateAmdPerKwh);
-  next.effectiveRateOverride =
-    !legacyTariff?.tariffId && Number.isFinite(rateAmdPerKwh) && rateAmdPerKwh > 0
-      ? { rateAmdPerKwh }
-      : null;
-  delete next.userTariff;
-  return next;
+  if (value.mode === 'usage') {
+    return { mode: 'usage', averageMonthlyKwh: value.averageMonthlyKwh ?? null };
+  }
+  if (value.mode === 'monthly') {
+    return { mode: 'monthly', monthlyKwh: cloneSafe(value.monthlyKwh) };
+  }
+  return null;
+};
+
+const normalizeCompleteState = (value = {}) => {
+  const state = { ...emptyState(), ...(cloneSafe(value) ?? {}) };
+  state.consumption = normalizeConsumptionState(state.consumption);
+  state.financialRate = normalizeFinancialRate(state.financialRate, state.consumption);
+  delete state.financialTariffMode;
+  delete state.effectiveRateOverride;
+  delete state.standardDayNightReadings;
+  delete state.actualDayNight;
+  delete state.userTariff;
+  return state;
 };
 
 const emptyState = () => ({
@@ -46,9 +56,7 @@ const emptyState = () => ({
   currentStep: 0,
   regionId: null,
   consumption: null,
-  financialTariffMode: 'standard',
-  effectiveRateOverride: null,
-  standardDayNightReadings: null,
+  financialRate: createStandardFinancialRate(),
   property: null,
   roof: null,
   sitePotential: null,
@@ -67,26 +75,16 @@ const isQuickAnalysis = (analysis) => analysis?.scope === QUICK_ANALYSIS_SCOPE;
 const isProfessionalAnalysis = (analysis) => analysis?.scope === PROFESSIONAL_ANALYSIS_SCOPE;
 
 /**
- * Earlier sessions contained an official tariff selector. Its registry and
- * social-status choices must never revive in the new product. Retain only a
- * valid old custom rate as the optional effective-rate override.
+ * Version 8 and earlier did not distinguish a bill-derived quotient from an
+ * explicitly entered custom rate. Preserve the raw consumption, but reset the
+ * financial source to standard instead of inventing provenance.
  */
 const migrateFinancialModelState = (stored = {}) => {
-  const legacyTariff = stored.effectiveRateOverride ?? stored.userTariff;
-  const rateAmdPerKwh = Number(legacyTariff?.rateAmdPerKwh);
-  const effectiveRateOverride =
-    !legacyTariff?.tariffId &&
-    Number.isFinite(rateAmdPerKwh) &&
-    rateAmdPerKwh > 0 &&
-    rateAmdPerKwh !== 53.48
-      ? { rateAmdPerKwh }
-      : null;
-  return {
+  return normalizeCompleteState({
     ...emptyState(),
     ...stored,
-    financialTariffMode: effectiveRateOverride ? 'custom-effective' : 'standard',
-    effectiveRateOverride,
-    standardDayNightReadings: null,
+    consumption: normalizeConsumptionState(stored.consumption),
+    financialRate: createStandardFinancialRate({ explicit: true }),
     version: SESSION_VERSION,
     quickAnalysis: null,
     quickAnalysisStatus: 'idle',
@@ -95,34 +93,25 @@ const migrateFinancialModelState = (stored = {}) => {
     professionalAnalysisStatus: 'idle',
     professionalAnalysisIdentity: null,
     professionalSolarPassport: null
-  };
+  });
 };
 
 const readStoredState = (stored) => {
   const state =
     stored?.version === SESSION_VERSION
-      ? { ...emptyState(), ...stored }
+      ? normalizeCompleteState(stored)
       : LEGACY_SESSION_VERSIONS.has(stored?.version)
         ? migrateFinancialModelState(stored)
         : emptyState();
   delete state.analysis;
   delete state.analysisStatus;
   delete state.solarPassport;
-  delete state.userTariff;
-  const activeRate = Number(state.effectiveRateOverride?.rateAmdPerKwh);
-  if (
-    state.financialTariffMode !== 'custom-effective' ||
-    !Number.isFinite(activeRate) ||
-    activeRate <= 0
-  ) {
-    state.financialTariffMode = 'standard';
-    state.effectiveRateOverride = null;
-  }
-  if (state.financialTariffMode !== 'standard') state.standardDayNightReadings = null;
+  state.consumption = normalizeConsumptionState(state.consumption);
+  state.financialRate = normalizeFinancialRate(state.financialRate, state.consumption);
   const currentQuickIdentity = createQuickAnalysisIdentity({
     regionId: state.regionId,
     consumption: state.consumption,
-    tariff: state.effectiveRateOverride
+    financialRate: state.financialRate
   });
   if (
     !isRestorableQuickAnalysis({
@@ -205,8 +194,20 @@ export const createCalculatorSession = ({ storage } = {}) => {
   };
 
   const write = (changes = {}) => {
-    const normalizedChanges = normalizeSessionChanges(changes);
-    const next = { ...read(), ...normalizedChanges, version: SESSION_VERSION };
+    const normalizedChanges = cloneSafe(changes) ?? {};
+    const previous = read();
+    if (
+      Object.hasOwn(normalizedChanges, 'consumption') &&
+      !Object.hasOwn(normalizedChanges, 'financialRate') &&
+      normalizeConsumptionState(normalizedChanges.consumption)?.mode !== previous.consumption?.mode
+    ) {
+      normalizedChanges.financialRate = createStandardFinancialRate();
+    }
+    const next = normalizeCompleteState({
+      ...previous,
+      ...normalizedChanges,
+      version: SESSION_VERSION
+    });
     // File objects and other opaque values are intentionally not persisted.
     delete next.selectedBillFile;
     // The generic v2 result fields must never be written back alongside the

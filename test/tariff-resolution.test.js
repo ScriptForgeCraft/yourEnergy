@@ -92,7 +92,7 @@ test('bill-only consumption is an automatic estimate, while a valid effective ra
   assert.equal(createUserTariffSelection({ rateAmdPerKwh: 0 }, DATE).available, false);
 });
 
-test('legacy sessions retain only a safe custom effective-rate override', () => {
+test('legacy sessions reset ambiguous effective-rate provenance to standard', () => {
   const records = new Map();
   const session = createCalculatorSession({
     storage: {
@@ -104,13 +104,14 @@ test('legacy sessions retain only a safe custom effective-rate override', () => 
     session.key,
     JSON.stringify({ version: 6, userTariff: { tariffId: 'social-vulnerable', period: 'night' } })
   );
-  assert.equal(session.read().effectiveRateOverride, null);
+  assert.equal(session.read().financialRate.mode, 'standard');
 
   records.set(session.key, JSON.stringify({ version: 6, userTariff: { rateAmdPerKwh: 45 } }));
-  assert.deepEqual(session.read().effectiveRateOverride, { rateAmdPerKwh: 45 });
+  assert.equal(session.read().financialRate.mode, 'standard');
 
   records.set(session.key, JSON.stringify({ version: 6, userTariff: { rateAmdPerKwh: 53.48 } }));
-  assert.equal(session.read().effectiveRateOverride, null);
+  assert.equal(session.read().financialRate.mode, 'standard');
+  assert.equal('effectiveRateOverride' in session.read(), false);
 });
 
 test('Quick and Professional expose compact average-rate controls without client-owned registry fields', async () => {
@@ -152,6 +153,6 @@ test('Quick and Professional expose compact average-rate controls without client
     ]) {
       assert.equal(typeof quick[requiredKey], 'string', `${locale} misses ${requiredKey}`);
     }
-    assert.equal(quick.tariffInfo.length, 4, `${locale} tariff info is incomplete`);
+    assert.equal(quick.tariffInfo.length, 3, `${locale} tariff info is incomplete`);
   }
 });

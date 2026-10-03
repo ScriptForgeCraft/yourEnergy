@@ -27,6 +27,7 @@ const unavailableConsumption = (issues) => ({
   monthlyKwh: null,
   averageMonthlyKwh: null,
   averageMonthlyBillAmd: null,
+  billedKwh: null,
   issues,
   source: unavailableSource
 });
@@ -54,7 +55,7 @@ const normalizeMonthlyProfile = (value) => {
  * one, it is a clearly labelled estimate using the standard residential
  * daytime reference-rate assumption from the server-owned tariff registry.
  *
- * @param {{monthlyKwh?: unknown[], annualKwh?: unknown, averageMonthlyKwh?: unknown, averageMonthlyBillAmd?: unknown}} [input]
+ * @param {{monthlyKwh?: unknown[], annualKwh?: unknown, averageMonthlyKwh?: unknown, averageMonthlyBillAmd?: unknown, billedKwh?: unknown}} [input]
  * @param {{tariff?: Object|null}} [options]
  * @returns {import('./models.js').Consumption}
  */
@@ -76,6 +77,7 @@ export const normalizeConsumption = (
       monthlyKwh: [...profile],
       averageMonthlyKwh: annualKwh / MONTHS_PER_YEAR,
       averageMonthlyBillAmd: null,
+      billedKwh: null,
       issues,
       source: manualSource
     };
@@ -91,6 +93,27 @@ export const normalizeConsumption = (
       monthlyKwh: null,
       averageMonthlyKwh: annualKwh / MONTHS_PER_YEAR,
       averageMonthlyBillAmd: null,
+      billedKwh: null,
+      issues,
+      source: manualSource
+    };
+  }
+
+  const averageMonthlyBillAmd = getCalculatorInputNumber(
+    input.averageMonthlyBillAmd,
+    'averageMonthlyBillAmd'
+  );
+  const billedKwh = getCalculatorInputNumber(input.billedKwh, 'averageMonthlyConsumptionKwh');
+  if (averageMonthlyBillAmd !== null && billedKwh !== null) {
+    return {
+      normalized: true,
+      kind: 'bill-with-kwh',
+      available: true,
+      annualKwh: billedKwh * MONTHS_PER_YEAR,
+      monthlyKwh: null,
+      averageMonthlyKwh: billedKwh,
+      averageMonthlyBillAmd,
+      billedKwh,
       issues,
       source: manualSource
     };
@@ -113,15 +136,12 @@ export const normalizeConsumption = (
       monthlyKwh: null,
       averageMonthlyKwh,
       averageMonthlyBillAmd: suppliedBill,
+      billedKwh: null,
       issues,
       source: manualSource
     };
   }
 
-  const averageMonthlyBillAmd = getCalculatorInputNumber(
-    input.averageMonthlyBillAmd,
-    'averageMonthlyBillAmd'
-  );
   if (averageMonthlyBillAmd !== null) {
     const rateAmdPerKwh = getUsableTariffRate(tariff);
     const estimate =
@@ -148,6 +168,7 @@ export const normalizeConsumption = (
       monthlyKwh: null,
       averageMonthlyKwh: billKwh,
       averageMonthlyBillAmd,
+      billedKwh: null,
       issues,
       source:
         rateAmdPerKwh === null

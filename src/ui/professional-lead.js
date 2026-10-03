@@ -56,6 +56,8 @@ export const buildProfessionalLeadContext = ({ analysis, state } = {}) => {
   const storage = analysis?.storageRecommendation;
   const mounting = analysis?.mountingHardwareRecommendation;
   const tariff = analysis?.financial?.tariff ?? {};
+  const tariffBillAmd = finite(tariff.billAmd ?? consumption.averageMonthlyBillAmd);
+  const tariffBilledKwh = finite(tariff.billedKwh ?? consumption.billedKwh);
 
   return {
     kind: 'professional',
@@ -67,23 +69,25 @@ export const buildProfessionalLeadContext = ({ analysis, state } = {}) => {
     consumption: {
       mode: cleanText(consumption.mode) || null,
       averageMonthlyBillAmd: finite(consumption.averageMonthlyBillAmd),
-      averageMonthlyKwh: finite(consumption.averageMonthlyKwh),
+      averageMonthlyKwh: finite(consumption.averageMonthlyKwh ?? consumption.billedKwh),
+      billedKwh: finite(consumption.billedKwh),
       monthlyKwh: wholeProfile(consumption.monthlyKwh),
       annualKwh: finite(analysis?.consumption?.annualKwh)
     },
     // The server-derived standard residential rate is the rate shown in the
     // completed calculation. Do not drop it merely because the visitor did
     // not enter a manual effective-rate override.
-    tariffAmdPerKwh: finite(
-      analysis?.financial?.tariff?.rateAmdPerKwh ?? state?.effectiveRateOverride?.rateAmdPerKwh
-    ),
+    tariffAmdPerKwh: finite(analysis?.financial?.tariff?.rateAmdPerKwh),
     financialTariff: {
       sourceType:
-        tariff.kind === 'user'
+        cleanText(tariff.sourceType ?? tariff.tariffSource) ||
+        (tariff.kind === 'user'
           ? 'user-provided-effective-rate'
-          : tariff.kind === 'automatic-standard-residential'
-            ? 'automatic-standard-residential'
-            : null,
+          : tariff.kind === 'bill-derived'
+            ? 'bill-derived-effective-rate'
+            : tariff.kind === 'automatic-standard-residential'
+              ? 'automatic-standard-residential'
+              : null),
       tariffId: cleanText(tariff.tariffId) || null,
       bracketMinMonthlyKwh: finite(tariff.bracketMinMonthlyKwh),
       bracketMaxMonthlyKwh: finite(tariff.bracketMaxMonthlyKwh),
@@ -92,6 +96,8 @@ export const buildProfessionalLeadContext = ({ analysis, state } = {}) => {
       minRateAmdPerKwh: finite(tariff.minRateAmdPerKwh),
       maxRateAmdPerKwh: finite(tariff.maxRateAmdPerKwh),
       effectiveRateAmdPerKwh: finite(tariff.effectiveRateAmdPerKwh),
+      ...(tariffBillAmd === null ? {} : { billAmd: tariffBillAmd }),
+      ...(tariffBilledKwh === null ? {} : { billedKwh: tariffBilledKwh }),
       monthlyTariffs: Array.isArray(tariff.monthlyTariffs)
         ? tariff.monthlyTariffs.map((month) => ({
             monthIndex: finite(month.monthIndex),

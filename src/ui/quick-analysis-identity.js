@@ -1,4 +1,5 @@
 import { ANALYSIS_SCHEMA_VERSION } from '../domain/analysis-version.js';
+import { toFinancialRateRequest } from '../domain/financial-rate.js';
 
 export const QUICK_ANALYSIS_SCOPE = 'regional-preliminary';
 
@@ -24,6 +25,7 @@ const stableValue = (value) => {
 export const createQuickAnalysisIdentity = ({
   regionId,
   consumption,
+  financialRate,
   tariff,
   calculationVersion = ANALYSIS_SCHEMA_VERSION
 } = {}) =>
@@ -32,7 +34,9 @@ export const createQuickAnalysisIdentity = ({
     calculationVersion,
     regionId: typeof regionId === 'string' && regionId.trim() ? regionId.trim() : null,
     consumption: stableValue(consumption),
-    tariff: stableValue(tariff)
+    financialRate: stableValue(
+      financialRate ? toFinancialRateRequest(financialRate, consumption) : tariff
+    )
   });
 
 export const isRestorableQuickAnalysis = ({

@@ -295,13 +295,17 @@ test('Quick bill plus actual kWh uses kWh for sizing and bill divided by kWh for
   };
   const standard = await analyze({ consumption: { averageMonthlyKwh: 310 } });
   const observed = await analyze({
-    consumption: { averageMonthlyBillAmd: 15_000, averageMonthlyKwh: 310 },
-    tariff: { rateAmdPerKwh: 15_000 / 310 }
+    consumption: { averageMonthlyBillAmd: 15_000, billedKwh: 310 },
+    financialRate: {
+      sourceType: 'bill-derived-effective-rate',
+      effectiveRateAmdPerKwh: 1
+    }
   });
 
   assert.equal(observed.consumption.averageMonthlyKwh, 310);
   assert.equal(observed.consumption.averageMonthlyBillAmd, 15_000);
-  assert.equal(observed.financial.tariff.kind, 'user');
+  assert.equal(observed.financial.tariff.kind, 'bill-derived');
+  assert.equal(observed.financial.tariff.sourceType, 'bill-derived-effective-rate');
   assert.equal(observed.financial.tariff.effectiveRateAmdPerKwh, 15_000 / 310);
   assert.equal(
     observed.selectedScenario.system.capacityKwp,
@@ -346,7 +350,11 @@ test('one temporary session carries quick values to refinement and professional 
   session.write({
     regionId: 'kotayk',
     consumption: { mode: 'usage', averageMonthlyKwh: 850 },
-    effectiveRateOverride: { rateAmdPerKwh: 45 },
+    financialRate: {
+      mode: 'custom-effective',
+      sourceType: 'user-provided-effective-rate',
+      effectiveRateAmdPerKwh: 45
+    },
     property: { coordinates: { lat: 40.27, lng: 44.63 }, confirmed: true },
     roof: { points: [{ lat: 40.27, lng: 44.63 }], complete: false },
     selectedBillFile: { name: 'private.pdf' }
@@ -374,7 +382,11 @@ test('a detailed roof result preserves its compatible quick result for a simple 
   const quickState = {
     regionId: 'yerevan',
     consumption: { mode: 'usage', averageMonthlyKwh: 850 },
-    effectiveRateOverride: { rateAmdPerKwh: 45 }
+    financialRate: {
+      mode: 'custom-effective',
+      sourceType: 'user-provided-effective-rate',
+      effectiveRateAmdPerKwh: 45
+    }
   };
   session.write({
     ...quickState,
@@ -387,7 +399,7 @@ test('a detailed roof result preserves its compatible quick result for a simple 
     quickAnalysisIdentity: createQuickAnalysisIdentity({
       regionId: quickState.regionId,
       consumption: quickState.consumption,
-      tariff: quickState.effectiveRateOverride
+      financialRate: quickState.financialRate
     })
   });
   session.write({
@@ -412,7 +424,11 @@ test('selecting a calculation panel invalidates cached sizing results but keeps 
   const quickState = {
     regionId: 'yerevan',
     consumption: { mode: 'usage', averageMonthlyKwh: 850 },
-    effectiveRateOverride: { rateAmdPerKwh: 45 }
+    financialRate: {
+      mode: 'custom-effective',
+      sourceType: 'user-provided-effective-rate',
+      effectiveRateAmdPerKwh: 45
+    }
   };
   session.write({
     ...quickState,
@@ -427,7 +443,7 @@ test('selecting a calculation panel invalidates cached sizing results but keeps 
     quickAnalysisIdentity: createQuickAnalysisIdentity({
       regionId: quickState.regionId,
       consumption: quickState.consumption,
-      tariff: quickState.effectiveRateOverride
+      financialRate: quickState.financialRate
     }),
     professionalAnalysis: { scope: 'manual-roof-plane', equipment: defaultSystem.equipment },
     professionalAnalysisStatus: 'complete',
@@ -476,7 +492,11 @@ test('Quick lead validation and context include only the permitted result summar
       consumption: { mode: 'usage', averageMonthlyKwh: 850 },
       property: { address: 'Must not leave the browser', coordinates: { lat: 40.18, lng: 44.51 } },
       roof: { points: [{ lat: 40.18, lng: 44.51 }] },
-      effectiveRateOverride: { rateAmdPerKwh: 45 }
+      financialRate: {
+        mode: 'custom-effective',
+        sourceType: 'user-provided-effective-rate',
+        effectiveRateAmdPerKwh: 45
+      }
     },
     analysis: {
       scope: 'regional-preliminary',

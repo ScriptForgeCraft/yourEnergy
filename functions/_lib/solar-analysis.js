@@ -1,16 +1,10 @@
 import {
   ARMENIA_GRID_CO2_FACTOR,
-  ARMENIA_TARIFF_DATASET,
   EPA_URBAN_TREE_CO2_EQUIVALENCY,
   PRELIMINARY_ELEVATED_GROUND_COVERAGE_RATIO,
   PRELIMINARY_USABLE_ROOF_RATIO,
   PriceBookRepository,
-  buildSolarAnalysis,
-  createAutomaticStandardResidentialTariff,
-  createAutomaticStandardResidentialTariffProfile,
-  createStandardResidentialTariffFromActualDayNight,
-  createUserTariffSelection,
-  normalizeConsumption
+  buildSolarAnalysis
 } from '../../src/domain/index.js';
 import { getCalculatorInputNumber } from '../../src/domain/calculator-inputs.js';
 import {
@@ -18,6 +12,7 @@ import {
   getDefaultCalculatorSystem
 } from '../../src/data/equipment/calculator/defaults.js';
 import { ApiError } from './http.js';
+import { resolveFinancialCalculation } from './financial-rate.js';
 
 const cleanString = (value, maximum = 220) =>
   typeof value === 'string' ? value.replace(/\s+/gu, ' ').trim().slice(0, maximum) || null : null;
@@ -82,38 +77,6 @@ const roofAreaFromBody = (body, validatedInput) => {
   };
 };
 
-const userEffectiveRate = (body) => {
-  const rawRate = body?.tariff?.rateAmdPerKwh;
-  if (rawRate === undefined || rawRate === null || rawRate === '') return null;
-  const selection = createUserTariffSelection({ rateAmdPerKwh: rawRate });
-  if (!selection.available) throw new ApiError('INVALID_INPUT');
-  return selection;
-};
-
-const automaticFinancialTariff = (body, consumption) => {
-  const actualDayKwh = body?.tariff?.actualDayKwh;
-  const actualNightKwh = body?.tariff?.actualNightKwh;
-  const hasActualReadings = actualDayKwh !== undefined || actualNightKwh !== undefined;
-  if (hasActualReadings) {
-    const selection = createStandardResidentialTariffFromActualDayNight(
-      consumption.averageMonthlyKwh,
-      { dayKwh: actualDayKwh, nightKwh: actualNightKwh },
-      ARMENIA_TARIFF_DATASET
-    );
-    if (!selection.available) throw new ApiError('INVALID_INPUT');
-    return selection;
-  }
-  return Array.isArray(consumption.monthlyKwh)
-    ? createAutomaticStandardResidentialTariffProfile(
-        consumption.monthlyKwh,
-        ARMENIA_TARIFF_DATASET
-      )
-    : createAutomaticStandardResidentialTariff(
-        consumption.averageMonthlyKwh,
-        ARMENIA_TARIFF_DATASET
-      );
-};
-
 const confirmedProperty = (body, validatedInput) => ({
   address: cleanString(body?.property?.address),
   coordinates: {
@@ -159,12 +122,7 @@ const confirmedRoof = (body, validatedInput, validatedArea = null) => {
  * result before explicitly confirming a point and outlining a usable roof.
  */
 export const validateP0AnalysisWorkflow = (body, validatedInput) => {
-  const effectiveRate = userEffectiveRate(body);
-  const consumption = normalizeConsumption(body?.consumption, {
-    tariff: effectiveRate,
-    tariffDataset: ARMENIA_TARIFF_DATASET
-  });
-  const tariffSelection = effectiveRate ?? automaticFinancialTariff(body, consumption);
+  const { consumption, tariffSelection } = resolveFinancialCalculation(body);
   const calculatorSystem = calculatorSystemForBody(body);
   const hasConfirmedProperty =
     body?.property?.confirmed === true &&

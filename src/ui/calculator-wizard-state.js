@@ -1,3 +1,5 @@
+import { createStandardFinancialRate } from '../domain/financial-rate.js';
+
 export const WIZARD_STEP_KEYS = Object.freeze(['object', 'consumption', 'roof', 'result']);
 
 export const WIZARD_STEP_STATUSES = Object.freeze({
@@ -34,9 +36,7 @@ export const createCalculatorWizardState = (overrides = {}) => ({
   potentialStatus: WIZARD_STEP_STATUSES.LOCKED,
   roof: null,
   consumption: null,
-  financialTariffMode: 'standard',
-  effectiveRateOverride: null,
-  standardDayNightReadings: null,
+  financialRate: createStandardFinancialRate(),
   storageRequired: false,
   analysis: null,
   analysisStatus: WIZARD_STEP_STATUSES.LOCKED,

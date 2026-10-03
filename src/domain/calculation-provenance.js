@@ -178,16 +178,20 @@ export const buildCalculationBasis = ({
           },
     tariff: {
       sourceType:
-        tariff.kind === 'automatic-standard-residential'
-          ? CALCULATION_BASIS_SOURCE_TYPE.REGISTRY_VALUE
-          : tariff.kind === 'user'
-            ? CALCULATION_BASIS_SOURCE_TYPE.USER_INPUT
-            : CALCULATION_BASIS_SOURCE_TYPE.UNAVAILABLE,
+        tariff.tariffSource === 'actual-day-night'
+          ? CALCULATION_BASIS_SOURCE_TYPE.USER_INPUT
+          : tariff.kind === 'automatic-standard-residential'
+            ? CALCULATION_BASIS_SOURCE_TYPE.REGISTRY_VALUE
+            : tariff.kind === 'user' || tariff.kind === 'bill-derived'
+              ? CALCULATION_BASIS_SOURCE_TYPE.USER_INPUT
+              : CALCULATION_BASIS_SOURCE_TYPE.UNAVAILABLE,
       tariffId: cleanString(tariff.tariffId),
       revision: cleanString(tariff.revision),
       customerType: cleanString(tariff.customerType),
       period: cleanString(tariff.period),
       tariffSource: cleanString(tariff.tariffSource),
+      billAmd: toPositiveNumberOrNull(tariff.billAmd),
+      billedKwh: toPositiveNumberOrNull(tariff.billedKwh),
       rateAmdPerKwh: toPositiveNumberOrNull(tariff.rateAmdPerKwh),
       effectiveRateAmdPerKwh: toPositiveNumberOrNull(tariff.effectiveRateAmdPerKwh),
       minRateAmdPerKwh: toPositiveNumberOrNull(tariff.minRateAmdPerKwh),

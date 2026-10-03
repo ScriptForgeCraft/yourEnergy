@@ -2,6 +2,7 @@ import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/dist/ScrollTrigger.js';
 import { createCalculatorSession } from './calculator-session.js';
 import { getArmeniaRegionalBenchmark } from '../data/regions/armenia.js';
+import { createStandardFinancialRate } from '../domain/financial-rate.js';
 import { toNonNegativeNumberOrNull, toPositiveNumberOrNull } from '../domain/numbers.js';
 
 const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
@@ -22,10 +23,19 @@ export const buildProcessStartState = ({ regionId, mode, amount }, previous = {}
 
   const consumption =
     mode === 'bill' ? { mode, averageMonthlyBillAmd: value } : { mode, averageMonthlyKwh: value };
+  if (
+    mode === 'bill' &&
+    previous?.consumption?.mode === 'bill' &&
+    previous.consumption.averageMonthlyBillAmd === value
+  ) {
+    const billedKwh = toPositiveNumberOrNull(previous.consumption.billedKwh);
+    if (billedKwh !== null) consumption.billedKwh = billedKwh;
+  }
   const next = { regionId, consumption };
 
   if (inputSignature(next) !== inputSignature(previous)) {
     Object.assign(next, {
+      financialRate: createStandardFinancialRate(),
       quickAnalysis: null,
       quickAnalysisStatus: 'idle',
       professionalAnalysis: null,
@@ -39,7 +49,7 @@ export const buildProcessStartState = ({ regionId, mode, amount }, previous = {}
       property: null,
       roof: null,
       sitePotential: null,
-      effectiveRateOverride: null
+      financialRate: createStandardFinancialRate()
     });
   }
   return next;

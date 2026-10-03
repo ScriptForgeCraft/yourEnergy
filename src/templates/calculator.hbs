@@ -208,6 +208,15 @@
                   <p class='consumption-field-note'><svg aria-hidden='true'>
                       <use href='/icons.svg#info'></use>
                     </svg>{{product.consumption.billHelp}}</p>
+                  <div class='professional-billed-kwh'><button class='text-button' type='button'
+                      data-consumption-billed-kwh-toggle aria-expanded='false'
+                      aria-controls='professional-billed-kwh-panel'>{{product.consumption.billKwhAction}}</button>
+                    <div id='professional-billed-kwh-panel' data-consumption-billed-kwh-panel hidden>
+                      <label>{{product.consumption.billKwhLabel}}<div class='input-with-unit'><input
+                            id='consumption-billed-kwh' name='billed-kwh' type='text' inputmode='decimal'
+                            autocomplete='off' data-consumption-billed-kwh /><span>kWh</span></div></label>
+                    </div>
+                  </div>
                 </div>
                 <div class='consumption-panel' data-consumption-panel='usage' hidden>
                   <label>{{product.consumption.usageLabel}}<div class='input-with-unit'><input id='consumption-usage' name='usage' type='text'
@@ -217,38 +226,49 @@
                   <div class='month-inputs'>{{#each passport.months}}<label>{{short}}<input id='consumption-month-{{@index}}' name='consumption-month-{{@index}}' type='text'
                         inputmode='decimal' autocomplete='off' data-consumption-month /></label>{{/each}}</div>
                 </div>
-                <details class='effective-rate tariff-setting' data-effective-rate-disclosure>
+                <details class='effective-rate tariff-setting' data-effective-rate-disclosure open>
                   <summary>{{product.consumption.tariffSettingTitle}}</summary>
                   <fieldset class='tariff-mode-options' data-professional-tariff-options>
                     <legend class='visually-hidden'>{{product.consumption.tariffModeLabel}}</legend>
+                    <label data-professional-bill-derived hidden><input type='radio'
+                        name='professional-tariff-mode' value='bill-derived' disabled />
+                      <span><strong>{{product.consumption.billDerivedRate}}</strong><small
+                          data-professional-bill-derived-rate></small><small
+                          data-professional-bill-derived-help></small></span>
+                    </label>
                     <label><input type='radio' name='professional-tariff-mode' value='standard' checked />
                       <span><strong>{{product.consumption.standardTariff}}</strong><small data-professional-standard-tariff>{{product.consumption.standardRangePending}}</small></span>
                     </label>
                     <label><input type='radio' name='professional-tariff-mode' value='custom-effective' />
                       <span><strong>{{product.consumption.customEffectiveRate}}</strong></span>
                     </label>
+                    <label data-professional-actual-day-night hidden><input type='radio'
+                        name='professional-tariff-mode' value='actual-day-night' disabled />
+                      <span><strong>{{product.consumption.actualDayNightRate}}</strong></span>
+                    </label>
                   </fieldset>
                   <div data-professional-custom-tariff hidden>
-                    <label><span>{{product.consumption.effectiveRateLabel}}</span>
+                    <label><span class='visually-hidden'>{{product.consumption.effectiveRateLabel}}</span>
                       <div class='input-with-unit'><input id='consumption-effective-rate' name='effective-rate' type='text' inputmode='decimal'
                           autocomplete='off' data-consumption-effective-rate aria-describedby='consumption-effective-rate-help' /><span>AMD/kWh</span></div>
                     </label>
                     <p class='input-help' id='consumption-effective-rate-help'>{{product.consumption.effectiveRateHelp}}</p>
+                    <p class='input-help tariff-comparison' data-professional-custom-comparison hidden></p>
                   </div>
-                  <details class='actual-day-night' data-actual-day-night-disclosure>
-                    <summary>{{product.consumption.actualDayNightDisclosure}}</summary>
+                  <div class='actual-day-night' data-professional-actual-day-night-panel hidden>
                     <div class='actual-day-night__fields'>
                       <label><span>{{product.consumption.actualDayLabel}}</span><div class='input-with-unit'><input name='actual-day-kwh' type='text' inputmode='decimal' autocomplete='off' data-actual-day-kwh aria-describedby='actual-day-night-help' /><span>kWh</span></div></label>
                       <label><span>{{product.consumption.actualNightLabel}}</span><div class='input-with-unit'><input name='actual-night-kwh' type='text' inputmode='decimal' autocomplete='off' data-actual-night-kwh aria-describedby='actual-day-night-help' /><span>kWh</span></div></label>
                     </div>
                     <p class='input-help' id='actual-day-night-help'>{{product.consumption.actualDayNightHelp}}</p>
-                  </details>
+                  </div>
                 </details>
-                <div class='consumption-estimate'>
+                <p class='input-help consumption-empty-state' data-consumption-empty>{{product.consumption.emptyState}}</p>
+                <div class='consumption-estimate' data-consumption-annual-card hidden>
                   <span class='consumption-estimate__icon' aria-hidden='true'><svg><use href='/icons.svg#zap'></use></svg></span>
                   <span class='consumption-estimate__copy'><span
                       class='consumption-estimate__label'>{{product.consumption.annualLabel}}</span><span
-                      class='consumption-estimate__value'><output data-consumption-annual>—</output><span>kWh</span></span></span>
+                      class='consumption-estimate__value'><output data-consumption-annual></output><span>kWh</span></span></span>
                   <span class='consumption-estimate__badge'>{{wizard.ui.estimateBadge}}</span>
                 </div>
               </div>

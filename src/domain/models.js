@@ -36,12 +36,13 @@
 
 /**
  * @typedef {Object} Consumption
- * @property {'monthly-profile'|'annual-kwh'|'monthly-average-kwh'|'monthly-bill'|'unavailable'} kind
+ * @property {'monthly-profile'|'annual-kwh'|'monthly-average-kwh'|'bill-with-kwh'|'monthly-bill'|'unavailable'} kind
  * @property {boolean} available
  * @property {number|null} annualKwh
  * @property {number[]|null} monthlyKwh
  * @property {number|null} averageMonthlyKwh
  * @property {number|null} averageMonthlyBillAmd
+ * @property {number|null} billedKwh
  * @property {string[]} issues
  * @property {SourceReference} source
  */
@@ -65,11 +66,11 @@
  * @property {string|null} id
  * @property {string|null} tariffId
  * @property {string|null} datasetRevision
- * @property {'standard'|'user-provided'|null} customerType
+ * @property {'standard'|'user-provided'|'bill-derived'|null} customerType
  * @property {'day'|'night'|'day-night-range'|'actual-day-night'|'custom'|null} period
  * @property {string} effectiveFrom
  * @property {string|null} effectiveTo
- * @property {'confirmed'|'provided'|'unavailable'} status
+ * @property {'confirmed'|'provided'|'estimated'|'unavailable'} status
  * @property {number|null} rateAmdPerKwh
  * @property {number|null} effectiveRateAmdPerKwh
  * @property {number|null} minRateAmdPerKwh

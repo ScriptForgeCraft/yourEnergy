@@ -4,7 +4,9 @@ import {
   calculateRoofPlaneArea,
   getCalculatorInputNumber,
   PRELIMINARY_USABLE_ROOF_RATIO,
-  SolarPassportRepository
+  SolarPassportRepository,
+  createStandardFinancialRate,
+  toFinancialRateRequest
 } from '../domain/index.js';
 import { number, format, text, element, localeCode } from './calculator/view-helpers.js';
 import { createCalculatorResultsView } from './calculator/results-view.js';
@@ -308,10 +310,7 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
   const savedProfessionalIdentity = createProfessionalAnalysisIdentity({
     property: savedSession.property?.coordinates,
     consumption: savedSession.consumption,
-    tariff:
-      savedSession.financialTariffMode === 'custom-effective'
-        ? savedSession.effectiveRateOverride
-        : savedSession.standardDayNightReadings,
+    financialRate: savedSession.financialRate,
     roof: savedRoofForIdentity,
     system: { capacityKwp: PVGIS_KWP, lossPercent: PVGIS_LOSS },
     panelId: recommendedPanelId,
@@ -339,9 +338,7 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
       : WIZARD_STEP_STATUSES.LOCKED,
     roof: savedSession.roof ?? null,
     consumption: savedSession.consumption ?? null,
-    financialTariffMode: savedSession.financialTariffMode ?? 'standard',
-    effectiveRateOverride: savedSession.effectiveRateOverride ?? null,
-    standardDayNightReadings: savedSession.standardDayNightReadings ?? null,
+    financialRate: savedSession.financialRate ?? createStandardFinancialRate(),
     storageRequired: savedStorageRequired,
     analysis: restoredAnalysis,
     solarPassport: restoredAnalysis ? (savedSession.professionalSolarPassport ?? null) : null,
@@ -378,9 +375,7 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
       sitePotential: state.sitePotential,
       roof: state.roof,
       consumption: state.consumption,
-      financialTariffMode: state.financialTariffMode,
-      effectiveRateOverride: state.effectiveRateOverride,
-      standardDayNightReadings: state.standardDayNightReadings,
+      financialRate: state.financialRate,
       storageRequired: state.storageRequired,
       professionalAnalysis: state.analysis,
       professionalAnalysisStatus: state.analysisStatus,
@@ -1272,10 +1267,7 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
         source: 'manual'
       },
       consumption: state.consumption,
-      tariff:
-        state.financialTariffMode === 'custom-effective'
-          ? state.effectiveRateOverride
-          : state.standardDayNightReadings,
+      financialRate: toFinancialRateRequest(state.financialRate, state.consumption),
       roof: {
         areaMethod: roof.areaMethod,
         mountingMode: roof.mountingMode,
@@ -1314,9 +1306,7 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
     }
     if (!validateRoof()) return;
     state.consumption = consumption.value;
-    state.effectiveRateOverride = consumption.tariff;
-    state.financialTariffMode = consumption.tariffMode;
-    state.standardDayNightReadings = consumption.actualDayNight;
+    state.financialRate = consumption.financialRate;
     const payload = buildPayload();
     // Persist every roof value used in this exact request. Without this,
     // untouched default controls are absent from a freshly drawn map outline,
@@ -1359,7 +1349,7 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
       professionalAnalysisIdentity = createProfessionalAnalysisIdentity({
         property: payload.property,
         consumption: payload.consumption,
-        tariff: payload.tariff,
+        financialRate: state.financialRate,
         roof: payload.roof,
         system: payload.system,
         panelId: payload.equipment?.panelId,
@@ -1410,6 +1400,8 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
   } else if (savedMode === 'bill') {
     const input = root.querySelector('[data-consumption-bill]');
     if (input) input.value = state.consumption.averageMonthlyBillAmd ?? '';
+    const billedKwh = root.querySelector('[data-consumption-billed-kwh]');
+    if (billedKwh) billedKwh.value = state.consumption.billedKwh ?? '';
   }
   if (state.addressNote && address) address.value = state.addressNote;
   if (storageRequired) storageRequired.checked = state.storageRequired;
@@ -1438,15 +1430,11 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
     root: root.querySelector('[data-consumption-inputs]'),
     strings: product.consumption ?? {},
     locale,
-    initialEffectiveRate: state.effectiveRateOverride,
-    initialTariffMode: state.financialTariffMode,
-    initialActualDayNight: state.standardDayNightReadings,
+    initialFinancialRate: state.financialRate,
     onChange: () => {
-      const draft = consumptionInput?.inspect();
-      state.consumption = draft?.valid ? draft.value : null;
-      state.effectiveRateOverride = draft?.valid ? draft.tariff : null;
-      state.financialTariffMode = draft?.valid ? draft.tariffMode : 'standard';
-      state.standardDayNightReadings = draft?.valid ? draft.actualDayNight : null;
+      const draft = consumptionInput?.draft();
+      state.consumption = draft?.consumption ?? null;
+      state.financialRate = draft?.financialRate ?? createStandardFinancialRate();
       // Consumption and its optional effective rate are shared with Quick. A Professional edit
       // cannot leave an earlier regional result visible for different inputs.
       session.clearQuickAnalysis();
@@ -1572,9 +1560,7 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
       return;
     }
     state.consumption = consumption.value;
-    state.effectiveRateOverride = consumption.tariff;
-    state.financialTariffMode = consumption.tariffMode;
-    state.standardDayNightReadings = consumption.actualDayNight;
+    state.financialRate = consumption.financialRate;
     setStep(2);
   });
   const useRoofMap = (action) => {

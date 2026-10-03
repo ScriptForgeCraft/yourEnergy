@@ -1,55 +1,23 @@
 import {
   ARMENIA_GRID_CO2_FACTOR,
-  ARMENIA_TARIFF_DATASET,
   EPA_URBAN_TREE_CO2_EQUIVALENCY,
   PriceBookRepository,
   buildRegionalQuickAnalysis,
-  createAutomaticStandardResidentialTariff,
-  createAutomaticStandardResidentialTariffProfile,
-  createUserTariffSelection,
-  getArmeniaRegionalBenchmark,
-  normalizeConsumption
+  getArmeniaRegionalBenchmark
 } from '../../src/domain/index.js';
 import { ApiError, handlePost, readJsonBody } from '../_lib/http.js';
+import { resolveFinancialCalculation } from '../_lib/financial-rate.js';
 import { createPvgisAdapter } from '../_lib/pvgis.js';
 
 const priceBookRepository = new PriceBookRepository();
 const P0_PVGIS_QUERY = Object.freeze({ capacityKwp: 1, lossPercent: 14 });
-
-const userEffectiveRate = (body) => {
-  const rawRate = body?.tariff?.rateAmdPerKwh;
-  if (rawRate === undefined || rawRate === null || rawRate === '') return null;
-  const selection = createUserTariffSelection({ rateAmdPerKwh: rawRate });
-  if (!selection.available) throw new ApiError('INVALID_INPUT');
-  return selection;
-};
 
 const validateQuickInput = (body) => {
   const regionId = typeof body?.regionId === 'string' ? body.regionId.trim() : '';
   const region = getArmeniaRegionalBenchmark(regionId);
   if (!region) throw new ApiError('INVALID_INPUT');
 
-  const effectiveRate = userEffectiveRate(body);
-  const consumption = normalizeConsumption(body?.consumption, {
-    tariff: effectiveRate,
-    tariffDataset: ARMENIA_TARIFF_DATASET
-  });
-  if (!consumption.available) throw new ApiError('INVALID_INPUT');
-
-  // A registry descriptor sent by a browser is never trusted or required.
-  // The server derives the standard residential reference rate itself.
-  const tariffSelection =
-    effectiveRate ??
-    (Array.isArray(consumption.monthlyKwh)
-      ? createAutomaticStandardResidentialTariffProfile(
-          consumption.monthlyKwh,
-          ARMENIA_TARIFF_DATASET
-        )
-      : createAutomaticStandardResidentialTariff(
-          consumption.averageMonthlyKwh,
-          ARMENIA_TARIFF_DATASET
-        ));
-  if (!tariffSelection.available) throw new ApiError('INVALID_INPUT');
+  const { consumption, tariffSelection } = resolveFinancialCalculation(body);
 
   return { region, tariffSelection, consumption };
 };

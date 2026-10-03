@@ -160,14 +160,19 @@ test('tariff mode session switching cannot keep a stale custom rate active', () 
   });
 
   session.write({
-    financialTariffMode: 'custom-effective',
-    effectiveRateOverride: { rateAmdPerKwh: 47 }
+    financialRate: {
+      mode: 'custom-effective',
+      sourceType: 'user-provided-effective-rate',
+      effectiveRateAmdPerKwh: 47
+    }
   });
-  assert.equal(session.read().effectiveRateOverride.rateAmdPerKwh, 47);
+  assert.equal(session.read().financialRate.effectiveRateAmdPerKwh, 47);
 
-  session.write({ financialTariffMode: 'standard' });
-  assert.equal(session.read().financialTariffMode, 'standard');
-  assert.equal(session.read().effectiveRateOverride, null);
+  session.write({
+    financialRate: { mode: 'standard', sourceType: 'automatic-standard-residential' }
+  });
+  assert.equal(session.read().financialRate.mode, 'standard');
+  assert.equal('effectiveRateAmdPerKwh' in session.read().financialRate, false);
 });
 
 test('HY, RU and EN expose complete tariff range copy without fallback keys', () => {
@@ -189,6 +194,6 @@ test('HY, RU and EN expose complete tariff range copy without fallback keys', ()
         `${locale} misses product.consumption.${key}`
       );
     }
-    assert.equal(calculatorModes[locale].quick.tariffInfo.length, 4);
+    assert.equal(calculatorModes[locale].quick.tariffInfo.length, 3);
   }
 });

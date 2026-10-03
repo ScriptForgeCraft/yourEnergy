@@ -1,4 +1,5 @@
 import { ANALYSIS_SCHEMA_VERSION } from '../domain/analysis-version.js';
+import { toFinancialRateRequest } from '../domain/financial-rate.js';
 
 export const PROFESSIONAL_ANALYSIS_SCOPE = 'manual-roof-plane';
 const PROFESSIONAL_ANALYSIS_CALCULATION_VERSION = ANALYSIS_SCHEMA_VERSION;
@@ -116,6 +117,7 @@ export const completeProfessionalRoofInput = (currentRoof, fallbackRoof) => {
 export const createProfessionalAnalysisIdentity = ({
   property,
   consumption,
+  financialRate,
   tariff,
   roof,
   system,
@@ -132,7 +134,9 @@ export const createProfessionalAnalysisIdentity = ({
       longitude: finiteNumber(coordinates.longitude ?? coordinates.lng)
     },
     consumption: stableValue(consumption),
-    tariff: stableValue(tariff),
+    financialRate: stableValue(
+      financialRate ? toFinancialRateRequest(financialRate, consumption) : tariff
+    ),
     roof: normalizedRoof(roof),
     system: stableValue(system),
     panelId: typeof panelId === 'string' && panelId.trim() ? panelId.trim() : null,

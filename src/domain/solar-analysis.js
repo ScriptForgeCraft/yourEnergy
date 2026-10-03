@@ -847,7 +847,9 @@ export const buildSolarAnalysis = (input = {}) => {
   const status = selectedScenario?.status ?? ANALYSIS_STATUS.UNAVAILABLE;
   const commercialEstimate = selectedScenario?.commercialEstimate ?? null;
   const tariffKind =
-    tariff?.kind === 'user' || tariff?.kind === 'automatic-standard-residential'
+    tariff?.kind === 'user' ||
+    tariff?.kind === 'bill-derived' ||
+    tariff?.kind === 'automatic-standard-residential'
       ? tariff.kind
       : 'unavailable';
   const tariffRecord = tariff?.tariff ?? {};
@@ -858,7 +860,10 @@ export const buildSolarAnalysis = (input = {}) => {
     revision: tariff?.dataset?.revision ?? tariffRecord.datasetRevision ?? null,
     customerType: tariffRecord.customerType ?? null,
     period: tariffRecord.period ?? null,
+    sourceType: tariffRecord.tariffSource ?? null,
     tariffSource: tariffRecord.tariffSource ?? null,
+    billAmd: tariffRecord.billAmd ?? null,
+    billedKwh: tariffRecord.billedKwh ?? null,
     bracketMinMonthlyKwh: tariffRecord.minMonthlyKwh ?? null,
     bracketMinMonthlyKwhInclusive: tariffRecord.minMonthlyKwhInclusive !== false,
     bracketMaxMonthlyKwh: tariffRecord.maxMonthlyKwh ?? null,
@@ -1062,6 +1067,7 @@ export const buildSolarAnalysis = (input = {}) => {
       'ARMENIA_MONTHLY_NET_METERING_MAY_TO_APRIL',
       ...(consumption.monthlyKwh === null ? ['UNIFORM_MONTHLY_CONSUMPTION_FOR_SETTLEMENT'] : []),
       ...(tariffKind === 'user' ? ['USER_PROVIDED_TARIFF'] : []),
+      ...(tariffKind === 'bill-derived' ? ['BILL_DERIVED_EFFECTIVE_RATE'] : []),
       ...(tariffKind === 'automatic-standard-residential'
         ? [
             'CONFIRMED_REGISTRY_TARIFF',

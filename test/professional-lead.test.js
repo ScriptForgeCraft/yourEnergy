@@ -43,7 +43,11 @@ test('Professional lead context includes entered inputs, calculated result and e
       addressNote: 'Arabkir, Yerevan',
       confirmedProperty: { lat: 40.20512, lng: 44.51234 },
       consumption: { mode: 'usage', averageMonthlyKwh: 540 },
-      effectiveRateOverride: { rateAmdPerKwh: 46.48 },
+      financialRate: {
+        mode: 'custom-effective',
+        sourceType: 'user-provided-effective-rate',
+        effectiveRateAmdPerKwh: 46.48
+      },
       roof: {
         areaMethod: 'map-projected',
         areaSqm: 40,
@@ -141,4 +145,34 @@ test('Professional lead preserves the server-derived automatic tariff', () => {
     effectiveRateAmdPerKwh: null,
     monthlyTariffs: null
   });
+});
+
+test('Professional lead preserves bill-derived raw inputs and provenance', () => {
+  const context = buildProfessionalLeadContext({
+    state: {
+      consumption: {
+        mode: 'bill',
+        averageMonthlyBillAmd: 11_111,
+        billedKwh: 111
+      }
+    },
+    analysis: {
+      financial: {
+        tariff: {
+          kind: 'bill-derived',
+          sourceType: 'bill-derived-effective-rate',
+          billAmd: 11_111,
+          billedKwh: 111,
+          effectiveRateAmdPerKwh: 11_111 / 111,
+          rateAmdPerKwh: 11_111 / 111
+        }
+      },
+      selectedScenario: {}
+    }
+  });
+
+  assert.equal(context.financialTariff.sourceType, 'bill-derived-effective-rate');
+  assert.equal(context.financialTariff.billAmd, 11_111);
+  assert.equal(context.financialTariff.billedKwh, 111);
+  assert.equal(context.financialTariff.effectiveRateAmdPerKwh, 11_111 / 111);
 });

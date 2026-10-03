@@ -488,7 +488,9 @@ const createCopy = ({ wizard, product }) => {
     sourcePricebook: pdf.sourcePricebook ?? 'Price book',
     sourceConfirmed: pdf.sourceConfirmed ?? 'confirmed',
     sourceTariffRegistry: pdf.sourceTariffRegistry ?? 'ENA / PSRC',
+    sourceBillDerived: pdf.sourceBillDerived ?? 'derived from bill amount and kWh',
     sourceUserProvided: pdf.sourceUserProvided ?? 'user-provided',
+    sourceActualDayNight: pdf.sourceActualDayNight ?? 'actual day/night readings',
     sourcePreliminary: pdf.sourcePreliminary ?? 'preliminary',
     sourceUnavailable: pdf.sourceUnavailable ?? 'unavailable',
     assumptionsTitle: pdf.assumptionsTitle ?? 'Main assumptions and limitations',
@@ -863,7 +865,7 @@ export const createCalculatorPdfReportHtml = ({
   const coordinatesObject = analysis.property?.coordinates;
   const roof = analysis.roof ?? state.roof ?? {};
   const consumption = analysis.consumption ?? state.consumption ?? {};
-  const tariff = analysis.financial?.tariff ?? state.effectiveRateOverride ?? {};
+  const tariff = analysis.financial?.tariff ?? {};
   const financial = scenario.financial ?? {};
   const storagePriceUnavailable = financial.storagePriceUnavailable === true;
   const estimate = scenario.commercialEstimate ?? analysis.commercialEstimate ?? {};
@@ -914,11 +916,15 @@ export const createCalculatorPdfReportHtml = ({
     tariffRate: asNumber(tariff.rateAmdPerKwh),
     tariffSummary,
     tariffSourceStatus:
-      tariff.kind === 'automatic-standard-residential'
-        ? copy.sourceTariffRegistry
-        : tariff.kind === 'user'
+      (tariff.sourceType ?? tariff.tariffSource) === 'bill-derived-effective-rate'
+        ? copy.sourceBillDerived
+        : (tariff.sourceType ?? tariff.tariffSource) === 'user-provided-effective-rate'
           ? copy.sourceUserProvided
-          : copy.sourceUnavailable,
+          : (tariff.sourceType ?? tariff.tariffSource) === 'actual-day-night'
+            ? copy.sourceActualDayNight
+            : tariff.kind === 'automatic-standard-residential'
+              ? copy.sourceTariffRegistry
+              : copy.sourceUnavailable,
     storageRequested: Boolean(state.storageRequired),
     roofArea: asNumber(roof.areaSqm),
     roofOrientation: asNumber(roof.orientationDegrees),

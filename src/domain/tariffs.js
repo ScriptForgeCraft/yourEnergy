@@ -1,6 +1,7 @@
 import { ARMENIA_TARIFF_DATASET } from '../data/tariffs/armenia.js';
 import { ARMENIA_SURPLUS_COMPENSATION_DATASET } from '../data/regulatory/armenia-surplus-compensation.js';
 import { getCalculatorInputNumber } from './calculator-inputs.js';
+import { deriveEffectiveRateFromBill } from './financial-rate.js';
 import { cleanString, toFiniteNumberOrNull, toPositiveNumberOrNull } from './numbers.js';
 import { SOURCE_KIND, SOURCE_STATUS } from './models.js';
 
@@ -475,10 +476,79 @@ export const createStandardResidentialTariffFromActualDayNight = (
       accuracy: 'actual-day-night',
       actualDayKwh: day,
       actualNightKwh: night,
+      tariffSource: 'actual-day-night',
       assumption: STANDARD_RESIDENTIAL_ACTUAL_SPLIT_ASSUMPTION
     },
     reason: 'STANDARD_RESIDENTIAL_ACTUAL_DAY_NIGHT_CONSUMPTION',
     assumption: STANDARD_RESIDENTIAL_ACTUAL_SPLIT_ASSUMPTION
+  };
+};
+
+/**
+ * Recomputes an effective average price from same-period raw bill inputs. The
+ * browser may display the quotient, but it never supplies the authoritative
+ * rate used here.
+ */
+export const createBillDerivedTariffSelection = (input = {}, effectiveDate = new Date()) => {
+  const billAmd = getCalculatorInputNumber(
+    input.billAmd ?? input.averageMonthlyBillAmd,
+    'averageMonthlyBillAmd'
+  );
+  const billedKwh = getCalculatorInputNumber(input.billedKwh, 'averageMonthlyConsumptionKwh');
+  const effectiveRateAmdPerKwh = deriveEffectiveRateFromBill({ billAmd, billedKwh });
+  const requestedDate = toIsoDate(effectiveDate);
+  const available =
+    billAmd !== null &&
+    billedKwh !== null &&
+    effectiveRateAmdPerKwh !== null &&
+    requestedDate !== null;
+  const source = {
+    kind: SOURCE_KIND.MANUAL,
+    status: available ? SOURCE_STATUS.ESTIMATED : SOURCE_STATUS.UNAVAILABLE,
+    provider: available ? 'User-provided electricity bill inputs' : null,
+    reference: null,
+    verifiedAt: null
+  };
+
+  if (!available) {
+    return {
+      kind: 'unavailable',
+      available: false,
+      requestedDate,
+      dataset: null,
+      tariff: null,
+      reason: 'BILL_DERIVED_TARIFF_INVALID',
+      source
+    };
+  }
+
+  return {
+    kind: 'bill-derived',
+    available: true,
+    requestedDate,
+    dataset: null,
+    tariff: {
+      id: 'bill-derived-effective-rate',
+      tariffId: null,
+      datasetRevision: null,
+      customerType: 'bill-derived',
+      period: TARIFF_PERIOD.CUSTOM,
+      effectiveFrom: requestedDate,
+      effectiveTo: null,
+      status: 'estimated',
+      billAmd,
+      billedKwh,
+      rateAmdPerKwh: effectiveRateAmdPerKwh,
+      effectiveRateAmdPerKwh,
+      minRateAmdPerKwh: effectiveRateAmdPerKwh,
+      maxRateAmdPerKwh: effectiveRateAmdPerKwh,
+      accuracy: 'bill-derived-effective-rate',
+      currency: 'AMD',
+      source,
+      tariffSource: 'bill-derived-effective-rate'
+    },
+    reason: 'BILL_DERIVED_EFFECTIVE_RATE',
+    source
   };
 };
 
@@ -578,7 +648,7 @@ export const estimateStandardResidentialConsumptionFromBill = (
 };
 
 /**
- * A rate copied from the visitor's electricity bill. It is usable for a
+ * An effective rate explicitly entered by the visitor. It is usable for a
  * preliminary planning calculation, but it deliberately remains distinct
  * from a confirmed tariff-registry record in the Passport and source ledger.
  */
@@ -591,7 +661,7 @@ export const createUserTariffSelection = (input = {}, effectiveDate = new Date()
   const source = {
     kind: SOURCE_KIND.MANUAL,
     status: rateAmdPerKwh === null ? SOURCE_STATUS.UNAVAILABLE : SOURCE_STATUS.PROVIDED,
-    provider: rateAmdPerKwh === null ? null : 'User-provided electricity bill',
+    provider: rateAmdPerKwh === null ? null : 'User-provided effective electricity rate',
     reference: null,
     verifiedAt: null
   };
@@ -652,7 +722,7 @@ export const getConfirmedTariffRate = (selectionOrTariff) => {
  */
 export const getUsableTariffRate = (selectionOrTariff) => {
   const selection = selectionOrTariff?.tariff ? selectionOrTariff : null;
-  if (selection?.kind === 'user' && selection.available) {
+  if ((selection?.kind === 'user' || selection?.kind === 'bill-derived') && selection.available) {
     const tariff = normalizeRecord(selection.tariff, selection.tariff?.currency);
     return tariff.currency === 'AMD' ? tariff.rateAmdPerKwh : null;
   }
@@ -664,7 +734,7 @@ export const getFinancialTariffRateRange = (selectionOrTariff) => {
   const selection = selectionOrTariff?.tariff ? selectionOrTariff : null;
   const tariff = selection?.tariff ?? selectionOrTariff;
   if (selection && !selection.available) return null;
-  if (selection?.kind === 'user') {
+  if (selection?.kind === 'user' || selection?.kind === 'bill-derived') {
     const rate = getUsableTariffRate(selection);
     return rate === null
       ? null

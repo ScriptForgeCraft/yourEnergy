@@ -96,7 +96,11 @@ test('process form hands only validated inputs to CalculatorSession and invalida
     professionalAnalysisIdentity: 'previous-inputs',
     professionalSolarPassport: { id: 'passport-1' },
     roof: { areaSqm: 80 },
-    effectiveRateOverride: { rateAmdPerKwh: 50 }
+    financialRate: {
+      mode: 'custom-effective',
+      sourceType: 'user-provided-effective-rate',
+      effectiveRateAmdPerKwh: 50
+    }
   };
   const next = buildProcessStartState(
     { regionId: 'lori', mode: 'bill', amount: '35000' },
@@ -110,7 +114,8 @@ test('process form hands only validated inputs to CalculatorSession and invalida
   });
   assert.equal(next.professionalAnalysis, null);
   assert.equal(next.roof, null);
-  assert.equal(next.effectiveRateOverride, null);
+  assert.equal(next.financialRate.mode, 'standard');
+  assert.equal(next.financialRate.sourceType, 'automatic-standard-residential');
 
   for (const amount of ['', null, -1, 0, 'no', Infinity]) {
     assert.equal(buildProcessStartState({ regionId: 'yerevan', mode: 'bill', amount }), null);

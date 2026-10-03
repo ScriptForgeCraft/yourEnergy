@@ -38,14 +38,23 @@ export const formatTariffProvenance = ({
   rate,
   formatRate = numericText
 } = {}) => {
-  const isUser = tariff?.kind === 'user' || tariff?.tariffSource === 'user-provided-effective-rate';
+  const sourceType = tariff?.sourceType ?? tariff?.tariffSource;
+  const isBillDerived =
+    tariff?.kind === 'bill-derived' || sourceType === 'bill-derived-effective-rate';
+  const isUser = tariff?.kind === 'user' || sourceType === 'user-provided-effective-rate';
+  const isActualDayNight =
+    sourceType === 'actual-day-night' || tariff?.accuracy === 'actual-day-night';
   const effectiveTariff =
     rate === null || rate === undefined ? tariff : { ...tariff, effectiveRateAmdPerKwh: rate };
   const rateText = formatTariffRate({ tariff: effectiveTariff, formatRate });
   if (!rateText) return strings.noTariff ?? '';
-  const label = isUser
-    ? (strings.userProvidedEffectiveRate ?? 'Average rate from user')
-    : (strings.automaticStandardTariff ?? 'Standard residential tariff');
-  const bracket = isUser ? '' : formatTariffBracket({ tariff, strings });
+  const label = isBillDerived
+    ? (strings.billDerivedRate ?? 'Average cost from your bill')
+    : isUser
+      ? (strings.userProvidedEffectiveRate ?? 'Entered average rate')
+      : isActualDayNight
+        ? (strings.actualDayNightRate ?? 'Actual day/night consumption')
+        : (strings.automaticStandardTariff ?? 'Standard residential tariff');
+  const bracket = isUser || isBillDerived ? '' : formatTariffBracket({ tariff, strings });
   return [label, bracket, rateText].filter(Boolean).join(' · ');
 };

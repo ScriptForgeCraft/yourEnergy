@@ -58,7 +58,9 @@ const normalizeFinancialTariff = (value) => {
   const tariff = value && typeof value === 'object' && !Array.isArray(value) ? value : {};
   const sourceType = oneOf(normalizeText(tariff.sourceType), [
     'automatic-standard-residential',
-    'user-provided-effective-rate'
+    'bill-derived-effective-rate',
+    'user-provided-effective-rate',
+    'actual-day-night'
   ]);
   const monthlyTariffs =
     Array.isArray(tariff.monthlyTariffs) && tariff.monthlyTariffs.length === 12
@@ -70,6 +72,9 @@ const normalizeFinancialTariff = (value) => {
           maxRateAmdPerKwh: positiveNumber(month?.maxRateAmdPerKwh, 1_000_000)
         }))
       : null;
+  if (!sourceType) return null;
+  const billAmd = positiveNumber(tariff.billAmd, 100_000_000);
+  const billedKwh = positiveNumber(tariff.billedKwh, 10_000_000);
   return {
     sourceType,
     tariffId: boundedText(tariff.tariffId, 96),
@@ -80,14 +85,16 @@ const normalizeFinancialTariff = (value) => {
     minRateAmdPerKwh: positiveNumber(tariff.minRateAmdPerKwh, 1_000_000),
     maxRateAmdPerKwh: positiveNumber(tariff.maxRateAmdPerKwh, 1_000_000),
     effectiveRateAmdPerKwh: positiveNumber(tariff.effectiveRateAmdPerKwh, 1_000_000),
+    ...(billAmd === null ? {} : { billAmd }),
+    ...(billedKwh === null ? {} : { billedKwh }),
     monthlyTariffs
   };
 };
 
 /**
  * Quick Calculator leads carry only the small, explicit calculation summary an
- * engineer needs. Addresses, coordinates, roof geometry, tariffs, files and
- * arbitrary client fields are deliberately excluded from delivery payloads.
+ * engineer needs. Addresses, coordinates, roof geometry, files and arbitrary
+ * client fields are deliberately excluded; typed tariff provenance is kept.
  */
 const normalizeCalculatorContext = (value, locale) => {
   if (!value || typeof value !== 'object' || Array.isArray(value)) return null;
@@ -101,12 +108,14 @@ const normalizeCalculatorContext = (value, locale) => {
     100_000_000
   );
   const averageMonthlyKwh = positiveNumber(value?.consumption?.averageMonthlyKwh, 10_000_000);
+  const billedKwh = positiveNumber(value?.consumption?.billedKwh, 10_000_000);
   const annualKwh = positiveNumber(value?.consumption?.annualKwh, 100_000_000);
   const selectedScenario = normalizeText(value.selectedScenario);
   const capacityKwp = positiveNumber(value.capacityKwp, 100);
   const annualGenerationKwh = positiveNumber(value.annualGenerationKwh, 10_000_000);
   const source = normalizeText(value.source);
   const scope = normalizeText(value.scope);
+  const financialTariff = normalizeFinancialTariff(value.financialTariff);
   const range = value.budgetRangeAmd;
   const p25 = positiveNumber(range?.p25, 10_000_000_000);
   const p50 = positiveNumber(range?.p50, 10_000_000_000);
@@ -125,10 +134,12 @@ const normalizeCalculatorContext = (value, locale) => {
             mode,
             ...(averageMonthlyBillAmd !== null ? { averageMonthlyBillAmd } : {}),
             ...(averageMonthlyKwh !== null ? { averageMonthlyKwh } : {}),
+            ...(billedKwh !== null ? { billedKwh } : {}),
             ...(annualKwh !== null ? { annualKwh } : {})
           }
         }
       : {}),
+    ...(financialTariff ? { financialTariff } : {}),
     ...(selectedScenario && selectedScenario.length <= 96 ? { selectedScenario } : {}),
     ...(capacityKwp !== null ? { capacityKwp } : {}),
     ...(annualGenerationKwh !== null ? { annualGenerationKwh } : {}),
@@ -170,11 +181,12 @@ const normalizeProfessionalCalculatorContext = (value, locale) => {
       mode,
       averageMonthlyBillAmd: positiveNumber(consumption.averageMonthlyBillAmd, 100_000_000),
       averageMonthlyKwh: positiveNumber(consumption.averageMonthlyKwh, 10_000_000),
+      billedKwh: positiveNumber(consumption.billedKwh, 10_000_000),
       monthlyKwh: normalizeMonthlyValues(consumption.monthlyKwh, 10_000_000),
       annualKwh: positiveNumber(consumption.annualKwh, 100_000_000)
     },
     tariffAmdPerKwh: positiveNumber(value.tariffAmdPerKwh, 1_000_000),
-    financialTariff,
+    ...(financialTariff ? { financialTariff } : {}),
     roof: {
       areaMethod,
       areaSqm: positiveNumber(roof.areaSqm, 10_000_000),
@@ -357,6 +369,14 @@ const modeLabel = (mode) =>
     monthly: 'Ամսական սպառման պրոֆիլ'
   })[mode] ?? mode;
 
+const financialSourceLabel = (sourceType) =>
+  ({
+    'automatic-standard-residential': 'Ստանդարտ կենցաղային՝ ավտոմատ ընտրված',
+    'bill-derived-effective-rate': 'Միջին արժեք՝ հաշվարկված նույն հաշվի գումարից և kWh-ից',
+    'user-provided-effective-rate': 'Օգտատիրոջ նշած միջին արժեք',
+    'actual-day-night': 'Փաստացի ցերեկային և գիշերային սպառում'
+  })[sourceType] ?? null;
+
 const roofAreaMethodLabel = (method) =>
   ({
     'map-projected': 'Քարտեզով ուրվագծում',
@@ -419,6 +439,30 @@ const formatQuickCalculatorContext = (context, locale) => {
         : `${formatNumber(context.consumption.annualKwh, locale)} kWh`
     );
   }
+  if (context.financialTariff?.sourceType) {
+    section(lines, 'Ֆինանսական հաշվարկ');
+    field(lines, 'Սակագնի աղբյուր', financialSourceLabel(context.financialTariff.sourceType));
+    field(
+      lines,
+      'Հաշվից հաշվարկված տվյալներ',
+      context.financialTariff.billAmd === null ||
+        context.financialTariff.billAmd === undefined ||
+        context.financialTariff.billedKwh === null ||
+        context.financialTariff.billedKwh === undefined
+        ? null
+        : `${formatNumber(context.financialTariff.billAmd, locale)} AMD / ${formatNumber(
+            context.financialTariff.billedKwh,
+            locale
+          )} kWh`
+    );
+    field(
+      lines,
+      'Միջին արդյունավետ արժեք',
+      context.financialTariff.effectiveRateAmdPerKwh === null
+        ? null
+        : `${formatNumber(context.financialTariff.effectiveRateAmdPerKwh, locale, 2)} AMD/kWh`
+    );
+  }
   section(lines, 'Նախնական արդյունք');
   field(lines, 'Սցենար', scenarioLabel(context.selectedScenario));
   field(
@@ -473,6 +517,11 @@ const formatProfessionalCalculatorContext = (context, locale) => {
   );
   field(
     lines,
+    'Նույն հաշվում նշված սպառում',
+    consumption.billedKwh === null ? null : `${formatNumber(consumption.billedKwh, locale)} kWh`
+  );
+  field(
+    lines,
     'Միջին ամսական սպառում',
     consumption.averageMonthlyKwh === null
       ? null
@@ -484,15 +533,7 @@ const formatProfessionalCalculatorContext = (context, locale) => {
     consumption.annualKwh === null ? null : `${formatNumber(consumption.annualKwh, locale)} kWh`
   );
   const financialTariff = context.financialTariff;
-  field(
-    lines,
-    'Ֆինանսական սակագնի աղբյուր',
-    financialTariff?.sourceType === 'automatic-standard-residential'
-      ? 'Ստանդարտ կենցաղային՝ ավտոմատ ընտրված'
-      : financialTariff?.sourceType === 'user-provided-effective-rate'
-        ? 'Օգտատիրոջ նշած միջին արժեք'
-        : null
-  );
+  field(lines, 'Ֆինանսական սակագնի աղբյուր', financialSourceLabel(financialTariff?.sourceType));
   field(lines, 'Սակագնային խումբ', financialTariff?.tariffId);
   field(
     lines,
@@ -504,6 +545,19 @@ const formatProfessionalCalculatorContext = (context, locale) => {
           locale,
           2
         )} AMD/kWh`
+  );
+  field(
+    lines,
+    'Հաշվի հում տվյալներ',
+    financialTariff?.billAmd === null ||
+      financialTariff?.billAmd === undefined ||
+      financialTariff?.billedKwh === null ||
+      financialTariff?.billedKwh === undefined
+      ? null
+      : `${formatNumber(financialTariff.billAmd, locale)} AMD / ${formatNumber(
+          financialTariff.billedKwh,
+          locale
+        )} kWh`
   );
   field(
     lines,

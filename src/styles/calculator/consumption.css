@@ -260,6 +260,22 @@
   color: #0877ef;
 }
 
+.calculator-page--professional .professional-billed-kwh {
+  display: grid;
+  gap: 0.55rem;
+  margin-top: 0.75rem;
+}
+
+.calculator-page--professional .professional-billed-kwh .text-button {
+  width: fit-content;
+}
+
+.calculator-page--professional .professional-billed-kwh label {
+  color: #162b50;
+  font-size: 0.77rem;
+  font-weight: 780;
+}
+
 .calculator-page--professional .effective-rate {
   min-width: 0;
   grid-column: 2;
@@ -376,6 +392,18 @@
   color: #5c7491;
   font-size: 0.67rem;
   line-height: 1.4;
+}
+
+.calculator-page--professional .tariff-comparison {
+  border-left: 3px solid #f5b82e;
+  padding-left: 0.65rem;
+}
+
+.calculator-page--professional .consumption-empty-state {
+  grid-column: 1 / -1;
+  margin: 1.15rem 0 0;
+  color: #5c7491;
+  font-size: 0.72rem;
 }
 
 .calculator-page--professional .consumption-estimate {

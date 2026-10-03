@@ -1,7 +1,15 @@
 import { getCalculatorInputNumber, isCalculatorInputInRange } from '../domain/calculator-inputs.js';
 import {
+  FINANCIAL_RATE_MODES,
+  createDefaultFinancialRate,
+  createStandardFinancialRate,
+  deriveEffectiveRateFromBill,
+  resolveFinancialRateSource
+} from '../domain/financial-rate.js';
+import {
   createAutomaticStandardResidentialTariff,
   createAutomaticStandardResidentialTariffProfile,
+  createStandardResidentialTariffFromActualDayNight,
   estimateStandardResidentialConsumptionFromBill
 } from '../domain/tariffs.js';
 import { formatTariffBracket, formatTariffRate } from './tariff-provenance.js';
@@ -10,6 +18,7 @@ const monthlyUsage = (value) => getCalculatorInputNumber(value, 'averageMonthlyC
 const monthlyBill = (value) => getCalculatorInputNumber(value, 'averageMonthlyBillAmd');
 const effectiveRate = (value) => getCalculatorInputNumber(value, 'customTariffAmdPerKwh');
 const profileMonth = (value) => getCalculatorInputNumber(value, 'monthlyProfileKwh');
+const hasText = (value) => typeof value === 'string' && value.trim() !== '';
 
 const togglePanel = (panel, active) => {
   panel.hidden = !active;
@@ -19,129 +28,236 @@ const togglePanel = (panel, active) => {
   });
 };
 
-const hasText = (value) => typeof value === 'string' && value.trim() !== '';
+const interpolate = (template, values = {}) =>
+  String(template ?? '').replace(/\{([a-zA-Z0-9_]+)\}/gu, (_match, key) =>
+    values[key] === null || values[key] === undefined ? '' : String(values[key])
+  );
 
-/**
- * The Professional consumption step accepts only household consumption and an
- * optional effective average rate. It never asks for a day/night percentage;
- * the advanced standard mode accepts only actual day/night kWh for the same
- * average-month period. The server derives all official registry values.
- */
+/** One Professional consumption controller shared by Bill, kWh and Monthly. */
 export const initConsumptionInput = ({
   root,
   strings = {},
   locale = 'en-US',
-  initialEffectiveRate = null,
-  initialTariffMode = 'standard',
-  initialActualDayNight = null,
+  initialFinancialRate = createStandardFinancialRate(),
   onChange = () => {}
 } = {}) => {
   if (!root) return null;
   const wizardRoot = root.closest('[data-calculator-wizard]') ?? root;
   const modeInputs = [...root.querySelectorAll('input[name="consumption-mode"]')];
   const panels = [...root.querySelectorAll('[data-consumption-panel]')];
+  const billInput = root.querySelector('[data-consumption-bill]');
+  const billedKwhInput = root.querySelector('[data-consumption-billed-kwh]');
+  const billedKwhToggle = root.querySelector('[data-consumption-billed-kwh-toggle]');
+  const billedKwhPanel = root.querySelector('[data-consumption-billed-kwh-panel]');
+  const usageInput = root.querySelector('[data-consumption-usage]');
   const annualOutput = root.querySelector('[data-consumption-annual]');
+  const annualCard = root.querySelector('[data-consumption-annual-card]');
+  const emptyState = root.querySelector('[data-consumption-empty]');
   const effectiveRateInput = root.querySelector('[data-consumption-effective-rate]');
   const tariffModeInputs = [...root.querySelectorAll('input[name="professional-tariff-mode"]')];
+  const billDerivedOption = root.querySelector('[data-professional-bill-derived]');
+  const billDerivedRate = root.querySelector('[data-professional-bill-derived-rate]');
+  const billDerivedHelp = root.querySelector('[data-professional-bill-derived-help]');
   const customTariffPanel = root.querySelector('[data-professional-custom-tariff]');
+  const customComparison = root.querySelector('[data-professional-custom-comparison]');
   const standardTariffOutput = root.querySelector('[data-professional-standard-tariff]');
-  const actualDayNightDisclosure = root.querySelector('[data-actual-day-night-disclosure]');
+  const actualDayNightOption = root.querySelector('[data-professional-actual-day-night]');
+  const actualDayNightPanel = root.querySelector('[data-professional-actual-day-night-panel]');
   const actualDayInput = root.querySelector('[data-actual-day-kwh]');
   const actualNightInput = root.querySelector('[data-actual-night-kwh]');
+  const tariffDisclosure = root.querySelector('[data-effective-rate-disclosure]');
   const chartItems = [
     ...wizardRoot.querySelectorAll('[data-consumption-chart] .consumption-profile-chart__item')
   ];
   const fillAverageButton = wizardRoot.querySelector('[data-consumption-fill-average]');
   const unitButtons = [...wizardRoot.querySelectorAll('[data-consumption-unit]')];
   const monthlyProfileButton = wizardRoot.querySelector('[data-consumption-switch-monthly]');
-  const formatTariffNumber = (value) =>
+  const formatRate = (value) =>
     new Intl.NumberFormat(locale, { maximumFractionDigits: 2 }).format(Number(value));
+  const formatWhole = (value) =>
+    new Intl.NumberFormat(locale, { maximumFractionDigits: 0 }).format(Number(value));
   let chartUnit = 'kwh';
-
-  if (effectiveRateInput && initialEffectiveRate?.rateAmdPerKwh !== undefined) {
-    effectiveRateInput.value = String(initialEffectiveRate.rateAmdPerKwh);
-  }
-  const initialMode =
-    initialTariffMode === 'custom-effective' && initialEffectiveRate?.rateAmdPerKwh
-      ? 'custom-effective'
-      : 'standard';
-  const initialModeInput = tariffModeInputs.find((input) => input.value === initialMode);
-  if (initialModeInput) initialModeInput.checked = true;
-  const tariffDisclosure = root.querySelector('[data-effective-rate-disclosure]');
-  if (tariffDisclosure && initialMode === 'custom-effective') tariffDisclosure.open = true;
-  const initialDayKwh = initialActualDayNight?.actualDayKwh ?? initialActualDayNight?.dayKwh;
-  const initialNightKwh = initialActualDayNight?.actualNightKwh ?? initialActualDayNight?.nightKwh;
-  if (actualDayInput && initialDayKwh !== undefined) {
-    actualDayInput.value = String(initialDayKwh);
-  }
-  if (actualNightInput && initialNightKwh !== undefined) {
-    actualNightInput.value = String(initialNightKwh);
-  }
-  if (actualDayNightDisclosure && initialActualDayNight) {
-    if (tariffDisclosure) tariffDisclosure.open = true;
-    actualDayNightDisclosure.open = true;
-  }
+  let financialSelectionExplicit =
+    initialFinancialRate?.mode !== FINANCIAL_RATE_MODES.STANDARD ||
+    initialFinancialRate?.explicit === true;
 
   const activeMode = () => modeInputs.find((input) => input.checked)?.value ?? 'bill';
   const activeTariffMode = () =>
-    tariffModeInputs.find((input) => input.checked)?.value ?? 'standard';
-  const selectedEffectiveRate = () =>
-    activeTariffMode() === 'custom-effective' ? effectiveRate(effectiveRateInput?.value) : null;
-  const automaticEstimate = (bill) =>
-    bill === null ? null : estimateStandardResidentialConsumptionFromBill(bill);
+    tariffModeInputs.find((input) => input.checked)?.value ?? FINANCIAL_RATE_MODES.STANDARD;
+  const selectTariffMode = (mode) => {
+    const input = tariffModeInputs.find((item) => item.value === mode);
+    const fallback = tariffModeInputs.find((item) => item.value === FINANCIAL_RATE_MODES.STANDARD);
+    if (input) input.checked = true;
+    else if (fallback) fallback.checked = true;
+  };
 
-  const getValues = () => {
+  if (initialFinancialRate?.mode === FINANCIAL_RATE_MODES.CUSTOM_EFFECTIVE) {
+    const rate = effectiveRate(initialFinancialRate.effectiveRateAmdPerKwh);
+    if (rate !== null && effectiveRateInput) effectiveRateInput.value = formatRate(rate);
+  }
+  if (initialFinancialRate?.mode === FINANCIAL_RATE_MODES.ACTUAL_DAY_NIGHT) {
+    if (actualDayInput) actualDayInput.value = String(initialFinancialRate.actualDayKwh ?? '');
+    if (actualNightInput)
+      actualNightInput.value = String(initialFinancialRate.actualNightKwh ?? '');
+  }
+  selectTariffMode(initialFinancialRate?.mode);
+  if (tariffDisclosure) tariffDisclosure.open = true;
+
+  const consumptionValues = () => {
     const mode = activeMode();
-    const usage = monthlyUsage(root.querySelector('[data-consumption-usage]')?.value);
-    const bill = monthlyBill(root.querySelector('[data-consumption-bill]')?.value);
-    const overrideRate = selectedEffectiveRate();
-    const estimate = mode === 'bill' && overrideRate === null ? automaticEstimate(bill) : null;
+    const bill = monthlyBill(billInput?.value);
+    const billedKwh = monthlyUsage(billedKwhInput?.value);
+    const usage = monthlyUsage(usageInput?.value);
     const monthly = [...root.querySelectorAll('[data-consumption-month]')].map((input) =>
       profileMonth(input.value)
     );
-    let annual = null;
-    const displayRate = overrideRate;
-    if (mode === 'bill' && bill !== null) {
-      if (overrideRate !== null) annual = (bill / overrideRate) * 12;
-      else if (estimate?.available) {
-        annual = estimate.estimatedMonthlyKwh * 12;
-      }
+    const value =
+      mode === 'bill'
+        ? {
+            mode,
+            averageMonthlyBillAmd: bill,
+            ...(billedKwh === null ? {} : { billedKwh })
+          }
+        : mode === 'usage'
+          ? { mode, averageMonthlyKwh: usage }
+          : { mode, monthlyKwh: monthly };
+    return { mode, bill, billedKwh, usage, monthly, value };
+  };
+
+  const derivedRate = (values) =>
+    values.mode === 'bill'
+      ? deriveEffectiveRateFromBill({ billAmd: values.bill, billedKwh: values.billedKwh })
+      : null;
+
+  const selectedFinancialRate = (values) => {
+    const mode = activeTariffMode();
+    if (mode === FINANCIAL_RATE_MODES.BILL_DERIVED) {
+      return resolveFinancialRateSource({ mode, consumption: values.value });
     }
-    if (mode === 'usage' && usage !== null) annual = usage * 12;
-    if (mode === 'monthly' && monthly.length === 12 && monthly.every((value) => value !== null)) {
-      annual = monthly.reduce((total, value) => total + value, 0);
+    if (mode === FINANCIAL_RATE_MODES.CUSTOM_EFFECTIVE) {
+      return resolveFinancialRateSource({
+        mode,
+        consumption: values.value,
+        effectiveRateAmdPerKwh: effectiveRateInput?.value
+      });
+    }
+    if (mode === FINANCIAL_RATE_MODES.ACTUAL_DAY_NIGHT) {
+      return resolveFinancialRateSource({
+        mode,
+        consumption: values.value,
+        actualDayKwh: actualDayInput?.value,
+        actualNightKwh: actualNightInput?.value
+      });
+    }
+    return createStandardFinancialRate({ explicit: financialSelectionExplicit });
+  };
+
+  const getValues = () => {
+    const values = consumptionValues();
+    const selectedMode = activeTariffMode();
+    const customRate =
+      selectedMode === FINANCIAL_RATE_MODES.CUSTOM_EFFECTIVE
+        ? effectiveRate(effectiveRateInput?.value)
+        : null;
+    const billRate = derivedRate(values);
+    const estimate =
+      values.mode === 'bill' && values.bill !== null && values.billedKwh === null
+        ? selectedMode === FINANCIAL_RATE_MODES.CUSTOM_EFFECTIVE && customRate !== null
+          ? null
+          : estimateStandardResidentialConsumptionFromBill(values.bill)
+        : null;
+    let annual = null;
+    if (values.mode === 'bill' && values.bill !== null) {
+      if (values.billedKwh !== null) annual = values.billedKwh * 12;
+      else if (customRate !== null) annual = (values.bill / customRate) * 12;
+      else if (estimate?.available) annual = estimate.estimatedMonthlyKwh * 12;
+    } else if (values.mode === 'usage' && values.usage !== null) {
+      annual = values.usage * 12;
+    } else if (
+      values.mode === 'monthly' &&
+      values.monthly.length === 12 &&
+      values.monthly.every((value) => value !== null)
+    ) {
+      annual = values.monthly.reduce((total, value) => total + value, 0);
     }
     if (!isCalculatorInputInRange(annual, 'annualConsumptionKwh')) annual = null;
     const standardSelection =
       annual === null
         ? null
-        : mode === 'monthly'
-          ? createAutomaticStandardResidentialTariffProfile(monthly)
+        : values.mode === 'monthly'
+          ? createAutomaticStandardResidentialTariffProfile(values.monthly)
           : createAutomaticStandardResidentialTariff(annual / 12);
+    let displayRate = null;
+    if (selectedMode === FINANCIAL_RATE_MODES.BILL_DERIVED) displayRate = billRate;
+    if (selectedMode === FINANCIAL_RATE_MODES.CUSTOM_EFFECTIVE) displayRate = customRate;
+    if (selectedMode === FINANCIAL_RATE_MODES.ACTUAL_DAY_NIGHT && values.usage !== null) {
+      const selection = createStandardResidentialTariffFromActualDayNight(values.usage, {
+        dayKwh: actualDayInput?.value,
+        nightKwh: actualNightInput?.value
+      });
+      displayRate = selection.available ? selection.tariff.effectiveRateAmdPerKwh : null;
+    }
     return {
+      ...values,
       annual,
-      bill,
+      billRate,
+      customRate,
       displayRate,
       estimate,
-      mode,
-      monthly,
-      overrideRate,
-      standardSelection,
-      usage
+      financialRate: selectedFinancialRate(values),
+      standardSelection
     };
   };
 
   const updateTariffUi = (values) => {
-    const custom = activeTariffMode() === 'custom-effective';
+    const billDerivedAvailable = values.billRate !== null && values.mode === 'bill';
+    const actualAvailable = values.mode === 'usage';
+    const active = activeTariffMode();
+    if (billDerivedOption) billDerivedOption.hidden = !billDerivedAvailable;
+    const billDerivedInput = tariffModeInputs.find(
+      (input) => input.value === FINANCIAL_RATE_MODES.BILL_DERIVED
+    );
+    if (billDerivedInput) billDerivedInput.disabled = !billDerivedAvailable;
+    if (actualDayNightOption) actualDayNightOption.hidden = !actualAvailable;
+    const actualInput = tariffModeInputs.find(
+      (input) => input.value === FINANCIAL_RATE_MODES.ACTUAL_DAY_NIGHT
+    );
+    if (actualInput) actualInput.disabled = !actualAvailable;
+
+    if (billDerivedRate) {
+      billDerivedRate.textContent = billDerivedAvailable
+        ? `${formatRate(values.billRate)} AMD/kWh`
+        : '';
+    }
+    if (billDerivedHelp) {
+      billDerivedHelp.textContent = billDerivedAvailable
+        ? interpolate(strings.billDerivedHelp, {
+            bill: formatWhole(values.bill),
+            kwh: formatWhole(values.billedKwh)
+          })
+        : '';
+    }
+
+    const custom = active === FINANCIAL_RATE_MODES.CUSTOM_EFFECTIVE;
     if (customTariffPanel) customTariffPanel.hidden = !custom;
     if (effectiveRateInput) effectiveRateInput.disabled = !custom;
-    const actualAvailable = !custom && values.mode === 'usage';
-    if (actualDayNightDisclosure) {
-      actualDayNightDisclosure.hidden = !actualAvailable;
-      actualDayNightDisclosure.querySelectorAll('input').forEach((input) => {
-        input.disabled = !actualAvailable;
-      });
+    if (customComparison) {
+      const visible = custom && billDerivedAvailable && values.customRate !== null;
+      customComparison.hidden = !visible;
+      customComparison.textContent = visible
+        ? interpolate(strings.customBillComparison, {
+            derived: formatRate(values.billRate),
+            custom: formatRate(values.customRate)
+          })
+        : '';
     }
+
+    const actual = active === FINANCIAL_RATE_MODES.ACTUAL_DAY_NIGHT && actualAvailable;
+    if (actualDayNightPanel) actualDayNightPanel.hidden = !actual;
+    [actualDayInput, actualNightInput].forEach((input) => {
+      if (input) input.disabled = !actual;
+    });
+
     if (standardTariffOutput) {
       standardTariffOutput.textContent = values.standardSelection?.available
         ? [
@@ -151,16 +267,13 @@ export const initConsumptionInput = ({
                 monthlyTariffs: values.standardSelection.monthlyTariffs
               },
               strings,
-              formatKwh: formatTariffNumber
+              formatKwh: formatRate
             }),
-            formatTariffRate({
-              tariff: values.standardSelection.tariff,
-              formatRate: formatTariffNumber
-            })
+            formatTariffRate({ tariff: values.standardSelection.tariff, formatRate })
           ]
             .filter(Boolean)
             .join(' · ')
-        : (strings.standardRangePending ?? '');
+        : '';
     }
   };
 
@@ -187,8 +300,11 @@ export const initConsumptionInput = ({
 
   const updateAnnualOutput = () => {
     const values = getValues();
-    if (annualOutput)
-      annualOutput.textContent = values.annual === null ? '—' : String(Math.round(values.annual));
+    if (annualOutput) {
+      annualOutput.textContent = values.annual === null ? '' : String(Math.round(values.annual));
+    }
+    if (annualCard) annualCard.hidden = values.annual === null;
+    if (emptyState) emptyState.hidden = values.annual !== null;
     if (chartUnit === 'amd' && values.displayRate === null) chartUnit = 'kwh';
     unitButtons.forEach((button) => {
       const selected = button.dataset.consumptionUnit === chartUnit;
@@ -200,39 +316,75 @@ export const initConsumptionInput = ({
     if (fillAverageButton) fillAverageButton.disabled = values.annual === null;
     updateChart(values);
     updateTariffUi(values);
+    return values;
   };
 
-  const updateMode = ({ notify = true } = {}) => {
+  const resetFinancialSource = () => {
+    financialSelectionExplicit = false;
+    selectTariffMode(FINANCIAL_RATE_MODES.STANDARD);
+    if (effectiveRateInput) effectiveRateInput.value = '';
+    if (actualDayInput) actualDayInput.value = '';
+    if (actualNightInput) actualNightInput.value = '';
+  };
+
+  const updateMode = ({ notify = true, resetFinancial = false } = {}) => {
     const mode = activeMode();
     panels.forEach((panel) => togglePanel(panel, panel.dataset.consumptionPanel === mode));
-    updateAnnualOutput();
-    if (notify) onChange();
+    if (resetFinancial) resetFinancialSource();
+    const values = updateAnnualOutput();
+    if (notify) onChange(values);
   };
 
-  modeInputs.forEach((input) => input.addEventListener('change', updateMode));
+  const maybeSelectBillDerived = () => {
+    const values = consumptionValues();
+    const available = derivedRate(values) !== null;
+    if (values.mode === 'bill' && available && !financialSelectionExplicit) {
+      selectTariffMode(createDefaultFinancialRate(values.value).mode);
+      if (tariffDisclosure) tariffDisclosure.open = true;
+    } else if (!available && activeTariffMode() === FINANCIAL_RATE_MODES.BILL_DERIVED) {
+      selectTariffMode(FINANCIAL_RATE_MODES.STANDARD);
+    }
+  };
+
+  modeInputs.forEach((input) =>
+    input.addEventListener('change', () => updateMode({ resetFinancial: true }))
+  );
   tariffModeInputs.forEach((input) =>
     input.addEventListener('change', () => {
+      financialSelectionExplicit = true;
       updateAnnualOutput();
       onChange();
     })
   );
   root
     .querySelectorAll(
-      '[data-consumption-bill], [data-consumption-usage], [data-consumption-month], [data-consumption-effective-rate], [data-actual-day-kwh], [data-actual-night-kwh]'
+      '[data-consumption-bill], [data-consumption-billed-kwh], [data-consumption-usage], [data-consumption-month], [data-consumption-effective-rate], [data-actual-day-kwh], [data-actual-night-kwh]'
     )
     .forEach((input) => {
       input.addEventListener('input', () => {
         input.removeAttribute('aria-invalid');
+        if (input === billInput || input === billedKwhInput) maybeSelectBillDerived();
         updateAnnualOutput();
         onChange();
       });
     });
+  effectiveRateInput?.addEventListener('blur', () => {
+    const rate = effectiveRate(effectiveRateInput.value);
+    if (rate !== null) effectiveRateInput.value = formatRate(rate);
+  });
+  billedKwhToggle?.addEventListener('click', () => {
+    const expanded = billedKwhToggle.getAttribute('aria-expanded') === 'true';
+    billedKwhToggle.setAttribute('aria-expanded', String(!expanded));
+    if (billedKwhPanel) billedKwhPanel.hidden = expanded;
+    if (!expanded) billedKwhInput?.focus();
+  });
   fillAverageButton?.addEventListener('click', () => {
     const values = getValues();
     const monthlyInputs = [...root.querySelectorAll('[data-consumption-month]')];
     if (values.annual === null || monthlyInputs.length !== 12) return;
     const monthlyMode = modeInputs.find((input) => input.value === 'monthly');
     if (monthlyMode) monthlyMode.checked = true;
+    resetFinancialSource();
     const annual = Math.round(values.annual);
     const base = Math.floor(annual / 12);
     const remainder = annual - base * 12;
@@ -253,102 +405,79 @@ export const initConsumptionInput = ({
     const monthlyMode = modeInputs.find((input) => input.value === 'monthly');
     if (!monthlyMode) return;
     monthlyMode.checked = true;
-    updateMode();
+    updateMode({ resetFinancial: true });
     root.querySelector('[data-consumption-month]')?.focus();
   });
-  updateMode({ notify: false });
 
   const invalidResult = (inputs, message) => ({
     valid: false,
     message,
     inputs: inputs.filter(Boolean)
   });
-  const validOverride = () =>
-    activeTariffMode() !== 'custom-effective' || selectedEffectiveRate() !== null;
-  const tariffOverride = () => {
-    const rateAmdPerKwh = selectedEffectiveRate();
-    return rateAmdPerKwh === null ? null : { rateAmdPerKwh };
-  };
-  const actualDayNight = (usage) => {
-    if (activeTariffMode() !== 'standard' || activeMode() !== 'usage') return null;
-    const hasDay = hasText(actualDayInput?.value);
-    const hasNight = hasText(actualNightInput?.value);
-    if (!hasDay && !hasNight) return null;
-    const dayKwh = profileMonth(actualDayInput?.value);
-    const nightKwh = profileMonth(actualNightInput?.value);
-    return dayKwh !== null &&
-      nightKwh !== null &&
-      dayKwh + nightKwh > 0 &&
-      usage !== null &&
-      Math.abs(dayKwh + nightKwh - usage) <= 0.01
-      ? { actualDayKwh: dayKwh, actualNightKwh: nightKwh }
-      : false;
-  };
 
   const inspect = () => {
-    const mode = activeMode();
-    if (!validOverride()) {
+    const values = getValues();
+    if (values.mode === 'bill') {
+      if (values.bill === null) return invalidResult([billInput], strings.invalidBill);
+      if (hasText(billedKwhInput?.value) && values.billedKwh === null) {
+        return invalidResult([billedKwhInput], strings.invalidUsage);
+      }
+    } else if (values.mode === 'usage' && values.usage === null) {
+      return invalidResult([usageInput], strings.invalidUsage);
+    } else if (
+      values.mode === 'monthly' &&
+      (values.monthly.length !== 12 || values.monthly.some((value) => value === null))
+    ) {
+      return invalidResult(
+        [...root.querySelectorAll('[data-consumption-month]')],
+        strings.incompleteMonths
+      );
+    }
+    if (values.annual === null) {
+      return invalidResult([billInput, usageInput], strings.noConsumption);
+    }
+    const mode = activeTariffMode();
+    if (mode === FINANCIAL_RATE_MODES.CUSTOM_EFFECTIVE && values.customRate === null) {
       return invalidResult(
         [effectiveRateInput],
         strings.invalidEffectiveRate ?? strings.invalidTariff
       );
     }
-    if (mode === 'bill') {
-      const input = root.querySelector('[data-consumption-bill]');
-      const value = monthlyBill(input?.value);
-      if (value === null) return invalidResult([input], strings.invalidBill);
-      if (selectedEffectiveRate() === null && !automaticEstimate(value)?.available) {
-        return invalidResult([input], strings.invalidBill);
-      }
-      return {
-        valid: true,
-        value: { mode, averageMonthlyBillAmd: value },
-        tariff: tariffOverride(),
-        actualDayNight: null,
-        tariffMode: activeTariffMode()
-      };
+    if (mode === FINANCIAL_RATE_MODES.BILL_DERIVED && values.billRate === null) {
+      return invalidResult([billInput, billedKwhInput], strings.invalidBillDerived);
     }
-    if (mode === 'usage') {
-      const input = root.querySelector('[data-consumption-usage]');
-      const value = monthlyUsage(input?.value);
-      const readings = actualDayNight(value);
-      if (readings === false) {
-        return invalidResult(
-          [actualDayInput, actualNightInput],
-          strings.invalidDayNight ?? strings.invalidUsage
-        );
-      }
-      return value === null
-        ? invalidResult([input], strings.invalidUsage)
-        : {
-            valid: true,
-            value: { mode, averageMonthlyKwh: value },
-            tariff: tariffOverride(),
-            actualDayNight: readings,
-            tariffMode: activeTariffMode()
-          };
-    }
-    const inputs = [...root.querySelectorAll('[data-consumption-month]')];
-    const monthlyKwh = inputs.map((input) => profileMonth(input.value));
-    const annualKwh = monthlyKwh.reduce((total, value) => total + (value ?? 0), 0);
     if (
-      monthlyKwh.length !== 12 ||
-      monthlyKwh.some((value) => value === null) ||
-      annualKwh <= 0 ||
-      !isCalculatorInputInRange(annualKwh, 'annualConsumptionKwh')
+      mode === FINANCIAL_RATE_MODES.ACTUAL_DAY_NIGHT &&
+      values.financialRate.mode !== FINANCIAL_RATE_MODES.ACTUAL_DAY_NIGHT
     ) {
-      return invalidResult(inputs, strings.incompleteMonths);
+      return invalidResult(
+        [actualDayInput, actualNightInput],
+        strings.invalidDayNight ?? strings.invalidUsage
+      );
     }
-    return {
-      valid: true,
-      value: { mode, monthlyKwh },
-      tariff: tariffOverride(),
-      actualDayNight: null,
-      tariffMode: activeTariffMode()
-    };
+    return { valid: true, value: values.value, financialRate: values.financialRate };
   };
 
+  if (billedKwhInput?.value) {
+    if (billedKwhPanel) billedKwhPanel.hidden = false;
+    billedKwhToggle?.setAttribute('aria-expanded', 'true');
+  }
+  updateMode({ notify: false });
+  if (financialSelectionExplicit) {
+    selectTariffMode(initialFinancialRate?.mode);
+  } else {
+    maybeSelectBillDerived();
+  }
+  updateAnnualOutput();
+
   return {
+    draft() {
+      const values = getValues();
+      return {
+        consumption: values.annual === null ? null : values.value,
+        financialRate: values.financialRate
+      };
+    },
     read() {
       const result = inspect();
       result.inputs?.forEach((input) => input.setAttribute('aria-invalid', 'true'));

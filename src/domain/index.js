@@ -2,6 +2,17 @@ export { normalizeConsumption } from './consumption.js';
 export { parseDecimalNumber } from './numbers.js';
 export { CALCULATOR_INPUT_LIMITS, getCalculatorInputNumber } from './calculator-inputs.js';
 export {
+  FINANCIAL_RATE_MODES,
+  FINANCIAL_RATE_SOURCE_TYPES,
+  createDefaultFinancialRate,
+  createStandardFinancialRate,
+  deriveEffectiveRateFromBill,
+  hasBillDerivedRate,
+  normalizeFinancialRate,
+  resolveFinancialRateSource,
+  toFinancialRateRequest
+} from './financial-rate.js';
+export {
   getConfirmedTariffRate,
   getFinancialTariffRateRange,
   getUsableTariffRate,
@@ -12,6 +23,7 @@ export {
   createAutomaticStandardResidentialTariffProfile,
   createStandardResidentialTariffFromActualDayNight,
   estimateStandardResidentialConsumptionFromBill,
+  createBillDerivedTariffSelection,
   createUserTariffSelection
 } from './tariffs.js';
 export { PriceBookRepository, buildCommercialEstimate } from './pricebook.js';

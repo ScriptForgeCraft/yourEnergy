@@ -23,8 +23,12 @@ const sessionStorage = () => {
 
 const professionalInputs = (overrides = {}) => ({
   property: { coordinates: { lat: 40.177, lng: 44.503 } },
-  consumption: { kind: 'annual-kwh', annualKwh: 7_200 },
-  tariff: { rateAmdPerKwh: 45 },
+  consumption: { mode: 'usage', averageMonthlyKwh: 600 },
+  financialRate: {
+    mode: 'custom-effective',
+    sourceType: 'user-provided-effective-rate',
+    effectiveRateAmdPerKwh: 45
+  },
   roof: {
     areaMethod: 'map-projected',
     mountingMode: 'roof-parallel',
@@ -205,7 +209,9 @@ test('a version 3 scoped result cannot restore the former overproduction payback
   assert.equal(restored.quickAnalysisStatus, 'idle');
   assert.equal(restored.professionalAnalysisStatus, 'idle');
   assert.equal(restored.consumption.averageMonthlyKwh, 850);
-  assert.equal(restored.effectiveRateOverride.rateAmdPerKwh, 45);
+  assert.equal(restored.financialRate.mode, 'standard');
+  assert.equal(restored.financialRate.sourceType, 'automatic-standard-residential');
+  assert.equal('effectiveRateOverride' in restored, false);
 });
 
 test('Quick identity discards a result when Professional changes shared consumption or tariff', () => {
@@ -214,7 +220,11 @@ test('Quick identity discards a result when Professional changes shared consumpt
   const shared = {
     regionId: 'yerevan',
     consumption: { mode: 'usage', averageMonthlyKwh: 500 },
-    effectiveRateOverride: { rateAmdPerKwh: 45 }
+    financialRate: {
+      mode: 'custom-effective',
+      sourceType: 'user-provided-effective-rate',
+      effectiveRateAmdPerKwh: 45
+    }
   };
   session.write({
     ...shared,
@@ -227,7 +237,7 @@ test('Quick identity discards a result when Professional changes shared consumpt
     quickAnalysisIdentity: createQuickAnalysisIdentity({
       regionId: shared.regionId,
       consumption: shared.consumption,
-      tariff: shared.effectiveRateOverride
+      financialRate: shared.financialRate
     })
   });
 
@@ -272,7 +282,7 @@ test('Quick and Professional results survive their own refresh and Back/Forward 
   session.write({
     regionId: 'yerevan',
     consumption: inputs.consumption,
-    effectiveRateOverride: inputs.tariff
+    financialRate: inputs.financialRate
   });
   session.saveQuickAnalysis(
     {
@@ -284,7 +294,7 @@ test('Quick and Professional results survive their own refresh and Back/Forward 
       identity: createQuickAnalysisIdentity({
         regionId: 'yerevan',
         consumption: inputs.consumption,
-        tariff: inputs.tariff
+        financialRate: inputs.financialRate
       })
     }
   );
@@ -296,7 +306,7 @@ test('Quick and Professional results survive their own refresh and Back/Forward 
     regionId: 'yerevan',
     property: inputs.property,
     consumption: inputs.consumption,
-    effectiveRateOverride: inputs.tariff,
+    financialRate: inputs.financialRate,
     roof: inputs.roof,
     selectedPanelId: inputs.panelId
   });
@@ -338,7 +348,7 @@ test('Professional restoration requires a matching property, roof, consumption a
     'roof change invalidates Professional result'
   );
   assert.equal(
-    matches(professionalInputs({ consumption: { kind: 'annual-kwh', annualKwh: 7_500 } })),
+    matches(professionalInputs({ consumption: { mode: 'usage', averageMonthlyKwh: 625 } })),
     false,
     'consumption change invalidates Professional result'
   );
@@ -356,7 +366,7 @@ test('changing a Professional panel clears only its incompatible property result
   session.write({
     regionId: 'yerevan',
     consumption: inputs.consumption,
-    effectiveRateOverride: inputs.tariff
+    financialRate: inputs.financialRate
   });
   session.saveQuickAnalysis(
     {
@@ -368,7 +378,7 @@ test('changing a Professional panel clears only its incompatible property result
       identity: createQuickAnalysisIdentity({
         regionId: 'yerevan',
         consumption: inputs.consumption,
-        tariff: inputs.tariff
+        financialRate: inputs.financialRate
       })
     }
   );

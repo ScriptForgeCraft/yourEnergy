@@ -62,7 +62,11 @@ const createOptions = () => ({
     addressNote: 'Home <private>',
     storageRequired: true,
     consumption: { annualKwh: 6454, mode: 'bill' },
-    effectiveRateOverride: { rateAmdPerKwh: 46.48 },
+    financialRate: {
+      mode: 'custom-effective',
+      sourceType: 'user-provided-effective-rate',
+      effectiveRateAmdPerKwh: 46.48
+    },
     sitePotential: {
       annualYieldKwhPerKwp: 1481,
       monthlyYieldKwhPerKwp: [81, 99, 116, 126, 141, 150, 160, 160, 150, 123, 101, 74],
@@ -129,6 +133,33 @@ test('PDF uses the completed analysis for PVGIS and automatic-tariff provenance'
 
   assert.match(html, /verified-source/u);
   assert.doesNotMatch(html, /visitor-rate/u);
+});
+
+test('PDF preserves bill-derived provenance and formats its effective rate', () => {
+  const options = createOptions();
+  options.analysis.financial = {
+    tariff: {
+      kind: 'bill-derived',
+      sourceType: 'bill-derived-effective-rate',
+      billAmd: 11_111,
+      billedKwh: 111,
+      effectiveRateAmdPerKwh: 11_111 / 111,
+      rateAmdPerKwh: 11_111 / 111
+    }
+  };
+  options.wizard = {
+    ...options.wizard,
+    pdfReport: {
+      ...options.wizard.pdfReport,
+      sourceBillDerived: 'bill-derived-source'
+    }
+  };
+
+  const html = createCalculatorPdfReportHtml(options);
+
+  assert.match(html, /bill-derived-source/u);
+  assert.match(html, /100\.1 AMD\/kWh/u);
+  assert.doesNotMatch(html, /100\.09909909909909/u);
 });
 
 test('PDF renders automatic standard savings and payback as ranges', () => {
