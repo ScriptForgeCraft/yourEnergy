@@ -1,6 +1,36 @@
 const numericText = (value) =>
   Number.isFinite(Number(value)) ? String(Number(value)).replace(/\.0+$/u, '') : '';
 
+export const formatTariffBracket = ({ tariff, strings = {}, formatKwh = numericText } = {}) => {
+  const minimum = tariff?.bracketMinMonthlyKwh ?? tariff?.minMonthlyKwh;
+  const maximum = tariff?.bracketMaxMonthlyKwh ?? tariff?.maxMonthlyKwh;
+  if (tariff?.accuracy === 'monthly-range' || Array.isArray(tariff?.monthlyTariffs)) {
+    return strings.monthlyBracket ?? 'Band selected for each month';
+  }
+  if (maximum !== null && maximum !== undefined && Number(minimum) === 0) {
+    return (strings.bracketUpTo ?? 'Up to {max} kWh/month').replace('{max}', formatKwh(maximum));
+  }
+  if (maximum !== null && maximum !== undefined) {
+    return (strings.bracketBetween ?? '{min}–{max} kWh/month')
+      .replace('{min}', formatKwh(Number(minimum)))
+      .replace('{max}', formatKwh(maximum));
+  }
+  if (minimum !== null && minimum !== undefined) {
+    return (strings.bracketAbove ?? 'Above {min} kWh/month').replace('{min}', formatKwh(minimum));
+  }
+  return '';
+};
+
+export const formatTariffRate = ({ tariff, formatRate = numericText } = {}) => {
+  const effective = tariff?.effectiveRateAmdPerKwh ?? tariff?.rateAmdPerKwh;
+  if (effective !== null && effective !== undefined) return `${formatRate(effective)} AMD/kWh`;
+  const minimum = tariff?.minRateAmdPerKwh;
+  const maximum = tariff?.maxRateAmdPerKwh;
+  return minimum !== null && minimum !== undefined && maximum !== null && maximum !== undefined
+    ? `${formatRate(minimum)}–${formatRate(maximum)} AMD/kWh`
+    : '';
+};
+
 /** Formats calculation provenance without restoring tariff choices in the UI. */
 export const formatTariffProvenance = ({
   tariff,
@@ -8,11 +38,14 @@ export const formatTariffProvenance = ({
   rate,
   formatRate = numericText
 } = {}) => {
-  const resolvedRate = rate ?? tariff?.rateAmdPerKwh;
-  if (resolvedRate === null || resolvedRate === undefined) return strings.noTariff ?? '';
-  const label =
-    tariff?.kind === 'user' || tariff?.tariffSource === 'user-provided-effective-rate'
-      ? (strings.userProvidedEffectiveRate ?? 'User-provided effective tariff')
-      : (strings.automaticStandardTariff ?? 'Automatic standard residential tariff');
-  return [label, `${formatRate(resolvedRate)} AMD/kWh`].filter(Boolean).join(' · ');
+  const isUser = tariff?.kind === 'user' || tariff?.tariffSource === 'user-provided-effective-rate';
+  const effectiveTariff =
+    rate === null || rate === undefined ? tariff : { ...tariff, effectiveRateAmdPerKwh: rate };
+  const rateText = formatTariffRate({ tariff: effectiveTariff, formatRate });
+  if (!rateText) return strings.noTariff ?? '';
+  const label = isUser
+    ? (strings.userProvidedEffectiveRate ?? 'Average rate from user')
+    : (strings.automaticStandardTariff ?? 'Standard residential tariff');
+  const bracket = isUser ? '' : formatTariffBracket({ tariff, strings });
+  return [label, bracket, rateText].filter(Boolean).join(' · ');
 };

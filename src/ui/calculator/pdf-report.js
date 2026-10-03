@@ -5,8 +5,18 @@ const PAGE_WIDTH_PT = 595.28;
 const PAGE_HEIGHT_PT = 841.89;
 
 const asNumber = (value) => {
+  if (value === null || value === undefined || value === '') return null;
   const number = Number(value);
   return Number.isFinite(number) ? number : null;
+};
+
+const displayEstimate = (value, range, locale, options = {}) => {
+  const minimum = asNumber(range?.min);
+  const maximum = asNumber(range?.max);
+  if (minimum !== null && maximum !== null && minimum <= maximum) {
+    return `${displayNumber(minimum, locale, options)}–${displayNumber(maximum, locale, options)}`;
+  }
+  return displayNumber(value, locale, options);
 };
 
 const escapeHtml = (value) =>
@@ -477,6 +487,7 @@ const createCopy = ({ wizard, product }) => {
     sourceEquipment: pdf.sourceEquipment ?? 'Equipment catalogue',
     sourcePricebook: pdf.sourcePricebook ?? 'Price book',
     sourceConfirmed: pdf.sourceConfirmed ?? 'confirmed',
+    sourceTariffRegistry: pdf.sourceTariffRegistry ?? 'ENA / PSRC',
     sourceUserProvided: pdf.sourceUserProvided ?? 'user-provided',
     sourcePreliminary: pdf.sourcePreliminary ?? 'preliminary',
     sourceUnavailable: pdf.sourceUnavailable ?? 'unavailable',
@@ -516,7 +527,7 @@ const pageOne = ({ copy, passport, locale, values }) => {
     panelWatts,
     annualGeneration,
     coverage,
-    annualSavings,
+    annualSavingsDisplay,
     remainingGridDemand,
     co2,
     coordinates,
@@ -557,7 +568,7 @@ const pageOne = ({ copy, passport, locale, values }) => {
         <div style="position:absolute;top:22pt;left:260pt;width:240pt;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:34pt 34pt;gap:12pt 18pt">
           <div><div style="color:#BFD8F4;font-size:7.8pt;line-height:1.18">${escapeHtml(copy.annualProduction)}</div><div style="margin-top:4pt;font-size:15.5pt;font-weight:700;white-space:nowrap">${escapeHtml(`${displayNumber(annualGeneration, locale)} kWh`)}</div></div>
           <div><div style="color:#BFD8F4;font-size:7.8pt;line-height:1.18">${escapeHtml(copy.annualCoverage)}</div><div style="margin-top:4pt;font-size:15.5pt;font-weight:700">${escapeHtml(`${displayNumber(coverage, locale)}%`)}</div></div>
-          <div><div style="color:#BFD8F4;font-size:7.8pt;line-height:1.18">${escapeHtml(copy.annualSavings)}</div><div style="margin-top:4pt;font-size:13.5pt;font-weight:700;white-space:nowrap">${escapeHtml(`${displayNumber(annualSavings, locale)} AMD`)}</div></div>
+          <div><div style="color:#BFD8F4;font-size:7.8pt;line-height:1.18">${escapeHtml(copy.annualSavings)}</div><div style="margin-top:4pt;font-size:13.5pt;font-weight:700;white-space:nowrap">${escapeHtml(`≈ ${annualSavingsDisplay} AMD`)}</div></div>
           <div><div style="color:#BFD8F4;font-size:7.8pt;line-height:1.18">${escapeHtml(copy.remainingGridDemand)}</div><div style="margin-top:4pt;font-size:13.5pt;font-weight:700;white-space:nowrap">${escapeHtml(`${displayNumber(remainingGridDemand, locale)} kWh`)}</div></div>
         </div>
       </section>
@@ -682,9 +693,9 @@ const pageTwo = ({ copy, passport, locale, values, equipment }) => {
 
 const pageThree = ({ copy, passport, locale, values }) => {
   const {
-    annualSavings,
-    payback,
-    savings25,
+    annualSavingsDisplay,
+    paybackDisplay,
+    savings25Display,
     budgetMin,
     budgetMid,
     budgetMax,
@@ -701,9 +712,9 @@ const pageThree = ({ copy, passport, locale, values }) => {
     reportId: passport?.id,
     content: `
       ${pageHeader({ title: copy.page3Title, subtitle: copy.page3Subtitle })}
-      ${metricCard({ x: 40, top: 135, width: metricWidth, label: copy.annualSavings, value: `${displayNumber(annualSavings, locale)} AMD`, accent: '#1F8F6A' })}
-      ${metricCard({ x: 214.43, top: 135, width: metricWidth, label: copy.payback, value: `${displayNumber(payback, locale, { maximumFractionDigits: 1 })} ${copy.years}`, accent: '#F5B82E' })}
-      ${metricCard({ x: 388.86, top: 135, width: metricWidth, label: copy.twentyFiveYears, value: `${displayNumber(savings25, locale)} AMD`, accent: '#1F7AE0', valueSize: 14.2 })}
+      ${metricCard({ x: 40, top: 135, width: metricWidth, label: copy.annualSavings, value: `≈ ${annualSavingsDisplay} AMD`, accent: '#1F8F6A' })}
+      ${metricCard({ x: 214.43, top: 135, width: metricWidth, label: copy.payback, value: `≈ ${paybackDisplay} ${copy.years}`, accent: '#F5B82E' })}
+      ${metricCard({ x: 388.86, top: 135, width: metricWidth, label: copy.twentyFiveYears, value: `≈ ${savings25Display} AMD`, accent: '#1F7AE0', valueSize: 14.2 })}
       <section class="pdf-card" style="position:absolute;top:261pt;left:40pt;width:515.28pt;height:84pt;padding:18pt 16pt;background:#F5F8FC">
         <div style="width:250pt">
           <div style="color:#0E2F57;font-size:10pt;font-weight:700">${escapeHtml(copy.budgetRange)}</div>
@@ -733,7 +744,6 @@ const pageFour = ({ copy, passport, locale, values, equipment }) => {
     coordinates,
     annualConsumption,
     inputMode,
-    tariffRate,
     tariffSummary,
     tariffSourceStatus,
     storageRequested,
@@ -788,7 +798,7 @@ const pageFour = ({ copy, passport, locale, values, equipment }) => {
           [copy.coordinates, coordinates],
           [copy.consumption, `${displayNumber(annualConsumption, locale)} kWh`],
           [copy.inputMethod, modeLabel],
-          [copy.tariff, tariffRate === null ? copy.unavailable : tariffSummary],
+          [copy.tariff, hasTariff ? tariffSummary : copy.unavailable],
           [copy.storageRequest, storageRequested ? copy.yes : copy.no],
           [
             copy.roof,
@@ -894,7 +904,9 @@ export const createCalculatorPdfReportHtml = ({
     annualGeneration,
     annualConsumption,
     coverage: asNumber(scenario.coveragePercent),
-    annualSavings: storagePriceUnavailable ? null : asNumber(financial.annualSavingsAmd),
+    annualSavingsDisplay: storagePriceUnavailable
+      ? '—'
+      : displayEstimate(financial.annualSavingsAmd, financial.annualSavingsRangeAmd, locale),
     remainingGridDemand,
     co2: asNumber(analysis.environmental?.avoidedCo2Tons),
     coordinates,
@@ -903,7 +915,7 @@ export const createCalculatorPdfReportHtml = ({
     tariffSummary,
     tariffSourceStatus:
       tariff.kind === 'automatic-standard-residential'
-        ? copy.sourceConfirmed
+        ? copy.sourceTariffRegistry
         : tariff.kind === 'user'
           ? copy.sourceUserProvided
           : copy.sourceUnavailable,
@@ -920,8 +932,18 @@ export const createCalculatorPdfReportHtml = ({
     referenceAzimuth: asNumber(referencePotential?.orientation?.azimuthDegrees),
     referenceTilt: asNumber(referencePotential?.orientation?.tiltDegrees),
     roofYield: asNumber(analysis.production?.annualYieldKwhPerKwp),
-    payback: storagePriceUnavailable ? null : asNumber(financial.paybackYears),
-    savings25: storagePriceUnavailable ? null : asNumber(financial.grossSavings25YearsAmd),
+    paybackDisplay: storagePriceUnavailable
+      ? '—'
+      : displayEstimate(financial.paybackYears, financial.paybackRangeYears, locale, {
+          maximumFractionDigits: 1
+        }),
+    savings25Display: storagePriceUnavailable
+      ? '—'
+      : displayEstimate(
+          financial.grossSavings25YearsAmd,
+          financial.grossSavings25YearsRangeAmd,
+          locale
+        ),
     budgetMin: storagePriceUnavailable ? null : asNumber(estimate.rangeAmd?.p25),
     budgetMid: storagePriceUnavailable ? null : asNumber(estimate.primaryAmd),
     budgetMax: storagePriceUnavailable ? null : asNumber(estimate.rangeAmd?.p75),
@@ -932,7 +954,9 @@ export const createCalculatorPdfReportHtml = ({
     // the provider-backed roof calculation. The report must reflect the data
     // source that produced this result, not the pre-check's state.
     hasPvgis: analysis.production?.source?.provider === 'PVGIS',
-    hasTariff: asNumber(tariff.rateAmdPerKwh) !== null,
+    hasTariff:
+      asNumber(tariff.rateAmdPerKwh) !== null ||
+      (asNumber(tariff.minRateAmdPerKwh) !== null && asNumber(tariff.maxRateAmdPerKwh) !== null),
     hasEquipment: equipment.module !== copy.unavailable || equipment.inverter !== copy.unavailable,
     hasPricebook:
       !storagePriceUnavailable &&

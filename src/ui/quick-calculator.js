@@ -1,12 +1,18 @@
 import { ProductApiClient, ProductApiError } from '../services/api-client.js';
 import { getCalculatorInputNumber } from '../domain/calculator-inputs.js';
+import {
+  createAutomaticStandardResidentialTariff,
+  estimateStandardResidentialConsumptionFromBill
+} from '../domain/tariffs.js';
 import { formatConsumerCommercialRange } from './commercial-range.js';
 import { createAsyncRequestLifecycle } from './async-request-lifecycle.js';
 import { createCalculatorSession } from './calculator-session.js';
 import { createQuickAnalysisIdentity } from './quick-analysis-identity.js';
+import { formatTariffBracket, formatTariffRate } from './tariff-provenance.js';
 
 const monthlyUsage = (value) => getCalculatorInputNumber(value, 'averageMonthlyConsumptionKwh');
 const monthlyBill = (value) => getCalculatorInputNumber(value, 'averageMonthlyBillAmd');
+const effectiveRate = (value) => getCalculatorInputNumber(value, 'customTariffAmdPerKwh');
 
 const leadText = (value) => (typeof value === 'string' ? value.replace(/\s+/gu, ' ').trim() : '');
 const validLeadPhone = (value) => /^[+()\d\s-]{6,32}$/u.test(value) && /\d/u.test(value);
@@ -87,6 +93,9 @@ export const buildQuickResultMetrics = ({
   locale = 'en-US'
 } = {}) => {
   const annualSavingsAmd = finite(scenario?.financial?.annualSavingsAmd);
+  const savingsRange = scenario?.financial?.annualSavingsRangeAmd;
+  const savingsMinimum = finite(savingsRange?.min);
+  const savingsMaximum = finite(savingsRange?.max);
   const systemCost = formatConsumerCommercialRange(
     commercialEstimate ?? scenario?.commercialEstimate,
     locale
@@ -122,11 +131,14 @@ export const buildQuickResultMetrics = ({
     }
   ];
 
-  if (annualSavingsAmd !== null) {
+  if (annualSavingsAmd !== null || (savingsMinimum !== null && savingsMaximum !== null)) {
     metrics.push({
       id: 'estimated-annual-savings',
       label: copy.savings ?? 'Estimated annual savings',
-      value: `${format(annualSavingsAmd, locale)} ${copy.amdPerYear ?? 'AMD/year'}`,
+      value:
+        savingsMinimum !== null && savingsMaximum !== null
+          ? `${copy.approximately ?? '≈'} ${format(savingsMinimum, locale)}–${format(savingsMaximum, locale)} ${copy.amdPerYear ?? 'AMD/year'}`
+          : `${copy.approximately ?? '≈'} ${format(annualSavingsAmd, locale)} ${copy.amdPerYear ?? 'AMD/year'}`,
       icon: 'coin',
       tone: 'gold'
     });
@@ -144,7 +156,8 @@ export const buildQuickResultMetrics = ({
 
   return {
     metrics,
-    savingsAvailable: annualSavingsAmd !== null,
+    savingsAvailable:
+      annualSavingsAmd !== null || (savingsMinimum !== null && savingsMaximum !== null),
     systemCostAvailable: systemCost !== null
   };
 };
@@ -246,6 +259,14 @@ export const initQuickCalculator = ({ config = {} } = {}) => {
   const form = root.querySelector('[data-quick-form]');
   const region = root.querySelector('[data-quick-region]');
   const bill = root.querySelector('[data-quick-bill]');
+  const billKwh = root.querySelector('[data-quick-bill-kwh]');
+  const billKwhWrap = root.querySelector('[data-quick-bill-kwh-wrap]');
+  const billKwhToggle = root.querySelector('[data-quick-bill-kwh-toggle]');
+  const billKwhPanel = root.querySelector('[data-quick-bill-kwh-panel]');
+  const billRate = root.querySelector('[data-quick-bill-rate]');
+  const billRateValue = root.querySelector('[data-quick-bill-rate-value]');
+  const estimatedConsumption = root.querySelector('[data-quick-estimated-consumption]');
+  const estimatedConsumptionValue = root.querySelector('[data-quick-estimated-consumption-value]');
   const usage = root.querySelector('[data-quick-usage]');
   const billWrap = root.querySelector('[data-quick-bill-wrap]');
   const usageWrap = root.querySelector('[data-quick-usage-wrap]');
@@ -258,6 +279,15 @@ export const initQuickCalculator = ({ config = {} } = {}) => {
   const resultCopy = root.querySelector('[data-quick-result-copy]');
   const resultValues = root.querySelector('[data-quick-result-values]');
   const resultActions = root.querySelector('[data-quick-result-actions]');
+  const tariffModeInputs = [...root.querySelectorAll('input[name="quick-tariff-mode"]')];
+  const tariffName = root.querySelector('[data-quick-tariff-name]');
+  const tariffSummary = root.querySelector('[data-quick-tariff-summary]');
+  const tariffChange = root.querySelector('[data-quick-tariff-change]');
+  const tariffOptions = root.querySelector('[data-quick-tariff-options]');
+  const customTariffPanel = root.querySelector('[data-quick-custom-tariff]');
+  const effectiveRateInput = root.querySelector('[data-quick-effective-rate]');
+  const tariffInfoButton = root.querySelector('[data-quick-tariff-info]');
+  const tariffPopover = root.querySelector('[data-quick-tariff-popover]');
   const leadOpen = root.querySelector('[data-quick-lead-open]');
   const leadDialog = root.querySelector('[data-quick-lead-dialog]');
   const leadForm = root.querySelector('[data-quick-lead-form]');
@@ -282,9 +312,24 @@ export const initQuickCalculator = ({ config = {} } = {}) => {
     usage.value = saved.consumption.averageMonthlyKwh ?? '';
   } else if (savedMode === 'bill') {
     bill.value = saved.consumption.averageMonthlyBillAmd ?? '';
+    if (saved.consumption.averageMonthlyKwh) {
+      billKwh.value = saved.consumption.averageMonthlyKwh;
+      billKwhPanel.hidden = false;
+      billKwhToggle.setAttribute('aria-expanded', 'true');
+    }
+  }
+  const savedTariffMode =
+    saved.financialTariffMode === 'custom-effective' && saved.effectiveRateOverride?.rateAmdPerKwh
+      ? 'custom-effective'
+      : 'standard';
+  const savedTariffModeInput = tariffModeInputs.find((input) => input.value === savedTariffMode);
+  if (savedTariffModeInput) savedTariffModeInput.checked = true;
+  if (effectiveRateInput && saved.effectiveRateOverride?.rateAmdPerKwh) {
+    effectiveRateInput.value = saved.effectiveRateOverride.rateAmdPerKwh;
   }
   const mode = () =>
     root.querySelector('input[name="quick-consumption-mode"]:checked')?.value ?? 'bill';
+  const tariffMode = () => tariffModeInputs.find((input) => input.checked)?.value ?? 'standard';
   const setStatus = (message, invalid = false) => {
     status.textContent = message ?? '';
     status.classList.toggle('is-error', invalid);
@@ -301,12 +346,85 @@ export const initQuickCalculator = ({ config = {} } = {}) => {
     resultContent.hidden = !visible;
     result.setAttribute('aria-busy', String(loading));
   };
+  const currentConsumptionKwh = () => {
+    if (mode() === 'usage') return monthlyUsage(usage.value);
+    const enteredKwh = monthlyUsage(billKwh?.value);
+    if (enteredKwh !== null) return enteredKwh;
+    const enteredBill = monthlyBill(bill.value);
+    const estimate =
+      enteredBill === null ? null : estimateStandardResidentialConsumptionFromBill(enteredBill);
+    return estimate?.available ? estimate.estimatedMonthlyKwh : null;
+  };
+  const derivedBillRate = () => {
+    const enteredBill = monthlyBill(bill.value);
+    const enteredKwh = monthlyUsage(billKwh?.value);
+    return enteredBill !== null && enteredKwh !== null ? enteredBill / enteredKwh : null;
+  };
+  const updateTariffDisplay = () => {
+    const derivedRate = derivedBillRate();
+    const selectedMode = tariffMode();
+    const customRate = effectiveRate(effectiveRateInput?.value);
+    const usesDerived = mode() === 'bill' && derivedRate !== null;
+    const usesCustom = selectedMode === 'custom-effective' || usesDerived;
+    if (customTariffPanel) customTariffPanel.hidden = selectedMode !== 'custom-effective';
+    if (effectiveRateInput) effectiveRateInput.disabled = selectedMode !== 'custom-effective';
+    if (billRate && billRateValue) {
+      billRate.hidden = !usesDerived;
+      billRateValue.textContent = usesDerived
+        ? new Intl.NumberFormat(locale, { maximumFractionDigits: 2 }).format(derivedRate)
+        : '';
+    }
+    if (estimatedConsumption && estimatedConsumptionValue) {
+      const enteredBill = monthlyBill(bill.value);
+      const estimate =
+        mode() === 'bill' && !usesDerived && enteredBill !== null
+          ? estimateStandardResidentialConsumptionFromBill(enteredBill)
+          : null;
+      estimatedConsumption.hidden = !estimate?.available;
+      estimatedConsumptionValue.textContent = estimate?.available
+        ? new Intl.NumberFormat(locale, { maximumFractionDigits: 0 }).format(
+            estimate.estimatedMonthlyKwh
+          )
+        : '';
+    }
+    if (tariffName) {
+      tariffName.textContent = usesDerived
+        ? (copy.billEffectiveRate ?? copy.customEffectiveRate)
+        : usesCustom
+          ? copy.customEffectiveRate
+          : copy.standardTariff;
+    }
+    if (!tariffSummary) return;
+    if (usesDerived || (usesCustom && customRate !== null)) {
+      const rate = usesDerived ? derivedRate : customRate;
+      tariffSummary.textContent = `${new Intl.NumberFormat(locale, { maximumFractionDigits: 2 }).format(rate)} AMD/kWh`;
+      return;
+    }
+    const consumptionKwh = currentConsumptionKwh();
+    const selection =
+      consumptionKwh === null ? null : createAutomaticStandardResidentialTariff(consumptionKwh);
+    tariffSummary.textContent = selection?.available
+      ? [
+          formatTariffBracket({ tariff: selection.tariff, strings: copy }),
+          formatTariffRate({
+            tariff: selection.tariff,
+            formatRate: (value) =>
+              new Intl.NumberFormat(locale, { maximumFractionDigits: 2 }).format(value)
+          })
+        ]
+          .filter(Boolean)
+          .join(' · ')
+      : (copy.standardRangePending ?? '');
+  };
   const updateMode = () => {
     const billMode = mode() === 'bill';
     billWrap.hidden = !billMode;
+    if (billKwhWrap) billKwhWrap.hidden = !billMode;
     usageWrap.hidden = billMode;
     bill.disabled = !billMode;
+    if (billKwh) billKwh.disabled = !billMode;
     usage.disabled = billMode;
+    updateTariffDisplay();
   };
   const clearAnalysis = () => {
     if (!lifecycle.isActive()) return;
@@ -333,35 +451,69 @@ export const initQuickCalculator = ({ config = {} } = {}) => {
   const input = () => {
     const selectedRegion = region.value;
     const currentMode = mode();
+    const selectedTariffMode = tariffMode();
     if (!selectedRegion) return { valid: false, field: region };
     if (currentMode === 'bill') {
       const value = monthlyBill(bill.value);
       if (!value) return { valid: false, field: bill };
+      const hasBillKwh = typeof billKwh?.value === 'string' && billKwh.value.trim() !== '';
+      const actualKwh = monthlyUsage(billKwh?.value);
+      if (hasBillKwh && actualKwh === null) return { valid: false, field: billKwh };
+      const derivedRate = actualKwh === null ? null : effectiveRate(value / actualKwh);
+      const customRate =
+        selectedTariffMode === 'custom-effective' ? effectiveRate(effectiveRateInput?.value) : null;
+      if (
+        selectedTariffMode === 'custom-effective' &&
+        customRate === null &&
+        derivedRate === null
+      ) {
+        return { valid: false, field: effectiveRateInput, message: copy.invalidEffectiveRate };
+      }
+      const activeRate = derivedRate ?? customRate;
+      const consumption = {
+        mode: 'bill',
+        averageMonthlyBillAmd: value,
+        ...(actualKwh === null ? {} : { averageMonthlyKwh: actualKwh })
+      };
       return {
         valid: true,
         payload: {
           regionId: selectedRegion,
-          consumption: { averageMonthlyBillAmd: value }
+          consumption: {
+            averageMonthlyBillAmd: value,
+            ...(actualKwh === null ? {} : { averageMonthlyKwh: actualKwh })
+          },
+          ...(activeRate === null ? {} : { tariff: { rateAmdPerKwh: activeRate } })
         },
         state: {
           regionId: selectedRegion,
-          consumption: { mode: 'bill', averageMonthlyBillAmd: value },
-          effectiveRateOverride: null
+          consumption,
+          financialTariffMode: activeRate === null ? 'standard' : 'custom-effective',
+          effectiveRateOverride: activeRate === null ? null : { rateAmdPerKwh: activeRate },
+          standardDayNightReadings: null
         }
       };
     }
     const value = monthlyUsage(usage.value);
     if (!value) return { valid: false, field: usage };
+    const customRate =
+      selectedTariffMode === 'custom-effective' ? effectiveRate(effectiveRateInput?.value) : null;
+    if (selectedTariffMode === 'custom-effective' && customRate === null) {
+      return { valid: false, field: effectiveRateInput, message: copy.invalidEffectiveRate };
+    }
     return {
       valid: true,
       payload: {
         regionId: selectedRegion,
-        consumption: { averageMonthlyKwh: value }
+        consumption: { averageMonthlyKwh: value },
+        ...(customRate === null ? {} : { tariff: { rateAmdPerKwh: customRate } })
       },
       state: {
         regionId: selectedRegion,
         consumption: { mode: 'usage', averageMonthlyKwh: value },
-        effectiveRateOverride: null
+        financialTariffMode: selectedTariffMode,
+        effectiveRateOverride: customRate === null ? null : { rateAmdPerKwh: customRate },
+        standardDayNightReadings: null
       }
     };
   };
@@ -399,14 +551,79 @@ export const initQuickCalculator = ({ config = {} } = {}) => {
       clearAnalysis();
     })
   );
-  [region, bill, usage].forEach((control) =>
-    control.addEventListener('input', () => {
-      control.removeAttribute('aria-invalid');
+  tariffModeInputs.forEach((control) =>
+    control.addEventListener('change', () => {
+      const customRate = effectiveRate(effectiveRateInput?.value);
+      session.write({
+        financialTariffMode: tariffMode(),
+        effectiveRateOverride:
+          tariffMode() === 'custom-effective' && customRate !== null
+            ? { rateAmdPerKwh: customRate }
+            : null,
+        standardDayNightReadings: null
+      });
+      updateTariffDisplay();
       clearAnalysis();
     })
   );
-  [bill, usage].forEach((control) => control.addEventListener('input', () => updateMode()));
+  [region, bill, usage, billKwh, effectiveRateInput].filter(Boolean).forEach((control) =>
+    control.addEventListener('input', () => {
+      control.removeAttribute('aria-invalid');
+      updateTariffDisplay();
+      clearAnalysis();
+    })
+  );
+  [bill, usage, billKwh]
+    .filter(Boolean)
+    .forEach((control) => control.addEventListener('input', () => updateMode()));
+  effectiveRateInput?.addEventListener('input', () => {
+    if (tariffMode() !== 'custom-effective') return;
+    const rateAmdPerKwh = effectiveRate(effectiveRateInput.value);
+    session.write({
+      financialTariffMode: 'custom-effective',
+      effectiveRateOverride: rateAmdPerKwh === null ? null : { rateAmdPerKwh },
+      standardDayNightReadings: null
+    });
+  });
   region.addEventListener('change', clearAnalysis);
+  billKwhToggle?.addEventListener('click', () => {
+    const expanded = billKwhToggle.getAttribute('aria-expanded') === 'true';
+    billKwhToggle.setAttribute('aria-expanded', String(!expanded));
+    billKwhPanel.hidden = expanded;
+    if (!expanded) billKwh?.focus();
+  });
+  tariffChange?.addEventListener('click', () => {
+    const expanded = tariffChange.getAttribute('aria-expanded') === 'true';
+    tariffChange.setAttribute('aria-expanded', String(!expanded));
+    tariffOptions.hidden = expanded;
+    tariffChange.textContent = expanded ? copy.changeTariff : copy.closeTariff;
+    if (!expanded) tariffModeInputs.find((input) => input.checked)?.focus();
+  });
+  const closeTariffPopover = ({ restoreFocus = true } = {}) => {
+    if (!tariffPopover || tariffPopover.hidden) return;
+    tariffPopover.hidden = true;
+    tariffInfoButton?.setAttribute('aria-expanded', 'false');
+    if (restoreFocus) tariffInfoButton?.focus();
+  };
+  tariffInfoButton?.addEventListener('click', () => {
+    const opening = tariffPopover?.hidden !== false;
+    if (!tariffPopover) return;
+    tariffPopover.hidden = !opening;
+    tariffInfoButton.setAttribute('aria-expanded', String(opening));
+    if (opening) tariffPopover.focus();
+  });
+  const handleTariffPopoverKeydown = (event) => {
+    if (event.key !== 'Escape' || tariffPopover?.hidden !== false) return;
+    event.preventDefault();
+    closeTariffPopover();
+  };
+  const handleTariffPopoverOutsideClick = (event) => {
+    if (!tariffPopover || tariffPopover.hidden) return;
+    if (tariffPopover.contains(event.target) || tariffInfoButton?.contains(event.target)) return;
+    closeTariffPopover();
+  };
+  document.addEventListener('keydown', handleTariffPopoverKeydown);
+  document.addEventListener('click', handleTariffPopoverOutsideClick);
   form.addEventListener('submit', async (event) => {
     event.preventDefault();
     if (!lifecycle.isActive()) return;
@@ -414,7 +631,7 @@ export const initQuickCalculator = ({ config = {} } = {}) => {
     if (!current.valid) {
       current.field?.setAttribute('aria-invalid', 'true');
       current.field?.focus();
-      setStatus(copy.waiting, true);
+      setStatus(current.message ?? copy.waiting, true);
       return;
     }
     request?.abort();
@@ -619,6 +836,8 @@ export const initQuickCalculator = ({ config = {} } = {}) => {
     request = null;
     leadRequest = null;
     leadTrigger = null;
+    document.removeEventListener('keydown', handleTariffPopoverKeydown);
+    document.removeEventListener('click', handleTariffPopoverOutsideClick);
     if (leadDialog?.open) leadDialog.close();
   };
   return { session, clearAnalysis, destroy };

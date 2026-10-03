@@ -121,11 +121,25 @@ export default {
       billLabel: 'Էլեկտրաէներգիայի միջին հաշիվ',
       billHelp: 'Մուտքագրեք ամսական միջին գումարը դրամով։',
       refineEffectiveRate: 'Ճշտել էլեկտրաէներգիայի արժեքը',
-      effectiveRateLabel: 'Փաստացի միջին սակագին',
+      tariffSettingTitle: 'Սակագին՝ ֆինանսական հաշվարկի համար',
+      tariffModeLabel: 'Ֆինանսական սակագնի եղանակ',
+      standardTariff: 'Ստանդարտ կենցաղային սակագին',
+      customEffectiveRate: 'Նշել միջին արժեքը',
+      effectiveRateLabel: '1 կՎտժ-ի միջին արժեքը',
       effectiveRateHelp:
-        'Ըստ ցանկության։ Եթե Ձեր հաշվից գիտեք փաստացի միջին սակագինը, մուտքագրեք այն այստեղ։',
-      automaticStandardTariff: 'Ավտոմատ ստանդարտ բնակելի սակագին',
-      userProvidedEffectiveRate: 'Օգտատիրոջ նշած փաստացի սակագին',
+        'Դիտեք միջին արժեքը Ձեր հաշվում կամ հաշվի գումարը բաժանեք կՎտժ-ով սպառման վրա։',
+      automaticStandardTariff: 'Ստանդարտ կենցաղային սակագին',
+      userProvidedEffectiveRate: 'Օգտատիրոջ նշած միջին արժեքը',
+      bracketUpTo: 'Մինչև {max} կՎտժ/ամիս',
+      bracketBetween: '{min}–{max} կՎտժ/ամիս',
+      bracketAbove: '{min} կՎտժ/ամիս-ից ավելի',
+      monthlyBracket: 'Սակագնային խումբը որոշվում է յուրաքանչյուր ամսվա համար',
+      standardRangePending: 'Խումբը կորոշվի սպառումը մուտքագրելուց հետո',
+      actualDayNightDisclosure: 'Հաշվում ունեմ ցերեկային և գիշերային առանձին ցուցմունքներ',
+      actualDayLabel: 'Ցերեկ',
+      actualNightLabel: 'Գիշեր',
+      actualDayNightHelp: 'Երկու արժեքների գումարը պետք է հավասար լինի ամսական սպառմանը։',
+      invalidDayNight: 'Նշեք նույն ամսվա ճիշտ ցերեկային և գիշերային կՎտժ-ը։',
       usageLabel: 'Միջին ամսական սպառում',
       usageHelp: 'Մուտքագրեք ամսական միջին սպառումը kWh-ով։',
       monthlyTitle: 'Սպառումը 12 ամսվա ընթացքում',
@@ -310,6 +324,12 @@ export default {
           'Նախնական հզորությունը հիմնվում է սարքավորումների կատալոգի վահանակի վրա․ վերջնական բնութագրերը հաստատում է ինժեները։',
         USER_PROVIDED_TARIFF:
           'Սակագինը մուտքագրել է օգտվողը իր հաշվից և այն սակագնային գրանցամատյան չէ։',
+        STANDARD_RESIDENTIAL_DAY_NIGHT_RANGE_WITH_UNKNOWN_USAGE_SPLIT:
+          'Ստանդարտ կենցաղային սակագնի ցերեկային/գիշերային բաշխումը հայտնի չէ, ուստի ֆինանսական արդյունքը ներկայացվում է միջակայքով։',
+        USER_PROVIDED_ACTUAL_DAY_NIGHT_CONSUMPTION:
+          'Արդյունավետ սակագինը հաշվարկվել է օգտվողի նշած փաստացի ցերեկային և գիշերային սպառումից։',
+        STANDARD_RESIDENTIAL_DAY_RATE_REFERENCE_FOR_BILL_TO_KWH_ESTIMATE:
+          'Միայն հաշվի գումարից սպառման գնահատման համար օգտագործվել է ստանդարտ ցերեկային դրույքը՝ որպես հղումային արժեք։',
         OWNER_MANAGED_PRICEBOOK_NOT_OFFER:
           'YOURENERGY-ի կողմից կառավարվող գնացուցակը նախնական բյուջեի ուղեցույց է, ոչ առաջարկ և ոչ պայմանագրային գին։',
         MAP_PROJECTED_AREA_CONVERTED_TO_ROOF_PLANE:

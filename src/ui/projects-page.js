@@ -25,8 +25,7 @@ if (grid && toolbar) {
   const sortCards = () => {
     const ordered = [...cards].sort((a, b) => {
       if (sort === 'power') return numericData(b, 'power') - numericData(a, 'power');
-      if (sort === 'production')
-        return numericData(b, 'production') - numericData(a, 'production');
+      if (sort === 'production') return numericData(b, 'production') - numericData(a, 'production');
       return originalOrder.get(a) - originalOrder.get(b);
     });
     for (const card of ordered) grid.append(card);

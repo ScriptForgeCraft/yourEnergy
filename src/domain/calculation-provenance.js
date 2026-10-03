@@ -189,6 +189,24 @@ export const buildCalculationBasis = ({
       period: cleanString(tariff.period),
       tariffSource: cleanString(tariff.tariffSource),
       rateAmdPerKwh: toPositiveNumberOrNull(tariff.rateAmdPerKwh),
+      effectiveRateAmdPerKwh: toPositiveNumberOrNull(tariff.effectiveRateAmdPerKwh),
+      minRateAmdPerKwh: toPositiveNumberOrNull(tariff.minRateAmdPerKwh),
+      maxRateAmdPerKwh: toPositiveNumberOrNull(tariff.maxRateAmdPerKwh),
+      dayRateAmdPerKwh: toPositiveNumberOrNull(tariff.dayRateAmdPerKwh),
+      nightRateAmdPerKwh: toPositiveNumberOrNull(tariff.nightRateAmdPerKwh),
+      bracketMinMonthlyKwh: toNonNegativeNumberOrNull(tariff.bracketMinMonthlyKwh),
+      bracketMinMonthlyKwhInclusive: tariff.bracketMinMonthlyKwhInclusive !== false,
+      bracketMaxMonthlyKwh: toNonNegativeNumberOrNull(tariff.bracketMaxMonthlyKwh),
+      accuracy: cleanString(tariff.accuracy),
+      monthlyTariffs: Array.isArray(tariff.monthlyTariffs)
+        ? tariff.monthlyTariffs.map((month) => ({
+            monthIndex: toNonNegativeNumberOrNull(month.monthIndex),
+            monthlyKwh: toNonNegativeNumberOrNull(month.monthlyKwh),
+            tariffId: cleanString(month.tariffId),
+            minRateAmdPerKwh: toPositiveNumberOrNull(month.minRateAmdPerKwh),
+            maxRateAmdPerKwh: toPositiveNumberOrNull(month.maxRateAmdPerKwh)
+          }))
+        : null,
       source: sourceReference(tariff.source)
     },
     surplusCompensation: {

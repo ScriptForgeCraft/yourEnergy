@@ -24,7 +24,7 @@ const sessionStorage = () => {
 const professionalInputs = (overrides = {}) => ({
   property: { coordinates: { lat: 40.177, lng: 44.503 } },
   consumption: { kind: 'annual-kwh', annualKwh: 7_200 },
-  tariff: { tariffId: 'standard', period: 'day' },
+  tariff: { rateAmdPerKwh: 45 },
   roof: {
     areaMethod: 'map-projected',
     mountingMode: 'roof-parallel',

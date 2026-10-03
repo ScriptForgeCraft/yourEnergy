@@ -646,6 +646,9 @@ function validateQuickCalculatorMarkup(html, page) {
     'data-quick-calculator',
     'data-quick-region',
     'data-quick-submit',
+    'data-quick-tariff-info',
+    'data-quick-tariff-options',
+    'data-quick-effective-rate',
     'data-quick-lead-open',
     'data-quick-lead-dialog',
     'data-quick-lead-form'
@@ -653,7 +656,6 @@ function validateQuickCalculatorMarkup(html, page) {
     if (!html.includes(marker)) fail(`${page}: missing quick calculator marker ${marker}`);
   }
   for (const removedMarker of [
-    'data-quick-tariff',
     'data-tariff-selector',
     'data-tariff-period',
     'data-tariff-bracket',

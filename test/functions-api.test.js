@@ -391,10 +391,15 @@ test('analysis joins real PVGIS yield with automatic residential finance and ver
   assert.equal(analysis.selectedScenario.system.capacityKwp, 7.8);
   assert.equal(analysis.selectedScenario.system.panelCount, 12);
   assert.equal(analysis.selectedScenario.generation.annualKwh, 11_700);
-  assert.ok(analysis.selectedScenario.financial.annualSavingsAmd > 0);
-  assert.ok(analysis.selectedScenario.financial.grossSavings25YearsAmd > 0);
-  assert.ok(analysis.selectedScenario.financial.paybackYears > 0);
-  assert.ok(analysis.selectedScenario.financial.timeline.length > 0);
+  assert.equal(analysis.selectedScenario.financial.annualSavingsAmd, null);
+  assert.ok(analysis.selectedScenario.financial.annualSavingsRangeAmd.min > 0);
+  assert.ok(
+    analysis.selectedScenario.financial.annualSavingsRangeAmd.max >
+      analysis.selectedScenario.financial.annualSavingsRangeAmd.min
+  );
+  assert.ok(analysis.selectedScenario.financial.grossSavings25YearsRangeAmd.min > 0);
+  assert.ok(analysis.selectedScenario.financial.paybackRangeYears.min > 0);
+  assert.equal(analysis.selectedScenario.financial.timeline.length, 0);
   assert.equal(analysis.environmental.factor.status, 'verified-historical');
   assert.equal(analysis.environmental.factor.dataYear, 2022);
   assert.equal(analysis.environmental.avoidedCo2Tons, 2.141);
@@ -402,7 +407,9 @@ test('analysis joins real PVGIS yield with automatic residential finance and ver
   assert.equal(analysis.environmental.treeEquivalent, 35.683);
   assert.equal(analysis.financial.tariff.kind, 'automatic-standard-residential');
   assert.equal(analysis.financial.tariff.tariffId, 'standard-over-400');
-  assert.equal(analysis.financial.tariff.rateAmdPerKwh, 53.48);
+  assert.equal(analysis.financial.tariff.rateAmdPerKwh, null);
+  assert.equal(analysis.financial.tariff.minRateAmdPerKwh, 43.48);
+  assert.equal(analysis.financial.tariff.maxRateAmdPerKwh, 53.48);
   assert.equal(analysis.commercialEstimate.available, true);
   assert.equal(analysis.commercialEstimate.kind, 'owner-managed');
   assert.equal(
@@ -448,6 +455,73 @@ test('analysis accepts a manual point and user tariff but ignores client-side ca
   assert.equal(analysis.selectedScenario.financial.annualSavingsAmd, 526_500);
   assert.notEqual(analysis.selectedScenario.financial.capexAmd, 1);
   assert.ok(analysis.assumptions.includes('USER_PROVIDED_TARIFF'));
+});
+
+test('Professional analysis accepts actual day/night kWh but resolves both rates on the server', async () => {
+  const response = await analysisOnRequest({
+    request: postJson('/analysis', {
+      ...p0AnalysisPayload,
+      tariff: {
+        actualDayKwh: 700,
+        actualNightKwh: 300,
+        officialDayRate: 1,
+        officialNightRate: 1
+      }
+    }),
+    env: pvgisEnv({ PVGIS_ENDPOINT: 'https://pvgis.example/api' }),
+    fetch: async () =>
+      new Response(
+        JSON.stringify({
+          outputs: {
+            totals: { fixed: { E_y: 1500 } },
+            monthly: { fixed: Array.from({ length: 12 }, () => ({ E_m: 125 })) }
+          }
+        }),
+        { headers: { 'content-type': 'application/json' } }
+      )
+  });
+  const analysis = (await readJson(response)).data.analysis;
+  const expectedRate = (700 * 53.48 + 300 * 43.48) / 1000;
+
+  assert.equal(response.status, 200);
+  assert.equal(analysis.financial.tariff.accuracy, 'actual-day-night');
+  assert.equal(analysis.financial.tariff.dayRateAmdPerKwh, 53.48);
+  assert.equal(analysis.financial.tariff.nightRateAmdPerKwh, 43.48);
+  assert.equal(analysis.financial.tariff.effectiveRateAmdPerKwh, expectedRate);
+  assert.equal(analysis.selectedScenario.system.capacityKwp, 7.8);
+  assert.ok(analysis.selectedScenario.financial.annualSavingsAmd > 0);
+  assert.equal(analysis.selectedScenario.financial.annualSavingsRangeAmd, null);
+});
+
+test('Professional monthly mode resolves an official tariff band for every month', async () => {
+  const monthlyKwh = [180, 220, 450, 180, 220, 450, 180, 220, 450, 180, 220, 450];
+  const response = await analysisOnRequest({
+    request: postJson('/analysis', {
+      ...p0AnalysisPayload,
+      consumption: { monthlyKwh }
+    }),
+    env: pvgisEnv({ PVGIS_ENDPOINT: 'https://pvgis.example/api' }),
+    fetch: async () =>
+      new Response(
+        JSON.stringify({
+          outputs: {
+            totals: { fixed: { E_y: 1500 } },
+            monthly: { fixed: Array.from({ length: 12 }, () => ({ E_m: 125 })) }
+          }
+        }),
+        { headers: { 'content-type': 'application/json' } }
+      )
+  });
+  const analysis = (await readJson(response)).data.analysis;
+
+  assert.equal(response.status, 200);
+  assert.equal(analysis.financial.tariff.accuracy, 'monthly-range');
+  assert.deepEqual(
+    analysis.financial.tariff.monthlyTariffs.slice(0, 3).map((month) => month.tariffId),
+    ['standard-up-to-200', 'standard-201-to-400', 'standard-over-400']
+  );
+  assert.ok(analysis.selectedScenario.financial.retailOffsetValueRangeAmd.min > 0);
+  assert.equal(analysis.selectedScenario.financial.retailOffsetValueAmd, null);
 });
 
 test('the server selects the dated P1 price book instead of accepting a client price or capex', () => {
@@ -835,6 +909,16 @@ test('lead endpoint sends a readable Professional Calculator report with submitt
           annualKwh: 6500
         },
         tariffAmdPerKwh: 46.48,
+        financialTariff: {
+          sourceType: 'automatic-standard-residential',
+          tariffId: 'standard-over-400',
+          bracketMinMonthlyKwh: 400,
+          dayRateAmdPerKwh: 53.48,
+          nightRateAmdPerKwh: 43.48,
+          minRateAmdPerKwh: 43.48,
+          maxRateAmdPerKwh: 53.48,
+          effectiveRateAmdPerKwh: null
+        },
         roof: {
           areaMethod: 'map-projected',
           areaSqm: 42.4,
@@ -861,6 +945,8 @@ test('lead endpoint sends a readable Professional Calculator report with submitt
           surplusGenerationKwh: 4186,
           coveragePercent: 164.4,
           annualSavingsAmd: 302120,
+          annualSavingsRangeAmd: { min: 260000, max: 320000 },
+          paybackRangeYears: { min: 6.1, max: 7.4 },
           avoidedCo2Tons: 2.2,
           source: 'PVGIS'
         },
@@ -893,8 +979,12 @@ test('lead endpoint sends a readable Professional Calculator report with submitt
   assert.match(email.payload.text, /Օբյեկտ/);
   assert.match(email.payload.text, /Arabkir, Yerevan/);
   assert.match(email.payload.text, /Մուտքագրված սպառում/);
+  assert.match(email.payload.text, /Ստանդարտ կենցաղային՝ ավտոմատ ընտրված/);
+  assert.match(email.payload.text, /43,48–53,48 AMD\/kWh/);
   assert.match(email.payload.text, /Տանիքի ուրվագիծ: 3 կետ/);
   assert.match(email.payload.text, /Հաշվարկի արդյունք/);
+  assert.match(email.payload.text, /260\D*000–320\D*000 AMD/);
+  assert.match(email.payload.text, /6,1–7,4 տարի/);
   assert.match(email.payload.text, /11 × 650 W/);
   assert.match(email.payload.text, /Առաջարկվող սարքավորում/);
   assert.match(email.payload.text, /LONGi Hi-MO X10 Guardian/);

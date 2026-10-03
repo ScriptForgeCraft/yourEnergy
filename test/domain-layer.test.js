@@ -114,9 +114,7 @@ test('buildSolarAnalysis derives transparent scenarios with an automatic standar
   assert.equal(analysis.sourceLedger.find((entry) => entry.key === 'tariff').available, true);
   assert.ok(analysis.assumptions.includes('ARMENIA_MONTHLY_NET_METERING_MAY_TO_APRIL'));
   assert.ok(
-    analysis.assumptions.includes(
-      'STANDARD_RESIDENTIAL_DAY_RATE_REFERENCE_FOR_PRELIMINARY_ESTIMATE'
-    )
+    analysis.assumptions.includes('STANDARD_RESIDENTIAL_DAY_NIGHT_RANGE_WITH_UNKNOWN_USAGE_SPLIT')
   );
   assertFiniteTree(analysis);
 });

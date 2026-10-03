@@ -109,7 +109,14 @@ test('Quick result presents only homeowner metrics and gates savings on a financ
       copy: calculatorModes.en.quick,
       locale: 'en-US'
     }).metrics.map(({ value }) => value),
-    ['11', '7.15 kWp', '10,374 kWh/year', '≈ 100%', '502,946 AMD/year', '2,000,000 ֏ – 2,200,000 ֏']
+    [
+      '11',
+      '7.15 kWp',
+      '10,374 kWh/year',
+      '≈ 100%',
+      '≈ 502,946 AMD/year',
+      '2,000,000 ֏ – 2,200,000 ֏'
+    ]
   );
 
   const withoutFinancialValue = buildQuickResultMetrics({
@@ -231,7 +238,8 @@ test('quick endpoint accepts a bill without tariff UI and resolves the automatic
   assert.equal(body.data.analysis.scope, 'regional-preliminary');
   assert.equal(body.data.analysis.financial.tariff.kind, 'automatic-standard-residential');
   assert.equal(body.data.analysis.financial.tariff.tariffId, 'standard-over-400');
-  assert.ok(body.data.analysis.selectedScenario.financial.annualSavingsAmd > 0);
+  assert.equal(body.data.analysis.selectedScenario.financial.annualSavingsAmd, null);
+  assert.ok(body.data.analysis.selectedScenario.financial.annualSavingsRangeAmd.min > 0);
 
   const unavailable = await quickOnRequest({
     request: post({ regionId: 'ararat', consumption: { averageMonthlyKwh: 1000 } }),
@@ -266,11 +274,42 @@ test('Quick server ignores browser-supplied official registry descriptors and ca
   assert.equal(response.status, 200);
   assert.equal(tariff.kind, 'automatic-standard-residential');
   assert.equal(tariff.tariffId, 'standard-over-400');
-  assert.equal(tariff.period, 'day');
+  assert.equal(tariff.period, 'day-night-range');
   assert.equal(tariff.customerType, 'standard');
   assert.equal(tariff.revision, ARMENIA_TARIFF_DATASET.revision);
-  assert.equal(tariff.rateAmdPerKwh, 53.48);
+  assert.equal(tariff.rateAmdPerKwh, null);
+  assert.equal(tariff.minRateAmdPerKwh, 43.48);
+  assert.equal(tariff.maxRateAmdPerKwh, 53.48);
   assert.equal(body.data.analysis.consumption.kind, 'estimated-from-monthly-bill');
+});
+
+test('Quick bill plus actual kWh uses kWh for sizing and bill divided by kWh for finance', async () => {
+  const analyze = async (payload) => {
+    const response = await quickOnRequest({
+      request: post({ regionId: 'yerevan', ...payload }),
+      env: { ...pvgisEnv, PVGIS_CACHE: memoryKv() },
+      fetch: async () => pvgisResponse()
+    });
+    assert.equal(response.status, 200);
+    return (await response.json()).data.analysis;
+  };
+  const standard = await analyze({ consumption: { averageMonthlyKwh: 310 } });
+  const observed = await analyze({
+    consumption: { averageMonthlyBillAmd: 15_000, averageMonthlyKwh: 310 },
+    tariff: { rateAmdPerKwh: 15_000 / 310 }
+  });
+
+  assert.equal(observed.consumption.averageMonthlyKwh, 310);
+  assert.equal(observed.consumption.averageMonthlyBillAmd, 15_000);
+  assert.equal(observed.financial.tariff.kind, 'user');
+  assert.equal(observed.financial.tariff.effectiveRateAmdPerKwh, 15_000 / 310);
+  assert.equal(
+    observed.selectedScenario.system.capacityKwp,
+    standard.selectedScenario.system.capacityKwp
+  );
+  assert.equal(typeof observed.selectedScenario.financial.retailOffsetValueAmd, 'number');
+  assert.equal(standard.selectedScenario.financial.retailOffsetValueAmd, null);
+  assert.equal(typeof standard.selectedScenario.financial.retailOffsetValueRangeAmd?.min, 'number');
 });
 
 test('quick endpoint reports missing cache and unsafe provider configuration without a fallback result', async () => {

@@ -44,6 +44,34 @@ export const createCalculatorResultsView = ({
       strings: product.consumption ?? {},
       formatRate: (value) => format(value, locale, { maximumFractionDigits: 2 })
     });
+  const normalizedRange = (value) => {
+    const minimum = number(value?.min, 0);
+    const maximum = number(value?.max, 0);
+    return minimum !== null && maximum !== null && minimum <= maximum
+      ? { min: minimum, max: maximum }
+      : null;
+  };
+  const formatMoneyEstimate = (value, range) => {
+    const normalized = normalizedRange(range);
+    if (normalized) {
+      return `≈ ${format(normalized.min, locale)}–${format(normalized.max, locale)} ֏`;
+    }
+    const scalar = number(value, 0);
+    return scalar === null ? '—' : `≈ ${format(scalar, locale)} ֏`;
+  };
+  const formatYearsEstimate = (value, range) => {
+    const normalized = normalizedRange(range);
+    if (normalized) {
+      return `≈ ${format(normalized.min, locale, { maximumFractionDigits: 1 })}–${format(
+        normalized.max,
+        locale,
+        { maximumFractionDigits: 1 }
+      )} ${wizard.years ?? 'years'}`;
+    }
+    return formatApproximate(value, locale, wizard.years ?? 'years', {
+      maximumFractionDigits: 1
+    });
+  };
   const dashboardMetric = (label, value, kind = '') => {
     const wrapper = element('div', `result-metric${kind ? ` result-metric--${kind}` : ''}`);
     wrapper.append(element('dt', '', label), element('dd', '', value));
@@ -227,7 +255,10 @@ export const createCalculatorResultsView = ({
       );
     }
     const tariff = basis.tariff;
-    if (tariff?.rateAmdPerKwh !== null && tariff?.rateAmdPerKwh !== undefined) {
+    if (
+      (tariff?.rateAmdPerKwh !== null && tariff?.rateAmdPerKwh !== undefined) ||
+      (tariff?.minRateAmdPerKwh !== null && tariff?.minRateAmdPerKwh !== undefined)
+    ) {
       add(basisCopy.tariff ?? 'Electricity tariff', tariffText(tariff), tariff.sourceType);
     } else {
       add(
@@ -387,11 +418,19 @@ export const createCalculatorResultsView = ({
     const annualSavings = storagePriceUnavailable
       ? financial.solarOnlyAnnualSavingsAmd
       : financial.annualSavingsAmd;
+    const annualSavingsRange = storagePriceUnavailable
+      ? financial.solarOnlyAnnualSavingsRangeAmd
+      : financial.annualSavingsRangeAmd;
     const annualConsumptionKwh = number(scenario.energyBalance?.annualConsumptionKwh, 0);
     const annualGenerationKwh = number(scenario.generation?.annualKwh, 0);
     const retailOffsetValueAmd = number(financial.retailOffsetValueAmd, 0);
+    const retailOffsetValueRangeAmd = normalizedRange(financial.retailOffsetValueRangeAmd);
     const displayedSavings = number(annualSavings, 0) ?? retailOffsetValueAmd;
-    const savingsAreOffsetOnly = number(annualSavings, 0) === null && retailOffsetValueAmd !== null;
+    const displayedSavingsRange = normalizedRange(annualSavingsRange) ?? retailOffsetValueRangeAmd;
+    const savingsAreOffsetOnly =
+      number(annualSavings, 0) === null &&
+      normalizedRange(annualSavingsRange) === null &&
+      (retailOffsetValueAmd !== null || retailOffsetValueRangeAmd !== null);
     const remainingGridDemandKwh =
       annualConsumptionKwh === null || annualGenerationKwh === null
         ? null
@@ -471,7 +510,7 @@ export const createCalculatorResultsView = ({
             : (resultsCopy.metrics?.annualSavings ??
               wizard.metrics?.annualSavings ??
               'Annual savings'),
-        value: displayedSavings === null ? '—' : `≈ ${format(displayedSavings, locale)} ֏`,
+        value: formatMoneyEstimate(displayedSavings, displayedSavingsRange),
         icon: 'calculator',
         kind: 'savings'
       })
@@ -530,20 +569,18 @@ export const createCalculatorResultsView = ({
             : (resultsCopy.metrics?.annualSavings ??
               wizard.metrics?.annualSavings ??
               'Annual savings'),
-        displayedSavings === null ? '—' : `≈ ${format(displayedSavings, locale)} ֏`,
+        formatMoneyEstimate(displayedSavings, displayedSavingsRange),
         'savings'
       ),
       dashboardMetric(
         storagePriceUnavailable
           ? (wizard.solarOnlyPayback ?? 'Solar-only payback period')
           : (resultsCopy.financial?.payback ?? wizard.metrics?.payback ?? 'Payback period'),
-        formatApproximate(
+        formatYearsEstimate(
           storagePriceUnavailable ? financial.solarOnlyPaybackYears : financial.paybackYears,
-          locale,
-          wizard.years ?? 'years',
-          {
-            maximumFractionDigits: 1
-          }
+          storagePriceUnavailable
+            ? financial.solarOnlyPaybackRangeYears
+            : financial.paybackRangeYears
         ),
         'payback'
       ),
@@ -551,12 +588,13 @@ export const createCalculatorResultsView = ({
         storagePriceUnavailable
           ? (wizard.solarOnlyTwentyFiveYears ?? 'Solar-only 25-year value')
           : (resultsCopy.financial?.twentyFiveYears ?? '25-year value'),
-        formatApproximate(
+        formatMoneyEstimate(
           storagePriceUnavailable
             ? financial.solarOnlyGrossSavings25YearsAmd
             : financial.grossSavings25YearsAmd,
-          locale,
-          '֏'
+          storagePriceUnavailable
+            ? financial.solarOnlyGrossSavings25YearsRangeAmd
+            : financial.grossSavings25YearsRangeAmd
         ),
         'lifetime'
       )
@@ -570,7 +608,7 @@ export const createCalculatorResultsView = ({
         storagePriceUnavailable
           ? (wizard.storagePriceUnavailableCopy ??
               'Battery and hybrid-system costs are not in the current price book. The figures above are explicitly solar-only; full-system budget and payback require battery sizing.')
-          : displayedSavings === null
+          : displayedSavings === null && displayedSavingsRange === null
             ? (wizard.tariffNeeded ?? 'Add your electricity tariff to see savings and payback.')
             : savingsAreOffsetOnly
               ? text(wizard.surplusCompensationUnavailableCopy, {
@@ -1040,9 +1078,21 @@ export const createCalculatorResultsView = ({
     );
     add(
       wizard.metrics?.tariff ?? product.consumption?.tariffLabel ?? 'Tariff',
-      analysis.financial?.tariff?.rateAmdPerKwh
+      analysis.financial?.tariff?.rateAmdPerKwh || analysis.financial?.tariff?.minRateAmdPerKwh
         ? tariffText(analysis.financial.tariff)
         : (product.result?.noTariff ?? '—')
+    );
+    const passportFinancial = analysis.selectedScenario?.financial ?? {};
+    add(
+      wizard.metrics?.annualSavings ?? 'Annual savings',
+      formatMoneyEstimate(
+        passportFinancial.annualSavingsAmd,
+        passportFinancial.annualSavingsRangeAmd
+      )
+    );
+    add(
+      wizard.metrics?.payback ?? 'Payback',
+      formatYearsEstimate(passportFinancial.paybackYears, passportFinancial.paybackRangeYears)
     );
     const environmental = analysis.environmental;
     if (Number.isFinite(Number(environmental?.avoidedCo2Tons))) {

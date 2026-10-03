@@ -16,10 +16,12 @@ const normalizeLocale = (value) => normalizeText(value).toLowerCase().split('-')
 const validPhone = (value) => /^[+()\d\s-]{6,32}$/.test(value) && /\d/.test(value);
 const validEmail = (value) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
 const positiveNumber = (value, maximum) => {
+  if (value === null || value === undefined || value === '') return null;
   const number = Number(value);
   return Number.isFinite(number) && number > 0 && number <= maximum ? number : null;
 };
 const boundedNumber = (value, minimum, maximum) => {
+  if (value === null || value === undefined || value === '') return null;
   const number = Number(value);
   return Number.isFinite(number) && number >= minimum && number <= maximum ? number : null;
 };
@@ -42,6 +44,44 @@ const normalizeOutlinePoints = (value) => {
     lng: boundedNumber(point?.lng, -180, 180)
   }));
   return normalized.every((point) => point.lat !== null && point.lng !== null) ? normalized : null;
+};
+
+const normalizeRange = (value, maximum) => {
+  const minimum = boundedNumber(value?.min, 0, maximum);
+  const maximumValue = boundedNumber(value?.max, 0, maximum);
+  return minimum !== null && maximumValue !== null && minimum <= maximumValue
+    ? { min: minimum, max: maximumValue }
+    : null;
+};
+
+const normalizeFinancialTariff = (value) => {
+  const tariff = value && typeof value === 'object' && !Array.isArray(value) ? value : {};
+  const sourceType = oneOf(normalizeText(tariff.sourceType), [
+    'automatic-standard-residential',
+    'user-provided-effective-rate'
+  ]);
+  const monthlyTariffs =
+    Array.isArray(tariff.monthlyTariffs) && tariff.monthlyTariffs.length === 12
+      ? tariff.monthlyTariffs.map((month) => ({
+          monthIndex: boundedNumber(month?.monthIndex, 0, 11),
+          monthlyKwh: boundedNumber(month?.monthlyKwh, 0, 10_000_000),
+          tariffId: boundedText(month?.tariffId, 96),
+          minRateAmdPerKwh: positiveNumber(month?.minRateAmdPerKwh, 1_000_000),
+          maxRateAmdPerKwh: positiveNumber(month?.maxRateAmdPerKwh, 1_000_000)
+        }))
+      : null;
+  return {
+    sourceType,
+    tariffId: boundedText(tariff.tariffId, 96),
+    bracketMinMonthlyKwh: boundedNumber(tariff.bracketMinMonthlyKwh, 0, 10_000_000),
+    bracketMaxMonthlyKwh: boundedNumber(tariff.bracketMaxMonthlyKwh, 0, 10_000_000),
+    dayRateAmdPerKwh: positiveNumber(tariff.dayRateAmdPerKwh, 1_000_000),
+    nightRateAmdPerKwh: positiveNumber(tariff.nightRateAmdPerKwh, 1_000_000),
+    minRateAmdPerKwh: positiveNumber(tariff.minRateAmdPerKwh, 1_000_000),
+    maxRateAmdPerKwh: positiveNumber(tariff.maxRateAmdPerKwh, 1_000_000),
+    effectiveRateAmdPerKwh: positiveNumber(tariff.effectiveRateAmdPerKwh, 1_000_000),
+    monthlyTariffs
+  };
 };
 
 /**
@@ -117,6 +157,7 @@ const normalizeProfessionalCalculatorContext = (value, locale) => {
   const mountingMode = oneOf(normalizeText(roof.mountingMode), ['roof-parallel', 'elevated']);
   const panelCount = boundedNumber(result.panelCount, 1, 100_000);
   const outlinePoints = normalizeOutlinePoints(roof.outlinePoints);
+  const financialTariff = normalizeFinancialTariff(value.financialTariff);
   const professional = {
     type: 'professional',
     locale,
@@ -133,6 +174,7 @@ const normalizeProfessionalCalculatorContext = (value, locale) => {
       annualKwh: positiveNumber(consumption.annualKwh, 100_000_000)
     },
     tariffAmdPerKwh: positiveNumber(value.tariffAmdPerKwh, 1_000_000),
+    financialTariff,
     roof: {
       areaMethod,
       areaSqm: positiveNumber(roof.areaSqm, 10_000_000),
@@ -156,6 +198,9 @@ const normalizeProfessionalCalculatorContext = (value, locale) => {
       surplusGenerationKwh: boundedNumber(result.surplusGenerationKwh, 0, 100_000_000),
       coveragePercent: boundedNumber(result.coveragePercent, 0, 100_000),
       annualSavingsAmd: boundedNumber(result.annualSavingsAmd, 0, 100_000_000_000),
+      annualSavingsRangeAmd: normalizeRange(result.annualSavingsRangeAmd, 100_000_000_000),
+      paybackYears: boundedNumber(result.paybackYears, 0, 10_000),
+      paybackRangeYears: normalizeRange(result.paybackRangeYears, 10_000),
       avoidedCo2Tons: boundedNumber(result.avoidedCo2Tons, 0, 100_000_000),
       source: boundedText(result.source, 96)
     },
@@ -287,6 +332,15 @@ const truncateTelegramMessage = (message) => {
 const formatNumber = (value, _visitorLocale, maximumFractionDigits = 0) =>
   Number.isFinite(Number(value))
     ? new Intl.NumberFormat(ENGINEER_LOCALE, { maximumFractionDigits }).format(value)
+    : null;
+
+const formatRange = (value, locale, maximumFractionDigits = 0) =>
+  value?.min !== null && value?.min !== undefined && value?.max !== null && value?.max !== undefined
+    ? `${formatNumber(value.min, locale, maximumFractionDigits)}–${formatNumber(
+        value.max,
+        locale,
+        maximumFractionDigits
+      )}`
     : null;
 
 const field = (lines, label, value) => {
@@ -429,12 +483,34 @@ const formatProfessionalCalculatorContext = (context, locale) => {
     'Տարեկան սպառում',
     consumption.annualKwh === null ? null : `${formatNumber(consumption.annualKwh, locale)} kWh`
   );
+  const financialTariff = context.financialTariff;
   field(
     lines,
-    'Էլեկտրաէներգիայի սակագին',
-    context.tariffAmdPerKwh === null
+    'Ֆինանսական սակագնի աղբյուր',
+    financialTariff?.sourceType === 'automatic-standard-residential'
+      ? 'Ստանդարտ կենցաղային՝ ավտոմատ ընտրված'
+      : financialTariff?.sourceType === 'user-provided-effective-rate'
+        ? 'Օգտատիրոջ նշած միջին արժեք'
+        : null
+  );
+  field(lines, 'Սակագնային խումբ', financialTariff?.tariffId);
+  field(
+    lines,
+    'Սակագնի միջակայք',
+    financialTariff?.minRateAmdPerKwh === null
       ? null
-      : `${formatNumber(context.tariffAmdPerKwh, locale, 2)} AMD/kWh`
+      : `${formatNumber(financialTariff.minRateAmdPerKwh, locale, 2)}–${formatNumber(
+          financialTariff.maxRateAmdPerKwh,
+          locale,
+          2
+        )} AMD/kWh`
+  );
+  field(
+    lines,
+    'Միջին արդյունավետ արժեք',
+    financialTariff?.effectiveRateAmdPerKwh === null
+      ? null
+      : `${formatNumber(financialTariff.effectiveRateAmdPerKwh, locale, 2)} AMD/kWh`
   );
   if (consumption.monthlyKwh) {
     field(
@@ -538,7 +614,20 @@ const formatProfessionalCalculatorContext = (context, locale) => {
   field(
     lines,
     'Գնահատված տարեկան խնայողություն',
-    result.annualSavingsAmd === null ? null : `${formatNumber(result.annualSavingsAmd, locale)} AMD`
+    result.annualSavingsRangeAmd
+      ? `${formatRange(result.annualSavingsRangeAmd, locale)} AMD`
+      : result.annualSavingsAmd === null
+        ? null
+        : `${formatNumber(result.annualSavingsAmd, locale)} AMD`
+  );
+  field(
+    lines,
+    'Հետգնման ժամկետ',
+    result.paybackRangeYears
+      ? `${formatRange(result.paybackRangeYears, locale, 1)} տարի`
+      : result.paybackYears === null
+        ? null
+        : `${formatNumber(result.paybackYears, locale, 1)} տարի`
   );
   field(
     lines,

@@ -3,11 +3,14 @@ export { parseDecimalNumber } from './numbers.js';
 export { CALCULATOR_INPUT_LIMITS, getCalculatorInputNumber } from './calculator-inputs.js';
 export {
   getConfirmedTariffRate,
+  getFinancialTariffRateRange,
   getUsableTariffRate,
   selectEffectiveSurplusCompensation,
   suggestStandardTariff,
   tariffBracketIncludesMonthlyKwh,
   createAutomaticStandardResidentialTariff,
+  createAutomaticStandardResidentialTariffProfile,
+  createStandardResidentialTariffFromActualDayNight,
   estimateStandardResidentialConsumptionFromBill,
   createUserTariffSelection
 } from './tariffs.js';

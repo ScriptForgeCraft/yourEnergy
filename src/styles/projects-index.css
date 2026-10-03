@@ -31,7 +31,6 @@
 .projects-container {
   width: min(calc(100% - 52px), 1280px);
 }
- 
 
 .projects-primary-button,
 .projects-secondary-button,
@@ -144,7 +143,13 @@
   z-index: -2;
   inset: 0;
   background:
-    linear-gradient(90deg, rgb(4 8 7 / 89%) 0%, rgb(4 8 7 / 68%) 35%, rgb(4 8 7 / 18%) 69%, rgb(4 8 7 / 6%) 100%),
+    linear-gradient(
+      90deg,
+      rgb(4 8 7 / 89%) 0%,
+      rgb(4 8 7 / 68%) 35%,
+      rgb(4 8 7 / 18%) 69%,
+      rgb(4 8 7 / 6%) 100%
+    ),
     linear-gradient(0deg, rgb(4 8 7 / 54%) 0%, transparent 46%);
 }
 
@@ -579,7 +584,12 @@ button.projects-video-button:focus-visible .projects-video-button__icon {
 .projects-card__shade {
   position: absolute;
   inset: 0;
-  background: linear-gradient(0deg, rgb(5 10 10 / 94%) 0%, rgb(5 10 10 / 48%) 39%, rgb(5 10 10 / 0%) 72%);
+  background: linear-gradient(
+    0deg,
+    rgb(5 10 10 / 94%) 0%,
+    rgb(5 10 10 / 48%) 39%,
+    rgb(5 10 10 / 0%) 72%
+  );
   transition: background 300ms ease;
 }
 
@@ -590,7 +600,12 @@ button.projects-video-button:focus-visible .projects-video-button__icon {
 
 .projects-card__link:hover .projects-card__shade,
 .projects-card__link:focus-visible .projects-card__shade {
-  background: linear-gradient(0deg, rgb(5 10 10 / 97%) 0%, rgb(5 10 10 / 58%) 44%, rgb(5 10 10 / 5%) 76%);
+  background: linear-gradient(
+    0deg,
+    rgb(5 10 10 / 97%) 0%,
+    rgb(5 10 10 / 58%) 44%,
+    rgb(5 10 10 / 5%) 76%
+  );
 }
 
 .projects-card__tag {
@@ -708,7 +723,10 @@ button.projects-video-button:focus-visible .projects-video-button__icon {
   font-size: 0.68rem;
   font-weight: 750;
   cursor: pointer;
-  transition: background 160ms ease, border-color 160ms ease, transform 160ms ease;
+  transition:
+    background 160ms ease,
+    border-color 160ms ease,
+    transform 160ms ease;
 }
 
 .projects-pagination__button:first-child .inline-icon {
@@ -772,9 +790,7 @@ button.projects-video-button:focus-visible .projects-video-button__icon {
   position: absolute;
   z-index: -1;
   inset: 0;
-  background:
-    linear-gradient(90deg, rgb(7 14 16 / 84%), rgb(7 14 16 / 64%)),
-    rgb(7 14 16 / 30%);
+  background: linear-gradient(90deg, rgb(7 14 16 / 84%), rgb(7 14 16 / 64%)), rgb(7 14 16 / 30%);
 }
 
 .projects-coverage__content {
@@ -961,7 +977,12 @@ button.projects-video-button:focus-visible .projects-video-button__icon {
   position: absolute;
   z-index: -1;
   inset: 0;
-  background: linear-gradient(90deg, rgb(6 13 12 / 92%) 0%, rgb(6 13 12 / 68%) 55%, rgb(6 13 12 / 42%) 100%);
+  background: linear-gradient(
+    90deg,
+    rgb(6 13 12 / 92%) 0%,
+    rgb(6 13 12 / 68%) 55%,
+    rgb(6 13 12 / 42%) 100%
+  );
 }
 
 .projects-cta__content {

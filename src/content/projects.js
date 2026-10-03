@@ -17,7 +17,8 @@ const validateProjectCatalog = (catalog) => {
   const seenSlugs = new Set();
   for (const project of catalog.projects ?? []) {
     if (!project?.slug) throw new Error('Each project in projects.json must have a slug.');
-    if (seenSlugs.has(project.slug)) throw new Error(`Duplicate project slug in projects.json: ${project.slug}`);
+    if (seenSlugs.has(project.slug))
+      throw new Error(`Duplicate project slug in projects.json: ${project.slug}`);
     seenSlugs.add(project.slug);
 
     const latitude = Number(project.location?.coordinates?.lat);
@@ -28,7 +29,8 @@ const validateProjectCatalog = (catalog) => {
     if (!Number.isFinite(longitude) || longitude < -180 || longitude > 180) {
       throw new Error(`Invalid longitude (location.coordinates.lng) for project ${project.slug}.`);
     }
-    if (!project.location?.regionKey) throw new Error(`Missing regionKey for project ${project.slug}.`);
+    if (!project.location?.regionKey)
+      throw new Error(`Missing regionKey for project ${project.slug}.`);
 
     for (const locale of ['hy', 'ru', 'en']) {
       if (!project.translations?.[locale]?.title) {
@@ -69,9 +71,11 @@ const pageCopy = Object.freeze({
   ru: {
     meta: {
       title: 'Проекты солнечных электростанций в Армении | YOURENERGY',
-      description: 'Реализованные солнечные системы YOURENERGY для домов, бизнеса и производственных объектов в Армении.',
+      description:
+        'Реализованные солнечные системы YOURENERGY для домов, бизнеса и производственных объектов в Армении.',
       ogTitle: 'Реальные проекты солнечной энергетики | YOURENERGY',
-      ogDescription: 'Смотрите реализованные солнечные системы и опубликованные показатели проектов.'
+      ogDescription:
+        'Смотрите реализованные солнечные системы и опубликованные показатели проектов.'
     },
     hero: {
       kicker: 'НАШИ ПРОЕКТЫ',
@@ -134,7 +138,8 @@ const pageCopy = Object.freeze({
   hy: {
     meta: {
       title: 'Արևային կայանների նախագծեր Հայաստանում | YOURENERGY',
-      description: 'YOURENERGY-ի իրականացված արևային համակարգեր Հայաստանի տների, բիզնեսների և արտադրական օբյեկտների համար։',
+      description:
+        'YOURENERGY-ի իրականացված արևային համակարգեր Հայաստանի տների, բիզնեսների և արտադրական օբյեկտների համար։',
       ogTitle: 'Արևային էներգետիկայի իրական նախագծեր | YOURENERGY',
       ogDescription: 'Տեսեք իրականացված արևային համակարգերն ու նախագծերի հրապարակված ցուցանիշները։'
     },
@@ -199,7 +204,8 @@ const pageCopy = Object.freeze({
   en: {
     meta: {
       title: 'Solar Power Projects in Armenia | YOURENERGY',
-      description: 'Completed YOURENERGY solar installations for homes, businesses and industrial sites across Armenia.',
+      description:
+        'Completed YOURENERGY solar installations for homes, businesses and industrial sites across Armenia.',
       ogTitle: 'Real solar energy projects | YOURENERGY',
       ogDescription: 'See completed solar installations and the results they deliver.'
     },

@@ -101,6 +101,10 @@ export const normalizeConsumption = (
     'averageMonthlyConsumptionKwh'
   );
   if (averageMonthlyKwh !== null) {
+    const suppliedBill = getCalculatorInputNumber(
+      input.averageMonthlyBillAmd,
+      'averageMonthlyBillAmd'
+    );
     return {
       normalized: true,
       kind: 'monthly-average-kwh',
@@ -108,7 +112,7 @@ export const normalizeConsumption = (
       annualKwh: averageMonthlyKwh * MONTHS_PER_YEAR,
       monthlyKwh: null,
       averageMonthlyKwh,
-      averageMonthlyBillAmd: null,
+      averageMonthlyBillAmd: suppliedBill,
       issues,
       source: manualSource
     };

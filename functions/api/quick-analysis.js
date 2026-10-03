@@ -5,6 +5,7 @@ import {
   PriceBookRepository,
   buildRegionalQuickAnalysis,
   createAutomaticStandardResidentialTariff,
+  createAutomaticStandardResidentialTariffProfile,
   createUserTariffSelection,
   getArmeniaRegionalBenchmark,
   normalizeConsumption
@@ -39,7 +40,15 @@ const validateQuickInput = (body) => {
   // The server derives the standard residential reference rate itself.
   const tariffSelection =
     effectiveRate ??
-    createAutomaticStandardResidentialTariff(consumption.averageMonthlyKwh, ARMENIA_TARIFF_DATASET);
+    (Array.isArray(consumption.monthlyKwh)
+      ? createAutomaticStandardResidentialTariffProfile(
+          consumption.monthlyKwh,
+          ARMENIA_TARIFF_DATASET
+        )
+      : createAutomaticStandardResidentialTariff(
+          consumption.averageMonthlyKwh,
+          ARMENIA_TARIFF_DATASET
+        ));
   if (!tariffSelection.available) throw new ApiError('INVALID_INPUT');
 
   return { region, tariffSelection, consumption };

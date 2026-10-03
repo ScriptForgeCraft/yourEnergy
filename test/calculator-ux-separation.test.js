@@ -310,7 +310,7 @@ test('Professional monthly input and report controls describe their actual behav
   assert.match(consumptionInput, /Array\(12\)\.fill\(annual === null \? 0 : annual \/ 12\)/u);
   assert.match(consumptionInput, /base \+ \(index < remainder \? 1 : 0\)/u);
   assert.doesNotMatch(wizardCopy, /higher accuracy|более точного расчёта|Բարձր ճշգրտ/u);
-  assert.match(wizardCopy, /Финансовая оценка сейчас использует годовую сумму/u);
+  assert.match(wizardCopy, /тарифная группа определяется отдельно для каждого месяца/u);
   assert.match(template, /data-open-passport/u);
   assert.match(controller, /\[data-open-passport\]/u);
 });

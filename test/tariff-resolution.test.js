@@ -31,7 +31,11 @@ test('known monthly kWh automatically resolves every standard residential bracke
     assert.equal(selection.available, true);
     assert.equal(selection.kind, 'automatic-standard-residential');
     assert.equal(selection.tariff.tariffId, tariffId);
-    assert.equal(selection.tariff.period, 'day');
+    assert.equal(selection.tariff.period, 'day-night-range');
+    assert.equal(selection.tariff.rateAmdPerKwh, null);
+    assert.equal(selection.tariff.effectiveRateAmdPerKwh, null);
+    assert.equal(selection.tariff.minRateAmdPerKwh, selection.tariff.nightRateAmdPerKwh);
+    assert.equal(selection.tariff.maxRateAmdPerKwh, selection.tariff.dayRateAmdPerKwh);
   }
 });
 
@@ -109,7 +113,7 @@ test('legacy sessions retain only a safe custom effective-rate override', () => 
   assert.equal(session.read().effectiveRateOverride, null);
 });
 
-test('Quick and Professional calculator markup expose no legacy tariff controls in any locale', async () => {
+test('Quick and Professional expose compact average-rate controls without client-owned registry fields', async () => {
   const root = resolve(import.meta.dirname, '..');
   const [quickTemplate, professionalTemplate] = await Promise.all([
     readFile(resolve(root, 'src/templates/calculator-quick.hbs'), 'utf8'),
@@ -119,28 +123,35 @@ test('Quick and Professional calculator markup expose no legacy tariff controls 
     'data-tariff-selector',
     'data-tariff-period',
     'data-tariff-bracket',
-    'social-vulnerable',
-    'data-quick-tariff'
+    'social-vulnerable'
   ]) {
     assert.equal(quickTemplate.includes(removed), false);
     assert.equal(professionalTemplate.includes(removed), false);
   }
   assert.equal(professionalTemplate.includes('data-consumption-effective-rate'), true);
-  assert.equal(quickTemplate.includes('data-consumption-effective-rate'), false);
+  assert.equal(quickTemplate.includes('data-quick-effective-rate'), true);
+  assert.equal(quickTemplate.includes('data-quick-tariff-info'), true);
+  assert.equal(quickTemplate.includes('data-quick-tariff-options'), true);
+  assert.equal(professionalTemplate.includes('data-actual-day-kwh'), true);
+  assert.equal(professionalTemplate.includes('data-actual-night-kwh'), true);
+  assert.equal(quickTemplate.includes('data-actual-day-kwh'), false);
+  assert.equal(quickTemplate.includes('data-actual-night-kwh'), false);
+  assert.equal(quickTemplate.includes("name='quick-day-percent'"), false);
+  assert.equal(professionalTemplate.includes("name='day-percent'"), false);
   for (const locale of ['hy', 'ru', 'en']) {
     const quick = calculatorModes[locale].quick;
-    for (const removedKey of [
-      'tariffLabel',
-      'refineTariff',
-      'officialTariff',
-      'customTariff',
-      'socialVulnerable',
-      'tariffDay',
-      'tariffNight',
-      'chooseBracket',
-      'mixedTariffHelp'
+    for (const requiredKey of [
+      'tariffForSavings',
+      'standardTariff',
+      'customEffectiveRate',
+      'tariffInfoTitle',
+      'effectiveRateHelp',
+      'bracketUpTo',
+      'bracketBetween',
+      'bracketAbove'
     ]) {
-      assert.equal(removedKey in quick, false, `${locale} keeps ${removedKey}`);
+      assert.equal(typeof quick[requiredKey], 'string', `${locale} misses ${requiredKey}`);
     }
+    assert.equal(quick.tariffInfo.length, 4, `${locale} tariff info is incomplete`);
   }
 });

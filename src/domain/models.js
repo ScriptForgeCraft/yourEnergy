@@ -66,11 +66,14 @@
  * @property {string|null} tariffId
  * @property {string|null} datasetRevision
  * @property {'standard'|'user-provided'|null} customerType
- * @property {'day'|'night'|'custom'|null} period
+ * @property {'day'|'night'|'day-night-range'|'actual-day-night'|'custom'|null} period
  * @property {string} effectiveFrom
  * @property {string|null} effectiveTo
  * @property {'confirmed'|'provided'|'unavailable'} status
  * @property {number|null} rateAmdPerKwh
+ * @property {number|null} effectiveRateAmdPerKwh
+ * @property {number|null} minRateAmdPerKwh
+ * @property {number|null} maxRateAmdPerKwh
  * @property {string} currency
  * @property {SourceReference} source
  */

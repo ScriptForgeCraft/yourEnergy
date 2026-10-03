@@ -72,7 +72,7 @@
   row-gap: 0;
 }
 
-.calculator-page--professional .consumption-inputs fieldset {
+.calculator-page--professional .consumption-inputs > fieldset {
   display: grid;
   grid-column: 1 / -1;
   grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -84,7 +84,7 @@
   background: #f4f7fb;
 }
 
-.calculator-page--professional .consumption-inputs fieldset legend {
+.calculator-page--professional .consumption-inputs > fieldset legend {
   position: absolute;
   width: 1px;
   height: 1px;
@@ -94,7 +94,7 @@
   white-space: nowrap;
 }
 
-.calculator-page--professional .consumption-inputs fieldset > label {
+.calculator-page--professional .consumption-inputs > fieldset > label {
   position: relative;
   display: flex !important;
   min-height: 3.68rem;
@@ -120,7 +120,7 @@
   color: #58718f;
 }
 
-.calculator-page--professional .consumption-inputs fieldset > label:has(input:checked) {
+.calculator-page--professional .consumption-inputs > fieldset > label:has(input:checked) {
   z-index: 1;
   border-color: #167af3;
   color: #076deb;
@@ -130,13 +130,13 @@
 
 .calculator-page--professional
   .consumption-inputs
-  fieldset
+  > fieldset
   > label:has(input:checked)
   .consumption-mode-icon {
   color: #0877ef;
 }
 
-.calculator-page--professional .consumption-inputs fieldset input[type='radio'] {
+.calculator-page--professional .consumption-inputs > fieldset input[type='radio'] {
   position: absolute;
   width: 1px;
   height: 1px;
@@ -261,6 +261,7 @@
 }
 
 .calculator-page--professional .effective-rate {
+  min-width: 0;
   grid-column: 2;
   display: grid;
   align-content: start;
@@ -293,7 +294,9 @@
   background: #fff;
 }
 
-.calculator-page--professional .effective-rate [data-consumption-effective-rate] {
+.calculator-page--professional .effective-rate [data-consumption-effective-rate],
+.calculator-page--professional .effective-rate [data-actual-day-kwh],
+.calculator-page--professional .effective-rate [data-actual-night-kwh] {
   min-height: 0;
   height: 100%;
   margin: 0;
@@ -307,6 +310,69 @@
 
 .calculator-page--professional .effective-rate > .input-help {
   margin: 0;
+  color: #5c7491;
+  font-size: 0.67rem;
+  line-height: 1.4;
+}
+
+.calculator-page--professional .tariff-mode-options {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.5rem;
+  margin: 0.2rem 0 0;
+  border: 0;
+  padding: 0;
+}
+
+.calculator-page--professional .tariff-mode-options label {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  margin: 0;
+  color: #173553;
+  font-size: 0.76rem;
+  cursor: pointer;
+}
+
+.calculator-page--professional .tariff-mode-options label > span {
+  min-width: 0;
+}
+
+.calculator-page--professional .tariff-mode-options small,
+.calculator-page--professional .tariff-mode-options strong {
+  display: block;
+}
+
+.calculator-page--professional .tariff-mode-options small {
+  margin-top: 0.15rem;
+  color: #5c7491;
+  font-size: 0.66rem;
+  font-weight: 500;
+  line-height: 1.35;
+}
+
+.calculator-page--professional [data-professional-custom-tariff] > label,
+.calculator-page--professional .actual-day-night label {
+  color: #162b50;
+  font-size: 0.77rem;
+  font-weight: 780;
+}
+
+.calculator-page--professional .actual-day-night {
+  margin-top: 0.2rem;
+  border: 0;
+}
+
+.calculator-page--professional .actual-day-night__fields {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.55rem;
+  margin-top: 0.55rem;
+}
+
+.calculator-page--professional .actual-day-night .input-help,
+.calculator-page--professional [data-professional-custom-tariff] .input-help {
+  margin: 0.4rem 0 0;
   color: #5c7491;
   font-size: 0.67rem;
   line-height: 1.4;
@@ -757,7 +823,7 @@
     grid-template-columns: 1fr;
   }
 
-  .calculator-page--professional .consumption-inputs fieldset {
+  .calculator-page--professional .consumption-inputs > fieldset {
     grid-template-columns: 1fr;
   }
 

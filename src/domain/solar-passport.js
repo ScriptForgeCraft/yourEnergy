@@ -1,7 +1,7 @@
 import { cloneSerializable, cleanString, deepFreeze } from './numbers.js';
 import { ANALYSIS_SCHEMA_VERSION } from './solar-analysis.js';
 
-const SOLAR_PASSPORT_SCHEMA_VERSION = '1.0.0';
+const SOLAR_PASSPORT_SCHEMA_VERSION = '1.1.0';
 
 let passportSequence = 0;
 

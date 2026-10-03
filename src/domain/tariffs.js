@@ -9,6 +9,7 @@ const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/u;
 const TARIFF_PERIOD = Object.freeze({
   DAY: 'day',
   NIGHT: 'night',
+  RANGE: 'day-night-range',
   CUSTOM: 'custom'
 });
 
@@ -213,9 +214,8 @@ export const getUsableSurplusCompensationRate = (selectionOrCompensation) => {
 
 /**
  * Returns dated, verified standard residential records. Day/night rates remain
- * in the regulatory dataset, but consumer flows use the daytime rate as their
- * documented deterministic reference assumption rather than presenting a
- * time-of-use choice.
+ * in the regulatory dataset and form honest financial bounds when the actual
+ * customer load split is unknown.
  */
 const listRegistryTariffOptions = (
   dataset = ARMENIA_TARIFF_DATASET,
@@ -239,7 +239,7 @@ const listRegistryTariffOptions = (
  * decimal consumption continuous between adjacent tariff brackets.
  */
 export const tariffBracketIncludesMonthlyKwh = (record, monthlyKwh) => {
-  const consumption = getCalculatorInputNumber(monthlyKwh, 'averageMonthlyConsumptionKwh');
+  const consumption = getCalculatorInputNumber(monthlyKwh, 'monthlyProfileKwh');
   const normalized = normalizeRecord(record, record?.currency);
   if (
     consumption === null ||
@@ -269,8 +269,11 @@ export const suggestStandardTariff = (
   );
 };
 
-const STANDARD_RESIDENTIAL_DAY_RATE_ASSUMPTION =
-  'STANDARD_RESIDENTIAL_DAY_RATE_REFERENCE_FOR_PRELIMINARY_ESTIMATE';
+const STANDARD_RESIDENTIAL_RANGE_ASSUMPTION =
+  'STANDARD_RESIDENTIAL_DAY_NIGHT_RANGE_WITH_UNKNOWN_USAGE_SPLIT';
+const STANDARD_RESIDENTIAL_DAY_RATE_BILL_ESTIMATE_ASSUMPTION =
+  'STANDARD_RESIDENTIAL_DAY_RATE_REFERENCE_FOR_BILL_TO_KWH_ESTIMATE';
+const STANDARD_RESIDENTIAL_ACTUAL_SPLIT_ASSUMPTION = 'USER_PROVIDED_ACTUAL_DAY_NIGHT_CONSUMPTION';
 const BRACKET_BOUNDARY_EPSILON_KWH = 0.01;
 
 const createAutomaticSelectionFromRecord = (record, metadata, requestedDate) => ({
@@ -279,28 +282,32 @@ const createAutomaticSelectionFromRecord = (record, metadata, requestedDate) => 
   requestedDate,
   dataset: metadata,
   tariff: {
-    id: `${record.id}-automatic-day-reference`,
+    id: `${record.id}-automatic-range`,
     tariffId: record.id,
     datasetRevision: metadata.revision,
     customerType: 'standard',
-    // This describes the server's product assumption, never a customer
-    // selection exposed in the calculator UI.
-    period: TARIFF_PERIOD.DAY,
+    period: TARIFF_PERIOD.RANGE,
     minMonthlyKwh: record.minMonthlyKwh,
     minMonthlyKwhInclusive: record.minMonthlyKwhInclusive,
     maxMonthlyKwh: record.maxMonthlyKwh,
     effectiveFrom: record.effectiveFrom,
     effectiveTo: record.effectiveTo,
     status: 'confirmed',
-    rateAmdPerKwh: record.dayRate,
+    rateAmdPerKwh: null,
+    effectiveRateAmdPerKwh: null,
+    dayRateAmdPerKwh: record.dayRate,
+    nightRateAmdPerKwh: record.nightRate,
+    minRateAmdPerKwh: Math.min(record.dayRate, record.nightRate),
+    maxRateAmdPerKwh: Math.max(record.dayRate, record.nightRate),
+    accuracy: 'range',
     currency: record.currency,
     source: record.source,
     tariffSource: 'automatic-standard-residential',
-    assumption: STANDARD_RESIDENTIAL_DAY_RATE_ASSUMPTION
+    assumption: STANDARD_RESIDENTIAL_RANGE_ASSUMPTION
   },
   reason: 'AUTOMATIC_STANDARD_RESIDENTIAL_TARIFF',
   source: record.source,
-  assumption: STANDARD_RESIDENTIAL_DAY_RATE_ASSUMPTION
+  assumption: STANDARD_RESIDENTIAL_RANGE_ASSUMPTION
 });
 
 /**
@@ -325,10 +332,154 @@ export const createAutomaticStandardResidentialTariff = (
       tariff: null,
       reason: 'STANDARD_RESIDENTIAL_TARIFF_UNAVAILABLE',
       source: normalizeSource(dataset?.source),
-      assumption: STANDARD_RESIDENTIAL_DAY_RATE_ASSUMPTION
+      assumption: STANDARD_RESIDENTIAL_RANGE_ASSUMPTION
     };
   }
   return createAutomaticSelectionFromRecord(record, metadata, requestedDate);
+};
+
+/**
+ * Resolves every month independently. The summary remains a single tariff
+ * only when all twelve months belong to the same official bracket.
+ */
+export const createAutomaticStandardResidentialTariffProfile = (
+  monthlyKwh,
+  dataset = ARMENIA_TARIFF_DATASET,
+  effectiveDate = new Date()
+) => {
+  const requestedDate = toIsoDate(effectiveDate);
+  const metadata = datasetMetadata(dataset);
+  const values = Array.isArray(monthlyKwh)
+    ? monthlyKwh.map((value) => getCalculatorInputNumber(value, 'monthlyProfileKwh'))
+    : [];
+  if (!requestedDate || values.length !== 12 || values.some((value) => value === null)) {
+    return {
+      kind: 'unavailable',
+      available: false,
+      requestedDate,
+      dataset: metadata,
+      tariff: null,
+      monthlyTariffs: null,
+      reason: 'STANDARD_RESIDENTIAL_TARIFF_PROFILE_UNAVAILABLE',
+      source: normalizeSource(dataset?.source),
+      assumption: STANDARD_RESIDENTIAL_RANGE_ASSUMPTION
+    };
+  }
+
+  const monthlySelections = values.map((value) =>
+    createAutomaticStandardResidentialTariff(value, dataset, effectiveDate)
+  );
+  if (monthlySelections.some((selection) => !selection.available)) {
+    return {
+      kind: 'unavailable',
+      available: false,
+      requestedDate,
+      dataset: metadata,
+      tariff: null,
+      monthlyTariffs: null,
+      reason: 'STANDARD_RESIDENTIAL_TARIFF_PROFILE_UNAVAILABLE',
+      source: normalizeSource(dataset?.source),
+      assumption: STANDARD_RESIDENTIAL_RANGE_ASSUMPTION
+    };
+  }
+
+  const monthlyTariffs = monthlySelections.map((selection, monthIndex) => ({
+    monthIndex,
+    monthlyKwh: values[monthIndex],
+    ...selection.tariff
+  }));
+  const uniqueTariffIds = new Set(monthlyTariffs.map((tariff) => tariff.tariffId));
+  const tariff =
+    uniqueTariffIds.size === 1
+      ? { ...monthlySelections[0].tariff }
+      : {
+          id: 'standard-residential-monthly-profile-range',
+          tariffId: null,
+          datasetRevision: metadata.revision,
+          customerType: 'standard',
+          period: TARIFF_PERIOD.RANGE,
+          minMonthlyKwh: null,
+          minMonthlyKwhInclusive: true,
+          maxMonthlyKwh: null,
+          effectiveFrom: null,
+          effectiveTo: null,
+          status: 'confirmed',
+          rateAmdPerKwh: null,
+          effectiveRateAmdPerKwh: null,
+          dayRateAmdPerKwh: null,
+          nightRateAmdPerKwh: null,
+          minRateAmdPerKwh: Math.min(...monthlyTariffs.map((item) => item.minRateAmdPerKwh)),
+          maxRateAmdPerKwh: Math.max(...monthlyTariffs.map((item) => item.maxRateAmdPerKwh)),
+          accuracy: 'monthly-range',
+          currency: metadata.currency,
+          source: monthlySelections[0].source,
+          tariffSource: 'automatic-standard-residential',
+          assumption: STANDARD_RESIDENTIAL_RANGE_ASSUMPTION
+        };
+
+  return {
+    kind: 'automatic-standard-residential',
+    available: true,
+    requestedDate,
+    dataset: metadata,
+    tariff,
+    monthlyTariffs,
+    reason: 'AUTOMATIC_STANDARD_RESIDENTIAL_MONTHLY_TARIFFS',
+    source: monthlySelections[0].source,
+    assumption: STANDARD_RESIDENTIAL_RANGE_ASSUMPTION
+  };
+};
+
+/**
+ * Uses actual day/night kWh supplied for the same monthly period. The official
+ * rates still come exclusively from the registry.
+ */
+export const createStandardResidentialTariffFromActualDayNight = (
+  monthlyKwh,
+  { dayKwh, nightKwh } = {},
+  dataset = ARMENIA_TARIFF_DATASET,
+  effectiveDate = new Date()
+) => {
+  const selection = createAutomaticStandardResidentialTariff(monthlyKwh, dataset, effectiveDate);
+  const day = getCalculatorInputNumber(dayKwh, 'monthlyProfileKwh');
+  const night = getCalculatorInputNumber(nightKwh, 'monthlyProfileKwh');
+  const total = day === null || night === null ? null : day + night;
+  const expected = getCalculatorInputNumber(monthlyKwh, 'averageMonthlyConsumptionKwh');
+  if (
+    !selection.available ||
+    total === null ||
+    total <= 0 ||
+    expected === null ||
+    Math.abs(total - expected) > 0.01
+  ) {
+    return {
+      kind: 'unavailable',
+      available: false,
+      requestedDate: selection.requestedDate,
+      dataset: selection.dataset,
+      tariff: null,
+      reason: 'ACTUAL_DAY_NIGHT_CONSUMPTION_INVALID',
+      source: selection.source
+    };
+  }
+  const effectiveRateAmdPerKwh =
+    (day * selection.tariff.dayRateAmdPerKwh + night * selection.tariff.nightRateAmdPerKwh) / total;
+  return {
+    ...selection,
+    tariff: {
+      ...selection.tariff,
+      id: `${selection.tariff.tariffId}-actual-day-night`,
+      period: 'actual-day-night',
+      rateAmdPerKwh: effectiveRateAmdPerKwh,
+      effectiveRateAmdPerKwh,
+      accuracy: 'actual-day-night',
+      actualDayKwh: day,
+      actualNightKwh: night,
+      assumption: STANDARD_RESIDENTIAL_ACTUAL_SPLIT_ASSUMPTION
+    },
+    reason: 'STANDARD_RESIDENTIAL_ACTUAL_DAY_NIGHT_CONSUMPTION',
+    assumption: STANDARD_RESIDENTIAL_ACTUAL_SPLIT_ASSUMPTION
+  };
 };
 
 const standardResidentialRecords = (dataset, requestedDate) => {
@@ -369,7 +520,7 @@ export const estimateStandardResidentialConsumptionFromBill = (
     estimatedMonthlyKwh: null,
     tariff: null,
     rateAmdPerKwh: null,
-    assumption: STANDARD_RESIDENTIAL_DAY_RATE_ASSUMPTION,
+    assumption: STANDARD_RESIDENTIAL_DAY_RATE_BILL_ESTIMATE_ASSUMPTION,
     resolution: null,
     reason,
     source: normalizeSource(dataset?.source)
@@ -387,7 +538,7 @@ export const estimateStandardResidentialConsumptionFromBill = (
       estimatedMonthlyKwh: exact.kwh,
       tariff: createAutomaticSelectionFromRecord(exact.record, metadata, requestedDate).tariff,
       rateAmdPerKwh: exact.record.dayRate,
-      assumption: STANDARD_RESIDENTIAL_DAY_RATE_ASSUMPTION,
+      assumption: STANDARD_RESIDENTIAL_DAY_RATE_BILL_ESTIMATE_ASSUMPTION,
       resolution: 'within-bracket',
       reason: 'ESTIMATED_FROM_MONTHLY_BILL',
       source: { ...exact.record.source, status: SOURCE_STATUS.ESTIMATED }
@@ -419,7 +570,7 @@ export const estimateStandardResidentialConsumptionFromBill = (
     estimatedMonthlyKwh: nearest.kwh,
     tariff: createAutomaticSelectionFromRecord(nearest.record, metadata, requestedDate).tariff,
     rateAmdPerKwh: nearest.record.dayRate,
-    assumption: STANDARD_RESIDENTIAL_DAY_RATE_ASSUMPTION,
+    assumption: STANDARD_RESIDENTIAL_DAY_RATE_BILL_ESTIMATE_ASSUMPTION,
     resolution: 'nearest-valid-boundary',
     reason: 'ESTIMATED_FROM_MONTHLY_BILL_BOUNDARY_FALLBACK',
     source: { ...nearest.record.source, status: SOURCE_STATUS.ESTIMATED }
@@ -472,6 +623,10 @@ export const createUserTariffSelection = (input = {}, effectiveDate = new Date()
       effectiveTo: null,
       status: 'provided',
       rateAmdPerKwh,
+      effectiveRateAmdPerKwh: rateAmdPerKwh,
+      minRateAmdPerKwh: rateAmdPerKwh,
+      maxRateAmdPerKwh: rateAmdPerKwh,
+      accuracy: 'effective-rate',
       currency: 'AMD',
       source,
       tariffSource: 'user-provided-effective-rate'
@@ -502,4 +657,39 @@ export const getUsableTariffRate = (selectionOrTariff) => {
     return tariff.currency === 'AMD' ? tariff.rateAmdPerKwh : null;
   }
   return getConfirmedTariffRate(selectionOrTariff);
+};
+
+/** Returns financial bounds without inventing a day/night usage split. */
+export const getFinancialTariffRateRange = (selectionOrTariff) => {
+  const selection = selectionOrTariff?.tariff ? selectionOrTariff : null;
+  const tariff = selection?.tariff ?? selectionOrTariff;
+  if (selection && !selection.available) return null;
+  if (selection?.kind === 'user') {
+    const rate = getUsableTariffRate(selection);
+    return rate === null
+      ? null
+      : { min: rate, max: rate, effective: rate, accuracy: 'effective-rate' };
+  }
+  if (selection?.kind === 'automatic-standard-residential') {
+    const effective = toPositiveNumberOrNull(
+      tariff?.effectiveRateAmdPerKwh ?? tariff?.rateAmdPerKwh
+    );
+    if (effective !== null) {
+      return {
+        min: effective,
+        max: effective,
+        effective,
+        accuracy: tariff?.accuracy ?? 'actual-day-night'
+      };
+    }
+    const min = toPositiveNumberOrNull(tariff?.minRateAmdPerKwh);
+    const max = toPositiveNumberOrNull(tariff?.maxRateAmdPerKwh);
+    return min !== null && max !== null && min <= max
+      ? { min, max, effective: null, accuracy: tariff?.accuracy ?? 'range' }
+      : null;
+  }
+  const rate = getUsableTariffRate(selectionOrTariff);
+  return rate === null
+    ? null
+    : { min: rate, max: rate, effective: rate, accuracy: 'effective-rate' };
 };

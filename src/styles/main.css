@@ -29,7 +29,6 @@
   box-sizing: border-box;
 }
 
-
 html,
 body,
 body * {
@@ -1224,5 +1223,3 @@ h1 mark {
     transition-duration: 0.01ms !important;
   }
 }
-
-

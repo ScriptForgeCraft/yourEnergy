@@ -217,13 +217,32 @@
                   <div class='month-inputs'>{{#each passport.months}}<label>{{short}}<input id='consumption-month-{{@index}}' name='consumption-month-{{@index}}' type='text'
                         inputmode='decimal' autocomplete='off' data-consumption-month /></label>{{/each}}</div>
                 </div>
-                <details class='effective-rate' data-effective-rate-disclosure>
-                  <summary>{{product.consumption.refineEffectiveRate}}</summary>
-                  <label><span>{{product.consumption.effectiveRateLabel}}</span>
-                    <div class='input-with-unit'><input id='consumption-effective-rate' name='effective-rate' type='text' inputmode='decimal'
-                        autocomplete='off' data-consumption-effective-rate aria-describedby='consumption-effective-rate-help' /><span>AMD/kWh</span></div>
-                  </label>
-                  <p class='input-help' id='consumption-effective-rate-help'>{{product.consumption.effectiveRateHelp}}</p>
+                <details class='effective-rate tariff-setting' data-effective-rate-disclosure>
+                  <summary>{{product.consumption.tariffSettingTitle}}</summary>
+                  <fieldset class='tariff-mode-options' data-professional-tariff-options>
+                    <legend class='visually-hidden'>{{product.consumption.tariffModeLabel}}</legend>
+                    <label><input type='radio' name='professional-tariff-mode' value='standard' checked />
+                      <span><strong>{{product.consumption.standardTariff}}</strong><small data-professional-standard-tariff>{{product.consumption.standardRangePending}}</small></span>
+                    </label>
+                    <label><input type='radio' name='professional-tariff-mode' value='custom-effective' />
+                      <span><strong>{{product.consumption.customEffectiveRate}}</strong></span>
+                    </label>
+                  </fieldset>
+                  <div data-professional-custom-tariff hidden>
+                    <label><span>{{product.consumption.effectiveRateLabel}}</span>
+                      <div class='input-with-unit'><input id='consumption-effective-rate' name='effective-rate' type='text' inputmode='decimal'
+                          autocomplete='off' data-consumption-effective-rate aria-describedby='consumption-effective-rate-help' /><span>AMD/kWh</span></div>
+                    </label>
+                    <p class='input-help' id='consumption-effective-rate-help'>{{product.consumption.effectiveRateHelp}}</p>
+                  </div>
+                  <details class='actual-day-night' data-actual-day-night-disclosure>
+                    <summary>{{product.consumption.actualDayNightDisclosure}}</summary>
+                    <div class='actual-day-night__fields'>
+                      <label><span>{{product.consumption.actualDayLabel}}</span><div class='input-with-unit'><input name='actual-day-kwh' type='text' inputmode='decimal' autocomplete='off' data-actual-day-kwh aria-describedby='actual-day-night-help' /><span>kWh</span></div></label>
+                      <label><span>{{product.consumption.actualNightLabel}}</span><div class='input-with-unit'><input name='actual-night-kwh' type='text' inputmode='decimal' autocomplete='off' data-actual-night-kwh aria-describedby='actual-day-night-help' /><span>kWh</span></div></label>
+                    </div>
+                    <p class='input-help' id='actual-day-night-help'>{{product.consumption.actualDayNightHelp}}</p>
+                  </details>
                 </details>
                 <div class='consumption-estimate'>
                   <span class='consumption-estimate__icon' aria-hidden='true'><svg><use href='/icons.svg#zap'></use></svg></span>

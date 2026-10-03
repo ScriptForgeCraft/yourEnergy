@@ -121,11 +121,25 @@ export default {
       billLabel: 'Средний счёт за электричество',
       billHelp: 'Укажите среднюю сумму за месяц в драмах.',
       refineEffectiveRate: 'Уточнить стоимость электроэнергии',
-      effectiveRateLabel: 'Фактический средний тариф',
+      tariffSettingTitle: 'Тариф для финансового расчёта',
+      tariffModeLabel: 'Режим финансового тарифа',
+      standardTariff: 'Стандартный бытовой тариф',
+      customEffectiveRate: 'Указать среднюю стоимость',
+      effectiveRateLabel: 'Средняя стоимость 1 kWh',
       effectiveRateHelp:
-        'Необязательно. Если вы знаете фактический средний тариф из своего счёта, укажите его здесь.',
-      automaticStandardTariff: 'Автоматический стандартный бытовой тариф',
-      userProvidedEffectiveRate: 'Фактический тариф, указанный пользователем',
+        'Посмотрите среднюю стоимость в вашем счёте или разделите сумму счёта на потребление в kWh.',
+      automaticStandardTariff: 'Стандартный бытовой тариф',
+      userProvidedEffectiveRate: 'Средняя стоимость, указанная пользователем',
+      bracketUpTo: 'До {max} kWh/месяц',
+      bracketBetween: '{min}–{max} kWh/месяц',
+      bracketAbove: 'Свыше {min} kWh/месяц',
+      monthlyBracket: 'Тарифная группа определяется для каждого месяца',
+      standardRangePending: 'Группа определится после ввода потребления',
+      actualDayNightDisclosure: 'У меня есть отдельные показания День / Ночь из счёта',
+      actualDayLabel: 'День',
+      actualNightLabel: 'Ночь',
+      actualDayNightHelp: 'Сумма двух значений должна совпадать с месячным потреблением.',
+      invalidDayNight: 'Укажите корректные дневные и ночные kWh за тот же месяц.',
       usageLabel: 'Среднее потребление в месяц',
       usageHelp: 'Укажите среднее потребление в kWh за месяц.',
       monthlyTitle: 'Потребление за 12 месяцев',
@@ -309,6 +323,12 @@ export default {
           'Для предварительной вместимости используется модуль из каталога оборудования; итоговую спецификацию подтверждает инженер.',
         USER_PROVIDED_TARIFF:
           'Тариф введён пользователем из счёта и не является тарифным реестром.',
+        STANDARD_RESIDENTIAL_DAY_NIGHT_RANGE_WITH_UNKNOWN_USAGE_SPLIT:
+          'Распределение потребления по дневному и ночному стандартному тарифу неизвестно, поэтому финансовый результат показан диапазоном.',
+        USER_PROVIDED_ACTUAL_DAY_NIGHT_CONSUMPTION:
+          'Эффективная ставка рассчитана по фактическим дневным и ночным kWh, указанным пользователем.',
+        STANDARD_RESIDENTIAL_DAY_RATE_REFERENCE_FOR_BILL_TO_KWH_ESTIMATE:
+          'Только для оценки потребления по сумме счёта дневная стандартная ставка использована как ориентир.',
         OWNER_MANAGED_PRICEBOOK_NOT_OFFER:
           'Прайс-лист, управляемый владельцем, — ориентир для предварительного бюджета, а не оферта или договорная цена.',
         MAP_PROJECTED_AREA_CONVERTED_TO_ROOF_PLANE:

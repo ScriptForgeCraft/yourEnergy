@@ -308,7 +308,10 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
   const savedProfessionalIdentity = createProfessionalAnalysisIdentity({
     property: savedSession.property?.coordinates,
     consumption: savedSession.consumption,
-    tariff: savedSession.effectiveRateOverride,
+    tariff:
+      savedSession.financialTariffMode === 'custom-effective'
+        ? savedSession.effectiveRateOverride
+        : savedSession.standardDayNightReadings,
     roof: savedRoofForIdentity,
     system: { capacityKwp: PVGIS_KWP, lossPercent: PVGIS_LOSS },
     panelId: recommendedPanelId,
@@ -336,7 +339,9 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
       : WIZARD_STEP_STATUSES.LOCKED,
     roof: savedSession.roof ?? null,
     consumption: savedSession.consumption ?? null,
+    financialTariffMode: savedSession.financialTariffMode ?? 'standard',
     effectiveRateOverride: savedSession.effectiveRateOverride ?? null,
+    standardDayNightReadings: savedSession.standardDayNightReadings ?? null,
     storageRequired: savedStorageRequired,
     analysis: restoredAnalysis,
     solarPassport: restoredAnalysis ? (savedSession.professionalSolarPassport ?? null) : null,
@@ -373,7 +378,9 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
       sitePotential: state.sitePotential,
       roof: state.roof,
       consumption: state.consumption,
+      financialTariffMode: state.financialTariffMode,
       effectiveRateOverride: state.effectiveRateOverride,
+      standardDayNightReadings: state.standardDayNightReadings,
       storageRequired: state.storageRequired,
       professionalAnalysis: state.analysis,
       professionalAnalysisStatus: state.analysisStatus,
@@ -1265,7 +1272,10 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
         source: 'manual'
       },
       consumption: state.consumption,
-      tariff: state.effectiveRateOverride,
+      tariff:
+        state.financialTariffMode === 'custom-effective'
+          ? state.effectiveRateOverride
+          : state.standardDayNightReadings,
       roof: {
         areaMethod: roof.areaMethod,
         mountingMode: roof.mountingMode,
@@ -1305,6 +1315,8 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
     if (!validateRoof()) return;
     state.consumption = consumption.value;
     state.effectiveRateOverride = consumption.tariff;
+    state.financialTariffMode = consumption.tariffMode;
+    state.standardDayNightReadings = consumption.actualDayNight;
     const payload = buildPayload();
     // Persist every roof value used in this exact request. Without this,
     // untouched default controls are absent from a freshly drawn map outline,
@@ -1425,11 +1437,16 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
   const consumptionInput = initConsumptionInput({
     root: root.querySelector('[data-consumption-inputs]'),
     strings: product.consumption ?? {},
+    locale,
     initialEffectiveRate: state.effectiveRateOverride,
+    initialTariffMode: state.financialTariffMode,
+    initialActualDayNight: state.standardDayNightReadings,
     onChange: () => {
       const draft = consumptionInput?.inspect();
       state.consumption = draft?.valid ? draft.value : null;
       state.effectiveRateOverride = draft?.valid ? draft.tariff : null;
+      state.financialTariffMode = draft?.valid ? draft.tariffMode : 'standard';
+      state.standardDayNightReadings = draft?.valid ? draft.actualDayNight : null;
       // Consumption and its optional effective rate are shared with Quick. A Professional edit
       // cannot leave an earlier regional result visible for different inputs.
       session.clearQuickAnalysis();
@@ -1556,6 +1573,8 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
     }
     state.consumption = consumption.value;
     state.effectiveRateOverride = consumption.tariff;
+    state.financialTariffMode = consumption.tariffMode;
+    state.standardDayNightReadings = consumption.actualDayNight;
     setStep(2);
   });
   const useRoofMap = (action) => {

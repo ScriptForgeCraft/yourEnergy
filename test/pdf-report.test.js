@@ -131,6 +131,37 @@ test('PDF uses the completed analysis for PVGIS and automatic-tariff provenance'
   assert.doesNotMatch(html, /visitor-rate/u);
 });
 
+test('PDF renders automatic standard savings and payback as ranges', () => {
+  const options = createOptions();
+  options.analysis.financial = {
+    tariff: {
+      kind: 'automatic-standard-residential',
+      tariffId: 'standard-over-400',
+      bracketMinMonthlyKwh: 400,
+      bracketMaxMonthlyKwh: null,
+      minRateAmdPerKwh: 43.48,
+      maxRateAmdPerKwh: 53.48,
+      source: { provider: 'Electric Networks of Armenia / PSRC' }
+    }
+  };
+  options.analysis.selectedScenario.financial = {
+    annualSavingsAmd: null,
+    annualSavingsRangeAmd: { min: 168_000, max: 205_000 },
+    paybackYears: null,
+    paybackRangeYears: { min: 6.1, max: 7.4 },
+    grossSavings25YearsAmd: null,
+    grossSavings25YearsRangeAmd: { min: 4_200_000, max: 5_125_000 }
+  };
+
+  const html = createCalculatorPdfReportHtml(options);
+
+  assert.match(html, /168,000–205,000 AMD/u);
+  assert.match(html, /6\.1–7\.4/u);
+  assert.match(html, /43\.48–53\.48 AMD\/kWh/u);
+  assert.match(html, /ENA \/ PSRC/u);
+  assert.doesNotMatch(html, />205,000 AMD</u);
+});
+
 test('PDF report escapes localized copy before rendering HTML', () => {
   const options = createOptions();
   options.wizard = {

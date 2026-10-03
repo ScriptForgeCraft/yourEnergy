@@ -6,8 +6,8 @@ import {
 } from './quick-analysis-identity.js';
 
 const SESSION_KEY = 'yourenergy.calculator.v2';
-const SESSION_VERSION = 7;
-const LEGACY_SESSION_VERSIONS = new Set([2, 3, 4, 5, 6]);
+const SESSION_VERSION = 8;
+const LEGACY_SESSION_VERSIONS = new Set([2, 3, 4, 5, 6, 7]);
 
 const cloneSafe = (value) => {
   if (!value || typeof value !== 'object') return value ?? null;
@@ -20,6 +20,15 @@ const cloneSafe = (value) => {
 
 const normalizeSessionChanges = (changes = {}) => {
   const next = cloneSafe(changes) ?? {};
+  if (next.financialTariffMode === 'standard') next.effectiveRateOverride = null;
+  if (next.financialTariffMode === 'custom-effective') next.standardDayNightReadings = null;
+  if (
+    Object.hasOwn(next, 'effectiveRateOverride') &&
+    next.effectiveRateOverride?.rateAmdPerKwh &&
+    !Object.hasOwn(next, 'financialTariffMode')
+  ) {
+    next.financialTariffMode = 'custom-effective';
+  }
   if (!Object.hasOwn(next, 'userTariff') || Object.hasOwn(next, 'effectiveRateOverride'))
     return next;
   const legacyTariff = next.userTariff;
@@ -37,7 +46,9 @@ const emptyState = () => ({
   currentStep: 0,
   regionId: null,
   consumption: null,
+  financialTariffMode: 'standard',
   effectiveRateOverride: null,
+  standardDayNightReadings: null,
   property: null,
   roof: null,
   sitePotential: null,
@@ -73,7 +84,9 @@ const migrateFinancialModelState = (stored = {}) => {
   return {
     ...emptyState(),
     ...stored,
+    financialTariffMode: effectiveRateOverride ? 'custom-effective' : 'standard',
     effectiveRateOverride,
+    standardDayNightReadings: null,
     version: SESSION_VERSION,
     quickAnalysis: null,
     quickAnalysisStatus: 'idle',
@@ -96,6 +109,16 @@ const readStoredState = (stored) => {
   delete state.analysisStatus;
   delete state.solarPassport;
   delete state.userTariff;
+  const activeRate = Number(state.effectiveRateOverride?.rateAmdPerKwh);
+  if (
+    state.financialTariffMode !== 'custom-effective' ||
+    !Number.isFinite(activeRate) ||
+    activeRate <= 0
+  ) {
+    state.financialTariffMode = 'standard';
+    state.effectiveRateOverride = null;
+  }
+  if (state.financialTariffMode !== 'standard') state.standardDayNightReadings = null;
   const currentQuickIdentity = createQuickAnalysisIdentity({
     regionId: state.regionId,
     consumption: state.consumption,

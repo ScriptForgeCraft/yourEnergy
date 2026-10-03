@@ -255,6 +255,7 @@ const copy = {
       sourcesTitle: 'Աղբյուրներ',
       sourcePvgis: 'Արևային տվյալներ — Եվրոպական հանձնաժողովի Համատեղ հետազոտական կենտրոն',
       sourceTariff: 'Սակագին',
+      sourceTariffRegistry: 'ENA / PSRC',
       sourceEquipment: 'Սարքավորումների կատալոգ',
       sourcePricebook: 'Գնացուցակ',
       sourceConfirmed: 'հաստատված',
@@ -339,7 +340,7 @@ const copy = {
         monthlyTitle: 'Ամսական սպառում',
         optional: 'ընտրովի',
         monthlyCopy:
-          'Մուտքագրեք փաստացի ամսական սպառումը՝ այն սեզոնային արևային արտադրության հետ համեմատելու համար։ Ֆինանսական գնահատումը ներկայում օգտագործում է տարեկան գումարը։',
+          'Մուտքագրեք փաստացի ամսական սպառումը՝ այն սեզոնային արևային արտադրության հետ համեմատելու համար։ Ֆինանսական գնահատման համար ստանդարտ սակագնային խումբը որոշվում է յուրաքանչյուր ամսվա համար առանձին։',
         kwh: 'kWh',
         amd: 'AMD',
         fillAverage: 'Բաժանել տարեկան արժեքը հավասար',
@@ -348,7 +349,7 @@ const copy = {
         tipBillCopy: 'Միջին ամսական գումարը կարող եք գտնել կոմունալ վճարման հաշվում։',
         tipMonthlyTitle: 'Օգտագործեք ամսական տվյալներ, եթե կան',
         tipMonthlyCopy:
-          'Ամսական տվյալները օգնում են սեզոնային համեմատությանը։ Ֆինանսական գնահատումը հիմնվում է տարեկան ընդհանուրի վրա։',
+          'Ամսական տվյալներն օգնում են սեզոնային համեմատությանը և թույլ են տալիս կիրառել յուրաքանչյուր ամսվա սակագնային խումբը։',
         tipTariffTitle: 'Սակագինը կարևոր է',
         tipTariffCopy: 'Սակագները փոխում են ֆինանսական գնահատումն ու հետգնման ժամկետը։',
         advancedCopy: 'Ամսական պրոֆիլն ու Ձեր նշած սակագինը պահպանվում են հաշվարկում։',
@@ -634,6 +635,7 @@ const copy = {
       sourcesTitle: 'Источники',
       sourcePvgis: 'Солнечные данные — Объединённый исследовательский центр Европейской комиссии',
       sourceTariff: 'Тариф',
+      sourceTariffRegistry: 'ENA / PSRC',
       sourceEquipment: 'Каталог оборудования',
       sourcePricebook: 'Прайс-лист',
       sourceConfirmed: 'подтверждено',
@@ -719,7 +721,7 @@ const copy = {
         monthlyTitle: 'Потребление по месяцам',
         optional: 'необязательно',
         monthlyCopy:
-          'Введите фактическое потребление по месяцам, чтобы сравнить его с солнечной выработкой по сезонам. Финансовая оценка сейчас использует годовую сумму.',
+          'Введите фактическое потребление по месяцам, чтобы сравнить его с солнечной выработкой по сезонам. Для финансовой оценки стандартная тарифная группа определяется отдельно для каждого месяца.',
         kwh: 'кВт·ч',
         amd: 'AMD',
         fillAverage: 'Равномерно распределить годовое значение',
@@ -728,7 +730,7 @@ const copy = {
         tipBillCopy: 'Среднюю сумму за месяц можно найти в коммунальном счёте.',
         tipMonthlyTitle: 'Используйте помесячные данные, если они есть',
         tipMonthlyCopy:
-          'Помесячные данные помогают сезонному сравнению. Финансовая оценка основана на годовой сумме.',
+          'Помесячные данные помогают сезонному сравнению и позволяют применить тарифную группу каждого месяца.',
         tipTariffTitle: 'Тариф имеет значение',
         tipTariffCopy: 'Разные тарифы влияют на финансовую оценку и срок окупаемости.',
         advancedCopy: 'Помесячный профиль и введённый тариф сохраняются для следующего расчёта.',
@@ -1014,6 +1016,7 @@ const copy = {
       sourcesTitle: 'Sources',
       sourcePvgis: 'Solar data — European Commission Joint Research Centre',
       sourceTariff: 'Tariff',
+      sourceTariffRegistry: 'ENA / PSRC',
       sourceEquipment: 'Equipment catalogue',
       sourcePricebook: 'Price book',
       sourceConfirmed: 'confirmed',
@@ -1099,7 +1102,7 @@ const copy = {
         monthlyTitle: 'Monthly consumption',
         optional: 'optional',
         monthlyCopy:
-          'Enter actual monthly consumption to compare it with solar production by season. The financial estimate currently uses the annual total.',
+          'Enter actual monthly consumption to compare it with solar production by season. For the financial estimate, the standard tariff band is selected separately for each month.',
         kwh: 'kWh',
         amd: 'AMD',
         fillAverage: 'Spread annual value evenly',
@@ -1108,7 +1111,7 @@ const copy = {
         tipBillCopy: 'You can find the average monthly amount on your utility bill.',
         tipMonthlyTitle: 'Use monthly data if available',
         tipMonthlyCopy:
-          'Monthly data helps seasonal comparison. The financial estimate uses the annual total.',
+          'Monthly data helps seasonal comparison and applies the tariff band for each month.',
         tipTariffTitle: 'Tariff matters',
         tipTariffCopy: 'Different tariffs affect the financial analysis and payback period.',
         advancedCopy:

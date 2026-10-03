@@ -121,11 +121,25 @@ export default {
       billLabel: 'Average electricity bill',
       billHelp: 'Enter the average monthly amount in AMD.',
       refineEffectiveRate: 'Refine electricity cost',
-      effectiveRateLabel: 'Actual average tariff',
+      tariffSettingTitle: 'Tariff for the financial estimate',
+      tariffModeLabel: 'Financial tariff mode',
+      standardTariff: 'Standard residential tariff',
+      customEffectiveRate: 'Enter an average price',
+      effectiveRateLabel: 'Average price per kWh',
       effectiveRateHelp:
-        'Optional. If you know the effective average rate from your electricity bill, enter it here.',
-      automaticStandardTariff: 'Automatic standard residential tariff',
-      userProvidedEffectiveRate: 'User-provided effective tariff',
+        'Use the average price on your bill, or divide the bill amount by consumption in kWh.',
+      automaticStandardTariff: 'Standard residential tariff',
+      userProvidedEffectiveRate: 'Average rate from user',
+      bracketUpTo: 'Up to {max} kWh/month',
+      bracketBetween: '{min}–{max} kWh/month',
+      bracketAbove: 'Above {min} kWh/month',
+      monthlyBracket: 'The tariff band is selected for each month',
+      standardRangePending: 'The band will be selected after consumption is entered',
+      actualDayNightDisclosure: 'I have separate Day / Night readings from my bill',
+      actualDayLabel: 'Day',
+      actualNightLabel: 'Night',
+      actualDayNightHelp: 'The two values must add up to the monthly consumption.',
+      invalidDayNight: 'Enter valid day and night kWh for the same month.',
       usageLabel: 'Average monthly consumption',
       usageHelp: 'Enter the average monthly consumption in kWh.',
       monthlyTitle: 'Consumption over 12 months',
@@ -310,6 +324,12 @@ export default {
           'Preliminary capacity uses a module from the equipment catalog; an engineer must confirm the final specification.',
         USER_PROVIDED_TARIFF:
           'The tariff was entered by the visitor from a bill and is not a tariff registry record.',
+        STANDARD_RESIDENTIAL_DAY_NIGHT_RANGE_WITH_UNKNOWN_USAGE_SPLIT:
+          'The standard day/night consumption split is unknown, so the financial result is shown as a range.',
+        USER_PROVIDED_ACTUAL_DAY_NIGHT_CONSUMPTION:
+          'The effective rate is calculated from actual day and night kWh supplied by the user.',
+        STANDARD_RESIDENTIAL_DAY_RATE_REFERENCE_FOR_BILL_TO_KWH_ESTIMATE:
+          'The standard day rate is used only as a reference when estimating consumption from a bill amount.',
         OWNER_MANAGED_PRICEBOOK_NOT_OFFER:
           'The owner-managed price list is a preliminary budget guide, not an offer or contractual price.',
         MAP_PROJECTED_AREA_CONVERTED_TO_ROOF_PLANE:

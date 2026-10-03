@@ -114,12 +114,31 @@ test('Professional lead preserves the server-derived automatic tariff', () => {
         tariff: {
           kind: 'automatic-standard-residential',
           tariffId: 'standard-201-to-400',
-          rateAmdPerKwh: 48.48
+          bracketMinMonthlyKwh: 200,
+          bracketMaxMonthlyKwh: 400,
+          dayRateAmdPerKwh: 48.48,
+          nightRateAmdPerKwh: 38.48,
+          minRateAmdPerKwh: 38.48,
+          maxRateAmdPerKwh: 48.48,
+          effectiveRateAmdPerKwh: null,
+          rateAmdPerKwh: null
         }
       },
       selectedScenario: {}
     }
   });
 
-  assert.equal(context.tariffAmdPerKwh, 48.48);
+  assert.equal(context.tariffAmdPerKwh, null);
+  assert.deepEqual(context.financialTariff, {
+    sourceType: 'automatic-standard-residential',
+    tariffId: 'standard-201-to-400',
+    bracketMinMonthlyKwh: 200,
+    bracketMaxMonthlyKwh: 400,
+    dayRateAmdPerKwh: 48.48,
+    nightRateAmdPerKwh: 38.48,
+    minRateAmdPerKwh: 38.48,
+    maxRateAmdPerKwh: 48.48,
+    effectiveRateAmdPerKwh: null,
+    monthlyTariffs: null
+  });
 });

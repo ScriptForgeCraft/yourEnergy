@@ -14,6 +14,14 @@ const wholeProfile = (values) =>
     ? values.map(finite)
     : null;
 
+const finiteRange = (value) => {
+  const minimum = finite(value?.min);
+  const maximum = finite(value?.max);
+  return minimum !== null && maximum !== null && minimum <= maximum
+    ? { min: minimum, max: maximum }
+    : null;
+};
+
 const compactEquipment = (item, details = '') => {
   if (!item || typeof item !== 'object') return null;
   const name = [
@@ -47,6 +55,7 @@ export const buildProfessionalLeadContext = ({ analysis, state } = {}) => {
   const inverter = analysis?.inverterRecommendation;
   const storage = analysis?.storageRecommendation;
   const mounting = analysis?.mountingHardwareRecommendation;
+  const tariff = analysis?.financial?.tariff ?? {};
 
   return {
     kind: 'professional',
@@ -68,6 +77,31 @@ export const buildProfessionalLeadContext = ({ analysis, state } = {}) => {
     tariffAmdPerKwh: finite(
       analysis?.financial?.tariff?.rateAmdPerKwh ?? state?.effectiveRateOverride?.rateAmdPerKwh
     ),
+    financialTariff: {
+      sourceType:
+        tariff.kind === 'user'
+          ? 'user-provided-effective-rate'
+          : tariff.kind === 'automatic-standard-residential'
+            ? 'automatic-standard-residential'
+            : null,
+      tariffId: cleanText(tariff.tariffId) || null,
+      bracketMinMonthlyKwh: finite(tariff.bracketMinMonthlyKwh),
+      bracketMaxMonthlyKwh: finite(tariff.bracketMaxMonthlyKwh),
+      dayRateAmdPerKwh: finite(tariff.dayRateAmdPerKwh),
+      nightRateAmdPerKwh: finite(tariff.nightRateAmdPerKwh),
+      minRateAmdPerKwh: finite(tariff.minRateAmdPerKwh),
+      maxRateAmdPerKwh: finite(tariff.maxRateAmdPerKwh),
+      effectiveRateAmdPerKwh: finite(tariff.effectiveRateAmdPerKwh),
+      monthlyTariffs: Array.isArray(tariff.monthlyTariffs)
+        ? tariff.monthlyTariffs.map((month) => ({
+            monthIndex: finite(month.monthIndex),
+            monthlyKwh: finite(month.monthlyKwh),
+            tariffId: cleanText(month.tariffId) || null,
+            minRateAmdPerKwh: finite(month.minRateAmdPerKwh),
+            maxRateAmdPerKwh: finite(month.maxRateAmdPerKwh)
+          }))
+        : null
+    },
     roof: {
       areaMethod: cleanText(roof.areaMethod) || null,
       areaSqm: finite(normalizedRoof.areaSqm ?? roof.effectiveAreaSqm),
@@ -95,6 +129,9 @@ export const buildProfessionalLeadContext = ({ analysis, state } = {}) => {
       surplusGenerationKwh: finite(balance.surplusEnergyKwh),
       coveragePercent: finite(scenario.coveragePercent),
       annualSavingsAmd: finite(financial.annualSavingsAmd),
+      annualSavingsRangeAmd: finiteRange(financial.annualSavingsRangeAmd),
+      paybackYears: finite(financial.paybackYears),
+      paybackRangeYears: finiteRange(financial.paybackRangeYears),
       avoidedCo2Tons: finite(analysis?.environmental?.avoidedCo2Tons),
       source: cleanText(analysis?.production?.source?.provider) || null
     },
