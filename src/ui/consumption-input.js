@@ -1,5 +1,8 @@
 import { getCalculatorInputNumber, isCalculatorInputInRange } from '../domain/calculator-inputs.js';
-import { estimateStandardResidentialConsumptionFromBill } from '../domain/tariffs.js';
+import {
+  createAutomaticStandardResidentialTariff,
+  estimateStandardResidentialConsumptionFromBill
+} from '../domain/tariffs.js';
 
 const monthlyUsage = (value) => getCalculatorInputNumber(value, 'averageMonthlyConsumptionKwh');
 const monthlyBill = (value) => getCalculatorInputNumber(value, 'averageMonthlyBillAmd');
@@ -74,6 +77,13 @@ export const initConsumptionInput = ({
       annual = monthly.reduce((total, value) => total + value, 0);
     }
     if (!isCalculatorInputInRange(annual, 'annualConsumptionKwh')) annual = null;
+    // Match the server's automatic standard-residential reference for the
+    // usage and monthly-profile modes as well as bill input. This only drives
+    // the optional AMD chart; the authoritative rate remains server-side.
+    if (displayRate === null && annual !== null) {
+      const automaticTariff = createAutomaticStandardResidentialTariff(annual / 12);
+      if (automaticTariff.available) displayRate = automaticTariff.tariff.rateAmdPerKwh;
+    }
     return { annual, bill, displayRate, estimate, mode, monthly, overrideRate, usage };
   };
 

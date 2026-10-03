@@ -706,8 +706,11 @@ export const createCalculatorResultsView = ({
         element(
           'p',
           '',
-          resultsCopy.roofCopy ??
-            'The available roof area is sufficient for the recommended system.'
+          isLimiting
+            ? (wizard.roofCapacityExplanation ??
+                'The physical roof limit is not the recommended system size; the recommendation is sized from consumption, solar yield and the other calculation inputs.')
+            : (resultsCopy.roofCopy ??
+                'The available roof area is sufficient for the recommended system.')
         )
       );
       status.append(statusIcon, statusCopy);
@@ -743,17 +746,29 @@ export const createCalculatorResultsView = ({
           `${format(analysis.roof?.tiltDegrees, locale, { maximumFractionDigits: 0 })}°`
         )
       );
-      roofFit.append(
-        heading,
-        status,
-        values,
-        facts,
-        element(
-          'button',
-          'pro-result-roof__link',
-          resultsCopy.roofWhy ?? 'Why is the recommended system smaller?'
-        )
+      const explanationId = 'professional-roof-capacity-explanation';
+      const explanation = element(
+        'p',
+        'pro-result-roof__explanation',
+        wizard.roofCapacityExplanation ??
+          'The physical roof limit is not the recommended system size; the recommendation is sized from consumption, solar yield and the other calculation inputs.'
       );
+      explanation.id = explanationId;
+      explanation.hidden = true;
+      const whyButton = element(
+        'button',
+        'pro-result-roof__link',
+        resultsCopy.roofWhy ?? 'Why is the recommended system smaller?'
+      );
+      whyButton.type = 'button';
+      whyButton.setAttribute('aria-controls', explanationId);
+      whyButton.setAttribute('aria-expanded', 'false');
+      whyButton.addEventListener('click', () => {
+        const expanded = whyButton.getAttribute('aria-expanded') === 'true';
+        whyButton.setAttribute('aria-expanded', String(!expanded));
+        explanation.hidden = expanded;
+      });
+      roofFit.append(heading, status, values, facts, whyButton, explanation);
       resultDashboard.append(roofFit);
     }
     const mountingHardware = analysis.mountingHardwareRecommendation;

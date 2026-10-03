@@ -15,6 +15,7 @@ export { PriceBookRepository, buildCommercialEstimate } from './pricebook.js';
 export {
   ANALYSIS_SCHEMA_VERSION,
   buildSolarAnalysis,
+  calculateArmeniaNetMeteringSettlement,
   calculateRoofPlaneArea,
   calculateSolarScenario,
   normalizeRoof

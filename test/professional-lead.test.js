@@ -105,3 +105,21 @@ test('Professional lead context includes entered inputs, calculated result and e
   assert.equal(context.equipment.inverter, 'SolaX X3-MIC · 4 kW AC');
   assert.equal('billFileName' in context, false);
 });
+
+test('Professional lead preserves the server-derived automatic tariff', () => {
+  const context = buildProfessionalLeadContext({
+    state: { consumption: { mode: 'usage', averageMonthlyKwh: 540 } },
+    analysis: {
+      financial: {
+        tariff: {
+          kind: 'automatic-standard-residential',
+          tariffId: 'standard-201-to-400',
+          rateAmdPerKwh: 48.48
+        }
+      },
+      selectedScenario: {}
+    }
+  });
+
+  assert.equal(context.tariffAmdPerKwh, 48.48);
+});

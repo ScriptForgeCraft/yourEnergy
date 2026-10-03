@@ -105,6 +105,16 @@ test('roof validation points to the exact missing input in a recoverable order',
   };
 
   assert.equal(getRoofValidationIssue(base), 'outline');
+  assert.equal(getRoofValidationIssue({ ...base, simplePolygon: false }), 'self-intersection');
+  assert.equal(
+    getRoofValidationIssue({
+      ...base,
+      polygonComplete: true,
+      effectiveAreaSqm: 82.4,
+      distanceFromPropertyMeters: 501
+    }),
+    'distance'
+  );
   assert.equal(getRoofValidationIssue({ ...base, areaMethod: 'measured-plane' }), 'area');
   assert.equal(
     getRoofValidationIssue({

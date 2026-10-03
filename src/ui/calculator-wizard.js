@@ -10,7 +10,7 @@ import { number, format, text, element, localeCode } from './calculator/view-hel
 import { createCalculatorResultsView } from './calculator/results-view.js';
 import { openCalculatorPdfReport } from './calculator/pdf-report.js';
 import { ProductApiClient, ProductApiError } from '../services/api-client.js';
-import { createPropertyMap } from '../services/property-map.js';
+import { createPropertyMap, isSimplePolygon } from '../services/property-map.js';
 import {
   applyPotentialOutcome,
   createCalculatorWizardState,
@@ -38,6 +38,10 @@ const PVGIS_LOSS = 14;
 const ADDRESS_SEARCH_DEBOUNCE_MS = 1_000;
 const POTENTIAL_COOLDOWN_MS = 10_000;
 const ANALYSIS_COOLDOWN_MS = 15_000;
+// A property point can be imprecise (for example, an entrance rather than
+// the roof centre), but an outline kilometres away is plainly a different
+// building. This guard applies only to map-drawn roofs.
+const MAX_ROOF_DISTANCE_FROM_PROPERTY_METERS = 500;
 
 const analysisMatchesPanel = (analysis, system) => {
   const equipment = analysis?.equipment ?? analysis?.selectedScenario?.system?.equipment;
@@ -107,6 +111,14 @@ const ARMENIA_REGION_CENTERS = Object.freeze({
 });
 
 export const getRoofValidationIssue = (roof = {}) => {
+  if (roof.areaMethod === 'map-projected' && roof.simplePolygon === false)
+    return 'self-intersection';
+  if (
+    roof.areaMethod === 'map-projected' &&
+    Number.isFinite(roof.distanceFromPropertyMeters) &&
+    roof.distanceFromPropertyMeters > MAX_ROOF_DISTANCE_FROM_PROPERTY_METERS
+  )
+    return 'distance';
   if (
     roof.areaMethod === 'map-projected' &&
     (!roof.polygonComplete || roof.effectiveAreaSqm === null)
@@ -116,6 +128,30 @@ export const getRoofValidationIssue = (roof = {}) => {
   if (roof.azimuthDegrees === null) return 'orientation';
   if (roof.tiltDegrees === null) return 'tilt';
   return null;
+};
+
+const roofOutlineDistanceFromProperty = (points, property) => {
+  if (!Array.isArray(points) || points.length < 3 || !property) return null;
+  const normalized = points.filter(
+    (point) => Number.isFinite(Number(point?.lat)) && Number.isFinite(Number(point?.lng))
+  );
+  if (normalized.length !== points.length) return null;
+  const center = normalized.reduce(
+    (total, point) => ({ lat: total.lat + Number(point.lat), lng: total.lng + Number(point.lng) }),
+    { lat: 0, lng: 0 }
+  );
+  const lat = center.lat / normalized.length;
+  const lng = center.lng / normalized.length;
+  const propertyLat = Number(property.lat);
+  const propertyLng = Number(property.lng);
+  if (!Number.isFinite(propertyLat) || !Number.isFinite(propertyLng)) return null;
+  const radians = Math.PI / 180;
+  const deltaLat = (propertyLat - lat) * radians;
+  const deltaLng = (propertyLng - lng) * radians;
+  const a =
+    Math.sin(deltaLat / 2) ** 2 +
+    Math.cos(lat * radians) * Math.cos(propertyLat * radians) * Math.sin(deltaLng / 2) ** 2;
+  return 6_371_008.8 * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(Math.max(0, 1 - a)));
 };
 
 /**
@@ -768,7 +804,10 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
 
   const onRoofChange = (roof) => {
     if (!lifecycle.isActive()) return;
-    state.roof = roof;
+    // Map edits contain only geometry. Preserve engineering values already
+    // entered for the same outline so an incomplete session never silently
+    // falls back to form defaults after a refresh.
+    state.roof = { ...state.roof, ...roof };
     updateRoofAreaSummary();
     clearAnalysis();
     updateProgress();
@@ -871,9 +910,10 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
         selectedOrientation && roof.azimuthDegrees !== null
           ? `${selectedOrientation} (${format(roof.azimuthDegrees, locale)}°)`
           : `${format(roof.azimuthDegrees, locale)}°`;
-    }
+    } else if (roofMapOrientation) roofMapOrientation.textContent = '—';
     if (roofMapTilt && roof.tiltDegrees !== null)
       roofMapTilt.textContent = `${format(roof.tiltDegrees, locale)}°`;
+    else if (roofMapTilt) roofMapTilt.textContent = '—';
     updateRoofCapacityPreview(roof);
     updateRoofReferenceComparison(roof);
   };
@@ -1120,6 +1160,8 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
       planeAreaSqm,
       tiltDegrees
     });
+    const points = Array.isArray(state.roof?.points) ? state.roof.points : [];
+    const hasOutline = points.length >= 3;
     return {
       areaMethod,
       mountingMode: activeMountingMode(root),
@@ -1128,7 +1170,11 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
       projectedAreaSqm,
       planeAreaSqm,
       effectiveAreaSqm: effective,
-      polygonComplete: Boolean(state.roof?.complete)
+      polygonComplete: Boolean(state.roof?.complete),
+      simplePolygon: hasOutline ? isSimplePolygon(points) : true,
+      distanceFromPropertyMeters: hasOutline
+        ? roofOutlineDistanceFromProperty(points, state.confirmedProperty)
+        : null
     };
   };
   const clearRoofValidation = () => {
@@ -1144,6 +1190,8 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
   const showRoofValidation = (issue) => {
     const messages = {
       outline: wizard.ui?.roof?.outlineRequired ?? product.roof?.parametersRequired,
+      'self-intersection': wizard.ui?.roof?.invalidOutline ?? product.roof?.parametersRequired,
+      distance: wizard.ui?.roof?.outlineTooFar ?? product.roof?.parametersRequired,
       area: wizard.ui?.roof?.areaRequired ?? product.roof?.parametersRequired,
       orientation: wizard.ui?.roof?.orientationRequired ?? product.roof?.parametersRequired,
       tilt: wizard.ui?.roof?.tiltRequired ?? product.roof?.parametersRequired
@@ -1249,7 +1297,10 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
       !state.roof?.complete &&
       state.roof?.points?.length >= 3
     ) {
-      if (!mapController?.finishRoof()) onRoofChange({ ...state.roof, complete: true });
+      if (!mapController?.finishRoof()) {
+        const simplePolygon = isSimplePolygon(state.roof.points);
+        onRoofChange({ ...state.roof, simplePolygon, complete: simplePolygon });
+      }
     }
     if (!validateRoof()) return;
     state.consumption = consumption.value;

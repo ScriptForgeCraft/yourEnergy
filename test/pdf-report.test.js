@@ -105,6 +105,32 @@ test('Armenian PDF localizes internal input values and roof-specific yield', () 
   assert.doesNotMatch(html, /VERIFIED_HISTORICAL_GRID_FACTOR_2022/u);
 });
 
+test('PDF uses the completed analysis for PVGIS and automatic-tariff provenance', () => {
+  const options = createOptions();
+  options.state.sitePotential = null;
+  options.analysis.production = {
+    ...options.analysis.production,
+    source: { provider: 'PVGIS' }
+  };
+  options.analysis.financial = {
+    tariff: { kind: 'automatic-standard-residential', rateAmdPerKwh: 46.48 }
+  };
+  options.wizard = {
+    ...options.wizard,
+    pdfReport: {
+      ...options.wizard.pdfReport,
+      sourceConfirmed: 'verified-source',
+      sourceUserProvided: 'visitor-rate',
+      sourceUnavailable: 'missing-source'
+    }
+  };
+
+  const html = createCalculatorPdfReportHtml(options);
+
+  assert.match(html, /verified-source/u);
+  assert.doesNotMatch(html, /visitor-rate/u);
+});
+
 test('PDF report escapes localized copy before rendering HTML', () => {
   const options = createOptions();
   options.wizard = {

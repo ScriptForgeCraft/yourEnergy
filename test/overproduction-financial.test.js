@@ -47,14 +47,19 @@ const scenario = ({
   annualYieldKwhPerKwp = 1_000,
   targetCoverage = 1,
   panelWatts = null,
+  monthlyConsumptionKwh = null,
+  monthlyYieldFactors = null,
   surplusCompensation
 } = {}) =>
   calculateSolarScenario({
     id: 'overproduction-test',
     targetCoverage,
-    consumption: { annualKwh: annualConsumptionKwh },
+    consumption:
+      monthlyConsumptionKwh === null
+        ? { annualKwh: annualConsumptionKwh }
+        : { monthlyKwh: monthlyConsumptionKwh },
     roof: {},
-    production: { annualYieldKwhPerKwp },
+    production: { annualYieldKwhPerKwp, monthlyYieldFactors },
     tariff: retailTariff,
     surplusCompensation,
     investment: { capexAmdPerKwp: 100_000 },
@@ -138,4 +143,25 @@ test('a configured, verified regulatory surplus-compensation rate completes annu
   assert.equal(result.financial.annualSavingsAmd, 54_000);
   assert.equal(result.financial.paybackYears, 120_000 / 54_000);
   assert.equal(result.limitations.includes('SURPLUS_COMPENSATION_UNAVAILABLE'), false);
+});
+
+test('May-to-April settlement does not use April generation to erase an earlier May bill', () => {
+  const surplusCompensation = selectEffectiveSurplusCompensation(
+    TEST_SURPLUS_COMPENSATION_DATASET,
+    EFFECTIVE_DATE
+  );
+  const monthlyConsumptionKwh = [0, 0, 0, 0, 1_000, 0, 0, 0, 0, 0, 0, 0];
+  const monthlyYieldFactors = [0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0];
+  const result = scenario({
+    monthlyConsumptionKwh,
+    annualYieldKwhPerKwp: 1_000,
+    monthlyYieldFactors,
+    surplusCompensation
+  });
+
+  assert.equal(result.energyBalance.offsetEnergyKwh, 0);
+  assert.equal(result.energyBalance.surplusEnergyKwh, 1_000);
+  assert.equal(result.financial.retailOffsetValueAmd, 0);
+  assert.equal(result.financial.surplusCompensationValueAmd, 20_000);
+  assert.equal(result.financial.annualEconomicValueAmd, 20_000);
 });

@@ -92,14 +92,19 @@ test('buildSolarAnalysis derives transparent scenarios with an automatic standar
   });
 
   assert.equal(analysis.mode, 'real-analysis');
-  assert.equal(analysis.status, 'financial-ready');
+  // The real May-to-April monthly sequence leaves a small April credit even
+  // though annual production is lower than annual consumption. With no
+  // verified annual-surplus rate the engine correctly withholds a complete
+  // financial claim instead of applying the retail tariff to that credit.
+  assert.equal(analysis.status, 'technical-ready');
   assert.equal(analysis.selectedScenario.id, 'balanced');
   assert.equal(analysis.selectedScenario.system.panelCount, 12);
   assert.equal(analysis.selectedScenario.system.capacityKwp, 6.96);
   assert.equal(analysis.selectedScenario.generation.annualKwh, 10_440);
-  assert.ok(analysis.selectedScenario.financial.annualSavingsAmd > 0);
+  assert.equal(analysis.selectedScenario.financial.annualSavingsAmd, null);
+  assert.equal(analysis.selectedScenario.financial.paybackYears, null);
+  assert.ok(analysis.selectedScenario.limitations.includes('SURPLUS_COMPENSATION_UNAVAILABLE'));
   assert.equal(analysis.selectedScenario.financial.capexAmd, 2_784_000);
-  assert.ok(analysis.selectedScenario.financial.paybackYears > 0);
   assert.equal(analysis.selectedScenario.generation.monthlyKwh.length, 12);
   assert.equal(
     analysis.selectedScenario.generation.monthlyKwh.reduce((total, item) => total + item, 0),
@@ -107,6 +112,12 @@ test('buildSolarAnalysis derives transparent scenarios with an automatic standar
   );
   assert.equal(analysis.dataCompleteness.level, 'preliminary');
   assert.equal(analysis.sourceLedger.find((entry) => entry.key === 'tariff').available, true);
+  assert.ok(analysis.assumptions.includes('ARMENIA_MONTHLY_NET_METERING_MAY_TO_APRIL'));
+  assert.ok(
+    analysis.assumptions.includes(
+      'STANDARD_RESIDENTIAL_DAY_RATE_REFERENCE_FOR_PRELIMINARY_ESTIMATE'
+    )
+  );
   assertFiniteTree(analysis);
 });
 

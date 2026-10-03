@@ -368,6 +368,8 @@ const copy = {
         showPointNumbers: 'Ցույց տալ կետերի համարները',
         advancedCopy: 'Տեղադրման եղանակը և թեքության պարամետրերը կիրառվում են հաջորդ հաշվարկի մեջ։',
         outlineRequired: 'Քարտեզի վրա նշեք նույն տանիքի առնվազն 3 անկյունը։',
+        invalidOutline: 'Տանիքի ուրվագիծը չպետք է հատի ինքն իրեն։ Ուղղեք կետերի հերթականությունը։',
+        outlineTooFar: 'Տանիքի ուրվագիծը շատ հեռու է ընտրված օբյեկտից։ Ստուգեք օբյեկտն ու տանիքը։',
         areaRequired: 'Մուտքագրեք օգտագործելի տանիքի մակերեսը մ²-ով։',
         orientationRequired: 'Ընտրեք տանիքի լանջի ուղղությունը։',
         tiltRequired: 'Մուտքագրեք տանիքի թեքության անկյունը 0°-ից 90°։',
@@ -746,6 +748,9 @@ const copy = {
         showPointNumbers: 'Показывать номера точек',
         advancedCopy: 'Способ установки и параметры наклона применяются в следующем расчёте.',
         outlineRequired: 'Отметьте на карте минимум 3 угла одной поверхности крыши.',
+        invalidOutline: 'Контур крыши не должен пересекать сам себя. Исправьте порядок точек.',
+        outlineTooFar:
+          'Контур крыши находится слишком далеко от выбранного объекта. Проверьте объект и крышу.',
         areaRequired: 'Введите полезную площадь крыши в м².',
         orientationRequired: 'Выберите направление ската крыши.',
         tiltRequired: 'Введите угол наклона крыши от 0° до 90°.',
@@ -1125,6 +1130,9 @@ const copy = {
         advancedCopy:
           'The mounting approach and tilt parameters are applied to the next calculation.',
         outlineRequired: 'Mark at least 3 corners of one roof surface on the map.',
+        invalidOutline: 'The roof outline cannot cross itself. Correct the point order.',
+        outlineTooFar:
+          'The roof outline is too far from the selected property. Check the property and roof.',
         areaRequired: 'Enter the usable roof area in m².',
         orientationRequired: 'Select the roof-face direction.',
         tiltRequired: 'Enter a roof tilt from 0° to 90°.',

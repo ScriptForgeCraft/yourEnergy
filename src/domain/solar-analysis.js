@@ -342,6 +342,58 @@ const makeTimeline = (capexAmd, annualSavingsAmd) => {
   }));
 };
 
+// Armenian autonomous-generation settlement starts in May and ends in April.
+// A credit created in one month is available only in following months of that
+// settlement year; a balance left after April is annual surplus rather than a
+// retail-rate offset. The input arrays retain calendar order (Jan..Dec).
+const ARMENIA_SETTLEMENT_MONTH_ORDER = Object.freeze([4, 5, 6, 7, 8, 9, 10, 11, 0, 1, 2, 3]);
+
+const validMonthlyEnergy = (values) =>
+  Array.isArray(values) &&
+  values.length === MONTHS_PER_YEAR &&
+  values.every((value) => Number.isFinite(value) && value >= 0);
+
+// PVGIS factors and division into twelve months can produce binary floating
+// point dust (for example 1_000.0000000000001 kWh). Keep the financial and
+// limitation boundary deterministic without rounding meaningful energy data.
+const stableEnergy = (value) => {
+  const rounded = Number(value.toFixed(9));
+  return Math.abs(rounded) < 1e-9 ? 0 : rounded;
+};
+
+/**
+ * Settles one May-to-April Armenian net-metering year from calendar-month
+ * consumption and generation. The result intentionally has no tariff: the
+ * caller can apply either a verified effective rate or a user-provided one.
+ */
+export const calculateArmeniaNetMeteringSettlement = ({
+  monthlyConsumptionKwh,
+  monthlyGenerationKwh
+} = {}) => {
+  if (!validMonthlyEnergy(monthlyConsumptionKwh) || !validMonthlyEnergy(monthlyGenerationKwh)) {
+    return null;
+  }
+
+  let carriedCreditKwh = 0;
+  let gridPurchaseKwh = 0;
+  let offsetEnergyKwh = 0;
+
+  for (const monthIndex of ARMENIA_SETTLEMENT_MONTH_ORDER) {
+    const consumptionKwh = monthlyConsumptionKwh[monthIndex];
+    const availableCreditKwh = carriedCreditKwh + monthlyGenerationKwh[monthIndex];
+    const importedKwh = Math.max(consumptionKwh - availableCreditKwh, 0);
+    gridPurchaseKwh += importedKwh;
+    offsetEnergyKwh += consumptionKwh - importedKwh;
+    carriedCreditKwh = Math.max(availableCreditKwh - consumptionKwh, 0);
+  }
+
+  return {
+    offsetEnergyKwh: stableEnergy(offsetEnergyKwh),
+    surplusEnergyKwh: stableEnergy(carriedCreditKwh),
+    gridPurchaseKwh: stableEnergy(gridPurchaseKwh)
+  };
+};
+
 const surplusCompensationSummary = (selection) => ({
   kind: selection?.kind === 'regulatory-registry' ? 'registry' : 'unavailable',
   available: selection?.available === true,
@@ -456,8 +508,21 @@ export const calculateSolarScenario = ({
     : null;
   const retailRateAmdPerKwh = getUsableTariffRate(tariff);
   const surplusCompensationRateAmdPerKwh = getUsableSurplusCompensationRate(surplusCompensation);
-  const offsetEnergyKwh = Math.min(annualKwh, consumption.annualKwh);
-  const surplusEnergyKwh = Math.max(annualKwh - consumption.annualKwh, 0);
+  // A monthly consumption profile is used exactly when the visitor supplied
+  // one. A single annual/monthly-average value cannot recover seasonality, so
+  // its documented fallback is an even monthly profile rather than a false
+  // annual netting calculation.
+  const monthlyConsumptionKwh =
+    consumption.monthlyKwh ?? Array(MONTHS_PER_YEAR).fill(consumption.annualKwh / MONTHS_PER_YEAR);
+  const monthlyGenerationKwh =
+    monthlyKwh ?? Array(MONTHS_PER_YEAR).fill(annualKwh / MONTHS_PER_YEAR);
+  const settlement = calculateArmeniaNetMeteringSettlement({
+    monthlyConsumptionKwh,
+    monthlyGenerationKwh
+  });
+  const offsetEnergyKwh = settlement?.offsetEnergyKwh ?? Math.min(annualKwh, consumption.annualKwh);
+  const surplusEnergyKwh =
+    settlement?.surplusEnergyKwh ?? Math.max(annualKwh - consumption.annualKwh, 0);
   const retailOffsetValueAmd =
     retailRateAmdPerKwh === null ? null : offsetEnergyKwh * retailRateAmdPerKwh;
   const surplusCompensationValueAmd =
@@ -890,8 +955,17 @@ export const buildSolarAnalysis = (input = {}) => {
     sourceLedger,
     assumptions: [
       ...ANALYSIS_ASSUMPTIONS,
+      'ARMENIA_MONTHLY_NET_METERING_MAY_TO_APRIL',
+      ...(consumption.monthlyKwh === null ? ['UNIFORM_MONTHLY_CONSUMPTION_FOR_SETTLEMENT'] : []),
       ...(tariffKind === 'user' ? ['USER_PROVIDED_TARIFF'] : []),
-      ...(tariffKind === 'registry' ? ['CONFIRMED_REGISTRY_TARIFF'] : []),
+      ...(tariffKind === 'automatic-standard-residential'
+        ? [
+            'CONFIRMED_REGISTRY_TARIFF',
+            ...(typeof tariff?.assumption === 'string' && tariff.assumption
+              ? [tariff.assumption]
+              : [])
+          ]
+        : []),
       ...(environmental.factor.status === 'verified-historical'
         ? [`VERIFIED_HISTORICAL_GRID_FACTOR_${environmental.factor.dataYear ?? 'UNKNOWN'}`]
         : []),

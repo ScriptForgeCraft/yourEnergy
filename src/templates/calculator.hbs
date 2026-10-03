@@ -203,7 +203,7 @@
                 </fieldset>
                 <div class='consumption-panel' data-consumption-panel='bill'><label>{{product.consumption.billLabel}}
                     <div class='input-with-unit'><input id='consumption-bill' name='bill' type='text' inputmode='decimal'
-                        autocomplete='off' value='25000' data-consumption-bill /><span>AMD</span></div>
+                        autocomplete='off' placeholder='25 000' data-consumption-bill /><span>AMD</span></div>
                   </label>
                   <p class='consumption-field-note'><svg aria-hidden='true'>
                       <use href='/icons.svg#info'></use>
@@ -333,6 +333,7 @@
               <section class='professional-roof-parameters' aria-labelledby='professional-roof-parameters'>
                 <h3 id='professional-roof-parameters'>{{wizard.engineering}}</h3>
                 <div class='wizard-form-grid'><label>{{product.roof.orientationLabel}}<select id='roof-orientation' name='orientation' autocomplete='off' data-roof-orientation>
+                      <option value='' selected disabled>{{product.roof.orientationOptions.unknown}}</option>
                       <option value='180'>{{product.roof.orientationOptions.south}}</option>
                       <option value='135'>{{product.roof.orientationOptions.southEast}}</option>
                       <option value='225'>{{product.roof.orientationOptions.southWest}}</option>
@@ -341,7 +342,7 @@
                       <option value='0'>{{product.roof.orientationOptions.north}}</option>
                       <option value='custom'>{{product.roof.orientationOptions.custom}}</option>
                     </select></label><label>{{product.roof.tiltLabel}}<div class='input-with-unit'><input id='roof-tilt' name='tilt' type='text'
-                        inputmode='decimal' autocomplete='off' value='30' data-roof-tilt /><span>°</span></div>
+                        inputmode='decimal' autocomplete='off' placeholder='30' data-roof-tilt /><span>°</span></div>
                   </label></div><section class='professional-roof-capacity' data-roof-capacity-preview hidden aria-live='polite'><strong>{{wizard.roofCapacityTitle}}</strong><dl><div><dt>{{wizard.roofAreaForSizing}}</dt><dd data-roof-capacity-area>—</dd></div><div><dt>{{wizard.preliminaryUsableRoofArea}}</dt><dd data-roof-capacity-usable>—</dd></div><div><dt>{{wizard.maximumPanelsForRoof}}</dt><dd data-roof-capacity-panels>—</dd></div></dl><p data-roof-capacity-panel></p><p data-roof-capacity-system></p><small data-roof-capacity-assumption></small></section><section class='roof-reference-comparison' data-roof-reference-comparison hidden aria-live='polite'><h4>{{wizard.roofReferenceComparison}}</h4><dl><div><dt>{{wizard.actualRoof}}</dt><dd data-roof-reference-actual>—</dd></div><div><dt>{{wizard.pvgisReference}}</dt><dd data-roof-reference-pvgis>—</dd></div></dl><p>{{wizard.roofReferenceHelp}}</p></section><label
                   data-roof-orientation-custom hidden>{{product.roof.customOrientationLabel}}<input
                     id='roof-orientation-custom' name='custom-orientation' type='text' inputmode='decimal' autocomplete='off'
@@ -389,10 +390,10 @@
                   <div><span><svg aria-hidden='true'>
                       <use href='/icons.svg#faq-home'></use>
                     </svg></span>
-                    <p><strong data-roof-map-orientation>South</strong><small>{{wizard.ui.roof.orientation}}</small></p>
+                    <p><strong data-roof-map-orientation>—</strong><small>{{wizard.ui.roof.orientation}}</small></p>
                   </div>
                   <div><span>∠</span>
-                    <p><strong data-roof-map-tilt>30°</strong><small>{{wizard.ui.roof.tilt}}</small></p>
+                    <p><strong data-roof-map-tilt>—</strong><small>{{wizard.ui.roof.tilt}}</small></p>
                   </div>
                 </div>
               </details>

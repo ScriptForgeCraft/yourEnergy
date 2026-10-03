@@ -79,6 +79,14 @@ test('Professional has exactly four customer steps and retains every engineering
   assert.match(professional, /<select\b[^>]*\bdata-roof-mounting-mode\b/u);
   assert.doesNotMatch(professional, /data-wizard-nav='\{\{@index\}\}'[^>]*aria-label=/u);
   assert.match(professional, /class='consumption-estimate'/u);
+  assert.match(professional, /<input[^>]*placeholder='25 000'[^>]*data-consumption-bill/u);
+  assert.doesNotMatch(professional, /<input[^>]*data-consumption-bill[^>]*\bvalue=/u);
+  assert.match(
+    professional,
+    /data-roof-orientation>\s*<option value='' selected disabled>\{\{product\.roof\.orientationOptions\.unknown\}\}<\/option>/u
+  );
+  assert.match(professional, /<input[^>]*placeholder='30'[^>]*data-roof-tilt/u);
+  assert.doesNotMatch(professional, /<input[^>]*data-roof-tilt[^>]*\bvalue=/u);
   assert.match(
     professional,
     /class='consumption-estimate__value'><output data-consumption-annual>/u
@@ -167,6 +175,7 @@ test('Professional has exactly four customer steps and retains every engineering
   assert.match(resultsView, /metrics\?\.annualSavings/u);
   assert.match(resultsView, /storagePriceUnavailable/u);
   assert.match(resultsView, /surplusEnergyKwh/u);
+  assert.match(resultsView, /whyButton\.addEventListener\('click'/u);
   assert.match(controller, /createEquipmentCatalog/u);
   assert.match(controller, /loadDisplayProducts/u);
   assert.doesNotMatch(controller, /import \{ createEquipmentCatalog \} from/u);

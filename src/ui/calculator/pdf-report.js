@@ -901,7 +901,12 @@ export const createCalculatorPdfReportHtml = ({
     inputMode: consumption.mode ?? state.consumption?.mode ?? null,
     tariffRate: asNumber(tariff.rateAmdPerKwh),
     tariffSummary,
-    tariffSourceStatus: tariff.kind === 'registry' ? copy.sourceConfirmed : copy.sourceUserProvided,
+    tariffSourceStatus:
+      tariff.kind === 'automatic-standard-residential'
+        ? copy.sourceConfirmed
+        : tariff.kind === 'user'
+          ? copy.sourceUserProvided
+          : copy.sourceUnavailable,
     storageRequested: Boolean(state.storageRequired),
     roofArea: asNumber(roof.areaSqm),
     roofOrientation: asNumber(roof.orientationDegrees),
@@ -923,7 +928,10 @@ export const createCalculatorPdfReportHtml = ({
     storagePriceUnavailable,
     monthlyGeneration: scenario.generation?.monthlyKwh ?? [],
     monthlyReference: referencePotential?.monthlyYieldKwhPerKwp ?? [],
-    hasPvgis: Boolean(referencePotential?.annualYieldKwhPerKwp),
+    // The optional location benchmark can fail or be skipped independently of
+    // the provider-backed roof calculation. The report must reflect the data
+    // source that produced this result, not the pre-check's state.
+    hasPvgis: analysis.production?.source?.provider === 'PVGIS',
     hasTariff: asNumber(tariff.rateAmdPerKwh) !== null,
     hasEquipment: equipment.module !== copy.unavailable || equipment.inverter !== copy.unavailable,
     hasPricebook:

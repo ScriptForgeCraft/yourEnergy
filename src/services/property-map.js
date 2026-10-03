@@ -24,6 +24,74 @@ const normalizePoint = (point) => ({
 const isFinitePoint = (point) =>
   Number.isFinite(Number(point?.lat)) && Number.isFinite(Number(point?.lng));
 
+const GEOMETRY_EPSILON = 1e-12;
+
+const crossProduct = (start, end, point) =>
+  (end.lng - start.lng) * (point.lat - start.lat) - (end.lat - start.lat) * (point.lng - start.lng);
+
+const pointOnSegment = (start, end, point) =>
+  Math.abs(crossProduct(start, end, point)) <= GEOMETRY_EPSILON &&
+  point.lat >= Math.min(start.lat, end.lat) - GEOMETRY_EPSILON &&
+  point.lat <= Math.max(start.lat, end.lat) + GEOMETRY_EPSILON &&
+  point.lng >= Math.min(start.lng, end.lng) - GEOMETRY_EPSILON &&
+  point.lng <= Math.max(start.lng, end.lng) + GEOMETRY_EPSILON;
+
+const segmentsIntersect = (firstStart, firstEnd, secondStart, secondEnd) => {
+  const firstA = crossProduct(firstStart, firstEnd, secondStart);
+  const firstB = crossProduct(firstStart, firstEnd, secondEnd);
+  const secondA = crossProduct(secondStart, secondEnd, firstStart);
+  const secondB = crossProduct(secondStart, secondEnd, firstEnd);
+  const properIntersection =
+    ((firstA > GEOMETRY_EPSILON && firstB < -GEOMETRY_EPSILON) ||
+      (firstA < -GEOMETRY_EPSILON && firstB > GEOMETRY_EPSILON)) &&
+    ((secondA > GEOMETRY_EPSILON && secondB < -GEOMETRY_EPSILON) ||
+      (secondA < -GEOMETRY_EPSILON && secondB > GEOMETRY_EPSILON));
+  return (
+    properIntersection ||
+    pointOnSegment(firstStart, firstEnd, secondStart) ||
+    pointOnSegment(firstStart, firstEnd, secondEnd) ||
+    pointOnSegment(secondStart, secondEnd, firstStart) ||
+    pointOnSegment(secondStart, secondEnd, firstEnd)
+  );
+};
+
+/**
+ * Rejects self-crossing, degenerate and repeated-point roof outlines before
+ * they can be treated as a physical area. Adjacent edges share a vertex by
+ * definition, so only non-adjacent intersections are invalid.
+ */
+export const isSimplePolygon = (rawPoints) => {
+  const points = Array.isArray(rawPoints)
+    ? rawPoints.filter(isFinitePoint).map(normalizePoint)
+    : [];
+  if (points.length < 3 || points.length !== rawPoints.length) return false;
+
+  let twiceArea = 0;
+  for (let index = 0; index < points.length; index += 1) {
+    const current = points[index];
+    const next = points[(index + 1) % points.length];
+    if (
+      Math.abs(current.lat - next.lat) <= GEOMETRY_EPSILON &&
+      Math.abs(current.lng - next.lng) <= GEOMETRY_EPSILON
+    )
+      return false;
+    twiceArea += current.lng * next.lat - next.lng * current.lat;
+  }
+  if (Math.abs(twiceArea) <= GEOMETRY_EPSILON) return false;
+
+  for (let first = 0; first < points.length; first += 1) {
+    const firstNext = (first + 1) % points.length;
+    for (let second = first + 1; second < points.length; second += 1) {
+      const secondNext = (second + 1) % points.length;
+      const adjacent = first === second || firstNext === second || secondNext === first;
+      if (adjacent) continue;
+      if (segmentsIntersect(points[first], points[firstNext], points[second], points[secondNext]))
+        return false;
+    }
+  }
+  return true;
+};
+
 /**
  * A lightweight local projection suitable for a clearly marked preliminary
  * roof area. It is deliberately not presented as an engineering survey.
@@ -326,10 +394,12 @@ export const createPropertyMap = async ({
 
   const emitRoof = () => {
     const points = roofPoints.map(normalizePoint);
+    const simplePolygon = isSimplePolygon(points);
     onRoofChange({
       points,
       areaSqm: calculatePreliminaryPolygonArea(points),
-      complete: roofFinished && points.length >= 3
+      simplePolygon,
+      complete: roofFinished && simplePolygon
     });
   };
 
@@ -425,7 +495,7 @@ export const createPropertyMap = async ({
 
   const setRoofPoints = (points, { fit = false, complete = false, notify = true } = {}) => {
     roofPoints = points.filter(isFinitePoint).map(normalizePoint);
-    roofFinished = Boolean(complete) && roofPoints.length >= 3;
+    roofFinished = Boolean(complete) && isSimplePolygon(roofPoints);
     drawRoof();
     if (fit && roofPoints.length >= 2)
       map.fitBounds(L.latLngBounds(roofPoints), { padding: [28, 28] });
@@ -448,7 +518,7 @@ export const createPropertyMap = async ({
     if (mode !== 'roof' || roofFinished || roofPoints.length < 3) return;
     event.originalEvent?.preventDefault();
     event.originalEvent?.stopPropagation();
-    roofFinished = true;
+    roofFinished = isSimplePolygon(roofPoints);
     emitRoof();
   });
 
@@ -551,7 +621,8 @@ export const createPropertyMap = async ({
       return {
         points: roofPoints.map(normalizePoint),
         areaSqm: calculatePreliminaryPolygonArea(roofPoints),
-        complete: roofFinished && roofPoints.length >= 3
+        simplePolygon: isSimplePolygon(roofPoints),
+        complete: roofFinished && isSimplePolygon(roofPoints)
       };
     },
     undo() {
@@ -567,9 +638,9 @@ export const createPropertyMap = async ({
     },
     finishRoof() {
       if (roofPoints.length < 3) return false;
-      roofFinished = true;
+      roofFinished = isSimplePolygon(roofPoints);
       emitRoof();
-      return true;
+      return roofFinished;
     },
     resize() {
       invalidateSizeAfterLayout();

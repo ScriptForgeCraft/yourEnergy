@@ -6,6 +6,7 @@ import { onRequest as potentialOnRequest } from '../functions/api/potential.js';
 import { PVGIS_CACHE_TTL_SECONDS, createPvgisCache } from '../functions/_lib/pvgis-cache.js';
 import { isWithinArmeniaServiceArea } from '../functions/_lib/service-area.js';
 import { calculateRoofPlaneArea } from '../src/domain/index.js';
+import { isSimplePolygon } from '../src/services/property-map.js';
 
 const endpoint = 'https://site.example/api';
 
@@ -44,6 +45,27 @@ const pvgisGeneration = () => ({
     totals: { fixed: { E_y: 1500 } },
     monthly: { fixed: Array.from({ length: 12 }, () => ({ E_m: 125 })) }
   }
+});
+
+test('a roof outline must be a non-self-crossing polygon before it becomes an area', () => {
+  assert.equal(
+    isSimplePolygon([
+      { lat: 40.18, lng: 44.51 },
+      { lat: 40.181, lng: 44.511 },
+      { lat: 40.18, lng: 44.511 },
+      { lat: 40.181, lng: 44.51 }
+    ]),
+    false
+  );
+  assert.equal(
+    isSimplePolygon([
+      { lat: 40.18, lng: 44.51 },
+      { lat: 40.181, lng: 44.51 },
+      { lat: 40.181, lng: 44.511 },
+      { lat: 40.18, lng: 44.511 }
+    ]),
+    true
+  );
 });
 
 const p0Payload = Object.freeze({
