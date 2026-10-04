@@ -1424,30 +1424,11 @@
 }
 
 .pro-result-roof__status {
-  display: grid;
-  grid-template-columns: 2rem minmax(0, 1fr);
-  gap: 0.55rem;
-  align-items: start;
   border: 1px solid #cdeedb;
   border-radius: 0.6rem;
   padding: 0.62rem;
   color: #176e48 !important;
   background: rgb(255 255 255 / 68%);
-}
-
-.pro-result-roof__status-icon {
-  display: grid;
-  width: 2rem;
-  height: 2rem;
-  place-items: center;
-  border-radius: 50%;
-  color: #fff;
-  background: #12a866;
-}
-
-.pro-result-roof__status-icon svg {
-  width: 1.05rem;
-  height: 1.05rem;
 }
 
 .pro-result-roof__status strong,

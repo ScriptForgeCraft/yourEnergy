@@ -745,8 +745,6 @@ export const createCalculatorResultsView = ({
       heading.append(icon, element('h3', '', resultsCopy.roofTitle ?? 'Roof compatibility'));
       const isLimiting = scenario.limitations?.includes('ROOF_CAPACITY_LIMIT');
       const status = element('div', 'pro-result-roof__status');
-      const statusIcon = element('span', 'pro-result-roof__status-icon');
-      statusIcon.append(resultIcon(isLimiting ? 'info' : 'check'));
       const statusCopy = element('div');
       statusCopy.append(
         element(
@@ -766,7 +764,7 @@ export const createCalculatorResultsView = ({
                 'The available roof area is sufficient for the recommended system.')
         )
       );
-      status.append(statusIcon, statusCopy);
+      status.append(statusCopy);
       const values = element('dl', 'pro-result-roof__comparison');
       values.append(
         dashboardMetric(
