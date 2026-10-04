@@ -1257,6 +1257,9 @@
 .calculator-mode-error__card h1 {
   margin-top: 0;
 }
+.flow-actions button {
+  margin: 10px;
+}
 
 @media (min-width: 960px) {
   .wizard-step[data-wizard-step='0'],
@@ -1337,8 +1340,10 @@
     display: none;
   }
 
-#wizard-consumption-title,#wizard-roof-title,#wizard-object-title {
-    font-size:1.4rem !important  ;
+  #wizard-consumption-title,
+  #wizard-roof-title,
+  #wizard-object-title {
+    font-size: 1.4rem !important  ;
   }
 }
 
