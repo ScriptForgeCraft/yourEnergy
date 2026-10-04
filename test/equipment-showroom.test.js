@@ -194,6 +194,14 @@ test('equipment keeps a flat interactive hotspot layer and no pointer-follow par
   assert.match(js, /link\.download = url\.split/u);
 });
 
+test('equipment model picker stays above adjacent category content', async () => {
+  const css = await readFile(new URL('../src/styles/equipment.css', import.meta.url), 'utf8');
+
+  assert.match(css, /\.equipment-model-picker\s*\{[^}]*z-index:\s*3;/u);
+  assert.match(css, /\.equipment-model-picker select\s*\{[^}]*width:\s*100%;/u);
+  assert.match(css, /\.equipment-model-picker select\s*\{[^}]*background-color:\s*#061917;/u);
+});
+
 test('equipment has a complete static first product before JavaScript runs', async () => {
   const html = await readFile(
     new URL('../.generated/site/equipment/index.html', import.meta.url),

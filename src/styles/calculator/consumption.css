@@ -741,6 +741,33 @@
 }
 
 @media (max-width: 780px) {
+  /* A localized solar-data title can legitimately occupy multiple lines.
+     Reserve a second row for the yield so the two never compete for the
+     narrow inline space beside the icon. */
+  .site-potential-card--compact .site-potential-card__heading {
+    grid-template-columns: 2.35rem minmax(0, 1fr);
+    grid-template-areas:
+      'icon copy'
+      '. yield';
+    align-items: start;
+  }
+
+  .site-potential-card--compact .site-potential-card__icon {
+    grid-area: icon;
+  }
+
+  .site-potential-card--compact .site-potential-card__heading > div {
+    grid-area: copy;
+    min-width: 0;
+  }
+
+  .site-potential-card--compact .site-potential-card__heading output {
+    grid-area: yield;
+    justify-self: start;
+    margin-top: 0.08rem;
+    font-size: 1rem;
+  }
+
   .potential-monthly-details {
     padding-right: 0.72rem;
     padding-bottom: 0.72rem;

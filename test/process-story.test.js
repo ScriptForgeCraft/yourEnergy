@@ -170,6 +170,10 @@ test('mobile installation labels and PVGIS data stay within their cards', async 
   );
   assert.match(calculatorCss, /\.potential-chart\.chart-bars\s*\{[^}]*overflow-x:\s*auto;/u);
   assert.match(calculatorCss, /\.potential-monthly-details table\s*\{[^}]*width:\s*100%;/u);
+  assert.match(
+    calculatorCss,
+    /\.site-potential-card--compact \.site-potential-card__heading\s*\{[^}]*grid-template-areas:/u
+  );
 });
 
 test('process image srcsets describe only real generated widths', () => {

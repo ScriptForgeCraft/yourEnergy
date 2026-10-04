@@ -1336,6 +1336,10 @@
   .wizard-progress {
     display: none;
   }
+
+#wizard-consumption-title,#wizard-roof-title,#wizard-object-title {
+    font-size:1.4rem !important  ;
+  }
 }
 
 @media (max-width: 860px) {
