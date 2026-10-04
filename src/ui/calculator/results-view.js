@@ -706,20 +706,21 @@ export const createCalculatorResultsView = ({
     } else {
       const chart = element('figure', 'pro-result-card pro-result-card--production');
       const chartHeading = element('div', 'pro-result-production__heading');
+      const productionUnit = 'kWh';
       chartHeading.append(
         element(
           'figcaption',
           '',
-          resultsCopy.monthlyProduction ?? wizard.production ?? 'Monthly solar production'
+          `${resultsCopy.monthlyProduction ?? wizard.production ?? 'Monthly solar production'} · ${productionUnit}`
         ),
         element(
           'strong',
           '',
-          `${resultsCopy.totalAnnualProduction ?? 'Annual total'}: ${format(annualGenerationKwh, locale)} kWh`
+          `${resultsCopy.totalAnnualProduction ?? 'Annual total'}: ${format(annualGenerationKwh, locale)} ${productionUnit}`
         )
       );
       const bars = element('div', 'chart-bars');
-      renderBars(bars, monthly, product.passport?.months ?? [], 'kWh');
+      renderBars(bars, monthly, product.passport?.months ?? [], productionUnit);
       chart.append(chartHeading, bars);
       resultDashboard.append(chart);
     }

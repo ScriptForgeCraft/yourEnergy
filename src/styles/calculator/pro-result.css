@@ -1709,6 +1709,12 @@
     padding-bottom: 0.35rem;
   }
 
+  /* Values remain available in the title/tooltip; omitting this repeated
+     suffix keeps all twelve monthly values readable on narrow screens. */
+  .pro-result-card--production .chart-bar__unit {
+    display: none;
+  }
+
   .pro-result-roof__facts {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }

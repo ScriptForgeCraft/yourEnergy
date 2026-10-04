@@ -1020,14 +1020,15 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
       button.style.setProperty('--bar-height', `${Math.max(3, (numeric / maximum) * 100)}%`);
       const month = months[index] ?? {};
       const valueText = format(numeric, locale, { maximumFractionDigits: 0 });
-      const display = compactValues ? valueText : `${valueText} ${unit}`;
+      const valueLabel = element('span', 'chart-bar__value', valueText);
+      if (!compactValues) valueLabel.append(' ', element('span', 'chart-bar__unit', unit));
       button.setAttribute(
         'aria-label',
         `${month.name ?? month.short ?? index + 1}: ${valueText} ${unit}`
       );
       button.title = button.getAttribute('aria-label');
       button.append(
-        element('span', 'chart-bar__value', display),
+        valueLabel,
         element('span', 'chart-bar__label', month.short ?? String(index + 1))
       );
       container.append(button);

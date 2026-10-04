@@ -202,16 +202,23 @@ test('Professional product links preserve the recommendation ID in every locale'
 });
 
 test('Professional results use coverage terminology without duplicate production details', async () => {
-  const [resultsView, modes, wizard, en, ru, hy] = await Promise.all([
+  const [resultsView, modes, wizard, en, ru, hy, styles] = await Promise.all([
     source('src/ui/calculator/results-view.js'),
     source('src/content/calculator-modes.js'),
     source('src/content/calculator-wizard.js'),
     source('src/content/en.js'),
     source('src/content/ru.js'),
-    source('src/content/hy.js')
+    source('src/content/hy.js'),
+    source('src/styles/calculator/pro-result.css')
   ]);
 
   assert.match(resultsView, /pro-result-production__heading/u);
+  assert.match(resultsView, /const productionUnit = 'kWh'/u);
+  assert.match(
+    resultsView,
+    /renderBars\(bars, monthly, product\.passport\?\.months \?\? \[\], productionUnit\)/u
+  );
+  assert.match(styles, /\.pro-result-card--production \.chart-bar__unit/u);
   assert.doesNotMatch(resultsView, /annualNetSurplusHelp/u);
   assert.match(resultsView, /roofCapacityNotLimiting/u);
   assert.doesNotMatch(modes, /selfConsumption/u);
