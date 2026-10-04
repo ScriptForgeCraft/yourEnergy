@@ -655,12 +655,26 @@
 
 /* PVGIS values stay readable at every width: blue bars, numbers above and
    month abbreviations beneath the baseline. */
+.potential-monthly-details,
+.potential-monthly-details .wizard-chart {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.potential-monthly-details .wizard-chart {
+  overflow: hidden;
+}
+
 .potential-chart.chart-bars {
+  grid-template-columns: repeat(12, minmax(1.8rem, 1fr));
   min-height: 9.1rem;
   gap: 0.18rem;
-  overflow: visible;
-  padding: 0.75rem 0.08rem 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  overscroll-behavior-inline: contain;
+  padding: 0.75rem 0.08rem 0.5rem;
   border-bottom: 1px solid #cfe3f5;
+  scrollbar-width: thin;
 }
 
 .potential-chart .chart-bar {
@@ -698,6 +712,55 @@
   font-weight: 750;
   line-height: 1;
   text-overflow: ellipsis;
+}
+
+.potential-monthly-details table {
+  width: 100%;
+  margin-top: 0.9rem;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.potential-monthly-details th,
+.potential-monthly-details td {
+  padding: 0.38rem 0.45rem;
+  border-bottom: 1px solid #dceaf5;
+  color: #284968;
+  font-size: 0.78rem;
+  text-align: start;
+}
+
+.potential-monthly-details th {
+  color: #315675;
+  font-weight: 800;
+}
+
+.potential-monthly-details th:last-child,
+.potential-monthly-details td:last-child {
+  text-align: end;
+}
+
+@media (max-width: 780px) {
+  .potential-monthly-details {
+    padding-right: 0.72rem;
+    padding-bottom: 0.72rem;
+    padding-left: 0.72rem;
+  }
+
+  .potential-monthly-details .wizard-chart {
+    margin-top: 0.8rem;
+    padding: 0.75rem;
+    border-radius: 0.7rem;
+  }
+
+  .potential-monthly-details .wizard-chart figcaption {
+    margin-bottom: 0.6rem;
+    font-size: 0.92rem;
+  }
+
+  .potential-chart.chart-bars {
+    grid-template-columns: repeat(12, minmax(1.75rem, 1fr));
+  }
 }
 
 .consumption-chart-card,

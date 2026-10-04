@@ -8,6 +8,7 @@ import {
 import { processStoryCopy } from '../src/content/process-story.js';
 import { PROCESS_IMAGE_ASSETS, createProcessImageContext } from '../src/config/process-images.js';
 import { createCalculatorSession } from '../src/ui/calculator-session.js';
+import { readStylesheet } from './helpers/styles.js';
 
 const analysis = {
   production: {
@@ -151,6 +152,24 @@ test('HY, RU and EN expose the same six process visuals and content shape', () =
     );
     assert.ok(copy.steps.every(({ nav, headline, copy: body }) => nav && headline && body));
   }
+});
+
+test('mobile installation labels and PVGIS data stay within their cards', async () => {
+  const [processCss, calculatorCss] = await Promise.all([
+    readStylesheet(new URL('../src/styles/process-story.css', import.meta.url)),
+    readStylesheet(new URL('../src/styles/tools.css', import.meta.url))
+  ]);
+
+  assert.match(
+    processCss,
+    /\.process-installation-timeline__label\s*\{[^}]*overflow-wrap:\s*anywhere\s*!important;/u
+  );
+  assert.match(
+    processCss,
+    /\.process-installation-timeline\s*\{[^}]*grid-template-columns:\s*repeat\(2, minmax\(0, 1fr\)\);/u
+  );
+  assert.match(calculatorCss, /\.potential-chart\.chart-bars\s*\{[^}]*overflow-x:\s*auto;/u);
+  assert.match(calculatorCss, /\.potential-monthly-details table\s*\{[^}]*width:\s*100%;/u);
 });
 
 test('process image srcsets describe only real generated widths', () => {

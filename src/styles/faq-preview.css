@@ -312,7 +312,7 @@
   top: clamp(40px, 5.8svh, 54px);
   right: clamp(9.5vw, 15.6vw, 300px);
   width: min(23vw, 350px);
-  color: #062643;
+  color: #dbe8f5;
   pointer-events: none;
   transform: rotate(-4deg);
 }
