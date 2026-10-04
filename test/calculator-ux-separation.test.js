@@ -85,7 +85,8 @@ test('Professional has exactly four customer steps and retains every engineering
     professional,
     /data-roof-orientation>\s*<option value='' selected disabled>\{\{product\.roof\.orientationOptions\.unknown\}\}<\/option>/u
   );
-  assert.match(professional, /<input[^>]*placeholder='30'[^>]*data-roof-tilt/u);
+  assert.match(professional, /<input[^>]*data-roof-tilt/u);
+  assert.doesNotMatch(professional, /<input[^>]*placeholder='30'[^>]*data-roof-tilt/u);
   assert.doesNotMatch(professional, /<input[^>]*data-roof-tilt[^>]*\bvalue=/u);
   assert.match(
     professional,

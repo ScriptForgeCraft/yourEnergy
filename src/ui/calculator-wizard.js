@@ -121,14 +121,14 @@ export const getRoofValidationIssue = (roof = {}) => {
     roof.distanceFromPropertyMeters > MAX_ROOF_DISTANCE_FROM_PROPERTY_METERS
   )
     return 'distance';
-  if (
-    roof.areaMethod === 'map-projected' &&
-    (!roof.polygonComplete || roof.effectiveAreaSqm === null)
-  )
-    return 'outline';
+  if (roof.areaMethod === 'map-projected' && !roof.polygonComplete) return 'outline';
   if (roof.areaMethod === 'measured-plane' && roof.effectiveAreaSqm === null) return 'area';
   if (roof.azimuthDegrees === null) return 'orientation';
   if (roof.tiltDegrees === null) return 'tilt';
+  // A valid outline can still have no derived plane area when the entered
+  // tilt is too steep for a reliable plan-view conversion. That requires a
+  // measured roof-face area, not another instruction to redraw the polygon.
+  if (roof.areaMethod === 'map-projected' && roof.effectiveAreaSqm === null) return 'area';
   return null;
 };
 

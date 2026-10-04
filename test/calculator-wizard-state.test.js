@@ -167,6 +167,34 @@ test('roof validation points to the exact missing input in a recoverable order',
     getRoofValidationIssue({
       ...base,
       polygonComplete: true,
+      effectiveAreaSqm: null,
+      azimuthDegrees: null,
+      tiltDegrees: null
+    }),
+    'orientation'
+  );
+  assert.equal(
+    getRoofValidationIssue({
+      ...base,
+      polygonComplete: true,
+      effectiveAreaSqm: null,
+      tiltDegrees: null
+    }),
+    'tilt'
+  );
+  assert.equal(
+    getRoofValidationIssue({
+      ...base,
+      polygonComplete: true,
+      effectiveAreaSqm: null,
+      tiltDegrees: 80
+    }),
+    'area'
+  );
+  assert.equal(
+    getRoofValidationIssue({
+      ...base,
+      polygonComplete: true,
       effectiveAreaSqm: 82.4,
       azimuthDegrees: null
     }),

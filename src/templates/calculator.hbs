@@ -384,7 +384,7 @@
                       <option value='0'>{{product.roof.orientationOptions.north}}</option>
                       <option value='custom'>{{product.roof.orientationOptions.custom}}</option>
                     </select></label><label>{{product.roof.tiltLabel}}<div class='input-with-unit'><input id='roof-tilt' name='tilt' type='text'
-                        inputmode='decimal' autocomplete='off' placeholder='30' data-roof-tilt /><span>°</span></div>
+                        inputmode='decimal' autocomplete='off' data-roof-tilt /><span>°</span></div>
                   </label></div><section class='professional-roof-capacity' data-roof-capacity-preview hidden aria-live='polite'><strong>{{wizard.roofCapacityTitle}}</strong><dl><div><dt>{{wizard.roofAreaForSizing}}</dt><dd data-roof-capacity-area>—</dd></div><div><dt>{{wizard.preliminaryUsableRoofArea}}</dt><dd data-roof-capacity-usable>—</dd></div><div><dt>{{wizard.maximumPanelsForRoof}}</dt><dd data-roof-capacity-panels>—</dd></div></dl><p data-roof-capacity-panel></p><p data-roof-capacity-system></p><small data-roof-capacity-assumption></small></section><section class='roof-reference-comparison' data-roof-reference-comparison hidden aria-live='polite'><h4>{{wizard.roofReferenceComparison}}</h4><dl><div><dt>{{wizard.actualRoof}}</dt><dd data-roof-reference-actual>—</dd></div><div><dt>{{wizard.pvgisReference}}</dt><dd data-roof-reference-pvgis>—</dd></div></dl><p>{{wizard.roofReferenceHelp}}</p></section><label
                   data-roof-orientation-custom hidden>{{product.roof.customOrientationLabel}}<input
                     id='roof-orientation-custom' name='custom-orientation' type='text' inputmode='decimal' autocomplete='off'
