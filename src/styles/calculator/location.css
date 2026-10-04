@@ -493,6 +493,48 @@
   background: linear-gradient(120deg, #f5f9fe, #f0f6fc);
 }
 
+.calculator-page--professional .professional-panel--coordinates > summary {
+  display: flex;
+  min-height: 2.25rem;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  color: #12294d;
+  cursor: pointer;
+  font-size: 0.76rem;
+  font-weight: 780;
+  list-style: none;
+}
+
+.calculator-page--professional .professional-panel--coordinates > summary::-webkit-details-marker {
+  display: none;
+}
+
+.calculator-page--professional .professional-panel--coordinates > summary svg {
+  width: 1rem;
+  height: 1rem;
+  flex: 0 0 auto;
+  color: #607895;
+  transition: transform 160ms ease;
+}
+
+.calculator-page--professional .professional-panel--coordinates[open] > summary svg {
+  transform: rotate(180deg);
+}
+
+.calculator-page--professional .professional-panel--coordinates > summary:focus-visible {
+  outline: 2px solid #147af3;
+  outline-offset: 3px;
+}
+
+.calculator-page--professional .professional-panel--coordinates__body {
+  padding-top: 0.32rem;
+}
+
+.calculator-page--professional .professional-panel--coordinates__body > .text-button {
+  margin-left: auto;
+}
+
 .professional-panel__title {
   display: flex;
   align-items: center;
@@ -656,9 +698,13 @@
   background: #e8f3ff;
 }
 
+.calculator-page--professional .wizard-map-wrap--location .leaflet-top.leaflet-left {
+  top: 0.85rem;
+  right: 0.85rem;
+  left: auto;
+}
+
 .calculator-page--professional .wizard-map-wrap--location .leaflet-control-zoom {
-  top: 4.7rem;
-  left: 0.85rem;
   margin: 0;
 }
 
@@ -763,9 +809,9 @@
   }
 
   .calculator-page--professional .wizard-step[data-wizard-step='0'] {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
   }
 
   .calculator-page--professional .wizard-step[data-wizard-step='0']::before {
@@ -773,19 +819,78 @@
     height: 100%;
   }
 
-  .calculator-page--professional .wizard-step[data-wizard-step='0'] > .wizard-step__heading,
-  .calculator-page--professional .wizard-step[data-wizard-step='0'] > .professional-location-form,
-  .calculator-page--professional .wizard-step[data-wizard-step='0'] > .wizard-map-wrap {
-    grid-column: 1;
+  .calculator-page--professional .wizard-step[data-wizard-step='0'] > .wizard-step__heading {
+    order: 1;
+  }
+
+  /* Keep the desktop two-column form intact while allowing a useful mobile
+     sequence: location choices, optional address, compact advanced values,
+     map, then the primary action. */
+  .calculator-page--professional .professional-location-form {
+    display: contents;
+  }
+
+  .calculator-page--professional .professional-location-form > * {
+    position: relative;
+    z-index: 1;
+    margin-right: 1.3rem;
+    margin-left: 1.3rem;
+  }
+
+  .calculator-page--professional .location-methods {
+    order: 4;
+  }
+
+  .calculator-page--professional .location-picker-grid {
+    order: 2;
+  }
+
+  .calculator-page--professional .location-picker-help {
+    order: 3;
+  }
+
+  .calculator-page--professional .location-address-field {
+    order: 5;
+  }
+
+  .calculator-page--professional .location-address-disclosure {
+    order: 6;
+  }
+
+  .calculator-page--professional .location-search-attribution {
+    order: 7;
+  }
+
+  .calculator-page--professional .location-search-results {
+    order: 8;
   }
 
   .calculator-page--professional .wizard-step[data-wizard-step='0'] > .wizard-map-wrap {
-    grid-row: 2;
-    height: clamp(25rem, 90vw, 35rem);
+    order: 10;
+    width: auto;
+    height: clamp(24rem, 92vw, 34rem);
+    margin: 0.9rem 1.3rem 0;
   }
 
-  .calculator-page--professional .wizard-step[data-wizard-step='0'] > .professional-location-form {
-    grid-row: 3;
+  .calculator-page--professional .professional-panel--coordinates {
+    order: 9;
+  }
+
+  .calculator-page--professional .professional-location-form > .async-card {
+    order: 11;
+  }
+
+  .calculator-page--professional .professional-location-form > [data-potential-result] {
+    order: 12;
+  }
+
+  .calculator-page--professional .professional-location-form > [data-potential-actions] {
+    order: 13;
+  }
+
+  .calculator-page--professional .professional-location-actions {
+    order: 14;
+    margin-bottom: 1rem;
   }
 
   .professional-location-actions .button {
@@ -831,10 +936,34 @@
     padding-left: 1rem;
   }
 
-  .location-methods,
   .calculator-page--professional .location-picker-grid,
   .calculator-page--professional .wizard-coordinates {
     grid-template-columns: 1fr;
+  }
+
+  .calculator-page--professional .professional-location-form > * {
+    margin-right: 1rem;
+    margin-left: 1rem;
+  }
+
+  .calculator-page--professional .wizard-step[data-wizard-step='0'] > .wizard-map-wrap {
+    margin-right: 1rem;
+    margin-left: 1rem;
+  }
+
+  .location-methods {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.42rem;
+  }
+
+  .location-methods .button {
+    min-width: 0;
+    min-height: 2.8rem;
+    padding-inline: 0.55rem;
+    font-size: 0.68rem;
+    line-height: 1.22;
+    white-space: normal;
+    overflow-wrap: anywhere;
   }
 
   .map-data-icon {
@@ -857,5 +986,13 @@
     margin: 0 0 0.7rem;
     color: #17355d;
     font-size: 0.78rem;
+  }
+
+  .calculator-page--professional .wizard-step__heading h2,
+  .calculator-page--professional .wizard-step__heading p,
+  .calculator-page--professional .professional-location-form,
+  .calculator-page--professional .professional-location-actions .button {
+    min-width: 0;
+    overflow-wrap: anywhere;
   }
 }

@@ -1303,6 +1303,14 @@
   }
 }
 
+/* Fixed contact bubbles obscure form controls and result actions on mobile
+   and compact tablets. The same contacts remain available in the footer. */
+@media (max-width: 860px) {
+  .calculator-page .floating-contact-actions {
+    display: none;
+  }
+}
+
 @media (max-width: 780px) {
   .calculator-hero {
     padding-top: calc(var(--header-height) + 1.8rem);

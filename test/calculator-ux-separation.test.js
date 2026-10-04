@@ -118,6 +118,10 @@ test('Professional has exactly four customer steps and retains every engineering
   assert.match(propertyMap, /setRoofPointNumbers\(visible\)[\s\S]*?drawRoof\(\)/u);
   assert.match(professional, /data-location-region/u);
   assert.match(professional, /data-location-locality/u);
+  assert.match(
+    professional,
+    /<details class='professional-panel professional-panel--coordinates'>/u
+  );
   assert.match(professional, /data-location-map-wrap hidden/u);
   assert.match(professional, /data-potential-summary/u);
   assert.match(professional, /potential-monthly-details/u);
@@ -233,22 +237,28 @@ test('Professional result supplements are not hidden behind a legacy presentatio
 });
 
 test('calculator mobile layouts keep the roof workflow and result text inside the viewport', async () => {
-  const [template, location, roof, consumption, quick, professionalResult] = await Promise.all([
-    source('src/templates/calculator.hbs'),
-    source('src/styles/calculator/location.css'),
-    source('src/styles/calculator/roof-results.css'),
-    source('src/styles/calculator/consumption.css'),
-    source('src/styles/calculator/quick.css'),
-    source('src/styles/calculator/pro-result.css')
-  ]);
+  const [template, location, roof, consumption, quick, professionalResult, base] =
+    await Promise.all([
+      source('src/templates/calculator.hbs'),
+      source('src/styles/calculator/location.css'),
+      source('src/styles/calculator/roof-results.css'),
+      source('src/styles/calculator/consumption.css'),
+      source('src/styles/calculator/quick.css'),
+      source('src/styles/calculator/pro-result.css'),
+      source('src/styles/calculator/base.css')
+    ]);
 
   assert.match(
     location,
     /@media \(max-width: 620px\)[\s\S]*?\.wizard-progress \{\s*display: none;/u
   );
+  assert.match(location, /\.professional-location-form \{\s*display: contents;/u);
+  assert.match(location, /> \.wizard-map-wrap \{\s*order: 10;/u);
+  assert.match(location, /\.professional-panel--coordinates \{\s*order: 9;/u);
+  assert.match(location, /\.professional-location-actions \{\s*order: 14;/u);
   assert.match(
     location,
-    /@media \(max-width: 860px\)[\s\S]*?> \.wizard-map-wrap \{\s*grid-row: 2;[\s\S]*?> \.professional-location-form \{\s*grid-row: 3;/u
+    /\.wizard-map-wrap--location \.leaflet-top\.leaflet-left \{[\s\S]*?right: 0\.85rem;/u
   );
   const locationStep = template.match(
     /data-wizard-step='0'[\s\S]*?(?=<section class='wizard-step' data-wizard-step='1')/u
@@ -263,6 +273,16 @@ test('calculator mobile layouts keep the roof workflow and result text inside th
     consumption,
     /\.professional-consumption-actions[\s\S]*?grid-template-columns: 1fr;/u
   );
+  assert.match(consumption, /\.professional-consumption-form \{\s*display: contents;/u);
+  assert.match(consumption, /\.professional-consumption-aside \{\s*order: 3;/u);
+  assert.match(consumption, /\.professional-consumption-actions \{\s*order: 4;/u);
+  assert.match(roof, /\.professional-roof-map__analysis \{[\s\S]*?width: 3rem;/u);
+  assert.match(roof, /\.professional-roof-map__tools \{[\s\S]*?width: 3rem;/u);
+  assert.match(
+    roof,
+    /\.professional-roof-map \.leaflet-top\.leaflet-left \{[\s\S]*?top: 3\.9rem;/u
+  );
+  assert.match(base, /\.calculator-page \.floating-contact-actions \{\s*display: none;/u);
   assert.match(quick, /\.quick-result__metric dd[\s\S]*?overflow-wrap: anywhere;/u);
   assert.match(quick, /\.quick-result__actions[\s\S]*?grid-template-columns: 1fr;/u);
   assert.match(quick, /\.quick-result__offer-row \{[\s\S]*?flex-direction: column;/u);

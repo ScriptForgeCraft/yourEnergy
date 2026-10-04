@@ -107,20 +107,21 @@
                     name='locality' autocomplete='off' data-location-locality aria-describedby='location-picker-help' disabled></select></label>
               </div>
               <small class='location-picker-help' id='location-picker-help'>{{product.location.localityHelp}}</small>
-              <section class='professional-panel professional-panel--coordinates'
-                aria-labelledby='professional-location-parameters'>
-                <div class='professional-panel__title'>
-                  <h3 id='professional-location-parameters'>{{wizard.exactCoordinates}}</h3><button class='text-button'
-                    type='button' data-use-map-coordinates><svg aria-hidden='true'>
+              <details class='professional-panel professional-panel--coordinates'>
+                <summary><span>{{wizard.exactCoordinates}}</span><svg aria-hidden='true'>
+                    <use href='/icons.svg#chevron-down'></use>
+                  </svg></summary>
+                <div class='professional-panel--coordinates__body'><button class='text-button' type='button'
+                    data-use-map-coordinates><svg aria-hidden='true'>
                       <use href='/icons.svg#map-pin'></use>
                     </svg>{{wizard.showOnMap}}</button>
+                  <p class='input-help'>{{wizard.coordinatesHelp}}</p>
+                  <div class='wizard-coordinates'><label>{{product.location.latitudeLabel}}<input id='location-latitude' name='latitude' type='number' step='any'
+                        inputmode='decimal' autocomplete='off'
+                        data-location-latitude /></label><label>{{product.location.longitudeLabel}}<input type='number'
+                        id='location-longitude' name='longitude' step='any' inputmode='decimal' autocomplete='off' data-location-longitude /></label></div>
                 </div>
-                <p class='input-help'>{{wizard.coordinatesHelp}}</p>
-                <div class='wizard-coordinates'><label>{{product.location.latitudeLabel}}<input id='location-latitude' name='latitude' type='number' step='any'
-                      inputmode='decimal' autocomplete='off'
-                      data-location-latitude /></label><label>{{product.location.longitudeLabel}}<input type='number'
-                      id='location-longitude' name='longitude' step='any' inputmode='decimal' autocomplete='off' data-location-longitude /></label></div>
-              </section>
+              </details>
 
  
               <div class='async-card' data-potential-loading data-potential-status data-step-state='locked'
@@ -408,11 +409,15 @@
             </div>
             <div class='wizard-map-wrap professional-roof-map'>
               <div data-roof-map-host></div>
-              <div class='professional-roof-map__layers'><button type='button'
-                  class='is-active'>{{wizard.ui.roof.map}}</button><button
-                  type='button'>{{wizard.ui.roof.satellite}}</button></div>
+              <div class='professional-roof-map__layers' role='group' aria-label='{{wizard.ui.roof.map}}'><button
+                  type='button' class='is-active' aria-label='{{wizard.ui.roof.map}}'><svg aria-hidden='true'>
+                    <use href='/icons.svg#map-pin'></use>
+                  </svg><span>{{wizard.ui.roof.map}}</span></button><button type='button'
+                  aria-label='{{wizard.ui.roof.satellite}}'><svg aria-hidden='true'>
+                    <use href='/icons.svg#satellite'></use>
+                  </svg><span>{{wizard.ui.roof.satellite}}</span></button></div>
               <details class='professional-roof-map__analysis'>
-                <summary><svg aria-hidden='true'>
+                <summary aria-label='{{wizard.ui.roof.analysis}}' title='{{wizard.ui.roof.analysis}}'><svg aria-hidden='true'>
                     <use href='/icons.svg#faq-home'></use>
                   </svg><strong>{{wizard.ui.roof.analysis}}</strong><svg class='professional-roof-map__analysis-arrow' aria-hidden='true'>
                     <use href='/icons.svg#arrow-right'></use>
@@ -439,7 +444,7 @@
                 </div>
               </details>
               <details class='professional-roof-map__tools'>
-                <summary><svg aria-hidden='true'>
+                <summary aria-label='{{wizard.ui.roof.outlineSettings}}' title='{{wizard.ui.roof.outlineSettings}}'><svg aria-hidden='true'>
                     <use href='/icons.svg#faq-settings'></use>
                   </svg><strong>{{wizard.ui.roof.outlineSettings}}</strong><svg class='professional-roof-map__tools-arrow' aria-hidden='true'>
                     <use href='/icons.svg#arrow-right'></use>

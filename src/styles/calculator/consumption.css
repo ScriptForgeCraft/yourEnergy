@@ -921,7 +921,31 @@
     gap: 1rem;
   }
 
-  .professional-consumption-form,
+  .calculator-page--professional .wizard-step[data-wizard-step='1'] > .wizard-step__heading {
+    order: 1;
+  }
+
+  /* The supporting chart and tips belong before navigation on a single-column
+     screen. display:contents keeps the desktop columns unchanged and makes the
+     Continue action the final interactive block on mobile/tablet. */
+  .professional-consumption-form {
+    display: contents;
+  }
+
+  .calculator-page--professional .consumption-inputs {
+    order: 2;
+  }
+
+  .professional-consumption-aside {
+    order: 3;
+  }
+
+  .professional-consumption-actions {
+    order: 4;
+    margin-top: 0;
+  }
+
+  .calculator-page--professional .consumption-inputs,
   .professional-consumption-aside {
     border: 1px solid #dceaf5;
     border-radius: 0.82rem;
@@ -1002,11 +1026,19 @@
   }
 
   .consumption-profile-chart {
-    grid-template-columns: repeat(12, minmax(1.8rem, 1fr));
+    grid-template-columns: repeat(12, minmax(0, 1fr));
     gap: 0.13rem;
-    overflow-x: auto;
-    overscroll-behavior-inline: contain;
     padding-bottom: 0.35rem;
+  }
+
+  .consumption-profile-chart__item {
+    min-width: 0;
+  }
+
+  .consumption-profile-chart__item output,
+  .consumption-profile-chart__item small {
+    min-width: 0;
+    font-size: clamp(0.47rem, 2.15vw, 0.56rem);
   }
 
   .calculator-page--professional .tariff-mode-options label > span,
@@ -1014,6 +1046,14 @@
   .consumption-chart-card,
   .consumption-tips {
     min-width: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .calculator-page--professional .wizard-step[data-wizard-step='1'] .button,
+  .calculator-page--professional .wizard-step[data-wizard-step='1'] h2,
+  .calculator-page--professional .wizard-step[data-wizard-step='1'] h3 {
+    min-width: 0;
+    white-space: normal;
     overflow-wrap: anywhere;
   }
 }
