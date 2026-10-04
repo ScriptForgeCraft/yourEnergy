@@ -829,3 +829,144 @@
   height: 0.86rem;
   flex: 0 0 auto;
 }
+
+@media (max-width: 960px) {
+  .calculator-page--professional .wizard-step[data-wizard-step='2'] {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+  }
+
+  .calculator-page--professional .wizard-step[data-wizard-step='2'] > .wizard-step__heading {
+    order: 1;
+    margin-bottom: 0;
+  }
+
+  /* On a narrow screen the map must follow the two area-method choices, not
+   * the Calculate button. display:contents lets the existing semantic form
+   * keep its fields while placing the drawing surface at the useful point in
+   * the visual flow. */
+  .calculator-page--professional .professional-roof-form {
+    display: contents;
+  }
+
+  .calculator-page--professional .professional-roof-methods {
+    order: 2;
+  }
+
+  .calculator-page--professional .professional-roof-notice {
+    order: 3;
+    margin-top: 0;
+  }
+
+  .calculator-page--professional .professional-roof-map {
+    order: 4;
+    min-height: clamp(27rem, 105vw, 34rem);
+  }
+
+  .calculator-page--professional .professional-roof-area {
+    order: 5;
+    margin-top: 0;
+  }
+
+  .calculator-page--professional .professional-roof-plane-input {
+    order: 6;
+    margin: 0;
+  }
+
+  .calculator-page--professional .professional-roof-parameters {
+    order: 7;
+  }
+
+  .calculator-page--professional .professional-roof-actions {
+    order: 8;
+    margin-top: 0;
+  }
+}
+
+@media (max-width: 620px) {
+  .calculator-page--professional .wizard-step[data-wizard-step='2'] {
+    gap: 0.75rem;
+    padding: 0.9rem;
+  }
+
+  .calculator-page--professional .professional-roof-methods > label,
+  .calculator-page--professional .professional-roof-notice,
+  .calculator-page--professional .professional-roof-area,
+  .calculator-page--professional .professional-roof-parameters,
+  .calculator-page--professional .professional-roof-capacity,
+  .calculator-page--professional .roof-reference-comparison {
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .calculator-page--professional .professional-roof-map {
+    min-height: clamp(25rem, 122vw, 30rem);
+  }
+
+  .professional-roof-map__analysis {
+    top: 0.65rem;
+    right: 0.65rem;
+    width: calc(100% - 1.3rem);
+  }
+
+  .professional-roof-map__layers {
+    top: 3.85rem;
+    left: 0.65rem;
+  }
+
+  .professional-roof-map__tools {
+    right: 0.65rem;
+    bottom: 0.65rem;
+    left: 0.65rem;
+    width: auto;
+  }
+
+  .calculator-page--professional .professional-roof-parameters .wizard-form-grid,
+  .professional-roof-capacity dl,
+  .roof-reference-comparison dl {
+    grid-template-columns: 1fr;
+  }
+
+  .professional-roof-actions {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.55rem;
+  }
+
+  .professional-roof-actions .button {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .professional-roof-actions .button:not(.button--outline) {
+    order: 1;
+  }
+
+  .professional-roof-actions .button--outline {
+    order: 2;
+  }
+}
+
+@media (max-width: 420px) {
+  .calculator-page--professional .professional-roof-methods {
+    grid-template-columns: 1fr;
+    gap: 0.35rem;
+  }
+
+  .calculator-page--professional .professional-roof-methods > label {
+    min-height: 3rem;
+    justify-content: flex-start;
+    padding-inline: 0.75rem;
+    text-align: left;
+  }
+
+  .calculator-page--professional .professional-roof-area {
+    grid-template-columns: 2.7rem minmax(0, 1fr);
+  }
+
+  .calculator-page--professional .professional-roof-area > span {
+    width: 2.7rem;
+    height: 2.7rem;
+  }
+}

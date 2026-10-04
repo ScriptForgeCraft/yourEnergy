@@ -60,15 +60,16 @@ export const createCalculatorResultsView = ({
     return scalar === null ? '—' : `≈ ${format(scalar, locale)} ֏`;
   };
   const formatYearsEstimate = (value, range) => {
+    const yearsUnit = wizard.pdfReport?.years ?? wizard.years ?? 'years';
     const normalized = normalizedRange(range);
     if (normalized) {
       return `≈ ${format(normalized.min, locale, { maximumFractionDigits: 1 })}–${format(
         normalized.max,
         locale,
         { maximumFractionDigits: 1 }
-      )} ${wizard.years ?? 'years'}`;
+      )} ${yearsUnit}`;
     }
-    return formatApproximate(value, locale, wizard.years ?? 'years', {
+    return formatApproximate(value, locale, yearsUnit, {
       maximumFractionDigits: 1
     });
   };
@@ -161,7 +162,7 @@ export const createCalculatorResultsView = ({
     const basisCopy = wizard.calculationBasis ?? {};
     const sourceType = (type) => basisCopy.sourceTypes?.[type] ?? type ?? '';
     const withSource = (value, type) => `${value} · ${sourceType(type)}`.replace(/\s*·\s*$/u, '');
-    const detail = element('details', 'wizard-details calculation-basis');
+    const detail = element('details', 'wizard-details pro-result-details calculation-basis');
     detail.append(element('summary', '', wizard.calculationBasisTitle ?? 'Calculation basis'));
     const list = element('dl', 'passport-ledger');
     const add = (label, value, type) => {

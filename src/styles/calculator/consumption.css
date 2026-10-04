@@ -973,7 +973,23 @@
   }
 
   .professional-consumption-actions .button {
-    flex: 1 1 auto;
+    width: 100%;
+    min-width: 0;
+    justify-content: center;
+  }
+
+  .professional-consumption-actions {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.55rem;
+  }
+
+  .professional-consumption-actions .button:not(.button--outline) {
+    order: 1;
+  }
+
+  .professional-consumption-actions .button--outline {
+    order: 2;
   }
 
   .consumption-chart-card,
@@ -986,6 +1002,18 @@
   }
 
   .consumption-profile-chart {
+    grid-template-columns: repeat(12, minmax(1.8rem, 1fr));
     gap: 0.13rem;
+    overflow-x: auto;
+    overscroll-behavior-inline: contain;
+    padding-bottom: 0.35rem;
+  }
+
+  .calculator-page--professional .tariff-mode-options label > span,
+  .calculator-page--professional .consumption-inputs,
+  .consumption-chart-card,
+  .consumption-tips {
+    min-width: 0;
+    overflow-wrap: anywhere;
   }
 }

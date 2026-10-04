@@ -221,9 +221,56 @@ test('Professional result supplements are not hidden behind a legacy presentatio
   assert.doesNotMatch(resultsView, /legacyResultPresentation/u);
   assert.match(resultsView, /const storage = analysis\.storageRecommendation;\s*if \(storage\)/u);
   assert.match(resultsView, /const basis = calculationBasisDetail\(analysis\.calculationBasis\)/u);
+  assert.match(
+    resultsView,
+    /wizard-details pro-result-details calculation-basis/u,
+    'calculation basis must participate in the result dashboard order'
+  );
+  assert.match(resultsView, /wizard\.pdfReport\?\.years \?\? wizard\.years/u);
   assert.match(resultsView, /ROOF_CAPACITY_LIMIT/u);
   assert.match(resultsView, /environmental\.treeEquivalent/u);
   assert.match(resultsView, /monthlyComparisonChart\(\{/u);
+});
+
+test('calculator mobile layouts keep the roof workflow and result text inside the viewport', async () => {
+  const [template, location, roof, consumption, quick, professionalResult] = await Promise.all([
+    source('src/templates/calculator.hbs'),
+    source('src/styles/calculator/location.css'),
+    source('src/styles/calculator/roof-results.css'),
+    source('src/styles/calculator/consumption.css'),
+    source('src/styles/calculator/quick.css'),
+    source('src/styles/calculator/pro-result.css')
+  ]);
+
+  assert.match(
+    location,
+    /@media \(max-width: 620px\)[\s\S]*?\.wizard-progress \{\s*display: none;/u
+  );
+  assert.match(
+    location,
+    /@media \(max-width: 860px\)[\s\S]*?> \.wizard-map-wrap \{\s*grid-row: 2;[\s\S]*?> \.professional-location-form \{\s*grid-row: 3;/u
+  );
+  const locationStep = template.match(
+    /data-wizard-step='0'[\s\S]*?(?=<section class='wizard-step' data-wizard-step='1')/u
+  )?.[0];
+  assert.ok(locationStep);
+  assert.doesNotMatch(locationStep, /data-wizard-back/u);
+  assert.match(location, /\.professional-location-actions \.button \{[\s\S]*?width: 100%;/u);
+  assert.match(roof, /\.professional-roof-form \{\s*display: contents;/u);
+  assert.match(roof, /\.professional-roof-map \{\s*order: 4;/u);
+  assert.match(roof, /\.professional-roof-actions[\s\S]*?grid-template-columns: 1fr;/u);
+  assert.match(
+    consumption,
+    /\.professional-consumption-actions[\s\S]*?grid-template-columns: 1fr;/u
+  );
+  assert.match(quick, /\.quick-result__metric dd[\s\S]*?overflow-wrap: anywhere;/u);
+  assert.match(quick, /\.quick-result__actions[\s\S]*?grid-template-columns: 1fr;/u);
+  assert.match(quick, /\.quick-result__offer-row \{[\s\S]*?flex-direction: column;/u);
+  assert.match(professionalResult, /\.pro-result-finance dd[\s\S]*?overflow-wrap: anywhere;/u);
+  assert.match(
+    professionalResult,
+    /@media \(max-width: 430px\)[\s\S]*?\.pro-result-finance__metrics[\s\S]*?grid-template-columns: 1fr;/u
+  );
 });
 
 test('one calculator exposes two modes and migrates historic routes safely', async () => {

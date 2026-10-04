@@ -132,6 +132,9 @@ export const getRoofValidationIssue = (roof = {}) => {
   return null;
 };
 
+export const roofAreaForDisplay = (roof = {}) =>
+  roof.areaMethod === 'map-projected' ? roof.projectedAreaSqm : roof.effectiveAreaSqm;
+
 const roofOutlineDistanceFromProperty = (points, property) => {
   if (!Array.isArray(points) || points.length < 3 || !property) return null;
   const normalized = points.filter(
@@ -890,6 +893,7 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
 
   const updateRoofAreaSummary = () => {
     const roof = roofGeometry();
+    const displayAreaSqm = roofAreaForDisplay(roof);
     if (roofAreaLabel) {
       roofAreaLabel.textContent =
         roof.areaMethod === 'measured-plane'
@@ -898,15 +902,15 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
     }
     if (roofArea) {
       roofArea.textContent =
-        roof.effectiveAreaSqm === null
+        displayAreaSqm === null
           ? '—'
-          : `${format(roof.effectiveAreaSqm, locale, { maximumFractionDigits: 1 })} m²`;
+          : `${format(displayAreaSqm, locale, { maximumFractionDigits: 1 })} m²`;
     }
     if (roofMapArea)
       roofMapArea.textContent =
-        roof.effectiveAreaSqm === null
+        displayAreaSqm === null
           ? '—'
-          : `${format(roof.effectiveAreaSqm, locale, { maximumFractionDigits: 1 })} m²`;
+          : `${format(displayAreaSqm, locale, { maximumFractionDigits: 1 })} m²`;
     if (roofMapOrientation && roof.azimuthDegrees !== null) {
       const selectedOrientation = roofOrientation?.selectedOptions?.[0]?.textContent?.trim();
       roofMapOrientation.textContent =

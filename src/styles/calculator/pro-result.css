@@ -1023,6 +1023,34 @@
   margin-top: 1rem;
 }
 
+.pro-result-content > *,
+.pro-result-hero__content,
+.pro-result-hero__metric,
+.pro-result-finance__heading,
+.pro-result-finance__metrics > div,
+.pro-result-card,
+.pro-result-card dl > div,
+.pro-result-next,
+.pro-result-next li,
+.pro-result-details {
+  min-width: 0;
+}
+
+.pro-result-hero h3,
+.pro-result-hero__metric dd,
+.pro-result-hero__metric dt,
+.pro-result-finance dd,
+.pro-result-finance dt,
+.pro-result-card dd,
+.pro-result-card dt,
+.pro-result-card p,
+.pro-result-card small,
+.pro-result-next strong,
+.pro-result-next small,
+.pro-result-details {
+  overflow-wrap: anywhere;
+}
+
 @media (max-width: 1100px) {
   .pro-result-hero__metrics {
     width: min(70%, 43rem);
@@ -1643,6 +1671,12 @@
     min-height: 0;
   }
 
+  .calculator-page--professional
+    [data-professional-calculator][data-current-step='3']
+    .wizard-progress {
+    display: none;
+  }
+
   .pro-result-production__heading {
     display: grid;
     gap: 0.2rem;
@@ -1656,6 +1690,25 @@
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
+  .pro-result-hero-actions {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+  }
+
+  .pro-result-hero-actions .button {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .pro-result-card--production .chart-bars,
+  .monthly-comparison-chart__bars {
+    grid-template-columns: repeat(12, minmax(1.8rem, 1fr));
+    overflow-x: auto;
+    overscroll-behavior-inline: contain;
+    padding-bottom: 0.35rem;
+  }
+
   .pro-result-roof__facts {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -1667,5 +1720,57 @@
   .pro-result-next__actions .text-button {
     width: 100%;
     margin-left: 0;
+  }
+}
+
+@media (max-width: 430px) {
+  .pro-result-hero,
+  .pro-result-finance,
+  .pro-result-card,
+  .pro-result-next,
+  .pro-result-details {
+    padding: 0.82rem;
+  }
+
+  .pro-result-hero__metrics,
+  .pro-result-finance__metrics,
+  .pro-result-energy__primary,
+  .pro-result-energy__breakdown,
+  .pro-result-card--equipment,
+  .pro-result-roof__comparison,
+  .pro-result-roof__facts,
+  .pro-result-details > .wizard-kpis,
+  .pro-result-details--yield .passport-ledger,
+  .pro-result-next ol {
+    grid-template-columns: 1fr;
+  }
+
+  .pro-result-energy__breakdown > div + div {
+    border-top: 1px solid #dde8f1;
+    border-left: 0;
+    padding-top: 0.65rem;
+    padding-left: 0;
+  }
+
+  .pro-result-card--impact {
+    grid-template-columns: 1fr;
+  }
+
+  .pro-result-card--impact .wizard-kpis {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.55rem;
+  }
+
+  .pro-result-next__heading {
+    grid-template-columns: 2.35rem minmax(0, 1fr);
+  }
+
+  .pro-result-next li {
+    grid-template-columns: 1.8rem minmax(0, 1fr);
+  }
+
+  .pro-result-next li > svg {
+    display: none;
   }
 }

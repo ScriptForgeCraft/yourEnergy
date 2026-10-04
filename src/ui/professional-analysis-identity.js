@@ -64,14 +64,34 @@ export const mergeProfessionalRoofInput = (currentRoof, inputRoof) => {
       ? inputRoof
       : {};
 
+  const incoming = (key, fallback = null) =>
+    Object.hasOwn(input, key) ? input[key] : (stored[key] ?? fallback);
+  const incomingOrientation = Object.hasOwn(input, 'azimuthDegrees')
+    ? input.azimuthDegrees
+    : Object.hasOwn(input, 'orientationDegrees')
+      ? input.orientationDegrees
+      : (stored.orientationDegrees ?? stored.azimuthDegrees ?? null);
+  const incomingComplete = Object.hasOwn(input, 'complete')
+    ? input.complete
+    : Object.hasOwn(input, 'polygonComplete')
+      ? input.polygonComplete
+      : (stored.complete ?? stored.polygonComplete ?? false);
+
   return {
     ...stored,
-    areaMethod: input.areaMethod ?? null,
-    mountingMode: input.mountingMode ?? null,
-    projectedAreaSqm: input.projectedAreaSqm ?? null,
-    planeAreaSqm: input.planeAreaSqm ?? null,
-    tiltDegrees: input.tiltDegrees ?? null,
-    orientationDegrees: input.azimuthDegrees ?? input.orientationDegrees ?? null
+    // Map events and form-control events update different parts of the same
+    // roof. Treat them as partial updates: dropping the outline here leaves
+    // Leaflet drawing a polygon while the calculation still sees no area.
+    points: incoming('points', []),
+    areaSqm: incoming('areaSqm'),
+    complete: Boolean(incomingComplete),
+    simplePolygon: incoming('simplePolygon', true),
+    areaMethod: incoming('areaMethod'),
+    mountingMode: incoming('mountingMode'),
+    projectedAreaSqm: incoming('projectedAreaSqm'),
+    planeAreaSqm: incoming('planeAreaSqm'),
+    tiltDegrees: incoming('tiltDegrees'),
+    orientationDegrees: incomingOrientation
   };
 };
 

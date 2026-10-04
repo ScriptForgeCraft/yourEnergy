@@ -118,6 +118,13 @@ export const calculatePreliminaryPolygonArea = (rawPoints) => {
   return Math.abs(area / 2);
 };
 
+// A genuine double-click fires two click events at effectively the same map
+// point. MouseEvent.detail can also be greater than one while a visitor is
+// quickly clicking different roof corners, so detail alone must not discard
+// those vertices.
+export const isRepeatedRoofFinishClick = ({ detail, distanceMeters } = {}) =>
+  Number(detail) > 1 && Number.isFinite(Number(distanceMeters)) && Number(distanceMeters) < 0.75;
+
 const importLeaflet = () =>
   Promise.all([import('leaflet'), import('leaflet/dist/leaflet.css')]).then(
     ([{ default: L }]) => L
@@ -505,9 +512,17 @@ export const createPropertyMap = async ({
   map.on('click', (event) => {
     if (mode === 'roof') {
       if (roofFinished) return;
-      // Leaflet emits a click for each half of a double-click. The second
-      // click is the user's finish gesture, not another roof vertex.
-      if (event.originalEvent?.detail > 1) return;
+      const lastPoint = roofPoints.at(-1);
+      const distanceFromLastPoint = lastPoint ? map.distance(lastPoint, event.latlng) : null;
+      // Ignore only the repeated click at the same vertex used to finish an
+      // outline. Fast clicks on different corners are all real roof points.
+      if (
+        isRepeatedRoofFinishClick({
+          detail: event.originalEvent?.detail,
+          distanceMeters: distanceFromLastPoint
+        })
+      )
+        return;
       addRoofPoint(event.latlng);
       return;
     }

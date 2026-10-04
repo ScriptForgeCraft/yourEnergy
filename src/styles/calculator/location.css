@@ -553,7 +553,7 @@
 }
 
 .professional-location-actions {
-  justify-content: space-between;
+  justify-content: flex-end;
   margin-top: 0.95rem;
 }
 
@@ -770,7 +770,7 @@
 
   .calculator-page--professional .wizard-step[data-wizard-step='0']::before {
     width: 100%;
-    height: calc(50% - 0.5rem);
+    height: 100%;
   }
 
   .calculator-page--professional .wizard-step[data-wizard-step='0'] > .wizard-step__heading,
@@ -780,8 +780,18 @@
   }
 
   .calculator-page--professional .wizard-step[data-wizard-step='0'] > .wizard-map-wrap {
-    grid-row: 3;
+    grid-row: 2;
     height: clamp(25rem, 90vw, 35rem);
+  }
+
+  .calculator-page--professional .wizard-step[data-wizard-step='0'] > .professional-location-form {
+    grid-row: 3;
+  }
+
+  .professional-location-actions .button {
+    width: 100%;
+    min-width: 0;
+    justify-content: center;
   }
 
   .professional-benefits {
@@ -804,7 +814,7 @@
   }
 
   .calculator-page--professional .wizard-progress {
-    display: grid;
+    display: none;
   }
 
   .professional-hero__controls {
@@ -841,5 +851,11 @@
   .professional-benefits > div:nth-child(4) {
     border-top: 1px solid #dceaf5;
     border-left: 0;
+  }
+
+  .calculator-page--professional .wizard-mobile-progress {
+    margin: 0 0 0.7rem;
+    color: #17355d;
+    font-size: 0.78rem;
   }
 }

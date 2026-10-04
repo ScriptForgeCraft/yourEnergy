@@ -1,7 +1,10 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 
-import { calculatePreliminaryPolygonArea } from '../src/services/property-map.js';
+import {
+  calculatePreliminaryPolygonArea,
+  isRepeatedRoofFinishClick
+} from '../src/services/property-map.js';
 import {
   applyPotentialOutcome,
   createCalculatorWizardState,
@@ -9,11 +12,37 @@ import {
   isWizardStepAccessible,
   WIZARD_STEP_STATUSES
 } from '../src/ui/calculator-wizard-state.js';
-import { getRoofValidationIssue } from '../src/ui/calculator-wizard.js';
+import { getRoofValidationIssue, roofAreaForDisplay } from '../src/ui/calculator-wizard.js';
 
 const completePotential = Object.freeze({
   annualYieldKwhPerKwp: 1532,
   monthlyYieldKwhPerKwp: [70, 86, 113, 145, 168, 181, 186, 173, 148, 116, 78, 68]
+});
+
+test('rapid clicks on different roof corners are not mistaken for a finish double-click', () => {
+  assert.equal(isRepeatedRoofFinishClick({ detail: 2, distanceMeters: 8 }), false);
+  assert.equal(isRepeatedRoofFinishClick({ detail: 3, distanceMeters: 2 }), false);
+  assert.equal(isRepeatedRoofFinishClick({ detail: 2, distanceMeters: 0.2 }), true);
+  assert.equal(isRepeatedRoofFinishClick({ detail: 1, distanceMeters: 0 }), false);
+});
+
+test('the Roof step shows contour area before tilt is known', () => {
+  assert.equal(
+    roofAreaForDisplay({
+      areaMethod: 'map-projected',
+      projectedAreaSqm: 84.37,
+      effectiveAreaSqm: null
+    }),
+    84.37
+  );
+  assert.equal(
+    roofAreaForDisplay({
+      areaMethod: 'measured-plane',
+      projectedAreaSqm: 84.37,
+      effectiveAreaSqm: 92.5
+    }),
+    92.5
+  );
 });
 
 test('PVGIS unavailable leaves Roof available and a retry preserves roof and consumption', () => {

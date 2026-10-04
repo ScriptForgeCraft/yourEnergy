@@ -122,6 +122,45 @@ test('a completed Professional result retains untouched roof controls through re
   assert.equal(persistedRoof.complete, true);
 });
 
+test('successive Professional map events retain the live outline and its calculated area', () => {
+  const controls = {
+    areaMethod: 'map-projected',
+    mountingMode: 'roof-parallel',
+    projectedAreaSqm: null,
+    planeAreaSqm: null,
+    tiltDegrees: 25,
+    orientationDegrees: 180
+  };
+  const firstOutline = {
+    points: [
+      { lat: 40.177, lng: 44.503 },
+      { lat: 40.1771, lng: 44.503 },
+      { lat: 40.177, lng: 44.5031 }
+    ],
+    areaSqm: 47.5,
+    simplePolygon: true,
+    complete: false
+  };
+  const secondOutline = {
+    ...firstOutline,
+    points: [...firstOutline.points, { lat: 40.1769, lng: 44.5031 }],
+    areaSqm: 95,
+    complete: true
+  };
+
+  const afterFirstClickSequence = mergeProfessionalRoofInput(controls, firstOutline);
+  const afterFinishedOutline = mergeProfessionalRoofInput(afterFirstClickSequence, secondOutline);
+
+  assert.deepEqual(afterFirstClickSequence.points, firstOutline.points);
+  assert.equal(afterFirstClickSequence.areaSqm, 47.5);
+  assert.equal(afterFirstClickSequence.areaMethod, 'map-projected');
+  assert.equal(afterFirstClickSequence.tiltDegrees, 25);
+  assert.deepEqual(afterFinishedOutline.points, secondOutline.points);
+  assert.equal(afterFinishedOutline.areaSqm, 95);
+  assert.equal(afterFinishedOutline.complete, true);
+  assert.equal(afterFinishedOutline.orientationDegrees, 180);
+});
+
 test('measured roof results survive refresh with an unused zero-area map outline', () => {
   const inputs = professionalInputs();
   const roof = {
