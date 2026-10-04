@@ -1169,6 +1169,7 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
     });
     const points = Array.isArray(state.roof?.points) ? state.roof.points : [];
     const hasOutline = points.length >= 3;
+    const simplePolygon = hasOutline ? isSimplePolygon(points) : true;
     return {
       areaMethod,
       mountingMode: activeMountingMode(root),
@@ -1177,8 +1178,10 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
       projectedAreaSqm,
       planeAreaSqm,
       effectiveAreaSqm: effective,
-      polygonComplete: Boolean(state.roof?.complete),
-      simplePolygon: hasOutline ? isSimplePolygon(points) : true,
+      // Geometry is authoritative. A valid Leaflet polygon is already closed
+      // visually, so a stale interaction flag must not reject 3+ real corners.
+      polygonComplete: hasOutline && simplePolygon,
+      simplePolygon,
       distanceFromPropertyMeters: hasOutline
         ? roofOutlineDistanceFromProperty(points, state.confirmedProperty)
         : null

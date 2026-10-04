@@ -3,7 +3,9 @@ import test from 'node:test';
 
 import {
   calculatePreliminaryPolygonArea,
-  isRepeatedRoofFinishClick
+  getRoofOutlineState,
+  isRepeatedRoofFinishClick,
+  shouldFinishRoofOnDoubleClick
 } from '../src/services/property-map.js';
 import {
   applyPotentialOutcome,
@@ -24,6 +26,22 @@ test('rapid clicks on different roof corners are not mistaken for a finish doubl
   assert.equal(isRepeatedRoofFinishClick({ detail: 3, distanceMeters: 2 }), false);
   assert.equal(isRepeatedRoofFinishClick({ detail: 2, distanceMeters: 0.2 }), true);
   assert.equal(isRepeatedRoofFinishClick({ detail: 1, distanceMeters: 0 }), false);
+  assert.equal(shouldFinishRoofOnDoubleClick({ pointCount: 3, repeatedClick: false }), false);
+  assert.equal(shouldFinishRoofOnDoubleClick({ pointCount: 3, repeatedClick: true }), true);
+  assert.equal(shouldFinishRoofOnDoubleClick({ pointCount: 2, repeatedClick: true }), false);
+});
+
+test('three valid roof corners are a complete outline without a separate finish flag', () => {
+  const outline = getRoofOutlineState([
+    { lat: 40.18, lng: 44.51 },
+    { lat: 40.18, lng: 44.51012 },
+    { lat: 40.18012, lng: 44.51012 }
+  ]);
+
+  assert.equal(outline.points.length, 3);
+  assert.equal(outline.simplePolygon, true);
+  assert.equal(outline.complete, true);
+  assert.ok(outline.areaSqm > 0);
 });
 
 test('the Roof step shows contour area before tilt is known', () => {

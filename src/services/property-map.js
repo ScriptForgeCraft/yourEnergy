@@ -118,12 +118,32 @@ export const calculatePreliminaryPolygonArea = (rawPoints) => {
   return Math.abs(area / 2);
 };
 
+export const getRoofOutlineState = (rawPoints) => {
+  const points = Array.isArray(rawPoints)
+    ? rawPoints.filter(isFinitePoint).map(normalizePoint)
+    : [];
+  const simplePolygon = isSimplePolygon(points);
+
+  return {
+    points,
+    areaSqm: calculatePreliminaryPolygonArea(points),
+    simplePolygon,
+    // Leaflet already renders the closing segment. For the calculator, a
+    // non-self-crossing outline with at least three vertices is complete; a
+    // separate double-click flag must not invalidate the same geometry.
+    complete: simplePolygon
+  };
+};
+
 // A genuine double-click fires two click events at effectively the same map
 // point. MouseEvent.detail can also be greater than one while a visitor is
 // quickly clicking different roof corners, so detail alone must not discard
 // those vertices.
 export const isRepeatedRoofFinishClick = ({ detail, distanceMeters } = {}) =>
   Number(detail) > 1 && Number.isFinite(Number(distanceMeters)) && Number(distanceMeters) < 0.75;
+
+export const shouldFinishRoofOnDoubleClick = ({ pointCount, repeatedClick } = {}) =>
+  Number(pointCount) >= 3 && repeatedClick === true;
 
 const importLeaflet = () =>
   Promise.all([import('leaflet'), import('leaflet/dist/leaflet.css')]).then(
@@ -165,6 +185,7 @@ export const createPropertyMap = async ({
   let roofMarkers = [];
   let roofPoints = [];
   let roofFinished = false;
+  let roofFinishClickCandidate = false;
   let roofLineWeight = 3;
   let roofPointRadius = 10;
   let roofPointNumbersVisible = true;
@@ -400,20 +421,13 @@ export const createPropertyMap = async ({
   setLayer('satellite');
 
   const emitRoof = () => {
-    const points = roofPoints.map(normalizePoint);
-    const simplePolygon = isSimplePolygon(points);
-    onRoofChange({
-      points,
-      areaSqm: calculatePreliminaryPolygonArea(points),
-      simplePolygon,
-      complete: roofFinished && simplePolygon
-    });
+    onRoofChange(getRoofOutlineState(roofPoints));
   };
 
   const removeRoofPoint = (index) => {
     if (!Number.isInteger(index) || !roofPoints[index]) return false;
     // Removing or moving a point makes a previously finished outline editable
-    // again. The visitor must explicitly finish the corrected outline.
+    // again. Its geometry determines whether it remains a valid outline.
     roofFinished = false;
     roofPoints.splice(index, 1);
     drawRoof();
@@ -452,8 +466,7 @@ export const createPropertyMap = async ({
         removeRoofPoint(index);
       });
       marker.on('dragstart', () => {
-        // Moving a vertex reopens the outline: it must be finished again
-        // before the browser can send the polygon as a completed roof input.
+        // Moving a vertex reopens the outline while it is being edited.
         roofFinished = false;
       });
       marker.on('dragend', () => {
@@ -511,18 +524,19 @@ export const createPropertyMap = async ({
 
   map.on('click', (event) => {
     if (mode === 'roof') {
-      if (roofFinished) return;
+      // A restored or double-click-finished outline is still editable. A map
+      // click expresses clear intent to add another corner, so reopen it
+      // instead of silently ignoring the visitor until a marker is removed.
+      if (roofFinished) roofFinished = false;
       const lastPoint = roofPoints.at(-1);
       const distanceFromLastPoint = lastPoint ? map.distance(lastPoint, event.latlng) : null;
       // Ignore only the repeated click at the same vertex used to finish an
       // outline. Fast clicks on different corners are all real roof points.
-      if (
-        isRepeatedRoofFinishClick({
-          detail: event.originalEvent?.detail,
-          distanceMeters: distanceFromLastPoint
-        })
-      )
-        return;
+      roofFinishClickCandidate = isRepeatedRoofFinishClick({
+        detail: event.originalEvent?.detail,
+        distanceMeters: distanceFromLastPoint
+      });
+      if (roofFinishClickCandidate) return;
       addRoofPoint(event.latlng);
       return;
     }
@@ -531,6 +545,21 @@ export const createPropertyMap = async ({
 
   map.on('dblclick', (event) => {
     if (mode !== 'roof' || roofFinished || roofPoints.length < 3) return;
+    // Browsers can emit dblclick when two rapid clicks land on different map
+    // coordinates because the DOM target is still the same Leaflet canvas.
+    // Remember whether its second click repeated the last vertex; measuring
+    // here would always see zero because a distinct second point is already
+    // part of the outline by the time this event fires.
+    if (
+      !shouldFinishRoofOnDoubleClick({
+        pointCount: roofPoints.length,
+        repeatedClick: roofFinishClickCandidate
+      })
+    ) {
+      roofFinishClickCandidate = false;
+      return;
+    }
+    roofFinishClickCandidate = false;
     event.originalEvent?.preventDefault();
     event.originalEvent?.stopPropagation();
     roofFinished = isSimplePolygon(roofPoints);
@@ -633,12 +662,7 @@ export const createPropertyMap = async ({
       return addRoofPoint(pointForOffset({ north: 3 * ring, east: 3 * ring }));
     },
     getRoof() {
-      return {
-        points: roofPoints.map(normalizePoint),
-        areaSqm: calculatePreliminaryPolygonArea(roofPoints),
-        simplePolygon: isSimplePolygon(roofPoints),
-        complete: roofFinished && isSimplePolygon(roofPoints)
-      };
+      return getRoofOutlineState(roofPoints);
     },
     undo() {
       if (!roofPoints.length) return false;
