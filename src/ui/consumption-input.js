@@ -65,7 +65,8 @@ export const initConsumptionInput = ({
   const actualDayNightPanel = root.querySelector('[data-professional-actual-day-night-panel]');
   const actualDayInput = root.querySelector('[data-actual-day-kwh]');
   const actualNightInput = root.querySelector('[data-actual-night-kwh]');
-  const tariffDisclosure = root.querySelector('[data-effective-rate-disclosure]');
+  const chart = wizardRoot.querySelector('[data-consumption-chart]');
+  const chartContext = wizardRoot.querySelector('[data-consumption-chart-context]');
   const chartItems = [
     ...wizardRoot.querySelectorAll('[data-consumption-chart] .consumption-profile-chart__item')
   ];
@@ -101,12 +102,10 @@ export const initConsumptionInput = ({
       actualNightInput.value = String(initialFinancialRate.actualNightKwh ?? '');
   }
   selectTariffMode(initialFinancialRate?.mode);
-  if (tariffDisclosure) tariffDisclosure.open = true;
-
   const consumptionValues = () => {
     const mode = activeMode();
     const bill = monthlyBill(billInput?.value);
-    const billedKwh = monthlyUsage(billedKwhInput?.value);
+    const billedKwh = billedKwhPanel?.hidden === false ? monthlyUsage(billedKwhInput?.value) : null;
     const usage = monthlyUsage(usageInput?.value);
     const monthly = [...root.querySelectorAll('[data-consumption-month]')].map((input) =>
       profileMonth(input.value)
@@ -281,9 +280,8 @@ export const initConsumptionInput = ({
     if (!chartItems.length) return;
     const hasMonthlyProfile =
       mode === 'monthly' && monthly.length === 12 && monthly.every((value) => value !== null);
-    const kwhValues = hasMonthlyProfile
-      ? monthly
-      : Array(12).fill(annual === null ? 0 : annual / 12);
+    const empty = annual === null;
+    const kwhValues = hasMonthlyProfile ? monthly : Array(12).fill(empty ? 0 : annual / 12);
     const useAmd = chartUnit === 'amd' && displayRate !== null;
     const values = useAmd ? kwhValues.map((value) => value * displayRate) : kwhValues;
     const maximum = Math.max(...values, 1);
@@ -291,11 +289,21 @@ export const initConsumptionInput = ({
       const value = values[index] ?? 0;
       item
         .querySelector('[data-consumption-chart-value]')
-        ?.replaceChildren(useAmd ? `${Math.round(value)} ֏` : String(Math.round(value)));
+        ?.replaceChildren(
+          empty ? '—' : useAmd ? `${Math.round(value)} ֏` : String(Math.round(value))
+        );
       item
         .querySelector('.consumption-profile-chart__bar')
-        ?.style.setProperty('--chart-height', `${Math.max(8, (value / maximum) * 100)}%`);
+        ?.style.setProperty(
+          '--chart-height',
+          empty ? '0%' : `${Math.max(8, (value / maximum) * 100)}%`
+        );
     });
+    chart?.classList.toggle('is-empty', empty);
+    if (chartContext) {
+      chartContext.hidden = hasMonthlyProfile;
+      chartContext.textContent = empty ? strings.chartEmpty : strings.chartUniform;
+    }
   };
 
   const updateAnnualOutput = () => {
@@ -330,6 +338,9 @@ export const initConsumptionInput = ({
   const updateMode = ({ notify = true, resetFinancial = false } = {}) => {
     const mode = activeMode();
     panels.forEach((panel) => togglePanel(panel, panel.dataset.consumptionPanel === mode));
+    if (billedKwhInput) {
+      billedKwhInput.disabled = mode !== 'bill' || billedKwhPanel?.hidden !== false;
+    }
     if (resetFinancial) resetFinancialSource();
     const values = updateAnnualOutput();
     if (notify) onChange(values);
@@ -340,7 +351,6 @@ export const initConsumptionInput = ({
     const available = derivedRate(values) !== null;
     if (values.mode === 'bill' && available && !financialSelectionExplicit) {
       selectTariffMode(createDefaultFinancialRate(values.value).mode);
-      if (tariffDisclosure) tariffDisclosure.open = true;
     } else if (!available && activeTariffMode() === FINANCIAL_RATE_MODES.BILL_DERIVED) {
       selectTariffMode(FINANCIAL_RATE_MODES.STANDARD);
     }
@@ -376,7 +386,22 @@ export const initConsumptionInput = ({
     const expanded = billedKwhToggle.getAttribute('aria-expanded') === 'true';
     billedKwhToggle.setAttribute('aria-expanded', String(!expanded));
     if (billedKwhPanel) billedKwhPanel.hidden = expanded;
-    if (!expanded) billedKwhInput?.focus();
+    if (billedKwhInput) billedKwhInput.disabled = expanded;
+    billedKwhToggle.textContent = expanded ? strings.billKwhAction : strings.billKwhRemove;
+    if (!expanded) {
+      billedKwhInput?.focus();
+      return;
+    }
+    if (billedKwhInput) {
+      billedKwhInput.value = '';
+      billedKwhInput.removeAttribute('aria-invalid');
+    }
+    if (activeTariffMode() === FINANCIAL_RATE_MODES.BILL_DERIVED) {
+      financialSelectionExplicit = false;
+      selectTariffMode(FINANCIAL_RATE_MODES.STANDARD);
+    }
+    updateAnnualOutput();
+    onChange();
   });
   fillAverageButton?.addEventListener('click', () => {
     const values = getValues();
@@ -419,7 +444,11 @@ export const initConsumptionInput = ({
     const values = getValues();
     if (values.mode === 'bill') {
       if (values.bill === null) return invalidResult([billInput], strings.invalidBill);
-      if (hasText(billedKwhInput?.value) && values.billedKwh === null) {
+      if (
+        billedKwhPanel?.hidden === false &&
+        hasText(billedKwhInput?.value) &&
+        values.billedKwh === null
+      ) {
         return invalidResult([billedKwhInput], strings.invalidUsage);
       }
     } else if (values.mode === 'usage' && values.usage === null) {
@@ -461,6 +490,11 @@ export const initConsumptionInput = ({
   if (billedKwhInput?.value) {
     if (billedKwhPanel) billedKwhPanel.hidden = false;
     billedKwhToggle?.setAttribute('aria-expanded', 'true');
+  }
+  if (billedKwhToggle) {
+    billedKwhToggle.textContent = billedKwhInput?.value
+      ? strings.billKwhRemove
+      : strings.billKwhAction;
   }
   updateMode({ notify: false });
   if (financialSelectionExplicit) {

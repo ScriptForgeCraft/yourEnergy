@@ -214,6 +214,7 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
   const potentialChart = root.querySelector('[data-potential-chart]');
   const potentialTable = root.querySelector('[data-potential-table]');
   const potentialSummary = root.querySelector('[data-potential-summary]');
+  const consumptionContinue = root.querySelector('[data-consumption-continue]');
   const roofArea = root.querySelector('[data-roof-area]');
   const roofAreaLabel = root.querySelector('[data-roof-area-label]');
   const roofMapArea = root.querySelector('[data-roof-map-area]');
@@ -1428,13 +1429,15 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
 
   const consumptionInput = initConsumptionInput({
     root: root.querySelector('[data-consumption-inputs]'),
-    strings: product.consumption ?? {},
+    strings: { ...(product.consumption ?? {}), ...(wizard.ui?.consumption ?? {}) },
     locale,
     initialFinancialRate: state.financialRate,
     onChange: () => {
+      const validation = consumptionInput?.inspect();
       const draft = consumptionInput?.draft();
       state.consumption = draft?.consumption ?? null;
       state.financialRate = draft?.financialRate ?? createStandardFinancialRate();
+      if (consumptionContinue) consumptionContinue.disabled = validation?.valid !== true;
       // Consumption and its optional effective rate are shared with Quick. A Professional edit
       // cannot leave an earlier regional result visible for different inputs.
       session.clearQuickAnalysis();
@@ -1442,6 +1445,9 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
       updateProgress();
     }
   });
+  if (consumptionContinue) {
+    consumptionContinue.disabled = consumptionInput?.inspect().valid !== true;
+  }
   root
     .querySelector('[data-open-location-map]')
     ?.addEventListener('click', searchAddressImmediately);
@@ -1553,7 +1559,7 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
   });
   potentialSkip?.addEventListener('click', () => setStep(1));
   potentialRetry?.addEventListener('click', () => void requestPotential({ force: true }));
-  root.querySelector('[data-consumption-continue]')?.addEventListener('click', () => {
+  consumptionContinue?.addEventListener('click', () => {
     const consumption = consumptionInput?.read();
     if (!consumption?.valid) {
       writeStatus(consumption?.message ?? product.consumption?.noConsumption, true);

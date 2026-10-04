@@ -75,7 +75,7 @@
 .calculator-page--professional .consumption-inputs > fieldset {
   display: grid;
   grid-column: 1 / -1;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 0.08rem;
   margin: 0;
   border: 0;
@@ -230,6 +230,14 @@
   font-weight: 800;
 }
 
+/* The generic panel input rule above is correct for unit shells, but monthly
+   fields are standalone controls and must retain their visible boundary. */
+.calculator-page--professional .consumption-panel--months .month-inputs input {
+  border: 1px solid #d2dfec;
+  padding: 0 0.55rem;
+  background: #fff;
+}
+
 .calculator-page--professional .consumption-panel .input-with-unit span,
 .calculator-page--professional .effective-rate .input-with-unit span {
   min-height: 0;
@@ -286,12 +294,67 @@
   border: 0;
 }
 
-.calculator-page--professional .effective-rate summary {
-  width: fit-content;
-  cursor: pointer;
-  color: #076deb;
+.calculator-page--professional .professional-tariff-heading {
+  display: flex;
+  align-items: center;
+  gap: 0.38rem;
+}
+
+.calculator-page--professional .professional-tariff-heading h3 {
+  margin: 0;
+  color: #162b50;
   font-size: 0.78rem;
-  font-weight: 750;
+  font-weight: 780;
+}
+
+.calculator-page--professional .professional-tariff-info {
+  position: relative;
+}
+
+.calculator-page--professional .professional-tariff-info > summary {
+  display: grid;
+  width: 1.4rem;
+  height: 1.4rem;
+  place-items: center;
+  border-radius: 50%;
+  color: #076deb;
+  cursor: pointer;
+  font-size: 1rem;
+  list-style: none;
+}
+
+.calculator-page--professional .professional-tariff-info > summary::-webkit-details-marker {
+  display: none;
+}
+
+.calculator-page--professional .professional-tariff-info > summary:focus-visible {
+  outline: 2px solid #1685ff;
+  outline-offset: 2px;
+}
+
+.calculator-page--professional .professional-tariff-info > div {
+  position: absolute;
+  z-index: 5;
+  top: calc(100% + 0.42rem);
+  right: 0;
+  width: min(22rem, 75vw);
+  border: 1px solid #d8e7f3;
+  border-radius: 0.62rem;
+  padding: 0.82rem;
+  color: #314f6e;
+  background: #fff;
+  box-shadow: 0 12px 30px rgb(24 67 104 / 15%);
+  font-size: 0.68rem;
+  line-height: 1.45;
+}
+
+.calculator-page--professional .professional-tariff-info > div strong {
+  display: block;
+  color: #153553;
+}
+
+.calculator-page--professional .professional-tariff-info > div p {
+  margin: 0.45rem 0 0;
 }
 
 .calculator-page--professional .effective-rate > label {
@@ -511,6 +574,12 @@
   box-shadow: 0 10px 20px rgb(0 104 237 / 22%);
 }
 
+.professional-consumption-actions .button:disabled {
+  cursor: not-allowed;
+  filter: saturate(0.5);
+  opacity: 0.52;
+}
+
 .professional-consumption-aside {
   display: grid;
   align-content: start;
@@ -708,6 +777,19 @@
   border-bottom: 1px solid #dce8f1;
 }
 
+.consumption-chart-context {
+  min-height: 2.3em;
+  margin: 0.7rem 0 0;
+  color: #607891;
+  font-size: 0.65rem;
+  line-height: 1.4;
+}
+
+.consumption-profile-chart.is-empty .consumption-profile-chart__bar {
+  min-height: 0;
+  opacity: 0;
+}
+
 .consumption-profile-chart__item {
   display: grid;
   grid-template-rows: 1rem 1fr 1rem;
@@ -758,6 +840,13 @@
 .consumption-fill-average svg {
   width: 1.25rem;
   height: 1.25rem;
+}
+
+.consumption-fill-average:disabled {
+  color: #8295a9;
+  background: #f5f8fb;
+  cursor: not-allowed;
+  opacity: 0.62;
 }
 
 .consumption-tips summary {

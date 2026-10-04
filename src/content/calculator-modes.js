@@ -102,6 +102,7 @@ const common = {
         'Ստանդարտ աղբյուրի դեպքում հաշվիչը սպառումից ընտրում է պաշտոնական կենցաղային սակագնային խումբը։'
       ],
       billKwhAction: 'Հաշվում կա՞ կՎտժ։ Նշել',
+      billKwhRemove: 'Չօգտագործել հաշվի կՎտժ-ը',
       billKwhLabel: 'Հաշվում նշված սպառումը',
       billEffectiveRate: 'Ըստ Ձեր հաշվի',
       estimatedConsumption: 'Հաշվարկային սպառում',
@@ -417,6 +418,7 @@ const common = {
         'Для стандартного источника калькулятор определяет официальную бытовую тарифную группу по потреблению.'
       ],
       billKwhAction: 'Есть kWh в счёте? Указать',
+      billKwhRemove: 'Не использовать kWh из счёта',
       billKwhLabel: 'Потребление из счёта',
       billEffectiveRate: 'По вашему счёту',
       estimatedConsumption: 'Расчётное потребление',
@@ -732,6 +734,7 @@ const common = {
         'For the standard source, the calculator selects the official residential tariff band from consumption.'
       ],
       billKwhAction: 'Have kWh on your bill? Enter it',
+      billKwhRemove: 'Do not use kWh from the bill',
       billKwhLabel: 'Consumption from your bill',
       billEffectiveRate: 'From your bill',
       estimatedConsumption: 'Estimated consumption',

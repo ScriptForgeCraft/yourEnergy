@@ -345,6 +345,14 @@
   display: block;
 }
 
+.quick-tariff-setting__summary:has([data-quick-tariff-change][aria-expanded='true']) > div {
+  display: none;
+}
+
+.quick-tariff-setting__summary:has([data-quick-tariff-change][aria-expanded='true']) {
+  justify-content: flex-end;
+}
+
 .quick-tariff-setting__summary strong {
   color: #143353;
   font-size: 0.9rem;

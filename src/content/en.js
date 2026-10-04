@@ -121,9 +121,17 @@ export default {
       billLabel: 'Average electricity bill',
       billHelp: 'Enter the average monthly amount in AMD.',
       billKwhAction: 'Have kWh on this bill? Enter it →',
+      billKwhRemove: 'Do not use kWh from the bill',
       billKwhLabel: 'Consumption from the same bill',
       refineEffectiveRate: 'Refine electricity cost',
       tariffSettingTitle: 'Tariff for the financial estimate',
+      tariffInfoLabel: 'How the tariff is calculated',
+      tariffInfoTitle: 'How is the tariff calculated?',
+      tariffInfo: [
+        'The tariff is used only for savings and payback. Solar-system sizing is determined from consumption in kWh.',
+        'If you enter a bill amount and kWh from the same bill, the calculator can determine your average electricity cost automatically.',
+        'For the standard source, the calculator selects the official residential tariff band from consumption.'
+      ],
       tariffModeLabel: 'Financial tariff mode',
       standardTariff: 'Standard residential tariff',
       billDerivedRate: 'From your bill',

@@ -346,6 +346,9 @@ const copy = {
         kwh: 'kWh',
         amd: 'AMD',
         fillAverage: 'Բաժանել տարեկան արժեքը հավասար',
+        chartEmpty: 'Մուտքագրեք սպառումը՝ ամսական գրաֆիկը տեսնելու համար։',
+        chartUniform:
+          'Գրաֆիկը համեմատության համար ցույց է տալիս հավասար բաշխում․ սա Ձեր մուտքագրած ամսական պրոֆիլը չէ։',
         tipsTitle: 'Արագ խորհուրդներ',
         tipBillTitle: 'Ստուգեք էլեկտրաէներգիայի հաշիվը',
         tipBillCopy: 'Միջին ամսական գումարը կարող եք գտնել կոմունալ վճարման հաշվում։',
@@ -729,6 +732,9 @@ const copy = {
         kwh: 'кВт·ч',
         amd: 'AMD',
         fillAverage: 'Равномерно распределить годовое значение',
+        chartEmpty: 'Введите потребление, чтобы увидеть помесячный график.',
+        chartUniform:
+          'Для сравнения график показывает равномерное распределение. Это не введённый вами помесячный профиль.',
         tipsTitle: 'Полезные советы',
         tipBillTitle: 'Проверьте счёт за электроэнергию',
         tipBillCopy: 'Среднюю сумму за месяц можно найти в коммунальном счёте.',
@@ -1112,6 +1118,9 @@ const copy = {
         kwh: 'kWh',
         amd: 'AMD',
         fillAverage: 'Spread annual value evenly',
+        chartEmpty: 'Enter consumption to see the monthly chart.',
+        chartUniform:
+          'For comparison, the chart shows an even distribution. This is not a monthly profile you entered.',
         tipsTitle: 'Quick tips',
         tipBillTitle: 'Check your electricity bill',
         tipBillCopy: 'You can find the average monthly amount on your utility bill.',

@@ -244,15 +244,21 @@ test('HY, RU and EN define the complete financial-source and empty-state copy', 
       'billDerivedHelp',
       'customEffectiveRate',
       'customBillComparison',
-      'emptyState'
+      'emptyState',
+      'billKwhRemove',
+      'tariffInfoLabel',
+      'tariffInfoTitle'
     ]) {
       assert.equal(typeof professional[key], 'string', `${locale} professional.${key}`);
     }
+    assert.equal(Array.isArray(professional.tariffInfo), true, `${locale} professional.tariffInfo`);
+    assert.equal(professional.tariffInfo.length, 3, `${locale} professional.tariffInfo length`);
     for (const key of [
       'tariffForSavings',
       'billEffectiveRate',
       'billDerivedHelp',
-      'customBillComparison'
+      'customBillComparison',
+      'billKwhRemove'
     ]) {
       assert.equal(typeof quick[key], 'string', `${locale} quick.${key}`);
     }

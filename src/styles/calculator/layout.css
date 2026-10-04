@@ -226,6 +226,11 @@
   padding-inline: 0.25rem;
 }
 
+.quick-calculator [data-quick-custom-tariff] .quick-input-with-unit {
+  grid-template-columns: minmax(0, 1fr) auto;
+  padding-left: 0.8rem;
+}
+
 /* Quick selects and unit inputs share one fixed outer height. The nested
    editable control stretches inside its shell instead of adding its own
    height or margin. */
@@ -258,6 +263,12 @@
 .quick-calculator [data-quick-submit] .inline-icon {
   width: 1.12rem;
   height: 1.12rem;
+}
+
+.quick-calculator [data-quick-submit]:disabled {
+  cursor: not-allowed;
+  filter: saturate(0.55);
+  opacity: 0.58;
 }
 
 .quick-result {

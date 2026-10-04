@@ -307,10 +307,40 @@ test('Professional monthly input and report controls describe their actual behav
   ]);
 
   assert.doesNotMatch(consumptionInput, /demoMonthlyProfile/u);
-  assert.match(consumptionInput, /Array\(12\)\.fill\(annual === null \? 0 : annual \/ 12\)/u);
+  assert.match(consumptionInput, /Array\(12\)\.fill\(empty \? 0 : annual \/ 12\)/u);
   assert.match(consumptionInput, /base \+ \(index < remainder \? 1 : 0\)/u);
+  assert.match(consumptionInput, /empty \? '—'/u);
+  assert.match(consumptionInput, /chartContext\.textContent = empty/u);
   assert.doesNotMatch(wizardCopy, /higher accuracy|более точного расчёта|Բարձր ճշգրտ/u);
   assert.match(wizardCopy, /тарифная группа определяется отдельно для каждого месяца/u);
   assert.match(template, /data-open-passport/u);
   assert.match(controller, /\[data-open-passport\]/u);
+});
+
+test('Quick and Professional expose honest idle, hidden-input and validation states', async () => {
+  const [quickTemplate, professionalTemplate, quickController, professionalController, styles] =
+    await Promise.all([
+      source('src/templates/calculator-quick.hbs'),
+      source('src/templates/calculator.hbs'),
+      source('src/ui/quick-calculator.js'),
+      source('src/ui/consumption-input.js'),
+      source('src/styles/calculator/consumption.css')
+    ]);
+
+  assert.match(quickTemplate, /data-quick-result-loading[^>]*hidden/u);
+  assert.match(quickTemplate, /data-quick-result-content>/u);
+  assert.match(quickTemplate, /data-quick-submit disabled/u);
+  assert.match(quickController, /setResultState\('idle'\)/u);
+  assert.match(quickController, /submit\.disabled = request !== null \|\| !input\(\)\.valid/u);
+  assert.match(quickController, /billKwh\.value = ''/u);
+  assert.match(quickController, /billKwhPanel\?\.hidden === false/u);
+
+  assert.match(professionalTemplate, /data-consumption-continue disabled/u);
+  assert.match(professionalTemplate, /data-consumption-chart-context/u);
+  assert.match(professionalTemplate, /professional-tariff-info/u);
+  assert.match(professionalController, /billedKwhInput\.value = ''/u);
+  assert.match(professionalController, /billedKwhPanel\?\.hidden === false/u);
+  assert.match(styles, /grid-template-columns: repeat\(3, minmax\(0, 1fr\)\)/u);
+  assert.match(styles, /consumption-panel--months \.month-inputs input/u);
+  assert.match(styles, /consumption-profile-chart\.is-empty/u);
 });

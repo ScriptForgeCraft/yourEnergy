@@ -226,8 +226,12 @@
                   <div class='month-inputs'>{{#each passport.months}}<label>{{short}}<input id='consumption-month-{{@index}}' name='consumption-month-{{@index}}' type='text'
                         inputmode='decimal' autocomplete='off' data-consumption-month /></label>{{/each}}</div>
                 </div>
-                <details class='effective-rate tariff-setting' data-effective-rate-disclosure open>
-                  <summary>{{product.consumption.tariffSettingTitle}}</summary>
+                <section class='effective-rate tariff-setting' data-effective-rate-disclosure>
+                  <div class='professional-tariff-heading'><h3>{{product.consumption.tariffSettingTitle}}</h3>
+                    <details class='professional-tariff-info'><summary aria-label='{{product.consumption.tariffInfoLabel}}'>ⓘ</summary>
+                      <div><strong>{{product.consumption.tariffInfoTitle}}</strong>{{#each product.consumption.tariffInfo}}<p>{{this}}</p>{{/each}}</div>
+                    </details>
+                  </div>
                   <fieldset class='tariff-mode-options' data-professional-tariff-options>
                     <legend class='visually-hidden'>{{product.consumption.tariffModeLabel}}</legend>
                     <label data-professional-bill-derived hidden><input type='radio'
@@ -262,7 +266,7 @@
                     </div>
                     <p class='input-help' id='actual-day-night-help'>{{product.consumption.actualDayNightHelp}}</p>
                   </div>
-                </details>
+                </section>
                 <p class='input-help consumption-empty-state' data-consumption-empty>{{product.consumption.emptyState}}</p>
                 <div class='consumption-estimate' data-consumption-annual-card hidden>
                   <span class='consumption-estimate__icon' aria-hidden='true'><svg><use href='/icons.svg#zap'></use></svg></span>
@@ -276,7 +280,7 @@
                   type='button' data-wizard-back='0'><svg aria-hidden='true'>
                     <use href='/icons.svg#arrow-left'></use>
                   </svg>{{wizard.back}}</button><button class='button' type='button'
-                  data-consumption-continue>{{wizard.next}}: {{product.roof.title}}<svg aria-hidden='true'>
+                  data-consumption-continue disabled>{{wizard.next}}: {{product.roof.title}}<svg aria-hidden='true'>
                     <use href='/icons.svg#arrow-right'></use>
                   </svg></button></div>
             </div>
@@ -301,12 +305,13 @@
                       data-consumption-unit='amd' aria-pressed='false'>{{wizard.ui.consumption.amd}}</button>
                   </div>
                 </div>
-                <div class='consumption-profile-chart' data-consumption-chart
+                <p class='consumption-chart-context' data-consumption-chart-context>{{wizard.ui.consumption.chartEmpty}}</p>
+                <div class='consumption-profile-chart is-empty' data-consumption-chart
                   aria-label='{{wizard.ui.consumption.monthlyTitle}}'>{{#each passport.months}}<div
                     class='consumption-profile-chart__item'><output data-consumption-chart-value>—</output><span
                       class='consumption-profile-chart__bar' style='--chart-height: 0%'></span><small>{{short}}</small>
                   </div>{{/each}}</div><button class='consumption-fill-average' type='button'
-                  data-consumption-fill-average><svg aria-hidden='true'>
+                  data-consumption-fill-average disabled><svg aria-hidden='true'>
                     <use href='/icons.svg#chart-bars'></use>
                   </svg>{{wizard.ui.consumption.fillAverage}}</button>
               </section>
