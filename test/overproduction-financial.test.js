@@ -93,7 +93,7 @@ test('generation equal to consumption has zero surplus and keeps a complete fina
   assert.equal(result.financial.paybackYears, 2);
 });
 
-test('generation above consumption never values unconfigured surplus at the retail tariff', () => {
+test('generation above consumption excludes unconfigured surplus but retains conservative payback', () => {
   const result = scenario({ panelWatts: 600 });
 
   assert.deepEqual(result.energyBalance, {
@@ -104,9 +104,9 @@ test('generation above consumption never values unconfigured surplus at the reta
   });
   assert.equal(result.financial.retailOffsetValueAmd, 50_000);
   assert.equal(result.financial.surplusCompensationValueAmd, null);
-  assert.equal(result.financial.annualEconomicValueAmd, null);
-  assert.equal(result.financial.annualSavingsAmd, null);
-  assert.equal(result.financial.paybackYears, null);
+  assert.equal(result.financial.annualEconomicValueAmd, 50_000);
+  assert.equal(result.financial.annualSavingsAmd, 50_000);
+  assert.equal(result.financial.paybackYears, 120_000 / 50_000);
   assert.equal(result.coveragePercent, 100);
   assert.equal(result.financial.surplusCompensation.reason, 'SURPLUS_COMPENSATION_NOT_CONFIGURED');
   assert.ok(result.limitations.includes('SURPLUS_COMPENSATION_UNAVAILABLE'));
@@ -125,7 +125,8 @@ test('very low consumption rounds up to a whole module to meet the coverage targ
   assert.ok(Math.abs(lowConsumption.energyBalance.surplusEnergyKwh - 770) < 0.000001);
   assert.equal(lowConsumption.coveragePercent, 100);
   assert.equal(lowConsumption.financial.retailOffsetValueAmd, 5_000);
-  assert.equal(lowConsumption.financial.annualEconomicValueAmd, null);
+  assert.equal(lowConsumption.financial.annualEconomicValueAmd, 5_000);
+  assert.ok(Math.abs(lowConsumption.financial.paybackYears - 58_000 / 5_000) < 1e-9);
 });
 
 test('a configured, verified regulatory surplus-compensation rate completes annual value and payback', () => {

@@ -375,9 +375,11 @@ test('Professional monthly input and report controls describe their actual behav
   ]);
 
   assert.doesNotMatch(consumptionInput, /demoMonthlyProfile/u);
-  assert.match(consumptionInput, /Array\(12\)\.fill\(empty \? 0 : annual \/ 12\)/u);
+  assert.doesNotMatch(consumptionInput, /Array\(12\)\.fill\(empty \? 0 : annual \/ 12\)/u);
+  assert.match(consumptionInput, /if \(chartCard\) chartCard\.hidden = !monthlyMode/u);
+  assert.match(consumptionInput, /chartRateRanges\(values\)/u);
   assert.match(consumptionInput, /base \+ \(index < remainder \? 1 : 0\)/u);
-  assert.match(consumptionInput, /empty \? '—'/u);
+  assert.match(consumptionInput, /empty\s*\?\s*'—'/u);
   assert.match(consumptionInput, /chartContext\.textContent = empty/u);
   assert.doesNotMatch(wizardCopy, /higher accuracy|более точного расчёта|Բարձր ճշգրտ/u);
   assert.match(wizardCopy, /тарифная группа определяется отдельно для каждого месяца/u);

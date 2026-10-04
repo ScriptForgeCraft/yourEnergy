@@ -73,6 +73,16 @@ export const createCalculatorResultsView = ({
       maximumFractionDigits: 1
     });
   };
+  const passportNote = (note) => {
+    const localized = product.ledger?.assumptions?.[note];
+    if (localized) return localized;
+    const gridFactor = /^VERIFIED_HISTORICAL_GRID_FACTOR_(\d{4}|UNKNOWN)$/u.exec(note);
+    return gridFactor
+      ? text(product.ledger?.assumptions?.VERIFIED_HISTORICAL_GRID_FACTOR, {
+          year: gridFactor[1]
+        })
+      : null;
+  };
   const dashboardMetric = (label, value, kind = '') => {
     const wrapper = element('div', `result-metric${kind ? ` result-metric--${kind}` : ''}`);
     wrapper.append(element('dt', '', label), element('dd', '', value));
@@ -432,6 +442,9 @@ export const createCalculatorResultsView = ({
       number(annualSavings, 0) === null &&
       normalizedRange(annualSavingsRange) === null &&
       (retailOffsetValueAmd !== null || retailOffsetValueRangeAmd !== null);
+    const hasUnpricedSurplus =
+      number(scenario.energyBalance?.surplusEnergyKwh, 0) > 0 &&
+      number(financial.surplusCompensationValueAmd, 0) === null;
     const remainingGridDemandKwh =
       annualConsumptionKwh === null || annualGenerationKwh === null
         ? null
@@ -506,7 +519,7 @@ export const createCalculatorResultsView = ({
       overviewMetric({
         label: storagePriceUnavailable
           ? (wizard.solarOnlyAnnualSavings ?? 'Solar-only annual value')
-          : savingsAreOffsetOnly
+          : savingsAreOffsetOnly || hasUnpricedSurplus
             ? (wizard.retailOffsetSavings ?? 'Savings from covered consumption')
             : (resultsCopy.metrics?.annualSavings ??
               wizard.metrics?.annualSavings ??
@@ -565,7 +578,7 @@ export const createCalculatorResultsView = ({
       dashboardMetric(
         storagePriceUnavailable
           ? (wizard.solarOnlyAnnualSavings ?? 'Solar-only annual value')
-          : savingsAreOffsetOnly
+          : savingsAreOffsetOnly || hasUnpricedSurplus
             ? wizard.retailOffsetSavings
             : (resultsCopy.metrics?.annualSavings ??
               wizard.metrics?.annualSavings ??
@@ -611,7 +624,7 @@ export const createCalculatorResultsView = ({
               'Battery and hybrid-system costs are not in the current price book. The figures above are explicitly solar-only; full-system budget and payback require battery sizing.')
           : displayedSavings === null && displayedSavingsRange === null
             ? (wizard.tariffNeeded ?? 'Add your electricity tariff to see savings and payback.')
-            : savingsAreOffsetOnly
+            : savingsAreOffsetOnly || hasUnpricedSurplus
               ? text(wizard.surplusCompensationUnavailableCopy, {
                   surplus: format(scenario.energyBalance?.surplusEnergyKwh, locale)
                 })
@@ -1114,10 +1127,11 @@ export const createCalculatorResultsView = ({
     }
     passportContent.append(list);
     const limitations = element('ul', 'check-list');
-    [...(analysis.assumptions ?? []), ...(analysis.limitations ?? [])].forEach((note) =>
-      limitations.append(element('li', '', product.ledger?.assumptions?.[note] ?? note))
-    );
-    passportContent.append(limitations);
+    [...new Set([...(analysis.assumptions ?? []), ...(analysis.limitations ?? [])])]
+      .map(passportNote)
+      .filter(Boolean)
+      .forEach((note) => limitations.append(element('li', '', note)));
+    if (limitations.childElementCount) passportContent.append(limitations);
   };
 
   return { renderResult, renderPassport };

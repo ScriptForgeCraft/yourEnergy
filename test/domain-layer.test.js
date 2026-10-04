@@ -93,16 +93,16 @@ test('buildSolarAnalysis derives transparent scenarios with an automatic standar
 
   assert.equal(analysis.mode, 'real-analysis');
   // The real May-to-April monthly sequence leaves a small April credit even
-  // though annual production is lower than annual consumption. With no
-  // verified annual-surplus rate the engine correctly withholds a complete
-  // financial claim instead of applying the retail tariff to that credit.
-  assert.equal(analysis.status, 'technical-ready');
+  // though annual production is lower than annual consumption. The credit is
+  // excluded without a verified annual-surplus rate, while the known retail
+  // offset remains available as a conservative financial range.
+  assert.equal(analysis.status, 'financial-ready');
   assert.equal(analysis.selectedScenario.id, 'balanced');
   assert.equal(analysis.selectedScenario.system.panelCount, 12);
   assert.equal(analysis.selectedScenario.system.capacityKwp, 6.96);
   assert.equal(analysis.selectedScenario.generation.annualKwh, 10_440);
   assert.equal(analysis.selectedScenario.financial.annualSavingsAmd, null);
-  assert.equal(analysis.selectedScenario.financial.paybackYears, null);
+  assert.ok(analysis.selectedScenario.financial.paybackRangeYears.min > 0);
   assert.ok(analysis.selectedScenario.limitations.includes('SURPLUS_COMPENSATION_UNAVAILABLE'));
   assert.equal(analysis.selectedScenario.financial.capexAmd, 2_784_000);
   assert.equal(analysis.selectedScenario.generation.monthlyKwh.length, 12);

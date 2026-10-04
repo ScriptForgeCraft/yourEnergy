@@ -66,6 +66,7 @@ export const initConsumptionInput = ({
   const actualDayInput = root.querySelector('[data-actual-day-kwh]');
   const actualNightInput = root.querySelector('[data-actual-night-kwh]');
   const chart = wizardRoot.querySelector('[data-consumption-chart]');
+  const chartCard = chart?.closest('.consumption-chart-card');
   const chartContext = wizardRoot.querySelector('[data-consumption-chart-context]');
   const chartItems = [
     ...wizardRoot.querySelectorAll('[data-consumption-chart] .consumption-profile-chart__item')
@@ -78,6 +79,10 @@ export const initConsumptionInput = ({
   const formatWhole = (value) =>
     new Intl.NumberFormat(locale, { maximumFractionDigits: 0 }).format(Number(value));
   let chartUnit = 'kwh';
+  // Keep the latest known annual amount only as an explicit shortcut for the
+  // "split evenly" action. It is never rendered or submitted as a monthly
+  // profile until the visitor presses that action.
+  let monthlyProfileSeedAnnual = null;
   let financialSelectionExplicit =
     initialFinancialRate?.mode !== FINANCIAL_RATE_MODES.STANDARD ||
     initialFinancialRate?.explicit === true;
@@ -208,6 +213,31 @@ export const initConsumptionInput = ({
     };
   };
 
+  const chartRateRanges = ({ displayRate, standardSelection }) => {
+    if (displayRate !== null) {
+      return Array.from({ length: 12 }, () => ({ min: displayRate, max: displayRate }));
+    }
+    const monthlyTariffs = standardSelection?.monthlyTariffs;
+    const tariffs =
+      Array.isArray(monthlyTariffs) && monthlyTariffs.length === 12
+        ? monthlyTariffs
+        : standardSelection?.tariff
+          ? Array.from({ length: 12 }, () => standardSelection.tariff)
+          : null;
+    if (!tariffs) return null;
+    const ranges = tariffs.map((tariff) => {
+      const minimum = Number(tariff?.minRateAmdPerKwh);
+      const maximum = Number(tariff?.maxRateAmdPerKwh);
+      return Number.isFinite(minimum) &&
+        Number.isFinite(maximum) &&
+        minimum > 0 &&
+        maximum >= minimum
+        ? { min: minimum, max: maximum }
+        : null;
+    });
+    return ranges.every(Boolean) ? ranges : null;
+  };
+
   const updateTariffUi = (values) => {
     const billDerivedAvailable = values.billRate !== null && values.mode === 'bill';
     const actualAvailable = values.mode === 'usage';
@@ -276,52 +306,75 @@ export const initConsumptionInput = ({
     }
   };
 
-  const updateChart = ({ annual, mode, monthly, displayRate }) => {
+  const updateChart = (values) => {
     if (!chartItems.length) return;
+    const { annual, mode, monthly } = values;
+    const monthlyMode = mode === 'monthly';
+    if (chartCard) chartCard.hidden = !monthlyMode;
+    if (!monthlyMode) return;
     const hasMonthlyProfile =
-      mode === 'monthly' && monthly.length === 12 && monthly.every((value) => value !== null);
-    const empty = annual === null;
-    const kwhValues = hasMonthlyProfile ? monthly : Array(12).fill(empty ? 0 : annual / 12);
-    const useAmd = chartUnit === 'amd' && displayRate !== null;
-    const values = useAmd ? kwhValues.map((value) => value * displayRate) : kwhValues;
-    const maximum = Math.max(...values, 1);
+      monthly.length === 12 && monthly.every((value) => value !== null) && annual !== null;
+    const empty = !hasMonthlyProfile;
+    const kwhValues = hasMonthlyProfile ? monthly : Array(12).fill(0);
+    const rateRanges = chartRateRanges(values);
+    const useAmd = chartUnit === 'amd' && rateRanges !== null;
+    const displayValues = useAmd
+      ? kwhValues.map((value, index) => ({
+          min: value * rateRanges[index].min,
+          max: value * rateRanges[index].max
+        }))
+      : kwhValues;
+    const chartHeights = useAmd ? displayValues.map((value) => value.max) : displayValues;
+    const maximum = Math.max(...chartHeights, 1);
     chartItems.forEach((item, index) => {
-      const value = values[index] ?? 0;
+      const value = displayValues[index] ?? 0;
+      const heightValue = chartHeights[index] ?? 0;
       item
         .querySelector('[data-consumption-chart-value]')
         ?.replaceChildren(
-          empty ? '—' : useAmd ? `${Math.round(value)} ֏` : String(Math.round(value))
+          empty
+            ? '—'
+            : useAmd
+              ? value.min === value.max
+                ? `${formatWhole(value.max)} ֏`
+                : `${formatWhole(value.min)}–${formatWhole(value.max)} ֏`
+              : formatWhole(value)
         );
       item
         .querySelector('.consumption-profile-chart__bar')
         ?.style.setProperty(
           '--chart-height',
-          empty ? '0%' : `${Math.max(8, (value / maximum) * 100)}%`
+          empty ? '0%' : `${Math.max(8, (heightValue / maximum) * 100)}%`
         );
     });
     chart?.classList.toggle('is-empty', empty);
     if (chartContext) {
       chartContext.hidden = hasMonthlyProfile;
-      chartContext.textContent = empty ? strings.chartEmpty : strings.chartUniform;
+      chartContext.textContent = empty ? strings.chartEmpty : '';
     }
   };
 
   const updateAnnualOutput = () => {
     const values = getValues();
+    if (values.annual !== null) monthlyProfileSeedAnnual = Math.round(values.annual);
     if (annualOutput) {
       annualOutput.textContent = values.annual === null ? '' : String(Math.round(values.annual));
     }
     if (annualCard) annualCard.hidden = values.annual === null;
     if (emptyState) emptyState.hidden = values.annual !== null;
-    if (chartUnit === 'amd' && values.displayRate === null) chartUnit = 'kwh';
+    const hasChartRate = chartRateRanges(values) !== null;
+    if (chartUnit === 'amd' && !hasChartRate) chartUnit = 'kwh';
     unitButtons.forEach((button) => {
       const selected = button.dataset.consumptionUnit === chartUnit;
       const requiresRate = button.dataset.consumptionUnit === 'amd';
-      button.disabled = requiresRate && values.displayRate === null;
+      button.disabled = requiresRate && !hasChartRate;
       button.classList.toggle('is-active', selected);
       button.setAttribute('aria-pressed', String(selected));
     });
-    if (fillAverageButton) fillAverageButton.disabled = values.annual === null;
+    if (fillAverageButton) {
+      fillAverageButton.disabled =
+        values.mode !== 'monthly' || (values.annual === null && monthlyProfileSeedAnnual === null);
+    }
     updateChart(values);
     updateTariffUi(values);
     return values;
@@ -406,13 +459,14 @@ export const initConsumptionInput = ({
   fillAverageButton?.addEventListener('click', () => {
     const values = getValues();
     const monthlyInputs = [...root.querySelectorAll('[data-consumption-month]')];
-    if (values.annual === null || monthlyInputs.length !== 12) return;
+    const annual = values.annual ?? monthlyProfileSeedAnnual;
+    if (annual === null || monthlyInputs.length !== 12) return;
     const monthlyMode = modeInputs.find((input) => input.value === 'monthly');
     if (monthlyMode) monthlyMode.checked = true;
     resetFinancialSource();
-    const annual = Math.round(values.annual);
-    const base = Math.floor(annual / 12);
-    const remainder = annual - base * 12;
+    const roundedAnnual = Math.round(annual);
+    const base = Math.floor(roundedAnnual / 12);
+    const remainder = roundedAnnual - base * 12;
     monthlyInputs.forEach((input, index) => {
       input.value = String(base + (index < remainder ? 1 : 0));
     });

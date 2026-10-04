@@ -348,6 +348,15 @@ export default {
           'The standard day rate is used only as a reference when estimating consumption from a bill amount.',
         OWNER_MANAGED_PRICEBOOK_NOT_OFFER:
           'The owner-managed price list is a preliminary budget guide, not an offer or contractual price.',
+        ARMENIA_MONTHLY_NET_METERING_MAY_TO_APRIL:
+          'The annual electricity net-metering settlement runs from May through April.',
+        UNIFORM_MONTHLY_CONSUMPTION_FOR_SETTLEMENT:
+          'No monthly profile was entered, so consumption is distributed evenly by month for the settlement calculation.',
+        CONFIRMED_REGISTRY_TARIFF: 'A confirmed residential-tariff registry was used.',
+        VERIFIED_HISTORICAL_GRID_FACTOR:
+          'The CO₂ factor uses the latest available verified historical value for {year}.',
+        SURPLUS_COMPENSATION_UNAVAILABLE:
+          'No verified surplus-compensation rate is configured, so surplus generation is excluded from the financial estimate.',
         MAP_PROJECTED_AREA_CONVERTED_TO_ROOF_PLANE:
           'The map outline area was converted from a top view to a preliminary roof-plane area using the entered tilt.',
         USER_MEASURED_ROOF_PLANE_AREA:

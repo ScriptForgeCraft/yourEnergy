@@ -592,16 +592,20 @@ export const calculateSolarScenario = ({
       : surplusCompensationRateAmdPerKwh === null
         ? null
         : surplusEnergyKwh * surplusCompensationRateAmdPerKwh;
+  // A missing export-compensation rate makes only the excess generation
+  // unpriced. It must not erase the verifiable saving from electricity that
+  // the system offsets at the retail rate. Treat the unpriced part as zero in
+  // the conservative estimate and keep its missing value explicit below.
+  const unpricedSurplus = surplusEnergyKwh > 0 && surplusCompensationValueAmd === null;
+  const knownSurplusCompensationAmd = surplusCompensationValueAmd ?? 0;
   const annualEconomicValueAmd =
-    retailOffsetValueAmd === null || surplusCompensationValueAmd === null
-      ? null
-      : retailOffsetValueAmd + surplusCompensationValueAmd;
+    retailOffsetValueAmd === null ? null : retailOffsetValueAmd + knownSurplusCompensationAmd;
   const annualEconomicValueRangeAmd =
-    retailOffsetValueRangeAmd === null || surplusCompensationValueAmd === null
+    retailOffsetValueRangeAmd === null
       ? null
       : rangeFrom(
-          retailOffsetValueRangeAmd.min + surplusCompensationValueAmd,
-          retailOffsetValueRangeAmd.max + surplusCompensationValueAmd
+          retailOffsetValueRangeAmd.min + knownSurplusCompensationAmd,
+          retailOffsetValueRangeAmd.max + knownSurplusCompensationAmd
         );
   const commercialEstimate = buildCommercialEstimate({ capacityKwp, priceBook, at: effectiveDate });
   const solarOnlyCapexAmd =
@@ -636,9 +640,7 @@ export const calculateSolarScenario = ({
     limitations: [
       ...(roofLimited ? ['ROOF_CAPACITY_LIMIT'] : []),
       ...(financialTariffRange === null ? ['TARIFF_REQUIRED'] : []),
-      ...(surplusEnergyKwh > 0 && surplusCompensationValueAmd === null
-        ? ['SURPLUS_COMPENSATION_UNAVAILABLE']
-        : []),
+      ...(unpricedSurplus ? ['SURPLUS_COMPENSATION_UNAVAILABLE'] : []),
       ...(storagePriceUnavailable ? ['STORAGE_PRICE_UNAVAILABLE'] : []),
       ...(!storagePriceUnavailable && capexAmd === null ? ['CAPEX_REQUIRED'] : [])
     ],
@@ -668,9 +670,9 @@ export const calculateSolarScenario = ({
       surplusCompensationValueAmd,
       annualEconomicValueAmd: storagePriceUnavailable ? null : annualEconomicValueAmd,
       annualEconomicValueRangeAmd: storagePriceUnavailable ? null : annualEconomicValueRangeAmd,
-      // Retained for presentation compatibility; it is now always the
-      // corrected complete annual economic value, never all generation at a
-      // retail rate.
+      // Retained for presentation compatibility. This is never all
+      // generation at a retail rate: unpriced excess is excluded from the
+      // conservative value while confirmed compensation is added separately.
       annualSavingsAmd: storagePriceUnavailable ? null : annualEconomicValueAmd,
       annualSavingsRangeAmd: storagePriceUnavailable ? null : annualEconomicValueRangeAmd,
       grossSavings25YearsAmd:

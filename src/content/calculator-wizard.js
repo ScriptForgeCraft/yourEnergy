@@ -176,7 +176,7 @@ const copy = {
     roofLimit: 'Հզորությունը սահմանափակված է հասանելի տանիքի մակերեսով',
     surplusEnergy: 'Տարեկան զուտ ավելցուկ',
     surplusCompensationUnavailableCopy:
-      '{surplus} kWh/տարին գերազանցում է տարեկան սպառումը։ Ավելցուկի դրամական արժեքը և հետգնման ժամկետը չեն ցուցադրվում, քանի դեռ չի կարգավորվել հաստատված փոխհատուցման սակագին։',
+      '{surplus} kWh/տարին ավելցուկ է։ Այն չի ներառվել հաշվարկում, քանի որ հաստատված փոխհատուցման սակագին չկա։ Ցուցադրված խնայողությունն ու հետգնման ժամկետը հիմնված են միայն ծածկվող սպառման վրա։',
     surplusCompensationValueCopy:
       'Ավելցուկային արտադրություն՝ {surplus} kWh/տարի · փոխհատուցման արժեք՝ {value} AMD/տարի։',
     tariffNeeded:
@@ -561,7 +561,7 @@ const copy = {
     roofLimit: 'Мощность ограничена доступной площадью крыши',
     surplusEnergy: 'Годовой нетто-избыток',
     surplusCompensationUnavailableCopy:
-      '{surplus} кВт·ч/год превышают годовое потребление. Денежная оценка избытка и окупаемость не показаны, пока не будет настроена подтверждённая ставка компенсации.',
+      '{surplus} кВт·ч/год — избыточная выработка. Она не включена в расчёт, так как нет подтверждённой ставки компенсации. Показанные экономия и окупаемость основаны только на покрытом потреблении.',
     surplusCompensationValueCopy:
       'Избыточная выработка: {surplus} кВт·ч/год · компенсация: {value} AMD/год.',
     tariffNeeded: 'Хотите увидеть экономию и окупаемость? Укажите тариф из вашего счёта.',
@@ -946,7 +946,7 @@ const copy = {
     roofLimit: 'Capacity is limited by the available roof area',
     surplusEnergy: 'Annual net surplus',
     surplusCompensationUnavailableCopy:
-      '{surplus} kWh/year exceeds annual consumption. Its monetary value and payback are unavailable until a verified surplus-compensation rate is configured.',
+      '{surplus} kWh/year is surplus generation. It is excluded because no verified compensation rate is configured. The displayed savings and payback are based only on covered consumption.',
     surplusCompensationValueCopy:
       'Surplus generation: {surplus} kWh/year · compensation value: {value} AMD/year.',
     tariffNeeded: 'Want to see savings and payback? Add the tariff from your bill.',
