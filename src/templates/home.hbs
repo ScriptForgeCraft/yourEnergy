@@ -26,24 +26,7 @@
   <link rel='icon' href='/yourenergy-mark.svg' type='image/svg+xml' />
   <link rel='apple-touch-icon' href='/apple-touch-icon.png' />
   <link rel='stylesheet' href='/src/styles/home.css' />
-  <script>
-    try {
-      const state = window.history.state?.processReloadState;
-      if (
-        state &&
-        state.location ===
-          `${window.location.pathname}${window.location.search}${window.location.hash}` &&
-        Number.isInteger(state.step) &&
-        Date.now() - Number(state.updatedAt) <= 15000 &&
-        'scrollRestoration' in window.history
-      ) {
-        window.history.scrollRestoration = 'manual';
-        window.__yourEnergyProcessReload = true;
-      }
-    } catch {
-      // Native restoration is the fallback when browser history is unavailable.
-    }
-  </script>
+  <script src='/scripts/process-reload-restoration.js'></script>
   <script type='application/ld+json'>{{{jsonLd}}}</script>
 </head>
 

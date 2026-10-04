@@ -160,6 +160,18 @@ function getJsonLd(html, page) {
   return documents;
 }
 
+function validateNoInlineExecutableScripts(html, page) {
+  for (const match of html.matchAll(/<script\b[^>]*>([\s\S]*?)<\/script>/giu)) {
+    const openingTag = match[0].slice(0, match[0].indexOf('>') + 1);
+    const attributes = attrs(openingTag);
+    const type = attributes.get('type')?.toLowerCase();
+    const isDataScript = type === 'application/json' || type === 'application/ld+json';
+    if (!attributes.has('src') && !isDataScript && match[1].trim()) {
+      fail(`${page}: inline executable scripts violate the site's Content Security Policy`);
+    }
+  }
+}
+
 function flattenJsonLd(document) {
   return Array.isArray(document['@graph']) ? document['@graph'] : [document];
 }
@@ -888,6 +900,7 @@ for (const page of expectedPages) {
 for (const [page, html] of pages) {
   const locale = page.startsWith('ru/') ? 'ru' : page.startsWith('en/') ? 'en' : 'hy';
   validateBaseDocument(html, page, locale);
+  validateNoInlineExecutableScripts(html, page);
   await validateAssets(html, page);
   await validateAnchors(html, page, pages);
   validateExternalLinkSafety(html, page);
