@@ -29,7 +29,7 @@
   <body class='faq-page'>
     <a class='skip-link' href='#main'>{{aria.skip}}</a>
     {{> site-header}}
-    <main id='main'>
+    <main id='main' data-faq-page>
       <section class='faq-page-hero' aria-labelledby='faq-page-title'>
         <div class='faq-page-hero__backdrop' aria-hidden='true'><picture><source
               type='image/avif'
@@ -40,12 +40,78 @@
               srcset='/images/hero-time-18-1024.webp 1024w, /images/hero-time-18-1600.webp 1600w'
               sizes='100vw'
             /><img src='/images/hero-time-18-1600.jpg' width='1600' height='900' alt='' fetchpriority='high' decoding='async' /></picture></div>
-        <div class='container faq-page-hero__inner'><h1 id='faq-page-title'>{{faq.pageTitle}}</h1><p>{{faq.intro}}</p></div>
+        <div class='container faq-page-hero__inner'>
+          <p class='faq-page-hero__eyebrow'>{{faq.eyebrow}}</p>
+          <h1 id='faq-page-title'>{{faq.pageTitle}}</h1>
+          <p>{{faq.intro}}</p>
+        </div>
       </section>
-      <section class='faq-answers section' aria-labelledby='faq-answers-title'>
+      <section id='faq-answers' class='faq-answers section' aria-labelledby='faq-answers-title' data-faq-answers>
         <div class='container faq-answers__layout'>
-          <header class='faq-answers__heading'><h2 id='faq-answers-title'>{{faq.answersTitle}}</h2><p>{{faq.answersIntro}}</p></header>
-          <div class='faq-answers__list'>{{#each faq.items}}<details id='faq-{{add @index 1}}' class='faq-answer'><summary><span class='faq-answer__number'>{{add @index 1}}</span><span>{{question}}</span><span class='faq-answer__toggle' aria-hidden='true'>+</span></summary><div class='faq-answer__body'><p>{{answer}}</p></div></details>{{/each}}</div>
+          <aside class='faq-sidebar'>
+            <div class='faq-search' role='search'>
+              <label for='faq-search'>{{faq.searchLabel}}</label>
+              <svg class='faq-search__icon inline-icon' aria-hidden='true'>
+                <use href='/icons.svg#search'></use>
+              </svg>
+              <input id='faq-search' type='search' placeholder='{{faq.searchPlaceholder}}' autocomplete='off' data-faq-search />
+            </div>
+            <nav class='faq-categories' aria-label='{{faq.categoriesLabel}}'>
+              {{#each faq.categories}}
+                <button id='category-{{id}}' class='faq-category{{#if isActive}} is-active{{/if}}' type='button' data-faq-category='{{id}}' data-faq-category-label='{{label}}' aria-pressed='{{isActive}}'>
+                  <span class='faq-category__icon'><svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#{{icon}}'></use></svg></span>
+                  <span class='faq-category__label'>{{label}}</span>
+                  <span class='faq-category__count'>{{count}}</span>
+                  <svg class='faq-category__arrow inline-icon' aria-hidden='true'><use href='/icons.svg#chevron-right'></use></svg>
+                </button>
+              {{/each}}
+            </nav>
+            <section class='faq-sidebar__cta' aria-labelledby='faq-contact-title'>
+              <svg class='faq-sidebar__cta-icon inline-icon' aria-hidden='true'><use href='/icons.svg#message-circle'></use></svg>
+              <div>
+                <h2 id='faq-contact-title'>{{faq.notFound}}</h2>
+                <p>{{faq.contactLink}}</p>
+                <a class='button button--small' href='{{contactsHref}}'>{{faq.contactLink}}</a>
+              </div>
+            </section>
+          </aside>
+          <div class='faq-results'>
+            <header class='faq-results__heading'>
+              <h2 id='faq-answers-title' data-faq-results-title>{{faq.allQuestions}}</h2>
+              <span class='faq-results__count' data-faq-results-count>{{faq.totalCount}}</span>
+            </header>
+            <p class='faq-no-results' data-faq-no-results aria-live='polite' hidden>{{faq.noResults}}</p>
+            <div class='faq-answers__list' data-faq-list>
+              {{#each faq.items}}
+                <details id='faq-{{id}}' class='faq-answer' data-faq-item data-faq-id='{{id}}' data-faq-category='{{category}}'>
+                  <summary>
+                    <span class='faq-answer__number' data-faq-number>{{add @index 1}}</span>
+                    <span class='faq-answer__question' data-faq-question>{{question}}</span>
+                    <span class='faq-answer__toggle' aria-hidden='true'><svg class='inline-icon'><use href='/icons.svg#chevron-down'></use></svg></span>
+                  </summary>
+                  <div class='faq-answer__body' data-faq-answer>
+                    {{#if guide}}
+                      <p class='faq-answer__lead'>{{answer}}</p>
+                      <ol class='faq-guide'>
+                        {{#each guide}}
+                          <li class='faq-guide__step'>
+                            <span class='faq-guide__number'>{{add @index 1}}</span>
+                            <div class='faq-guide__content'>
+                              <h3>{{title}}</h3>
+                              <p>{{copy}}</p>
+                              <p class='faq-guide__tip'>{{tip}}</p>
+                            </div>
+                          </li>
+                        {{/each}}
+                      </ol>
+                    {{else}}
+                      <p>{{answer}}</p>
+                    {{/if}}
+                  </div>
+                </details>
+              {{/each}}
+            </div>
+          </div>
         </div>
       </section>
     </main>

@@ -113,6 +113,10 @@ if (document.querySelector('[data-blog-page], [data-blog-article]')) {
   void import('./ui/blog.js').then(({ initBlog }) => initBlog());
 }
 
+if (document.querySelector('[data-faq-page]')) {
+  void import('./faq.js').then(({ initFaq }) => initFaq());
+}
+
 const projectsVideo = document.querySelector('[data-projects-video]');
 const projectsVideoToggle = document.querySelector('[data-projects-video-toggle]');
 

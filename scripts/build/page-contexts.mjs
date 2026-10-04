@@ -276,10 +276,15 @@ export const createPageContextBuilder = ({ publicEnv, pages }) => {
     if (includeFaq) {
       graph.push({
         '@type': 'FAQPage',
-        mainEntity: content.faq.items.map(({ question, answer }) => ({
+        mainEntity: content.faq.items.map(({ question, answer, guide = [] }) => ({
           '@type': 'Question',
           name: question,
-          acceptedAnswer: { '@type': 'Answer', text: answer }
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: [answer, ...guide.flatMap(({ title, copy, tip }) => [title, copy, tip])]
+              .filter(Boolean)
+              .join(' ')
+          }
         }))
       });
     }
@@ -688,10 +693,23 @@ export const createPageContextBuilder = ({ publicEnv, pages }) => {
   const createFaqContext = (content) => {
     const path = faqPath(content.locale);
     const base = createHomeContext(content, { pageKind: 'faq' });
+    const faq = {
+      ...base.faq,
+      totalCount: content.faq.items.length,
+      categories: content.faq.categories.map((category) => ({
+        ...category,
+        count:
+          category.id === 'all'
+            ? content.faq.items.length
+            : content.faq.items.filter((item) => item.category === category.id).length,
+        isActive: category.id === 'all'
+      }))
+    };
     return {
       ...base,
       path,
       faqHref: path,
+      faq,
       meta: content.faq.meta,
       alternateLinks: createToolAlternateLinks('faq'),
       languageLinks: createToolLanguageLinks(content.locale, 'faq'),

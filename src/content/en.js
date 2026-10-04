@@ -878,37 +878,51 @@ export default {
     homeTitleLead: 'Everything you need to know',
     homeTitleAccent: 'before installing',
     homeTitleTail: 'a solar system',
-    pageTitle: 'Solar system questions, answered',
-    intro: 'Clear, concise answers to help you make a confident decision about a solar system.',
+    pageTitle: 'Frequently asked questions, answered',
+    intro:
+      'Clear answers about solar systems, the calculation and next steps. Choose a topic or search for your question.',
     previewIntro:
       'Costs, warranties, documents, grid connection and batteries — answers to the most common questions, all in one place.',
-    answersEyebrow: 'All questions',
-    answersTitle: 'Detailed answers',
-    answersIntro:
-      'The essentials on calculations, pricing, installation and how a solar system works.',
     allQuestions: 'All questions',
+    searchLabel: 'Search questions',
+    searchPlaceholder: 'Search questions...',
+    categoriesLabel: 'FAQ topics',
+    noResults: 'No questions found. Try a different search.',
     notFound: 'Didn’t find an answer?',
     contactLink: 'Ask an engineer',
+    categories: [
+      { id: 'all', label: 'All questions', icon: 'list' },
+      { id: 'cost-payback', label: 'Cost and payback period', icon: 'coins' },
+      { id: 'warranty-service', label: 'Warranties and maintenance', icon: 'shield-check' },
+      { id: 'documents-permits', label: 'Documents and permits', icon: 'file-text' },
+      { id: 'storage', label: 'Batteries and energy storage', icon: 'battery' },
+      { id: 'calculator', label: 'How to use the calculator', icon: 'calculator' },
+      { id: 'solar-passport', label: 'Solar Passport', icon: 'file' }
+    ],
     previewItems: [
       {
         question: 'Costs',
         answer: 'and payback',
-        icon: 'coins'
+        icon: 'coins',
+        target: 'category-cost-payback'
       },
       {
         question: 'Warranties',
         answer: 'and service',
-        icon: 'shield-check'
+        icon: 'shield-check',
+        target: 'category-warranty-service'
       },
       {
         question: 'Documents',
         answer: 'and permits',
-        icon: 'file-text'
+        icon: 'file-text',
+        target: 'category-documents-permits'
       },
       {
         question: 'Batteries',
         answer: 'and energy storage',
-        icon: 'battery'
+        icon: 'battery',
+        target: 'category-storage'
       }
     ],
     meta: {
@@ -919,52 +933,205 @@ export default {
       ogDescription: 'Clear answers about solar-system calculations, installation and operation.'
     },
     items: [
-      [
-        'How much does a solar system cost?',
-        'Start by selecting your region and entering your average electricity bill or consumption. The first result is preliminary; refining the roof data and completing an engineering review help determine the final system configuration and price.'
-      ],
-      [
-        'How is system capacity calculated?',
-        'The preliminary calculation is based on the selected region and your electricity consumption. You can then refine it by entering the roof area. Detailed checks of the roof, shading and grid connection are completed by an engineer.'
-      ],
-      [
-        'What is the payback period?',
-        'Payback is shown after the solar-potential calculation and after you enter your electricity tariff. The model does not include possible tariff increases, panel degradation, maintenance, financing costs, discounting, taxes or grid-export rules.'
-      ],
-      [
-        'Do solar panels need maintenance?',
-        'Periodic inspections, monitoring checks and cleaning when needed help keep the system operating efficiently. The exact maintenance schedule depends on the equipment and installation conditions.'
-      ],
-      [
-        'What happens in cloudy weather?',
-        'Generation decreases in cloudy weather and stops at night. During those periods, the home uses electricity from the grid or from a battery if one is included in the project.'
-      ],
-      [
-        'Can I install a battery?',
-        'Yes. The Energy Independence option shows an example system with battery storage. The required capacity is selected according to the consumption profile and the desired backup duration.'
-      ],
-      [
-        'Can I finance the system?',
-        'No verified financing programme is currently published on the website. Financing terms will only be shown once a specific partner and the corresponding agreement have been confirmed.'
-      ],
-      [
-        'What is a Solar Passport?',
-        'A preliminary Solar Passport brings together the calculation inputs, sources and assumptions in one place. It is not an engineering design, bank document or binding commercial offer. A permanent link and PDF are not currently generated.'
-      ]
-    ].map(([question, answer], index) => ({
-      question,
-      answer,
-      icon: [
-        'calculator',
-        'zap',
-        'satellite',
-        'shield-check',
-        'sun',
-        'cycle',
-        'file',
-        'message-square'
-      ][index]
-    }))
+      {
+        id: 'system-cost',
+        category: 'cost-payback',
+        icon: 'coins',
+        question: 'How much does a solar system cost?',
+        answer:
+          'Start by selecting your region and entering your average electricity bill or consumption. The first result is preliminary. The final configuration and price are confirmed after the roof data, equipment and engineering conditions have been reviewed.'
+      },
+      {
+        id: 'system-capacity',
+        category: 'cost-payback',
+        icon: 'calculator',
+        question: 'How is the system capacity calculated?',
+        answer:
+          'The preliminary sizing is based on your electricity consumption and solar-resource data. Professional mode can refine the estimate using the exact property location, roof area, orientation and tilt. Final sizing and technical compatibility are confirmed by an engineer.'
+      },
+      {
+        id: 'payback',
+        category: 'cost-payback',
+        icon: 'chart-bars',
+        question: 'What is the payback period?',
+        answer:
+          'Payback is calculated when sufficient solar-production and financial data are available. The calculator can use the standard residential tariff or an effective electricity rate supplied by you. The result is preliminary and does not model future tariff increases, panel degradation, financing, taxes or future maintenance costs.'
+      },
+      {
+        id: 'final-price',
+        category: 'cost-payback',
+        icon: 'zap',
+        question: 'What affects the final system price?',
+        answer:
+          'The final price depends on system capacity, the selected panels and inverter, mounting hardware, roof conditions, protection and electrical components, optional battery storage and installation work. Website pricing is a preliminary guide, not a contractual offer.'
+      },
+      {
+        id: 'financing',
+        category: 'cost-payback',
+        icon: 'file',
+        question: 'Can the system be financed?',
+        answer:
+          'A financing programme should only be published when a specific partner and current terms have been verified. If no such programme is supported by the project’s current sources, the FAQ must not promise financing terms.'
+      },
+      {
+        id: 'maintenance',
+        category: 'warranty-service',
+        icon: 'wrench',
+        question: 'Do solar panels require maintenance?',
+        answer:
+          'Periodic inspections, monitoring checks and cleaning when needed help maintain efficient operation. The exact maintenance schedule depends on the equipment, installation conditions and local environment.'
+      },
+      {
+        id: 'warranty',
+        category: 'warranty-service',
+        icon: 'shield-check',
+        question: 'What warranty is provided for the equipment?',
+        answer:
+          'Warranty periods can differ between panels, inverters, batteries and installation work. Only verified manufacturer or supplier warranty data for the selected equipment should be displayed. Final warranty obligations are confirmed in the proposal and contract.'
+      },
+      {
+        id: 'system-failure',
+        category: 'warranty-service',
+        icon: 'support',
+        question: 'What should I do if the system develops a fault?',
+        answer:
+          'Contact the YOURENERGY team and provide the monitoring error or a description of the issue. Diagnosis comes first; further action depends on the cause, equipment warranty and the applicable service terms.'
+      },
+      {
+        id: 'required-documents',
+        category: 'documents-permits',
+        icon: 'file-text',
+        question: 'What documents are required for a solar system?',
+        answer:
+          'The exact document set depends on the property, system capacity and current grid requirements. A complete document package is not needed for the preliminary online calculation. During implementation, the engineer confirms the documents and process required for the specific project.'
+      },
+      {
+        id: 'permits',
+        category: 'documents-permits',
+        icon: 'shield',
+        question: 'Is a permit required for installation?',
+        answer:
+          'That depends on the property type, project and current requirements. The website should not make a universal claim that a permit is always required or never required. Before implementation, a YOURENERGY engineer should verify the current requirements for the specific property.'
+      },
+      {
+        id: 'grid-connection',
+        category: 'documents-permits',
+        icon: 'zap',
+        question: 'How is the solar system connected to the grid?',
+        answer:
+          'The final grid-connection scheme and requirements depend on the project and current network conditions. The calculator provides a preliminary solar assessment and is not a grid-connection approval. Connection compatibility is confirmed during the engineering stage.'
+      },
+      {
+        id: 'battery',
+        category: 'storage',
+        icon: 'battery',
+        question: 'Can a battery be added?',
+        answer:
+          'Yes. Battery storage can be included when the selected inverter, system architecture and project conditions are compatible. Professional Calculator allows you to request a storage or backup assessment.'
+      },
+      {
+        id: 'battery-sizing',
+        category: 'storage',
+        icon: 'chart-bars',
+        question: 'How is battery capacity selected?',
+        answer:
+          'Accurate battery sizing depends on which loads must be backed up, their power demand and the desired backup duration. Total monthly household consumption alone is not sufficient for precise battery sizing.'
+      },
+      {
+        id: 'battery-outage',
+        category: 'storage',
+        icon: 'zap',
+        question: 'Will the solar system work during a grid outage?',
+        answer:
+          'Not every solar system continues operating automatically during a grid outage. Backup operation requires a compatible inverter, battery and properly designed backup configuration. This capability must be planned during system design.'
+      },
+      {
+        id: 'battery-later',
+        category: 'storage',
+        icon: 'cycle',
+        question: 'Can a battery be added later?',
+        answer:
+          'It is possible with many systems, but it depends on the inverter model, electrical architecture and compatibility of the future battery. If storage may be added later, it is best to account for that during the initial design.'
+      },
+      {
+        id: 'calculator-modes',
+        category: 'calculator',
+        icon: 'calculator',
+        question: 'What is the difference between Quick and Professional Calculator?',
+        answer:
+          'Quick Calculator is designed for an initial estimate: select your region and enter an average bill or consumption. Professional mode uses the same calculation foundation but adds exact location, solar-resource data, roof parameters, more detailed consumption inputs and expanded results.'
+      },
+      {
+        id: 'professional-calculator',
+        category: 'calculator',
+        icon: 'calculator',
+        question: 'How do I use Professional Calculator?',
+        answer:
+          'Professional Calculator refines the preliminary estimate with location, consumption and roof data, then presents expanded results.',
+        guide: [
+          {
+            title: 'Step 1 — Location',
+            copy: 'Search for the address, select the correct result and confirm the property on the map. If needed, select the point directly on the map or enter coordinates. The calculator obtains reference solar-resource data for the selected location.',
+            tip: 'Tip: choosing the correct address makes the preliminary estimate more useful.'
+          },
+          {
+            title: 'Step 2 — Consumption',
+            copy: 'Choose the input method for the information you have: average bill, average kWh consumption or a monthly consumption profile. If you know your effective AMD/kWh rate, it can be used for the financial calculation.',
+            tip: 'Tip: actual kWh consumption is usually more useful than the bill amount alone.'
+          },
+          {
+            title: 'Step 3 — Roof',
+            copy: 'Outline the roof on the map or enter a measured roof-plane area. For a map outline, mark at least 3 points on the same roof. Confirm orientation, tilt and mounting method. Map-derived roof area is preliminary.',
+            tip: 'Tip: a map outline does not replace physical measurement or a shading assessment.'
+          },
+          {
+            title: 'Step 4 — Results',
+            copy: 'Review the recommended system capacity, panel count, annual generation, consumption coverage, roof compatibility, preliminary equipment selection and, when available, financial estimates. From the results you can open Solar Passport, create the PDF report or send the calculation to an engineer.',
+            tip: 'Tip: the result is preliminary; an engineer confirms final technical compatibility.'
+          }
+        ]
+      },
+      {
+        id: 'consumption-input',
+        category: 'calculator',
+        icon: 'chart-bars',
+        question: 'Which consumption data should I enter?',
+        answer:
+          'If actual kWh consumption is available, use it. If you only know the monthly bill amount, the calculator can derive a preliminary consumption estimate. Professional mode also supports a monthly profile. More accurate consumption data produces a more useful preliminary system sizing.'
+      },
+      {
+        id: 'roof-map',
+        category: 'calculator',
+        icon: 'roof-measure',
+        question: 'How should I mark the roof on the map?',
+        answer:
+          'Choose the roof-outline method and mark at least 3 points around the same roof plane. Adjust the points if needed and review the resulting area. The map outline provides a preliminary projected area and does not replace physical measurement, shading assessment or structural verification.'
+      },
+      {
+        id: 'calculator-results',
+        category: 'calculator',
+        icon: 'chart-bars',
+        question: 'What do the calculator results mean?',
+        answer:
+          'Results include preliminary recommended capacity, panel count, expected generation, consumption coverage, roof constraints, preliminary equipment selection, environmental indicators and financial estimates when data are available. They are not a final engineering design or contractual offer.'
+      },
+      {
+        id: 'solar-passport',
+        category: 'solar-passport',
+        icon: 'file',
+        question: 'What is Solar Passport?',
+        answer:
+          'Solar Passport brings together the calculation inputs, results, data sources, preliminary equipment selection and modelling assumptions. It helps explain what the estimate is based on, but it does not replace a site survey, engineering design or commercial proposal.'
+      },
+      {
+        id: 'solar-passport-pdf',
+        category: 'solar-passport',
+        icon: 'download',
+        question: 'Can I save the calculation as a PDF?',
+        answer:
+          'Yes. Professional Calculator results provide a printable/PDF report containing a summary of the system, roof, generation, financial picture, data sources and major limitations. If the current product does not provide a permanent public share link, the FAQ must not claim that one is generated.'
+      }
+    ]
   },
   finalCta: {
     title: 'Ready to discover your home’s potential?',
