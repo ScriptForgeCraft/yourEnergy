@@ -607,10 +607,15 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
     if (lat === null || lng === null) return false;
     state.pendingLocation = { lat, lng };
     syncLocationCoordinates({ lat, lng });
-    state.confirmedProperty = null;
     clearPotentialAndBelow();
+    // Selecting an exact point on the map (or a geocoded address) is enough
+    // to identify its solar resource. Start that lookup now, while Location
+    // is still visible, instead of making the visitor go forward and then
+    // back merely to see the result.
+    state.confirmedProperty = { lat, lng };
     state.mapFocus = { lat, lng };
     updateProgress();
+    void requestPotential();
     return true;
   };
 
@@ -1151,12 +1156,16 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
     state.addressNote = address?.value.trim() ?? '';
     state.confirmedProperty = { ...state.pendingLocation };
     state.mapFocus = { ...state.confirmedProperty };
-    setPotentialOutcome({ status: WIZARD_STEP_STATUSES.AVAILABLE });
+    // A point may already have returned its solar-resource reference while
+    // the visitor reviewed it on this step. Do not discard that result while
+    // continuing to consumption.
+    if (state.potentialStatus === WIZARD_STEP_STATUSES.LOCKED)
+      setPotentialOutcome({ status: WIZARD_STEP_STATUSES.AVAILABLE });
     await mountMap('location');
     if (!lifecycle.isActive()) return;
     mapController?.setLocation(state.confirmedProperty, { notify: false });
     setStep(1);
-    void requestPotential();
+    if (!state.sitePotential && !potentialRequest) void requestPotential();
   };
 
   const roofAzimuth = () =>

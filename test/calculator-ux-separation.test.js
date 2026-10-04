@@ -137,6 +137,11 @@ test('Professional has exactly four customer steps and retains every engineering
   assert.match(controller, /locateSelectedLocality/u);
   assert.match(controller, /state\.mapFocus = \{ \.\.\.center \}/u);
   assert.match(controller, /state\.mapFocus = \{ lat, lng \}/u);
+  assert.match(
+    controller,
+    /const setPendingLocation = \(coordinates\) => \{[\s\S]*?state\.confirmedProperty = \{ lat, lng \};[\s\S]*?void requestPotential\(\);/u,
+    'Selecting an exact point must request its solar-resource reference before leaving Location'
+  );
   assert.match(controller, /clearLocationCoordinates\(\)/u);
   assert.match(
     controller,
@@ -151,6 +156,11 @@ test('Professional has exactly four customer steps and retains every engineering
   assert.match(controller, /mapController\?\.finishRoof\(\)/u);
   assert.match(controller, /if \(target === 0\)[\s\S]*?mountMap\('location'\)/u);
   assert.match(controller, /if \(state\.sitePotential\) renderPotential\(state\.sitePotential\)/u);
+  assert.match(
+    controller,
+    /if \(state\.potentialStatus === WIZARD_STEP_STATUSES\.LOCKED\)[\s\S]*?setPotentialOutcome\(\{ status: WIZARD_STEP_STATUSES\.AVAILABLE \}\)/u,
+    'Continuing from Location must keep a completed site-potential reference'
+  );
   assert.doesNotMatch(controller, /renderBars\(potentialSummaryChart/u);
   assert.doesNotMatch(professional, /data-calculation-panel/u);
   assert.match(controller, /getDefaultCalculatorSystem/u);
