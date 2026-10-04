@@ -111,6 +111,9 @@ test('Professional has exactly four customer steps and retains every engineering
   assert.match(controller, /setRoofLineWeight\(roofLineWidth\?\.value\)/u);
   assert.match(controller, /setRoofPointRadius\(roofPointRadius\?\.value\)/u);
   assert.match(controller, /setRoofPointNumbers\(roofPointNumbers\?\.checked \?\? true\)/u);
+  assert.match(controller, /const mapMoved = mapController\?\.mount\(host\) \?\? false/u);
+  assert.match(controller, /fit: mapMoved/u);
+  assert.match(controller, /mode === 'roof' && mapMoved && state\.confirmedProperty/u);
   assert.match(controller, /roofMapTools\?\.removeAttribute\('open'\)/u);
   assert.match(controller, /roofMapAnalysis\?\.removeAttribute\('open'\)/u);
   assert.match(controller, /target\?\.closest\('\.leaflet-container'\)/u);

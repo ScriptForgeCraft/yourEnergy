@@ -969,7 +969,11 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
         mapController = createdMap;
       }
       if (!lifecycle.isActive()) return null;
-      mapController?.mount(host);
+      // Moving the shared Leaflet element between the location and roof steps
+      // is the only time its property view should be restored. Style controls
+      // call mountMap too; resetting the view there would discard a visitor's
+      // deliberate zoom or pan while editing an outline.
+      const mapMoved = mapController?.mount(host) ?? false;
       mapController?.setMode(mode);
       if (mode === 'roof') {
         applyRoofMapStyle(mapController);
@@ -978,7 +982,10 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
           .forEach((button, index) => button.classList.toggle('is-active', index === 1));
       }
       if (state.confirmedProperty)
-        mapController?.setLocation(state.confirmedProperty, { notify: false });
+        mapController?.setLocation(state.confirmedProperty, {
+          fit: mapMoved,
+          notify: false
+        });
       if (state.confirmedProperty) syncLocationCoordinates(state.confirmedProperty);
       if (mode === 'location' && !state.confirmedProperty && state.mapFocus)
         mapController?.focusLocation(state.mapFocus);
@@ -991,7 +998,7 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
         });
       }
       mapController?.resize();
-      if (mode === 'roof' && state.confirmedProperty)
+      if (mode === 'roof' && mapMoved && state.confirmedProperty)
         mapController?.centerAfterLayout(state.confirmedProperty);
       return mapController;
     } catch {
