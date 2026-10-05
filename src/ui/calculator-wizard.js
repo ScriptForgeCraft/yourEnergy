@@ -46,6 +46,29 @@ const ANALYSIS_COOLDOWN_MS = 15_000;
 // building. This guard applies only to map-drawn roofs.
 const MAX_ROOF_DISTANCE_FROM_PROPERTY_METERS = 500;
 
+export const getViewportPopoverPosition = ({
+  triggerRect,
+  popoverRect,
+  viewportWidth,
+  viewportHeight,
+  gutter = 12
+}) => {
+  const safeGutter = Math.max(0, gutter);
+  const maximumWidth = Math.max(1, viewportWidth - safeGutter * 2);
+  const width = Math.min(Math.max(1, popoverRect.width), maximumWidth);
+  const spaceBelow = Math.max(0, viewportHeight - triggerRect.bottom - safeGutter);
+  const spaceAbove = Math.max(0, triggerRect.top - safeGutter);
+  const placement = spaceBelow >= spaceAbove ? 'below' : 'above';
+  const maximumHeight = Math.max(1, placement === 'below' ? spaceBelow : spaceAbove);
+  const height = Math.min(Math.max(1, popoverRect.height), maximumHeight);
+  const maximumLeft = Math.max(safeGutter, viewportWidth - safeGutter - width);
+  const left = Math.min(maximumLeft, Math.max(safeGutter, triggerRect.right - width));
+  const top =
+    placement === 'below' ? triggerRect.bottom : Math.max(safeGutter, triggerRect.top - height);
+
+  return { left, top, width, maximumHeight, placement };
+};
+
 const analysisMatchesPanel = (analysis, system) => {
   const equipment = analysis?.equipment ?? analysis?.selectedScenario?.system?.equipment;
   const selected = system?.equipment;
@@ -231,6 +254,9 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
   const roofOrientationCustomInput = root.querySelector('[data-roof-orientation-custom-input]');
   const roofTilt = root.querySelector('[data-roof-tilt]');
   const roofMountingModeHelp = root.querySelector('[data-roof-mounting-mode-help]');
+  const roofInfoButtons = [...root.querySelectorAll('[data-roof-info-toggle]')];
+  const roofInfoPopovers = [...root.querySelectorAll('[data-roof-info-popover]')];
+  const roofInfoPopoversById = new Map(roofInfoPopovers.map((popover) => [popover.id, popover]));
   const arrayGeometry = root.querySelector('[data-array-geometry]');
   const arrayTilt = root.querySelector('[data-array-tilt]');
   const arrayAzimuth = root.querySelector('[data-array-azimuth]');
@@ -1313,6 +1339,7 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
     if (roofMountingModeHelp)
       roofMountingModeHelp.textContent =
         product.roof?.mountingModes?.[elevated ? 'elevatedHelp' : 'roofParallelHelp'] ?? '';
+    if (!elevated) closeRoofInfoPopovers({ restoreFocus: false });
     if (arrayGeometry) arrayGeometry.hidden = !elevated;
     if (arrayTilt) arrayTilt.disabled = !elevated;
     if (arrayAzimuth) arrayAzimuth.disabled = !elevated;
@@ -1682,6 +1709,79 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
     .querySelectorAll('[data-roof-area-method], [data-roof-mounting-mode], [data-roof-orientation]')
     .forEach((input) => input.addEventListener('change', syncRoofControls));
 
+  const roofInfoPopoverFor = (button) =>
+    roofInfoPopoversById.get(button.getAttribute('aria-controls')) ?? null;
+  const positionRoofInfoPopover = (button) => {
+    const popover = roofInfoPopoverFor(button);
+    if (!popover || popover.hidden) return;
+    popover.style.width = '';
+    popover.style.maxWidth = '';
+    popover.style.maxHeight = '';
+    const position = getViewportPopoverPosition({
+      triggerRect: button.getBoundingClientRect(),
+      popoverRect: popover.getBoundingClientRect(),
+      viewportWidth: window.innerWidth,
+      viewportHeight: window.innerHeight
+    });
+    popover.style.width = `${position.width}px`;
+    popover.style.maxHeight = `${position.maximumHeight}px`;
+    popover.style.left = `${position.left}px`;
+    popover.style.right = 'auto';
+    popover.style.top = `${position.top}px`;
+  };
+  const positionOpenRoofInfoPopovers = () =>
+    roofInfoButtons.forEach((button) => positionRoofInfoPopover(button));
+  const closeRoofInfoPopover = (button, { restoreFocus = true } = {}) => {
+    const popover = roofInfoPopoverFor(button);
+    if (!popover || popover.hidden) return;
+    popover.hidden = true;
+    button.setAttribute('aria-expanded', 'false');
+    if (restoreFocus) button.focus();
+  };
+  const closeRoofInfoPopovers = ({ except = null, restoreFocus = true } = {}) => {
+    roofInfoButtons.forEach((button) => {
+      if (button === except) return;
+      closeRoofInfoPopover(button, { restoreFocus: false });
+    });
+    if (restoreFocus && except) except.focus();
+  };
+  roofInfoButtons.forEach((button) =>
+    button.addEventListener('click', () => {
+      const popover = roofInfoPopoverFor(button);
+      if (!popover) return;
+      const opening = popover.hidden;
+      closeRoofInfoPopovers({ except: button, restoreFocus: false });
+      popover.hidden = !opening;
+      button.setAttribute('aria-expanded', String(opening));
+      if (opening) {
+        positionRoofInfoPopover(button);
+        popover.focus();
+        requestAnimationFrame(() => positionRoofInfoPopover(button));
+      }
+    })
+  );
+  const handleRoofInfoPopoverKeydown = (event) => {
+    if (event.key !== 'Escape') return;
+    const button = roofInfoButtons.find((item) => roofInfoPopoverFor(item)?.hidden === false);
+    if (!button) return;
+    event.preventDefault();
+    closeRoofInfoPopover(button);
+  };
+  const handleRoofInfoPopoverOutsideClick = (event) => {
+    if (
+      roofInfoButtons.some(
+        (button) =>
+          button.contains(event.target) || roofInfoPopoverFor(button)?.contains(event.target)
+      )
+    )
+      return;
+    closeRoofInfoPopovers({ restoreFocus: false });
+  };
+  document.addEventListener('keydown', handleRoofInfoPopoverKeydown);
+  document.addEventListener('click', handleRoofInfoPopoverOutsideClick);
+  window.addEventListener('resize', positionOpenRoofInfoPopovers);
+  window.addEventListener('scroll', positionOpenRoofInfoPopovers, true);
+
   storageRequired?.addEventListener('change', () => {
     const nextStorageRequired = storageRequired.checked;
     if (nextStorageRequired === state.storageRequired) return;
@@ -1894,6 +1994,10 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
     professionalLeadRequest?.abort();
     professionalLeadRequest = null;
     professionalLeadTrigger = null;
+    document.removeEventListener('keydown', handleRoofInfoPopoverKeydown);
+    document.removeEventListener('click', handleRoofInfoPopoverOutsideClick);
+    window.removeEventListener('resize', positionOpenRoofInfoPopovers);
+    window.removeEventListener('scroll', positionOpenRoofInfoPopovers, true);
     mapController?.destroy();
     mapController = null;
     if (passportDialog?.open) passportDialog.close();

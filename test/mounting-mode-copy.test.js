@@ -15,27 +15,24 @@ test('Professional mounting-mode copy distinguishes roof-plane panels from tilte
   const expected = {
     ru: {
       roofParallel: 'По плоскости крыши',
-      roofParallelHelp:
-        'Панели устанавливаются рядом по существующему скату крыши. Межрядовое расстояние из-за наклона панелей отдельно не требуется.',
+      roofParallelHelp: 'Панели устанавливаются по существующей поверхности крыши.',
       elevated: 'Наклонные ряды на опорах',
       elevatedHelp:
-        'Панели устанавливаются отдельными рядами на опорах, обычно на плоской крыше. Между рядами учитывается расстояние для снижения взаимного затенения.'
+        'Панели устанавливаются отдельными наклонными рядами, обычно на плоской крыше. Между рядами учитывается расстояние для снижения взаимного затенения.'
     },
     en: {
       roofParallel: 'Along the roof plane',
-      roofParallelHelp:
-        'Panels are installed side by side following the existing roof slope. No separate row-spacing allowance is applied for panel tilt.',
+      roofParallelHelp: 'Panels are installed following the existing roof surface.',
       elevated: 'Tilted rows on supports',
       elevatedHelp:
-        'Panels are installed in separate tilted rows, typically on a flat roof. Spacing between rows is considered to reduce inter-row shading.'
+        'Panels are installed in separate tilted rows, typically on a flat roof. Row spacing is considered to reduce inter-row shading.'
     },
     hy: {
       roofParallel: 'Տանիքի հարթությամբ',
-      roofParallelHelp:
-        'Վահանակները տեղադրվում են կողք կողքի՝ տանիքի առկա լանջի հարթությանը հետևելով։ Վահանակների թեքության պատճառով շարքերի միջև առանձին հեռավորություն չի պահանջվում։',
+      roofParallelHelp: 'Վահանակները տեղադրվում են տանիքի առկա հարթությամբ։',
       elevated: 'Հենարանների վրա թեքված շարքեր',
       elevatedHelp:
-        'Վահանակները տեղադրվում են հենարանների վրա՝ առանձին թեքված շարքերով, սովորաբար՝ հարթ տանիքի վրա։ Փոխադարձ ստվերումը նվազեցնելու համար հաշվի է առնվում շարքերի միջև եղած հեռավորությունը։'
+        'Վահանակները տեղադրվում են առանձին թեքված շարքերով, սովորաբար հարթ տանիքի վրա։ Հաշվի է առնվում շարքերի միջև հեռավորությունը՝ փոխադարձ ստվերումը նվազեցնելու համար։'
     }
   };
   const content = { ru, en, hy };

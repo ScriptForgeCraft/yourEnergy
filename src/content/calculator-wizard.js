@@ -6,6 +6,7 @@ const copy = {
       'Ընտրեք տունը, նշեք սպառումն ու հասանելի տանիքը։ Մնացած տեխնիկական տվյալները հասանելի են ըստ անհրաժեշտության։',
     steps: ['Օբյեկտ', 'Սպառում', 'Տանիք', 'Արդյունք'],
     engineering: 'Տանիքի պարամետրեր',
+    engineeringParameters: 'Ինժեներական պարամետրեր',
     exactCoordinates: 'Ճշգրիտ կոորդինատներ',
     coordinatesHelp:
       'Եթե հասցեի որոնումը ճշգրիտ չի գտնում գույքը, մուտքագրեք լայնությունն ու երկայնությունը ձեռքով։',
@@ -399,6 +400,7 @@ const copy = {
       'Выберите дом, укажите потребление и доступную крышу. Технические параметры откроются только при необходимости.',
     steps: ['Объект', 'Потребление', 'Крыша', 'Результат'],
     engineering: 'Параметры крыши',
+    engineeringParameters: 'Инженерные параметры',
     exactCoordinates: 'Точные координаты',
     coordinatesHelp:
       'Если поиск адреса не находит объект достаточно точно, введите широту и долготу вручную.',
@@ -794,6 +796,7 @@ const copy = {
       'Choose the home, enter consumption and outline the usable roof. Technical inputs appear only when you need them.',
     steps: ['Property', 'Consumption', 'Roof', 'Result'],
     engineering: 'Roof parameters',
+    engineeringParameters: 'Engineering parameters',
     exactCoordinates: 'Exact coordinates',
     coordinatesHelp:
       'Enter latitude and longitude manually if address search cannot locate the property accurately.',

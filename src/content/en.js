@@ -232,14 +232,13 @@ export default {
       areaLabel: 'Preliminary area from the outline',
       mountingModeLabel: 'Mounting approach',
       mountingModeHelp:
-        'Along the roof plane: panels follow the existing roof slope without a separate row-spacing allowance. Tilted rows on supports: spacing between rows is considered to reduce inter-row shading.',
+        'Along the roof plane: panels are installed following the existing roof surface. Tilted rows on supports: row spacing is considered to reduce inter-row shading.',
       mountingModes: {
         roofParallel: 'Along the roof plane',
-        roofParallelHelp:
-          'Panels are installed side by side following the existing roof slope. No separate row-spacing allowance is applied for panel tilt.',
+        roofParallelHelp: 'Panels are installed following the existing roof surface.',
         elevated: 'Tilted rows on supports',
         elevatedHelp:
-          'Panels are installed in separate tilted rows, typically on a flat roof. Spacing between rows is considered to reduce inter-row shading.'
+          'Panels are installed in separate tilted rows, typically on a flat roof. Row spacing is considered to reduce inter-row shading.'
       },
       areaMethodTitle: 'How the area is provided',
       areaMethodHelp:
@@ -257,15 +256,18 @@ export default {
         'Choose the roof-face direction. A roof-specific calculation cannot be made without it; the location reference above remains available.',
       customOrientationLabel: 'Custom orientation (0° = north, 180° = south)',
       customOrientationHelp: 'Enter a compass bearing from 0 to 359°.',
-      tiltLabel: 'This roof-face tilt',
+      tiltLabel: 'Roof tilt',
       tiltHelp:
-        'For a roof-specific calculation, enter an approximate angle from 0° to 90°. It is not detected from the address.',
-      arrayTiltLabel: 'PV array tilt (tilted rows on supports only)',
+        'The angle of the roof itself relative to horizontal. A flat roof is about 0°, while pitched roofs are often around 20–35°. If you do not know the exact angle, enter an approximate value.',
+      tiltInfoLabel: 'More information about roof tilt',
+      arrayTiltLabel: 'PV array tilt (optional)',
       arrayTiltHelp:
-        'Optional engineer override. Leave blank to use the nearest catalog-supported angle to the PVGIS free-standing optimum.',
-      arrayAzimuthLabel: 'PV array direction (tilted rows on supports only)',
+        'Only for tilted rows on supports. This is the tilt of the solar panels, not the roof. If left blank, YOURENERGY automatically selects the closest catalog-supported angle to the PVGIS calculated optimum.',
+      arrayTiltInfoLabel: 'More information about PV array tilt',
+      arrayAzimuthLabel: 'PV array direction (optional)',
       arrayAzimuthHelp:
-        'Optional compass bearing. Leave blank to use the PVGIS free-standing optimum direction.',
+        'Only for tilted rows on supports. This is the compass direction of the panels themselves. If left blank, YOURENERGY uses the PVGIS recommended direction.',
+      arrayAzimuthInfoLabel: 'More information about PV array direction',
       parametersRequired:
         'Enter the roof-face direction and tilt to create a roof-specific calculation.',
       angleGuideTitle: 'Visual check of the roof inputs',
