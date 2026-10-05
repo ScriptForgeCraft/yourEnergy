@@ -661,8 +661,6 @@ export const initProcessStory = ({ config = {} } = {}) => {
       let wheelBurstTimer = 0;
       let touchStartY = null;
       let touchHandled = false;
-      let pinnedLayoutRefreshFrame = 0;
-      let pinnedLayoutViewportWidth = 0;
       let reloadRestoreFrame = 0;
       let savedScrollRestoration = earlyProcessReload ? 'auto' : null;
 
@@ -683,25 +681,9 @@ export const initProcessStory = ({ config = {} } = {}) => {
       const activateProcessChrome = () => {
         setManualScrollRestoration(true);
         setProcessChromeActive(true);
-
-        // ScrollTrigger creates its pin spacer before onEnter runs. Hiding the
-        // browser scrollbar afterwards widens the viewport, but without this
-        // refresh the spacer retains the old (scrollbar-width) measurement and
-        // leaves an empty strip on the right of #process until a page reload.
-        const viewportWidth = document.documentElement.clientWidth;
-        if (pinnedLayoutViewportWidth === viewportWidth) return;
-        pinnedLayoutViewportWidth = viewportWidth;
-        window.cancelAnimationFrame(pinnedLayoutRefreshFrame);
-        pinnedLayoutRefreshFrame = window.requestAnimationFrame(() => {
-          pinnedLayoutRefreshFrame = 0;
-          if (!disposed) ScrollTrigger.refresh();
-        });
       };
 
       const deactivateProcessChrome = () => {
-        window.cancelAnimationFrame(pinnedLayoutRefreshFrame);
-        pinnedLayoutRefreshFrame = 0;
-        pinnedLayoutViewportWidth = 0;
         setProcessChromeActive(false);
         setManualScrollRestoration(false);
       };
@@ -722,7 +704,7 @@ export const initProcessStory = ({ config = {} } = {}) => {
         });
         gsap.set(copies[nextIndex], { autoAlpha: 1, y: 0 });
         gsap.set(visuals[nextIndex], { autoAlpha: 1, scale: 1 });
-        gsap.set(mediaFrames[nextIndex], { autoAlpha: 1, scale: 1 });
+        gsap.set(mediaFrames[nextIndex], { autoAlpha: 1 });
         gsap.set(cardsFor(nextIndex), { autoAlpha: 1, y: 0, z: 0 });
         animateStepMetrics(nextIndex);
       };
@@ -788,11 +770,11 @@ export const initProcessStory = ({ config = {} } = {}) => {
         });
         gsap.set(outgoingCopy, { autoAlpha: 1, y: 0 });
         gsap.set(outgoingVisual, { autoAlpha: 1, scale: 1 });
-        gsap.set(outgoingMedia, { autoAlpha: 1, scale: 1 });
+        gsap.set(outgoingMedia, { autoAlpha: 1 });
         gsap.set(incoming, { autoAlpha: 1 });
         gsap.set(incomingCopy, { autoAlpha: 0, y: forward ? 26 : -26 });
         gsap.set(incomingVisual, { autoAlpha: 0, scale: 1.03 });
-        gsap.set(incomingMedia, { autoAlpha: 0, scale: 1.03 });
+        gsap.set(incomingMedia, { autoAlpha: 0 });
         gsap.set(incomingCards, {
           autoAlpha: 0,
           y: forward ? 16 : -16,
@@ -817,7 +799,7 @@ export const initProcessStory = ({ config = {} } = {}) => {
           })
           .to(outgoingCopy, { autoAlpha: 0, y: forward ? -20 : 20, duration: 0.24 }, 0)
           .to(outgoingVisual, { autoAlpha: 0, scale: 1.025, duration: 0.28 }, 0)
-          .to(outgoingMedia, { autoAlpha: 0, scale: 1.025, duration: 0.28 }, 0)
+          .to(outgoingMedia, { autoAlpha: 0, duration: 0.28 }, 0)
           .to(
             outgoingCards,
             { autoAlpha: 0, y: forward ? -12 : 12, duration: 0.22, stagger: 0.02 },
@@ -826,7 +808,7 @@ export const initProcessStory = ({ config = {} } = {}) => {
           .set(outgoing, { autoAlpha: 0 }, 0.28)
           .to(incomingCopy, { autoAlpha: 1, y: 0, duration: 0.34 }, 0.08)
           .to(incomingVisual, { autoAlpha: 1, scale: 1, duration: 0.48 }, 0.04)
-          .to(incomingMedia, { autoAlpha: 1, scale: 1, duration: 0.48 }, 0.04)
+          .to(incomingMedia, { autoAlpha: 1, duration: 0.42 }, 0.04)
           .to(incomingCards, { autoAlpha: 1, y: 0, z: 0, duration: 0.32, stagger: 0.035 }, 0.2);
         return true;
       };

@@ -181,20 +181,19 @@ test('desktop process mode collapses global navigation into an accessible burger
   assert.match(navigation, /returnToHomeTop/u);
   assert.match(navigation, /window\.scrollTo\(\{ top: 0, behavior: 'auto' \}\)/u);
   assert.match(navigation, /process-chrome-active/u);
-  assert.match(navigation, /hide-page-scrollbar', active/u);
+  assert.doesNotMatch(navigation, /hide-page-scrollbar/u);
   assert.match(navigation, /element\.inert = active/u);
   assert.match(processStory, /setProcessChromeActive\(true\)/u);
   assert.match(processStory, /setProcessChromeActive\(false\)/u);
-  assert.match(mainCss, /scrollbar-gutter:\s*auto/u);
+  assert.match(mainCss, /scrollbar-gutter:\s*stable/u);
   assert.match(mainCss, /overflow-y:\s*auto/u);
-  assert.doesNotMatch(mainCss, /html::-webkit-scrollbar/u);
-  assert.match(mainCss, /html\.hide-page-scrollbar\s*\{\s*scrollbar-width:\s*none;/u);
-  assert.match(mainCss, /html\.hide-page-scrollbar::-webkit-scrollbar\s*\{\s*display:\s*none;/u);
-  assert.match(mainCss, /html\.hide-page-scrollbar \.page-home #process\s*\{\s*width:\s*100vw;/u);
-  assert.match(mainCss, /var\(--page-scrollbar-width\)/u);
-  assert.match(mainCss, /html\.hide-page-scrollbar \.site-header\s*\{\s*padding-right:/u);
-  assert.match(navigation, /window\.innerWidth - documentElement\.clientWidth/u);
-  assert.match(navigation, /setProperty\('--page-scrollbar-width'/u);
+  assert.match(
+    mainCss,
+    /html\.process-chrome-active\s*\{\s*scrollbar-color:\s*transparent transparent;/u
+  );
+  assert.match(mainCss, /html\.process-chrome-active::-webkit-scrollbar-thumb/u);
+  assert.doesNotMatch(mainCss, /hide-page-scrollbar/u);
+  assert.doesNotMatch(mainCss, /page-scrollbar-width/u);
 });
 
 test('the cinematic header uses one compact language control and retains normal language links', async () => {

@@ -18,7 +18,6 @@
      remains on the section itself; only its actual content is constrained. */
   --container: 1700px;
   --header-height: 74px;
-  --page-scrollbar-width: 0px;
   --site-control-height: 3rem;
   --site-select-arrow: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath d='m1 1 5 5 5-5' fill='none' stroke='%23142234' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.8'/%3E%3C/svg%3E");
 }
@@ -50,23 +49,41 @@ html {
   scroll-behavior: smooth;
   overflow-y: auto;
   overflow-x: hidden;
-  scrollbar-gutter: auto;
+  /* Reserve the scrollbar gutter for the entire document. The process scene
+     must not change the viewport width while its pinned ScrollTrigger is
+     active, otherwise the frame visibly shifts twice on entry. */
+  scrollbar-gutter: stable;
+  scrollbar-width: thin;
+  scrollbar-color: #6a6b92 transparent;
 }
 
-html.hide-page-scrollbar {
-  scrollbar-width: none;
+html::-webkit-scrollbar {
+  width: 6px;
 }
 
-html.hide-page-scrollbar::-webkit-scrollbar {
-  display: none;
+html::-webkit-scrollbar-track {
+  background: transparent;
 }
 
-html.hide-page-scrollbar .page-home #process {
-  width: 100vw;
+html::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  background: #6a6b92;
+  transition: background-color 220ms ease;
 }
 
-html.hide-page-scrollbar .site-header {
-  padding-right: var(--page-scrollbar-width);
+html::-webkit-scrollbar-thumb:hover {
+  background: #55567d;
+}
+
+/* Keep the process rail visually quiet while retaining its physical gutter.
+   Unlike display:none / scrollbar-width:none this does not resize #process. */
+html.process-chrome-active {
+  scrollbar-color: transparent transparent;
+}
+
+html.process-chrome-active::-webkit-scrollbar-thumb,
+html.process-chrome-active::-webkit-scrollbar-thumb:hover {
+  background: transparent;
 }
 
 html.site-menu-open {
@@ -159,7 +176,7 @@ select:not([multiple]) {
 .floating-contact-actions {
   position: fixed;
   z-index: 60;
-  right: calc(max(18px, env(safe-area-inset-right)) + var(--page-scrollbar-width));
+  right: max(18px, env(safe-area-inset-right));
   bottom: max(24px, env(safe-area-inset-bottom));
   display: grid;
   gap: 12px;
@@ -1130,7 +1147,7 @@ h1 mark {
 
 @media (max-width: 767px) {
   .floating-contact-actions {
-    right: calc(max(14px, env(safe-area-inset-right)) + var(--page-scrollbar-width));
+    right: max(14px, env(safe-area-inset-right));
     bottom: max(16px, env(safe-area-inset-bottom));
     gap: 10px;
   }
