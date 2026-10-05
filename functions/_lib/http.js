@@ -93,7 +93,7 @@ const ERROR_DEFINITIONS = Object.freeze({
   },
   ROOF_AREA_REQUIRES_MEASURED_PLANE: {
     status: 422,
-    message: 'Use a measured roof-face area for a very steep roof.',
+    message: 'For a very steep roof, enter a measured roof section area.',
     retryable: false
   },
   LEAD_DELIVERY_NOT_CONFIGURED: {

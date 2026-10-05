@@ -217,7 +217,7 @@ export default {
     },
     roof: {
       title: 'Roof',
-      copy: 'Outline the usable roof area and enter the actual roof-face parameters for a preliminary estimate.',
+      copy: 'Outline the usable roof section and enter its orientation and tilt for a preliminary estimate.',
       mapDisclosure:
         'The map helps place a point and an approximate outline. Without aerial imagery or a 3D model, it cannot automatically detect the roof, its pitch or shading.',
       fallback: 'The map is unavailable. Enter and manually confirm the property coordinates.',
@@ -240,43 +240,40 @@ export default {
         elevatedHelp:
           'Panels are installed in separate tilted rows, typically on a flat roof. Row spacing is considered to reduce inter-row shading.'
       },
-      areaMethodTitle: 'How the area is provided',
+      areaMethodTitle: 'How do you want to enter the area?',
       areaMethodHelp:
-        'A map outline is the area from above, not the sloped roof-face area. Use a measured roof-face area for a steep roof.',
+        'The map outline shows the roof from above. On a pitched roof, the actual surface area can be larger. If you know the measured area of this roof section, use it.',
       areaMethods: {
-        mapProjected: 'Map outline — projected area from above',
-        measuredPlane: 'Measured roof-face area'
+        mapProjected: 'Map outline — area from above',
+        measuredPlane: 'Measured roof section area'
       },
-      planeAreaLabel: 'Measured roof-face area',
+      planeAreaLabel: 'Measured roof section area',
       planeAreaHelp:
-        'Enter the measured area of one roof face in m². It is still preliminary until an engineer visit.',
-      planeAreaSummary: 'Preliminary roof-plane area used for calculation',
-      orientationLabel: 'Roof-face direction',
-      orientationHelp:
-        'Choose the roof-face direction. A roof-specific calculation cannot be made without it; the location reference above remains available.',
+        'Enter the actual measured area of this roof section in m². The value remains preliminary until an engineer survey.',
+      planeAreaSummary: 'Roof area used in calculation',
+      orientationLabel: 'Roof orientation',
+      orientationHelp: 'Choose the direction this roof section faces.',
       customOrientationLabel: 'Custom orientation (0° = north, 180° = south)',
       customOrientationHelp: 'Enter a compass bearing from 0 to 359°.',
       tiltLabel: 'Roof tilt',
       tiltHelp:
         'The angle of the roof itself relative to horizontal. A flat roof is about 0°, while pitched roofs are often around 20–35°. If you do not know the exact angle, enter an approximate value.',
       tiltInfoLabel: 'More information about roof tilt',
-      arrayTiltLabel: 'PV array tilt (optional)',
+      arrayTiltLabel: 'Panel tilt (optional)',
       arrayTiltHelp:
         'Only for tilted rows on supports. This is the tilt of the solar panels, not the roof. If left blank, YOURENERGY automatically selects the closest catalog-supported angle to the PVGIS calculated optimum.',
-      arrayTiltInfoLabel: 'More information about PV array tilt',
-      arrayAzimuthLabel: 'PV array direction (optional)',
+      arrayTiltInfoLabel: 'More information about panel tilt',
+      arrayAzimuthLabel: 'Panel direction (optional)',
       arrayAzimuthHelp:
         'Only for tilted rows on supports. This is the compass direction of the panels themselves. If left blank, YOURENERGY uses the PVGIS recommended direction.',
-      arrayAzimuthInfoLabel: 'More information about PV array direction',
-      parametersRequired:
-        'Enter the roof-face direction and tilt to create a roof-specific calculation.',
-      angleGuideTitle: 'Visual check of the roof inputs',
-      angleGuideCopy:
-        'The arrow shows the roof-face direction you entered. It is different from the free-standing reference above.',
-      angleGuideOrientation: 'Roof-face direction',
-      angleGuideTilt: 'Roof-face tilt',
-      benchmarkOrientation: 'Reference direction for a free-standing plane',
-      benchmarkTilt: 'Reference tilt for a free-standing plane',
+      arrayAzimuthInfoLabel: 'More information about panel direction',
+      parametersRequired: 'Enter the roof orientation and tilt for the calculation.',
+      angleGuideTitle: 'Check roof orientation and tilt',
+      angleGuideCopy: 'The arrow shows the roof orientation you entered.',
+      angleGuideOrientation: 'Roof orientation',
+      angleGuideTilt: 'Roof tilt',
+      benchmarkOrientation: 'Reference direction for tilted rows on supports',
+      benchmarkTilt: 'Reference tilt for tilted rows on supports',
       angleGuideUnknown: 'Not specified',
       pointSelectLabel: 'Remove point {index}',
       nudgeNorth: 'Move point north',
@@ -376,9 +373,9 @@ export default {
         SURPLUS_COMPENSATION_UNAVAILABLE:
           'No verified surplus-compensation rate is configured, so surplus generation is excluded from the financial estimate.',
         MAP_PROJECTED_AREA_CONVERTED_TO_ROOF_PLANE:
-          'The map outline area was converted from a top view to a preliminary roof-plane area using the entered tilt.',
+          'The map outline area was converted from a top view to a preliminary roof area using the entered tilt.',
         USER_MEASURED_ROOF_PLANE_AREA:
-          'The roof-face area was entered by the visitor and needs engineering verification.',
+          'The measured roof area was entered by the visitor and needs engineering verification.',
         MANUAL_PROPERTY_POINT:
           'The property point was selected manually; it does not verify the address or ownership.',
         MANUAL_ROOF_PLANE:
@@ -403,8 +400,7 @@ export default {
         'The solar-analysis service is not connected or is temporarily unavailable.',
       outsideServiceArea:
         'This free preliminary calculator currently serves points in Armenia only.',
-      roofAreaRequiresMeasured:
-        'For a very steep roof, enter a measured roof-face area instead of a top-view area.',
+      roofAreaRequiresMeasured: 'For a very steep roof, enter a measured roof section area.',
       potentialCooldown: 'A repeat request for this point will be available in {seconds} s.',
       analysisCooldown: 'A repeat calculation with the same data will be available in {seconds} s.',
       inputsChanged:
@@ -583,7 +579,7 @@ export default {
           {
             icon: 'sun',
             label: 'Roof direction',
-            value: 'Enter the roof-face direction',
+            value: 'Enter the roof orientation',
             data: 'roof-direction'
           },
           {
@@ -1105,7 +1101,7 @@ export default {
           },
           {
             title: 'Step 3 — Roof',
-            copy: 'Outline the roof on the map or enter a measured roof-plane area. For a map outline, mark at least 3 points on the same roof. Confirm orientation, tilt and mounting method. Map-derived roof area is preliminary.',
+            copy: 'Outline the roof on the map or enter a measured roof section area. For a map outline, mark at least 3 points on the same roof. Confirm orientation, tilt and mounting method. Map-derived roof area is preliminary.',
             tip: 'Tip: a map outline does not replace physical measurement or a shading assessment.'
           },
           {

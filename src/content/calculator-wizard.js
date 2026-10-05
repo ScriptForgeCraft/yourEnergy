@@ -386,7 +386,7 @@ const copy = {
         invalidOutline: 'Տանիքի ուրվագիծը չպետք է հատի ինքն իրեն։ Ուղղեք կետերի հերթականությունը։',
         outlineTooFar: 'Տանիքի ուրվագիծը շատ հեռու է ընտրված օբյեկտից։ Ստուգեք օբյեկտն ու տանիքը։',
         areaRequired: 'Մուտքագրեք օգտագործելի տանիքի մակերեսը մ²-ով։',
-        orientationRequired: 'Ընտրեք տանիքի լանջի ուղղությունը։',
+        orientationRequired: 'Ընտրեք տանիքի ուղղվածությունը։',
         tiltRequired: 'Մուտքագրեք տանիքի թեքության անկյունը 0°-ից 90°։',
         analysisFailed:
           'Հաշվարկն այժմ չհաջողվեց։ Ձեր տվյալները պահպանված են․ ստուգեք կապը և կրկին փորձեք։'
@@ -782,7 +782,7 @@ const copy = {
         outlineTooFar:
           'Контур крыши находится слишком далеко от выбранного объекта. Проверьте объект и крышу.',
         areaRequired: 'Введите полезную площадь крыши в м².',
-        orientationRequired: 'Выберите направление ската крыши.',
+        orientationRequired: 'Выберите ориентацию крыши.',
         tiltRequired: 'Введите угол наклона крыши от 0° до 90°.',
         analysisFailed:
           'Сейчас не удалось выполнить расчёт. Ваши данные сохранены — проверьте соединение и повторите попытку.'
@@ -1178,7 +1178,7 @@ const copy = {
         outlineTooFar:
           'The roof outline is too far from the selected property. Check the property and roof.',
         areaRequired: 'Enter the usable roof area in m².',
-        orientationRequired: 'Select the roof-face direction.',
+        orientationRequired: 'Select the roof orientation.',
         tiltRequired: 'Enter a roof tilt from 0° to 90°.',
         analysisFailed:
           "We couldn't calculate the result right now. Your entries are saved — check the connection and try again."
