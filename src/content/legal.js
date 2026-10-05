@@ -8,7 +8,7 @@ const privacyDocuments = {
   hy: {
     title: 'Գաղտնիության քաղաքականություն',
     eyebrow: 'ԻՐԱՎԱԿԱՆ ՏԵՂԵԿԱՏՎՈՒԹՅՈՒՆ',
-    updated: 'Վերջին թարմացումը՝ 21 սեպտեմբերի 2026 թ.',
+    updated: 'Վերջին թարմացումը՝ 5 հոկտեմբերի 2026 թ.',
     intro:
       'Սույն Գաղտնիության քաղաքականությունը բացատրում է, թե ինչպես է «ՅՈՒՐ ԷՆԵՐՋԻ» ՍՊԸ-ն (ապրանքանիշ՝ YOURENERGY) հավաքում, օգտագործում և պաշտպանում անձնական տվյալները yourenergy.am կայքից օգտվելիս, հաշվարկ կատարելիս կամ մեզ հետ կապ հաստատելիս։',
     sections: [
@@ -39,9 +39,11 @@ const privacyDocuments = {
         paragraph('Հաշվարկի համար կարող են օգտագործվել՝'),
         list(
           'ընտրված տարածաշրջանը,',
+          'օբյեկտի՝ որոնման միջոցով ընտրված կամ Ձեր կողմից մուտքագրված հասցեն և ընտրված կետի ճշգրիտ կոորդինատները,',
           'էլեկտրաէներգիայի միջին ամսական սպառումը,',
           'էլեկտրաէներգիայի միջին ամսական հաշիվը,',
           'կիրառվող սակագինը,',
+          'քարտեզի վրա նշված տանիքի ուրվագիծը (դրա կետերի կոորդինատները), ինչպես նաև մակերեսը, կողմնորոշումը, թեքությունն ու տեղադրման եղանակը,',
           'հաշվարկի համար օգտագործվող այլ տեխնիկական պարամետրեր։'
         ),
         paragraph(
@@ -51,7 +53,11 @@ const privacyDocuments = {
           'անուն,',
           'հեռախոսահամար,',
           'Ձեր մեկնաբանությունը,',
-          'տվյալ հաշվարկի համառոտ արդյունքները և մուտքային պարամետրերը։'
+          'օբյեկտի ճշգրիտ կոորդինատները և, եթե տանիքի ուրվագիծը նշվել է քարտեզի վրա, դրա կետերի կոորդինատները,',
+          'տվյալ հաշվարկի մանրամասն արդյունքներն ու մուտքային պարամետրերը, ներառյալ տանիքի պարամետրերը։'
+        ),
+        paragraph(
+          'Այս տվյալներն օգտագործվում են նախնական հաշվարկի, առաջարկի կամ ինժեներական խորհրդատվության պատրաստման համար։ Տանիքի ուրվագիծը հայտի հետ փոխանցվում է միայն այն դեպքում, եթե այն նշել եք պրոֆեսիոնալ հաշվիչում։'
         ),
         heading('Տեխնիկական տվյալներ'),
         paragraph(
@@ -204,7 +210,7 @@ const privacyDocuments = {
   ru: {
     title: 'Политика конфиденциальности',
     eyebrow: 'ЮРИДИЧЕСКАЯ ИНФОРМАЦИЯ',
-    updated: 'Последнее обновление: 21 сентября 2026 года',
+    updated: 'Последнее обновление: 5 октября 2026 года',
     intro:
       'Настоящая Политика конфиденциальности объясняет, как ООО «ЮР ЭНЕРДЖИ» (бренд YOURENERGY) собирает, использует и защищает персональные данные при использовании сайта yourenergy.am, солнечного калькулятора и при обращении в компанию.',
     sections: [
@@ -237,9 +243,11 @@ const privacyDocuments = {
         paragraph('Для выполнения предварительного расчёта могут использоваться:'),
         list(
           'выбранный регион;',
+          'адрес объекта, выбранный в поиске или введённый пользователем, и точные координаты выбранной точки;',
           'среднее месячное потребление электроэнергии;',
           'средний месячный счёт за электроэнергию;',
           'применяемый тариф;',
+          'контур крыши, отмеченный на карте (координаты его точек), а также площадь, ориентация, наклон и способ монтажа;',
           'иные технические параметры, введённые для расчёта.'
         ),
         paragraph(
@@ -249,7 +257,11 @@ const privacyDocuments = {
           'имя;',
           'номер телефона;',
           'комментарий;',
-          'краткие результаты и исходные параметры выполненного расчёта.'
+          'точные координаты объекта и, если контур крыши был отмечен на карте, координаты точек этого контура;',
+          'подробные результаты и исходные параметры выполненного расчёта, включая параметры крыши.'
+        ),
+        paragraph(
+          'Эти данные используются для предварительного расчёта, подготовки предложения или инженерной консультации. Контур крыши передаётся с заявкой только если вы отметили его в профессиональном калькуляторе.'
         ),
         heading('Технические данные'),
         paragraph(
@@ -404,7 +416,7 @@ const privacyDocuments = {
   en: {
     title: 'Privacy Policy',
     eyebrow: 'LEGAL INFORMATION',
-    updated: 'Last updated: 21 September 2026',
+    updated: 'Last updated: 5 October 2026',
     intro:
       'This Privacy Policy explains how YOUR ENERGY LLC (brand: YOURENERGY) collects, uses and protects personal data when you use yourenergy.am, use the solar calculator or contact us.',
     sections: [
@@ -435,9 +447,11 @@ const privacyDocuments = {
         paragraph('The following may be used for a preliminary estimate:'),
         list(
           'selected region;',
+          'the property address selected in search or entered by you, and the precise coordinates of the selected point;',
           'average monthly electricity consumption;',
           'average monthly electricity bill;',
           'applicable tariff;',
+          'the roof outline marked on the map (the coordinates of its points), as well as its area, orientation, tilt and mounting method;',
           'other technical parameters entered for the estimate.'
         ),
         paragraph('If you send a request for an offer after an estimate, we may also receive:'),
@@ -445,7 +459,11 @@ const privacyDocuments = {
           'name;',
           'phone number;',
           'your comment;',
-          'a summary of the estimate and its input parameters.'
+          'the precise property coordinates and, where a roof outline was marked on the map, the coordinates of its points;',
+          'detailed estimate results and input parameters, including roof parameters.'
+        ),
+        paragraph(
+          'We use this data for the preliminary estimate, to prepare a proposal or for an engineering consultation. The roof outline is included with a request only when you marked it in Professional Calculator.'
         ),
         heading('Technical data'),
         paragraph(

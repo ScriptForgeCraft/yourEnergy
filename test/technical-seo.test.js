@@ -17,6 +17,20 @@ test('each locale has a real noindex error document and no missing navigation ru
   }
 });
 
+test('about hero signals preserve a text boundary between title and description', async () => {
+  const template = await readFile(new URL('../src/templates/about.hbs', import.meta.url), 'utf8');
+  assert.match(template, /<strong>\{\{title\}\}<\/strong>&#32;<small>\{\{copy\}\}<\/small>/u);
+
+  for (const file of ['about/index.html', 'ru/about/index.html', 'en/about/index.html']) {
+    const html = await readFile(resolve(siteRoot, file), 'utf8');
+    const signals = [
+      ...html.matchAll(/<span><strong>[^<]+<\/strong>&#32;<small>[^<]+<\/small><\/span>/gu)
+    ];
+    assert.equal(signals.length, 3, file);
+    assert.doesNotMatch(html, /<span><strong>[^<]+<\/strong><small>[^<]+<\/small><\/span>/u, file);
+  }
+});
+
 test('indexable pages have unique titles and descriptions within each locale', async () => {
   const pages = await createPageRegistry();
   const titles = new Set();

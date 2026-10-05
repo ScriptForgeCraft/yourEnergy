@@ -971,7 +971,7 @@ export default {
         icon: 'file',
         question: 'Can the system be financed?',
         answer:
-          'A financing programme should only be published when a specific partner and current terms have been verified. If no such programme is supported by the project’s current sources, the FAQ must not promise financing terms.'
+          'Credit or leasing availability depends on current financial-partner offers and the project parameters. A YOURENERGY specialist can explain the available options and terms for your project.'
       },
       {
         id: 'maintenance',
@@ -987,7 +987,7 @@ export default {
         icon: 'shield-check',
         question: 'What warranty is provided for the equipment?',
         answer:
-          'Warranty periods can differ between panels, inverters, batteries and installation work. Only verified manufacturer or supplier warranty data for the selected equipment should be displayed. Final warranty obligations are confirmed in the proposal and contract.'
+          'Warranty periods can differ between panels, inverters, batteries and installation work. The selected equipment comes with warranty terms confirmed by the manufacturer or supplier. Final warranty obligations are confirmed in the proposal and contract.'
       },
       {
         id: 'system-failure',
@@ -1011,7 +1011,7 @@ export default {
         icon: 'shield',
         question: 'Is a permit required for installation?',
         answer:
-          'That depends on the property type, project and current requirements. The website should not make a universal claim that a permit is always required or never required. Before implementation, a YOURENERGY engineer should verify the current requirements for the specific property.'
+          'That depends on the property type, project and current requirements. Before implementation, a YOURENERGY engineer will verify the current requirements for the specific property.'
       },
       {
         id: 'grid-connection',
@@ -1129,7 +1129,7 @@ export default {
         icon: 'download',
         question: 'Can I save the calculation as a PDF?',
         answer:
-          'Yes. Professional Calculator results provide a printable/PDF report containing a summary of the system, roof, generation, financial picture, data sources and major limitations. If the current product does not provide a permanent public share link, the FAQ must not claim that one is generated.'
+          'Yes. Professional Calculator results provide a printable/PDF report containing a summary of the system, roof, generation, financial picture, data sources and major limitations.'
       }
     ]
   },

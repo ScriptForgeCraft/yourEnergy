@@ -16,6 +16,7 @@ const locales = [
 
 const semanticIds = (content) => content.faq.items.map(({ id }) => id);
 const categoryIds = (content) => content.faq.categories.map(({ id }) => id);
+const faqAnswer = (content, id) => content.faq.items.find((item) => item.id === id).answer;
 
 test('FAQ locales share semantic questions and complete category mappings', () => {
   const expectedQuestions = semanticIds(hy);
@@ -27,6 +28,22 @@ test('FAQ locales share semantic questions and complete category mappings', () =
     assert.equal(new Set(semanticIds(content)).size, content.faq.items.length);
     assert.ok(content.faq.items.every(({ category }) => expectedCategories.includes(category)));
     assert.equal(content.faq.categories.find(({ id }) => id === 'all').label.length > 0, true);
+  }
+});
+
+test('sensitive FAQ answers are customer-facing, not editorial instructions', () => {
+  const editorialMarkers = {
+    financing: [/FAQ/u, /сайте только/u, /should only be published/u],
+    warranty: [/На сайте следует/u, /Ցուցադրել միայն/u, /should be displayed/u],
+    permits: [/Сайт не должен/u, /Կայքը չպետք է/u, /website should not/u],
+    'solar-passport-pdf': [/FAQ/u, /share-link/u, /public share link/u]
+  };
+
+  for (const { content } of locales) {
+    for (const [id, markers] of Object.entries(editorialMarkers)) {
+      const answer = faqAnswer(content, id);
+      for (const marker of markers) assert.doesNotMatch(answer, marker, `${id}: ${marker}`);
+    }
   }
 });
 
