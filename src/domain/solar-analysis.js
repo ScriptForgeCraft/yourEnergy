@@ -25,7 +25,7 @@ import { buildEquipmentRecommendation } from './equipment-recommendation.js';
 import { buildCalculationBasis } from './calculation-provenance.js';
 import { calculatePreliminaryRoofCapacity } from './roof-capacity.js';
 import { ANALYSIS_SCHEMA_VERSION } from './analysis-version.js';
-import { PRELIMINARY_MAX_ELEVATED_TILT_DEGREES } from './calculator-assumptions.js';
+import { PRELIMINARY_MAX_MAP_PROJECTED_ROOF_TILT_DEGREES } from './calculator-assumptions.js';
 
 export { ANALYSIS_SCHEMA_VERSION } from './analysis-version.js';
 
@@ -51,7 +51,7 @@ const sourceKinds = new Set(Object.values(SOURCE_KIND));
 const sourceStatuses = new Set(Object.values(SOURCE_STATUS));
 const areaMethods = new Set(['map-projected', 'measured-plane']);
 const mountingModes = new Set(['roof-parallel', 'elevated']);
-const MAX_PROJECTED_AREA_TILT_DEGREES = PRELIMINARY_MAX_ELEVATED_TILT_DEGREES;
+const MAX_PROJECTED_AREA_TILT_DEGREES = PRELIMINARY_MAX_MAP_PROJECTED_ROOF_TILT_DEGREES;
 
 const unavailableSource = Object.freeze({
   kind: SOURCE_KIND.UNAVAILABLE,

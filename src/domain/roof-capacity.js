@@ -1,8 +1,5 @@
 import { round, toPositiveNumberOrNull } from './numbers.js';
-import {
-  PRELIMINARY_ELEVATED_GROUND_COVERAGE_RATIO,
-  PRELIMINARY_MAX_ELEVATED_TILT_DEGREES
-} from './calculator-assumptions.js';
+import { PRELIMINARY_ELEVATED_GROUND_COVERAGE_RATIO } from './calculator-assumptions.js';
 
 const usableRoofRatio = (value) => {
   const ratio = toPositiveNumberOrNull(value);
@@ -18,7 +15,6 @@ export const calculatePreliminaryRoofCapacity = ({
   projectedRoofAreaSqm,
   areaMethod,
   mountingMode = 'roof-parallel',
-  tiltDegrees,
   usableAreaRatio,
   panelAreaSqm,
   panelWatts
@@ -39,14 +35,10 @@ export const calculatePreliminaryRoofCapacity = ({
   const watts = toPositiveNumberOrNull(panelWatts);
   if (roofArea === null || ratio === null || moduleArea === null || watts === null) return null;
 
-  const tilt = Number(tiltDegrees);
-  const panelFootprintSqm =
-    mountingMode === 'elevated'
-      ? Number.isFinite(tilt) && tilt >= 0 && tilt < PRELIMINARY_MAX_ELEVATED_TILT_DEGREES
-        ? moduleArea * Math.cos((tilt * Math.PI) / 180)
-        : null
-      : moduleArea;
-  if (panelFootprintSqm === null || panelFootprintSqm <= 0) return null;
+  // Panel tilt cannot reduce the physical module area used for a preliminary
+  // capacity limit. The elevated coverage ratio above already reserves area;
+  // row pitch and shading are not modelled here.
+  const panelFootprintSqm = moduleArea;
 
   const usableRoofAreaSqm = roofArea * ratio;
   const maximumPanelCount = Math.floor(usableRoofAreaSqm / panelFootprintSqm);
