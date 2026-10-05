@@ -176,12 +176,12 @@ test('mobile installation labels and PVGIS data stay within their cards', async 
   );
 });
 
-test('mobile process chapters use a soft visual bridge instead of a hard step boundary', async () => {
+test('mobile process chapters use a soft visual bridge without dimming the shared photo', async () => {
   const processCss = await readStylesheet(
     new URL('../src/styles/process-story.css', import.meta.url)
   );
 
-  assert.match(processCss, /\.process-stage__background::after\s*\{[^}]*display:\s*block;/u);
+  assert.match(processCss, /\.process-stage__background::after\s*\{[^}]*display:\s*none;/u);
   assert.match(processCss, /\.process-state\s*\{[^}]*min-height:\s*0;/u);
   assert.match(processCss, /\.process-state \+ \.process-state::after\s*\{[^}]*radial-gradient/u);
 });

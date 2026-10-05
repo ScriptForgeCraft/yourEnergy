@@ -987,7 +987,7 @@
     height: auto;
     min-height: 0;
     overflow: visible;
-    background: #020b12;
+    background: linear-gradient(90deg, #020c14d9, transparent 70%);
   }
   .process-stage__frame::before {
     content: none;
@@ -1004,19 +1004,8 @@
     top: 0;
     height: 100svh;
   }
-  /* The background remains visible through the mobile chapters, so give it a
-     consistent dark wash. The framed step photo is above this layer and keeps
-     its full brightness. */
   .process-stage__background::after {
-    display: block;
-    background:
-      linear-gradient(
-        180deg,
-        rgb(2 11 18 / 88%) 0%,
-        rgb(2 11 18 / 72%) 42%,
-        rgb(2 11 18 / 84%) 100%
-      ),
-      radial-gradient(ellipse at 76% 38%, rgb(241 199 91 / 12%), transparent 58%);
+    display: none;
   }
   .process-stage__ambient {
     position: absolute;
@@ -1042,24 +1031,13 @@
   }
   .process-state--photo::before {
     content: '';
-    /* Fade every chapter into the same dark tone at its beginning and end.
-       This joins the steps without covering the actual step image or copy. */
-    background: linear-gradient(
-      180deg,
-      #020b12 0%,
-      rgb(2 11 18 / 94%) 10%,
-      rgb(2 11 18 / 62%) 38%,
-      rgb(2 11 18 / 62%) 66%,
-      rgb(2 11 18 / 94%) 90%,
-      #020b12 100%
-    );
   }
   .process-state + .process-state {
     border-top: 0;
     box-shadow: none;
   }
-  /* A soft, centred glow signals the next chapter. It replaces the former
-     hard border and shadow, so Step 1 flows naturally into Step 2 and onward. */
+  /* A light, centred glow signals the next chapter. It replaces the former
+     hard border and shadow without dimming the shared background photo. */
   .process-state + .process-state::after {
     content: '';
     position: absolute;
@@ -1070,8 +1048,8 @@
     height: clamp(64px, 10svh, 92px);
     pointer-events: none;
     background:
-      linear-gradient(180deg, #020b12 0%, rgb(2 11 18 / 78%) 58%, transparent 100%),
-      radial-gradient(ellipse at top, rgb(241 199 91 / 19%), transparent 64%);
+      linear-gradient(180deg, rgb(2 11 18 / 56%) 0%, rgb(2 11 18 / 24%) 58%, transparent 100%),
+      radial-gradient(ellipse at top, rgb(241 199 91 / 13%), transparent 64%);
   }
   .process-state__copy {
     grid-column: 1;
