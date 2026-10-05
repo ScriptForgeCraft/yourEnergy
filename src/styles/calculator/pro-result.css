@@ -74,7 +74,11 @@
       rgb(244 250 255 / 20%) 68%,
       rgb(244 250 255 / 0%) 100%
     ),
-    url('/images/professional-results-house-1600.webp') center / cover;
+    image-set(
+        url('/images/professional-results-house-1600.avif') type('image/avif'),
+        url('/images/professional-results-house-1600.webp') type('image/webp')
+      )
+      center / cover;
 }
 
 .pro-result-hero__roof-status {
@@ -493,7 +497,7 @@
 
 .pro-result-card--production .chart-bar__label {
   bottom: 0;
-  color: #627a95;
+  color: #58718b;
   font-size: 0.57rem;
 }
 
@@ -502,7 +506,7 @@
   display: flex;
   gap: 0.8rem;
   margin: 0.5rem 0 0;
-  color: #617a95;
+  color: #58718b;
   font-size: 0.65rem;
 }
 
@@ -555,7 +559,7 @@
 }
 
 .monthly-comparison-chart__item small {
-  color: #637b96;
+  color: #58718b;
   font-size: 0.55rem;
   text-align: center;
 }
@@ -575,7 +579,7 @@
 
 .pro-result-equipment__engineering-note {
   margin: 0;
-  color: #627a95;
+  color: #58718b;
   font-size: 0.68rem;
   line-height: 1.4;
 }
@@ -605,6 +609,7 @@
 
 .pro-result-equipment-card__media {
   display: grid;
+  height: 12.4rem;
   min-height: 10.5rem;
   place-items: center;
   padding: 0.65rem;
@@ -637,7 +642,7 @@
 
 .pro-result-equipment-card__label,
 .pro-result-equipment-card__status {
-  color: #0878e9;
+  color: #0069c7;
   font-size: 0.59rem;
   font-weight: 800;
   letter-spacing: 0.055em;
@@ -647,7 +652,7 @@
 .pro-result-equipment-card__brand,
 .pro-result-equipment-card__model,
 .pro-result-equipment-card__reason {
-  color: #5d7692;
+  color: #4f6985;
   font-size: 0.67rem;
   line-height: 1.33;
 }
@@ -667,7 +672,7 @@
 
 .pro-result-equipment-card__cta {
   margin-top: 0.2rem !important;
-  color: #0878e9;
+  color: #0069c7;
   font-size: 0.67rem;
   font-weight: 800;
 }
@@ -759,7 +764,7 @@
 
 .pro-result-card--impact dt,
 .pro-result-card--impact .pro-result-impact__source {
-  color: #5c7f70;
+  color: #46715f;
   font-size: 0.66rem;
 }
 
@@ -803,7 +808,7 @@
 }
 
 .pro-result-details dt {
-  color: #67809b;
+  color: #58718b;
   font-size: 0.64rem;
 }
 
@@ -863,7 +868,7 @@
 
 .pro-result-next__heading p {
   margin: 0.2rem 0 0;
-  color: #617a95;
+  color: #58718b;
   font-size: 0.72rem;
 }
 
@@ -910,7 +915,7 @@
 
 .pro-result-next li small {
   margin-top: 0.14rem;
-  color: #617a95;
+  color: #58718b;
   font-size: 0.64rem;
   line-height: 1.33;
 }
@@ -1087,7 +1092,11 @@
         rgb(244 250 255 / 87%) 48%,
         rgb(244 250 255 / 17%) 100%
       ),
-      url('/images/professional-results-house-1024.webp') center / cover;
+      image-set(
+          url('/images/professional-results-house-1024.avif') type('image/avif'),
+          url('/images/professional-results-house-1024.webp') type('image/webp')
+        )
+        center / cover;
   }
 
   .pro-result-hero__metrics {
@@ -1191,6 +1200,7 @@
   }
 
   .pro-result-equipment-card__media {
+    height: 9rem;
     min-height: 9rem;
   }
 
@@ -1241,7 +1251,11 @@
       rgb(246 251 255 / 4%) 78%,
       rgb(246 251 255 / 0%) 100%
     ),
-    url('/images/professional-results-house-1600.webp') center right / cover;
+    image-set(
+        url('/images/professional-results-house-1600.avif') type('image/avif'),
+        url('/images/professional-results-house-1600.webp') type('image/webp')
+      )
+      center right / cover;
 }
 
 .pro-result-hero h3 {
@@ -1497,7 +1511,7 @@
   width: max-content;
   border: 0;
   padding: 0;
-  color: #0877e9;
+  color: #0069c7;
   background: transparent;
   font: inherit;
   font-size: 0.66rem;
@@ -1535,7 +1549,7 @@
 
 .pro-result-next__actions .text-button {
   margin-left: auto;
-  color: #0877e9;
+  color: #0069c7;
   font-size: 0.68rem;
   font-weight: 800;
 }
@@ -1594,7 +1608,11 @@
         rgb(246 251 255 / 22%) 76%,
         rgb(246 251 255 / 0%) 100%
       ),
-      url('/images/professional-results-house-1024.webp') center / cover;
+      image-set(
+          url('/images/professional-results-house-1024.avif') type('image/avif'),
+          url('/images/professional-results-house-1024.webp') type('image/webp')
+        )
+        center / cover;
   }
 
   .pro-result-hero__metrics,

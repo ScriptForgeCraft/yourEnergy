@@ -46,6 +46,14 @@ const ANALYSIS_COOLDOWN_MS = 15_000;
 // building. This guard applies only to map-drawn roofs.
 const MAX_ROOF_DISTANCE_FROM_PROPERTY_METERS = 500;
 
+// Step four is not part of the initial Professional flow. Keeping its visual
+// layer in a separate CSS chunk avoids downloading dashboard-only rules until
+// an analysis is ready. Callers wait for the stylesheet before exposing the
+// result, preventing a flash of unstyled dashboard content.
+let resultStylesRequest = null;
+const ensureResultStyles = () =>
+  (resultStylesRequest ??= import('../styles/calculator/pro-result.css'));
+
 export const getViewportPopoverPosition = ({
   triggerRect,
   popoverRect,
@@ -1439,6 +1447,11 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
       if (!lifecycle.canCommit(controller, analysisRequest)) return;
       state.analysis = response?.analysis ?? null;
       if (!state.analysis) throw new ProductApiError('MALFORMED_RESPONSE');
+      // Keep the completed state hidden until its visual layer is available.
+      // A stylesheet request failure must not discard an otherwise valid
+      // analysis: the semantic result markup remains a useful fallback.
+      await ensureResultStyles().catch(() => null);
+      if (!lifecycle.canCommit(controller, analysisRequest)) return;
       state.analysisStatus = WIZARD_STEP_STATUSES.COMPLETE;
       // Cool down completed calculations only. A provider failure must leave
       // Retry immediately available for the same inputs.
@@ -1975,16 +1988,23 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
   populateLocalityOptions();
   syncRoofControls({ preserveAnalysis: true });
   if (state.sitePotential) renderPotential(state.sitePotential);
-  if (state.analysis) {
-    renderResult(state.analysis);
-    void loadDisplayProducts()
-      .then(() => {
-        if (lifecycle.isActive() && state.analysis) renderResult(state.analysis);
-      })
-      .catch(() => {});
-  }
   const restoredStep = Number.isInteger(savedSession.currentStep) ? savedSession.currentStep : 0;
-  setStep(restoredStep, { focus: false });
+  if (state.analysis) {
+    void ensureResultStyles()
+      .catch(() => null)
+      .then(() => {
+        if (!lifecycle.isActive() || !state.analysis) return;
+        renderResult(state.analysis);
+        setStep(restoredStep, { focus: false });
+        void loadDisplayProducts()
+          .then(() => {
+            if (lifecycle.isActive() && state.analysis) renderResult(state.analysis);
+          })
+          .catch(() => {});
+      });
+  } else {
+    setStep(restoredStep, { focus: false });
+  }
   const destroy = () => {
     if (!lifecycle.destroy()) return;
     clearAddressSearchDebounce();
