@@ -99,12 +99,55 @@ export const selectPracticalMountingOption = ({
 export const recommendMountingHardware = ({
   mountingMode,
   pvgisOptimumTiltDegrees,
+  arrayTiltDegrees = null,
+  explicitArrayTilt = false,
   mountingSystems = getMountingSystems()
 } = {}) => {
   if (mountingMode !== 'elevated') return null;
 
   const optimum = inclination(pvgisOptimumTiltDegrees);
   if (optimum === null) return null;
+  const requestedArrayTilt = inclination(arrayTiltDegrees);
+  if (explicitArrayTilt && requestedArrayTilt !== null) {
+    const exact = mountingSystems
+      .map((product) => ({ product, availableInclinationDeg: availableInclinations(product) }))
+      .find((candidate) => candidate.availableInclinationDeg.includes(requestedArrayTilt));
+    if (!exact) {
+      return Object.freeze({
+        status: MOUNTING_HARDWARE_RECOMMENDATION_STATUS.NO_CATALOG_MATCH,
+        mountingMode,
+        pvgisOptimumTiltDegrees: optimum,
+        arrayTiltDegrees: requestedArrayTilt,
+        source: 'equipment-catalog',
+        compatibilityStatus: 'preliminary',
+        compatibilityLimitations: Object.freeze([
+          ...MOUNTING_HARDWARE_COMPATIBILITY_LIMITATIONS,
+          'REQUESTED_ARRAY_TILT_HAS_NO_CATALOG_MATCH_REQUIRES_ENGINEERING_VERIFICATION'
+        ])
+      });
+    }
+    const option = {
+      productId: exact.product.id,
+      brand: exact.product.brand,
+      productName: exact.product.product_name,
+      model: exact.product.model,
+      availableInclinationDeg: exact.availableInclinationDeg,
+      practicalInclinationDeg: requestedArrayTilt,
+      kitLengthMm: positiveOrNull(exact.product.calculation?.kit_length_mm),
+      railLengthMm: positiveOrNull(exact.product.calculation?.rail_length_mm),
+      source: 'equipment-catalog'
+    };
+    return Object.freeze({
+      status: MOUNTING_HARDWARE_RECOMMENDATION_STATUS.MATCHED,
+      mountingMode,
+      pvgisOptimumTiltDegrees: optimum,
+      arrayTiltDegrees: requestedArrayTilt,
+      ...option,
+      reason: 'CATALOG_INCLINATION_MATCHES_USER_ENTERED_ARRAY_TILT',
+      compatibilityStatus: 'preliminary',
+      compatibilityLimitations: MOUNTING_HARDWARE_COMPATIBILITY_LIMITATIONS
+    });
+  }
   const option = selectPracticalMountingOption({
     mountingSystems,
     pvgisOptimumTiltDegrees: optimum
@@ -124,6 +167,7 @@ export const recommendMountingHardware = ({
     status: MOUNTING_HARDWARE_RECOMMENDATION_STATUS.MATCHED,
     mountingMode,
     pvgisOptimumTiltDegrees: optimum,
+    arrayTiltDegrees: option.practicalInclinationDeg,
     ...option,
     reason: 'CATALOG_INCLINATION_NEAREST_TO_PVGIS_OPTIMUM',
     compatibilityStatus: 'preliminary',

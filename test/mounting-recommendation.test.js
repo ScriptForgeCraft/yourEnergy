@@ -52,3 +52,15 @@ test('an elevated system reports no catalog match rather than inventing a hardwa
   assert.equal(recommendation?.pvgisOptimumTiltDegrees, 27);
   assert.equal(recommendation?.practicalInclinationDeg, undefined);
 });
+
+test('an explicit engineer array tilt is never silently rounded to a catalog angle', () => {
+  const recommendation = recommendMountingHardware({
+    mountingMode: 'elevated',
+    pvgisOptimumTiltDegrees: 27,
+    arrayTiltDegrees: 25,
+    explicitArrayTilt: true
+  });
+  assert.equal(recommendation?.status, MOUNTING_HARDWARE_RECOMMENDATION_STATUS.NO_CATALOG_MATCH);
+  assert.equal(recommendation?.arrayTiltDegrees, 25);
+  assert.equal(recommendation?.practicalInclinationDeg, undefined);
+});

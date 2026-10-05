@@ -19,7 +19,8 @@ import {
   normalizePvgisOptimalResult,
   normalizePvgisResult,
   validatePotentialInput,
-  validateAnalysisInput
+  validateAnalysisInput,
+  withElevatedArrayGeometry
 } from '../functions/_lib/pvgis.js';
 
 const endpoint = 'https://site.example/api';
@@ -243,7 +244,7 @@ test('PVGIS accepts only explicit roof/system inputs and normalizes a valid twel
   );
 });
 
-test('PVGIS mountingplace follows the Professional mounting mode without changing azimuth conversion', () => {
+test('PVGIS uses roof geometry for roof-parallel and explicit array geometry for elevated mounting', () => {
   const roofParallel = validateAnalysisInput({
     ...analysisPayload,
     roof: { ...analysisPayload.roof, mountingMode: 'roof-parallel', azimuthDegrees: 90 }
@@ -253,14 +254,17 @@ test('PVGIS mountingplace follows the Professional mounting mode without changin
     roof: { ...analysisPayload.roof, mountingMode: 'elevated', azimuthDegrees: 90 }
   });
   const buildingUrl = buildPvgisUrl('https://pvgis.example/api', roofParallel);
-  const freeUrl = buildPvgisUrl('https://pvgis.example/api', elevated);
+  const freeUrl = buildPvgisUrl(
+    'https://pvgis.example/api',
+    withElevatedArrayGeometry(elevated, { arrayTiltDegrees: 20, arrayAzimuthDegrees: 90 })
+  );
 
   assert.equal(roofParallel.roof.pvgisAspectDegrees, -90);
-  assert.equal(elevated.roof.pvgisAspectDegrees, -90);
+  assert.equal(elevated.roof.pvgisAspectDegrees, null);
   assert.equal(buildingUrl.searchParams.get('mountingplace'), 'building');
   assert.equal(freeUrl.searchParams.get('mountingplace'), 'free');
   assert.equal(buildingUrl.searchParams.get('angle'), '30');
-  assert.equal(freeUrl.searchParams.get('angle'), '30');
+  assert.equal(freeUrl.searchParams.get('angle'), '20');
   assert.equal(buildingUrl.searchParams.get('aspect'), '-90');
   assert.equal(freeUrl.searchParams.get('aspect'), '-90');
 });

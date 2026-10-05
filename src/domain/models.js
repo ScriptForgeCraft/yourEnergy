@@ -54,8 +54,12 @@
  * @property {number|null} projectedAreaSqm
  * @property {number|null} planeAreaSqm
  * @property {'roof-parallel'|'elevated'|null} mountingMode
- * @property {number|null} orientationDegrees
- * @property {number|null} tiltDegrees
+ * @property {number|null} roofAzimuthDegrees
+ * @property {number|null} roofTiltDegrees
+ * @property {number|null} arrayAzimuthDegrees
+ * @property {number|null} arrayTiltDegrees
+ * @property {number|null} orientationDegrees Legacy alias for roofAzimuthDegrees
+ * @property {number|null} tiltDegrees Legacy alias for roofTiltDegrees
  * @property {number|null} usableAreaRatio
  * @property {boolean} polygonComplete
  * @property {SourceReference} source

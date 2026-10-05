@@ -29,7 +29,9 @@ test('property-level calculation basis identifies PVGIS, catalog IDs, a roof ass
       usableAreaRatio: 0.7,
       mountingMode: 'elevated',
       orientationDegrees: 180,
-      tiltDegrees: 30
+      tiltDegrees: 0,
+      arrayAzimuthDegrees: 180,
+      arrayTiltDegrees: 30
     },
     production: { annualYieldKwhPerKwp: 1_500, source: pvgisSource },
     system,
@@ -50,11 +52,13 @@ test('property-level calculation basis identifies PVGIS, catalog IDs, a roof ass
   assert.equal(basis.solarYield.source.provider, 'PVGIS');
   assert.equal(basis.solarYield.configuration.systemLossPercent, 14);
   assert.equal(basis.solarYield.configuration.mountingPlace, 'free');
+  assert.equal(basis.usableRoofRatio, null);
   assert.equal(
-    basis.usableRoofRatio.sourceType,
+    basis.elevatedRowDensity.sourceType,
     CALCULATION_BASIS_SOURCE_TYPE.CALCULATOR_ASSUMPTION
   );
-  assert.equal(basis.usableRoofRatio.ratio, 0.7);
+  assert.ok(Math.abs(basis.elevatedRowDensity.layoutGcr - 0.446) < 0.002);
+  assert.equal(basis.elevatedRowDensity.limitProfileAngleDegrees, 20);
   assert.deepEqual(
     {
       productId: basis.solarModule.productId,

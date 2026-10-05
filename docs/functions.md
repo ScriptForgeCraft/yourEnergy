@@ -151,10 +151,15 @@ At 75° or steeper the endpoint rejects the request with
 `ROOF_AREA_REQUIRES_MEASURED_PLANE`; callers must use
 `areaMethod: "measured-plane"` with `planeAreaSqm`. `mountingMode:
 "roof-parallel"` requests PVGIS for the visitor's entered roof plane with
-`mountingplace=building`. `"elevated"` calculates that same entered plane with
-`mountingplace=free`, while a separate PVGIS free-standing optimum remains a
-benchmark mounting recommendation. Neither mode measures local obstacles or
-structural capacity.
+`mountingplace=building`: array tilt and azimuth equal roof tilt and azimuth.
+For `"elevated"`, roof/surface geometry remains separate from PV-array
+geometry. The service first obtains the free-standing PVGIS optimum, selects
+the nearest supported catalog inclination for the preliminary array tilt, and
+then requests PVGIS with that array tilt/azimuth and `mountingplace=free`.
+Professional callers may send `roof.arrayTiltDegrees` and
+`roof.arrayAzimuthDegrees`; an unmatched user-entered angle is retained and
+flagged for engineering verification rather than silently rounded. Neither
+mode measures local obstacles or structural capacity.
 
 The server independently selects the active dated YOURENERGY PriceBook for a
 standard grid-tied residential preliminary budget. That owner-managed price range
@@ -166,10 +171,16 @@ provider result from confirmed consumption. The endpoint accepts only that
 specific-yield calculation. The loss assumption appears in the visible Passport
 ledger.
 
-For a preliminary physical fit limit, the server uses 70% of the manually
-outlined roof area plus a 580 W / 2 m² module assumption. It may limit the
-preliminary system capacity, but it is not a panel layout or engineering survey;
-the visible ledger must disclose both assumptions.
+For roof-parallel systems, the preliminary capacity applies the separately
+labelled usable-roof ratio to the roof-plane area. For conventional,
+single-direction elevated rows on a level horizontal plan, preliminary module
+area is `plan area × GCR`, where
+`GCR = 1 / (cos(array tilt) + sin(array tilt) / tan(limit angle))` and the
+transparent preliminary limit/profile-angle assumption is 20°. This is not a
+setback/obstacle allowance or a final panel layout. Elevated arrays on sloped
+roofs return an engineering-layout limitation instead of a numeric panel limit.
+Structural capacity, wind/snow loading, ballast and attachment design remain
+outside the calculator.
 
 ### `POST /api/lead`
 

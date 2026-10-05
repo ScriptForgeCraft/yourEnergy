@@ -109,7 +109,7 @@ test('Armenian PDF localizes internal input values and roof-specific yield', () 
   assert.doesNotMatch(html, /VERIFIED_HISTORICAL_GRID_FACTOR_2022/u);
 });
 
-test('PDF reports the roof-capacity usable-area ratio for every locale', () => {
+test('PDF reports roof usability separately from elevated row-density GCR for every locale', () => {
   const locales = [
     ['hy-AM', wizardCopy.hy],
     ['ru-RU', wizardCopy.ru],
@@ -133,12 +133,16 @@ test('PDF reports the roof-capacity usable-area ratio for every locale', () => {
     elevated.wizard = wizard;
     elevated.analysis.roof = {
       ...elevated.analysis.roof,
+      tiltDegrees: 0,
+      roofTiltDegrees: 0,
+      arrayTiltDegrees: 30,
+      arrayAzimuthDegrees: 180,
       areaMethod: 'measured-plane',
       mountingMode: 'elevated'
     };
     const elevatedHtml = createCalculatorPdfReportHtml(elevated);
 
-    assert.match(elevatedHtml, /45%/u, `${locale}: elevated ratio`);
+    assert.match(elevatedHtml, /45%|44%/u, `${locale}: elevated GCR`);
     assert.doesNotMatch(elevatedHtml, /70%/u, `${locale}: elevated must not claim 70%`);
   }
 });

@@ -194,6 +194,8 @@ const normalizeProfessionalCalculatorContext = (value, locale) => {
       planeAreaSqm: positiveNumber(roof.planeAreaSqm, 10_000_000),
       azimuthDegrees: boundedNumber(roof.azimuthDegrees, 0, 359),
       tiltDegrees: boundedNumber(roof.tiltDegrees, 0, 90),
+      arrayAzimuthDegrees: boundedNumber(roof.arrayAzimuthDegrees, 0, 359),
+      arrayTiltDegrees: boundedNumber(roof.arrayTiltDegrees, 0, 90),
       mountingMode,
       outlinePoints
     },

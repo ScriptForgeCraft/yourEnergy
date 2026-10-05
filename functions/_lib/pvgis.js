@@ -38,6 +38,11 @@ const PVGIS_MOUNTING_PLACE = Object.freeze({
 const pvgisMountingPlaceFor = (mountingMode) =>
   mountingMode === 'elevated' ? PVGIS_MOUNTING_PLACE.FREE : PVGIS_MOUNTING_PLACE.BUILDING;
 
+const optionalNumberInRange = (value, minimum, maximum) => {
+  if (value === undefined || value === null || value === '') return null;
+  return numberInRange(value, minimum, maximum);
+};
+
 // PVGIS has a public no-key API. Keeping the request server-side prevents the
 // browser from gaining a direct provider dependency and leaves a single point
 // for future endpoint/version changes.
@@ -52,16 +57,40 @@ export const validateAnalysisInput = (body) => {
   const longitude = numberInRange(body?.property?.longitude, -180, 180);
   const capacityKwp = numberInRange(body?.system?.capacityKwp, 0.1, 100);
   const lossPercent = numberInRange(body?.system?.lossPercent, 0, 100);
-  const tiltDegrees = numberInRange(body?.roof?.tiltDegrees, 0, 90);
-  const azimuthDegrees = numberInRange(body?.roof?.azimuthDegrees, 0, 359.9999);
+  const roofTiltDegrees = numberInRange(
+    body?.roof?.roofTiltDegrees ?? body?.roof?.tiltDegrees,
+    0,
+    90
+  );
+  const roofAzimuthDegrees = numberInRange(
+    body?.roof?.roofAzimuthDegrees ?? body?.roof?.azimuthDegrees,
+    0,
+    359.9999
+  );
+  // Stand-alone adapter callers from the existing roof-parallel contract did
+  // not send a mounting mode. The workflow endpoint still requires it.
+  const mountingMode = body?.roof?.mountingMode ?? 'roof-parallel';
+  const suppliedArrayTilt = body?.array?.tiltDegrees ?? body?.roof?.arrayTiltDegrees;
+  const suppliedArrayAzimuth = body?.array?.azimuthDegrees ?? body?.roof?.arrayAzimuthDegrees;
+  const arrayTiltDegrees = optionalNumberInRange(suppliedArrayTilt, 0, 90);
+  const arrayAzimuthDegrees = optionalNumberInRange(suppliedArrayAzimuth, 0, 359.9999);
 
   if (
     latitude === null ||
     longitude === null ||
     capacityKwp === null ||
     lossPercent === null ||
-    tiltDegrees === null ||
-    azimuthDegrees === null
+    roofTiltDegrees === null ||
+    roofAzimuthDegrees === null ||
+    !['roof-parallel', 'elevated'].includes(mountingMode) ||
+    (suppliedArrayTilt !== undefined &&
+      suppliedArrayTilt !== null &&
+      suppliedArrayTilt !== '' &&
+      arrayTiltDegrees === null) ||
+    (suppliedArrayAzimuth !== undefined &&
+      suppliedArrayAzimuth !== null &&
+      suppliedArrayAzimuth !== '' &&
+      arrayAzimuthDegrees === null)
   ) {
     throw new ApiError('INVALID_INPUT');
   }
@@ -70,11 +99,50 @@ export const validateAnalysisInput = (body) => {
     property: { latitude, longitude },
     system: { capacityKwp, lossPercent },
     roof: {
-      tiltDegrees,
-      azimuthDegrees,
-      pvgisAspectDegrees: compassToPvgisAspect(azimuthDegrees),
-      pvgisMountingPlace: pvgisMountingPlaceFor(body?.roof?.mountingMode)
+      roofTiltDegrees,
+      roofAzimuthDegrees,
+      // For roof-parallel systems PVGIS geometry equals roof geometry. For
+      // elevated arrays these values are populated only after the free-standing
+      // optimum/catalog selection (or an explicit professional override).
+      tiltDegrees: mountingMode === 'roof-parallel' ? roofTiltDegrees : arrayTiltDegrees,
+      azimuthDegrees: mountingMode === 'roof-parallel' ? roofAzimuthDegrees : arrayAzimuthDegrees,
+      pvgisAspectDegrees:
+        mountingMode === 'roof-parallel'
+          ? compassToPvgisAspect(roofAzimuthDegrees)
+          : arrayAzimuthDegrees === null
+            ? null
+            : compassToPvgisAspect(arrayAzimuthDegrees),
+      pvgisMountingPlace: pvgisMountingPlaceFor(mountingMode),
+      mountingMode,
+      explicitArrayGeometry:
+        mountingMode === 'elevated' && (arrayTiltDegrees !== null || arrayAzimuthDegrees !== null)
+    },
+    array: {
+      tiltDegrees: arrayTiltDegrees,
+      azimuthDegrees: arrayAzimuthDegrees
     }
+  };
+};
+
+/** Creates the actual PVGIS free-standing array query from explicit geometry. */
+export const withElevatedArrayGeometry = (
+  input,
+  { arrayTiltDegrees, arrayAzimuthDegrees } = {}
+) => {
+  const tilt = numberInRange(arrayTiltDegrees, 0, 90);
+  const azimuth = numberInRange(arrayAzimuthDegrees, 0, 359.9999);
+  if (input?.roof?.mountingMode !== 'elevated' || tilt === null || azimuth === null)
+    throw new ApiError('INVALID_INPUT');
+  return {
+    ...input,
+    roof: {
+      ...input.roof,
+      tiltDegrees: tilt,
+      azimuthDegrees: azimuth,
+      pvgisAspectDegrees: compassToPvgisAspect(azimuth),
+      pvgisMountingPlace: PVGIS_MOUNTING_PLACE.FREE
+    },
+    array: { tiltDegrees: tilt, azimuthDegrees: azimuth }
   };
 };
 

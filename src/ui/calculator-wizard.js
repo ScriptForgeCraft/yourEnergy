@@ -34,6 +34,7 @@ import {
 import { localitiesForRegion, localityCenter } from '../data/locations/armenia.js';
 import { localityLabel } from '../data/locations/locality-labels.js';
 import { getDefaultCalculatorSystem } from '../data/equipment/calculator/defaults.js';
+import { recommendMountingHardware } from '../domain/mounting-recommendation.js';
 
 const PVGIS_KWP = 1;
 const PVGIS_LOSS = 14;
@@ -229,12 +230,16 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
   const roofOrientationCustom = root.querySelector('[data-roof-orientation-custom]');
   const roofOrientationCustomInput = root.querySelector('[data-roof-orientation-custom-input]');
   const roofTilt = root.querySelector('[data-roof-tilt]');
+  const arrayGeometry = root.querySelector('[data-array-geometry]');
+  const arrayTilt = root.querySelector('[data-array-tilt]');
+  const arrayAzimuth = root.querySelector('[data-array-azimuth]');
   const storageRequired = root.querySelector('[data-storage-required]');
   const roofNotice = root.querySelector('.professional-roof-notice');
   const roofNoticeCopy = roofNotice?.querySelector('p');
   const roofNoticeDefault = roofNoticeCopy?.innerHTML ?? '';
   const roofCapacityPreview = root.querySelector('[data-roof-capacity-preview]');
   const roofCapacityArea = root.querySelector('[data-roof-capacity-area]');
+  const roofCapacityUsableLabel = root.querySelector('[data-roof-capacity-usable-label]');
   const roofCapacityUsable = root.querySelector('[data-roof-capacity-usable]');
   const roofCapacityPanels = root.querySelector('[data-roof-capacity-panels]');
   const roofCapacityPanel = root.querySelector('[data-roof-capacity-panel]');
@@ -306,6 +311,8 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
     projectedAreaSqm: savedSession.roof?.areaSqm ?? null,
     planeAreaSqm: number(roofPlaneArea?.value, 0),
     tiltDegrees: number(roofTilt?.value, 0, 90),
+    arrayTiltDegrees: number(arrayTilt?.value, 0, 90),
+    arrayAzimuthDegrees: number(arrayAzimuth?.value, 0, 359),
     azimuthDegrees:
       roofOrientation?.value === 'custom'
         ? number(roofOrientationCustomInput?.value, 0, 359)
@@ -827,12 +834,20 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
   const updateRoofCapacityPreview = (roof) => {
     if (!roofCapacityPreview) return;
     const system = recommendedPanelSystem;
+    const automaticArrayTilt =
+      roof.mountingMode === 'elevated' && roof.arrayTiltDegrees === null
+        ? recommendMountingHardware({
+            mountingMode: 'elevated',
+            pvgisOptimumTiltDegrees: state.sitePotential?.orientation?.tiltDegrees
+          })?.practicalInclinationDeg
+        : null;
     const capacity = calculatePreliminaryRoofCapacity({
       roofAreaSqm: roof.effectiveAreaSqm,
       projectedRoofAreaSqm: roof.projectedAreaSqm,
       areaMethod: roof.areaMethod,
       mountingMode: roof.mountingMode,
-      tiltDegrees: roof.tiltDegrees,
+      roofTiltDegrees: roof.tiltDegrees,
+      arrayTiltDegrees: roof.arrayTiltDegrees ?? automaticArrayTilt,
       usableAreaRatio: PRELIMINARY_USABLE_ROOF_RATIO,
       panelAreaSqm: system?.panelAreaSqm,
       panelWatts: system?.panelWatts
@@ -848,9 +863,18 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
         maximumFractionDigits: 1
       })} m²`;
     if (roofCapacityUsable)
-      roofCapacityUsable.textContent = `${format(capacity.usableRoofAreaSqm, locale, {
-        maximumFractionDigits: 1
-      })} m²`;
+      roofCapacityUsable.textContent = `${format(
+        capacity.preliminaryModuleAreaSqm ?? capacity.usableRoofAreaSqm,
+        locale,
+        {
+          maximumFractionDigits: 1
+        }
+      )} m²`;
+    if (roofCapacityUsableLabel)
+      roofCapacityUsableLabel.textContent =
+        roof.mountingMode === 'elevated'
+          ? (wizard.preliminaryModuleArea ?? 'Preliminary module area')
+          : (wizard.preliminaryUsableRoofArea ?? 'Usable module area');
     if (roofCapacityPanels)
       roofCapacityPanels.textContent = format(capacity.maximumPanelCount, locale);
     if (roofCapacityPanel)
@@ -864,7 +888,7 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
       });
     if (roofCapacityAssumption)
       roofCapacityAssumption.textContent = text(wizard.roofCapacityAssumption, {
-        ratio: format(capacity.usableAreaRatio * 100, locale, {
+        ratio: format((capacity.layoutGcr ?? capacity.usableAreaRatio) * 100, locale, {
           maximumFractionDigits: 0
         })
       });
@@ -1176,6 +1200,8 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
     const areaMethod = activeAreaMethod(root);
     const tiltDegrees = number(roofTilt?.value, 0, 90);
     const azimuthDegrees = roofAzimuth();
+    const arrayTiltDegrees = number(arrayTilt?.value, 0, 90);
+    const arrayAzimuthDegrees = number(arrayAzimuth?.value, 0, 359);
     const projectedAreaSqm = getCalculatorInputNumber(state.roof?.areaSqm, 'roofAreaSqm');
     const planeAreaSqm = getCalculatorInputNumber(roofPlaneArea?.value, 'roofAreaSqm');
     const effective = calculateRoofPlaneArea({
@@ -1192,6 +1218,10 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
       mountingMode: activeMountingMode(root),
       tiltDegrees,
       azimuthDegrees,
+      roofTiltDegrees: tiltDegrees,
+      roofAzimuthDegrees: azimuthDegrees,
+      arrayTiltDegrees,
+      arrayAzimuthDegrees,
       projectedAreaSqm,
       planeAreaSqm,
       effectiveAreaSqm: effective,
@@ -1209,9 +1239,14 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
     roofNotice?.removeAttribute('role');
     if (roofNoticeCopy && roofNoticeCopy.innerHTML !== roofNoticeDefault)
       roofNoticeCopy.innerHTML = roofNoticeDefault;
-    [roofPlaneArea, roofOrientation, roofOrientationCustomInput, roofTilt].forEach((field) =>
-      field?.removeAttribute('aria-invalid')
-    );
+    [
+      roofPlaneArea,
+      roofOrientation,
+      roofOrientationCustomInput,
+      roofTilt,
+      arrayTilt,
+      arrayAzimuth
+    ].forEach((field) => field?.removeAttribute('aria-invalid'));
   };
 
   const showRoofValidation = (issue) => {
@@ -1272,6 +1307,10 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
     const measured = activeAreaMethod(root) === 'measured-plane';
     if (roofPlaneWrap) roofPlaneWrap.hidden = !measured;
     if (roofPlaneArea) roofPlaneArea.disabled = !measured;
+    const elevated = activeMountingMode(root) === 'elevated';
+    if (arrayGeometry) arrayGeometry.hidden = !elevated;
+    if (arrayTilt) arrayTilt.disabled = !elevated;
+    if (arrayAzimuth) arrayAzimuth.disabled = !elevated;
     if (roofOrientationCustom) roofOrientationCustom.hidden = roofOrientation?.value !== 'custom';
     const roof = roofGeometry();
     state.roof = mergeProfessionalRoofInput(state.roof, roof);
@@ -1300,7 +1339,9 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
         planeAreaSqm: roof.planeAreaSqm,
         polygonComplete: roof.polygonComplete,
         tiltDegrees: roof.tiltDegrees,
-        azimuthDegrees: roof.azimuthDegrees
+        azimuthDegrees: roof.azimuthDegrees,
+        arrayTiltDegrees: roof.arrayTiltDegrees,
+        arrayAzimuthDegrees: roof.arrayAzimuthDegrees
       },
       // PVGIS remains a normalized 1 kWp yield query. The calculator-selected
       // catalog module is sent independently and resolved server-side.
@@ -1438,6 +1479,12 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
     if (roofPlaneArea && state.roof.planeAreaSqm) roofPlaneArea.value = state.roof.planeAreaSqm;
     if (roofTilt && Number.isFinite(Number(state.roof.tiltDegrees))) {
       roofTilt.value = state.roof.tiltDegrees;
+    }
+    if (arrayTilt && Number.isFinite(Number(state.roof.arrayTiltDegrees))) {
+      arrayTilt.value = state.roof.arrayTiltDegrees;
+    }
+    if (arrayAzimuth && Number.isFinite(Number(state.roof.arrayAzimuthDegrees))) {
+      arrayAzimuth.value = state.roof.arrayAzimuthDegrees;
     }
     if (roofOrientation && Number.isFinite(Number(state.roof.orientationDegrees))) {
       const known = [...roofOrientation.options].some(
@@ -1623,7 +1670,7 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
   );
   root
     .querySelectorAll(
-      '[data-roof-area-method], [data-roof-mounting-mode], [data-roof-tilt], [data-roof-plane-area], [data-roof-orientation], [data-roof-orientation-custom-input]'
+      '[data-roof-area-method], [data-roof-mounting-mode], [data-roof-tilt], [data-array-tilt], [data-array-azimuth], [data-roof-plane-area], [data-roof-orientation], [data-roof-orientation-custom-input]'
     )
     .forEach((input) => input.addEventListener('input', syncRoofControls));
   root

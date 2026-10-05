@@ -4,6 +4,7 @@ import {
   toNonNegativeNumberOrNull,
   toPositiveNumberOrNull
 } from './numbers.js';
+import { calculatePreliminaryRoofCapacity } from './roof-capacity.js';
 
 export const CALCULATION_BASIS_SOURCE_TYPE = Object.freeze({
   USER_INPUT: 'user-input',
@@ -48,9 +49,14 @@ const catalogProduct = (recommendation) => {
 const pvgisConfiguration = (value) => {
   const systemLossPercent = toNonNegativeNumberOrNull(value?.systemLossPercent);
   const mountingPlace = cleanString(value?.mountingPlace);
-  return systemLossPercent === null && mountingPlace === null
+  const arrayTiltDegrees = toNonNegativeNumberOrNull(value?.arrayTiltDegrees);
+  const arrayAzimuthDegrees = toNonNegativeNumberOrNull(value?.arrayAzimuthDegrees);
+  return systemLossPercent === null &&
+    mountingPlace === null &&
+    arrayTiltDegrees === null &&
+    arrayAzimuthDegrees === null
     ? null
-    : { systemLossPercent, mountingPlace };
+    : { systemLossPercent, mountingPlace, arrayTiltDegrees, arrayAzimuthDegrees };
 };
 
 /**
@@ -81,6 +87,17 @@ export const buildCalculationBasis = ({
   const surplus = financial?.surplusCompensation ?? {};
   const config = pvgisConfiguration(calculationConfig);
   const coordinates = property?.coordinates ?? null;
+  const roofCapacity = calculatePreliminaryRoofCapacity({
+    roofAreaSqm: roof?.areaSqm,
+    projectedRoofAreaSqm: roof?.projectedAreaSqm,
+    areaMethod: roof?.areaMethod,
+    mountingMode: roof?.mountingMode,
+    roofTiltDegrees: roof?.roofTiltDegrees ?? roof?.tiltDegrees,
+    arrayTiltDegrees: roof?.arrayTiltDegrees,
+    usableAreaRatio: roof?.usableAreaRatio,
+    panelAreaSqm,
+    panelWatts
+  });
 
   return deepFreeze({
     coordinates:
@@ -122,13 +139,27 @@ export const buildCalculationBasis = ({
             sourceType: CALCULATION_BASIS_SOURCE_TYPE.USER_INPUT,
             areaSqm: toPositiveNumberOrNull(roof.areaSqm),
             areaMethod: cleanString(roof.areaMethod),
-            tiltDegrees: toNonNegativeNumberOrNull(roof.tiltDegrees),
-            orientationDegrees: toNonNegativeNumberOrNull(roof.orientationDegrees),
+            roofTiltDegrees: toNonNegativeNumberOrNull(roof.roofTiltDegrees ?? roof.tiltDegrees),
+            roofAzimuthDegrees: toNonNegativeNumberOrNull(
+              roof.roofAzimuthDegrees ?? roof.orientationDegrees
+            ),
+            arrayTiltDegrees: toNonNegativeNumberOrNull(roof.arrayTiltDegrees),
+            arrayAzimuthDegrees: toNonNegativeNumberOrNull(roof.arrayAzimuthDegrees),
             mountingMode: cleanString(roof.mountingMode),
             source: sourceReference(roof.source)
           },
+    elevatedRowDensity:
+      roofCapacity?.mountingMode !== 'elevated'
+        ? null
+        : {
+            sourceType: CALCULATION_BASIS_SOURCE_TYPE.CALCULATOR_ASSUMPTION,
+            layoutType: roofCapacity.layoutType,
+            layoutGcr: roofCapacity.layoutGcr,
+            limitProfileAngleDegrees: roofCapacity.limitProfileAngleDegrees,
+            preliminaryModuleAreaSqm: roofCapacity.preliminaryModuleAreaSqm
+          },
     usableRoofRatio:
-      toPositiveNumberOrNull(roof?.usableAreaRatio) === null
+      roof?.mountingMode === 'elevated' || toPositiveNumberOrNull(roof?.usableAreaRatio) === null
         ? null
         : {
             sourceType: CALCULATION_BASIS_SOURCE_TYPE.CALCULATOR_ASSUMPTION,

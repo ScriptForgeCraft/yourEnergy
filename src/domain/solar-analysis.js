@@ -137,8 +137,12 @@ export const calculateRoofPlaneArea = ({
 
 /** @returns {import('./models.js').Roof} */
 export const normalizeRoof = (input = {}) => {
-  const orientationCandidate = toFiniteNumberOrNull(input.orientationDegrees);
-  const tiltCandidate = toFiniteNumberOrNull(input.tiltDegrees);
+  const orientationCandidate = toFiniteNumberOrNull(
+    input.roofAzimuthDegrees ?? input.orientationDegrees
+  );
+  const tiltCandidate = toFiniteNumberOrNull(input.roofTiltDegrees ?? input.tiltDegrees);
+  const arrayAzimuthCandidate = toFiniteNumberOrNull(input.arrayAzimuthDegrees);
+  const arrayTiltCandidate = toFiniteNumberOrNull(input.arrayTiltDegrees);
   const usableAreaCandidate = toFiniteNumberOrNull(input.usableAreaRatio);
   const orientationDegrees =
     orientationCandidate !== null && orientationCandidate >= 0 && orientationCandidate < 360
@@ -153,6 +157,18 @@ export const normalizeRoof = (input = {}) => {
   const polygonComplete = Boolean(input.polygonComplete);
   const areaMethod = validAreaMethod(input.areaMethod);
   const mountingMode = validMountingMode(input.mountingMode);
+  const arrayTiltDegrees =
+    mountingMode === 'roof-parallel'
+      ? tiltDegrees
+      : arrayTiltCandidate !== null && arrayTiltCandidate >= 0 && arrayTiltCandidate <= 90
+        ? arrayTiltCandidate
+        : null;
+  const arrayAzimuthDegrees =
+    mountingMode === 'roof-parallel'
+      ? orientationDegrees
+      : arrayAzimuthCandidate !== null && arrayAzimuthCandidate >= 0 && arrayAzimuthCandidate < 360
+        ? arrayAzimuthCandidate
+        : null;
   const projectedAreaSqm = getCalculatorInputNumber(input.projectedAreaSqm, 'roofAreaSqm');
   const planeAreaSqm = getCalculatorInputNumber(input.planeAreaSqm, 'roofAreaSqm');
   const derivedPlaneArea = calculateRoofPlaneArea({
@@ -177,6 +193,13 @@ export const normalizeRoof = (input = {}) => {
     projectedAreaSqm,
     planeAreaSqm: derivedPlaneArea ?? planeAreaSqm,
     mountingMode,
+    // Explicit surface and PV-array geometry. The legacy aliases below are
+    // retained for readers of earlier Passport data, but never drive elevated
+    // array production or row-density calculations.
+    roofAzimuthDegrees: orientationDegrees,
+    roofTiltDegrees: tiltDegrees,
+    arrayAzimuthDegrees,
+    arrayTiltDegrees,
     orientationDegrees,
     tiltDegrees,
     usableAreaRatio,
@@ -299,7 +322,8 @@ const roofPanelLimit = (roof, system) => {
       projectedRoofAreaSqm: roof.projectedAreaSqm,
       areaMethod: roof.areaMethod,
       mountingMode: roof.mountingMode,
-      tiltDegrees: roof.tiltDegrees,
+      roofTiltDegrees: roof.roofTiltDegrees,
+      arrayTiltDegrees: roof.arrayTiltDegrees,
       usableAreaRatio: roof.usableAreaRatio,
       panelAreaSqm: system.panelAreaSqm,
       panelWatts: system.panelWatts
@@ -839,9 +863,12 @@ export const buildSolarAnalysis = (input = {}) => {
   const mountingHardwareRecommendation = recommendMountingHardware({
     mountingMode: roof.mountingMode,
     pvgisOptimumTiltDegrees:
-      input.mountingRecommendation?.basis === 'pvgis-fixed-free-standing-optimum'
+      input.mountingRecommendation?.pvgisOptimumTiltDegrees ??
+      (input.mountingRecommendation?.basis === 'pvgis-fixed-free-standing-optimum'
         ? input.mountingRecommendation.tiltDegrees
-        : null
+        : null),
+    arrayTiltDegrees: roof.arrayTiltDegrees,
+    explicitArrayTilt: input.mountingRecommendation?.basis === 'user-entered-array-geometry'
   });
   const equipmentRecommendation = buildEquipmentRecommendation({
     selectedScenario,
@@ -1006,6 +1033,13 @@ export const buildSolarAnalysis = (input = {}) => {
   const limitations = Array.isArray(input.limitations)
     ? input.limitations.filter((limitation) => typeof limitation === 'string' && limitation)
     : [];
+  if (
+    roof.mountingMode === 'elevated' &&
+    roof.roofTiltDegrees !== null &&
+    roof.roofTiltDegrees > 0
+  ) {
+    limitations.push('ELEVATED_ON_SLOPED_ROOF_REQUIRES_ENGINEERING_LAYOUT');
+  }
   const calculationBasis = buildCalculationBasis({
     scope,
     property,
@@ -1050,6 +1084,16 @@ export const buildSolarAnalysis = (input = {}) => {
             mountingMode: cleanString(input.mountingRecommendation.mountingMode),
             tiltDegrees: toFiniteNumberOrNull(input.mountingRecommendation.tiltDegrees),
             azimuthDegrees: toFiniteNumberOrNull(input.mountingRecommendation.azimuthDegrees),
+            pvgisOptimumTiltDegrees: toFiniteNumberOrNull(
+              input.mountingRecommendation.pvgisOptimumTiltDegrees
+            ),
+            pvgisOptimumAzimuthDegrees: toFiniteNumberOrNull(
+              input.mountingRecommendation.pvgisOptimumAzimuthDegrees
+            ),
+            arrayTiltDegrees: toFiniteNumberOrNull(input.mountingRecommendation.arrayTiltDegrees),
+            arrayAzimuthDegrees: toFiniteNumberOrNull(
+              input.mountingRecommendation.arrayAzimuthDegrees
+            ),
             basis: cleanString(input.mountingRecommendation.basis)
           }
         : null,

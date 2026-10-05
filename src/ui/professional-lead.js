@@ -115,6 +115,8 @@ export const buildProfessionalLeadContext = ({ analysis, state } = {}) => {
       planeAreaSqm: finite(roof.planeAreaSqm),
       azimuthDegrees: finite(normalizedRoof.orientationDegrees ?? roof.orientationDegrees),
       tiltDegrees: finite(normalizedRoof.tiltDegrees ?? roof.tiltDegrees),
+      arrayAzimuthDegrees: finite(normalizedRoof.arrayAzimuthDegrees ?? roof.arrayAzimuthDegrees),
+      arrayTiltDegrees: finite(normalizedRoof.arrayTiltDegrees ?? roof.arrayTiltDegrees),
       mountingMode: cleanText(normalizedRoof.mountingMode ?? roof.mountingMode) || null,
       outlinePoints: Array.isArray(roof.points)
         ? roof.points.map((point) => ({ lat: finite(point?.lat), lng: finite(point?.lng) }))

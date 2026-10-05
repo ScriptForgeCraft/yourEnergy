@@ -36,6 +36,8 @@ const coordinatesFor = (property) => property?.coordinates ?? property ?? {};
 const normalizedRoof = (roof) => {
   const source = roof !== null && typeof roof === 'object' && !Array.isArray(roof) ? roof : {};
 
+  const arrayTiltDegrees = finiteNumber(source.arrayTiltDegrees);
+  const arrayAzimuthDegrees = finiteNumber(source.arrayAzimuthDegrees);
   return {
     areaMethod: typeof source.areaMethod === 'string' ? source.areaMethod : null,
     mountingMode: typeof source.mountingMode === 'string' ? source.mountingMode : null,
@@ -43,7 +45,9 @@ const normalizedRoof = (roof) => {
     planeAreaSqm: finiteNumber(source.planeAreaSqm),
     polygonComplete: Boolean(source.polygonComplete ?? source.complete),
     tiltDegrees: finiteNumber(source.tiltDegrees),
-    azimuthDegrees: finiteNumber(source.azimuthDegrees ?? source.orientationDegrees)
+    azimuthDegrees: finiteNumber(source.azimuthDegrees ?? source.orientationDegrees),
+    ...(arrayTiltDegrees === null ? {} : { arrayTiltDegrees }),
+    ...(arrayAzimuthDegrees === null ? {} : { arrayAzimuthDegrees })
   };
 };
 
@@ -91,7 +95,9 @@ export const mergeProfessionalRoofInput = (currentRoof, inputRoof) => {
     projectedAreaSqm: incoming('projectedAreaSqm'),
     planeAreaSqm: incoming('planeAreaSqm'),
     tiltDegrees: incoming('tiltDegrees'),
-    orientationDegrees: incomingOrientation
+    orientationDegrees: incomingOrientation,
+    arrayTiltDegrees: incoming('arrayTiltDegrees'),
+    arrayAzimuthDegrees: incoming('arrayAzimuthDegrees')
   };
 };
 
@@ -119,6 +125,8 @@ export const completeProfessionalRoofInput = (currentRoof, fallbackRoof) => {
       : (stored.areaSqm ?? projectedArea(fallback) ?? null),
     planeAreaSqm: stored.planeAreaSqm ?? fallback.planeAreaSqm ?? null,
     tiltDegrees: stored.tiltDegrees ?? fallback.tiltDegrees ?? null,
+    arrayTiltDegrees: stored.arrayTiltDegrees ?? fallback.arrayTiltDegrees ?? null,
+    arrayAzimuthDegrees: stored.arrayAzimuthDegrees ?? fallback.arrayAzimuthDegrees ?? null,
     orientationDegrees:
       stored.orientationDegrees ??
       stored.azimuthDegrees ??

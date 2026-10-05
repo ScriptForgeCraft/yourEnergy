@@ -36,10 +36,13 @@ export {
   normalizeRoof
 } from './solar-analysis.js';
 export {
-  PRELIMINARY_ELEVATED_GROUND_COVERAGE_RATIO,
+  PRELIMINARY_ELEVATED_LIMIT_PROFILE_ANGLE_DEGREES,
   PRELIMINARY_USABLE_ROOF_RATIO
 } from './calculator-assumptions.js';
-export { calculatePreliminaryRoofCapacity } from './roof-capacity.js';
+export {
+  calculateElevatedSingleDirectionRowGcr,
+  calculatePreliminaryRoofCapacity
+} from './roof-capacity.js';
 export { buildRegionalQuickAnalysis } from './quick-analysis.js';
 
 export { buildEquipmentRecommendation } from './equipment-recommendation.js';

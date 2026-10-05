@@ -1,7 +1,7 @@
 import {
   ARMENIA_GRID_CO2_FACTOR,
   EPA_URBAN_TREE_CO2_EQUIVALENCY,
-  PRELIMINARY_ELEVATED_GROUND_COVERAGE_RATIO,
+  PRELIMINARY_ELEVATED_LIMIT_PROFILE_ANGLE_DEGREES,
   PRELIMINARY_USABLE_ROOF_RATIO,
   PriceBookRepository,
   buildSolarAnalysis
@@ -94,8 +94,16 @@ const confirmedProperty = (body, validatedInput) => ({
   }
 });
 
-const confirmedRoof = (body, validatedInput, validatedArea = null) => {
+const confirmedRoof = (body, validatedInput, validatedArea = null, recommendedMounting = null) => {
   const area = validatedArea ?? roofAreaFromBody(body, validatedInput);
+  const arrayTiltDegrees =
+    area.mountingMode === 'roof-parallel'
+      ? validatedInput.roof.tiltDegrees
+      : (recommendedMounting?.arrayTiltDegrees ?? validatedInput.array?.tiltDegrees ?? null);
+  const arrayAzimuthDegrees =
+    area.mountingMode === 'roof-parallel'
+      ? validatedInput.roof.azimuthDegrees
+      : (recommendedMounting?.arrayAzimuthDegrees ?? validatedInput.array?.azimuthDegrees ?? null);
   return {
     areaSqm: area.planeAreaSqm,
     areaMethod: area.method,
@@ -103,6 +111,11 @@ const confirmedRoof = (body, validatedInput, validatedArea = null) => {
     planeAreaSqm: area.planeAreaSqm,
     mountingMode: area.mountingMode,
     usableAreaRatio: PRELIMINARY_USABLE_ROOF_RATIO,
+    roofAzimuthDegrees:
+      validatedInput.roof.roofAzimuthDegrees ?? validatedInput.roof.azimuthDegrees,
+    roofTiltDegrees: validatedInput.roof.roofTiltDegrees ?? validatedInput.roof.tiltDegrees,
+    arrayAzimuthDegrees,
+    arrayTiltDegrees,
     orientationDegrees: validatedInput.roof.azimuthDegrees,
     tiltDegrees: validatedInput.roof.tiltDegrees,
     polygonComplete: body?.roof?.polygonComplete === true,
@@ -175,7 +188,7 @@ export const buildP0SolarAnalysis = ({
     // Retain the already validated bill estimate so a discontinuity fallback
     // cannot be re-divided into a different bracket downstream.
     consumption: consumption ?? body?.consumption,
-    roof: confirmedRoof(body, validatedInput, roofArea),
+    roof: confirmedRoof(body, validatedInput, roofArea, providerAnalysis.recommendedMounting),
     production: {
       // P0 requests exactly 1 kWp, so PVGIS annual generation is a specific yield.
       annualYieldKwhPerKwp: providerAnalysis.generation.annualKwh,
@@ -212,7 +225,8 @@ export const buildP0SolarAnalysis = ({
     limitations: [
       'MANUAL_PROPERTY_POINT',
       'MANUAL_ROOF_PLANE',
-      'LOCAL_OBSTACLES_AND_STRUCTURE_NOT_MEASURED',
+      'LOCAL_OBSTACLES_SETBACKS_AND_ACCESS_NOT_SURVEYED',
+      'STRUCTURAL_CAPACITY_WIND_SNOW_BALLAST_AND_ATTACHMENT_NOT_CONFIRMED',
       ...(body?.roof?.mountingMode === 'elevated'
         ? ['PVGIS_FREE_STANDING_BENCHMARK_FOR_ELEVATED_MOUNT']
         : ['ROOF_PARALLEL_MOUNT_REQUIRES_ENGINEER_CONFIRMATION'])
@@ -220,8 +234,14 @@ export const buildP0SolarAnalysis = ({
     assumptions: [
       'PVGIS_SYSTEM_LOSS_14_PERCENT',
       body?.roof?.mountingMode === 'elevated'
-        ? `PRELIMINARY_ELEVATED_ROW_LAYOUT_${Math.round(PRELIMINARY_ELEVATED_GROUND_COVERAGE_RATIO * 100)}_PERCENT`
+        ? 'PRELIMINARY_ELEVATED_SINGLE_DIRECTION_ROW_DENSITY'
         : `PRELIMINARY_ROOF_USABLE_AREA_${Math.round(PRELIMINARY_USABLE_ROOF_RATIO * 100)}_PERCENT`,
+      ...(body?.roof?.mountingMode === 'elevated'
+        ? [
+            `PRELIMINARY_ELEVATED_LIMIT_PROFILE_ANGLE_${PRELIMINARY_ELEVATED_LIMIT_PROFILE_ANGLE_DEGREES}_DEGREES`,
+            'PRELIMINARY_ROW_DENSITY_NOT_FINAL_PANEL_LAYOUT'
+          ]
+        : []),
       'PRELIMINARY_PANEL_FROM_EQUIPMENT_CATALOG',
       ...(body?.roof?.areaMethod === 'map-projected'
         ? ['MAP_PROJECTED_AREA_CONVERTED_TO_ROOF_PLANE']

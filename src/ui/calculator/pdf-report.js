@@ -418,6 +418,8 @@ const createCopy = ({ wizard, product }) => {
     pvgisReferenceYield:
       pdf.pvgisReferenceYield ?? wizard.pvgisReferenceYield ?? 'Solar-resource reference yield',
     usableArea: pdf.usableArea ?? wizard.preliminaryUsableRoofArea ?? 'Usable module area',
+    preliminaryModuleArea:
+      pdf.preliminaryModuleArea ?? wizard.preliminaryModuleArea ?? 'Preliminary module area',
     mounting: pdf.mounting ?? 'Mounting approach',
     disclaimer: pdf.disclaimer ?? pdf.footer ?? '',
     solarModule: pdf.module ?? wizard.moduleRecommendationTitle ?? 'Solar module',
@@ -426,10 +428,10 @@ const createCopy = ({ wizard, product }) => {
     sizingExplanation:
       pdf.sizingExplanation ?? 'The system is sized for consumption, not to fill the whole roof.',
     roofCapacityTitle:
-      pdf.roofCapacityTitle ?? wizard.roofCapacityTitle ?? 'Physical roof capacity',
+      pdf.roofCapacityTitle ?? wizard.roofCapacityTitle ?? 'Preliminary module capacity',
     roofArea: pdf.roofArea ?? wizard.roofAreaForSizing ?? 'Roof area',
     physicalModuleLimit:
-      pdf.physicalModuleLimit ?? wizard.maximumPanelsForRoof ?? 'Physical module limit',
+      pdf.physicalModuleLimit ?? wizard.maximumPanelsForRoof ?? 'Preliminary module capacity',
     physicalCapacity:
       pdf.physicalCapacity ?? wizard.physicalDcCapacityLimit ?? 'Physical DC capacity limit',
     roofNotLimiting:
@@ -481,6 +483,17 @@ const createCopy = ({ wizard, product }) => {
     calculationBasisTitle:
       pdf.calculationBasisTitle ?? wizard.calculationBasisTitle ?? 'Calculation basis',
     pvgisReferenceOrientation: pdf.pvgisReferenceOrientation ?? 'Reference direction / tilt',
+    roofTilt: pdf.roofTilt ?? wizard.roofTilt ?? 'Roof tilt',
+    roofAzimuth: pdf.roofAzimuth ?? wizard.roofOrientation ?? 'Roof azimuth',
+    arrayTilt: pdf.arrayTilt ?? wizard.arrayTilt ?? 'Array tilt',
+    arrayAzimuth: pdf.arrayAzimuth ?? wizard.arrayAzimuth ?? 'Array azimuth',
+    preliminaryGcr: pdf.preliminaryGcr ?? wizard.preliminaryGcr ?? 'Preliminary row-density GCR',
+    rowSpacingLimitAngle:
+      pdf.rowSpacingLimitAngle ?? wizard.rowSpacingLimitAngle ?? 'Row-spacing limit angle',
+    preliminaryLayoutNote:
+      pdf.preliminaryLayoutNote ??
+      wizard.preliminaryLayoutNote ??
+      'This is a preliminary row-density estimate, not a final panel layout.',
     sourcesTitle: pdf.sourcesTitle ?? 'Sources',
     sourcePvgis: pdf.sourcePvgis ?? 'Solar data — European Commission Joint Research Centre',
     sourceTariff: pdf.sourceTariff ?? 'Tariff',
@@ -592,7 +605,7 @@ const pageOne = ({ copy, passport, locale, values }) => {
               `${displayNumber(referenceYield, locale)} ${copy.yieldPerYear}`
             ],
             [
-              copy.usableArea,
+              values.mountingMode === 'elevated' ? copy.preliminaryModuleArea : copy.usableArea,
               `${displayNumber(usableArea, locale, { maximumFractionDigits: 1 })} m²`
             ],
             [copy.mounting, mounting]
@@ -660,7 +673,7 @@ const pageTwo = ({ copy, passport, locale, values, equipment }) => {
         ${dataRows([
           [copy.roofArea, `${displayNumber(roofArea, locale, { maximumFractionDigits: 1 })} m²`],
           [
-            copy.usableArea,
+            values.mountingMode === 'elevated' ? copy.preliminaryModuleArea : copy.usableArea,
             `${displayNumber(usableArea, locale, { maximumFractionDigits: 1 })} m²`
           ],
           [
@@ -752,6 +765,10 @@ const pageFour = ({ copy, passport, locale, values, equipment }) => {
     roofArea,
     roofOrientation,
     roofTilt,
+    arrayAzimuth,
+    arrayTilt,
+    layoutGcr,
+    limitProfileAngleDegrees,
     mounting,
     referenceYield,
     referenceAzimuth,
@@ -806,6 +823,23 @@ const pageFour = ({ copy, passport, locale, values, equipment }) => {
             copy.roof,
             `${displayNumber(roofArea, locale, { maximumFractionDigits: 1 })} m² · ${displayNumber(roofOrientation, locale, { maximumFractionDigits: 0 })}° · ${displayNumber(roofTilt, locale, { maximumFractionDigits: 0 })}°`
           ],
+          [
+            copy.roofAzimuth,
+            `${displayNumber(roofOrientation, locale, { maximumFractionDigits: 0 })}°`
+          ],
+          [copy.roofTilt, `${displayNumber(roofTilt, locale, { maximumFractionDigits: 0 })}°`],
+          ...(arrayTilt === null
+            ? []
+            : [
+                [
+                  copy.arrayAzimuth,
+                  `${displayNumber(arrayAzimuth, locale, { maximumFractionDigits: 0 })}°`
+                ],
+                [
+                  copy.arrayTilt,
+                  `${displayNumber(arrayTilt, locale, { maximumFractionDigits: 0 })}°`
+                ]
+              ]),
           [copy.mounting, mounting]
         ])}
       </section>
@@ -821,8 +855,21 @@ const pageFour = ({ copy, passport, locale, values, equipment }) => {
             `${displayNumber(referenceAzimuth, locale, { maximumFractionDigits: 0 })}° / ${displayNumber(referenceTilt, locale, { maximumFractionDigits: 0 })}°`
           ],
           [copy.roofSpecificYield, `${displayNumber(roofYield, locale)} ${copy.yieldPerYear}`],
+          ...(layoutGcr === null
+            ? []
+            : [
+                [
+                  copy.preliminaryGcr,
+                  `${displayNumber(layoutGcr * 100, locale, { maximumFractionDigits: 0 })}%`
+                ],
+                [
+                  copy.rowSpacingLimitAngle,
+                  `${displayNumber(limitProfileAngleDegrees, locale, { maximumFractionDigits: 0 })}°`
+                ]
+              ]),
+          ...(layoutGcr === null ? [] : [[copy.preliminaryLayoutNote, '']]),
           [
-            copy.usableArea,
+            values.mountingMode === 'elevated' ? copy.preliminaryModuleArea : copy.usableArea,
             `${displayNumber(usableArea, locale, { maximumFractionDigits: 1 })} m²`
           ],
           [
@@ -886,7 +933,8 @@ export const createCalculatorPdfReportHtml = ({
     projectedRoofAreaSqm: roof.projectedAreaSqm,
     areaMethod: roof.areaMethod,
     mountingMode: roof.mountingMode,
-    tiltDegrees: roof.tiltDegrees,
+    roofTiltDegrees: roof.roofTiltDegrees ?? roof.tiltDegrees,
+    arrayTiltDegrees: roof.arrayTiltDegrees,
     usableAreaRatio: roof.usableAreaRatio,
     panelAreaSqm: scenario.system?.panelAreaSqm,
     panelWatts: scenario.system?.panelWatts
@@ -934,15 +982,20 @@ export const createCalculatorPdfReportHtml = ({
               : copy.sourceUnavailable,
     storageRequested: Boolean(state.storageRequired),
     roofArea: asNumber(roof.areaSqm),
-    roofOrientation: asNumber(roof.orientationDegrees),
-    roofTilt: asNumber(roof.tiltDegrees),
-    usableArea: asNumber(roofCapacity?.usableRoofAreaSqm),
+    roofOrientation: asNumber(roof.roofAzimuthDegrees ?? roof.orientationDegrees),
+    roofTilt: asNumber(roof.roofTiltDegrees ?? roof.tiltDegrees),
+    arrayAzimuth: asNumber(roof.arrayAzimuthDegrees),
+    arrayTilt: asNumber(roof.arrayTiltDegrees),
+    layoutGcr: asNumber(roofCapacity?.layoutGcr),
+    limitProfileAngleDegrees: asNumber(roofCapacity?.limitProfileAngleDegrees),
+    usableArea: asNumber(roofCapacity?.preliminaryModuleAreaSqm ?? roofCapacity?.usableRoofAreaSqm),
     roofUsableRatioPercent:
       roofCapacity?.usableAreaRatio !== undefined && roofCapacity?.usableAreaRatio !== null
         ? roofCapacity.usableAreaRatio * 100
         : null,
     physicalModuleLimit: asNumber(roofCapacity?.maximumPanelCount),
     physicalCapacity: asNumber(roofCapacity?.maximumCapacityKwp),
+    mountingMode: roof.mountingMode,
     mounting,
     roofLimited,
     referenceYield: asNumber(referencePotential?.annualYieldKwhPerKwp),

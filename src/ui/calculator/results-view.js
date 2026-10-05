@@ -222,8 +222,15 @@ export const createCalculatorResultsView = ({
             : '—';
       add(
         basisCopy.roof ?? 'Roof data',
-        `${format(roof.areaSqm, locale, { maximumFractionDigits: 1 })} m² · ${format(roof.orientationDegrees, locale, { maximumFractionDigits: 1 })}° · ${format(roof.tiltDegrees, locale, { maximumFractionDigits: 1 })}° · ${mountingMode}`,
+        `${format(roof.areaSqm, locale, { maximumFractionDigits: 1 })} m² · ${wizard.roofAzimuth ?? 'Roof azimuth'} ${format(roof.roofAzimuthDegrees, locale, { maximumFractionDigits: 1 })}° · ${wizard.roofTilt ?? 'Roof tilt'} ${format(roof.roofTiltDegrees, locale, { maximumFractionDigits: 1 })}°${roof.mountingMode === 'elevated' ? ` · ${wizard.arrayAzimuth ?? 'Array azimuth'} ${format(roof.arrayAzimuthDegrees, locale, { maximumFractionDigits: 1 })}° · ${wizard.arrayTilt ?? 'Array tilt'} ${format(roof.arrayTiltDegrees, locale, { maximumFractionDigits: 1 })}°` : ''} · ${mountingMode}`,
         roof.sourceType
+      );
+    }
+    if (basis.elevatedRowDensity) {
+      add(
+        wizard.preliminaryGcr ?? 'Preliminary row-density GCR',
+        `${format(basis.elevatedRowDensity.layoutGcr * 100, locale, { maximumFractionDigits: 0 })}% · ${wizard.rowSpacingLimitAngle ?? 'Row-spacing limit angle'} ${format(basis.elevatedRowDensity.limitProfileAngleDegrees, locale, { maximumFractionDigits: 0 })}°`,
+        basis.elevatedRowDensity.sourceType
       );
     }
     if (basis.usableRoofRatio) {
@@ -732,7 +739,8 @@ export const createCalculatorResultsView = ({
       projectedRoofAreaSqm: analysis.roof?.projectedAreaSqm,
       areaMethod: analysis.roof?.areaMethod,
       mountingMode: analysis.roof?.mountingMode,
-      tiltDegrees: analysis.roof?.tiltDegrees,
+      roofTiltDegrees: analysis.roof?.roofTiltDegrees ?? analysis.roof?.tiltDegrees,
+      arrayTiltDegrees: analysis.roof?.arrayTiltDegrees,
       usableAreaRatio: analysis.roof?.usableAreaRatio,
       panelAreaSqm: scenario.system?.panelAreaSqm,
       panelWatts: scenario.system?.panelWatts
@@ -773,7 +781,7 @@ export const createCalculatorResultsView = ({
           'recommended'
         ),
         dashboardMetric(
-          resultsCopy.roofMaximum ?? 'Physical roof maximum',
+          resultsCopy.roofMaximum ?? 'Preliminary module capacity',
           `${resultsCopy.upTo ?? 'up to'} ${format(roofCapacity.maximumPanelCount, locale)} ${resultsCopy.panelsUnit ?? 'panels'} · ${resultsCopy.upTo ?? 'up to'} ${format(roofCapacity.maximumCapacityKwp, locale, { maximumFractionDigits: 2 })} kWp`,
           'maximum'
         )
@@ -785,8 +793,10 @@ export const createCalculatorResultsView = ({
           `${format(roofCapacity.roofAreaSqm, locale, { maximumFractionDigits: 1 })} m²`
         ),
         dashboardMetric(
-          resultsCopy.usableArea ?? 'Usable area',
-          `${format(roofCapacity.usableRoofAreaSqm, locale, { maximumFractionDigits: 1 })} m²`
+          analysis.roof?.mountingMode === 'elevated'
+            ? (wizard.preliminaryModuleArea ?? 'Preliminary module area')
+            : (resultsCopy.usableArea ?? 'Usable area'),
+          `${format(roofCapacity.preliminaryModuleAreaSqm ?? roofCapacity.usableRoofAreaSqm, locale, { maximumFractionDigits: 1 })} m²`
         ),
         dashboardMetric(
           wizard.roofOrientation ?? 'Orientation',
@@ -794,9 +804,25 @@ export const createCalculatorResultsView = ({
         ),
         dashboardMetric(
           wizard.roofTilt ?? 'Tilt',
-          `${format(analysis.roof?.tiltDegrees, locale, { maximumFractionDigits: 0 })}°`
+          `${format(analysis.roof?.roofTiltDegrees ?? analysis.roof?.tiltDegrees, locale, { maximumFractionDigits: 0 })}°`
         )
       );
+      if (analysis.roof?.mountingMode === 'elevated') {
+        facts.append(
+          dashboardMetric(
+            wizard.arrayTilt ?? 'Array tilt',
+            `${format(analysis.roof?.arrayTiltDegrees, locale, { maximumFractionDigits: 0 })}°`
+          ),
+          dashboardMetric(
+            wizard.arrayAzimuth ?? 'Array azimuth',
+            `${format(analysis.roof?.arrayAzimuthDegrees, locale, { maximumFractionDigits: 0 })}°`
+          ),
+          dashboardMetric(
+            wizard.preliminaryGcr ?? 'Preliminary row-density GCR',
+            `${format((roofCapacity.layoutGcr ?? 0) * 100, locale, { maximumFractionDigits: 0 })}%`
+          )
+        );
+      }
       const explanationId = 'professional-roof-capacity-explanation';
       const explanation = element(
         'p',

@@ -271,23 +271,77 @@ test('an elevated system uses a free-standing PVGIS calculation and retains the 
   const optimumUrl = requestedUrls.find((url) => url.searchParams.get('optimalangles') === '1');
   assert.equal(generationUrl?.searchParams.get('mountingplace'), 'free');
   assert.equal(generationUrl?.searchParams.get('angle'), '30');
-  assert.equal(generationUrl?.searchParams.get('aspect'), '0');
+  assert.equal(generationUrl?.searchParams.get('aspect'), '-10');
   assert.equal(optimumUrl?.searchParams.get('mountingplace'), 'free');
   assert.equal(analysis.scope, 'manual-roof-plane');
   assert.equal(analysis.dataCompleteness.level, 'preliminary');
   assert.equal(analysis.roof.tiltDegrees, 30);
   assert.equal(analysis.roof.orientationDegrees, 180);
+  assert.equal(analysis.roof.roofTiltDegrees, 30);
+  assert.equal(analysis.roof.arrayTiltDegrees, 30);
+  assert.equal(analysis.roof.arrayAzimuthDegrees, 170);
   assert.equal(analysis.production.annualYieldKwhPerKwp, 1500);
-  assert.deepEqual(analysis.mountingRecommendation, {
-    mountingMode: 'elevated',
-    tiltDegrees: 31,
-    azimuthDegrees: 170,
-    basis: 'pvgis-fixed-free-standing-optimum'
-  });
+  assert.equal(analysis.mountingRecommendation.mountingMode, 'elevated');
+  assert.equal(analysis.mountingRecommendation.arrayTiltDegrees, 30);
+  assert.equal(analysis.mountingRecommendation.arrayAzimuthDegrees, 170);
+  assert.equal(analysis.mountingRecommendation.pvgisOptimumTiltDegrees, 31);
+  assert.equal(
+    analysis.mountingRecommendation.basis,
+    'catalog-practical-inclination-from-pvgis-optimum'
+  );
   assert.equal(analysis.mountingHardwareRecommendation.status, 'matched');
   assert.deepEqual(analysis.mountingHardwareRecommendation.availableInclinationDeg, [20, 30]);
   assert.equal(analysis.mountingHardwareRecommendation.practicalInclinationDeg, 30);
   assert.ok(analysis.limitations.includes('PVGIS_FREE_STANDING_BENCHMARK_FOR_ELEVATED_MOUNT'));
+  assert.ok(analysis.limitations.includes('ELEVATED_ON_SLOPED_ROOF_REQUIRES_ENGINEERING_LAYOUT'));
+});
+
+test('PVGIS angle follows roof geometry only for roof-parallel and array geometry for elevated', async () => {
+  const requestAngle = async (roof) => {
+    const requested = [];
+    const response = await analysisOnRequest({
+      request: postJson('/analysis', { ...p0Payload, roof }),
+      env: pvgisEnv(),
+      fetch: async (url) => {
+        const parsed = new URL(url);
+        requested.push(parsed);
+        const optimum = parsed.searchParams.get('optimalangles') === '1';
+        return new Response(
+          JSON.stringify({
+            ...pvgisGeneration(),
+            inputs: {
+              mounting_system: { fixed: { slope: { value: 31 }, azimuth: { value: 0 } } }
+            },
+            ...(optimum ? { outputs: pvgisGeneration().outputs } : {})
+          }),
+          { headers: { 'content-type': 'application/json' } }
+        );
+      }
+    });
+    assert.equal(response.status, 200);
+    return requested.find((url) => url.searchParams.get('optimalangles') !== '1');
+  };
+
+  const roofParallel = await requestAngle({ ...p0Payload.roof, tiltDegrees: 25 });
+  assert.equal(roofParallel.searchParams.get('angle'), '25');
+
+  const elevatedFlat = await requestAngle({
+    ...p0Payload.roof,
+    mountingMode: 'elevated',
+    tiltDegrees: 0,
+    arrayTiltDegrees: 20,
+    arrayAzimuthDegrees: 180
+  });
+  assert.equal(elevatedFlat.searchParams.get('angle'), '20');
+
+  const elevatedSloped = await requestAngle({
+    ...p0Payload.roof,
+    mountingMode: 'elevated',
+    tiltDegrees: 5,
+    arrayTiltDegrees: 30,
+    arrayAzimuthDegrees: 180
+  });
+  assert.equal(elevatedSloped.searchParams.get('angle'), '30');
 });
 
 test('a steep map-area roof is rejected before PVGIS is contacted', async () => {

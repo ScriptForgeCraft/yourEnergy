@@ -256,6 +256,12 @@ export default {
       tiltLabel: 'This roof-face tilt',
       tiltHelp:
         'For a roof-specific calculation, enter an approximate angle from 0° to 90°. It is not detected from the address.',
+      arrayTiltLabel: 'PV array tilt (elevated only)',
+      arrayTiltHelp:
+        'Optional engineer override. Leave blank to use the nearest catalog-supported angle to the PVGIS free-standing optimum.',
+      arrayAzimuthLabel: 'PV array direction (elevated only)',
+      arrayAzimuthHelp:
+        'Optional compass bearing. Leave blank to use the PVGIS free-standing optimum direction.',
       parametersRequired:
         'Enter the roof-face direction and tilt to create a roof-specific calculation.',
       angleGuideTitle: 'Visual check of the roof inputs',
@@ -336,6 +342,12 @@ export default {
           'The solar model uses a 14% preliminary system-loss assumption; an engineer must confirm it.',
         PRELIMINARY_ROOF_USABLE_AREA_70_PERCENT:
           'Preliminary capacity uses 70% of the outlined roof area. An engineer verifies actual usable area, setbacks and access paths.',
+        PRELIMINARY_ELEVATED_SINGLE_DIRECTION_ROW_DENSITY:
+          'Elevated capacity uses a preliminary single-direction row-spacing model, not a fixed roof-coverage percentage.',
+        PRELIMINARY_ELEVATED_LIMIT_PROFILE_ANGLE_20_DEGREES:
+          'The preliminary row-spacing model uses a 20° shading limit/profile angle assumption.',
+        PRELIMINARY_ROW_DENSITY_NOT_FINAL_PANEL_LAYOUT:
+          'This is a preliminary row-density estimate, not a final panel layout.',
         PRELIMINARY_PANEL_FROM_EQUIPMENT_CATALOG:
           'Preliminary capacity uses a module from the equipment catalog; an engineer must confirm the final specification.',
         USER_PROVIDED_TARIFF:
@@ -367,6 +379,12 @@ export default {
           'Roof direction, tilt and area were entered manually; no automatic roof scan was performed.',
         LOCAL_OBSTACLES_AND_STRUCTURE_NOT_MEASURED:
           'Local obstacles, shade, structural suitability and grid connection were not measured.',
+        LOCAL_OBSTACLES_SETBACKS_AND_ACCESS_NOT_SURVEYED:
+          'Local obstacles, setbacks and access routes have not been surveyed.',
+        STRUCTURAL_CAPACITY_WIND_SNOW_BALLAST_AND_ATTACHMENT_NOT_CONFIRMED:
+          'Structural capacity, wind and snow loading, ballast and attachment design are not confirmed by this preliminary calculator.',
+        ELEVATED_ON_SLOPED_ROOF_REQUIRES_ENGINEERING_LAYOUT:
+          'An elevated array on a sloped roof requires an engineering layout; no preliminary module limit is stated.',
         PVGIS_FREE_STANDING_BENCHMARK_FOR_ELEVATED_MOUNT:
           'For an elevated structure, the calculated optimum is only a benchmark; an engineer confirms the design.',
         ROOF_PARALLEL_MOUNT_REQUIRES_ENGINEER_CONFIRMATION:
