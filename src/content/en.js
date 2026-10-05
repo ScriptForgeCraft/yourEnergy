@@ -346,7 +346,7 @@ export default {
         PRELIMINARY_ROOF_USABLE_AREA_70_PERCENT:
           'Preliminary capacity uses 70% of the outlined roof area. An engineer verifies actual usable area, setbacks and access paths.',
         PRELIMINARY_ELEVATED_SINGLE_DIRECTION_ROW_DENSITY:
-          'Elevated capacity uses a preliminary single-direction row-spacing model, not a fixed roof-coverage percentage.',
+          'Capacity for tilted rows on supports uses a preliminary single-direction row-spacing model, not a fixed roof-coverage percentage.',
         PRELIMINARY_ELEVATED_LIMIT_PROFILE_ANGLE_20_DEGREES:
           'The preliminary row-spacing model uses a 20° shading limit/profile angle assumption.',
         PRELIMINARY_ROW_DENSITY_NOT_FINAL_PANEL_LAYOUT:
@@ -387,11 +387,11 @@ export default {
         STRUCTURAL_CAPACITY_WIND_SNOW_BALLAST_AND_ATTACHMENT_NOT_CONFIRMED:
           'Structural capacity, wind and snow loading, ballast and attachment design are not confirmed by this preliminary calculator.',
         ELEVATED_ON_SLOPED_ROOF_REQUIRES_ENGINEERING_LAYOUT:
-          'An elevated array on a sloped roof requires an engineering layout; no preliminary module limit is stated.',
+          'Tilted rows on supports on a sloped roof require an engineering layout; no preliminary module limit is shown.',
         PVGIS_FREE_STANDING_BENCHMARK_FOR_ELEVATED_MOUNT:
-          'For an elevated structure, the calculated optimum is only a benchmark; an engineer confirms the design.',
+          'For tilted rows on supports, the calculated optimum is only a reference; an engineer confirms the final design.',
         ROOF_PARALLEL_MOUNT_REQUIRES_ENGINEER_CONFIRMATION:
-          'For a roof-parallel system, an engineer confirms the final parameters.'
+          'For installation along the roof plane, an engineer confirms the final parameters.'
       }
     },
     status: {
@@ -1125,7 +1125,7 @@ export default {
         icon: 'roof-measure',
         question: 'How should I mark the roof on the map?',
         answer:
-          'Choose the roof-outline method and mark at least 3 points around the same roof plane. Adjust the points if needed and review the resulting area. The map outline provides a preliminary projected area and does not replace physical measurement, shading assessment or structural verification.'
+          'Choose the roof-outline method and mark at least 3 points around the same roof section. Adjust the points if needed and review the resulting area. The map outline provides a preliminary projected area and does not replace physical measurement, shading assessment or structural verification.'
       },
       {
         id: 'calculator-results',

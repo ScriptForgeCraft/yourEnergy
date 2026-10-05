@@ -382,11 +382,12 @@ const financialSourceLabel = (sourceType) =>
 const roofAreaMethodLabel = (method) =>
   ({
     'map-projected': 'Քարտեզով ուրվագծում',
-    'measured-plane': 'Չափված տանիքի հարթություն'
+    'measured-plane': 'Տանիքի հատվածի չափված մակերես'
   })[method] ?? method;
 
 const mountingModeLabel = (mode) =>
-  ({ 'roof-parallel': 'Տանիքին զուգահեռ', elevated: 'Բարձրացված կառուցվածք' })[mode] ?? mode;
+  ({ 'roof-parallel': 'Տանիքի հարթությամբ', elevated: 'Հենարանների վրա թեքված շարքեր' })[mode] ??
+  mode;
 
 const regionLabel = (region) =>
   ({
@@ -410,7 +411,7 @@ const scenarioLabel = (scenario) =>
 const scopeLabel = (scope) =>
   ({
     'regional-preliminary': 'Տարածաշրջանային նախնական հաշվարկ',
-    'manual-roof-plane': 'Ձեռքով մուտքագրված տանիքի հարթություն'
+    'manual-roof-plane': 'Ձեռքով մուտքագրված տանիքի տվյալներ'
   })[scope] ?? scope;
 
 const formatQuickCalculatorContext = (context, locale) => {

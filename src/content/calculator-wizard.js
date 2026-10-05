@@ -25,7 +25,7 @@ const copy = {
     maximumPanelsForRoof: 'Մոդուլների նախնական տարողություն',
     roofCapacityPreview: 'Ֆիզիկական DC հզորության սահման՝ {capacity} kWp ({count} մոդուլ)',
     roofCapacityAssumption:
-      'Մեկ ուղղությամբ բարձրացված շարքերի նախնական GCR-ը {ratio}% է։ Տեղային խոչընդոտները, անցումները և եզրային հեռավորությունները չեն չափագրվել։',
+      'Հենարանների վրա մեկ ուղղությամբ թեքված շարքերի նախնական GCR-ը {ratio}% է։ Տեղային խոչընդոտները, անցումները և եզրային հեռավորությունները չեն չափագրվել։',
     energyBalanceTitle: 'Էներգետիկ հաշվեկշիռ',
     annualConsumption: 'Տարեկան սպառում',
     annualCoverage: 'Տարեկան սպառման ծածկույթ',
@@ -43,8 +43,8 @@ const copy = {
     roofSummary: 'Տանիք',
     roofOrientation: 'Տանիքի ուղղություն',
     roofTilt: 'Տանիքի թեքություն',
-    arrayTilt: 'PV զանգվածի թեքություն',
-    arrayAzimuth: 'PV զանգվածի ուղղություն',
+    arrayTilt: 'Վահանակների թեքություն',
+    arrayAzimuth: 'Վահանակների ուղղություն',
     preliminaryGcr: 'Նախնական շարքային խտության GCR',
     rowSpacingLimitAngle: 'Շարքերի հեռավորության սահմանային անկյուն',
     preliminaryLayoutNote:
@@ -134,7 +134,7 @@ const copy = {
     mountingHardwareNoMatchCopy:
       'Հաշվարկային օպտիմումը {optimum}° է, սակայն կատալոգում նորմալացված աջակցվող անկյունով ամրացման տարբերակ չկա։',
     mountingHardwareEngineeringCopy:
-      'Կատալոգային անկյունը չի փոխում հաշվարկված տանիքի հարթությունը։ Կոնստրուկցիան և քամու բեռը հաստատվում են ինժեների կողմից։',
+      'Կատալոգային անկյունը չի փոխում տանիքի մուտքագրված թեքությունն ու ուղղվածությունը։ Կոնստրուկցիան և քամու բեռը հաստատվում են ինժեների կողմից։',
     storageRecommendationTitle: 'Էներգիայի կուտակման տարբերակ',
     storageProfileRequiredCopy:
       'Կուտակիչը ընտրովի է։ Ճշգրիտ հզորությունը պահանջում է կրիտիկական բեռի և պահուստի տևողության տվյալներ։',
@@ -419,7 +419,7 @@ const copy = {
     maximumPanelsForRoof: 'Предварительная вместимость модулей',
     roofCapacityPreview: 'Физический предел DC-мощности: {capacity} кВтp ({count} модулей)',
     roofCapacityAssumption:
-      'Предварительный GCR однонаправленных приподнятых рядов — {ratio}%. Локальные препятствия, проходы и отступы не обследованы.',
+      'Предварительный GCR однонаправленных наклонных рядов на опорах — {ratio}%. Локальные препятствия, проходы и отступы не обследованы.',
     energyBalanceTitle: 'Энергетический баланс',
     annualConsumption: 'Годовое потребление',
     annualCoverage: 'Годовое покрытие потребления',
@@ -436,8 +436,8 @@ const copy = {
     roofSummary: 'Крыша',
     roofOrientation: 'Ориентация крыши',
     roofTilt: 'Наклон крыши',
-    arrayTilt: 'Наклон PV-массива',
-    arrayAzimuth: 'Азимут PV-массива',
+    arrayTilt: 'Наклон панелей',
+    arrayAzimuth: 'Направление панелей',
     preliminaryGcr: 'Предварительный GCR плотности рядов',
     rowSpacingLimitAngle: 'Предельный угол междурядья',
     preliminaryLayoutNote:
@@ -527,7 +527,7 @@ const copy = {
     mountingHardwareNoMatchCopy:
       'Расчётный оптимум — {optimum}°, но в каталоге нет крепления с нормализованным поддерживаемым углом.',
     mountingHardwareEngineeringCopy:
-      'Каталожный угол не меняет расчётную плоскость крыши. Конструкцию и ветровую нагрузку подтверждает инженер.',
+      'Каталожный угол не изменяет введённые наклон и ориентацию крыши. Конструкцию и ветровую нагрузку подтверждает инженер.',
     storageRecommendationTitle: 'Вариант накопления энергии',
     storageProfileRequiredCopy:
       'Накопитель необязателен. Для точного подбора нужны данные о критической нагрузке и времени резерва.',
@@ -815,7 +815,7 @@ const copy = {
     maximumPanelsForRoof: 'Preliminary module capacity',
     roofCapacityPreview: 'Physical DC capacity limit: {capacity} kWp ({count} modules)',
     roofCapacityAssumption:
-      'The preliminary single-direction elevated-row GCR is {ratio}%. Local obstacles, access paths and setbacks have not been surveyed.',
+      'The preliminary GCR for single-direction tilted rows on supports is {ratio}%. Local obstacles, access paths and setbacks have not been surveyed.',
     energyBalanceTitle: 'Energy balance',
     annualConsumption: 'Annual consumption',
     annualCoverage: 'Annual consumption coverage',
@@ -832,8 +832,8 @@ const copy = {
     roofSummary: 'Roof',
     roofOrientation: 'Roof orientation',
     roofTilt: 'Roof tilt',
-    arrayTilt: 'Array tilt',
-    arrayAzimuth: 'Array azimuth',
+    arrayTilt: 'Panel tilt',
+    arrayAzimuth: 'Panel direction',
     preliminaryGcr: 'Preliminary row-density GCR',
     rowSpacingLimitAngle: 'Row-spacing limit angle',
     preliminaryLayoutNote: 'This is a preliminary row-density estimate, not a final panel layout.',
@@ -921,7 +921,7 @@ const copy = {
     mountingHardwareNoMatchCopy:
       'The calculated optimum is {optimum}°, but no catalog mounting option has a normalized supported angle.',
     mountingHardwareEngineeringCopy:
-      'The catalog angle does not change the calculated roof plane. Structure and wind-load design are confirmed during engineering.',
+      'The catalog angle does not change the entered roof tilt or orientation. Structure and wind-load design are confirmed during engineering.',
     storageRecommendationTitle: 'Energy-storage option',
     storageProfileRequiredCopy:
       'Storage is optional. Exact battery sizing requires critical-load and backup-duration inputs.',

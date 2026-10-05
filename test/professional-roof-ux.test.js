@@ -36,6 +36,12 @@ test('Professional roof UX distinguishes roof tilt from optional PV array contro
       arrayAzimuthLabel: 'Վահանակների ուղղություն (ոչ պարտադիր)',
       arrayAzimuthHelp:
         'Միայն հենարանների վրա թեքված շարքերի համար։ Սա վահանակների ուղղությունն է ըստ կողմնացույցի։ Եթե դաշտը դատարկ թողնեք, YOURENERGY-ը կօգտագործի PVGIS-ի առաջարկվող ուղղությունը։',
+      resultArrayTilt: 'Վահանակների թեքություն',
+      resultArrayAzimuth: 'Վահանակների ուղղություն',
+      roofCapacityAssumption:
+        'Հենարանների վրա մեկ ուղղությամբ թեքված շարքերի նախնական GCR-ը {ratio}% է։ Տեղային խոչընդոտները, անցումները և եզրային հեռավորությունները չեն չափագրվել։',
+      mountingHardwareEngineeringCopy:
+        'Կատալոգային անկյունը չի փոխում տանիքի մուտքագրված թեքությունն ու ուղղվածությունը։ Կոնստրուկցիան և քամու բեռը հաստատվում են ինժեների կողմից։',
       parametersRequired: 'Հաշվարկի համար նշեք տանիքի ուղղվածությունն ու թեքությունը։',
       angleGuideTitle: 'Ստուգեք տանիքի ուղղվածությունն ու թեքությունը',
       angleGuideCopy: 'Սլաքը ցույց է տալիս Ձեր նշած տանիքի ուղղվածությունը։',
@@ -68,6 +74,12 @@ test('Professional roof UX distinguishes roof tilt from optional PV array contro
       arrayAzimuthLabel: 'Направление панелей (необязательно)',
       arrayAzimuthHelp:
         'Только для наклонных рядов на опорах. Это направление самих панелей по компасу. Если оставить поле пустым, YOURENERGY использует рекомендуемое PVGIS направление.',
+      resultArrayTilt: 'Наклон панелей',
+      resultArrayAzimuth: 'Направление панелей',
+      roofCapacityAssumption:
+        'Предварительный GCR однонаправленных наклонных рядов на опорах — {ratio}%. Локальные препятствия, проходы и отступы не обследованы.',
+      mountingHardwareEngineeringCopy:
+        'Каталожный угол не изменяет введённые наклон и ориентацию крыши. Конструкцию и ветровую нагрузку подтверждает инженер.',
       parametersRequired: 'Для расчёта укажите ориентацию и наклон крыши.',
       angleGuideTitle: 'Проверьте ориентацию и наклон крыши',
       angleGuideCopy: 'Стрелка показывает указанную вами ориентацию крыши.',
@@ -100,6 +112,12 @@ test('Professional roof UX distinguishes roof tilt from optional PV array contro
       arrayAzimuthLabel: 'Panel direction (optional)',
       arrayAzimuthHelp:
         'Only for tilted rows on supports. This is the compass direction of the panels themselves. If left blank, YOURENERGY uses the PVGIS recommended direction.',
+      resultArrayTilt: 'Panel tilt',
+      resultArrayAzimuth: 'Panel direction',
+      roofCapacityAssumption:
+        'The preliminary GCR for single-direction tilted rows on supports is {ratio}%. Local obstacles, access paths and setbacks have not been surveyed.',
+      mountingHardwareEngineeringCopy:
+        'The catalog angle does not change the entered roof tilt or orientation. Structure and wind-load design are confirmed during engineering.',
       parametersRequired: 'Enter the roof orientation and tilt for the calculation.',
       angleGuideTitle: 'Check roof orientation and tilt',
       angleGuideCopy: 'The arrow shows the roof orientation you entered.',
@@ -132,6 +150,13 @@ test('Professional roof UX distinguishes roof tilt from optional PV array contro
     assert.equal(roof.arrayTiltHelp, copy.arrayTiltHelp);
     assert.equal(roof.arrayAzimuthLabel, copy.arrayAzimuthLabel);
     assert.equal(roof.arrayAzimuthHelp, copy.arrayAzimuthHelp);
+    assert.equal(calculatorWizard[locale].arrayTilt, copy.resultArrayTilt);
+    assert.equal(calculatorWizard[locale].arrayAzimuth, copy.resultArrayAzimuth);
+    assert.equal(calculatorWizard[locale].roofCapacityAssumption, copy.roofCapacityAssumption);
+    assert.equal(
+      calculatorWizard[locale].mountingHardwareEngineeringCopy,
+      copy.mountingHardwareEngineeringCopy
+    );
     assert.equal(roof.parametersRequired, copy.parametersRequired);
     assert.equal(roof.angleGuideTitle, copy.angleGuideTitle);
     assert.equal(roof.angleGuideCopy, copy.angleGuideCopy);
