@@ -820,7 +820,10 @@ export const buildSolarAnalysis = (input = {}) => {
     })
   );
   const selectedScenarioId =
-    cleanString(input.selectedScenarioId) ?? scenarios[1]?.id ?? scenarios[0]?.id;
+    cleanString(input.selectedScenarioId) ??
+    scenarios.find((scenario) => scenario.id === 'maximum')?.id ??
+    scenarios.at(-1)?.id ??
+    scenarios[0]?.id;
   const selectedScenario =
     scenarios.find((scenario) => scenario.id === selectedScenarioId) ?? scenarios[0] ?? null;
   const inverterRecommendation = recommendInverter({

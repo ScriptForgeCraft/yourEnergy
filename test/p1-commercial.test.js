@@ -166,7 +166,7 @@ test('an owner-managed price book remains available only through its review date
   assert.equal(analysis.commercialEstimate.kind, 'owner-managed');
   assert.equal(scenario.commercialEstimate.available, true);
   assert.equal(scenario.financial.capexAmd, scenario.commercialEstimate.primaryAmd);
-  assert.equal(scenario.financial.annualSavingsAmd, 588_120);
+  assert.equal(scenario.financial.annualSavingsAmd, 624_000);
   assert.ok(scenario.financial.paybackYears > 0);
   assert.ok(scenario.financial.timeline.length > 0);
   assert.equal(

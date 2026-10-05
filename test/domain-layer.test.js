@@ -119,6 +119,25 @@ test('buildSolarAnalysis derives transparent scenarios with an automatic standar
   assertFiniteTree(analysis);
 });
 
+test('buildSolarAnalysis defaults recommended sizing to maximum coverage while preserving explicit scenarios', () => {
+  const input = {
+    consumption: { annualKwh: 10_000 },
+    production: { annualYieldKwhPerKwp: 1_500 },
+    system: { panelWatts: 500, panelAreaSqm: 2 }
+  };
+
+  const defaultAnalysis = buildSolarAnalysis(input);
+  const balancedAnalysis = buildSolarAnalysis({ ...input, selectedScenarioId: 'balanced' });
+  const conservativeAnalysis = buildSolarAnalysis({ ...input, selectedScenarioId: 'conservative' });
+
+  assert.equal(defaultAnalysis.selectedScenario.id, 'maximum');
+  assert.equal(defaultAnalysis.selectedScenario.targetCoverage, 1);
+  assert.equal(balancedAnalysis.selectedScenario.id, 'balanced');
+  assert.equal(balancedAnalysis.selectedScenario.targetCoverage, 0.9);
+  assert.equal(conservativeAnalysis.selectedScenario.id, 'conservative');
+  assert.equal(conservativeAnalysis.selectedScenario.targetCoverage, 0.7);
+});
+
 test('roof constraints and an invalid override suppress unsupported financial claims', () => {
   const tariff = createUserTariffSelection({}, '2026-08-28');
   const consumption = normalizeConsumption({ annualKwh: 12_000 });

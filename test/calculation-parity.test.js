@@ -46,19 +46,26 @@ test('consumer and engineering UI share the calculation contract', () => {
 
   assert.deepEqual(analysis.production.monthlyYieldFactors, Array(12).fill(1 / 12));
   assert.equal(analysis.production.annualYieldKwhPerKwp, 1_500);
-  assert.equal(scenario.system.capacityKwp, 7.54);
-  assert.equal(scenario.system.panelCount, 13);
+  assert.equal(scenario.id, 'maximum');
+  assert.equal(scenario.system.capacityKwp, 8.12);
+  assert.equal(scenario.system.panelCount, 14);
   assert.equal(analysis.roof.areaSqm, 100);
-  assert.deepEqual(scenario.limitations, []);
+  assert.deepEqual(scenario.limitations, ['SURPLUS_COMPENSATION_UNAVAILABLE']);
   assert.deepEqual(scenario.commercialEstimate.rangeAmd, {
-    p25: 1_370_000,
-    p50: 1_460_000,
-    p75: 1_560_000
+    p25: 1_480_000,
+    p50: 1_580_000,
+    p75: 1_680_000
   });
-  assert.equal(scenario.generation.annualKwh, 11_310);
-  assert.equal(scenario.financial.annualSavingsAmd, 588_120);
-  assert.equal(scenario.financial.paybackYears, 2.482486567367204);
-  assert.equal(scenario.financial.timeline.at(-1).netAmd, 13_243_000);
-  assert.equal(passport.analysis.selectedScenario.generation.annualKwh, 11_310);
-  assert.equal(passport.analysis.commercialEstimate.primaryAmd, 1_460_000);
+  assert.equal(
+    scenario.generation.annualKwh,
+    scenario.system.capacityKwp * analysis.production.annualYieldKwhPerKwp
+  );
+  assert.equal(scenario.financial.annualSavingsAmd, 624_000);
+  assert.equal(scenario.financial.paybackYears, 2.532051282051282);
+  assert.equal(scenario.financial.timeline.at(-1).netAmd, 14_020_000);
+  assert.equal(
+    passport.analysis.selectedScenario.generation.annualKwh,
+    scenario.system.capacityKwp * analysis.production.annualYieldKwhPerKwp
+  );
+  assert.equal(passport.analysis.commercialEstimate.primaryAmd, 1_580_000);
 });

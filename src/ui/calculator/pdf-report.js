@@ -839,7 +839,14 @@ const pageFour = ({ copy, passport, locale, values, equipment }) => {
       </section>
       <h2 style="position:absolute;top:510pt;left:40pt;width:515.28pt;margin:0;color:#0E2F57;font-size:12pt">${escapeHtml(copy.assumptionsTitle)}</h2>
       ${assumptionCard({ x: 40, top: 569, title: copy.assumptionSolarTitle, body: copy.assumptionSolarText })}
-      ${assumptionCard({ x: 302.64, top: 569, title: copy.assumptionRoofTitle, body: copy.assumptionRoofText })}
+      ${assumptionCard({
+        x: 302.64,
+        top: 569,
+        title: copy.assumptionRoofTitle,
+        body: interpolate(copy.assumptionRoofText, {
+          ratio: displayNumber(values.roofUsableRatioPercent, locale)
+        })
+      })}
       ${assumptionCard({ x: 40, top: 696, title: copy.assumptionFinanceTitle, body: copy.assumptionFinanceText })}
       ${assumptionCard({ x: 302.64, top: 696, title: copy.assumptionEngineeringTitle, body: copy.assumptionEngineeringText })}
     `
@@ -930,6 +937,10 @@ export const createCalculatorPdfReportHtml = ({
     roofOrientation: asNumber(roof.orientationDegrees),
     roofTilt: asNumber(roof.tiltDegrees),
     usableArea: asNumber(roofCapacity?.usableRoofAreaSqm),
+    roofUsableRatioPercent:
+      roofCapacity?.usableAreaRatio !== undefined && roofCapacity?.usableAreaRatio !== null
+        ? roofCapacity.usableAreaRatio * 100
+        : null,
     physicalModuleLimit: asNumber(roofCapacity?.maximumPanelCount),
     physicalCapacity: asNumber(roofCapacity?.maximumCapacityKwp),
     mounting,

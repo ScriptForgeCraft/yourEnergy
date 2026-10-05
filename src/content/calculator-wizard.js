@@ -270,7 +270,7 @@ const copy = {
         'Արևային մոդելում կիրառված է 14% համակարգային կորուստների նախնական ենթադրություն։ Սակագնի աճը և վահանակների դեգրադացիան չեն մոդելավորվում։',
       assumptionRoofTitle: 'Տանիք և տեղադրում',
       assumptionRoofText:
-        'Օգտակար մակերեսի նախնական գործակիցը 70% է։ Ստվերումը, խոչընդոտները և կրողունակությունը տեղում չեն չափվել։',
+        'Նախնական հաշվարկում օգտագործվում է մակերեսի {ratio}%‑ը։ Ստվերումը, խոչընդոտները և կրողունակությունը տեղում չեն չափվել։',
       assumptionFinanceTitle: 'Ֆինանսներ',
       assumptionFinanceText:
         'Բյուջեն հիմնված է YOURENERGY-ի կողմից կառավարվող գնացուցակի վրա և առաջարկ չէ։ Ֆինանսավորումը, սպասարկումը, հարկերը և արտահանձնման վերջնական պայմանները ներառված չեն։',
@@ -656,7 +656,7 @@ const copy = {
         'В солнечной модели применено предварительное допущение системных потерь 14%. Рост тарифа и деградация панелей не моделируются.',
       assumptionRoofTitle: 'Крыша и монтаж',
       assumptionRoofText:
-        'Предварительно используется 70% площади. Затенение, препятствия и несущая способность на объекте не измерялись.',
+        'В предварительном расчёте используется {ratio}% площади. Затенение, препятствия и несущая способность на объекте не измерялись.',
       assumptionFinanceTitle: 'Финансы',
       assumptionFinanceText:
         'Бюджет основан на прайс-листе, которым управляет YOURENERGY, и не является офертой. Финансирование, обслуживание, налоги и окончательные условия отпуска в сеть не включены.',
@@ -1043,7 +1043,7 @@ const copy = {
         'A preliminary 14% system-loss assumption is applied in the solar model. Tariff growth and panel degradation are not modelled.',
       assumptionRoofTitle: 'Roof and installation',
       assumptionRoofText:
-        'The preliminary usable-area factor is 70%. Shading, obstructions and structural capacity were not measured on site.',
+        'The preliminary calculation uses {ratio}% of the area. Shading, obstructions and structural capacity were not measured on site.',
       assumptionFinanceTitle: 'Finance',
       assumptionFinanceText:
         'The budget uses an owner-managed price book and is not an offer. Financing, maintenance, taxes and final export terms are not included.',

@@ -388,9 +388,12 @@ test('analysis joins real PVGIS yield with automatic residential finance and ver
   assert.equal(response.status, 200);
   assert.equal(analysis.mode, 'real-analysis');
   assert.equal(analysis.property.confirmed, true);
-  assert.equal(analysis.selectedScenario.system.capacityKwp, 7.8);
-  assert.equal(analysis.selectedScenario.system.panelCount, 12);
-  assert.equal(analysis.selectedScenario.generation.annualKwh, 11_700);
+  assert.equal(analysis.selectedScenario.system.capacityKwp, 8.45);
+  assert.equal(analysis.selectedScenario.system.panelCount, 13);
+  assert.equal(
+    analysis.selectedScenario.generation.annualKwh,
+    analysis.selectedScenario.system.capacityKwp * 1_500
+  );
   assert.equal(analysis.selectedScenario.financial.annualSavingsAmd, null);
   assert.ok(analysis.selectedScenario.financial.annualSavingsRangeAmd.min > 0);
   assert.ok(
@@ -402,9 +405,9 @@ test('analysis joins real PVGIS yield with automatic residential finance and ver
   assert.equal(analysis.selectedScenario.financial.timeline.length, 0);
   assert.equal(analysis.environmental.factor.status, 'verified-historical');
   assert.equal(analysis.environmental.factor.dataYear, 2022);
-  assert.equal(analysis.environmental.avoidedCo2Tons, 2.141);
+  assert.equal(analysis.environmental.avoidedCo2Tons, 2.32);
   assert.equal(analysis.environmental.treeEquivalency.metricTonsCo2PerTreePerYear, 0.06);
-  assert.equal(analysis.environmental.treeEquivalent, 35.683);
+  assert.equal(analysis.environmental.treeEquivalent, 38.667);
   assert.equal(analysis.financial.tariff.kind, 'automatic-standard-residential');
   assert.equal(analysis.financial.tariff.tariffId, 'standard-over-400');
   assert.equal(analysis.financial.tariff.rateAmdPerKwh, null);
@@ -452,7 +455,7 @@ test('analysis accepts a manual point and user tariff but ignores client-side ca
   assert.equal(response.status, 200);
   assert.equal(analysis.property.address, null);
   assert.equal(analysis.financial.tariff.kind, 'user');
-  assert.equal(analysis.selectedScenario.financial.annualSavingsAmd, 526_500);
+  assert.equal(analysis.selectedScenario.financial.annualSavingsAmd, 540_000);
   assert.notEqual(analysis.selectedScenario.financial.capexAmd, 1);
   assert.ok(analysis.assumptions.includes('USER_PROVIDED_TARIFF'));
 });
@@ -488,7 +491,7 @@ test('Professional analysis accepts actual day/night kWh but resolves both rates
   assert.equal(analysis.financial.tariff.dayRateAmdPerKwh, 53.48);
   assert.equal(analysis.financial.tariff.nightRateAmdPerKwh, 43.48);
   assert.equal(analysis.financial.tariff.effectiveRateAmdPerKwh, expectedRate);
-  assert.equal(analysis.selectedScenario.system.capacityKwp, 7.8);
+  assert.equal(analysis.selectedScenario.system.capacityKwp, 8.45);
   assert.ok(analysis.selectedScenario.financial.annualSavingsAmd > 0);
   assert.equal(analysis.selectedScenario.financial.annualSavingsRangeAmd, null);
 });
@@ -547,7 +550,7 @@ test('the server selects the dated P1 price book instead of accepting a client p
   });
 
   assert.equal(analysis.priceBook.version, 'v1.0');
-  assert.equal(analysis.selectedScenario.financial.capexAmd, 1_510_000);
+  assert.equal(analysis.selectedScenario.financial.capexAmd, 1_640_000);
   assert.notEqual(analysis.selectedScenario.financial.capexAmd, 1);
   assert.equal(analysis.financial.price.kind, 'owner-managed');
 });

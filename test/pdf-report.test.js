@@ -109,6 +109,40 @@ test('Armenian PDF localizes internal input values and roof-specific yield', () 
   assert.doesNotMatch(html, /VERIFIED_HISTORICAL_GRID_FACTOR_2022/u);
 });
 
+test('PDF reports the roof-capacity usable-area ratio for every locale', () => {
+  const locales = [
+    ['hy-AM', wizardCopy.hy],
+    ['ru-RU', wizardCopy.ru],
+    ['en-US', wizardCopy.en]
+  ];
+
+  for (const [locale, wizard] of locales) {
+    const roofParallel = createOptions();
+    roofParallel.locale = locale;
+    roofParallel.wizard = wizard;
+    roofParallel.analysis.roof = {
+      ...roofParallel.analysis.roof,
+      mountingMode: 'roof-parallel'
+    };
+    const roofParallelHtml = createCalculatorPdfReportHtml(roofParallel);
+
+    assert.match(roofParallelHtml, /70%/u, `${locale}: roof-parallel ratio`);
+
+    const elevated = createOptions();
+    elevated.locale = locale;
+    elevated.wizard = wizard;
+    elevated.analysis.roof = {
+      ...elevated.analysis.roof,
+      areaMethod: 'measured-plane',
+      mountingMode: 'elevated'
+    };
+    const elevatedHtml = createCalculatorPdfReportHtml(elevated);
+
+    assert.match(elevatedHtml, /45%/u, `${locale}: elevated ratio`);
+    assert.doesNotMatch(elevatedHtml, /70%/u, `${locale}: elevated must not claim 70%`);
+  }
+});
+
 test('PDF uses the completed analysis for PVGIS and automatic-tariff provenance', () => {
   const options = createOptions();
   options.state.sitePotential = null;
