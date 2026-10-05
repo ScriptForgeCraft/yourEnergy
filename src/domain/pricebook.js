@@ -40,6 +40,7 @@ const normalizePriceBook = (input = {}) => {
   const p75 = toPositiveNumberOrNull(rates.p75);
   const validFrom = toIsoDate(input.validFrom);
   const validUntil = toIsoDate(input.validUntil);
+  const reviewBy = toIsoDate(input.reviewBy);
   const status =
     input.status === PRICEBOOK_STATUS.CONFIRMED
       ? PRICEBOOK_STATUS.CONFIRMED
@@ -51,8 +52,15 @@ const normalizePriceBook = (input = {}) => {
     validFrom !== null &&
     ((status === PRICEBOOK_STATUS.OWNER_MANAGED && validUntil === null) ||
       (validUntil !== null && validFrom <= validUntil));
+  const validReviewDate = reviewBy === null || reviewBy >= validFrom;
 
-  if (!validRateOrder || !validDateRange || !cleanString(input.id) || !cleanString(input.version)) {
+  if (
+    !validRateOrder ||
+    !validDateRange ||
+    !validReviewDate ||
+    !cleanString(input.id) ||
+    !cleanString(input.version)
+  ) {
     return null;
   }
 
@@ -67,6 +75,7 @@ const normalizePriceBook = (input = {}) => {
     checkedAt: toIsoDate(input.checkedAt),
     validFrom,
     validUntil,
+    reviewBy,
     ratesAmdPerWp: deepFreeze({ p25, p50, p75 }),
     scope: deepFreeze(listOfStrings(input.scope)),
     exclusions: deepFreeze(listOfStrings(input.exclusions)),
@@ -82,14 +91,15 @@ const isPriceBookActive = (priceBook, at = new Date()) => {
     normalized &&
     date &&
     normalized.validFrom <= date &&
-    (normalized.validUntil === null || normalized.validUntil >= date)
+    (normalized.validUntil === null || normalized.validUntil >= date) &&
+    (normalized.reviewBy === null || normalized.reviewBy >= date)
   );
 };
 
 /**
  * A replaceable registry boundary for finite price books and an explicitly
- * owner-managed price book. Finite records stop at their stated end date;
- * owner-managed records remain active until their owner replaces them.
+ * owner-managed price book. Records stop at their end or review date rather
+ * than silently remaining current.
  */
 export class PriceBookRepository {
   constructor({ records = ARMENIA_PRICEBOOKS, clock = () => new Date() } = {}) {
@@ -106,9 +116,7 @@ export class PriceBookRepository {
     const candidate = this.records
       .filter(
         (record) =>
-          record.systemType === requestedSystemType &&
-          record.validFrom <= requestedDate &&
-          (record.validUntil === null || record.validUntil >= requestedDate)
+          record.systemType === requestedSystemType && isPriceBookActive(record, requestedDate)
       )
       .sort((left, right) => right.validFrom.localeCompare(left.validFrom))[0];
 
@@ -165,6 +173,7 @@ export const buildCommercialEstimate = ({ capacityKwp, priceBook, at = new Date(
     scope: cloneSerializable(normalized.scope),
     exclusions: cloneSerializable(normalized.exclusions),
     confirmationRequired: cloneSerializable(normalized.confirmationRequired),
-    validUntil: normalized.validUntil
+    validUntil: normalized.validUntil,
+    reviewBy: normalized.reviewBy
   });
 };

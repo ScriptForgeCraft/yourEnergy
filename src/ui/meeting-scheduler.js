@@ -2,8 +2,9 @@ import { ProductApiClient, ProductApiError } from '../services/api-client.js';
 
 const DEFAULT_SCHEDULE_URL = '/data/meeting-schedule.json';
 const DEFAULT_MEETING_SCHEDULE = Object.freeze({
+  timezone: 'Asia/Yerevan',
   slotMinutes: 60,
-  minNoticeMinutes: 0,
+  minNoticeMinutes: 120,
   days: Object.freeze({
     0: Object.freeze({ enabled: false }),
     1: Object.freeze({
@@ -51,6 +52,53 @@ const sameDay = (left, right) =>
 const pad = (value) => String(value).padStart(2, '0');
 const dateKey = (date) =>
   `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
+
+const scheduleTimezone = (schedule) => {
+  const timezone = clean(schedule?.timezone) || 'Asia/Yerevan';
+  try {
+    new Intl.DateTimeFormat('en-US', { timeZone: timezone });
+    return timezone;
+  } catch {
+    return 'Asia/Yerevan';
+  }
+};
+
+const zonedDateTime = (date, schedule) => {
+  const parts = new Intl.DateTimeFormat('en-CA', {
+    timeZone: scheduleTimezone(schedule),
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    hourCycle: 'h23'
+  }).formatToParts(date);
+  const values = Object.fromEntries(
+    parts.filter(({ type }) => type !== 'literal').map(({ type, value }) => [type, Number(value)])
+  );
+  return {
+    year: values.year,
+    month: values.month,
+    day: values.day,
+    minutes: values.hour * 60 + values.minute
+  };
+};
+
+const calendarDateParts = (date) => ({
+  year: date.getFullYear(),
+  month: date.getMonth() + 1,
+  day: date.getDate()
+});
+
+const compareCalendarDates = (left, right) =>
+  `${left.year}-${pad(left.month)}-${pad(left.day)}`.localeCompare(
+    `${right.year}-${pad(right.month)}-${pad(right.day)}`
+  );
+
+const calendarDateFromZonedNow = (date, schedule) => {
+  const { year, month, day } = zonedDateTime(date, schedule);
+  return new Date(year, month - 1, day);
+};
 
 const timeToMinutes = (value) => {
   if (typeof value !== 'string') return null;
@@ -107,13 +155,14 @@ export const getMeetingSlots = (date, schedule = DEFAULT_MEETING_SCHEDULE) => {
 
 const getAvailableMeetingSlots = (date, schedule, now = new Date()) => {
   const slots = getMeetingSlots(date, schedule);
-  if (!sameDay(date, now)) return slots;
-
   const notice = Math.max(0, Number(schedule?.minNoticeMinutes ?? 0) || 0);
-  const cutoff = now.getHours() * 60 + now.getMinutes() + notice;
+  const cutoff = zonedDateTime(new Date(now.getTime() + notice * 60_000), schedule);
+  const comparison = compareCalendarDates(calendarDateParts(date), cutoff);
+  if (comparison < 0) return [];
+  if (comparison > 0) return slots;
   return slots.filter((time) => {
     const minute = timeToMinutes(time);
-    return minute !== null && minute > cutoff;
+    return minute !== null && minute >= cutoff.minutes;
   });
 };
 
@@ -121,9 +170,7 @@ export const isMeetingDateAvailable = (
   date,
   today = new Date(),
   schedule = DEFAULT_MEETING_SCHEDULE
-) =>
-  atStartOfDay(date) >= atStartOfDay(today) &&
-  getAvailableMeetingSlots(date, schedule, today).length > 0;
+) => getAvailableMeetingSlots(date, schedule, today).length > 0;
 
 export const buildMeetingMessage = (template, date, time) =>
   template.replace(/\{date\}/gu, date).replace(/\{time\}/gu, time);
@@ -366,7 +413,7 @@ export const initMeetingScheduler = ({ config = {} } = {}) => {
 
   const api = new ProductApiClient();
   let schedule = DEFAULT_MEETING_SCHEDULE;
-  let displayedMonth = atStartOfDay(new Date());
+  let displayedMonth = atStartOfDay(calendarDateFromZonedNow(new Date(), schedule));
   displayedMonth = new Date(displayedMonth.getFullYear(), displayedMonth.getMonth(), 1);
   let selectedDate = null;
   let selectedTime = '';
@@ -439,7 +486,7 @@ export const initMeetingScheduler = ({ config = {} } = {}) => {
   };
 
   const renderCalendar = () => {
-    const today = atStartOfDay(new Date());
+    const today = atStartOfDay(calendarDateFromZonedNow(new Date(), schedule));
     month.textContent = formatMeetingMonth(displayedMonth, locale);
     previous.disabled =
       displayedMonth.getFullYear() === today.getFullYear() &&
@@ -551,7 +598,7 @@ export const initMeetingScheduler = ({ config = {} } = {}) => {
   const resetDialog = () => {
     selectedDate = null;
     selectedTime = '';
-    const today = atStartOfDay(new Date());
+    const today = atStartOfDay(calendarDateFromZonedNow(new Date(), schedule));
     displayedMonth = new Date(today.getFullYear(), today.getMonth(), 1);
     selectedDateText.textContent = '';
     selection.textContent = '';

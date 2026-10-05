@@ -295,7 +295,7 @@ export default {
       noTariff:
         'No tariff was entered: capacity, calculated solar generation and a preliminary price remain available, but savings and payback are not shown.',
       priceUnavailable:
-        'The owner-managed price book is unavailable. Request an engineer survey; savings and payback also require a tariff.',
+        'The owner-managed price book is unavailable or needs an update. Request an engineer survey; savings and payback also require a tariff.',
       noSavings: 'There is not enough data to show savings and payback.',
       chartDescription:
         'Monthly preliminary generation based on the confirmed inputs and returned solar-resource data.',

@@ -25,7 +25,7 @@ export const createPageRegistry = async () => {
         indexable: false
       }),
       ...['faq', 'equipment', 'calculator', 'projects', 'about', 'contacts', 'blog'].map((kind) =>
-        page(kind, kind, { indexable: !['about', 'contacts'].includes(kind) })
+        page(kind)
       ),
       ...['privacy', 'terms'].map((kind) => page(kind, kind, { indexable: false })),
       page('calculator-pro', 'calculator/pro', { indexable: false }),

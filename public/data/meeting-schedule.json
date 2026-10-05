@@ -1,7 +1,7 @@
 {
   "timezone": "Asia/Yerevan",
   "slotMinutes": 60,
-  "minNoticeMinutes": 0,
+  "minNoticeMinutes": 120,
   "days": {
     "0": {
       "enabled": false

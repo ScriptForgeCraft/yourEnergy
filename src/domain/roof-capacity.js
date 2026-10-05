@@ -1,5 +1,8 @@
 import { round, toPositiveNumberOrNull } from './numbers.js';
-import { PRELIMINARY_ELEVATED_GROUND_COVERAGE_RATIO } from './calculator-assumptions.js';
+import {
+  PRELIMINARY_ELEVATED_GROUND_COVERAGE_RATIO,
+  PRELIMINARY_MAX_ELEVATED_TILT_DEGREES
+} from './calculator-assumptions.js';
 
 const usableRoofRatio = (value) => {
   const ratio = toPositiveNumberOrNull(value);
@@ -39,7 +42,7 @@ export const calculatePreliminaryRoofCapacity = ({
   const tilt = Number(tiltDegrees);
   const panelFootprintSqm =
     mountingMode === 'elevated'
-      ? Number.isFinite(tilt) && tilt >= 0 && tilt < 90
+      ? Number.isFinite(tilt) && tilt >= 0 && tilt < PRELIMINARY_MAX_ELEVATED_TILT_DEGREES
         ? moduleArea * Math.cos((tilt * Math.PI) / 180)
         : null
       : moduleArea;

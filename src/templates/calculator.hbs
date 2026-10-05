@@ -519,7 +519,7 @@
           </div>
           <p class='professional-lead-dialog__privacy'><svg aria-hidden='true'>
               <use href='/icons.svg#shield-check'></use>
-            </svg>{{wizard.lead.privacy}}</p>
+            </svg><span>{{wizard.lead.privacyBefore}}<a href='{{privacyHref}}'>{{wizard.lead.privacyLink}}</a>{{wizard.lead.privacyAfter}}</span></p>
           <form data-professional-lead-form novalidate aria-describedby='professional-lead-status'>
             <div class='professional-lead-dialog__field-grid'>
               <label for='professional-lead-name'>{{wizard.lead.name}}<input id='professional-lead-name' name='name'

@@ -254,7 +254,16 @@ export const createPageContextBuilder = ({ publicEnv, pages }) => {
         name: 'Your Energy LLC',
         alternateName: 'YOURENERGY',
         url: 'https://yourenergy.am/',
-        telephone: content.contact.phone
+        telephone: content.contact.phone,
+        areaServed: { '@type': 'Country', name: 'Armenia' },
+        address: {
+          '@type': 'PostalAddress',
+          streetAddress: '48 Artashisyan Street, Building 14',
+          addressLocality: 'Yerevan',
+          addressRegion: 'Shengavit',
+          postalCode: '0039',
+          addressCountry: 'AM'
+        }
       },
       {
         '@type': 'Service',
@@ -267,11 +276,6 @@ export const createPageContextBuilder = ({ publicEnv, pages }) => {
         areaServed: { '@type': 'Country', name: 'Armenia' }
       }
     ];
-
-    // TODO(owner): provide one confirmed, structured street/locality/region
-    // address before adding a PostalAddress to Organization JSON-LD. The supplied
-    // free-form contact text contains multiple place labels, so splitting it here
-    // would create unverified structured business data.
 
     if (includeFaq) {
       graph.push({
@@ -405,6 +409,7 @@ export const createPageContextBuilder = ({ publicEnv, pages }) => {
       calculatorHref,
       faqHref,
       contactsHref,
+      privacyHref: toolPath(content.locale, 'privacy'),
       headerCtaHref: calculatorHref,
       headerCtaLabel: content.common.headerCta,
       navLinks: {

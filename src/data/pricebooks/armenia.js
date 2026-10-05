@@ -1,7 +1,7 @@
 /**
- * Owner-managed residential price book. It stays active until YOURENERGY
- * replaces its version and rates; it remains a preliminary budget guide, not
- * an offer, invoice or automatically refreshed supplier feed.
+ * Owner-managed residential price book. It requires review by the stated date;
+ * it remains a preliminary budget guide, not an offer, invoice or
+ * automatically refreshed supplier feed.
  */
 export const YOURENERGY_OWNER_MANAGED_PRICEBOOK = Object.freeze({
   id: 'yourenergy-am-residential-grid-v1-0',
@@ -14,6 +14,7 @@ export const YOURENERGY_OWNER_MANAGED_PRICEBOOK = Object.freeze({
   checkedAt: '2026-08-29',
   validFrom: '2026-08-29',
   validUntil: null,
+  reviewBy: '2026-11-30',
   // The client-confirmed ceiling for the 10.4 kWp preliminary example is
   // 2,150,000 AMD. 206.7 AMD/Wp is 2,149,680 AMD at 10.4 kWp, which is
   // displayed as 2,150,000 AMD after the consumer-facing 10,000 AMD rounding.

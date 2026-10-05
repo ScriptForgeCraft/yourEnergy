@@ -8,3 +8,7 @@ export const PRELIMINARY_USABLE_ROOF_RATIO = 0.7;
 // shading the next. This conservative plan-area ratio is intentionally lower
 // than the roof-parallel usable-area assumption.
 export const PRELIMINARY_ELEVATED_GROUND_COVERAGE_RATIO = 0.45;
+
+// Map-projected roof areas are already withheld from preliminary calculations
+// at this tilt, where cosine-based footprint estimates become unreliable.
+export const PRELIMINARY_MAX_ELEVATED_TILT_DEGREES = 75;

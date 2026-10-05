@@ -1192,6 +1192,13 @@
   line-height: 1.4;
 }
 
+.meeting-picker__date a {
+  color: #176d42;
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
 .meeting-times {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));

@@ -32,7 +32,7 @@ const blogPath = (locale, slug = null) => pagePath(locale, slug ? `blog/${slug}`
 const blogPages = selectPages('blog', 'blog-article');
 const contentPageTypes = ['contacts', 'about'];
 const contactPages = selectPages('contacts').map(({ page }) => page);
-const contentPages = selectPages(...contentPageTypes).map(({ page }) => page);
+const contentPages = selectPages(...contentPageTypes);
 const expectedPages = registry.map(({ file }) => file);
 // Webmaster ownership tokens are static machine-readable assets, not site pages.
 const verificationAssets = new Set(['yandex_8a397f0dfdfda459.html']);
@@ -220,7 +220,12 @@ function validateJsonLd(html, page, { requiresFaq = false } = {}) {
     !organization ||
     organization.name !== 'Your Energy LLC' ||
     organization.telephone !== '+374 91 095 950' ||
-    'address' in organization
+    organization.areaServed?.name !== 'Armenia' ||
+    organization.address?.streetAddress !== '48 Artashisyan Street, Building 14' ||
+    organization.address?.addressLocality !== 'Yerevan' ||
+    organization.address?.addressRegion !== 'Shengavit' ||
+    organization.address?.postalCode !== '0039' ||
+    organization.address?.addressCountry !== 'AM'
   ) {
     fail(`${page}: Organization JSON-LD must use only confirmed structured fields`);
   }
@@ -567,6 +572,9 @@ async function validateSitemap() {
   const projectsRoutes = [...projectsPages, ...projectCasePages].map(({ locale, type }) =>
     locale === 'hy' ? `${origin}/${type}/` : `${origin}/${locale}/${type}/`
   );
+  const contentRoutes = contentPages.map(({ locale, type }) =>
+    locale === 'hy' ? `${origin}/${type}/` : `${origin}/${locale}/${type}/`
+  );
   const blogRoutes = blogPages.map(({ locale, slug }) => `${origin}${blogPath(locale, slug)}`);
   const expected = [
     ...homeRoutes,
@@ -574,6 +582,7 @@ async function validateSitemap() {
     ...faqRoutes,
     ...toolRoutes,
     ...equipmentRoutes,
+    ...contentRoutes,
     ...blogRoutes
   ];
   if (locations.length !== expected.length || expected.some((url) => !locations.includes(url))) {
@@ -590,7 +599,8 @@ async function validateSitemap() {
       ...projectCasePages,
       ...faqPages,
       ...toolPages,
-      ...equipmentPages
+      ...equipmentPages,
+      ...contentPages
     ].find(({ locale, type }) => {
       const url = locale === 'hy' ? `${origin}/${type}/` : `${origin}/${locale}/${type}/`;
       return location === url;
@@ -952,6 +962,12 @@ for (const { page, locale, type } of equipmentPages) {
   await validateToolSeo(pages.get(page), page, canonical, type);
   validateToolLanguageSwitcher(pages.get(page), page, locale, type);
 }
+for (const { page, locale, type } of contentPages) {
+  if (!pages.has(page)) continue;
+  const canonical = locale === 'hy' ? `${origin}/${type}/` : `${origin}/${locale}/${type}/`;
+  await validateToolSeo(pages.get(page), page, canonical, type);
+  validateToolLanguageSwitcher(pages.get(page), page, locale, type);
+}
 for (const { page, locale, type } of [...projectsPages, ...projectCasePages]) {
   if (!pages.has(page)) continue;
   const canonical = locale === 'hy' ? `${origin}/${type}/` : `${origin}/${locale}/${type}/`;
@@ -1000,7 +1016,8 @@ const publishedPages = new Set([
   ...blogPages.map(({ page }) => page),
   ...faqPages.map(({ page }) => page),
   ...toolPages.map(({ page }) => page),
-  ...equipmentPages.map(({ page }) => page)
+  ...equipmentPages.map(({ page }) => page),
+  ...contentPages.map(({ page }) => page)
 ]);
 const supportPageSet = new Set([
   'privacy/index.html',
@@ -1010,16 +1027,12 @@ const supportPageSet = new Set([
   'en/privacy/index.html',
   'en/terms/index.html'
 ]);
-const contentPageSet = new Set(contentPages);
 for (const page of expectedPages.filter(
-  (page) => !publishedPages.has(page) && (supportPageSet.has(page) || contentPageSet.has(page))
+  (page) => !publishedPages.has(page) && supportPageSet.has(page)
 )) {
   if (!pages.has(page)) continue;
   const locale = page.startsWith('ru/') ? 'ru' : page.startsWith('en/') ? 'en' : 'hy';
-  const type =
-    contentPageTypes.find(
-      (candidate) => page === `${candidate}/index.html` || page.endsWith(`/${candidate}/index.html`)
-    ) ?? (page.includes('/privacy/') || page === 'privacy/index.html' ? 'privacy' : 'terms');
+  const type = page.includes('/privacy/') || page === 'privacy/index.html' ? 'privacy' : 'terms';
   validateNoindexLocalizedPage(pages.get(page), page, locale, type);
 }
 const assetUrls = JSON.parse(

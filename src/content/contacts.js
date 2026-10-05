@@ -50,7 +50,7 @@ const baseContactPageCopy = Object.freeze({
       },
       {
         icon: 'calendar',
-        title: 'Պլանավորել հանդիպում',
+        title: 'Հանդիպման հարցում',
         value: 'Առցանց կամ գրասենյակում',
         href: '#contact-form',
         meeting: true
@@ -86,8 +86,8 @@ const baseContactPageCopy = Object.freeze({
     topic: 'Թեմա',
     message: 'Ձեր հաղորդագրությունը',
     meeting: {
-      title: 'Պլանավորել հանդիպում',
-      copy: 'Ընտրեք Ձեզ հարմար օրն ու ժամը։',
+      title: 'Հանդիպման հարցում',
+      copy: 'Ընտրեք նախընտրելի օրն ու ժամը՝ Երևանի ժամանակով։ Հասանելիությունը կհաստատենք կապվելիս։',
       selectDate: 'Ընտրեք օրը',
       selectTime: 'Ընտրեք ժամը',
       back: 'Հետ',
@@ -96,9 +96,14 @@ const baseContactPageCopy = Object.freeze({
       selectedDate: 'Ընտրված օր',
       selectedMeeting: 'Ընտրված հանդիպում',
       contactTitle: 'Թողեք Ձեր տվյալները',
-      contactCopy: 'Մուտքագրեք անունը և հեռախոսահամարը, և մեր ինժեները կկապվի Ձեզ հետ։',
-      submit: 'Ուղարկել հանդիպման հայտը',
-      sending: 'Ուղարկում ենք հանդիպման հայտը…',
+      contactCopy:
+        'Մուտքագրեք անունն ու հեռախոսահամարը, և ինժեները կհաստատի ընտրված ժամանակի հասանելիությունը։',
+      privacyBefore:
+        'Ձեր տվյալներն օգտագործվում են YOURENERGY-ի կողմից՝ հանդիպման հարցումը մշակելու համար՝ ',
+      privacyLink: 'Գաղտնիության քաղաքականության համաձայն',
+      privacyAfter: '։',
+      submit: 'Ուղարկել հանդիպման հարցումը',
+      sending: 'Ուղարկում ենք հանդիպման հարցումը…',
       invalid: 'Մուտքագրեք անունը և ճիշտ հեռախոսահամար։',
       invalidSelection: 'Սկզբում ընտրեք օրը և ժամը։',
       unavailable:
@@ -110,7 +115,8 @@ const baseContactPageCopy = Object.freeze({
       },
       noTimes: 'Այս օրվա համար հասանելի ժամեր չկան։',
       close: 'Փակել',
-      message: 'Կցանկանայի հանդիպում պլանավորել {date}-ին՝ {time}-ին (առցանց կամ գրասենյակում)։'
+      message:
+        'Կցանկանայի հանդիպման հարցում ուղարկել {date}-ին՝ {time}-ին (առցանց կամ գրասենյակում)։'
     },
     topicOptions: ['Համակարգի հաշվարկ', 'Տեղազննում', 'Սարքավորումներ', 'Այլ հարց'],
     consent: {
@@ -183,7 +189,7 @@ const baseContactPageCopy = Object.freeze({
       },
       {
         icon: 'calendar',
-        title: 'Запланировать встречу',
+        title: 'Запросить встречу',
         value: 'Онлайн или в офисе',
         href: '#contact-form',
         meeting: true
@@ -219,8 +225,8 @@ const baseContactPageCopy = Object.freeze({
     topic: 'Тема обращения',
     message: 'Ваше сообщение',
     meeting: {
-      title: 'Запланировать встречу',
-      copy: 'Выберите удобные день и время.',
+      title: 'Запросить встречу',
+      copy: 'Выберите предпочтительные день и время по Еревану. Мы подтвердим доступность при связи с вами.',
       selectDate: 'Выберите день',
       selectTime: 'Выберите время',
       back: 'Назад',
@@ -229,9 +235,14 @@ const baseContactPageCopy = Object.freeze({
       selectedDate: 'Выбранный день',
       selectedMeeting: 'Выбранная встреча',
       contactTitle: 'Оставьте контакты',
-      contactCopy: 'Укажите имя и номер телефона — инженер свяжется с вами.',
-      submit: 'Отправить заявку на встречу',
-      sending: 'Отправляем заявку на встречу…',
+      contactCopy:
+        'Укажите имя и номер телефона — инженер подтвердит доступность выбранного времени.',
+      privacyBefore:
+        'Ваши данные используются YOURENERGY для обработки запроса на встречу в соответствии с ',
+      privacyLink: 'Политикой конфиденциальности',
+      privacyAfter: '.',
+      submit: 'Запросить встречу',
+      sending: 'Отправляем запрос на встречу…',
       invalid: 'Укажите имя и корректный номер телефона.',
       invalidSelection: 'Сначала выберите день и время.',
       unavailable: 'Не удалось отправить заявку на встречу. Попробуйте позже или позвоните нам.',
@@ -242,7 +253,7 @@ const baseContactPageCopy = Object.freeze({
       },
       noTimes: 'На этот день свободного времени нет.',
       close: 'Закрыть',
-      message: 'Хочу запланировать встречу на {date} в {time} (онлайн или в офисе).'
+      message: 'Хочу запросить встречу на {date} в {time} (онлайн или в офисе).'
     },
     topicOptions: ['Расчёт системы', 'Выезд специалиста', 'Оборудование', 'Другой вопрос'],
     consent: {
@@ -309,7 +320,7 @@ const baseContactPageCopy = Object.freeze({
       },
       {
         icon: 'calendar',
-        title: 'Book a meeting',
+        title: 'Request a meeting',
         value: 'Online or in our office',
         href: '#contact-form',
         meeting: true
@@ -345,8 +356,8 @@ const baseContactPageCopy = Object.freeze({
     topic: 'Topic',
     message: 'Your message',
     meeting: {
-      title: 'Book a meeting',
-      copy: 'Choose a convenient day and time.',
+      title: 'Request a meeting',
+      copy: 'Choose your preferred day and time in Yerevan time. We will confirm availability when we contact you.',
       selectDate: 'Choose a day',
       selectTime: 'Choose a time',
       back: 'Back',
@@ -355,8 +366,13 @@ const baseContactPageCopy = Object.freeze({
       selectedDate: 'Selected day',
       selectedMeeting: 'Selected meeting',
       contactTitle: 'Leave your contact details',
-      contactCopy: 'Enter your name and phone number and an engineer will contact you.',
-      submit: 'Send meeting request',
+      contactCopy:
+        'Enter your name and phone number. An engineer will confirm whether the selected time is available.',
+      privacyBefore:
+        'YOURENERGY uses your data to process this meeting request in accordance with the ',
+      privacyLink: 'Privacy Policy',
+      privacyAfter: '.',
+      submit: 'Request a meeting',
       sending: 'Sending meeting request…',
       invalid: 'Enter your name and a valid phone number.',
       invalidSelection: 'Choose a day and time first.',
@@ -368,7 +384,7 @@ const baseContactPageCopy = Object.freeze({
       },
       noTimes: 'There are no available times for this day.',
       close: 'Close',
-      message: 'I would like to book a meeting for {date} at {time} (online or at the office).'
+      message: 'I would like to request a meeting for {date} at {time} (online or at the office).'
     },
     topicOptions: ['System estimate', 'Site visit', 'Equipment', 'Other question'],
     consent: {
@@ -443,7 +459,8 @@ const CONTACT_VISUAL_COPY = Object.freeze({
       { value: 'Կոմերցիոն օբյեկտ', icon: 'electrical-panel', label: 'Կոմերցիոն օբյեկտ' },
       { value: 'Այլ', icon: 'menu', label: 'Այլ' }
     ],
-    privacyHint: 'Ձեր տվյալներն օգտագործվում են միայն Ձեր հայտին պատասխանելու համար։',
+    privacyHint:
+      'Ձեր տվյալներն օգտագործվում են YOURENERGY-ի կողմից՝ Ձեր հայտը մշակելու համար՝ Գաղտնիության քաղաքականության համաձայն։',
     officesProjectsTitle: 'Մեր գրասենյակները',
     officesProjectsIntro: 'Ընտրեք հասցեն՝ Google Քարտեզներում երթուղին բացելու համար։',
     calculatorTitle: 'Հաշվարկ պե՞տք է հենց հիմա',
@@ -488,7 +505,8 @@ const CONTACT_VISUAL_COPY = Object.freeze({
       { value: 'Коммерческий объект', icon: 'electrical-panel', label: 'Коммерческий объект' },
       { value: 'Другое', icon: 'menu', label: 'Другое' }
     ],
-    privacyHint: 'Ваши данные используются только для связи по вашей заявке.',
+    privacyHint:
+      'Ваши данные используются YOURENERGY для обработки заявки в соответствии с Политикой конфиденциальности.',
     officesProjectsTitle: 'Наши офисы',
     officesProjectsIntro: 'Выберите адрес, чтобы построить маршрут в Google Картах.',
     calculatorTitle: 'Нужен расчёт прямо сейчас?',
@@ -535,7 +553,8 @@ const CONTACT_VISUAL_COPY = Object.freeze({
       { value: 'Commercial property', icon: 'electrical-panel', label: 'Commercial property' },
       { value: 'Other', icon: 'menu', label: 'Other' }
     ],
-    privacyHint: 'Your data is used only to respond to your request.',
+    privacyHint:
+      'YOURENERGY uses your data to process your request in accordance with the Privacy Policy.',
     officesProjectsTitle: 'Our offices',
     officesProjectsIntro: 'Select an address to get directions in Google Maps.',
     calculatorTitle: 'Need an estimate right now?',

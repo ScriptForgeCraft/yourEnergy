@@ -154,7 +154,7 @@ test('a real analysis with no tariff publishes no savings, payback or financial 
   assertFiniteTree(analysis);
 });
 
-test('an owner-managed price book remains available until it is replaced', () => {
+test('an owner-managed price book remains available only through its review date', () => {
   const analysis = buildSolarAnalysis({
     ...realAnalysisInputs,
     effectiveDate: '2026-09-29',
@@ -175,7 +175,7 @@ test('an owner-managed price book remains available until it is replaced', () =>
       priceBook: YOURENERGY_OWNER_MANAGED_PRICEBOOK,
       at: '2030-01-01'
     }).available,
-    true
+    false
   );
   assertFiniteTree(analysis);
 });

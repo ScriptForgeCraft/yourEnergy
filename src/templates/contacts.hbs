@@ -3,7 +3,6 @@
   <head>
     <meta charset='UTF-8' />
     <meta name='viewport' content='width=device-width, initial-scale=1.0' />
-    <meta name='robots' content='noindex,follow' />
     <meta name='theme-color' content='#071a2d' />
     <meta name='color-scheme' content='light' />
     <title>{{contactPage.meta.title}}</title>
@@ -167,6 +166,7 @@
         <form class='meeting-picker contact-form' data-meeting-contact-step aria-labelledby='meeting-contact-title' hidden novalidate>
           <h3 id='meeting-contact-title'>{{contactPage.meeting.contactTitle}}</h3>
           <p class='meeting-picker__date'>{{contactPage.meeting.contactCopy}}</p>
+          <p class='meeting-picker__date'>{{contactPage.meeting.privacyBefore}}<a href='{{privacyHref}}'>{{contactPage.meeting.privacyLink}}</a>{{contactPage.meeting.privacyAfter}}</p>
           <div class='contact-form__fields'>
             <label for='meeting-name'><span>{{contactPage.name}}</span><input id='meeting-name' name='name' type='text' autocomplete='name' maxlength='100' required placeholder='{{contactPage.name}} *' /></label>
             <label for='meeting-phone'><span>{{contactPage.phone}}</span><input id='meeting-phone' name='phone' type='tel' autocomplete='tel' inputmode='tel' maxlength='32' required placeholder='{{contactPage.phone}} *' /></label>

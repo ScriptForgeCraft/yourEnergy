@@ -52,6 +52,7 @@
           <dialog class='quick-lead-dialog' data-quick-lead-dialog aria-labelledby='quick-lead-title' aria-describedby='quick-lead-copy'>
             <button class='round-button dialog-close' type='button' data-quick-lead-close data-quick-lead-dismiss aria-label='{{aria.close}}'>×</button>
             <div class='dialog-content' data-quick-lead-content><h2 id='quick-lead-title'>{{quick.lead.title}}</h2><p id='quick-lead-copy'>{{quick.lead.copy}}</p>
+              <p class='quick-lead-dialog__privacy'>{{quick.lead.privacyBefore}}<a href='{{privacyHref}}'>{{quick.lead.privacyLink}}</a>{{quick.lead.privacyAfter}}</p>
               <form data-quick-lead-form novalidate aria-describedby='quick-lead-status'>
                 <label for='quick-lead-name'>{{quick.lead.name}}<input id='quick-lead-name' name='name' data-quick-lead-name autocomplete='name' maxlength='100' required /></label>
                 <label for='quick-lead-phone'>{{quick.lead.phone}}<input id='quick-lead-phone' name='phone' data-quick-lead-phone type='tel' autocomplete='tel' inputmode='tel' maxlength='32' required /></label>
