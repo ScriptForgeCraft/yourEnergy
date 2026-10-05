@@ -232,10 +232,14 @@ export default {
       areaLabel: 'Preliminary area from the outline',
       mountingModeLabel: 'Mounting approach',
       mountingModeHelp:
-        'The solar model calculates the entered plane as building-mounted for roof-parallel systems and free-standing for elevated systems. Its reference optimum remains a separate benchmark.',
+        'Along the roof plane: panels follow the existing roof slope without a separate row-spacing allowance. Tilted rows on supports: spacing between rows is considered to reduce inter-row shading.',
       mountingModes: {
-        roofParallel: 'Parallel to the roof face',
-        elevated: 'Elevated / free-standing structure'
+        roofParallel: 'Along the roof plane',
+        roofParallelHelp:
+          'Panels are installed side by side following the existing roof slope. No separate row-spacing allowance is applied for panel tilt.',
+        elevated: 'Tilted rows on supports',
+        elevatedHelp:
+          'Panels are installed in separate tilted rows, typically on a flat roof. Spacing between rows is considered to reduce inter-row shading.'
       },
       areaMethodTitle: 'How the area is provided',
       areaMethodHelp:
@@ -256,10 +260,10 @@ export default {
       tiltLabel: 'This roof-face tilt',
       tiltHelp:
         'For a roof-specific calculation, enter an approximate angle from 0° to 90°. It is not detected from the address.',
-      arrayTiltLabel: 'PV array tilt (elevated only)',
+      arrayTiltLabel: 'PV array tilt (tilted rows on supports only)',
       arrayTiltHelp:
         'Optional engineer override. Leave blank to use the nearest catalog-supported angle to the PVGIS free-standing optimum.',
-      arrayAzimuthLabel: 'PV array direction (elevated only)',
+      arrayAzimuthLabel: 'PV array direction (tilted rows on supports only)',
       arrayAzimuthHelp:
         'Optional compass bearing. Leave blank to use the PVGIS free-standing optimum direction.',
       parametersRequired:

@@ -230,6 +230,7 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
   const roofOrientationCustom = root.querySelector('[data-roof-orientation-custom]');
   const roofOrientationCustomInput = root.querySelector('[data-roof-orientation-custom-input]');
   const roofTilt = root.querySelector('[data-roof-tilt]');
+  const roofMountingModeHelp = root.querySelector('[data-roof-mounting-mode-help]');
   const arrayGeometry = root.querySelector('[data-array-geometry]');
   const arrayTilt = root.querySelector('[data-array-tilt]');
   const arrayAzimuth = root.querySelector('[data-array-azimuth]');
@@ -1307,7 +1308,11 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
     const measured = activeAreaMethod(root) === 'measured-plane';
     if (roofPlaneWrap) roofPlaneWrap.hidden = !measured;
     if (roofPlaneArea) roofPlaneArea.disabled = !measured;
-    const elevated = activeMountingMode(root) === 'elevated';
+    const mountingMode = activeMountingMode(root);
+    const elevated = mountingMode === 'elevated';
+    if (roofMountingModeHelp)
+      roofMountingModeHelp.textContent =
+        product.roof?.mountingModes?.[elevated ? 'elevatedHelp' : 'roofParallelHelp'] ?? '';
     if (arrayGeometry) arrayGeometry.hidden = !elevated;
     if (arrayTilt) arrayTilt.disabled = !elevated;
     if (arrayAzimuth) arrayAzimuth.disabled = !elevated;

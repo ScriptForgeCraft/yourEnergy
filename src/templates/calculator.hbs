@@ -392,10 +392,10 @@
                   data-roof-orientation-custom hidden>{{product.roof.customOrientationLabel}}<input
                     id='roof-orientation-custom' name='custom-orientation' type='text' inputmode='decimal' autocomplete='off'
                     data-roof-orientation-custom-input /></label><label
-                  class='professional-roof-mounting-select'>{{product.roof.mountingModeLabel}}<select data-roof-mounting-mode id='roof-mounting-mode' name='mounting-mode' autocomplete='off'>
+                  class='professional-roof-mounting-select'>{{product.roof.mountingModeLabel}}<select data-roof-mounting-mode id='roof-mounting-mode' name='mounting-mode' autocomplete='off' aria-describedby='roof-mounting-mode-help'>
                     <option value='roof-parallel'>{{product.roof.mountingModes.roofParallel}}</option>
                     <option value='elevated'>{{product.roof.mountingModes.elevated}}</option>
-                  </select></label>
+                  </select><small id='roof-mounting-mode-help' data-roof-mounting-mode-help>{{product.roof.mountingModes.roofParallelHelp}}</small></label>
                 <section class='professional-additional-preferences' aria-labelledby='additional-system-preferences'>
                   <h3 id='additional-system-preferences'>{{wizard.additionalSystemPreferences}}</h3>
                   <label class='professional-storage-request'><input id='storage-required' name='storage-required' type='checkbox' autocomplete='off' data-storage-required /><span>{{wizard.storageRequestLabel}}</span><small>{{wizard.storageRequestHelp}}</small></label>

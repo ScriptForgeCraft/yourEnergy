@@ -498,6 +498,14 @@
   font-weight: 760;
 }
 
+.calculator-page--professional .professional-roof-mounting-select small {
+  margin-top: 0.35rem;
+  color: #607895;
+  font-size: 0.7rem;
+  font-weight: 540;
+  line-height: 1.35;
+}
+
 .professional-roof-actions {
   justify-content: space-between;
   margin-top: 1rem;

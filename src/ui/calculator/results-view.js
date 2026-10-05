@@ -216,9 +216,9 @@ export const createCalculatorResultsView = ({
     if (roof) {
       const mountingMode =
         roof.mountingMode === 'elevated'
-          ? (wizard.elevated ?? 'Elevated structure')
+          ? (wizard.elevated ?? 'Tilted rows on supports')
           : roof.mountingMode === 'roof-parallel'
-            ? (wizard.parallel ?? 'Parallel to roof')
+            ? (wizard.parallel ?? 'Along the roof plane')
             : '—';
       add(
         basisCopy.roof ?? 'Roof data',

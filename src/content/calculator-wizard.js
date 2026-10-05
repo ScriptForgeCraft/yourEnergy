@@ -160,8 +160,8 @@ const copy = {
     pvgisAvailable: 'Արևային տվյալները հասանելի են',
     additionalSystemPreferences: 'Համակարգի լրացուցիչ նախընտրություններ',
     roofIntro: 'Նշեք տանիքի մակերեսն ու պարամետրերը՝ նախնական գնահատումը ճշգրտելու համար։',
-    parallel: 'Տանիքին զուգահեռ',
-    elevated: 'Բարձրացված կառուցվածք',
+    parallel: 'Տանիքի հարթությամբ',
+    elevated: 'Հենարանների վրա թեքված շարքեր',
     drawRoof:
       'Նշեք նույն տանիքի առնվազն 3 անկյունը քարտեզի վրա։ Մարկերը կարող եք քաշել՝ դիրքը շտկելու համար։',
     continueConsumption: 'Շարունակել դեպի արդյունք',
@@ -553,8 +553,8 @@ const copy = {
     additionalSystemPreferences: 'Дополнительные предпочтения системы',
     roofIntro:
       'Задайте площадь и параметры крыши, чтобы уточнить предварительную оценку солнечного потенциала.',
-    parallel: 'Параллельно крыше',
-    elevated: 'Приподнятая конструкция',
+    parallel: 'По плоскости крыши',
+    elevated: 'Наклонные ряды на опорах',
     drawRoof:
       'Отметьте на карте минимум 3 угла одной поверхности крыши. Маркеры можно перетаскивать для уточнения позиции.',
     continueConsumption: 'Перейти к результату',
@@ -945,8 +945,8 @@ const copy = {
     pvgisAvailable: 'Solar data received',
     additionalSystemPreferences: 'Additional system preferences',
     roofIntro: 'Define your roof area and parameters to refine the preliminary estimate.',
-    parallel: 'Parallel to roof',
-    elevated: 'Elevated structure',
+    parallel: 'Along the roof plane',
+    elevated: 'Tilted rows on supports',
     drawRoof:
       'Mark at least 3 corners of one roof surface on the map. Drag markers to refine their positions.',
     continueConsumption: 'Continue to result',
