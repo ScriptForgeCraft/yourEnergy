@@ -1,5 +1,6 @@
 import { initNavigation } from './ui/navigation.js';
 import { initScrollers } from './ui/scrollers.js';
+import { initServiceWorker } from './service-worker-registration.js';
 
 document.documentElement.classList.add('js');
 
@@ -17,6 +18,7 @@ const contactConfig = readConfig('#contact-page-config');
 
 initNavigation();
 initScrollers();
+initServiceWorker();
 
 if (document.querySelector('[data-home-hero]')) {
   void import('./ui/home-motion.js').then(({ initHomeMotion }) => initHomeMotion({ config }));

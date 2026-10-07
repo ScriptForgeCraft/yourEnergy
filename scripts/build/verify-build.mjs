@@ -35,7 +35,7 @@ const contactPages = selectPages('contacts').map(({ page }) => page);
 const contentPages = selectPages(...contentPageTypes);
 const expectedPages = registry.map(({ file }) => file);
 // Webmaster ownership tokens are static machine-readable assets, not site pages.
-const verificationAssets = new Set(['yandex_8a397f0dfdfda459.html']);
+const verificationAssets = new Set(['offline.html', 'yandex_8a397f0dfdfda459.html']);
 
 const failures = [];
 
@@ -660,6 +660,29 @@ async function validateHeaders() {
     fail('_headers must not retain Google Maps or unsafe-eval permissions');
   }
   if (/\*\s*;|\*$/u.test(csp)) fail('_headers CSP must not use a wildcard source');
+  if (!/\/sw\.js\s*\r?\n\s*Cache-Control:\s*no-cache/u.test(headers)) {
+    fail('_headers must keep sw.js revalidatable');
+  }
+  if (!/Service-Worker-Allowed:\s*\//u.test(headers)) {
+    fail('_headers must allow the service worker to control the site root');
+  }
+}
+
+async function validateServiceWorker() {
+  const worker = resolve(distRoot, 'sw.js');
+  if (!(await exists(worker))) {
+    fail('sw.js is missing from dist');
+    return;
+  }
+  const source = await readFile(worker, 'utf8');
+  for (const token of [
+    'PRECACHE_URLS',
+    'YOUR_ENERGY_SKIP_WAITING',
+    "url.pathname.startsWith('/api/')",
+    'staleWhileRevalidate'
+  ]) {
+    if (!source.includes(token)) fail(`sw.js is missing ${token}`);
+  }
 }
 
 function validateQuickCalculatorMarkup(html, page) {
@@ -1080,6 +1103,7 @@ for (const file of await walkOutput(distRoot)) {
 }
 await validateSitemap();
 await validateHeaders();
+await validateServiceWorker();
 await validateNoLegacyCalculatorStyles();
 await validateRemovedFeatures(pages);
 await validateHeroTimeAssets();

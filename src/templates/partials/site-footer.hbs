@@ -32,7 +32,17 @@
         href='{{supportBase}}/terms/'
       >{{footer.terms}}</a></span><span
       class='footer-developed-by'
-    >{{footer.developedBy}}</span></div></footer><nav
+    >{{footer.developedBy}}</span></div></footer><aside
+  class='service-worker-update'
+  data-service-worker-update
+  hidden
+  role='status'
+  aria-live='polite'
+><p>{{footer.update.message}}</p><button
+    class='service-worker-update__action'
+    type='button'
+    data-service-worker-reload
+  >{{footer.update.action}}</button></aside><nav
   class='floating-contact-actions'
   aria-label='{{nav.contacts}}'
 ><a

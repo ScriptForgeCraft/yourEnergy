@@ -2,6 +2,7 @@ import { writeFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { createPageRegistry } from './src/config/routes.js';
 import { projectRoot as root, siteRoot, publicRoot, distRoot } from './scripts/build/paths.mjs';
+import { writeServiceWorker } from './scripts/build/service-worker.mjs';
 import { defineConfig, loadEnv } from 'vite';
 
 const DEFAULT_OSM_TILE_URL = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
@@ -30,6 +31,10 @@ const createHeaders = (mapOrigins) => `/*
 
 /assets/*.css
   Cache-Control: public, max-age=31536000, immutable
+
+/sw.js
+  Cache-Control: no-cache
+  Service-Worker-Allowed: /
 `;
 
 export default defineConfig(async ({ mode }) => {
@@ -52,6 +57,7 @@ export default defineConfig(async ({ mode }) => {
       {
         name: 'yourenergy-csp-allowlist',
         async closeBundle() {
+          await writeServiceWorker({ distRoot });
           await writeFile(resolve(distRoot, '_headers'), createHeaders(mapOrigins));
           const redirects = pages
             .filter(({ kind }) => ['calculator-pro', 'calculator-refine'].includes(kind))

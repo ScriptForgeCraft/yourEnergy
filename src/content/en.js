@@ -1163,6 +1163,10 @@ export default {
   footer: {
     description:
       'Solar systems for homes and businesses: audit, design, installation, service and monitoring.',
+    update: {
+      message: 'A new site version is ready. Refresh to apply it.',
+      action: 'Refresh'
+    },
     columns: [
       {
         title: 'SOLUTIONS',
