@@ -678,6 +678,8 @@ async function validateServiceWorker() {
   for (const token of [
     'PRECACHE_URLS',
     'YOUR_ENERGY_SKIP_WAITING',
+    'YOUR_ENERGY_WARM_URLS',
+    'STATIC_DOCUMENT_PATHS',
     "url.pathname.startsWith('/api/')",
     'staleWhileRevalidate'
   ]) {
