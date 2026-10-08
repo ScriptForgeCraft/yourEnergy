@@ -39,10 +39,26 @@ const createIcon = (icon) => {
 };
 
 const setProductImage = (image, placeholder, product) => {
+  let resolveReady;
+  const ready = new Promise((resolve) => {
+    resolveReady = resolve;
+  });
+  const requestId = String(Number(image.dataset.imageRequestId ?? 0) + 1);
+  image.dataset.imageRequestId = requestId;
+
   const showMissing = () => {
+    if (image.dataset.imageRequestId !== requestId) return;
     image.hidden = true;
     placeholder.hidden = false;
+    resolveReady();
   };
+  const showImage = () => {
+    if (image.dataset.imageRequestId !== requestId) return;
+    image.hidden = false;
+    placeholder.hidden = true;
+    resolveReady();
+  };
+  image.onload = showImage;
   image.onerror = showMissing;
   image.alt = `${product.brand} ${product.name}`;
   image.srcset = product.displaySrcset || '';
@@ -52,11 +68,19 @@ const setProductImage = (image, placeholder, product) => {
   if (!product.image) {
     image.removeAttribute('src');
     showMissing();
-    return;
+    return ready;
   }
-  image.hidden = false;
+  // An <img> can keep painting its previous decoded bitmap while its next
+  // source downloads. Hide it first so that an outgoing product can never
+  // flash during a switch to an uncached product.
+  image.hidden = true;
   placeholder.hidden = true;
   image.src = product.displayImage || product.image;
+  if (image.complete) {
+    if (image.naturalWidth) showImage();
+    else showMissing();
+  }
+  return ready;
 };
 
 const humanizeSpec = (key, locale) =>
@@ -459,7 +483,7 @@ export const initEquipmentShowroom = ({ data, copy, locale, gsap }) => {
     lastProductByCategory.set(product.category, product.id);
     if (renderedCategory !== product.category) renderRail();
     const image = $('[data-product-image]', root);
-    setProductImage(image, $('[data-product-image-missing]', root), product);
+    const imageReady = setProductImage(image, $('[data-product-image-missing]', root), product);
     $('[data-product-image-note]', root).textContent = product.imageNote ?? '';
     $('[data-product-image-note]', root).hidden = !product.imageNote;
     $('[data-product-popular]', root).textContent = product.badge ?? copy.product.popular;
@@ -492,6 +516,7 @@ export const initEquipmentShowroom = ({ data, copy, locale, gsap }) => {
         `${url.pathname}${url.search}${url.hash}`
       );
     }
+    return imageReady;
   };
 
   function selectProduct(productId) {
@@ -501,37 +526,46 @@ export const initEquipmentShowroom = ({ data, copy, locale, gsap }) => {
 
     const finishSwitch = () => {
       selectedProduct = product;
-      renderProduct();
+      const imageReady = renderProduct();
       if (!animate) {
         switching = false;
         return;
       }
-      gsap.fromTo(
-        productVisual,
-        { autoAlpha: 0, scale: 0.93, rotateY: -5, y: 12 },
-        { autoAlpha: 1, scale: 1, rotateY: 0, y: 0, duration: 0.66, ease: 'power3.out' }
-      );
-      gsap.fromTo(
-        panelContent,
-        { autoAlpha: 0, y: 12 },
-        {
-          autoAlpha: 1,
-          y: 0,
-          duration: 0.5,
-          delay: 0.08,
-          ease: 'power2.out',
-          onComplete: () => {
-            switching = false;
+      imageReady.then(() => {
+        gsap.fromTo(
+          productVisual,
+          { autoAlpha: 0, scale: 0.93, rotateY: -5, y: 12 },
+          {
+            autoAlpha: 1,
+            scale: 1,
+            rotateY: 0,
+            y: 0,
+            duration: 0.66,
+            ease: 'power3.out',
+            onComplete: () => {
+              switching = false;
+            }
           }
-        }
-      );
-      gsap.from('.product-hotspot', {
-        scale: 0.55,
-        autoAlpha: 0,
-        stagger: 0.06,
-        duration: 0.42,
-        delay: 0.18,
-        ease: 'back.out(1.6)'
+        );
+        gsap.fromTo(
+          panelContent,
+          { autoAlpha: 0, y: 12 },
+          {
+            autoAlpha: 1,
+            y: 0,
+            duration: 0.5,
+            delay: 0.08,
+            ease: 'power2.out'
+          }
+        );
+        gsap.from('.product-hotspot', {
+          scale: 0.55,
+          autoAlpha: 0,
+          stagger: 0.06,
+          duration: 0.42,
+          delay: 0.18,
+          ease: 'back.out(1.6)'
+        });
       });
     };
 
@@ -539,21 +573,21 @@ export const initEquipmentShowroom = ({ data, copy, locale, gsap }) => {
       finishSwitch();
       return;
     }
-    gsap.to(productVisual, {
-      autoAlpha: 0,
-      scale: 0.94,
-      rotateY: 4,
-      y: 8,
-      duration: 0.26,
-      ease: 'power2.in'
-    });
-    gsap.to(panelContent, {
-      autoAlpha: 0,
-      y: -8,
-      duration: 0.2,
-      ease: 'power2.in',
-      onComplete: finishSwitch
-    });
+    gsap
+      .timeline({ onComplete: finishSwitch })
+      .to(
+        productVisual,
+        {
+          autoAlpha: 0,
+          scale: 0.94,
+          rotateY: 4,
+          y: 8,
+          duration: 0.26,
+          ease: 'power2.in'
+        },
+        0
+      )
+      .to(panelContent, { autoAlpha: 0, y: -8, duration: 0.2, ease: 'power2.in' }, 0);
   }
 
   const stepProduct = (direction) => {
