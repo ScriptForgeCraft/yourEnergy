@@ -311,6 +311,24 @@ select:not([multiple]) {
   box-shadow: 0 10px 34px rgb(0 0 0 / 20%);
 }
 
+/* These content-heavy pages keep the navigation in the document flow on
+   desktop. On compact screens navigation.js adds the modifier only when the
+   document itself is longer than three viewport heights. */
+.page-equipment .site-header,
+.blog-page .site-header,
+.calculator-page .site-header {
+  position: static;
+}
+
+@media (max-width: 680px) {
+  .page-equipment.has-mobile-fixed-header .site-header,
+  .blog-page.has-mobile-fixed-header .site-header,
+  .calculator-page.has-mobile-fixed-header .site-header {
+    position: fixed;
+    inset: 0 0 auto;
+  }
+}
+
 @media (min-width: 681px) {
   .site-header .header-row {
     width: min(calc(100% - 48px), var(--container));

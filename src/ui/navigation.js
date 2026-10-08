@@ -8,15 +8,40 @@ export const initNavigation = () => {
   const headerActions = header?.querySelector('.header-actions');
   const homeLinks = header?.querySelectorAll('[data-home-link]') ?? [];
   const documentElement = document.documentElement;
+  const page = document.body;
+  const usesConditionalMobileHeader = page?.matches(
+    '.page-equipment, .blog-page, .calculator-page'
+  );
+  const compactScreen = window.matchMedia('(max-width: 680px)');
   const processDesktop = window.matchMedia(
     '(min-width: 1181px) and (min-height: 650px) and (prefers-reduced-motion: no-preference)'
   );
 
   let processRequested = false;
   let menuCloseTimer = 0;
+  let headerModeFrame = 0;
 
   const isProcessChromeActive = () => documentElement.classList.contains('process-chrome-active');
   const updateHeader = () => header?.classList.toggle('is-scrolled', window.scrollY > 10);
+
+  const updateMobileHeaderMode = () => {
+    if (!usesConditionalMobileHeader || !page) return;
+    const headerIsFixed = page.classList.contains('has-mobile-fixed-header');
+    const contentHeight =
+      documentElement.scrollHeight - (headerIsFixed ? 0 : (header?.offsetHeight ?? 0));
+    page.classList.toggle(
+      'has-mobile-fixed-header',
+      compactScreen.matches && contentHeight > window.innerHeight * 3
+    );
+  };
+
+  const scheduleMobileHeaderMode = () => {
+    if (!usesConditionalMobileHeader || headerModeFrame) return;
+    headerModeFrame = window.requestAnimationFrame(() => {
+      headerModeFrame = 0;
+      updateMobileHeaderMode();
+    });
+  };
 
   const updateMenuState = () => {
     const open = Boolean(menu?.open);
@@ -109,8 +134,14 @@ export const initNavigation = () => {
   };
 
   updateHeader();
+  updateMobileHeaderMode();
   updateMenuState();
   window.addEventListener('scroll', updateHeader, { passive: true });
+  window.addEventListener('resize', scheduleMobileHeaderMode, { passive: true });
+  compactScreen.addEventListener('change', scheduleMobileHeaderMode);
+  if (usesConditionalMobileHeader && typeof ResizeObserver !== 'undefined') {
+    new ResizeObserver(scheduleMobileHeaderMode).observe(page);
+  }
   window.addEventListener('solar:process-chrome', onProcessChrome);
   processDesktop.addEventListener('change', applyProcessChrome);
 
