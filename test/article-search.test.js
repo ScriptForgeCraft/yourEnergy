@@ -26,3 +26,14 @@ test('each localized article exposes compact search aliases from its translation
   assert.match(article.ru.searchAliases, /Solar Power for a Home/u);
   assert.match(article.en.searchAliases, /Солнечная электростанция/u);
 });
+
+test('the table of contents does not repeat source heading numbers', async () => {
+  const articles = await loadBlogArticles();
+  const batteryArticle = articles.find(({ hy }) => hy.slug === 'do-i-need-solar-battery');
+
+  assert.ok(batteryArticle);
+  for (const localizedArticle of Object.values(batteryArticle)) {
+    assert.match(localizedArticle.toc[0].heading, /^1\.\s/u);
+    assert.doesNotMatch(localizedArticle.toc[0].tocLabel, /^\d+\.\s/u);
+  }
+});

@@ -46,7 +46,7 @@
         <div class='container article-layout'>
           <aside class='article-toc' aria-label='{{blogCopy.contents}}'>
             <p>{{blogCopy.contents}}</p>
-            <ol>{{#each article.toc}}<li><a href='#{{id}}'>{{heading}}</a></li>{{/each}}</ol>
+            <ol>{{#each article.toc}}<li><a href='#{{id}}'>{{tocLabel}}</a></li>{{/each}}</ol>
           </aside>
           <div class='article-prose' data-blog-reveal>
             <div class='article-editorial-note'><span aria-hidden='true'>✦</span><p>{{blogCopy.editorialNote}}</p></div>

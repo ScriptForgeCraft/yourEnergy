@@ -517,7 +517,7 @@
   line-height: 1.35;
 }
 .article-toc a::before {
-  content: counter(toc, decimal-leading-zero) ' ';
+  content: counter(toc) ' ';
   color: var(--blog-green);
   font-weight: 800;
 }

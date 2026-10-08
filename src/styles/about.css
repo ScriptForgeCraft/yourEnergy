@@ -579,7 +579,7 @@
   border-radius: 50%;
   color: var(--about-green-dark);
   background: #dff6eb;
-  content: '0' counter(about-step);
+  content: counter(about-step);
   font-size: 0.7rem;
   font-weight: 850;
 }

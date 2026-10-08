@@ -121,10 +121,10 @@ const pageCopy = Object.freeze({
     process: {
       title: 'Как мы реализуем проекты',
       steps: [
-        { number: '01', icon: 'file', title: 'Анализ' },
-        { number: '02', icon: 'roof-measure', title: 'Проектирование' },
-        { number: '03', icon: 'wrench', title: 'Монтаж' },
-        { number: '04', icon: 'chart-bars', title: 'Стабильная выработка' }
+        { number: '1', icon: 'file', title: 'Анализ' },
+        { number: '2', icon: 'roof-measure', title: 'Проектирование' },
+        { number: '3', icon: 'wrench', title: 'Монтаж' },
+        { number: '4', icon: 'chart-bars', title: 'Стабильная выработка' }
       ]
     },
     cta: {
@@ -187,10 +187,10 @@ const pageCopy = Object.freeze({
     process: {
       title: 'Ինչպես ենք իրականացնում',
       steps: [
-        { number: '01', icon: 'file', title: 'Վերլուծություն' },
-        { number: '02', icon: 'roof-measure', title: 'Նախագծում' },
-        { number: '03', icon: 'wrench', title: 'Տեղադրում' },
-        { number: '04', icon: 'chart-bars', title: 'Կայուն արտադրություն' }
+        { number: '1', icon: 'file', title: 'Վերլուծություն' },
+        { number: '2', icon: 'roof-measure', title: 'Նախագծում' },
+        { number: '3', icon: 'wrench', title: 'Տեղադրում' },
+        { number: '4', icon: 'chart-bars', title: 'Կայուն արտադրություն' }
       ]
     },
     cta: {
@@ -253,10 +253,10 @@ const pageCopy = Object.freeze({
     process: {
       title: 'How we deliver',
       steps: [
-        { number: '01', icon: 'file', title: 'Analysis' },
-        { number: '02', icon: 'roof-measure', title: 'Engineering' },
-        { number: '03', icon: 'wrench', title: 'Installation' },
-        { number: '04', icon: 'chart-bars', title: 'Reliable generation' }
+        { number: '1', icon: 'file', title: 'Analysis' },
+        { number: '2', icon: 'roof-measure', title: 'Engineering' },
+        { number: '3', icon: 'wrench', title: 'Installation' },
+        { number: '4', icon: 'chart-bars', title: 'Reliable generation' }
       ]
     },
     cta: {

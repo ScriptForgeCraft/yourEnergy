@@ -201,7 +201,12 @@ const parseLocalizedArticle = (block, locale, metadata) => {
 
   const [, h1, body, cta, sourceText] = h1Match;
   const blocks = toContentBlocks(body);
-  const headingBlocks = blocks.filter((item) => item.heading);
+  // Article headings are numbered in the source for the prose itself. The table
+  // of contents has its own CSS counter, so use a label without that source
+  // number there instead of presenting each ordinal twice (for example, "01 1.").
+  const headingBlocks = blocks
+    .filter((item) => item.heading)
+    .map((item) => ({ ...item, tocLabel: item.heading.replace(/^\d+\.\s+/u, '') }));
   const words = wordCount(`${h1} ${body}`);
   const readingTime = Math.max(1, Math.ceil(words / 190));
   const copy = BLOG_COPY[locale];
