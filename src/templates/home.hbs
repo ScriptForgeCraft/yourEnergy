@@ -23,8 +23,8 @@
   {{#each alternateLinks}}
   <link rel='alternate' hreflang='{{hreflang}}' href='{{href}}' />{{/each}}
   <link rel='icon' href='/favicon.ico' sizes='any' />
-  <link rel='icon' href='/yourenergy-mark.svg' type='image/svg+xml' />
-  <link rel='apple-touch-icon' href='/apple-touch-icon.png' />
+  <link rel='icon' href='/favicon.png' type='image/png' sizes='512x512' />
+  <link rel='apple-touch-icon' href='/apple-touch-icon.png' sizes='180x180' />
   <link rel='stylesheet' href='/src/styles/home.css' />
   <script src='/scripts/process-reload-restoration.js'></script>
   <script type='application/ld+json'>{{{jsonLd}}}</script>
@@ -67,10 +67,9 @@
           </div>
 
           <aside class='hero-dashboard hero-dashboard--calculator' data-hero-dashboard data-hero-quick-calculator
-            data-dashboard-mode='input' aria-label='{{hero.dashboardAriaLabel}}'>
+            data-dashboard-mode='example' aria-label='{{hero.dashboardAriaLabel}}'>
             <div class='hero-quick-form' data-hero-quick-form-panel aria-labelledby='hero-quick-title'>
               <header class='hero-quick-form__heading'>
-                <span>{{hero.quickCalculator.eyebrow}}</span>
                 <h2 id='hero-quick-title'>{{hero.quickCalculator.title}}</h2>
               </header>
               <form data-hero-quick-form novalidate aria-describedby='hero-quick-status'>
@@ -84,6 +83,14 @@
                   </span>
                 </label>
                 <div class='hero-quick-form__fields'>
+                  <label class='hero-quick-form__field' for='hero-quick-bill'>
+                    <span>{{hero.quickCalculator.bill}}</span>
+                    <span class='hero-quick-form__control'>
+                      <input id='hero-quick-bill' name='bill' type='text' inputmode='decimal' autocomplete='off'
+                        placeholder='25000' data-hero-quick-bill />
+                      <small>{{hero.quickCalculator.billUnit}}</small>
+                    </span>
+                  </label>
                   <label class='hero-quick-form__field' for='hero-quick-consumption'>
                     <span>{{hero.quickCalculator.consumption}}</span>
                     <span class='hero-quick-form__control'>
@@ -92,16 +99,7 @@
                       <small>{{hero.quickCalculator.consumptionUnit}}</small>
                     </span>
                   </label>
-                  <label class='hero-quick-form__field' for='hero-quick-tariff'>
-                    <span>{{hero.quickCalculator.tariff}}</span>
-                    <span class='hero-quick-form__control'>
-                      <input id='hero-quick-tariff' name='tariff' type='text' inputmode='decimal' autocomplete='off'
-                        placeholder='45' data-hero-quick-tariff />
-                      <small>{{hero.quickCalculator.tariffUnit}}</small>
-                    </span>
-                  </label>
                 </div>
-                <p class='hero-quick-form__hint'>{{hero.quickCalculator.tariffHint}}</p>
                 <button class='hero-quick-form__submit' type='submit' data-hero-quick-submit>
                   <svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#calculator'></use></svg>
                   <span data-hero-quick-submit-label>{{hero.quickCalculator.submit}}</span>
@@ -191,11 +189,6 @@
             </div>
           </aside>
         </div>
-        <p class='hero-signature'>{{hero.signatureLead}}<br />{{hero.signatureTail}}<svg viewBox='0 0 160 24'
-            aria-hidden='true' focusable='false'>
-            <path d='M58 10c15-4 31-5 47-2'></path>
-            <path d='M82 16c18-3 36-3 53-1 4 0 7 1 10 1'></path>
-          </svg></p>
         <aside class='trust-strip hero-trust-strip' aria-label='{{trust.disclosure}}'>
           <div class='container trust-strip__inner'>
             {{#each trust.items}}

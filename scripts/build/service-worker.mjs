@@ -41,7 +41,14 @@ export const isPrecachePath = (file) => {
   }
   if (file.startsWith('fonts/')) return extension === '.woff2';
   if (file === 'scripts/process-reload-restoration.js') return true;
-  return ['favicon.ico', 'icons.svg', 'yourenergy-mark.svg', 'offline.html'].includes(file);
+  return [
+    'apple-touch-icon.png',
+    'favicon.ico',
+    'favicon.png',
+    'icons.svg',
+    'yourenergy-logo.png',
+    'offline.html'
+  ].includes(file);
 };
 
 export const renderServiceWorker = ({

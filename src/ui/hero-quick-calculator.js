@@ -13,35 +13,48 @@ const textInput = (value) =>
 
 /**
  * Translates the intentionally small Hero form into the same server contract
- * used by Quick Calculator. The standard residential tariff remains the
- * honest default; the optional field is an observed effective rate only.
+ * used by Quick Calculator. A bill and its matching kWh reading allow the
+ * server to derive the effective rate; either value can also stand alone.
  */
 export const buildHeroQuickAnalysisRequest = ({
   regionId,
-  averageMonthlyKwh,
-  effectiveRateAmdPerKwh
+  averageMonthlyBillAmd,
+  billedKwh
 } = {}) => {
   const region = textInput(regionId);
-  const usage = getCalculatorInputNumber(averageMonthlyKwh, 'averageMonthlyConsumptionKwh');
-  if (!region || usage === null) return { valid: false, issue: 'consumption' };
+  const rawBill = textInput(averageMonthlyBillAmd);
+  const rawUsage = textInput(billedKwh);
+  const bill = rawBill === '' ? null : getCalculatorInputNumber(rawBill, 'averageMonthlyBillAmd');
+  const usage =
+    rawUsage === '' ? null : getCalculatorInputNumber(rawUsage, 'averageMonthlyConsumptionKwh');
+  if (!region || (bill === null && usage === null)) return { valid: false, issue: 'consumption' };
+  if (rawBill !== '' && bill === null) return { valid: false, issue: 'bill' };
+  if (rawUsage !== '' && usage === null) return { valid: false, issue: 'consumption' };
 
-  const rawTariff = textInput(effectiveRateAmdPerKwh);
-  const tariff =
-    rawTariff === '' ? null : getCalculatorInputNumber(rawTariff, 'customTariffAmdPerKwh');
-  if (rawTariff !== '' && tariff === null) return { valid: false, issue: 'tariff' };
-
-  const consumption = { mode: 'usage', averageMonthlyKwh: usage };
+  const hasBill = bill !== null;
+  const consumption = hasBill
+    ? {
+        mode: 'bill',
+        averageMonthlyBillAmd: bill,
+        ...(usage === null ? {} : { billedKwh: usage })
+      }
+    : { mode: 'usage', averageMonthlyKwh: usage };
   const financialRate = resolveFinancialRateSource({
-    mode: tariff === null ? FINANCIAL_RATE_MODES.STANDARD : FINANCIAL_RATE_MODES.CUSTOM_EFFECTIVE,
-    consumption,
-    effectiveRateAmdPerKwh: tariff
+    mode:
+      hasBill && usage !== null ? FINANCIAL_RATE_MODES.BILL_DERIVED : FINANCIAL_RATE_MODES.STANDARD,
+    consumption
   });
 
   return {
     valid: true,
     payload: {
       regionId: region,
-      consumption: { averageMonthlyKwh: usage },
+      consumption: hasBill
+        ? {
+            averageMonthlyBillAmd: bill,
+            ...(usage === null ? {} : { billedKwh: usage })
+          }
+        : { averageMonthlyKwh: usage },
       financialRate: toFinancialRateRequest(financialRate, consumption)
     },
     state: { regionId: region, consumption, financialRate }
@@ -69,8 +82,8 @@ export const initHeroQuickCalculator = ({ config = {} } = {}) => {
   const resultPanel = root.querySelector('[data-hero-quick-result]');
   const form = root.querySelector('[data-hero-quick-form]');
   const region = root.querySelector('[data-hero-quick-region]');
+  const bill = root.querySelector('[data-hero-quick-bill]');
   const consumption = root.querySelector('[data-hero-quick-consumption]');
-  const tariff = root.querySelector('[data-hero-quick-tariff]');
   const submit = root.querySelector('[data-hero-quick-submit]');
   const submitLabel = root.querySelector('[data-hero-quick-submit-label]');
   const status = root.querySelector('[data-hero-quick-status]');
@@ -95,16 +108,10 @@ export const initHeroQuickCalculator = ({ config = {} } = {}) => {
 
   const populate = (state) => {
     if (region && state.regionId) region.value = state.regionId;
-    if (consumption && state.consumption?.mode === 'usage') {
-      consumption.value = state.consumption.averageMonthlyKwh ?? '';
-    }
-    if (
-      tariff &&
-      state.financialRate?.mode === FINANCIAL_RATE_MODES.CUSTOM_EFFECTIVE &&
-      state.financialRate.effectiveRateAmdPerKwh !== undefined
-    ) {
-      tariff.value = state.financialRate.effectiveRateAmdPerKwh;
-    }
+    if (bill) bill.value = state.consumption?.averageMonthlyBillAmd ?? '';
+    if (consumption)
+      consumption.value =
+        state.consumption?.billedKwh ?? state.consumption?.averageMonthlyKwh ?? '';
   };
 
   const initial = session.read();
@@ -122,8 +129,8 @@ export const initHeroQuickCalculator = ({ config = {} } = {}) => {
 
   const clearFieldState = () => {
     setStatus();
+    bill?.removeAttribute('aria-invalid');
     consumption?.removeAttribute('aria-invalid');
-    tariff?.removeAttribute('aria-invalid');
   };
 
   const showForm = () => {
@@ -131,21 +138,21 @@ export const initHeroQuickCalculator = ({ config = {} } = {}) => {
     controller = null;
     setView('input');
     setStatus();
-    window.requestAnimationFrame(() => consumption?.focus());
+    window.requestAnimationFrame(() => bill?.focus());
   };
 
   form?.addEventListener('submit', async (event) => {
     event.preventDefault();
     const input = buildHeroQuickAnalysisRequest({
       regionId: region?.value,
-      averageMonthlyKwh: consumption?.value,
-      effectiveRateAmdPerKwh: tariff?.value
+      averageMonthlyBillAmd: bill?.value,
+      billedKwh: consumption?.value
     });
     clearFieldState();
     if (!input.valid) {
-      const target = input.issue === 'tariff' ? tariff : consumption;
+      const target = input.issue === 'bill' ? bill : consumption;
       target?.setAttribute('aria-invalid', 'true');
-      setStatus(input.issue === 'tariff' ? copy.invalidTariff : copy.invalid, true);
+      setStatus(input.issue === 'bill' ? copy.invalidBill : copy.invalid, true);
       target?.focus();
       return;
     }
@@ -193,7 +200,7 @@ export const initHeroQuickCalculator = ({ config = {} } = {}) => {
     }
   });
 
-  [region, consumption, tariff]
+  [region, bill, consumption]
     .filter(Boolean)
     .forEach((field) => field.addEventListener('input', clearFieldState));
   edit?.addEventListener('click', showForm);

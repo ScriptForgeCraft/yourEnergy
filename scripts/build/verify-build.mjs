@@ -876,8 +876,7 @@ function validateCinematicHomeHero(html, page, calculatorHref) {
     'data-hero-analysis-bars',
     'hero-dashboard__facts',
     'hero-dashboard__note',
-    'hero-dashboard__status',
-    'hero-signature'
+    'hero-dashboard__status'
   ]) {
     if (!hero.includes(marker)) fail(`${page}: cinematic hero is missing ${marker}`);
   }

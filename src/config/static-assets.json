@@ -5,6 +5,11 @@
     "urls": ["/apple-touch-icon.png"]
   },
   {
+    "id": "icons-favicon-png",
+    "source": "assets/icons/favicon.png",
+    "urls": ["/favicon.png"]
+  },
+  {
     "id": "documents-equipment-mounting-energy-stock-aluminium-mounting-price-list-hy",
     "source": "assets/documents/equipment/mounting/energy-stock-aluminium-mounting-price-list-hy.pdf",
     "urls": ["/assets/equipment/docs/Energy-Stock-Aluminium-Mounting-Price-List-HY.pdf"]
@@ -356,8 +361,8 @@
     "urls": ["/icons.svg"]
   },
   {
-    "id": "icons-yourenergy-mark",
-    "source": "assets/icons/yourenergy-mark.svg",
-    "urls": ["/yourenergy-mark.svg"]
+    "id": "icons-yourenergy-logo",
+    "source": "assets/icons/yourenergy-logo.png",
+    "urls": ["/yourenergy-logo.png"]
   }
 ]

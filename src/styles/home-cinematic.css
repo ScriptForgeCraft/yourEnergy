@@ -161,8 +161,7 @@
   max-width: 640px;
   color: #fff;
   font-size: clamp(2.72rem, 4.1vw, 4.18rem);
-  line-height: 0.97;
-  letter-spacing: -0.056em;
+  line-height: 1.1;
   text-wrap: balance;
 }
 
@@ -414,22 +413,11 @@
   margin-bottom: 15px;
 }
 
-.page-home .hero-quick-form__heading > span {
-  display: block;
-  margin-bottom: 5px;
-  color: var(--cinematic-gold);
-  font-size: 0.58rem;
-  font-weight: 850;
-  letter-spacing: 0.11em;
-  text-transform: uppercase;
-}
-
 .page-home .hero-quick-form__heading h2 {
   margin: 0;
   color: #fff;
-  font-size: clamp(1.05rem, 1.45vw, 1.26rem);
-  line-height: 1.15;
-  letter-spacing: -0.025em;
+  font-size: clamp(1.2rem, 1.7vw, 1.45rem) !important;
+  line-height: 1.15 !important;
 }
 
 .page-home .hero-quick-form__field {
@@ -564,7 +552,8 @@
     transform 160ms ease,
     box-shadow 160ms ease,
     filter 160ms ease;
-}
+ margin-top: 20px;
+  }
 
 .page-home .hero-quick-form__submit .inline-icon {
   width: 16px;
@@ -588,14 +577,7 @@
   outline-offset: 3px;
 }
 
-.page-home .hero-quick-form__status {
-  min-height: 16px;
-  margin: 7px 0 0;
-  color: rgb(255 255 255 / 74%);
-  font-size: 0.6rem;
-  font-weight: 650;
-  line-height: 1.25;
-}
+
 
 .page-home .hero-quick-form__status.is-error {
   color: #ffd0c8;
@@ -698,44 +680,6 @@
   font-family: 'Poqrik Dzeragir';
   src: url('/fonts/poqrik-dzeragir.woff2') format('woff2');
   font-display: swap;
-}
-
-.page-home .hero-signature {
-  position: absolute;
-  z-index: 2;
-  bottom: clamp(90px, 11.5vh, 110px);
-  left: clamp(24px, 5.5vw, 96px);
-  width: 158px;
-  margin: 0;
-  color: #fffdf7;
-  font-family: 'Caveat Signature';
-  font-size: clamp(1.4rem, 1.9vw, 1.78rem);
-  font-style: normal;
-  font-synthesis: none;
-  font-weight: 500;
-  line-height: 1;
-  text-align: left;
-  text-shadow: 0 2px 16px rgb(0 0 0 / 62%);
-  transform: rotate(-4deg);
-}
-
-html[lang='hy'] .page-home .hero-signature {
-  font-family: 'Poqrik Dzeragir';
-  font-size: clamp(1.22rem, 1.64vw, 1.52rem);
-  font-weight: 400;
-  line-height: 1.14;
-}
-
-.page-home .hero-signature svg {
-  display: block;
-  width: 100%;
-  height: auto;
-  margin-top: 5px;
-  overflow: visible;
-  fill: none;
-  stroke: #f2d27b;
-  stroke-linecap: round;
-  stroke-width: 1.25;
 }
 
 .page-home .hero-trust-strip .trust-strip__inner {
@@ -2016,10 +1960,6 @@ html[lang='hy'] .page-home .hero-signature {
   .page-home .hero-dashboard {
     top: 0;
     justify-self: start;
-  }
-
-  .page-home .hero-signature {
-    display: none;
   }
 
   .page-home .passport-grid {

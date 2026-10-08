@@ -90,5 +90,5 @@ test('shared navigation keeps visible keyboard focus and bounded mobile-menu ima
   );
   assert.match(css, /:focus-visible\s*\{[^}]*outline:\s*3px solid/u);
   assert.doesNotMatch(css, /:focus-visible\s*\{[^}]*outline:\s*(?:none|0)/u);
-  assert.match(header, /src='\/yourenergy-mark.svg' width='39' height='39'/u);
+  assert.match(header, /src='\/yourenergy-logo.png' width='39' height='39'/u);
 });

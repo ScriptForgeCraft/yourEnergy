@@ -39,8 +39,8 @@ test('cinematic homepage Hero keeps its result card and starts with a compact wo
     'data-hero-quick-calculator',
     'data-hero-quick-form',
     'data-hero-quick-region',
+    'data-hero-quick-bill',
     'data-hero-quick-consumption',
-    'data-hero-quick-tariff',
     'data-hero-quick-result',
     'data-hero-analysis-generation',
     'data-hero-analysis-capacity',
@@ -61,12 +61,13 @@ test('cinematic homepage Hero keeps its result card and starts with a compact wo
   assert.equal((hero.match(/href='\{\{calculatorHref\}\}'/gu) ?? []).length, 1);
   assert.doesNotMatch(hero, /<(?:video|canvas)\b|three(?:\.js)?|webgl/iu);
   assert.doesNotMatch(hero, /\{\{map\.demo\}\}|\{\{metrics\./u);
-  assert.match(hero, /data-dashboard-mode='input'/u);
+  assert.match(hero, /data-dashboard-mode='example'/u);
   assert.match(hero, /hero\.dashboardExample\.status/u);
+  assert.doesNotMatch(hero, /hero\.quickCalculator\.eyebrow|data-hero-quick-tariff/u);
   assert.doesNotMatch(hero, /homes equivalent|эквивалент домов|տան համարժեք/iu);
   assert.doesNotMatch(hero, /hero-energy-arc/u);
   assert.doesNotMatch(hero, /hero-route-note|hero-benefits/u);
-  assert.match(hero, /hero-signature/u);
+  assert.doesNotMatch(hero, /hero-signature/u);
   assert.doesNotMatch(hero, /hero-scroll-cue|hero-sun-note|hero-outlook-note/u);
 });
 
@@ -222,12 +223,9 @@ test('the cinematic header uses one compact language control and retains normal 
 
 test('hero copy is localized and keeps example data visibly separate from a visitor result', () => {
   const expected = new Map([
-    [hy, ['Յուրովի տնօրինիր քո արևը։', 'քան կարծում եք։', 'Հաշվել իմ տան համար']],
-    [
-      ru,
-      ['Управляй своей солнечной энергией по-своему.', 'чем вы думаете.', 'Рассчитать для дома']
-    ],
-    [en, ['Manage your solar energy your way.', 'than you think.', 'Calculate my home']]
+    [hy, ['Յուրովի տնօրինիր քո արևը։', 'արևը', 'Հաշվել իմ տան համար']],
+    [ru, ['Управляй своей солнечной энергией по-своему.', 'по-своему', 'Рассчитать для дома']],
+    [en, ['Manage your solar energy your way.', 'Your Way', 'Calculate my home']]
   ]);
   for (const [content, [eyebrow, accent, cta]] of expected) {
     assert.equal(content.hero.eyebrow, eyebrow);

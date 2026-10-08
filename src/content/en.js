@@ -412,11 +412,11 @@ export default {
   },
   hero: {
     eyebrow: 'Manage your solar energy your way.',
-    titleLead: 'Your roof',
-    titleMiddle: 'has more potential',
-    titleAccent: 'than you think.',
+    titleLead: 'Take Control of',
+    titleMiddle: 'Solar Energy',
+    titleAccent: 'Your Way',
     homeCopy:
-      'In a few steps, see your home’s solar potential, a preliminary system size and budget — plus savings when you enter your tariff.',
+      'In a few steps, see your home’s solar potential, a preliminary system size and budget — plus expected savings when you enter your bill and consumption.',
     calculatorCopy:
       'First choose and confirm a point manually, then see its solar potential. Roof and consumption data are only needed for the detailed estimate.',
     disclosure:
@@ -450,14 +450,12 @@ export default {
     dashboardNotePreliminary:
       'Preliminary calculation. Final parameters and price require an engineering review.',
     quickCalculator: {
-      eyebrow: 'Quick solar calculation',
-      title: 'See your home’s preliminary potential',
+      title: 'Quick solar calculation',
       region: 'Region',
       consumption: 'Average monthly consumption',
       consumptionUnit: 'kWh / month',
-      tariff: 'Your average tariff',
-      tariffUnit: '֏ / kWh',
-      tariffHint: 'Optional — leave blank to use the standard residential tariff.',
+      bill: 'Average monthly bill',
+      billUnit: 'AMD',
       submit: 'Calculate',
       calculating: 'Calculating…',
       edit: 'Edit inputs',
@@ -465,8 +463,8 @@ export default {
       panels: 'Panels',
       payback: 'Payback',
       paybackUnit: 'years',
-      invalid: 'Choose a region and enter a positive average monthly consumption.',
-      invalidTariff: 'Enter a positive tariff or leave the field blank.',
+      invalid: 'Choose a region and enter a positive bill amount or average monthly consumption.',
+      invalidBill: 'Enter a positive average monthly bill.',
       unavailable: 'The calculation is unavailable right now. Please try again.',
       country: 'Armenia'
     },
