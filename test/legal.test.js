@@ -19,7 +19,7 @@ const documentText = (document) =>
 
 test('Privacy Policy explicitly identifies precise property and roof-outline data', () => {
   const expectedTerms = {
-    hy: [/ճշգրիտ կոորդինատ/u, /տանիքի ուրվագիծ/u, /պրոֆեսիոնալ հաշվիչ/u],
+    hy: [/ճշգրիտ կոորդինատ/u, /տանիքի ուրվագիծ/u, /մասնագիտական հաշվիչ/u],
     ru: [/точные координаты/u, /контур крыши/u, /профессиональном калькуляторе/u],
     en: [/precise coordinates/u, /roof outline/u, /Professional Calculator/u]
   };

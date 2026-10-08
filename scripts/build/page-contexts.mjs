@@ -66,13 +66,13 @@ export const createPageContextBuilder = ({ publicEnv, pages }) => {
       label: 'Հաշվիչի ռեժիմ',
       quick: 'Արագ և պարզ',
       quickCopy: '2 քայլ, նախնական արդյունք',
-      professional: 'Պրոֆեսիոնալ',
-      professionalCopy: 'Մանրամասն հաշվարկ՝ ընդլայնված պարամետրերով',
-      unavailable: 'Պրոֆեսիոնալ ռեժիմը հիմա հասանելի չէ։',
+      professional: 'Մասնագիտական հաշվարկ',
+      professionalCopy: 'Մանրամասն հաշվարկ՝ ընդլայնված կարգավորումներով։',
+      unavailable: 'Մասնագիտական ռեժիմը հիմա հասանելի չէ։',
       migration: {
         title: 'Հաշվիչը տեղափոխվել է',
-        copy: 'Բացվում է YOURENERGY-ի միավորված պրոֆեսիոնալ հաշվիչը։',
-        action: 'Բացել պրոֆեսիոնալ ռեժիմը'
+        copy: 'Բացվում է YOURENERGY-ի միավորված մասնագիտական հաշվիչը։',
+        action: 'Բացել մասնագիտական ռեժիմը'
       }
     },
     ru: {
@@ -81,8 +81,8 @@ export const createPageContextBuilder = ({ publicEnv, pages }) => {
       label: 'Режим калькулятора',
       quick: 'Быстро и просто',
       quickCopy: '2 шага, предварительный результат',
-      professional: 'Профессиональный',
-      professionalCopy: 'Подробный расчёт с расширенными параметрами',
+      professional: 'Профессиональный расчёт',
+      professionalCopy: 'Подробный расчёт с расширенными настройками.',
       unavailable: 'Профессиональный режим сейчас недоступен.',
       migration: {
         title: 'Калькулятор переехал',
@@ -96,8 +96,8 @@ export const createPageContextBuilder = ({ publicEnv, pages }) => {
       label: 'Calculator mode',
       quick: 'Quick & Easy',
       quickCopy: '2 steps, preliminary result',
-      professional: 'Professional',
-      professionalCopy: 'Detailed calculation with advanced parameters',
+      professional: 'Professional Calculation',
+      professionalCopy: 'Detailed calculation with advanced settings.',
       unavailable: 'Professional mode is temporarily unavailable.',
       migration: {
         title: 'The calculator has moved',
