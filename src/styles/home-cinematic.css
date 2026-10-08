@@ -138,8 +138,11 @@
 .page-home .hero-grid {
   width: min(calc(100% - 48px), var(--container));
   flex: 1;
-  grid-template-columns: minmax(0, 0.92fr) minmax(350px, 0.62fr);
-  gap: clamp(42px, 6vw, 112px);
+  /* Reserve the right side of the scene for the house and its solar array.
+     The calculator now sits directly beside the introductory copy instead of
+     floating over the roof. */
+  grid-template-columns: minmax(270px, 400px) minmax(310px, 500px) minmax(0, 1fr);
+  gap: clamp(28px, 4vw, 56px);
   align-items: center;
   margin-inline: auto;
   padding-block: clamp(82px, 9vh, 108px) 26px;
@@ -204,7 +207,7 @@
   min-height: clamp(280px, 18vw, 312px);
   display: flex;
   flex-direction: column;
-  justify-self: end;
+  justify-self: start;
   overflow: hidden;
   border: 1px solid rgb(255 255 255 / 32%);
   border-radius: 21px;
@@ -1974,8 +1977,8 @@ html[data-hero-calculation-state='restoring']
 
 @media (max-width: 1180px) {
   .page-home .hero-grid {
-    grid-template-columns: minmax(0, 1fr) minmax(320px, 0.55fr);
-    gap: 34px;
+    grid-template-columns: minmax(270px, 400px) minmax(310px, 500px) minmax(0, 1fr);
+    gap: clamp(28px, 4vw, 48px);
   }
 
   .page-home .hero-copy h1 {

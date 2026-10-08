@@ -114,6 +114,10 @@
   column-gap: 0;
 }
 
+.quick-calculator[data-layout='results'] .tool-form {
+  width: 100%;
+}
+
 .quick-calculator[data-layout='results'] .quick-result {
   opacity: 1;
   pointer-events: auto;

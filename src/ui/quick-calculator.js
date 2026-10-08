@@ -592,6 +592,7 @@ export const initQuickCalculator = ({ config = {} } = {}) => {
     resultTitle.textContent = copy.resultsTitle ?? copy.waiting;
     resultCopy.textContent = copy.waiting;
     setResultState('idle');
+    setResultPanelVisibility(false);
     if (leadDialog?.open) leadDialog.close();
   };
   const input = () => {
@@ -683,12 +684,12 @@ export const initQuickCalculator = ({ config = {} } = {}) => {
   const syncSubmitAvailability = () => {
     if (!submit) return;
     const valid = input().valid;
-    setResultPanelVisibility(valid);
     submit.disabled = request !== null || !valid;
   };
   const render = (analysis) => {
     const scenario = analysis?.selectedScenario;
     if (!scenario) return;
+    setResultPanelVisibility(true);
     const values = document.createElement('dl');
     values.className = 'quick-result__metrics';
     const summary = buildQuickResultMetrics({
@@ -835,6 +836,7 @@ export const initQuickCalculator = ({ config = {} } = {}) => {
       setStatus(current.message ?? copy.waiting, true);
       return;
     }
+    setResultPanelVisibility(true);
     request?.abort();
     const controller = lifecycle.createController();
     request = controller;
@@ -1044,7 +1046,10 @@ export const initQuickCalculator = ({ config = {} } = {}) => {
   }
   const savedQuickAnalysis = saved.quickAnalysis;
   if (savedQuickAnalysis?.scope === 'regional-preliminary') render(savedQuickAnalysis);
-  else setResultState('idle');
+  else {
+    setResultState('idle');
+    setResultPanelVisibility(false);
+  }
   syncSubmitAvailability();
   const destroy = () => {
     if (!lifecycle.destroy()) return;
