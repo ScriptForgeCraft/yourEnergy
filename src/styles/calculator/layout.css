@@ -78,22 +78,17 @@
   gap: 1rem;
 }
 
-/* Start with the short form centred. Once its required fields are valid, the
-   grid opens into two columns: the form glides left and the result card enters
-   from the right. Keeping both cards in the grid makes the transition stable
-   even when the returned result is much taller than the form. */
+/* Keep the form in the left half of the workspace from the beginning. The
+   result card occupies the reserved right half only after submission, so the
+   user's inputs never shift when the preliminary estimate appears. */
 .quick-calculator__grid {
   overflow: clip;
-  transition:
-    grid-template-columns 480ms cubic-bezier(0.22, 0.85, 0.32, 1),
-    column-gap 480ms cubic-bezier(0.22, 0.85, 0.32, 1),
-    row-gap 360ms ease;
+  transition: row-gap 360ms ease;
 }
 
 .quick-calculator .tool-form {
-  width: min(calc((100% - 1rem) / 2), 44rem);
-  justify-self: center;
-  transition: width 480ms cubic-bezier(0.22, 0.85, 0.32, 1);
+  width: 100%;
+  justify-self: stretch;
 }
 
 .quick-result {
@@ -107,15 +102,6 @@
     opacity 260ms ease,
     transform 480ms cubic-bezier(0.22, 0.85, 0.32, 1),
     visibility 0s linear 480ms;
-}
-
-.quick-calculator[data-layout='form'] .quick-calculator__grid {
-  grid-template-columns: minmax(0, 1fr) minmax(0, 0fr);
-  column-gap: 0;
-}
-
-.quick-calculator[data-layout='results'] .tool-form {
-  width: 100%;
 }
 
 .quick-calculator[data-layout='results'] .quick-result {
