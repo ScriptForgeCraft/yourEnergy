@@ -400,6 +400,11 @@ export const initQuickCalculator = ({ config = {} } = {}) => {
     leadStatus.textContent = message ?? '';
     leadStatus.classList.toggle('is-error', invalid);
   };
+  const setResultPanelVisibility = (visible) => {
+    root.dataset.layout = visible ? 'results' : 'form';
+    result.setAttribute('aria-hidden', String(!visible));
+    result.toggleAttribute('inert', !visible);
+  };
   const setResultState = (state) => {
     const loading = state === 'loading';
     resultLoading.hidden = !loading;
@@ -677,7 +682,9 @@ export const initQuickCalculator = ({ config = {} } = {}) => {
   };
   const syncSubmitAvailability = () => {
     if (!submit) return;
-    submit.disabled = request !== null || !input().valid;
+    const valid = input().valid;
+    setResultPanelVisibility(valid);
+    submit.disabled = request !== null || !valid;
   };
   const render = (analysis) => {
     const scenario = analysis?.selectedScenario;

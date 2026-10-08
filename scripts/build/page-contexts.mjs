@@ -67,7 +67,7 @@ export const createPageContextBuilder = ({ publicEnv, pages }) => {
       quick: 'Արագ և պարզ',
       quickCopy: '2 քայլ, նախնական արդյունք',
       professional: 'Մասնագիտական հաշվարկ',
-      professionalCopy: 'Մանրամասն հաշվարկ՝ ընդլայնված կարգավորումներով։',
+      professionalCopy: 'Ընդլայնված կարգավորումներ։',
       unavailable: 'Մասնագիտական ռեժիմը հիմա հասանելի չէ։',
       migration: {
         title: 'Հաշվիչը տեղափոխվել է',
@@ -82,7 +82,7 @@ export const createPageContextBuilder = ({ publicEnv, pages }) => {
       quick: 'Быстро и просто',
       quickCopy: '2 шага, предварительный результат',
       professional: 'Профессиональный расчёт',
-      professionalCopy: 'Подробный расчёт с расширенными настройками.',
+      professionalCopy: 'Расширенные настройки.',
       unavailable: 'Профессиональный режим сейчас недоступен.',
       migration: {
         title: 'Калькулятор переехал',
@@ -97,7 +97,7 @@ export const createPageContextBuilder = ({ publicEnv, pages }) => {
       quick: 'Quick & Easy',
       quickCopy: '2 steps, preliminary result',
       professional: 'Professional Calculation',
-      professionalCopy: 'Detailed calculation with advanced settings.',
+      professionalCopy: 'Advanced Settings.',
       unavailable: 'Professional mode is temporarily unavailable.',
       migration: {
         title: 'The calculator has moved',

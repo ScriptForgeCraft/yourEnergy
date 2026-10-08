@@ -78,6 +78,50 @@
   gap: 1rem;
 }
 
+/* Start with the short form centred. Once its required fields are valid, the
+   grid opens into two columns: the form glides left and the result card enters
+   from the right. Keeping both cards in the grid makes the transition stable
+   even when the returned result is much taller than the form. */
+.quick-calculator__grid {
+  overflow: clip;
+  transition:
+    grid-template-columns 480ms cubic-bezier(0.22, 0.85, 0.32, 1),
+    column-gap 480ms cubic-bezier(0.22, 0.85, 0.32, 1),
+    row-gap 360ms ease;
+}
+
+.quick-calculator .tool-form {
+  width: min(calc((100% - 1rem) / 2), 44rem);
+  justify-self: center;
+  transition: width 480ms cubic-bezier(0.22, 0.85, 0.32, 1);
+}
+
+.quick-result {
+  min-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(1.5rem) scale(0.98);
+  visibility: hidden;
+  transition:
+    opacity 260ms ease,
+    transform 480ms cubic-bezier(0.22, 0.85, 0.32, 1),
+    visibility 0s linear 480ms;
+}
+
+.quick-calculator[data-layout='form'] .quick-calculator__grid {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 0fr);
+  column-gap: 0;
+}
+
+.quick-calculator[data-layout='results'] .quick-result {
+  opacity: 1;
+  pointer-events: auto;
+  transform: none;
+  visibility: visible;
+  transition-delay: 130ms, 130ms, 0ms;
+}
+
 .quick-calculator .tool-form,
 .quick-result {
   border-color: #e5edf3;
@@ -640,6 +684,28 @@
 
   .quick-calculator__grid {
     grid-template-columns: minmax(0, 1fr);
+  }
+
+  .quick-calculator .tool-form {
+    width: 100%;
+  }
+
+  .quick-calculator[data-layout='form'] .quick-calculator__grid {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto minmax(0, 0fr);
+    row-gap: 0;
+  }
+
+  .quick-calculator[data-layout='results'] .quick-calculator__grid {
+    grid-template-rows: auto minmax(0, 1fr);
+  }
+
+  .quick-result {
+    transform: translateY(1rem) scale(0.99);
+  }
+
+  .quick-calculator[data-layout='results'] .quick-result {
+    transform: none;
   }
 }
 

@@ -420,8 +420,12 @@ test('Quick and Professional expose honest idle, hidden-input and validation sta
   assert.match(quickTemplate, /data-quick-result-loading[^>]*hidden/u);
   assert.match(quickTemplate, /data-quick-result-content>/u);
   assert.match(quickTemplate, /data-quick-submit disabled/u);
+  assert.match(quickTemplate, /data-quick-calculator data-layout='form'/u);
+  assert.match(quickTemplate, /data-quick-result[^>]*aria-hidden='true'[^>]*inert/u);
   assert.match(quickController, /setResultState\('idle'\)/u);
-  assert.match(quickController, /submit\.disabled = request !== null \|\| !input\(\)\.valid/u);
+  assert.match(quickController, /const setResultPanelVisibility = \(visible\) =>/u);
+  assert.match(quickController, /setResultPanelVisibility\(valid\)/u);
+  assert.match(quickController, /submit\.disabled = request !== null \|\| !valid/u);
   assert.match(quickController, /billKwh\.value = ''/u);
   assert.match(quickController, /billKwhPanel\?\.hidden === false/u);
 
