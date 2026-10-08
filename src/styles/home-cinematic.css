@@ -332,7 +332,9 @@
 }
 
 .page-home
-  .hero-dashboard[data-dashboard-mode='analysis'][data-co2-available='true']
+  .hero-dashboard[data-dashboard-mode='analysis'][data-co2-available='true']:not(
+    .hero-dashboard--calculator
+  )
   .hero-dashboard__facts {
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
@@ -403,6 +405,23 @@
 /* Compact Hero calculator -------------------------------------------------- */
 .page-home .hero-dashboard--calculator {
   min-height: 0;
+}
+
+/* A saved calculation is restored on page load. Keep the input form out of
+   sight until its actual result has been read from the browser session. */
+html[data-hero-calculation-state='restoring']
+  .page-home
+  .hero-dashboard--calculator
+  [data-hero-quick-form-panel] {
+  display: none;
+}
+
+html[data-hero-calculation-state='restoring']
+  .page-home
+  .hero-dashboard--calculator
+  [data-hero-quick-result] {
+  display: block;
+  visibility: hidden;
 }
 
 .page-home .hero-quick-form {
@@ -701,6 +720,38 @@
 
   .page-home .hero-dashboard {
     top: clamp(-20px, calc(19px - 2.5vw), -12px);
+  }
+
+  /* The quick-calculator always shows four facts after calculation. Give the
+     desktop card enough room to keep those facts in one horizontal row. */
+  .page-home .hero-dashboard--calculator[data-dashboard-mode='analysis'],
+  .page-home .hero-dashboard--calculator[data-dashboard-mode='loading'] {
+    width: min(100%, clamp(440px, 29vw, 500px));
+  }
+
+  .page-home .hero-dashboard--calculator .hero-dashboard__facts,
+  .page-home .hero-dashboard--calculator[data-dashboard-mode='analysis'] .hero-dashboard__facts,
+  .page-home .hero-dashboard--calculator[data-dashboard-mode='loading'] .hero-dashboard__facts {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0;
+  }
+
+  .page-home .hero-dashboard--calculator .hero-dashboard__facts > div:nth-child(odd) {
+    border-left: 1px solid rgb(255 255 255 / 19%);
+    padding-left: 8px;
+  }
+
+  .page-home .hero-dashboard--calculator .hero-dashboard__facts > div:nth-child(even) {
+    padding-right: 8px;
+  }
+
+  .page-home .hero-dashboard--calculator .hero-dashboard__facts > div:first-child {
+    border-left: 0;
+    padding-left: 0;
+  }
+
+  .page-home .hero-dashboard--calculator .hero-dashboard__facts > div:nth-child(n + 5) {
+    padding-top: 0;
   }
 }
 

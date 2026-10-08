@@ -390,6 +390,7 @@ export const initHeroAnalysisCard = ({ hero, copy, locale, onRender = () => {} }
       copy,
       locale
     });
+    document.documentElement.removeAttribute('data-hero-calculation-state');
     onRender(presentation);
   };
   const handleAnalysisUpdate = (event) => refresh(event.detail ?? {});
