@@ -12,7 +12,8 @@ const analysis = Object.freeze({
       monthlyKwh: [400, 430, 620, 810, 920, 980, 1040, 990, 840, 670, 450, 270]
     },
     coveragePercent: 106.3,
-    financial: { annualSavingsAmd: 420_000 }
+    system: { capacityKwp: 5.94, panelCount: 11 },
+    financial: { annualSavingsAmd: 420_000, paybackYears: 4.7 }
   },
   environmental: { avoidedCo2Tons: null }
 });
@@ -29,6 +30,9 @@ test('Hero presentation only reads an existing SolarAnalysis and caps consumer c
   assert.equal(presentation.coveragePercent, 100);
   assert.equal(presentation.annualSavingsAmd, 420_000);
   assert.equal(presentation.avoidedCo2Tons, null);
+  assert.equal(presentation.capacityKwp, 5.94);
+  assert.equal(presentation.panelCount, 11);
+  assert.equal(presentation.paybackYears, 4.7);
   // Display clamping never mutates the analysis source or its export-capable value.
   assert.equal(analysis.selectedScenario.coveragePercent, 106.3);
 });
@@ -60,4 +64,22 @@ test('Hero presentation reports loading without manufacturing a result', () => {
   assert.equal(presentation.coveragePercent, null);
   assert.equal(presentation.annualSavingsAmd, null);
   assert.equal(presentation.avoidedCo2Tons, null);
+});
+
+test('Hero presentation preserves financial ranges when a visitor uses the standard tariff', () => {
+  const presentation = buildHeroAnalysisPresentation({
+    selectedScenario: {
+      generation: { annualKwh: 8_420, monthlyKwh: Array(12).fill(700) },
+      system: { capacityKwp: 5.6, panelCount: 11 },
+      financial: {
+        annualSavingsAmd: null,
+        annualSavingsRangeAmd: { min: 300_000, max: 380_000 },
+        paybackYears: null,
+        paybackRangeYears: { min: 4.2, max: 5.1 }
+      }
+    }
+  });
+
+  assert.deepEqual(presentation.annualSavingsRangeAmd, { min: 300_000, max: 380_000 });
+  assert.deepEqual(presentation.paybackRangeYears, { min: 4.2, max: 5.1 });
 });

@@ -36,6 +36,35 @@ test('every lead surface uses the same complete success copy in HY, RU and EN', 
   }
 });
 
+test('calculator lead forms let the visitor opt out of attaching their calculation', async () => {
+  const [quickTemplate, quickController, professionalTemplate, professionalController] =
+    await Promise.all([
+      source('src/templates/calculator-quick.hbs'),
+      source('src/ui/quick-calculator.js'),
+      source('src/templates/calculator.hbs'),
+      source('src/ui/calculator-wizard.js')
+    ]);
+
+  assert.equal(calculatorModes.hy.quick.lead.attachCalculation, 'Կցել իմ հաշվարկը');
+  assert.equal(calculatorModes.ru.quick.lead.attachCalculation, 'Прикрепить мой расчёт');
+  assert.equal(calculatorModes.en.quick.lead.attachCalculation, 'Attach my calculation');
+  assert.equal(calculatorWizardCopy.hy.lead.attachCalculation, 'Կցել իմ հաշվարկը');
+  assert.equal(calculatorWizardCopy.ru.lead.attachCalculation, 'Прикрепить мой расчёт');
+  assert.equal(calculatorWizardCopy.en.lead.attachCalculation, 'Attach my calculation');
+
+  for (const [template, marker] of [
+    [quickTemplate, 'data-quick-lead-attach-calculation'],
+    [professionalTemplate, 'data-professional-lead-attach-calculation']
+  ]) {
+    assert.match(template, new RegExp(`${marker} checked`, 'u'));
+  }
+  assert.match(quickController, /attachCalculation: Boolean\(leadAttachCalculation\?\.checked\)/u);
+  assert.match(
+    professionalController,
+    /attachCalculation: Boolean\(professionalLeadAttachCalculation\?\.checked\)/u
+  );
+});
+
 test('each data-submission form replaces its pre-submit UI only after API success', async () => {
   const [
     contactTemplate,

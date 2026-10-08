@@ -304,6 +304,9 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
   const professionalLeadEmail = professionalLeadDialog?.querySelector(
     '[data-professional-lead-email]'
   );
+  const professionalLeadAttachCalculation = professionalLeadDialog?.querySelector(
+    '[data-professional-lead-attach-calculation]'
+  );
   const professionalLeadMessage = professionalLeadDialog?.querySelector(
     '[data-professional-lead-message]'
   );
@@ -1925,7 +1928,12 @@ export const initCalculatorWizard = ({ config = {} } = {}) => {
         {
           ...validated.values,
           locale,
-          calculatorContext: buildProfessionalLeadContext({ analysis: state.analysis, state })
+          attachCalculation: Boolean(professionalLeadAttachCalculation?.checked),
+          ...(professionalLeadAttachCalculation?.checked
+            ? {
+                calculatorContext: buildProfessionalLeadContext({ analysis: state.analysis, state })
+              }
+            : {})
         },
         { signal: controller.signal }
       );

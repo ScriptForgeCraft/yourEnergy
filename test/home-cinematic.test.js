@@ -24,7 +24,7 @@ import {
 const root = resolve(import.meta.dirname, '..');
 const source = (path) => readFile(resolve(root, path), 'utf8');
 
-test('cinematic homepage Hero has a clearly labelled static example and one primary CTA', async () => {
+test('cinematic homepage Hero keeps its result card and starts with a compact working calculator', async () => {
   const template = await source('src/templates/home.hbs');
   const hero = template.match(/<section\b[^>]*\bdata-home-hero\b[^>]*>([\s\S]*?)<\/section>/u)?.[1];
   assert.ok(hero);
@@ -36,9 +36,18 @@ test('cinematic homepage Hero has a clearly labelled static example and one prim
     'data-hero-time-image',
     'data-hero-time-sun',
     'data-hero-dashboard',
+    'data-hero-quick-calculator',
+    'data-hero-quick-form',
+    'data-hero-quick-region',
+    'data-hero-quick-consumption',
+    'data-hero-quick-tariff',
+    'data-hero-quick-result',
     'data-hero-analysis-generation',
+    'data-hero-analysis-capacity',
+    'data-hero-analysis-panels',
     'data-hero-analysis-coverage',
     'data-hero-analysis-savings',
+    'data-hero-analysis-payback',
     'data-hero-analysis-co2',
     'data-hero-analysis-co2-label',
     'data-hero-example-trees',
@@ -52,7 +61,7 @@ test('cinematic homepage Hero has a clearly labelled static example and one prim
   assert.equal((hero.match(/href='\{\{calculatorHref\}\}'/gu) ?? []).length, 1);
   assert.doesNotMatch(hero, /<(?:video|canvas)\b|three(?:\.js)?|webgl/iu);
   assert.doesNotMatch(hero, /\{\{map\.demo\}\}|\{\{metrics\./u);
-  assert.match(hero, /data-dashboard-mode='example'/u);
+  assert.match(hero, /data-dashboard-mode='input'/u);
   assert.match(hero, /hero\.dashboardExample\.status/u);
   assert.doesNotMatch(hero, /homes equivalent|эквивалент домов|տան համարժեք/iu);
   assert.doesNotMatch(hero, /hero-energy-arc/u);

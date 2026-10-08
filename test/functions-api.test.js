@@ -898,6 +898,41 @@ test('lead endpoint sends the same normalized Quick Calculator lead to Telegram 
   assert.doesNotMatch(emailRequest.payload.text, /"annualGenerationKwh"/);
 });
 
+test('lead endpoint does not attach a calculation when the visitor opts out', async () => {
+  const received = [];
+  const response = await leadOnRequest({
+    request: postJson('/lead', {
+      name: 'Arman Petrosyan',
+      phone: '+374 91 095950',
+      locale: 'en',
+      attachCalculation: false,
+      calculatorContext: {
+        region: 'yerevan',
+        consumption: { mode: 'usage', averageMonthlyKwh: 850, annualKwh: 10_200 },
+        capacityKwp: 6.96,
+        annualGenerationKwh: 10_440,
+        source: 'PVGIS'
+      }
+    }),
+    env: leadDeliveryEnv,
+    fetch: async (url, init) => {
+      received.push({ url: String(url), payload: JSON.parse(init.body) });
+      return String(url).startsWith('https://api.telegram.org/')
+        ? telegramSuccess()
+        : emailSuccess();
+    }
+  });
+
+  assert.equal(response.status, 200);
+  assert.equal(received.length, 2);
+  for (const { payload } of received) {
+    const text = payload.text;
+    assert.doesNotMatch(text, /Արագ հաշվիչի ամփոփում/u);
+    assert.doesNotMatch(text, /PVGIS/u);
+    assert.doesNotMatch(text, /10\D*440 kWh/u);
+  }
+});
+
 test('lead endpoint sends a readable Professional Calculator report with submitted inputs and results', async () => {
   const received = [];
   const response = await leadOnRequest({

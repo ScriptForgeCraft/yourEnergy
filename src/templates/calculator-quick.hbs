@@ -56,6 +56,7 @@
               <form data-quick-lead-form novalidate aria-describedby='quick-lead-status'>
                 <label for='quick-lead-name'>{{quick.lead.name}}<input id='quick-lead-name' name='name' data-quick-lead-name autocomplete='name' maxlength='100' required /></label>
                 <label for='quick-lead-phone'>{{quick.lead.phone}}<input id='quick-lead-phone' name='phone' data-quick-lead-phone type='tel' autocomplete='tel' inputmode='tel' maxlength='32' required /></label>
+                <label class='lead-attach-calculation' for='quick-lead-attach-calculation'><input id='quick-lead-attach-calculation' name='attachCalculation' type='checkbox' data-quick-lead-attach-calculation checked /><span>{{quick.lead.attachCalculation}}</span></label>
                 <label for='quick-lead-message'>{{quick.lead.comment}} <span>{{product.common.optional}}</span><textarea id='quick-lead-message' name='message' autocomplete='off' data-quick-lead-message maxlength='2000' rows='3'></textarea></label>
                 <button class='button' type='submit' data-quick-lead-submit>{{quick.lead.submit}}</button><p class='form-status' id='quick-lead-status' data-quick-lead-status aria-live='polite'></p>
               </form>

@@ -1,4 +1,5 @@
 import { initHeroAnalysisCard } from './hero-analysis-card.js';
+import { initHeroQuickCalculator } from './hero-quick-calculator.js';
 
 const clamp = (value, min = 0, max = 1) => Math.min(max, Math.max(min, value));
 
@@ -650,6 +651,7 @@ export const initHomeMotion = ({ config = {} } = {}) => {
       disposeHeroCounters = initHeroCounters(hero, reducedMotionQuery.matches);
     }
   });
+  const disposeHeroQuickCalculator = initHeroQuickCalculator({ config });
   let animationFrame = 0;
   let capabilities = resolveHomeMotionCapabilities({
     reducedMotion: reducedMotionQuery.matches,
@@ -716,6 +718,7 @@ export const initHomeMotion = ({ config = {} } = {}) => {
     disposeHeroTime();
     disposeHeroCounters();
     disposeHeroAnalysisCard();
+    disposeHeroQuickCalculator();
     hero.classList.remove('is-motion-ready');
     resetBridge();
   };

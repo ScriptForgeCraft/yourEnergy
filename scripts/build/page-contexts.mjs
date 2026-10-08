@@ -127,6 +127,13 @@ export const createPageContextBuilder = ({ publicEnv, pages }) => {
     const locale = runtimeLocales[content.locale];
     return {
       ...content.hero,
+      quickCalculator: {
+        ...content.hero.quickCalculator,
+        regions: ARMENIA_REGIONAL_BENCHMARKS.map(({ id }) => ({
+          id,
+          label: regionLabels[content.locale]?.[id] ?? id
+        }))
+      },
       dashboardExample: {
         ...example,
         co2Tons,

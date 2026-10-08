@@ -238,6 +238,7 @@ const validateLeadInput = (body) => {
   const locale = normalizeLocale(body?.locale);
   const analysisId = normalizeText(body?.analysisId);
   const turnstileToken = normalizeText(body?.turnstileToken);
+  const attachCalculation = body?.attachCalculation;
 
   if (
     name.length < 2 ||
@@ -247,12 +248,18 @@ const validateLeadInput = (body) => {
     message.length > 2_000 ||
     !SUPPORTED_LOCALES.has(locale) ||
     (analysisId && !ANALYSIS_ID.test(analysisId)) ||
-    turnstileToken.length > 4_096
+    turnstileToken.length > 4_096 ||
+    (attachCalculation !== undefined && typeof attachCalculation !== 'boolean')
   ) {
     throw new ApiError('INVALID_INPUT');
   }
 
-  const calculatorContext = normalizeCalculatorContext(body?.calculatorContext, locale);
+  // A visitor can opt out of sending their calculation. Retain the legacy
+  // default of attaching it when this new field is absent.
+  const calculatorContext =
+    attachCalculation === false
+      ? null
+      : normalizeCalculatorContext(body?.calculatorContext, locale);
 
   return {
     name,

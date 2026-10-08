@@ -11,6 +11,14 @@ const finite = (value) => {
 const meaningfulAddress = (value) =>
   typeof value === 'string' && value.trim().length >= 3 ? value.trim() : null;
 
+const numberRange = (value) => {
+  const minimum = finite(value?.min);
+  const maximum = finite(value?.max);
+  return minimum !== null && maximum !== null && minimum >= 0 && maximum >= minimum
+    ? { min: minimum, max: maximum }
+    : null;
+};
+
 /**
  * Presentation data for the home Hero. It deliberately reads completed
  * SolarAnalysis values only: it does not size a system, estimate savings or
@@ -28,7 +36,12 @@ export const buildHeroAnalysisPresentation = (analysis, { status = 'idle' } = {}
       : null;
   const rawCoveragePercent = finite(scenario?.coveragePercent);
   const annualSavingsAmd = finite(scenario?.financial?.annualSavingsAmd);
+  const annualSavingsRangeAmd = numberRange(scenario?.financial?.annualSavingsRangeAmd);
   const avoidedCo2Tons = finite(analysis?.environmental?.avoidedCo2Tons);
+  const capacityKwp = finite(scenario?.system?.capacityKwp);
+  const panelCount = finite(scenario?.system?.panelCount);
+  const paybackYears = finite(scenario?.financial?.paybackYears);
+  const paybackRangeYears = numberRange(scenario?.financial?.paybackRangeYears);
   const property = analysis?.property ?? null;
   const locationKind =
     property?.confirmed && meaningfulAddress(property.address)
@@ -51,7 +64,14 @@ export const buildHeroAnalysisPresentation = (analysis, { status = 'idle' } = {}
     coveragePercent:
       rawCoveragePercent === null ? null : Math.min(Math.max(rawCoveragePercent, 0), 100),
     annualSavingsAmd: annualSavingsAmd !== null && annualSavingsAmd > 0 ? annualSavingsAmd : null,
-    avoidedCo2Tons: avoidedCo2Tons !== null && avoidedCo2Tons >= 0 ? avoidedCo2Tons : null
+    annualSavingsRangeAmd,
+    avoidedCo2Tons: avoidedCo2Tons !== null && avoidedCo2Tons >= 0 ? avoidedCo2Tons : null,
+    capacityKwp: capacityKwp !== null && capacityKwp > 0 ? capacityKwp : null,
+    panelCount: panelCount !== null && panelCount > 0 ? panelCount : null,
+    paybackYears: paybackYears !== null && paybackYears > 0 ? paybackYears : null,
+    paybackRangeYears,
+    regionId:
+      typeof analysis?.regionalBenchmark?.id === 'string' ? analysis.regionalBenchmark.id : null
   };
 };
 
@@ -84,19 +104,29 @@ const renderMetric = ({
   value,
   fallback,
   locale,
-  decimals = 0
+  decimals = 0,
+  range = null
 }) => {
   const output = root.querySelector(valueSelector);
   const unitOutput = root.querySelector(unitSelector);
-  const available = value !== null;
+  const available = value !== null || range !== null;
   if (output) {
-    output.textContent = available
-      ? formatNumber(value, locale, {
-          maximumFractionDigits: decimals,
-          minimumFractionDigits: decimals
-        })
-      : fallback;
-    counter(output, available ? value : null, { decimals });
+    output.textContent =
+      value !== null
+        ? formatNumber(value, locale, {
+            maximumFractionDigits: decimals,
+            minimumFractionDigits: decimals
+          })
+        : range !== null
+          ? `${formatNumber(range.min, locale, {
+              maximumFractionDigits: decimals,
+              minimumFractionDigits: decimals
+            })}–${formatNumber(range.max, locale, {
+              maximumFractionDigits: decimals,
+              minimumFractionDigits: decimals
+            })}`
+          : fallback;
+    counter(output, value, { decimals });
   }
   if (unitOutput) unitOutput.hidden = !available;
   return available;
@@ -122,6 +152,40 @@ const renderExampleFact = ({ root, selector, valueSelector, value, locale, decim
   hidden(root, selector, false);
 };
 
+const renderCompactFact = ({
+  root,
+  selector,
+  valueSelector,
+  value,
+  locale,
+  decimals = 0,
+  prefix = '',
+  range = null
+}) => {
+  const output = root.querySelector(valueSelector);
+  const available = value !== null || range !== null;
+  if (output) {
+    output.textContent =
+      value !== null
+        ? `${prefix}${formatNumber(value, locale, {
+            maximumFractionDigits: decimals,
+            minimumFractionDigits: decimals
+          })}`
+        : range !== null
+          ? `${formatNumber(range.min, locale, {
+              maximumFractionDigits: decimals,
+              minimumFractionDigits: decimals
+            })}–${formatNumber(range.max, locale, {
+              maximumFractionDigits: decimals,
+              minimumFractionDigits: decimals
+            })}`
+          : '—';
+    counter(output, value, { decimals });
+  }
+  hidden(root, selector, !available);
+  return available;
+};
+
 const renderBars = (root, monthlyGenerationKwh) => {
   const chart = root.querySelector('[data-hero-analysis-bars]');
   if (!chart) return;
@@ -138,15 +202,26 @@ const renderBars = (root, monthlyGenerationKwh) => {
 const locationLabel = (presentation, copy) => {
   if (presentation.locationKind === 'address') return presentation.location;
   if (presentation.locationKind === 'selected') return copy.dashboardLocationSelected;
-  if (presentation.locationKind === 'regional') return copy.dashboardLocationRegional;
+  if (presentation.locationKind === 'regional') {
+    const quick = copy.quickCalculator ?? {};
+    const region = quick.regions?.find(({ id }) => id === presentation.regionId);
+    return region
+      ? [region.label, quick.country].filter(Boolean).join(', ')
+      : copy.dashboardLocationRegional;
+  }
   return copy.dashboardLocationSelected;
 };
 
 const renderExampleCard = ({ root, copy, locale }) => {
   const example = copy.dashboardExample;
   if (!example) return null;
-  root.dataset.dashboardMode = 'example';
+  const compactCalculator = root.hasAttribute('data-hero-quick-calculator');
+  root.dataset.dashboardMode = compactCalculator ? 'input' : 'example';
   root.dataset.co2Available = String(finite(example.co2Tons) !== null);
+  if (compactCalculator) {
+    hidden(root, '[data-hero-quick-form-panel]', false);
+    hidden(root, '[data-hero-quick-result]', true);
+  }
   text(root, '[data-hero-analysis-location]', example.location);
   text(root, '[data-hero-analysis-status]', example.status);
   text(root, '[data-hero-analysis-note]', example.note);
@@ -179,6 +254,9 @@ const renderExampleCard = ({ root, copy, locale }) => {
   hidden(root, '[data-hero-analysis-coverage]', true);
   hidden(root, '[data-hero-analysis-savings]', true);
   hidden(root, '[data-hero-analysis-co2]', finite(example.co2Tons) === null);
+  hidden(root, '[data-hero-analysis-capacity]', true);
+  hidden(root, '[data-hero-analysis-panels]', true);
+  hidden(root, '[data-hero-analysis-payback]', true);
   return { mode: 'example', ...example };
 };
 
@@ -193,8 +271,13 @@ const renderHeroAnalysisCard = ({
   if (!analysis && status !== 'loading') return renderExampleCard({ root, copy, locale });
   const presentation = buildHeroAnalysisPresentation(analysis, { status });
   const ready = presentation.ready;
+  const compactCalculator = root.hasAttribute('data-hero-quick-calculator');
   root.dataset.dashboardMode = presentation.loading ? 'loading' : 'analysis';
   root.dataset.co2Available = String(presentation.avoidedCo2Tons !== null);
+  if (compactCalculator) {
+    hidden(root, '[data-hero-quick-form-panel]', true);
+    hidden(root, '[data-hero-quick-result]', false);
+  }
   text(root, '[data-hero-analysis-location]', locationLabel(presentation, copy));
   text(
     root,
@@ -215,6 +298,32 @@ const renderHeroAnalysisCard = ({
     fallback: presentation.loading ? copy.dashboardLoading : '—',
     locale
   });
+
+  renderCompactFact({
+    root,
+    selector: '[data-hero-analysis-capacity]',
+    valueSelector: '[data-hero-analysis-capacity-value]',
+    value: presentation.capacityKwp,
+    locale,
+    decimals: 1
+  });
+  renderCompactFact({
+    root,
+    selector: '[data-hero-analysis-panels]',
+    valueSelector: '[data-hero-analysis-panels-value]',
+    value: presentation.panelCount,
+    locale
+  });
+  renderCompactFact({
+    root,
+    selector: '[data-hero-analysis-payback]',
+    valueSelector: '[data-hero-analysis-payback-value]',
+    value: presentation.paybackYears,
+    locale,
+    decimals: 1,
+    prefix: '≈',
+    range: presentation.paybackRangeYears
+  });
   renderMetric({
     root,
     valueSelector: '[data-hero-analysis-coverage-value]',
@@ -229,12 +338,13 @@ const renderHeroAnalysisCard = ({
     unitSelector: '[data-hero-analysis-savings-unit]',
     value: presentation.annualSavingsAmd,
     fallback: copy.dashboardNeedTariff,
-    locale
+    locale,
+    range: presentation.annualSavingsRangeAmd
   });
 
   const co2 = root.querySelector('[data-hero-analysis-co2]');
   if (co2) {
-    co2.hidden = presentation.avoidedCo2Tons === null;
+    co2.hidden = compactCalculator || presentation.avoidedCo2Tons === null;
     text(root, '[data-hero-analysis-co2-label]', copy.dashboardCo2);
     const value = root.querySelector('[data-hero-analysis-co2-value]');
     if (value && presentation.avoidedCo2Tons !== null) {
@@ -246,7 +356,7 @@ const renderHeroAnalysisCard = ({
     }
   }
   hidden(root, '[data-hero-example-trees]', true);
-  hidden(root, '[data-hero-analysis-coverage]', false);
+  hidden(root, '[data-hero-analysis-coverage]', compactCalculator);
   hidden(root, '[data-hero-analysis-savings]', false);
   renderBars(root, presentation.monthlyGenerationKwh);
   return presentation;

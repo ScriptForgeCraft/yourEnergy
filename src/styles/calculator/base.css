@@ -138,6 +138,27 @@
   height: var(--site-control-height, 3rem);
 }
 
+.quick-lead-dialog .lead-attach-calculation,
+.professional-lead-dialog .lead-attach-calculation {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  cursor: pointer;
+  font-size: 0.9rem;
+  line-height: 1.35;
+}
+
+.quick-lead-dialog .lead-attach-calculation input,
+.professional-lead-dialog .lead-attach-calculation input {
+  width: 1.15rem;
+  min-width: 1.15rem;
+  min-height: 1.15rem;
+  height: 1.15rem;
+  margin: 0;
+  padding: 0;
+  accent-color: var(--color-accent);
+}
+
 .quick-lead-dialog [aria-busy='true'] [data-quick-lead-submit],
 .professional-lead-dialog [aria-busy='true'] [data-professional-lead-submit] {
   cursor: wait;

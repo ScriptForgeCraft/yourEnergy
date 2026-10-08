@@ -401,6 +401,279 @@
   color: var(--cinematic-gold);
 }
 
+/* Compact Hero calculator -------------------------------------------------- */
+.page-home .hero-dashboard--calculator {
+  min-height: 0;
+}
+
+.page-home .hero-quick-form {
+  animation: hero-calculator-fade 220ms ease-out both;
+}
+
+.page-home .hero-quick-form__heading {
+  margin-bottom: 15px;
+}
+
+.page-home .hero-quick-form__heading > span {
+  display: block;
+  margin-bottom: 5px;
+  color: var(--cinematic-gold);
+  font-size: 0.58rem;
+  font-weight: 850;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+}
+
+.page-home .hero-quick-form__heading h2 {
+  margin: 0;
+  color: #fff;
+  font-size: clamp(1.05rem, 1.45vw, 1.26rem);
+  line-height: 1.15;
+  letter-spacing: -0.025em;
+}
+
+.page-home .hero-quick-form__field {
+  display: grid;
+  gap: 6px;
+  min-width: 0;
+  color: rgb(255 255 255 / 78%);
+  font-size: 0.63rem;
+  font-weight: 720;
+  line-height: 1.2;
+}
+
+.page-home .hero-quick-form__fields {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 9px;
+  margin-top: 10px;
+}
+
+.page-home .hero-quick-form__control {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  height: 39px;
+  border: 1px solid rgb(255 255 255 / 21%);
+  border-radius: 10px;
+  color: #fff;
+  background: rgb(3 20 35 / 46%);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 7%);
+}
+
+.page-home .hero-quick-form__control .inline-icon {
+  width: 16px;
+  height: 16px;
+  flex: 0 0 auto;
+  margin-left: 10px;
+  color: var(--cinematic-gold);
+}
+
+.page-home .hero-quick-form__control input,
+.page-home .hero-quick-form__control select {
+  width: 100%;
+  min-width: 0;
+  height: 100%;
+  border: 0;
+  outline: 0;
+  padding: 0 8px;
+  color: #fff;
+  background: transparent;
+  font: inherit;
+  font-size: 0.84rem;
+  font-weight: 800;
+}
+
+.page-home .hero-quick-form__control input::placeholder {
+  color: rgb(255 255 255 / 38%);
+}
+
+.page-home .hero-quick-form__control select {
+  appearance: none;
+  padding-right: 27px;
+  cursor: pointer;
+}
+
+.page-home .hero-quick-form__control--select::after {
+  position: absolute;
+  right: 10px;
+  width: 7px;
+  height: 7px;
+  border-right: 1.5px solid rgb(255 255 255 / 75%);
+  border-bottom: 1.5px solid rgb(255 255 255 / 75%);
+  content: '';
+  pointer-events: none;
+  transform: translateY(-2px) rotate(45deg);
+}
+
+.page-home .hero-quick-form__control select option {
+  color: #071a2d;
+}
+
+.page-home .hero-quick-form__control small {
+  display: block;
+  flex: 0 0 auto;
+  padding-right: 8px;
+  color: rgb(255 255 255 / 54%);
+  font-size: 0.54rem;
+  font-weight: 720;
+  white-space: nowrap;
+}
+
+.page-home .hero-quick-form__control input {
+  width: auto;
+  flex: 1 1 auto;
+}
+
+.page-home .hero-quick-form__control:focus-within {
+  border-color: rgb(255 211 74 / 90%);
+  box-shadow: 0 0 0 3px rgb(245 189 24 / 18%);
+}
+
+.page-home .hero-quick-form__control:has(input[aria-invalid='true']) {
+  border-color: #ff9b8c;
+}
+
+.page-home .hero-quick-form__hint {
+  min-height: 26px;
+  margin: 9px 0 10px;
+  color: rgb(255 255 255 / 57%);
+  font-size: 0.56rem;
+  line-height: 1.35;
+}
+
+.page-home .hero-quick-form__submit {
+  display: inline-flex;
+  width: 100%;
+  min-height: 43px;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  border: 0;
+  border-radius: 11px;
+  padding: 9px 14px;
+  color: #061828;
+  background: linear-gradient(135deg, #f7c620, #ffcf3c);
+  box-shadow: 0 12px 23px rgb(245 189 24 / 24%);
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.78rem;
+  font-weight: 850;
+  transition:
+    transform 160ms ease,
+    box-shadow 160ms ease,
+    filter 160ms ease;
+}
+
+.page-home .hero-quick-form__submit .inline-icon {
+  width: 16px;
+  height: 16px;
+}
+
+.page-home .hero-quick-form__submit:hover:not(:disabled) {
+  box-shadow: 0 15px 28px rgb(245 189 24 / 37%);
+  filter: brightness(1.04);
+  transform: translateY(-1px);
+}
+
+.page-home .hero-quick-form__submit:disabled {
+  cursor: wait;
+  opacity: 0.74;
+}
+
+.page-home .hero-quick-form__submit:focus-visible,
+.page-home .hero-dashboard__edit:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 3px;
+}
+
+.page-home .hero-quick-form__status {
+  min-height: 16px;
+  margin: 7px 0 0;
+  color: rgb(255 255 255 / 74%);
+  font-size: 0.6rem;
+  font-weight: 650;
+  line-height: 1.25;
+}
+
+.page-home .hero-quick-form__status.is-error {
+  color: #ffd0c8;
+}
+
+.page-home .hero-dashboard--calculator .hero-dashboard__result {
+  animation: hero-calculator-fade 260ms ease-out both;
+}
+
+.page-home .hero-dashboard--calculator .hero-dashboard__facts {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px 0;
+}
+
+.page-home .hero-dashboard--calculator[data-dashboard-mode='analysis'] .hero-dashboard__facts,
+.page-home .hero-dashboard--calculator[data-dashboard-mode='loading'] .hero-dashboard__facts {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.page-home .hero-dashboard--calculator .hero-dashboard__facts > div:nth-child(odd) {
+  border-left: 0;
+  padding-left: 0;
+}
+
+.page-home .hero-dashboard--calculator .hero-dashboard__facts > div:nth-child(even) {
+  padding-right: 0;
+}
+
+.page-home .hero-dashboard--calculator .hero-dashboard__facts > div:nth-child(n + 5) {
+  padding-top: 3px;
+}
+
+.page-home .hero-dashboard--calculator .hero-dashboard__facts dd {
+  font-size: 0.88rem;
+}
+
+.page-home .hero-dashboard--calculator .hero-dashboard__facts dd small {
+  font-size: 0.68em;
+  white-space: nowrap;
+}
+
+.page-home .hero-dashboard--calculator[data-dashboard-mode='loading'] .hero-dashboard__result {
+  opacity: 0.72;
+}
+
+.page-home .hero-dashboard__edit {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  align-self: flex-start;
+  margin-top: 10px;
+  border: 0;
+  padding: 0;
+  color: rgb(255 234 165 / 95%);
+  background: transparent;
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.62rem;
+  font-weight: 760;
+}
+
+.page-home .hero-dashboard__edit .inline-icon {
+  width: 14px;
+  height: 14px;
+}
+
+@keyframes hero-calculator-fade {
+  from {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .page-home .hero-trust-strip {
   width: 100%;
   margin-top: auto;

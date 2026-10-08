@@ -329,6 +329,7 @@ export const initQuickCalculator = ({ config = {} } = {}) => {
   const leadForm = root.querySelector('[data-quick-lead-form]');
   const leadName = root.querySelector('[data-quick-lead-name]');
   const leadPhone = root.querySelector('[data-quick-lead-phone]');
+  const leadAttachCalculation = root.querySelector('[data-quick-lead-attach-calculation]');
   const leadMessage = root.querySelector('[data-quick-lead-message]');
   const leadSubmit = root.querySelector('[data-quick-lead-submit]');
   const leadStatus = root.querySelector('[data-quick-lead-status]');
@@ -986,11 +987,16 @@ export const initQuickCalculator = ({ config = {} } = {}) => {
         {
           ...validated.values,
           locale: config.locale,
-          calculatorContext: buildQuickLeadContext({
-            analysis,
-            state: snapshot,
-            locale: config.locale
-          })
+          attachCalculation: Boolean(leadAttachCalculation?.checked),
+          ...(leadAttachCalculation?.checked
+            ? {
+                calculatorContext: buildQuickLeadContext({
+                  analysis,
+                  state: snapshot,
+                  locale: config.locale
+                })
+              }
+            : {})
         },
         { signal: controller.signal }
       );

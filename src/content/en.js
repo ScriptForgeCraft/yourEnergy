@@ -449,6 +449,27 @@ export default {
     dashboardLoading: 'Calculating…',
     dashboardNotePreliminary:
       'Preliminary calculation. Final parameters and price require an engineering review.',
+    quickCalculator: {
+      eyebrow: 'Quick solar calculation',
+      title: 'See your home’s preliminary potential',
+      region: 'Region',
+      consumption: 'Average monthly consumption',
+      consumptionUnit: 'kWh / month',
+      tariff: 'Your average tariff',
+      tariffUnit: '֏ / kWh',
+      tariffHint: 'Optional — leave blank to use the standard residential tariff.',
+      submit: 'Calculate',
+      calculating: 'Calculating…',
+      edit: 'Edit inputs',
+      capacity: 'System size',
+      panels: 'Panels',
+      payback: 'Payback',
+      paybackUnit: 'years',
+      invalid: 'Choose a region and enter a positive average monthly consumption.',
+      invalidTariff: 'Enter a positive tariff or leave the field blank.',
+      unavailable: 'The calculation is unavailable right now. Please try again.',
+      country: 'Armenia'
+    },
     dashboardExample: {
       location: 'Yerevan, Armenia',
       status: 'EXAMPLE RESULT',
