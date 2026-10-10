@@ -13,11 +13,11 @@
     <meta property='og:title' content='{{meta.ogTitle}}' />
     <meta property='og:description' content='{{meta.ogDescription}}' />
     <meta property='og:url' content='https://yourenergy.am{{path}}' />
-    <meta property='og:image' content='https://yourenergy.am/images/project-arabkir-1200.jpg' />
+    <meta property='og:image' content='https://yourenergy.am/images/projects-hero-1600.jpg' />
     <meta name='twitter:card' content='summary_large_image' />
     <meta name='twitter:title' content='{{meta.ogTitle}}' />
     <meta name='twitter:description' content='{{meta.ogDescription}}' />
-    <meta name='twitter:image' content='https://yourenergy.am/images/project-arabkir-1200.jpg' />
+    <meta name='twitter:image' content='https://yourenergy.am/images/projects-hero-1600.jpg' />
     <link rel='canonical' href='https://yourenergy.am{{path}}' />
     {{#each alternateLinks}}<link rel='alternate' hreflang='{{hreflang}}' href='{{href}}' />{{/each}}
     <link rel='icon' href='/favicon.ico' sizes='any' />
@@ -33,6 +33,9 @@
       <section class='projects-hero' aria-labelledby='projects-hero-title'>
         <div class='projects-hero__media' aria-hidden='true'>
           <picture class='projects-hero__poster'>
+            <source media='(min-width: 1024px)' type='image/avif' srcset='/images/projects-hero-1024.avif 1024w, /images/projects-hero-1600.avif 1600w, /images/projects-hero-1920.avif 1920w' sizes='100vw' />
+            <source media='(min-width: 1024px)' type='image/webp' srcset='/images/projects-hero-1024.webp 1024w, /images/projects-hero-1600.webp 1600w, /images/projects-hero-1920.webp 1920w' sizes='100vw' />
+            <source media='(min-width: 1024px)' type='image/jpeg' srcset='/images/projects-hero-1024.jpg 1024w, /images/projects-hero-1600.jpg 1600w, /images/projects-hero-1920.jpg 1920w' sizes='100vw' />
             <source type='image/avif' srcset='/images/hero-time-20-1024.avif 1024w, /images/hero-time-20-1600.avif 1600w' sizes='100vw' />
             <source type='image/webp' srcset='/images/hero-time-20-1024.webp 1024w, /images/hero-time-20-1600.webp 1600w' sizes='100vw' />
             <img src='/images/hero-time-20-1600.jpg' width='1600' height='900' alt='' fetchpriority='high' decoding='async' />
@@ -169,78 +172,76 @@
         </div>
       </section>
 
-      <section class='projects-coverage' aria-labelledby='projects-coverage-title'>
-        <div class='projects-coverage__media' aria-hidden='true'>
+      <div class='projects-closing'>
+        <div class='projects-closing__media' aria-hidden='true'>
           <picture>
-            <source type='image/avif' srcset='/images/hero-time-18-1024.avif 1024w, /images/hero-time-18-1600.avif 1600w' sizes='100vw' />
-            <source type='image/webp' srcset='/images/hero-time-18-1024.webp 1024w, /images/hero-time-18-1600.webp 1600w' sizes='100vw' />
+            <source media='(min-width: 1024px)' type='image/avif' srcset='/images/projects-hero-1024.avif 1024w, /images/projects-hero-1600.avif 1600w, /images/projects-hero-1920.avif 1920w' sizes='100vw' />
+            <source media='(min-width: 1024px)' type='image/webp' srcset='/images/projects-hero-1024.webp 1024w, /images/projects-hero-1600.webp 1600w, /images/projects-hero-1920.webp 1920w' sizes='100vw' />
+            <source media='(min-width: 1024px)' type='image/jpeg' srcset='/images/projects-hero-1024.jpg 1024w, /images/projects-hero-1600.jpg 1600w, /images/projects-hero-1920.jpg 1920w' sizes='100vw' />
+            <source type='image/avif' srcset='/images/hero-time-18-640.avif 640w, /images/hero-time-18-1024.avif 1024w, /images/hero-time-18-1600.avif 1600w' sizes='100vw' />
+            <source type='image/webp' srcset='/images/hero-time-18-640.webp 640w, /images/hero-time-18-1024.webp 1024w, /images/hero-time-18-1600.webp 1600w' sizes='100vw' />
             <img src='/images/hero-time-18-1600.jpg' width='1600' height='900' alt='' loading='lazy' decoding='async' />
           </picture>
         </div>
-        <div class='projects-coverage__shade' aria-hidden='true'></div>
-        <div class='container projects-container projects-coverage__content'>
-          <div class='projects-map' aria-hidden='true'>
-            <img
-              class='projects-map__shape'
-              src='{{projectsPage.mapConfig.svgPath}}'
-              width='{{projectsPage.mapConfig.svgWidth}}'
-              height='{{projectsPage.mapConfig.svgHeight}}'
-              alt=''
-              loading='lazy'
-              decoding='async'
-            />
-            {{#each projectsPage.coverage.markers}}
-              <span class='projects-map__marker' style='--marker-x: {{x}}%; --marker-y: {{y}}%;'>
-                <i></i>
-              </span>
-            {{/each}}
-          </div>
+        <div class='projects-closing__shade' aria-hidden='true'></div>
 
-          <div class='projects-coverage__copy'>
-            <h2 id='projects-coverage-title'>{{projectsPage.coverage.title}}</h2>
-            <p>{{projectsPage.coverage.copy}}</p>
-            <dl class='projects-coverage__stats'>
-              {{#each projectsPage.coverage.stats}}<div><dd>{{value}}</dd><dt>{{label}}</dt></div>{{/each}}
-            </dl>
-          </div>
-        </div>
-      </section>
+        <section class='projects-coverage' aria-labelledby='projects-coverage-title'>
+          <div class='container projects-container projects-coverage__content'>
+            <div class='projects-map' aria-hidden='true'>
+              <img
+                class='projects-map__shape'
+                src='{{projectsPage.mapConfig.svgPath}}'
+                width='{{projectsPage.mapConfig.svgWidth}}'
+                height='{{projectsPage.mapConfig.svgHeight}}'
+                alt=''
+                loading='lazy'
+                decoding='async'
+              />
+              {{#each projectsPage.coverage.markers}}
+                <span class='projects-map__marker' style='--marker-x: {{x}}%; --marker-y: {{y}}%;'>
+                  <i></i>
+                </span>
+              {{/each}}
+            </div>
 
-      <section class='projects-process' aria-labelledby='projects-process-title'>
-        <div class='container projects-container projects-process__layout'>
-          <h2 id='projects-process-title'>{{projectsPage.process.title}}</h2>
-          <ol class='projects-process__steps'>
-            {{#each projectsPage.process.steps}}
-              <li>
-                <svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#{{icon}}'></use></svg>
-                <span><b>{{number}}</b><strong>{{title}}</strong></span>
-              </li>
-            {{/each}}
-          </ol>
-        </div>
-      </section>
+            <div class='projects-coverage__copy'>
+              <h2 id='projects-coverage-title'>{{projectsPage.coverage.title}}</h2>
+              <p>{{projectsPage.coverage.copy}}</p>
+              <dl class='projects-coverage__stats'>
+                {{#each projectsPage.coverage.stats}}<div><dd>{{value}}</dd><dt>{{label}}</dt></div>{{/each}}
+              </dl>
+            </div>
+          </div>
+        </section>
 
-      <section class='projects-cta'>
-        <div class='projects-cta__media' aria-hidden='true'>
-          <picture>
-            <source type='image/avif' srcset='/images/hero-time-20-1024.avif 1024w, /images/hero-time-20-1600.avif 1600w' sizes='100vw' />
-            <source type='image/webp' srcset='/images/hero-time-20-1024.webp 1024w, /images/hero-time-20-1600.webp 1600w' sizes='100vw' />
-            <img src='/images/hero-time-20-1600.jpg' width='1600' height='900' alt='' loading='lazy' decoding='async' />
-          </picture>
-        </div>
-        <div class='projects-cta__shade' aria-hidden='true'></div>
-        <div class='container projects-container projects-cta__content'>
-          <div>
-            <p class='projects-eyebrow'>{{projectsPage.cta.eyebrow}}</p>
-            <h2>{{projectsPage.cta.title}}</h2>
-            <p class='projects-cta__copy'>{{projectsPage.cta.copy}}</p>
+        <section class='projects-process' aria-labelledby='projects-process-title'>
+          <div class='container projects-container projects-process__layout'>
+            <h2 id='projects-process-title'>{{projectsPage.process.title}}</h2>
+            <ol class='projects-process__steps'>
+              {{#each projectsPage.process.steps}}
+                <li>
+                  <svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#{{icon}}'></use></svg>
+                  <strong>{{title}}</strong>
+                </li>
+              {{/each}}
+            </ol>
           </div>
-          <div class='projects-cta__actions'>
-            <a class='projects-primary-button' href='{{calculatorHref}}'>{{projectsPage.cta.primary}} <svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#arrow-right'></use></svg></a>
-            <a class='projects-secondary-button' href='{{projectsPage.contactHref}}'>{{projectsPage.cta.secondary}}</a>
+        </section>
+
+        <section class='projects-cta'>
+          <div class='container projects-container projects-cta__content'>
+            <div>
+              <p class='projects-eyebrow'>{{projectsPage.cta.eyebrow}}</p>
+              <h2>{{projectsPage.cta.title}}</h2>
+              <p class='projects-cta__copy'>{{projectsPage.cta.copy}}</p>
+            </div>
+            <div class='projects-cta__actions'>
+              <a class='projects-primary-button' href='{{calculatorHref}}'>{{projectsPage.cta.primary}} <svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#arrow-right'></use></svg></a>
+              <a class='projects-secondary-button' href='{{projectsPage.contactHref}}'>{{projectsPage.cta.secondary}}</a>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      </div>
     </main>
 
     {{> site-footer}}

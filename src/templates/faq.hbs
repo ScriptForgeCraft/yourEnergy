@@ -33,13 +33,13 @@
       <section class='faq-page-hero' aria-labelledby='faq-page-title'>
         <div class='faq-page-hero__backdrop' aria-hidden='true'><picture><source
               type='image/avif'
-              srcset='/images/hero-time-18-1024.avif 1024w, /images/hero-time-18-1600.avif 1600w'
+              srcset='/images/faq-hero-1024.avif 1024w, /images/faq-hero-1600.avif 1600w'
               sizes='100vw'
             /><source
               type='image/webp'
-              srcset='/images/hero-time-18-1024.webp 1024w, /images/hero-time-18-1600.webp 1600w'
+              srcset='/images/faq-hero-1024.webp 1024w, /images/faq-hero-1600.webp 1600w'
               sizes='100vw'
-            /><img src='/images/hero-time-18-1600.jpg' width='1600' height='900' alt='' fetchpriority='high' decoding='async' /></picture></div>
+            /><img src='/images/faq-hero-1600.jpg' width='1981' height='794' alt='' fetchpriority='high' decoding='async' /></picture></div>
         <div class='container faq-page-hero__inner'>
           <p class='faq-page-hero__eyebrow'>{{faq.eyebrow}}</p>
           <h1 id='faq-page-title'>{{faq.pageTitle}}</h1>
@@ -67,7 +67,10 @@
               {{/each}}
             </nav>
             <section class='faq-sidebar__cta' aria-labelledby='faq-contact-title'>
-              <svg class='faq-sidebar__cta-icon inline-icon' aria-hidden='true'><use href='/icons.svg#message-circle'></use></svg>
+              <svg class='faq-sidebar__cta-icon inline-icon' aria-hidden='true' viewBox='0 0 24 24' focusable='false' stroke-linecap='round' stroke-linejoin='round'>
+                <path d='M7.9 20A9 9 0 1 0 4 16.1L2 22Z'></path>
+                <path d='M8 12h.01M12 12h.01M16 12h.01'></path>
+              </svg>
               <div>
                 <h2 id='faq-contact-title'>{{faq.notFound}}</h2>
                 <p>{{faq.contactLink}}</p>

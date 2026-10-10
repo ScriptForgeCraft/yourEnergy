@@ -13,11 +13,11 @@
     <meta property='og:title' content='{{meta.ogTitle}}' />
     <meta property='og:description' content='{{meta.ogDescription}}' />
     <meta property='og:url' content='https://yourenergy.am{{path}}' />
-    <meta property='og:image' content='https://yourenergy.am/images/hero-time-20-1600.jpg' />
+    <meta property='og:image' content='https://yourenergy.am/images/about-hero-1600.jpg' />
     <meta name='twitter:card' content='summary_large_image' />
     <meta name='twitter:title' content='{{meta.ogTitle}}' />
     <meta name='twitter:description' content='{{meta.ogDescription}}' />
-    <meta name='twitter:image' content='https://yourenergy.am/images/hero-time-20-1600.jpg' />
+    <meta name='twitter:image' content='https://yourenergy.am/images/about-hero-1600.jpg' />
     <link rel='canonical' href='https://yourenergy.am{{path}}' />
     {{#each alternateLinks}}<link rel='alternate' hreflang='{{hreflang}}' href='{{href}}' />{{/each}}
     <link rel='icon' href='/favicon.ico' sizes='any' />
@@ -33,16 +33,21 @@
       <section class='about-hero' aria-labelledby='about-hero-title'>
         <div class='about-hero__media' aria-hidden='true'>
           <picture>
-            <source type='image/avif' srcset='/images/hero-time-20-1024.avif 1024w, /images/hero-time-20-1600.avif 1600w' sizes='100vw' />
-            <source type='image/webp' srcset='/images/hero-time-20-1024.webp 1024w, /images/hero-time-20-1600.webp 1600w' sizes='100vw' />
-            <img src='/images/hero-time-20-1600.jpg' width='1600' height='900' alt='' fetchpriority='high' decoding='async' />
+            <source type='image/avif' srcset='/images/about-hero-1024.avif 1024w, /images/about-hero-1600.avif 1600w, /images/about-hero-1920.avif 1920w' sizes='100vw' />
+            <source type='image/webp' srcset='/images/about-hero-1024.webp 1024w, /images/about-hero-1600.webp 1600w, /images/about-hero-1920.webp 1920w' sizes='100vw' />
+            <img src='/images/about-hero-1600.jpg' width='1600' height='900' alt='' fetchpriority='high' decoding='async' />
           </picture>
         </div>
         <div class='about-hero__veil' aria-hidden='true'></div>
-        <div class='container about-hero__inner'>
+        <div class='container about-hero__layout'>
           <div class='about-hero__copy' data-about-reveal>
-            <h1 id='about-hero-title'>{{aboutPage.hero.titleLead}}<br /><mark>{{aboutPage.hero.titleAccent}}</mark></h1>
+            <span class='about-kicker about-hero__kicker'>{{aboutPage.hero.eyebrow}}</span>
+            <h1 id='about-hero-title'>{{aboutPage.hero.titleLead}} <mark>{{aboutPage.hero.titleAccent}}</mark></h1>
             <p>{{aboutPage.hero.copy}}</p>
+            <div class='about-hero__actions'>
+              <a class='button' href='{{calculatorHref}}'>{{aboutPage.finalCta.primary}} <svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#arrow-right'></use></svg></a>
+              <a class='about-hero__text-link' href='{{contactsHref}}'>{{aboutPage.finalCta.secondary}} <svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#arrow-right'></use></svg></a>
+            </div>
             <ul class='about-hero__signals' role='list'>
               {{#each aboutPage.hero.signals}}
                 <li>
@@ -52,6 +57,21 @@
               {{/each}}
             </ul>
           </div>
+          <aside class='about-hero__route' data-about-reveal aria-labelledby='about-route-title'>
+            <div class='about-hero__route-top'>
+              <span>{{aboutPage.principles.eyebrow}}</span>
+              <span aria-hidden='true'>1 — 4</span>
+            </div>
+            <h2 id='about-route-title'>{{aboutPage.principles.title}}</h2>
+            <ol>
+              {{#each aboutPage.principles.items}}
+                <li>
+                  <span class='about-hero__route-number'>{{add @index 1}}</span>
+                  <span><b>{{title}}</b><em>{{copy}}</em></span>
+                </li>
+              {{/each}}
+            </ol>
+          </aside>
         </div>
       </section>
 
@@ -64,11 +84,20 @@
             <p>{{aboutPage.intro.copySecond}}</p>
             <p>{{aboutPage.intro.copyThird}}</p>
           </div>
-          <div class='about-intro__media' data-about-reveal>
-            <figure class='about-intro__media-main'><img src='/images/project-arabkir-800.jpg' width='800' height='533' alt='' loading='lazy' decoding='async' /></figure>
-            <figure><img src='/images/process-step-inspection-1024.jpg' width='1024' height='576' alt='' loading='lazy' decoding='async' /></figure>
-            <figure><img src='/images/project-vagharshapat-800.jpg' width='800' height='533' alt='' loading='lazy' decoding='async' /></figure>
-          </div>
+          <aside class='about-intro__facts' data-about-reveal>
+            <div class='about-intro__facts-head'>
+              <span class='about-intro__facts-icon'><svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#sun'></use></svg></span>
+              <span>{{aboutPage.intro.factsTitle}}</span>
+            </div>
+            <dl>
+              {{#each aboutPage.intro.facts}}
+                <div>
+                  <dt>{{label}}</dt>
+                  <dd>{{value}}</dd>
+                </div>
+              {{/each}}
+            </dl>
+          </aside>
         </div>
       </section>
 
@@ -77,10 +106,12 @@
           <div class='about-copy about-principles__head' data-about-reveal>
             <span class='about-kicker'>{{aboutPage.principles.eyebrow}}</span>
             <h2 id='about-principles-title'>{{aboutPage.principles.title}}</h2>
+            <p>{{aboutPage.principles.copy}}</p>
           </div>
           <div class='about-principles__grid'>
             {{#each aboutPage.principles.items}}
               <article class='about-principle' data-about-reveal>
+                <span class='about-principle__number' aria-hidden='true'></span>
                 <span class='about-principle__icon'><svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#{{icon}}'></use></svg></span>
                 <div><h3>{{title}}</h3><p>{{copy}}</p></div>
               </article>
@@ -148,22 +179,28 @@
         </div>
       </section>
 
-      <section class='about-cta' aria-labelledby='about-cta-title'>
-        <div class='about-cta__media' aria-hidden='true'>
-          <picture>
-            <source type='image/avif' srcset='/images/hero-time-8-1024.avif 1024w, /images/hero-time-8-1600.avif 1600w' sizes='100vw' />
-            <source type='image/webp' srcset='/images/hero-time-8-1024.webp 1024w, /images/hero-time-8-1600.webp 1600w' sizes='100vw' />
-            <img src='/images/hero-time-8-1600.jpg' width='1600' height='900' alt='' loading='lazy' decoding='async' />
-          </picture>
-        </div>
-        <div class='about-cta__veil' aria-hidden='true'></div>
-        <div class='container about-cta__content' data-about-reveal>
-          <span class='about-cta__eyebrow'>{{aboutPage.finalCta.eyebrow}}</span>
-          <h2 id='about-cta-title'>{{aboutPage.finalCta.title}}</h2>
-          <p>{{aboutPage.finalCta.copy}}</p>
-          <div class='about-cta__actions'>
-            <a class='button' href='{{calculatorHref}}'>{{aboutPage.finalCta.primary}} <svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#arrow-right'></use></svg></a>
-            <a class='button button--outline about-cta__outline' href='{{contactsHref}}'>{{aboutPage.finalCta.secondary}}</a>
+      <section class='about-cta about-section' aria-labelledby='about-cta-title'>
+        <div class='container'>
+          <div class='about-cta__content' data-about-reveal>
+            <div class='about-cta__media' aria-hidden='true'>
+              <picture>
+                <source type='image/avif' srcset='/images/about-cta-background-1024.avif 1024w, /images/about-cta-background-1600.avif 1600w' sizes='100vw' />
+                <source type='image/webp' srcset='/images/about-cta-background-1024.webp 1024w, /images/about-cta-background-1600.webp 1600w' sizes='100vw' />
+                <img src='/images/about-cta-background-1600.jpg' width='1600' height='900' alt='' loading='lazy' decoding='async' />
+              </picture>
+            </div>
+            <div class='about-cta__veil' aria-hidden='true'></div>
+            <div>
+              <span class='about-cta__eyebrow'>{{aboutPage.finalCta.eyebrow}}</span>
+              <h2 id='about-cta-title'>{{aboutPage.finalCta.title}}</h2>
+            </div>
+            <div class='about-cta__conversion'>
+              <p>{{aboutPage.finalCta.copy}}</p>
+              <div class='about-cta__actions'>
+                <a class='button button--navy' href='{{calculatorHref}}'>{{aboutPage.finalCta.primary}} <svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#arrow-right'></use></svg></a>
+                <a class='about-cta__outline' href='{{contactsHref}}'>{{aboutPage.finalCta.secondary}} <svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#arrow-right'></use></svg></a>
+              </div>
+            </div>
           </div>
         </div>
       </section>

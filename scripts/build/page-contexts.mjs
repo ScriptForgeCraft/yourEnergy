@@ -1011,7 +1011,7 @@ export const createPageContextBuilder = ({ publicEnv, pages }) => {
       blogMeta: {
         title: `${BLOG_COPY[content.locale].heroBefore} ${BLOG_COPY[content.locale].heroAccent} | YOURENERGY`,
         description: BLOG_COPY[content.locale].heroText,
-        image: '/images/hero-time-20-1600.jpg'
+        image: '/images/blog-hero-1600.jpg'
       },
       featured: localeArticles[0],
       articles: localeArticles,

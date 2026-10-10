@@ -151,6 +151,7 @@ const aboutPageCopy = {
     hero: {
       titleLead: 'О компании',
       titleAccent: 'YOUR ENERGY',
+      eyebrow: 'СОЛНЕЧНАЯ ЭНЕРГЕТИКА · АРМЕНИЯ',
       copy: 'Проектируем и реализуем солнечные энергосистемы в Армении для частных домов и бизнеса.',
       signals: [
         { icon: 'faq-settings', title: 'Инженерный', copy: 'подход' },
@@ -166,7 +167,13 @@ const aboutPageCopy = {
       copySecond:
         'В одном процессе объединяем оценку объекта, расчёт, подбор оборудования, проектирование, монтаж, запуск и дальнейшую поддержку.',
       copyThird:
-        'Каждое решение выбираем с учётом реального потребления, технических возможностей объекта и целей клиента.'
+        'Каждое решение выбираем с учётом реального потребления, технических возможностей объекта и целей клиента.',
+      factsTitle: 'В фокусе проекта',
+      facts: [
+        { label: 'Объект', value: 'Частный дом или бизнес' },
+        { label: 'Основа решения', value: 'Потребление и технические условия' },
+        { label: 'Результат', value: 'Спроектированная и запущенная система' }
+      ]
     },
     certification: {
       eyebrow: 'СЕРТИФИКАЦИЯ И ОПЫТ',
@@ -210,6 +217,7 @@ const aboutPageCopy = {
     principles: {
       eyebrow: 'НАШ ПОДХОД',
       title: 'Как мы работаем',
+      copy: 'Ведём проект последовательно: от первичного обследования до запуска системы и поддержки в эксплуатации.',
       items: [
         {
           icon: 'faq-settings',
@@ -251,6 +259,7 @@ const aboutPageCopy = {
     hero: {
       titleLead: 'Մեր մասին',
       titleAccent: 'YOUR ENERGY',
+      eyebrow: 'ԱՐԵՎԱՅԻՆ ԷՆԵՐԳԵՏԻԿԱ · ՀԱՅԱՍՏԱՆ',
       copy: 'Արևային էներգիայի նախագծում և իրականացում Հայաստանում՝ մասնավոր տների և բիզնեսի համար։',
       signals: [
         { icon: 'faq-settings', title: 'Ինժեներական', copy: 'մոտեցում' },
@@ -266,7 +275,13 @@ const aboutPageCopy = {
       copySecond:
         'Մեկ գործընթացում միավորում ենք օբյեկտի գնահատումը, հաշվարկը, սարքավորումների ընտրությունը, նախագծումը, մոնտաժը, գործարկումը և հետագա աջակցությունը։',
       copyThird:
-        'Յուրաքանչյուր լուծում ընտրում ենք իրական սպառման, օբյեկտի տեխնիկական հնարավորությունների և հաճախորդի նպատակների հիման վրա։'
+        'Յուրաքանչյուր լուծում ընտրում ենք իրական սպառման, օբյեկտի տեխնիկական հնարավորությունների և հաճախորդի նպատակների հիման վրա։',
+      factsTitle: 'Նախագծի հիմքում',
+      facts: [
+        { label: 'Օբյեկտ', value: 'Մասնավոր տուն կամ բիզնես' },
+        { label: 'Լուծման հիմք', value: 'Սպառում և տեխնիկական պայմաններ' },
+        { label: 'Արդյունք', value: 'Նախագծված և գործարկված համակարգ' }
+      ]
     },
     certification: {
       eyebrow: 'ՀԱՎԱՍՏԱԳՐՈՒՄ ԵՎ ՓՈՐՁ',
@@ -310,6 +325,7 @@ const aboutPageCopy = {
     principles: {
       eyebrow: 'ՄԵՐ ՄՈՏԵՑՈՒՄԸ',
       title: 'Ինչպես ենք աշխատում',
+      copy: 'Նախագիծն իրականացնում ենք հաջորդաբար՝ նախնական ուսումնասիրությունից մինչև համակարգի գործարկում և շահագործման աջակցություն։',
       items: [
         {
           icon: 'faq-settings',
@@ -351,6 +367,7 @@ const aboutPageCopy = {
     hero: {
       titleLead: 'About',
       titleAccent: 'YOUR ENERGY',
+      eyebrow: 'SOLAR ENERGY · ARMENIA',
       copy: 'Solar energy system design and delivery in Armenia for private homes and businesses.',
       signals: [
         { icon: 'faq-settings', title: 'Engineering', copy: 'approach' },
@@ -366,7 +383,13 @@ const aboutPageCopy = {
       copySecond:
         'We bring site assessment, system sizing, equipment selection, engineering, installation, commissioning and ongoing support into one process.',
       copyThird:
-        "Every solution is selected around actual energy use, the property's technical potential and the client's goals."
+        "Every solution is selected around actual energy use, the property's technical potential and the client's goals.",
+      factsTitle: 'What shapes the project',
+      facts: [
+        { label: 'Property', value: 'Private home or business' },
+        { label: 'Decision basis', value: 'Energy use and technical conditions' },
+        { label: 'Outcome', value: 'A designed and commissioned system' }
+      ]
     },
     certification: {
       eyebrow: 'CERTIFICATION & EXPERIENCE',
@@ -410,6 +433,7 @@ const aboutPageCopy = {
     principles: {
       eyebrow: 'OUR APPROACH',
       title: 'How we work',
+      copy: 'We move the project forward step by step, from the initial site review to commissioning and operational support.',
       items: [
         {
           icon: 'faq-settings',

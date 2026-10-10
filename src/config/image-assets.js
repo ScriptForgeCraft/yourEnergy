@@ -6,33 +6,51 @@ export const RESPONSIVE_IMAGE_ASSETS = [
     name: `hero-time-${hour}`,
     source: `home/hero/hero-time-${hour}`,
     widths: [640, 1024, 1600],
-    quality: 50
+    quality: 82
   })),
   {
     name: 'quick-calculator-sunset',
     source: 'calculator/quick-calculator-sunset',
     widths: [640, 1024, 1600],
-    quality: 62
+    quality: 82
   },
   { name: 'roof-scan', source: 'calculator/roof-scan', widths: [480, 768, 1200, 1536] },
   {
     name: 'contact-panel-bg',
     source: 'contacts/contact-panel-bg',
     widths: [640, 1024],
-    quality: 62
+    quality: 82
+  },
+  ...['about', 'contacts', 'faq', 'projects'].map((page) => ({
+    name: `${page}-hero`,
+    source: `page-heroes/${page}`,
+    widths: [1024, 1600, 1920],
+    quality: 84
+  })),
+  {
+    name: 'blog-hero',
+    source: 'page-heroes/blog',
+    widths: [1024, 1600],
+    quality: 84
+  },
+  {
+    name: 'about-cta-background',
+    source: 'page-heroes/about-cta-background',
+    widths: [1024, 1600],
+    quality: 84
   },
   {
     name: 'professional-results-house',
     source: 'calculator/professional-results-house',
     widths: [640, 1024, 1600],
-    quality: 65,
+    quality: 82,
     legacyUrls: ['/images/professional-results-house.png']
   },
   {
     name: 'equipment-hero',
     source: 'equipment/hero/hero-bg',
     widths: [768, 1200, 1536],
-    quality: 68
+    quality: 84
   },
   ...['arabkir', 'abovyan', 'vagharshapat', 'ararat'].map((place) => ({
     name: `project-${place}`,

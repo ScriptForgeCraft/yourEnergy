@@ -57,7 +57,7 @@ for (const asset of staticAssets) {
       for (const width of EQUIPMENT_IMAGE_WIDTHS) {
         await sharp(source)
           .resize({ width, withoutEnlargement: true })
-          .webp({ quality: 80, effort: 5 })
+          .webp({ quality: 90, effort: 4 })
           .toFile(claimOutput(equipmentImageUrl(url, width)));
       }
     }
@@ -73,7 +73,7 @@ for (const { name, source, widths, quality, legacyUrls = [] } of RESPONSIVE_IMAG
   const metadata = await sharp(bytes).metadata();
   const digest = createHash('sha256')
     .update(bytes)
-    .update(JSON.stringify({ widths, quality, sharp: sharp.versions, encoder: 1 }))
+    .update(JSON.stringify({ widths, quality, sharp: sharp.versions, encoder: 2 }))
     .digest('hex');
   const cache = resolve(cacheDir, digest);
   currentCache.add(digest);
@@ -96,19 +96,11 @@ for (const { name, source, widths, quality, legacyUrls = [] } of RESPONSIVE_IMAG
     );
     if (!ready.every(Boolean)) {
       const image = sharp(bytes).resize({ width, withoutEnlargement: true });
+      const avifQuality = quality ?? 82;
       await Promise.all([
-        image
-          .clone()
-          .avif({ quality: quality ?? 56, effort: 5 })
-          .toFile(cached[0]),
-        image
-          .clone()
-          .webp({ quality: quality ? 84 : 76, effort: 5 })
-          .toFile(cached[1]),
-        image
-          .clone()
-          .jpeg({ quality: quality ? 88 : 78, progressive: true, mozjpeg: true })
-          .toFile(cached[2])
+        image.clone().avif({ quality: avifQuality, effort: 4 }).toFile(cached[0]),
+        image.clone().webp({ quality: 90, effort: 4 }).toFile(cached[1]),
+        image.clone().jpeg({ quality: 92, progressive: true, mozjpeg: true }).toFile(cached[2])
       ]);
     }
     for (const [index, filename] of names.entries()) {

@@ -99,10 +99,7 @@
   max-width: none;
   margin: 0;
   color: #f8fafc;
-  font-size: clamp(2.3rem, 3.1vw, 3.75rem) !important;
   font-weight: 780;
-  line-height: 0.99 !important;
-  letter-spacing: -0.065em;
 }
 
 .faq-preview h2 span,

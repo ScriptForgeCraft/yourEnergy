@@ -757,40 +757,49 @@ button.projects-video-button:focus-visible .projects-video-button__icon {
   text-align: center;
 }
 
-/* Armenia coverage */
-.projects-coverage {
+/* One continuous closing scene: coverage, process, and CTA share one image. */
+.projects-closing {
   position: relative;
+  overflow: hidden;
   background: #07100f;
-  min-height: 280px;
-  display: grid;
-  color: #fff;
   isolation: isolate;
 }
 
-.projects-coverage__media,
-.projects-coverage__media picture,
-.projects-coverage__media img {
+.projects-closing__media,
+.projects-closing__media picture,
+.projects-closing__media img {
   width: 100%;
   height: 100%;
   display: block;
 }
 
-.projects-coverage__media {
+.projects-closing__media {
   position: absolute;
   z-index: -2;
   inset: 0;
+  background: #07100f;
 }
 
-.projects-coverage__media img {
+.projects-closing__media img {
   object-fit: cover;
-  object-position: center 58%;
+  object-position: center;
 }
 
-.projects-coverage__shade {
+.projects-closing__shade {
   position: absolute;
   z-index: -1;
   inset: 0;
-  background: linear-gradient(90deg, rgb(7 14 16 / 84%), rgb(7 14 16 / 64%)), rgb(7 14 16 / 30%);
+  background:
+    linear-gradient(90deg, rgb(4 12 12 / 86%) 0%, rgb(4 12 12 / 63%) 54%, rgb(4 12 12 / 32%) 100%),
+    linear-gradient(0deg, rgb(4 12 12 / 76%) 0%, rgb(4 12 12 / 8%) 72%);
+}
+
+/* Armenia coverage */
+.projects-coverage {
+  position: relative;
+  min-height: 280px;
+  display: grid;
+  color: #fff;
 }
 
 .projects-coverage__content {
@@ -827,6 +836,7 @@ button.projects-video-button:focus-visible .projects-video-button__icon {
 .projects-map__marker i {
   width: 8px;
   height: 8px;
+  display: block;
   flex: 0 0 auto;
   border: 2px solid rgb(255 255 255 / 50%);
   border-radius: 50%;
@@ -875,7 +885,11 @@ button.projects-video-button:focus-visible .projects-video-button__icon {
 
 /* Process */
 .projects-process {
-  background: var(--projects-cream-light);
+  position: relative;
+  background: rgb(241 236 228 / 96%);
+  box-shadow:
+    0 1px 0 rgb(255 255 255 / 22%) inset,
+    0 -1px 0 rgb(7 16 42 / 12%) inset;
 }
 
 .projects-process__layout {
@@ -907,9 +921,9 @@ button.projects-video-button:focus-visible .projects-video-button__icon {
 .projects-process__steps li {
   min-width: 0;
   display: grid;
-  grid-template-columns: 32px 1fr;
+  grid-template-columns: 32px minmax(0, 1fr);
   align-items: center;
-  gap: 9px;
+  gap: 10px;
   border-left: 1px solid rgb(7 16 42 / 10%);
   padding: 4px 14px;
 }
@@ -925,64 +939,20 @@ button.projects-video-button:focus-visible .projects-video-button__icon {
   stroke-width: 1.35;
 }
 
-.projects-process__steps span,
-.projects-process__steps b,
 .projects-process__steps strong {
   display: block;
-}
-
-.projects-process__steps b {
-  margin-bottom: 2px;
-  color: #101820;
-  font-size: 0.58rem;
-}
-
-.projects-process__steps strong {
   color: #293036;
-  font-size: 0.64rem;
-  font-weight: 700;
-  line-height: 1.22;
+  font-size: clamp(0.72rem, 0.83vw, 0.82rem);
+  font-weight: 750;
+  line-height: 1.25;
 }
 
 /* Closing CTA */
 .projects-cta {
   position: relative;
-  background: #07100f;
   min-height: 205px;
   display: grid;
   color: #fff;
-  isolation: isolate;
-}
-
-.projects-cta__media,
-.projects-cta__media picture,
-.projects-cta__media img {
-  width: 100%;
-  height: 100%;
-  display: block;
-}
-
-.projects-cta__media {
-  position: absolute;
-  z-index: -2;
-  inset: 0;
-}
-
-.projects-cta__media img {
-  object-fit: cover;
-  object-position: center 73%;
-}
-
-.projects-cta__shade {
-  position: absolute;
-  z-index: -1;
-  inset: 0;
-  background: linear-gradient(
-    90deg,
-    rgb(6 13 12 / 92%) 0%,
-    rgb(6 13 12 / 68%) 55%,
-    rgb(6 13 12 / 42%) 100%
-  );
 }
 
 .projects-cta__content {
@@ -1170,6 +1140,10 @@ button.projects-video-button:focus-visible .projects-video-button__icon {
 
   .projects-coverage {
     min-height: 510px;
+  }
+
+  .projects-closing__media img {
+    object-position: 68% center;
   }
 
   .projects-coverage__content {

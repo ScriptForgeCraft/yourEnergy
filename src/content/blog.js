@@ -104,11 +104,11 @@ const localizedDate = Object.freeze({
 // a desktop-sized source to every reader.
 const articleImages = Object.freeze({
   'solar-panels-for-home-armenia': {
-    src: '/images/hero-time-20-1600.webp',
+    src: '/images/hero-time-8-1600.webp',
     avifSrcset:
-      '/images/hero-time-20-640.avif 640w, /images/hero-time-20-1024.avif 1024w, /images/hero-time-20-1600.avif 1600w',
+      '/images/hero-time-8-640.avif 640w, /images/hero-time-8-1024.avif 1024w, /images/hero-time-8-1600.avif 1600w',
     webpSrcset:
-      '/images/hero-time-20-640.webp 640w, /images/hero-time-20-1024.webp 1024w, /images/hero-time-20-1600.webp 1600w',
+      '/images/hero-time-8-640.webp 640w, /images/hero-time-8-1024.webp 1024w, /images/hero-time-8-1600.webp 1600w',
     width: 1600,
     height: 900
   },

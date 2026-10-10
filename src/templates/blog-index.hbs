@@ -32,16 +32,10 @@
     {{> site-header}}
     <main id='main'>
       <section class='blog-hero' aria-labelledby='blog-title'>
-        <picture><source type='image/avif' srcset='/images/hero-time-20-640.avif 640w, /images/hero-time-20-1024.avif 1024w, /images/hero-time-20-1600.avif 1600w' sizes='100vw' /><source type='image/webp' srcset='/images/hero-time-20-640.webp 640w, /images/hero-time-20-1024.webp 1024w, /images/hero-time-20-1600.webp 1600w' sizes='100vw' /><img src='/images/hero-time-20-1600.webp' width='1600' height='900' alt='' aria-hidden='true' fetchpriority='high' decoding='async' /></picture>
+        <picture><source media='(min-width: 1024px)' type='image/avif' srcset='/images/blog-hero-1024.avif 1024w, /images/blog-hero-1600.avif 1600w' sizes='100vw' /><source media='(min-width: 1024px)' type='image/webp' srcset='/images/blog-hero-1024.webp 1024w, /images/blog-hero-1600.webp 1600w' sizes='100vw' /><source media='(min-width: 1024px)' type='image/jpeg' srcset='/images/blog-hero-1024.jpg 1024w, /images/blog-hero-1600.jpg 1600w' sizes='100vw' /><source type='image/avif' srcset='/images/hero-time-8-640.avif 640w, /images/hero-time-8-1024.avif 1024w, /images/hero-time-8-1600.avif 1600w' sizes='100vw' /><source type='image/webp' srcset='/images/hero-time-8-640.webp 640w, /images/hero-time-8-1024.webp 1024w, /images/hero-time-8-1600.webp 1600w' sizes='100vw' /><img src='/images/hero-time-8-1600.webp' width='1600' height='900' alt='' aria-hidden='true' fetchpriority='high' decoding='async' /></picture>
         <div class='container blog-hero__content' data-blog-reveal>
           <h1 id='blog-title'>{{blogCopy.heroBefore}} <span>{{blogCopy.heroAccent}}</span></h1>
           <p>{{blogCopy.heroText}}</p>
-          <label class='blog-search' for='blog-search'>
-            <span class='visually-hidden'>{{blogCopy.searchLabel}}</span>
-            <svg aria-hidden='true' viewBox='0 0 24 24'><circle cx='10.8' cy='10.8' r='6.5'></circle><path d='m16 16 4.2 4.2'></path></svg>
-            <input id='blog-search' type='search' autocomplete='off' placeholder='{{blogCopy.searchPlaceholder}}' data-blog-search />
-            <span aria-hidden='true'>→</span>
-          </label>
         </div>
       </section>
 
@@ -63,9 +57,17 @@
 
         <div class='blog-section-heading'>
           <div><h2>{{blogCopy.latest}}</h2></div>
-          <div class='blog-view-toggle' role='group' aria-label='{{blogCopy.latest}}'>
-            <button class='is-active' type='button' aria-pressed='true' data-blog-view='grid'>{{blogCopy.grid}}</button>
-            <button type='button' aria-pressed='false' data-blog-view='list'>{{blogCopy.list}}</button>
+          <div class='blog-section-heading__controls'>
+            <label class='blog-search' for='blog-search'>
+              <span class='visually-hidden'>{{blogCopy.searchLabel}}</span>
+              <svg aria-hidden='true' viewBox='0 0 24 24'><circle cx='10.8' cy='10.8' r='6.5'></circle><path d='m16 16 4.2 4.2'></path></svg>
+              <input id='blog-search' type='search' autocomplete='off' placeholder='{{blogCopy.searchPlaceholder}}' data-blog-search />
+              <span aria-hidden='true'>→</span>
+            </label>
+            <div class='blog-view-toggle' role='group' aria-label='{{blogCopy.latest}}'>
+              <button class='is-active' type='button' aria-pressed='true' data-blog-view='grid'>{{blogCopy.grid}}</button>
+              <button type='button' aria-pressed='false' data-blog-view='list'>{{blogCopy.list}}</button>
+            </div>
           </div>
         </div>
 
