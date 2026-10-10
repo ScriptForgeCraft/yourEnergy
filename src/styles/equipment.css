@@ -661,6 +661,11 @@
     align-self: center;
   }
 
+  .equipment-intro {
+    align-self: start;
+    padding-top: clamp(26px, 4svh, 44px);
+  }
+
   .equipment-intro h1 {
     padding-top: 0;
   }
