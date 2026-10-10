@@ -23,6 +23,32 @@ const initReveal = (page) => {
   items.forEach((item) => observer.observe(item));
 };
 
+const initPrinciplesSequence = (page) => {
+  const section = page.querySelector('[data-about-principles]');
+  if (!section) return;
+
+  const reveal = () => section.classList.add('is-principles-visible');
+
+  if (reducedMotion() || typeof IntersectionObserver === 'undefined') {
+    reveal();
+    return;
+  }
+
+  section.classList.add('about-principles--motion-ready');
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        reveal();
+        observer.unobserve(entry.target);
+      });
+    },
+    { threshold: 0.18, rootMargin: '0px 0px -8% 0px' }
+  );
+
+  observer.observe(section);
+};
+
 const initHeroParallax = (page) => {
   if (reducedMotion()) return;
 
@@ -116,6 +142,7 @@ export const initAboutMotion = () => {
   if (!page) return;
 
   initReveal(page);
+  initPrinciplesSequence(page);
   initHeroParallax(page);
   initCertificationLightbox(page);
 };

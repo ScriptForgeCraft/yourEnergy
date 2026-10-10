@@ -101,16 +101,21 @@
         </div>
       </section>
 
-      <section class='about-principles about-section' aria-labelledby='about-principles-title'>
+      <section class='about-principles about-section' data-about-principles aria-labelledby='about-principles-title'>
         <div class='container'>
           <div class='about-copy about-principles__head' data-about-reveal>
             <span class='about-kicker'>{{aboutPage.principles.eyebrow}}</span>
             <h2 id='about-principles-title'>{{aboutPage.principles.title}}</h2>
             <p>{{aboutPage.principles.copy}}</p>
           </div>
+          <div class='about-principles__journey' aria-hidden='true'>
+            <svg viewBox='0 0 1000 120' preserveAspectRatio='none' focusable='false'>
+              <path class='about-principles__journey-line' d='M0 118H125C190 118 190 30 250 30S310 118 375 118S440 30 500 30S560 118 625 118S690 30 750 30S810 118 875 118H1000'></path>
+            </svg>
+          </div>
           <div class='about-principles__grid'>
             {{#each aboutPage.principles.items}}
-              <article class='about-principle' data-about-reveal>
+              <article class='about-principle'>
                 <span class='about-principle__number' aria-hidden='true'></span>
                 <span class='about-principle__icon'><svg class='inline-icon' aria-hidden='true'><use href='/icons.svg#{{icon}}'></use></svg></span>
                 <div><h3>{{title}}</h3><p>{{copy}}</p></div>
