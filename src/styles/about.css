@@ -862,7 +862,9 @@
 }
 .about-company-record dd {
   margin: 6px 0 0;
-  overflow-wrap: anywhere !important;
+  overflow-wrap: normal !important;
+  word-break: normal !important;
+  hyphens: none !important;
   color: var(--about-ink);
   font-size: 0.84rem;
   font-weight: 790;

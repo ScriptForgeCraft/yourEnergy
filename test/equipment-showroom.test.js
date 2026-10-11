@@ -196,23 +196,41 @@ test('equipment keeps a flat interactive hotspot layer and no pointer-follow par
 
 test('equipment model picker stays above adjacent category content', async () => {
   const css = await readFile(new URL('../src/styles/equipment.css', import.meta.url), 'utf8');
+  const template = await readFile(
+    new URL('../src/templates/equipment.hbs', import.meta.url),
+    'utf8'
+  );
 
   assert.match(css, /\.equipment-model-picker\s*\{[^}]*z-index:\s*3;/u);
   assert.match(css, /\.equipment-model-picker select\s*\{[^}]*width:\s*100%;/u);
   assert.match(css, /\.equipment-model-picker select\s*\{[^}]*background-color:\s*#061917;/u);
+  assert.ok(
+    template.indexOf("class='equipment-categories'") <
+      template.indexOf("class='equipment-model-picker'"),
+    'the category catalogue must precede the model picker in the mobile reading order'
+  );
 });
 
 test('mobile category labels and image notes reserve their own readable space', async () => {
   const css = await readFile(new URL('../src/styles/equipment.css', import.meta.url), 'utf8');
   const imageNoteRule = css.match(/\.product-viewer__image-note\s*\{[^}]*\}/u)?.[0];
+  const mobileRules = css.slice(
+    css.indexOf('@media (max-width: 800px)'),
+    css.indexOf('@media (max-width: 520px)')
+  );
 
   assert.ok(imageNoteRule);
   assert.match(imageNoteRule, /position:\s*relative;/u);
   assert.match(imageNoteRule, /align-self:\s*end;/u);
   assert.doesNotMatch(imageNoteRule, /bottom:\s*-/u);
   assert.match(css, /grid-auto-rows:\s*minmax\(108px,\s*auto\);/u);
-  assert.match(css, /overflow-wrap:\s*anywhere\s*!important;/u);
-  assert.match(css, /word-break:\s*break-word\s*!important;/u);
+  assert.match(css, /overflow-wrap:\s*normal\s*!important;/u);
+  assert.match(css, /word-break:\s*normal\s*!important;/u);
+  assert.match(css, /hyphens:\s*none\s*!important;/u);
+  assert.doesNotMatch(css, /overflow-wrap:\s*anywhere\s*!important;/u);
+  assert.doesNotMatch(css, /word-break:\s*break-word\s*!important;/u);
+  assert.match(mobileRules, /\.equipment-categories\s*\{[^}]*max-height:\s*none;/u);
+  assert.match(mobileRules, /\.equipment-categories\s*\{[^}]*overflow:\s*visible;/u);
 });
 
 test('equipment has a complete static first product before JavaScript runs', async () => {

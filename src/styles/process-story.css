@@ -718,8 +718,9 @@
   display: block;
   width: 100%;
   max-width: 16ch;
-  overflow-wrap: anywhere !important;
+  overflow-wrap: normal !important;
   word-break: normal !important;
+  hyphens: none !important;
   text-wrap: balance;
 }
 

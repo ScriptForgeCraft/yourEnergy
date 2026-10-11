@@ -204,7 +204,6 @@
       "powerRange": "620–650 Вт",
       "badge": "Двусторонний модуль",
       "image": "/assets/equipment/products/znshine-zxnr-bd132.png",
-      "imageNote": "Визуализация. Конструкцию и размеры уточняйте по техническому паспорту.",
       "datasheetPdf": "/assets/equipment/docs/ZNShine-ZXNR-BD132-620-650W-Datasheet-EN.pdf",
       "shortDescription": "Двусторонняя панель с N-type ячейками и двойным стеклом. Использует свет с обеих сторон модуля; дополнительная выработка зависит от отражающей поверхности и условий установки.",
       "highlights": [

@@ -162,7 +162,7 @@ test('mobile installation labels and PVGIS data stay within their cards', async 
 
   assert.match(
     processCss,
-    /\.process-installation-timeline__label\s*\{[^}]*overflow-wrap:\s*anywhere\s*!important;/u
+    /\.process-installation-timeline__label\s*\{[^}]*overflow-wrap:\s*normal\s*!important;[^}]*word-break:\s*normal\s*!important;[^}]*hyphens:\s*none\s*!important;/u
   );
   assert.match(
     processCss,
