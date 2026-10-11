@@ -1003,12 +1003,14 @@
     position: sticky;
     top: 0;
     height: 100svh;
+    /* Avoid expensive full-viewport repaints as this sticky image scrolls. */
+    filter: none;
   }
   .process-stage__background::after {
     display: none;
   }
   .process-stage__ambient {
-    position: absolute;
+    display: none;
   }
   .process-stage__states,
   .process-state {
@@ -1030,26 +1032,17 @@
     pointer-events: auto;
   }
   .process-state--photo::before {
-    content: '';
+    /* The desktop readability layer becomes a mobile shadow with no benefit:
+       headings keep their own text shadow. */
+    content: none;
   }
   .process-state + .process-state {
     border-top: 0;
     box-shadow: none;
   }
-  /* A light, centred glow signals the next chapter. It replaces the former
-     hard border and shadow without dimming the shared background photo. */
+  /* Do not paint a decorative seam between mobile chapters. */
   .process-state + .process-state::after {
-    content: '';
-    position: absolute;
-    z-index: 1;
-    top: 0;
-    right: 12%;
-    left: 12%;
-    height: clamp(64px, 10svh, 92px);
-    pointer-events: none;
-    background:
-      linear-gradient(180deg, rgb(2 11 18 / 56%) 0%, rgb(2 11 18 / 24%) 58%, transparent 100%),
-      radial-gradient(ellipse at top, rgb(241 199 91 / 13%), transparent 64%);
+    content: none;
   }
   .process-state__copy {
     grid-column: 1;
@@ -1145,8 +1138,10 @@
     height: auto;
     padding: 9px 18px;
     border-block: 1px solid #ffffff14;
-    background: #06141de8;
-    backdrop-filter: blur(14px);
+    /* Backdrop filtering a sticky element above a full-screen photo forces
+       additional painting on mobile GPUs. */
+    background: #06141d;
+    backdrop-filter: none;
     transform: none;
   }
   .process-progress ol {
@@ -1184,6 +1179,11 @@
     width: 32px;
     background: #0a1922;
     box-shadow: 0 0 0 4px #06141d;
+  }
+  .process-metric,
+  .process-installation-timeline,
+  .process-visual.process-visual--installation {
+    backdrop-filter: none;
   }
   .process-stage__scroll-hint {
     display: none;

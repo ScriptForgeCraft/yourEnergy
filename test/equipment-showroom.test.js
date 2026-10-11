@@ -202,6 +202,19 @@ test('equipment model picker stays above adjacent category content', async () =>
   assert.match(css, /\.equipment-model-picker select\s*\{[^}]*background-color:\s*#061917;/u);
 });
 
+test('mobile category labels and image notes reserve their own readable space', async () => {
+  const css = await readFile(new URL('../src/styles/equipment.css', import.meta.url), 'utf8');
+  const imageNoteRule = css.match(/\.product-viewer__image-note\s*\{[^}]*\}/u)?.[0];
+
+  assert.ok(imageNoteRule);
+  assert.match(imageNoteRule, /position:\s*relative;/u);
+  assert.match(imageNoteRule, /align-self:\s*end;/u);
+  assert.doesNotMatch(imageNoteRule, /bottom:\s*-/u);
+  assert.match(css, /grid-auto-rows:\s*minmax\(108px,\s*auto\);/u);
+  assert.match(css, /overflow-wrap:\s*anywhere\s*!important;/u);
+  assert.match(css, /word-break:\s*break-word\s*!important;/u);
+});
+
 test('equipment has a complete static first product before JavaScript runs', async () => {
   const html = await readFile(
     new URL('../.generated/site/equipment/index.html', import.meta.url),

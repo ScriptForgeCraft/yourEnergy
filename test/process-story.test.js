@@ -176,14 +176,16 @@ test('mobile installation labels and PVGIS data stay within their cards', async 
   );
 });
 
-test('mobile process chapters use a soft visual bridge without dimming the shared photo', async () => {
+test('mobile process chapters do not add a shadow bridge over the shared photo', async () => {
   const processCss = await readStylesheet(
     new URL('../src/styles/process-story.css', import.meta.url)
   );
 
   assert.match(processCss, /\.process-stage__background::after\s*\{[^}]*display:\s*none;/u);
   assert.match(processCss, /\.process-state\s*\{[^}]*min-height:\s*0;/u);
-  assert.match(processCss, /\.process-state \+ \.process-state::after\s*\{[^}]*radial-gradient/u);
+  assert.match(processCss, /\.process-state--photo::before\s*\{[^}]*content:\s*none;/u);
+  assert.match(processCss, /\.process-state \+ \.process-state::after\s*\{[^}]*content:\s*none;/u);
+  assert.match(processCss, /\.process-progress\s*\{[^}]*backdrop-filter:\s*none;/u);
 });
 
 test('process image srcsets describe only real generated widths', () => {

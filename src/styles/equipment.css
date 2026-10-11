@@ -265,7 +265,7 @@
 
 .equipment-category {
   width: 100%;
-  min-height: 58px;
+  min-height: 68px;
   display: grid;
   grid-template-columns: 38px minmax(0, 1fr);
   align-items: center;
@@ -319,20 +319,27 @@
 .equipment-category__copy {
   min-width: 0;
   display: grid;
+  align-content: center;
+  gap: 3px;
 }
 
 .equipment-category__copy strong {
-  overflow: hidden;
+  display: block;
+  max-width: 100%;
+  overflow: visible;
   font-size: 0.84rem;
   font-weight: 540;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  line-height: 1.25;
+  text-overflow: clip;
+  text-wrap: pretty;
+  white-space: normal;
 }
 
 .equipment-category__copy small {
   min-height: 1.2em;
   color: rgb(255 255 255 / 40%);
   font-size: 0.69rem;
+  line-height: 1.3;
 }
 
 .product-viewer {
@@ -556,13 +563,16 @@
 }
 
 .product-viewer__image-note {
-  position: absolute;
-  bottom: -17px;
-  width: 100%;
-  margin: 0;
-  color: rgb(255 255 255 / 46%);
-  font-size: 0.61rem;
-  line-height: 1.35;
+  position: relative;
+  z-index: 3;
+  align-self: end;
+  width: min(100%, 42rem);
+  margin: 0 0 6px;
+  padding-inline: 12px;
+  color: rgb(255 255 255 / 55%);
+  font-size: 0.65rem;
+  line-height: 1.45;
+  pointer-events: none;
   text-align: center;
 }
 
@@ -1577,6 +1587,7 @@
 
   .equipment-categories {
     grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-auto-rows: minmax(84px, auto);
     gap: 8px;
     overflow-x: auto;
     padding-bottom: 4px;
@@ -1585,7 +1596,7 @@
 
   .equipment-category {
     min-width: 142px;
-    min-height: 72px;
+    min-height: 84px;
     grid-template-columns: 28px minmax(0, 1fr);
     padding: 8px 10px;
   }
@@ -1606,6 +1617,10 @@
 
   .equipment-category__copy strong {
     font-size: 0.74rem;
+    overflow-wrap: anywhere !important;
+    word-break: break-word !important;
+    hyphens: auto !important;
+    text-wrap: pretty;
     white-space: normal;
   }
 
@@ -1753,6 +1768,7 @@
 
   .equipment-categories {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-auto-rows: minmax(108px, auto);
     gap: 10px;
     margin-inline: 0;
     overflow: visible;
@@ -1760,14 +1776,30 @@
 
   .equipment-category {
     min-width: 0;
-    min-height: 88px;
+    min-height: 108px;
+    grid-template-columns: 24px minmax(0, 1fr);
+    gap: 8px;
+    padding: 12px 8px;
+  }
+
+  .equipment-category__icon {
+    width: 24px;
+    height: 24px;
+  }
+
+  .equipment-category__icon .equipment-icon {
+    width: 20px;
+    height: 20px;
   }
 
   .equipment-category__copy strong {
+    font-size: 0.72rem;
     overflow: visible;
-    overflow-wrap: anywhere;
+    overflow-wrap: anywhere !important;
     text-overflow: clip;
-    line-height: 1.22;
+    hyphens: auto !important;
+    line-height: 1.35;
+    word-break: break-word !important;
   }
 
   .product-viewer {

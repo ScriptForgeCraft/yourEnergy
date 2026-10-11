@@ -9,13 +9,11 @@ const heroTimeProfiles = Object.freeze([
   { hour: 8, assetHour: 8, kind: 'day', arcPoint: { x: 0.39, y: 0.456 } },
   { hour: 12, assetHour: 12, kind: 'day', arcPoint: { x: 0.54, y: 0.231 } },
   { hour: 14, assetHour: 14, kind: 'day', arcPoint: { x: 0.65, y: 0.148 } },
-  { hour: 16, assetHour: 16, kind: 'day', arcPoint: { x: 0.75, y: 0.117 } },
-  { hour: 18, assetHour: 18, kind: 'day', arcPoint: { x: 0.87, y: 0.137 } },
-  { hour: 20, assetHour: 20, kind: 'evening', arcPoint: { x: 0.96, y: 0.213 } }
+  { hour: 16, assetHour: 16, kind: 'day', arcPoint: { x: 0.75, y: 0.117 } }
 ]);
 
-const HERO_INTRO_MAX_DURATION_MS = 5_200;
-const HERO_INTRO_TRANSITION_MAX_MS = 1_150;
+const HERO_INTRO_MAX_DURATION_MS = 5_400;
+const HERO_INTRO_TRANSITION_MAX_MS = 1_800;
 
 // No night scene was supplied. The 08:00 image is the neutral fallback asset,
 // but it is never presented as a current 08:00 solar position: the decorative
@@ -67,9 +65,7 @@ export const getHeroTimeProfile = (date = new Date()) => {
   if (hour >= 8 && hour < 10) return heroTimeProfiles[0];
   if (hour < 13) return heroTimeProfiles[1];
   if (hour < 15) return heroTimeProfiles[2];
-  if (hour < 17) return heroTimeProfiles[3];
-  if (hour < 19) return heroTimeProfiles[4];
-  return heroTimeProfiles[5];
+  return heroTimeProfiles[3];
 };
 
 /**

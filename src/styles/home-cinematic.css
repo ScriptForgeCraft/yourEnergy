@@ -85,15 +85,17 @@
 .page-home .hero-scrim {
   z-index: 1;
   pointer-events: none;
+  /* Let the supplied photography remain a photograph, not a dark texture.
+     The strongest contrast stays behind the left-aligned copy only. */
   background:
     linear-gradient(
       90deg,
-      rgb(2 14 24 / 94%) 0%,
-      rgb(3 17 29 / 80%) 32%,
-      rgb(3 17 29 / 27%) 67%,
-      rgb(3 17 29 / 45%) 100%
+      rgb(2 14 24 / 86%) 0%,
+      rgb(3 17 29 / 66%) 32%,
+      rgb(3 17 29 / 8%) 67%,
+      rgb(3 17 29 / 18%) 100%
     ),
-    linear-gradient(0deg, rgb(2 13 22 / 74%), transparent 46%, rgb(3 16 29 / 20%));
+    linear-gradient(0deg, rgb(2 13 22 / 56%), transparent 46%, rgb(3 16 29 / 12%));
 }
 
 .page-home .hero-time-sun {
@@ -574,8 +576,8 @@ html[data-hero-calculation-state='restoring']
     transform 160ms ease,
     box-shadow 160ms ease,
     filter 160ms ease;
- margin-top: 20px;
-  }
+  margin-top: 20px;
+}
 
 .page-home .hero-quick-form__submit .inline-icon {
   width: 16px;
@@ -598,8 +600,6 @@ html[data-hero-calculation-state='restoring']
   outline: 2px solid #fff;
   outline-offset: 3px;
 }
-
-
 
 .page-home .hero-quick-form__status.is-error {
   color: #ffd0c8;

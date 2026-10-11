@@ -55,26 +55,38 @@ for (const asset of staticAssets) {
     }
     if (equipmentImageUrl(url) !== url) {
       for (const width of EQUIPMENT_IMAGE_WIDTHS) {
+        const responsiveDestination = claimOutput(equipmentImageUrl(url, width));
+        await mkdir(dirname(responsiveDestination), { recursive: true });
         await sharp(source)
           .resize({ width, withoutEnlargement: true })
-          .webp({ quality: 90, effort: 4 })
-          .toFile(claimOutput(equipmentImageUrl(url, width)));
+          .webp({ quality: 95, alphaQuality: 100, effort: 4 })
+          .toFile(responsiveDestination);
       }
     }
   }
 }
 
-for (const { name, source, widths, quality, legacyUrls = [] } of RESPONSIVE_IMAGE_ASSETS) {
+for (const {
+  name,
+  source,
+  widths,
+  quality,
+  legacyUrls = [],
+  progressiveJpeg = true
+} of RESPONSIVE_IMAGE_ASSETS) {
   if (assetIds.has(name)) throw new Error(`Duplicate asset ID: ${name}`);
   assetIds.add(name);
   const sourcePath = resolve(sourceDir, `${source}.png`);
   const bytes = await requireSource(sourcePath);
   for (const url of legacyUrls) await copyFile(sourcePath, claimOutput(url));
   const metadata = await sharp(bytes).metadata();
-  const digest = createHash('sha256')
-    .update(bytes)
-    .update(JSON.stringify({ widths, quality, sharp: sharp.versions, encoder: 2 }))
-    .digest('hex');
+  // Keep existing cache entries for the normal progressive-JPEG policy.
+  // The process backdrop alone uses a non-progressive fallback, so only it
+  // needs a new encoding cache key.
+  const encoding = progressiveJpeg
+    ? { widths, quality, sharp: sharp.versions, encoder: 3 }
+    : { widths, quality, progressiveJpeg, sharp: sharp.versions, encoder: 4 };
+  const digest = createHash('sha256').update(bytes).update(JSON.stringify(encoding)).digest('hex');
   const cache = resolve(cacheDir, digest);
   currentCache.add(digest);
   await mkdir(cache, { recursive: true });
@@ -96,11 +108,22 @@ for (const { name, source, widths, quality, legacyUrls = [] } of RESPONSIVE_IMAG
     );
     if (!ready.every(Boolean)) {
       const image = sharp(bytes).resize({ width, withoutEnlargement: true });
-      const avifQuality = quality ?? 82;
+      const avifQuality = quality ?? 90;
       await Promise.all([
-        image.clone().avif({ quality: avifQuality, effort: 4 }).toFile(cached[0]),
-        image.clone().webp({ quality: 90, effort: 4 }).toFile(cached[1]),
-        image.clone().jpeg({ quality: 92, progressive: true, mozjpeg: true }).toFile(cached[2])
+        image
+          .clone()
+          .avif({ quality: avifQuality, effort: 4, chromaSubsampling: '4:4:4' })
+          .toFile(cached[0]),
+        image.clone().webp({ quality: 95, alphaQuality: 100, effort: 4 }).toFile(cached[1]),
+        image
+          .clone()
+          .jpeg({
+            quality: 95,
+            chromaSubsampling: '4:4:4',
+            progressive: progressiveJpeg,
+            mozjpeg: true
+          })
+          .toFile(cached[2])
       ]);
     }
     for (const [index, filename] of names.entries()) {

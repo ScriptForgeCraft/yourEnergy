@@ -81,8 +81,8 @@ test('time-based hero visual uses Asia/Yerevan and a neutral fallback outside su
     ['2026-09-07T08:00:00.000Z', 12, 12, 12, 'day'],
     ['2026-09-07T09:00:00.000Z', 13, 14, 14, 'day'],
     ['2026-09-07T11:00:00.000Z', 15, 16, 16, 'day'],
-    ['2026-09-07T13:00:00.000Z', 17, 18, 18, 'day'],
-    ['2026-09-07T15:00:00.000Z', 19, 20, 20, 'evening'],
+    ['2026-09-07T13:00:00.000Z', 17, 16, 16, 'day'],
+    ['2026-09-07T15:00:00.000Z', 19, 16, 16, 'day'],
     ['2026-09-07T18:00:00.000Z', 22, null, 8, 'neutral']
   ];
   for (const [iso, yerevanHour, profileHour, assetHour, kind] of expectedFrames) {
@@ -110,14 +110,14 @@ test('first-view Hero day-cycle intro starts at morning and stops at the active 
   const afternoon = getHeroTimeProfile(new Date('2026-09-07T13:00:00.000Z'));
   assert.deepEqual(
     getHeroIntroProfiles(afternoon).map(({ assetHour }) => assetHour),
-    [8, 12, 14, 16, 18]
+    [8, 12, 14, 16]
   );
   assert.deepEqual(
     getHeroIntroProfiles(getHeroTimeProfile(new Date('2026-09-07T18:00:00.000Z'))),
     []
   );
-  assert.equal(getHeroIntroTransitionDuration(5), 1_150);
-  assert.equal(getHeroIntroTransitionDuration(6) * 5 <= 5_200, true);
+  assert.equal(getHeroIntroTransitionDuration(4), 1_800);
+  assert.equal(getHeroIntroTransitionDuration(4) * 3 <= 5_400, true);
 });
 
 test('time-based Hero visual preloads a frame and retains the last successful frame before neutral recovery', async () => {
@@ -149,8 +149,8 @@ test('Hero sun maps each source-frame arc point into the centered cover crop', (
     frameWidth: 1520.8,
     frameHeight: 791.2
   });
-  assert.equal(Math.round(point.x), 1460);
-  assert.equal(Math.round(point.y), 150);
+  assert.equal(Math.round(point.x), 1141);
+  assert.equal(Math.round(point.y), 68);
   assert.equal(projectHeroArcPoint(evening, { frameWidth: 100 }), null);
 });
 
@@ -160,8 +160,8 @@ test('each supplied day-cycle frame carries a source-verified point on its solar
     ['2026-09-07T06:00:00.000Z', { x: 0.54, y: 0.231 }],
     ['2026-09-07T09:00:00.000Z', { x: 0.65, y: 0.148 }],
     ['2026-09-07T11:00:00.000Z', { x: 0.75, y: 0.117 }],
-    ['2026-09-07T13:00:00.000Z', { x: 0.87, y: 0.137 }],
-    ['2026-09-07T15:00:00.000Z', { x: 0.96, y: 0.213 }]
+    ['2026-09-07T13:00:00.000Z', { x: 0.75, y: 0.117 }],
+    ['2026-09-07T15:00:00.000Z', { x: 0.75, y: 0.117 }]
   ];
   for (const [iso, expected] of expectedArcPoints) {
     assert.deepEqual(getHeroTimeProfile(new Date(iso)).arcPoint, expected);
