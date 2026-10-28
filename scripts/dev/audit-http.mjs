@@ -46,7 +46,7 @@ try {
     } else if (missing) {
       const body = await check(`${pagePath(page.locale)}audit-does-not-exist/`, 404);
       assert.match(body, new RegExp(`<html lang=['"]${page.locale}['"]`));
-      assert.match(body, /noindex/u);
+      assert.doesNotMatch(body, /name=['"]robots['"][^>]*noindex/u);
     } else {
       const body = await check(page.path, 200);
       assert.match(body, new RegExp(`<html lang=['"]${page.locale}['"]`));
@@ -57,7 +57,7 @@ try {
   const sitemap = await check('/sitemap.xml', 200);
   assert.equal(
     [...sitemap.matchAll(/<loc>/gu)].length,
-    pages.filter(({ indexable }) => indexable).length
+    pages.filter(({ sitemap }) => sitemap).length
   );
   await check('/missing-file.js', 404);
   const headers = await readFile('dist/_headers', 'utf8');

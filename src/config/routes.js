@@ -15,6 +15,7 @@ export const createPageRegistry = async () => {
       path: pagePath(locale, route),
       file: `${pagePath(locale, route).slice(1)}index.html`,
       indexable: true,
+      sitemap: true,
       ...extra
     });
     return [
@@ -22,18 +23,18 @@ export const createPageRegistry = async () => {
       page('not-found', '', {
         path: `${pagePath(locale)}404.html`,
         file: `${pagePath(locale).slice(1)}404.html`,
-        indexable: false
+        sitemap: false
       }),
       ...['faq', 'equipment', 'calculator', 'projects', 'about', 'contacts', 'blog'].map((kind) =>
         page(kind)
       ),
-      ...['privacy', 'terms'].map((kind) => page(kind, kind, { indexable: false })),
-      page('calculator-pro', 'calculator/pro', { indexable: false }),
-      page('calculator-refine', 'calculator/refine', { indexable: false }),
+      ...['privacy', 'terms'].map((kind) => page(kind)),
+      page('calculator-pro', 'calculator/pro', { sitemap: false }),
+      page('calculator-refine', 'calculator/refine', { sitemap: false }),
       page('calculator-shell', 'calculator/pro', {
         path: `${pagePath(locale, 'calculator/pro')}shell.html`,
         file: `${pagePath(locale, 'calculator/pro').slice(1)}shell.html`,
-        indexable: false
+        sitemap: false
       }),
       ...PROJECT_CASE_SLUGS.map((slug) => page('project-case', `projects/${slug}`, { slug })),
       ...articles.map((article) => {

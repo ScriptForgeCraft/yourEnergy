@@ -523,9 +523,9 @@ function validateBlogLocalizedPage(html, page, locale, slug = null) {
   }
 }
 
-function validateNoindexLocalizedPage(html, page, locale, type) {
+function validateSupportLocalizedPage(html, page, locale, type) {
   const robots = findMeta(html, 'name', 'robots')?.get('content')?.toLowerCase() ?? '';
-  if (!robots.includes('noindex')) fail(`${page}: noindex route must declare noindex`);
+  if (robots.includes('noindex')) fail(`${page}: support route must allow indexing`);
   const canonical = locale === 'hy' ? `${origin}/${type}/` : `${origin}/${locale}/${type}/`;
   const canonicalLink = tagAttributes(html, 'link').find(
     (attributes) => attributes.get('rel') === 'canonical'
@@ -559,32 +559,7 @@ async function validateSitemap() {
   }
   const sitemap = await readFile(sitemapPath, 'utf8');
   const locations = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/giu)].map((match) => match[1].trim());
-  const homeRoutes = [`${origin}/`, `${origin}/ru/`, `${origin}/en/`];
-  const faqRoutes = faqPages.map(({ locale, type }) =>
-    locale === 'hy' ? `${origin}/${type}/` : `${origin}/${locale}/${type}/`
-  );
-  const toolRoutes = toolPages.map(({ locale, type }) =>
-    locale === 'hy' ? `${origin}/${type}/` : `${origin}/${locale}/${type}/`
-  );
-  const equipmentRoutes = equipmentPages.map(({ locale, type }) =>
-    locale === 'hy' ? `${origin}/${type}/` : `${origin}/${locale}/${type}/`
-  );
-  const projectsRoutes = [...projectsPages, ...projectCasePages].map(({ locale, type }) =>
-    locale === 'hy' ? `${origin}/${type}/` : `${origin}/${locale}/${type}/`
-  );
-  const contentRoutes = contentPages.map(({ locale, type }) =>
-    locale === 'hy' ? `${origin}/${type}/` : `${origin}/${locale}/${type}/`
-  );
-  const blogRoutes = blogPages.map(({ locale, slug }) => `${origin}${blogPath(locale, slug)}`);
-  const expected = [
-    ...homeRoutes,
-    ...projectsRoutes,
-    ...faqRoutes,
-    ...toolRoutes,
-    ...equipmentRoutes,
-    ...contentRoutes,
-    ...blogRoutes
-  ];
+  const expected = registry.filter(({ sitemap }) => sitemap).map(({ path }) => `${origin}${path}`);
   if (locations.length !== expected.length || expected.some((url) => !locations.includes(url))) {
     fail(`sitemap must include ${expected.join(', ')}`);
   }
@@ -600,7 +575,8 @@ async function validateSitemap() {
       ...faqPages,
       ...toolPages,
       ...equipmentPages,
-      ...contentPages
+      ...contentPages,
+      ...selectPages('privacy', 'terms')
     ].find(({ locale, type }) => {
       const url = locale === 'hy' ? `${origin}/${type}/` : `${origin}/${locale}/${type}/`;
       return location === url;
@@ -741,7 +717,7 @@ function validateHomePublicSeoCopy(html, page) {
 
 function validatePrivateCalculatorMarkup(html, page, type) {
   const robots = findMeta(html, 'name', 'robots')?.get('content')?.toLowerCase() ?? '';
-  if (!robots.includes('noindex')) fail(`${page}: private calculator route must be noindex`);
+  if (robots.includes('noindex')) fail(`${page}: calculator route must allow indexing`);
   const refresh = tagAttributes(html, 'meta').find(
     (attributes) => attributes.get('http-equiv')?.toLowerCase() === 'refresh'
   );
@@ -939,7 +915,10 @@ for (const [page, html] of pages) {
   await validateAnchors(html, page, pages);
   validateExternalLinkSafety(html, page);
   const entry = pageByFile.get(page);
-  if (entry?.indexable) await validateIndexableMetadata(html, page, entry);
+  if (entry?.sitemap && !['privacy', 'terms'].includes(entry.kind))
+    await validateIndexableMetadata(html, page, entry);
+  const robots = findMeta(html, 'name', 'robots')?.get('content')?.toLowerCase() ?? '';
+  if (robots.includes('noindex')) fail(`${page}: every static page must allow indexing`);
 }
 
 if (pages.has('index.html'))
@@ -1057,7 +1036,7 @@ for (const page of expectedPages.filter(
   if (!pages.has(page)) continue;
   const locale = page.startsWith('ru/') ? 'ru' : page.startsWith('en/') ? 'en' : 'hy';
   const type = page.includes('/privacy/') || page === 'privacy/index.html' ? 'privacy' : 'terms';
-  validateNoindexLocalizedPage(pages.get(page), page, locale, type);
+  validateSupportLocalizedPage(pages.get(page), page, locale, type);
 }
 const assetUrls = JSON.parse(
   await readFile(resolve(projectRoot, '.generated/asset-urls.json'), 'utf8')

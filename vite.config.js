@@ -20,6 +20,7 @@ const trustedMapOrigin = (tileUrl) => {
 };
 
 const createHeaders = (mapOrigins) => `/*
+  X-Robots-Tag: index, follow
   Content-Security-Policy: default-src 'self'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; object-src 'none'; script-src 'self' ${CLOUDFLARE_INSIGHTS_SCRIPT_ORIGIN}; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:${mapOrigins.map((value) => ` ${value}`).join('')}; font-src 'self' data:; connect-src 'self'; manifest-src 'self'; worker-src 'self'
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: accelerometer=(), camera=(), geolocation=(self), gyroscope=(), microphone=(), payment=(), usb=()

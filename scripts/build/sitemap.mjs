@@ -1,7 +1,7 @@
 const origin = 'https://yourenergy.am';
 
 export const renderSitemap = (pages) => {
-  const published = pages.filter(({ indexable }) => indexable);
+  const published = pages.filter(({ sitemap }) => sitemap);
   const entries = published.map((page) => {
     const siblings = published.filter(
       (candidate) =>

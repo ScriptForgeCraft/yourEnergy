@@ -1,6 +1,6 @@
 /**
  * Every published locale produces one crawlable home route. Support routes
- * are generated alongside it, but intentionally remain noindex.
+ * are generated alongside it and also allow indexing.
  */
 export const CONTENT_LOCALE_SCHEMA = Object.freeze([
   Object.freeze({ key: 'hy', locale: 'hy-AM', path: '/', file: 'index.html', published: true }),

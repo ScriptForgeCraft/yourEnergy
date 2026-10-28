@@ -6,12 +6,12 @@ import { siteRoot } from '../scripts/build/paths.mjs';
 import { resolve } from 'node:path';
 import { equipmentImageUrl, equipmentImageSrcset } from '../src/config/equipment-images.js';
 
-test('each locale has a real noindex error document and no missing navigation runtime', async () => {
+test('each locale has an error document with indexing allowed and no missing navigation runtime', async () => {
   const pages = await createPageRegistry();
   assert.equal(pages.filter(({ kind }) => kind === 'not-found').length, 3);
   for (const page of pages) {
     const html = await readFile(resolve(siteRoot, page.file), 'utf8');
-    if (page.kind === 'not-found') assert.match(html, /noindex,follow/u);
+    assert.doesNotMatch(html, /name=['"]robots['"][^>]*noindex/u, page.path);
     if (html.includes('data-mobile-menu'))
       assert.match(html, /src='\/src\/(?:main|equipment)\.js'/u, page.path);
   }
@@ -35,7 +35,7 @@ test('indexable pages have unique titles and descriptions within each locale', a
   const pages = await createPageRegistry();
   const titles = new Set();
   const descriptions = new Set();
-  for (const page of pages.filter(({ indexable }) => indexable)) {
+  for (const page of pages.filter(({ sitemap }) => sitemap)) {
     const html = await readFile(resolve(siteRoot, page.file), 'utf8');
     const title = html.match(/<title>(.*?)<\/title>/u)?.[1];
     const description = html.match(/<meta name='description' content='([^']+)'/u)?.[1];
@@ -50,7 +50,7 @@ test('indexable pages have unique titles and descriptions within each locale', a
     }
     const siblings = pages.filter(
       (candidate) =>
-        candidate.indexable &&
+        candidate.sitemap &&
         candidate.kind === page.kind &&
         candidate.slug === page.slug &&
         candidate.article?.hy.slug === page.article?.hy.slug
